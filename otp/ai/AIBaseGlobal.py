@@ -1,5 +1,6 @@
 from otp.ai.AIBase import *
-__builtins__['simbase'] = AIBase()
+simbase = AIBase()
+__builtins__['simbase'] = simbase
 __builtins__['ostream'] = Notify.out()
 __builtins__['run'] = simbase.run
 __builtins__['taskMgr'] = simbase.taskMgr

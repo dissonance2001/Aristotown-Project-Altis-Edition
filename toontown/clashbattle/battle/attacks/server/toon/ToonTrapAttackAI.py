@@ -8,7 +8,7 @@ from toontown.clashbattle.battle.statuses import SEE, StatusEffects
 from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.toon.gui.ToonTipGlobals import TTE
 from toontown.clashbattle.battle import BattleGlobals
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.TOON_TRAP)
@@ -19,7 +19,7 @@ class ToonTrapAttackAI(ToonAttackAI):
         self.showToonTipAll(TTE.TIP_TRAP)
 
         for target in self.targets:
-            target: DistributedSuitBaseAI
+            target: ClashSuitBaseAI
 
             if target.getHp() <= 0:
                 continue
@@ -51,7 +51,7 @@ class ToonTrapAttackAI(ToonAttackAI):
 
         return super().calculate()
 
-    def getFinalDamage(self, target: DistributedSuitBaseAI) -> int:
+    def getFinalDamage(self, target: ClashSuitBaseAI) -> int:
         """
         Apply any damage modifiers to this Trap and return the final damage to deal to <target>
         """

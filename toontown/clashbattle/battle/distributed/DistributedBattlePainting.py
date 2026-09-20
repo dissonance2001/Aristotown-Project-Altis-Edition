@@ -1,14 +1,14 @@
 from panda3d.core import Point3, Vec3
 from direct.interval.IntervalGlobal import *
-from toontown.clashbattle.battle.distributed import DistributedBattleFinal
+from toontown.clashbattle.battle.distributed import ClashBattleFinal
 from toontown.clashbattle.battle import BattleProps
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 
 @DirectNotifyCategory()
-class DistributedBattlePainting(DistributedBattleFinal.DistributedBattleFinal):
+class DistributedBattlePainting(ClashBattleFinal.ClashBattleFinal):
     def __init__(self, cr):
-        DistributedBattleFinal.DistributedBattleFinal.__init__(self, cr)
+        ClashBattleFinal.ClashBattleFinal.__init__(self, cr)
         self.initialReservesJoiningDone = False
 
     def showSuitsJoining(self, suits, ts, name, callback):
@@ -99,4 +99,4 @@ class DistributedBattlePainting(DistributedBattleFinal.DistributedBattleFinal):
         return result
 
     def enterWaitForInput(self, ts = 0):
-        DistributedBattleFinal.DistributedBattleFinal.enterWaitForInput(self, ts)
+        ClashBattleFinal.ClashBattleFinal.enterWaitForInput(self, ts)

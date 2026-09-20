@@ -11,7 +11,7 @@ from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAtt
 from toontown.clashbattle.battle.statuses import StatusEffects, SEE
 from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.toon.gui.ToonTipGlobals import TTE
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.TOON_LURE)
@@ -44,7 +44,7 @@ class ToonLureAttackAI(ToonAttackAI):
                     target.removeStatusEffectOfId(SEE.EFFECT_SUIT_JUST_DODGED_LURE)
 
         for target in self.targets:
-            target: DistributedSuitBaseAI
+            target: ClashSuitBaseAI
             targetId = target.getDoId()
 
             if not target.canBeAttacked():

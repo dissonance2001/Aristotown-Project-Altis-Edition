@@ -19,7 +19,7 @@ from toontown.gui.game.condition import ConditionGlobals
 from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.clashbattle.battle import BattleGlobals
 from toontown.hood import ZoneUtil
-from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit.ClashSuitBase import ClashSuitBase
 from toontown.toon.DistributedToonBase import DistributedToonBase
 from toontown.toonbase import TTLocalizer
 from toontown.utils.AstronStruct import AstronStruct
@@ -146,7 +146,7 @@ class Attack(AstronStruct, DirectObject):
 
     @staticmethod
     def isSuit(target: BattleAvatar) -> bool:
-        return isinstance(target, DistributedSuitBase)
+        return isinstance(target, ClashSuitBase)
     
     def sendLocalToonAway(self, zoneId: int, exitState: str='Died') -> None:
         place = base.cr.playGame.getPlace()
@@ -1206,7 +1206,7 @@ class Attack(AstronStruct, DirectObject):
             self.invoker.neutralAvatar()
 
     @staticmethod
-    def updateSuitHP(suit: DistributedSuitBase, hp: int, nonZero: bool=False) -> None:
+    def updateSuitHP(suit: ClashSuitBase, hp: int, nonZero: bool=False) -> None:
         suit.updateHealthBar(hp)
         if nonZero and hp == 0:
             return

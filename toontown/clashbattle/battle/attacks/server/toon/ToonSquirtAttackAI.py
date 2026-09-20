@@ -7,7 +7,7 @@ from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAtt
 from toontown.clashbattle.battle.statuses import StatusEffects, SEE
 from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.toon.gui.ToonTipGlobals import TTE
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.TOON_SQUIRT)
@@ -22,7 +22,7 @@ class ToonSquirtAttackAI(ToonAttackAI):
             self.giveMissEffect()
 
         for target in self.targets.copy():
-            target: DistributedSuitBaseAI
+            target: ClashSuitBaseAI
             targetIndex = self.suits.index(target)
             targetId = target.getDoId()
 
@@ -67,7 +67,7 @@ class ToonSquirtAttackAI(ToonAttackAI):
 
         return super().calculate()
     
-    def attemptSplashTarget(self, suit: DistributedSuitBaseAI, totalDamage: int) -> None:
+    def attemptSplashTarget(self, suit: ClashSuitBaseAI, totalDamage: int) -> None:
         if not suit.canBeAttacked():
             return
 
@@ -82,7 +82,7 @@ class ToonSquirtAttackAI(ToonAttackAI):
 
         return splashTarget
     
-    def attemptAddSoakTarget(self, suit: DistributedSuitBaseAI, attackTarget: AttackTarget=None):
+    def attemptAddSoakTarget(self, suit: ClashSuitBaseAI, attackTarget: AttackTarget=None):
         """
         Attempts to soak the indicated target.
         If it is already soaked, the soak rounds will be refreshed.

@@ -589,6 +589,7 @@ from direct.distributed import DistributedObjectGlobal
 from toontown.ai import WelcomeValleyManager/AI
 from toontown.building import DistributedAnimatedProp/AI
 from toontown.toon import DistributedToon/AI/UD
+from toontown.toon import ClashDistributedToonBase/AI
 from toontown.classicchars import DistributedCCharBase/AI
 from toontown.classicchars import DistributedMickey/AI
 from toontown.classicchars import DistributedVampireMickey/AI
@@ -1082,6 +1083,74 @@ dclass DistributedAnimatedProp : DistributedObject {
 
 typedef int16 pair16[2];
 
+struct StatusEffect {
+  uint16 id;
+  int16 rounds;
+  int16 disabledRounds;
+  int64/100[] extraArgs;
+};
+
+struct VisualEffect {
+  uint16 id;
+  int64/100[] extraArgs;
+};
+
+dclass ClashDistributedToonBase : DistributedAvatar {
+  setDNAString(blob) required broadcast db;
+  setAnimState(char [0-1024], int16/1000, int16) broadcast ram ownsend airecv;
+  receiveChatMessage(uint8 channelId, uint32 modifier, uint8 contentTypeId, string content) broadcast;
+  setRawStatusEffects(StatusEffect statusEffect[], VisualEffect visualEffect[]) broadcast ram;
+  setEquippedItems(InventoryItem equippedItems[] = []) required broadcast ram;
+};
+
+struct PlaygroundGagMultiplier {
+  uint16 zoneId;
+  uint8 multiplier = 1;
+};
+
+struct PlaygroundGagDiscount {
+  uint16 zoneId;
+  uint8 discount = 0;
+};
+
+struct SuitGalleryEntry {
+  string suitName = "";
+  uint32 amountDefeated = 0;
+};
+
+struct CogBountyEntry {
+  string suitName = "";
+  uint32 timestamp = 0;
+};
+
+struct Booster {
+  uint16 boosterType;
+  uint32 endTimestamp;
+  uint32 startTimestamp;
+};
+
+struct QuestHistory {
+  uint8 questSource;
+  uint64 chainId;
+};
+
+struct QuestId {
+  uint8 questSource;
+  uint64 chainId;
+  uint16 objectiveId;
+  uint16 subObjectiveId;
+};
+
+struct QuestReference {
+  QuestId questId;
+  uint32 progress[];
+};
+
+struct Kudos {
+  uint16 zoneId = 0;
+  uint8 kudos = 0;
+};
+
 dclass DistributedToon : DistributedPlayer {
   setDNAString(blob) required broadcast ownrecv db;
   setGM(uint16 = 0) required broadcast ownrecv db;
@@ -1302,6 +1371,20 @@ dclass DistributedToon : DistributedPlayer {
   requestRefundSpend(uint8) ownsend airecv;
   doRefundFailure() ownrecv;
   setCerts(string[] = []) required broadcast ownrecv db;
+
+  // Kudos rewards
+  setPlaygroundGagMultipliers(PlaygroundGagMultiplier[] = []) required ownrecv db;
+  setPlaygroundGagDiscounts(PlaygroundGagDiscount[] = []) required ownrecv db;
+
+  setSeenCutscenes(uint16[] = []) required ownrecv db;
+  addSeenCutscene(uint16) ownsend airecv;
+
+  setPlayerFlags(uint16[] = []) required broadcast db;
+
+    // Daily quests
+  setDailyQuestRerolls(uint8 = 2) required ownrecv db;
+  requestDailyCompletion(QuestReference questRef) ownsend airecv;
+  requestDailyReroll(QuestReference questRef) ownsend airecv;
 };
 
 dclass DistributedCCharBase : DistributedObject {

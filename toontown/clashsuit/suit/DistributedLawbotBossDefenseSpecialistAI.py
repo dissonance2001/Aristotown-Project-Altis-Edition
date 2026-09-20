@@ -1,15 +1,13 @@
 import random
 
 from toontown.clashsuit.suit import BossCogGlobals
-from otp.ai.AIBaseGlobal import *
-from toontown.clashsuit.suit import DistributedSuitBaseAI
-from toontown.toonbase import ToontownGlobals
+from toontown.clashsuit.suit import ClashSuitBaseAI
 
 
-class DistributedLawbotBossDefenseSpecialistAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
+class DistributedLawbotBossDefenseSpecialistAI(ClashSuitBaseAI.ClashSuitBaseAI):
 
     def __init__(self, lawbotBoss, air, suitPlanner):
-        DistributedSuitBaseAI.DistributedSuitBaseAI.__init__(self, air, suitPlanner)
+        ClashSuitBaseAI.ClashSuitBaseAI.__init__(self, air, suitPlanner)
         self.boss = lawbotBoss
         self.suitDamage = 0
         self.suitMaxDamage = 1
@@ -21,7 +19,7 @@ class DistributedLawbotBossDefenseSpecialistAI(DistributedSuitBaseAI.Distributed
         self.suitDamage = None
         self.suitMaxDamage = None
         taskMgr.remove(self.uniqueName('Remove'))
-        DistributedSuitBaseAI.DistributedSuitBaseAI.delete(self)
+        ClashSuitBaseAI.ClashSuitBaseAI.delete(self)
 
     def getPos(self):
         return (self.getX(), self.getY(), self.getZ())

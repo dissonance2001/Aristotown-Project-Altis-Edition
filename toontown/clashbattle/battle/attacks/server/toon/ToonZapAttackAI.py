@@ -1,14 +1,13 @@
 import math
 
 from otp.ai.AIBaseGlobal import simbase
-from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
 from toontown.clashbattle.battle.BattleGlobals import ZapTargetsWanted, getZapJumpDamage
 from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
 from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
 from toontown.clashbattle.battle.statuses import StatusEffects
 from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.TOON_ZAP)
@@ -38,7 +37,7 @@ class ToonZapAttackAI(ToonAttackAI):
         perHitAttackDamage = attackDamage
 
         for target in self.targets:
-            target: DistributedSuitBaseAI
+            target: ClashSuitBaseAI
             targetId = target.getDoId()
 
             if not target.canBeAttacked():
@@ -86,7 +85,7 @@ class ToonZapAttackAI(ToonAttackAI):
         super().calculate()
     
     def getLanded(self) -> bool:
-        suit: DistributedSuitBaseAI = simbase.air.doId2do.get(self.target)
+        suit: ClashSuitBaseAI = simbase.air.doId2do.get(self.target)
         if suit:
             return bool(suit.getStatusEffectOfType(StatusEffects.ZapWillHit))
         return False

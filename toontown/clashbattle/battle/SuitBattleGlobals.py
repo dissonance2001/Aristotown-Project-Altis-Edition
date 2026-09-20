@@ -61,7 +61,7 @@ def pickFromFreqList(freqList):
 
 
 def calculateHp(data, level, hpMultIndex=0, dnaName=''):
-    # HP Boosts and HP related attributes are set in adjustHP function in DistributedSuitBaseAI
+    # HP Boosts and HP related attributes are set in adjustHP function in ClashSuitBaseAI
     if "specialization" in data:
         formula = data["specialization"]
     else:

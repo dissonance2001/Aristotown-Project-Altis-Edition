@@ -8,7 +8,7 @@ from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAtt
 from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
 from toontown.clashbattle.battle.BattleEventGlobals import BEG
-from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
+from toontown.toon.ClashDistributedToonBaseAI import ClashDistributedToonBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.TOON_HEAL)
@@ -41,7 +41,7 @@ class ToonHealAttackAI(ToonAttackAI):
         finalAttackDamage = math.ceil(finalAttackDamage / max(len(otherTargets), 1))
 
         for target in self.targets:
-            target: DistributedToonBaseAI
+            target: ClashDistributedToonBaseAI
             if not target.canBeAttacked():
                 continue
 

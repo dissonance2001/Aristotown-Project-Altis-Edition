@@ -1,6 +1,6 @@
 from toontown.clashbattle.battle.statuses.StatusEffectDefinitions import DEBUFF, getEffectIdsOfQuality, StatusEffectDefinitions
 from toontown.gui.ScaledFrame import ScaledFrame
-from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit.ClashSuitBase import ClashSuitBase
 from toontown.toon.gui import GuiBinGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.clashbattle.battle.BattleGlobals import *
@@ -491,7 +491,7 @@ class TownBattleToonPanel(DirectFrame):
 
                     if track == AttackEnum.TOON_DROP:
                         if prestige and isinstance(targetIndex, int) and 0 <= targetIndex < len(self.cogs):
-                            cog: DistributedSuitBase = self.cogs[targetIndex]
+                            cog: ClashSuitBase = self.cogs[targetIndex]
                             effectIdSet = {effect.getEffectId()
                                            for effect in cog.getStatusEffects()
                                            if effect.getEffectId() not in DropPrestigeBlacklist

@@ -4,15 +4,15 @@ from direct.interval.IntervalGlobal import Sequence, Parallel, ActorInterval, Wa
 from pandac.PandaModules import Point3
 
 from toontown.clashbattle.battle import BattleParticles, MovieUtil
-from toontown.clashsuit.suit import DistributedSuitBase
+from toontown.clashsuit.suit import ClashSuitBase
 from toontown.toonbase import ToontownGlobals
 
 
-class DistributedWinterMinigameSuit(DistributedSuitBase.DistributedSuitBase):
+class DistributedWinterMinigameSuit(ClashSuitBase.ClashSuitBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedWinterMinigameSuit')
 
     def __init__(self, cr):
-        DistributedSuitBase.DistributedSuitBase.__init__(self, cr)
+        ClashSuitBase.ClashSuitBase.__init__(self, cr)
         self.flyTrack = None
         self.stealTrack = None
         self.explodeTrack = None
@@ -27,10 +27,10 @@ class DistributedWinterMinigameSuit(DistributedSuitBase.DistributedSuitBase):
         self.fsm.enterInitialState()
 
     def generate(self):
-        DistributedSuitBase.DistributedSuitBase.generate(self)
+        ClashSuitBase.ClashSuitBase.generate(self)
 
     def announceGenerate(self):
-        DistributedSuitBase.DistributedSuitBase.announceGenerate(self)
+        ClashSuitBase.ClashSuitBase.announceGenerate(self)
         colNode = self.find('**/distAvatarCollNode*')
         if not colNode.isEmpty():
             colNode.setTag('pieCode', str(ToontownGlobals.PieCodeWinterMinigame))
@@ -41,14 +41,14 @@ class DistributedWinterMinigameSuit(DistributedSuitBase.DistributedSuitBase):
         self._finishTracks()
         if self.fsm:
             self.fsm.request('Off')
-        DistributedSuitBase.DistributedSuitBase.disable(self)
+        ClashSuitBase.ClashSuitBase.disable(self)
 
     def delete(self):
         self._finishTracks()
         if self.fsm:
             del self.fsm
             self.fsm = None
-        DistributedSuitBase.DistributedSuitBase.delete(self)
+        ClashSuitBase.ClashSuitBase.delete(self)
 
     def request(self, state):
         if self.fsm:

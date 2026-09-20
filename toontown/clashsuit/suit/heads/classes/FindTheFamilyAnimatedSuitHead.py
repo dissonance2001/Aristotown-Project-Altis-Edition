@@ -46,9 +46,9 @@ class FindTheFamilyAnimatedSuitHead(UniqueSkelecogAnimatedSuitHead):
         return f'{id(self)}-{str}'
 
     def listenForEvents(self):
-        self.accept('DistributedBattleBase-enterLocalToonWaitForInput', self.startBodyFreakout)
+        self.accept('ClashBattleBase-enterLocalToonWaitForInput', self.startBodyFreakout)
         self.accept('MovieDrop-suitPreFlatten', self.suitGotFlattened)
-        # self.accept('DistributedBattleBase-exitLocalToonWaitForInput', self.__stopBodyFreakout)
+        # self.accept('ClashBattleBase-exitLocalToonWaitForInput', self.__stopBodyFreakout)
 
     def suitGotFlattened(self, suit):
         if not getattr(self, 'suit', None):

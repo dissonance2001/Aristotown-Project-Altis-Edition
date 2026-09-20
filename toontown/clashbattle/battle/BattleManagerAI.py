@@ -1,5 +1,5 @@
 from toontown.clashbattle.battle import SuitBattleGlobals
-from toontown.clashbattle.battle.distributed import DistributedBattleAI
+from toontown.clashbattle.battle.distributed import ClashBattleAI
 from typing import TYPE_CHECKING
 
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
@@ -22,7 +22,7 @@ class BattleManagerAI:
     def __init__(self, air):
         self.air = air  # type: ToontownAIRepository
         self.cellId2battle = {}
-        self.battleConstructor = DistributedBattleAI.DistributedBattleAI
+        self.battleConstructor = ClashBattleAI.ClashBattleAI
 
     def cellHasBattle(self, cellId):
         return cellId in self.cellId2battle

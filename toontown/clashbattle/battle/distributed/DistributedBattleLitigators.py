@@ -1,12 +1,12 @@
 from panda3d.core import Point3, Vec3
 from direct.interval.IntervalGlobal import *
-from toontown.clashbattle.battle.distributed import DistributedBattleFinal
+from toontown.clashbattle.battle.distributed import ClashBattleFinal
 from toontown.clashbattle.battle import BattleProps
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 
 @DirectNotifyCategory()
-class DistributedBattleLitigators(DistributedBattleFinal.DistributedBattleFinal):
+class DistributedBattleLitigators(ClashBattleFinal.ClashBattleFinal):
     """
     DistributedBattleLitigators is a hybrid DistributedBattlePainting file.
     For litigation team members, they fly in from their spot at the table during the boss.
@@ -14,7 +14,7 @@ class DistributedBattleLitigators(DistributedBattleFinal.DistributedBattleFinal)
     """
 
     def __init__(self, cr):
-        DistributedBattleFinal.DistributedBattleFinal.__init__(self, cr)
+        ClashBattleFinal.ClashBattleFinal.__init__(self, cr)
         self.initialReservesJoiningDone = False
         base.dblg = self
 
@@ -150,19 +150,19 @@ class DistributedBattleLitigators(DistributedBattleFinal.DistributedBattleFinal)
         return result
 
     def enterPlayMovie(self, ts=0):
-        DistributedBattleFinal.DistributedBattleFinal.enterPlayMovie(self, ts)
+        ClashBattleFinal.ClashBattleFinal.enterPlayMovie(self, ts)
         # Re-adjust the music when the battle movie is starting.
         self.adjustLitigationTeamMusic()
 
     def enterWaitForInput(self, ts=0):
-        DistributedBattleFinal.DistributedBattleFinal.enterWaitForInput(self, ts)
+        ClashBattleFinal.ClashBattleFinal.enterWaitForInput(self, ts)
         # Re-adjust the music when the player is receiving input.
         self.adjustLitigationTeamMusic()
         if self.hasLocalToon():
             camera.reparentTo(self)
             
     def enterResume(self, ts=0):
-        DistributedBattleFinal.DistributedBattleFinal.enterResume(self, ts)
+        ClashBattleFinal.ClashBattleFinal.enterResume(self, ts)
         # Only our local avatar should update the music
         if self.hasLocalToon():
             # Send a message to update the music, but with an empty list. This will effectively only play the base track

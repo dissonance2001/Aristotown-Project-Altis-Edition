@@ -18,17 +18,17 @@ from toontown.clashbattle.battle.statuses.StatusEffects import DrenchStatusEffec
 from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.events.apriltoons.findthefamily import FindTheFamilyGlobals
 from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
-from toontown.clashsuit.suit.DistributedSuitAI import DistributedSuitAI
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitAI import ClashSuitAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 from toontown.clashsuit.suit import SuitDNA
-from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
+from toontown.toon.ClashDistributedToonBaseAI import ClashDistributedToonBaseAI
 
 from typing import TYPE_CHECKING
 
 from toontown.utils import AIUtil
 
 if TYPE_CHECKING:
-    from toontown.clashbattle.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
+    from toontown.clashbattle.battle.distributed.ClashBattleBaseAI import ClashBattleBaseAI
     from toontown.clashbattle.battle.BattleListenerAI import BattleListenerAI
 
 
@@ -59,7 +59,7 @@ class EnvironmentalBase(BattleListenerObject):
         self.inheritedEventDefinitions = [ENV_ENUM.BASE]
 
         # Variables set by the battle.
-        self.battle = battle  # type: DistributedBattleBaseAI
+        self.battle = battle  # type: ClashBattleBaseAI
         self.battleListener = battleListener  # type: BattleListenerAI
         self.setParticipants([], [])
 
@@ -69,8 +69,8 @@ class EnvironmentalBase(BattleListenerObject):
         return f"{self.__class__.__name__}(environmentalType={self.environmentalType})"
     
     def setParticipants(self, toons: list, suits: list) -> None:
-        self.toons = toons  # type: List[DistributedToonBaseAI]
-        self.suits = suits  # type: List[DistributedSuitBaseAI]
+        self.toons = toons  # type: List[ClashDistributedToonBaseAI]
+        self.suits = suits  # type: List[ClashSuitBaseAI]
     
     def setRounds(self, rounds: int, adjust: bool = False) -> None:
         self.rounds = rounds
@@ -127,19 +127,19 @@ class EnvironmentalBase(BattleListenerObject):
     Other useful events that we listen to
     """
 
-    def handleToonAddedToBattle(self, toon: DistributedToonBaseAI):
+    def handleToonAddedToBattle(self, toon: ClashDistributedToonBaseAI):
         if toon not in self.toons:
             self.toons.append(toon)
 
-    def handleSuitAddedToBattle(self, suit: DistributedSuitBaseAI):
+    def handleSuitAddedToBattle(self, suit: ClashSuitBaseAI):
         if suit not in self.suits:
             self.suits.append(suit)
 
-    def handleToonRemovedFromBattle(self, toon: DistributedToonBaseAI):
+    def handleToonRemovedFromBattle(self, toon: ClashDistributedToonBaseAI):
         if toon in self.toons:
             self.toons.remove(toon)
 
-    def handleSuitRemovedFromBattle(self, suit: DistributedSuitBaseAI):
+    def handleSuitRemovedFromBattle(self, suit: ClashSuitBaseAI):
         # Let subclasses override this function.
         pass
 
@@ -208,7 +208,7 @@ class PersistentStatusEffectEnvironmental(EnvironmentalBase):
         super().setParticipants(toons, suits)
         self.updateAppliedEffects()
 
-    def handleToonAddedToBattle(self, toon: DistributedToonBaseAI) -> None:
+    def handleToonAddedToBattle(self, toon: ClashDistributedToonBaseAI) -> None:
         """
         A new battle member being added -> refresh the active effects.
         :param toon: The Toon being added into battle.
@@ -216,7 +216,7 @@ class PersistentStatusEffectEnvironmental(EnvironmentalBase):
         super().handleToonAddedToBattle(toon)
         self.updateAppliedEffects()
 
-    def handleSuitAddedToBattle(self, suit: DistributedSuitBaseAI) -> None:
+    def handleSuitAddedToBattle(self, suit: ClashSuitBaseAI) -> None:
         """
         A new battle member being added -> refresh the active effects.
         :param suit: The Suit being added into battle.
@@ -246,7 +246,7 @@ class PersistentStatusEffectEnvironmental(EnvironmentalBase):
         pass
 
     def applyStatusEffectToToons(self, effectId: SEE, extraArgs: list = None, rounds: Optional[int] = -1,
-                                 manageEffect: bool = True, exceptions: List[DistributedToonBaseAI] = None,
+                                 manageEffect: bool = True, exceptions: List[ClashDistributedToonBaseAI] = None,
                                  effectExceptions: Optional[List[SEE]] = None) -> None:
         """
         Applies a Status Effect onto all Toons in battle.
@@ -278,7 +278,7 @@ class PersistentStatusEffectEnvironmental(EnvironmentalBase):
                 self.applyStatusEffectToToon(toon, effectId, extraArgs, rounds, manageEffect)
 
     def applyStatusEffectToSuits(self, effectId: SEE, extraArgs: list = None, rounds: Optional[int] = -1,
-                                 manageEffect: bool = True, exceptions: List[DistributedSuitBaseAI] = None,
+                                 manageEffect: bool = True, exceptions: List[ClashSuitBaseAI] = None,
                                  effectExceptions: Optional[List[SEE]] = None) -> None:
         """
         Applies a Status Effect onto all Suits in battle.
@@ -306,7 +306,7 @@ class PersistentStatusEffectEnvironmental(EnvironmentalBase):
             if success:
                 self.applyStatusEffectToSuit(suit, effectId, extraArgs, rounds, manageEffect)
 
-    def applyStatusEffectToToon(self, toon: DistributedToonBaseAI,
+    def applyStatusEffectToToon(self, toon: ClashDistributedToonBaseAI,
                                 effectId: SEE, extraArgs: list = None, rounds: Optional[int] = -1,
                                 manageEffect: bool = True) -> None:
         """
@@ -325,7 +325,7 @@ class PersistentStatusEffectEnvironmental(EnvironmentalBase):
         if manageEffect and not combined:
             self.managedEffects.append(effect)
 
-    def applyStatusEffectToSuit(self, suit: DistributedSuitBaseAI,
+    def applyStatusEffectToSuit(self, suit: ClashSuitBaseAI,
                                 effectId: SEE, extraArgs: list = None, rounds: Optional[int] = -1,
                                 manageEffect: bool = True) -> None:
         """
@@ -358,25 +358,25 @@ class ContentSyncEnvironmental(EnvironmentalBase):
         # All Toons in battle need to be content synced now.
         self.applyContentSyncToToon(AIUtil.avIds2Avs(self.battle.toons))
 
-    def applyContentSyncToToon(self, toons: Union[DistributedToonBaseAI, List[DistributedToonBaseAI]]):
+    def applyContentSyncToToon(self, toons: Union[ClashDistributedToonBaseAI, List[ClashDistributedToonBaseAI]]):
         self.battle.air.contentSyncManager.applyContentSync(
             syncType=self.contentSyncType,
             toons=toons,
             listenForZone=False,
         )
 
-    def removeContentSyncFromToon(self, toons: Union[DistributedToonBaseAI, List[DistributedToonBaseAI]]):
+    def removeContentSyncFromToon(self, toons: Union[ClashDistributedToonBaseAI, List[ClashDistributedToonBaseAI]]):
         self.battle.air.contentSyncManager.removeContentSync(toons)
 
     """
     Event hooks    
     """
 
-    def handleToonAddedToBattle(self, toon: DistributedToonBaseAI):
+    def handleToonAddedToBattle(self, toon: ClashDistributedToonBaseAI):
         super().handleToonAddedToBattle(toon)
         self.applyContentSyncToToon(toon)
 
-    def handleToonRemovedFromBattle(self, toon: DistributedToonBaseAI):
+    def handleToonRemovedFromBattle(self, toon: ClashDistributedToonBaseAI):
         super().handleToonRemovedFromBattle(toon)
         self.removeContentSyncFromToon(toon)
 
@@ -442,7 +442,7 @@ class RainmakerEnvironmental(PersistentStatusEffectEnvironmental):
         """
         return self.currentWeather
 
-    def getRainmaker(self) -> Optional[DistributedSuitBaseAI]:
+    def getRainmaker(self) -> Optional[ClashSuitBaseAI]:
         """
         Returns the boss suit, aka Rainmaker.
         """
@@ -470,7 +470,7 @@ class RainmakerEnvironmental(PersistentStatusEffectEnvironmental):
     Effect application
     """
 
-    def handleSuitAddedToBattle(self, suit: DistributedSuitBaseAI) -> None:
+    def handleSuitAddedToBattle(self, suit: ClashSuitBaseAI) -> None:
         """
         Whenever we add a suit into battle, we also
         add some special effects onto Suits that arrive in certain phases.
@@ -487,7 +487,7 @@ class RainmakerEnvironmental(PersistentStatusEffectEnvironmental):
         # Apply all other effects now.
         super().handleSuitAddedToBattle(suit)
 
-    def handleDrenchedExpire(self, suit: DistributedSuitBaseAI):
+    def handleDrenchedExpire(self, suit: ClashSuitBaseAI):
         """
         When Drenched expires on a suit, we re-apply perma soak as necessary.
         """
@@ -661,11 +661,11 @@ class RainmakerEnvironmental(PersistentStatusEffectEnvironmental):
         ],
     ]
 
-    def spawnCogPattern(self) -> List[DistributedSuitAI]:
+    def spawnCogPattern(self) -> List[ClashSuitAI]:
         suitPatternList = random.choice(self.suitPatternBible)
         suits = []
         for suitPattern in suitPatternList:
-            newSuit = DistributedSuitAI(self.battle.air, None)
+            newSuit = ClashSuitAI(self.battle.air, None)
             dna = SuitDNA.SuitDNA()
             suitName = suitPattern.name
             dna.newSuit(suitName)
@@ -728,7 +728,7 @@ class PlutocratEnvironmental(PersistentStatusEffectEnvironmental):
             {"mode": "end", 'respectPreviousAdditions': True},
         )
     
-    def attemptShatter(self, suit: DistributedSuitBaseAI, attackType: AttackEnum) -> None:
+    def attemptShatter(self, suit: ClashSuitBaseAI, attackType: AttackEnum) -> None:
         # Some attack types are blacklisted from shattering cogs.
         if attackType in (AttackEnum.TOON_FIRE,):
             return
@@ -744,7 +744,7 @@ class PlutocratEnvironmental(PersistentStatusEffectEnvironmental):
             {"mode": "insert"},
         )
 
-    def handleSuitAddedToBattle(self, suit: DistributedSuitBaseAI) -> None:
+    def handleSuitAddedToBattle(self, suit: ClashSuitBaseAI) -> None:
         """If a new suit is added to the battle while snow squall is ongoing,
         ensure that they are cold.
         """
@@ -753,7 +753,7 @@ class PlutocratEnvironmental(PersistentStatusEffectEnvironmental):
         
         super().handleSuitAddedToBattle(suit)
     
-    def freezeSuit(self, suit: DistributedSuitBaseAI, effect: Union[SoakStatusEffect, DrenchStatusEffect]) -> None:
+    def freezeSuit(self, suit: ClashSuitBaseAI, effect: Union[SoakStatusEffect, DrenchStatusEffect]) -> None:
         """When a Suit is applied with either the soaked or drenched effect, remove it
         and replace it with frozen.
         """
@@ -787,7 +787,7 @@ class MajorPlayerReviveHandler(EnvironmentalBase):
         # Has Major Player been revived already?
         self.hasRevived = False
 
-    def handleSuitRemovedFromBattle(self, suit: DistributedSuitBaseAI):
+    def handleSuitRemovedFromBattle(self, suit: ClashSuitBaseAI):
         # Revive check
         if self.hasRevived:
             return
@@ -1047,7 +1047,7 @@ class PacesetterGagOrderEnvironmental(GagOrderOverwriteEnvironmental):
         # Fully initialize.
         super().__init__(*args, **kwargs)
 
-    def handleSuitRemovedFromBattle(self, suit: DistributedSuitBaseAI):
+    def handleSuitRemovedFromBattle(self, suit: ClashSuitBaseAI):
         super().handleSuitRemovedFromBattle(suit)
         if suit.getStyleName(False) == 'psetter':
             self.destroy()
@@ -1191,11 +1191,11 @@ class AdaptiveLaffEnvironmental(EnvironmentalBase):
     Event hooks    
     """
 
-    def handleToonAddedToBattle(self, toon: DistributedToonBaseAI):
+    def handleToonAddedToBattle(self, toon: ClashDistributedToonBaseAI):
         super().handleToonAddedToBattle(toon)
         self.applyAdaptiveLaffToToon([toon])
 
-    def handleToonRemovedFromBattle(self, toon: DistributedToonBaseAI):
+    def handleToonRemovedFromBattle(self, toon: ClashDistributedToonBaseAI):
         super().handleToonRemovedFromBattle(toon)
         self.removeAdaptiveLaffFromToon([toon])
 
@@ -1341,7 +1341,7 @@ class HighRollerCloneHandler(PersistentStatusEffectEnvironmental):
     def attemptPowerTrip(self):
         possibleAttackers = []
         for clone in self.epicCurrentCloneList:
-            clone: DistributedSuitAI
+            clone: ClashSuitAI
             if clone:
                 if not clone.hasStatusEffectOfId(SEE.EFFECT_SUIT_LURED) and clone in self.battle.aliveSuits:
                     possibleAttackers.append(clone)
@@ -1683,7 +1683,7 @@ class FTFPresidentShivering(EnvironmentalBase):
     def suitIsUs(self, suit):
         return bool(suit.getStatusEffectOfId(SEE.EFFECT_FTF_PRESIDENT_SHIVERING))
 
-    def attemptShatter(self, suit: DistributedSuitBaseAI, attackType: AttackEnum) -> None:
+    def attemptShatter(self, suit: ClashSuitBaseAI, attackType: AttackEnum) -> None:
         # Some attack types are blacklisted from shattering cogs.
         if attackType in (AttackEnum.TOON_FIRE,):
             return
@@ -1830,6 +1830,6 @@ class FTFSupervisorConfusedGagOrder(PacesetterGagOrderEnvironmental):
         super().__init__(*args, **kwargs)
         self.inheritedEventDefinitions.append(ENV_ENUM.PACESETTER_GAG_ORDER)
 
-    def handleSuitRemovedFromBattle(self, suit: DistributedSuitBaseAI):
+    def handleSuitRemovedFromBattle(self, suit: ClashSuitBaseAI):
         # Overwrite the pacesetter version of this func that destroys itself when pacesetter dies
         EnvironmentalBase.handleSuitRemovedFromBattle(self, suit)

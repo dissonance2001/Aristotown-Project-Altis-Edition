@@ -8,7 +8,7 @@ from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
 from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
 from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
-from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
+from toontown.toon.ClashDistributedToonBaseAI import ClashDistributedToonBaseAI
 
 
 """
@@ -193,7 +193,7 @@ class GenericDamageAttackAI(AttackAI):
                 attackTarget.landed = attackHit
                 attackTarget.hpAdjust = -result
                 # This is a heal on a toon, we need to cap it
-                if isinstance(target, DistributedToonBaseAI) and attackTarget.hpAdjust > 0:
+                if isinstance(target, ClashDistributedToonBaseAI) and attackTarget.hpAdjust > 0:
                     hpDelta = target.getMaxHp() - target.getHp()
                     attackTarget.hpAdjust = min(hpDelta, attackTarget.hpAdjust)
     

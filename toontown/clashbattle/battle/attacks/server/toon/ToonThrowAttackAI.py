@@ -7,7 +7,7 @@ from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import Attack
 from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
 from toontown.clashbattle.battle.statuses import StatusEffects, SEE
 from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 import math
 
 
@@ -23,7 +23,7 @@ class ToonThrowAttackAI(ToonAttackAI):
             self.giveMissEffect()
 
         for target in self.targets.copy():
-            target: DistributedSuitBaseAI
+            target: ClashSuitBaseAI
             targetId = target.getDoId()
 
             if not target.canBeAttacked():
@@ -61,7 +61,7 @@ class ToonThrowAttackAI(ToonAttackAI):
 
         return super().calculate()
 
-    def attemptAddMarkTarget(self, suit: DistributedSuitBaseAI):
+    def attemptAddMarkTarget(self, suit: ClashSuitBaseAI):
         """
         Attempts to mark the indicated target.
         """

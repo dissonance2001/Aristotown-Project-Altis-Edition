@@ -10,7 +10,7 @@ from toontown.clashbattle.battle.statuses import StatusEffects
 from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum
 from toontown.inventory.enums.ItemEnums import MaterialItemType
 from toontown.modifiers import ModifierEnums
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 from toontown.toon.ToonStatsGlobals import ToonStats
 
 
@@ -19,7 +19,7 @@ class ToonFireAttackAI(ToonAttackAI):
 
     def calculate(self) -> None:
         for suit in self.targets:
-            suit: DistributedSuitBaseAI
+            suit: ClashSuitBaseAI
             suitId = suit.getDoId()
 
             if suit.getHp() <= 0:
@@ -51,7 +51,7 @@ class ToonFireAttackAI(ToonAttackAI):
 
             self.sendEvent(BEG.EVENT_FIRED_SUIT, [suit, self.invoker])
 
-    def useToonFires(self, suit: DistributedSuitBaseAI) -> bool:
+    def useToonFires(self, suit: ClashSuitBaseAI) -> bool:
         """
         This module handles subtracting the correct amount of fires from a toon after usage.
         """

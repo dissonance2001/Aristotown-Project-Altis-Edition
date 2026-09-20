@@ -5,14 +5,14 @@ from direct.interval.IntervalGlobal import *
 
 from toontown.clashbattle.battle import BattleGlobals, MovieUtil
 from toontown.clashsuit.suit import SuitDNA, SuitGlobals
-from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit.ClashSuitBase import ClashSuitBase
 from toontown.toon.DistributedToonBase import DistributedToonBase
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from toontown.clashbattle.battle.distributed.DistributedBattleBase import DistributedBattleBase
+    from toontown.clashbattle.battle.distributed.ClashBattleBase import ClashBattleBase
 
 
 @DirectNotifyCategory()
@@ -27,8 +27,8 @@ class BattleCamera:
 
     def __init__(self, battle) -> None:
         self.toons = []  # type: List[DistributedToonBase]
-        self.suits = []  # type: List[DistributedSuitBase]
-        self.battle = battle  # type: DistributedBattleBase
+        self.suits = []  # type: List[ClashSuitBase]
+        self.battle = battle  # type: ClashBattleBase
 
         self._seq: Sequence = None
         self._hasEnteredWaitForInput = False

@@ -37,10 +37,10 @@ from toontown.clashbattle.battle.statuses.StatusEffectDefinitions import DEBUFF
 from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE, SUIT_STATUS_EFFECTS_TO_REMOVE
 from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 from toontown.clashsuit.suit.SuitDNA import SuitDNA
 from toontown.toon import ToonDNA
-from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
+from toontown.toon.ClashDistributedToonBaseAI import ClashDistributedToonBaseAI
 from toontown.toonbase import TTLocalizer
 
 
@@ -256,7 +256,7 @@ class HealingBellAI(RemoveStatusEffectAttackAI):
 
         # We delete all negative status effects from each suit except for the user
         for suit in self.targets:
-            suit: DistributedSuitBaseAI
+            suit: ClashSuitBaseAI
             if suit == self.invoker:
                 continue
             for effectType in self.STATUS_EFFECT:
@@ -566,7 +566,7 @@ class WagerBarAI(RemoveStatusEffectAttackAI, GenericDamageAttackAI, WagerBaseAI)
         self.targets = [*self.getAliveSuits(), *self.getToons()]
 
     def getDamage(self, target: BattleAvatar = None) -> int:
-        if isinstance(target, DistributedSuitBaseAI):
+        if isinstance(target, ClashSuitBaseAI):
             return 8
         return self.invoker.getAttackDamage(self.attackType)
 
@@ -576,7 +576,7 @@ class WagerBeansAI(WagerBaseAI):
     
     def calculate(self) -> None:
         for target in self.targets:
-            target: DistributedToonBaseAI
+            target: ClashDistributedToonBaseAI
 
             # Give them silly little beans :)
             target.addMoney(20)
@@ -637,7 +637,7 @@ class WoodchipperAI(ApplyStatusEffectAttackAI):
 
     def setTargetList(self) -> None:
         # Simply apply Woodchipper to a random Toon
-        activeToons = self.getToons() # type: list[DistributedToonBaseAI]
+        activeToons = self.getToons() # type: list[ClashDistributedToonBaseAI]
         toonsWithoutEffect = []
         for toon in activeToons:
             if not toon.getStatusEffectsOfId(self.STATUS_EFFECT):
@@ -836,7 +836,7 @@ class StormCellZapAI(DamageAttackAI):
             result = self.getDamage(target)
             attackTarget = self.createAttackTarget(target.doId)
             attackTarget.landed = 1
-            if isinstance(target, DistributedToonBaseAI):
+            if isinstance(target, ClashDistributedToonBaseAI):
                 attackTarget.hpAdjust = result
             # else:
             #     attackTarget.hpAdjust = (round(target.getMaxHp() * 1.5) - target.getHp())
@@ -1077,9 +1077,9 @@ class RushJobAI(ApplyStatusEffectAttackAI):
         fromAttorney = self.extraArgs[0]
 
         # Do some funnies from here.
-        if isinstance(target, DistributedToonBaseAI):
+        if isinstance(target, ClashDistributedToonBaseAI):
             self.extraArgs = [AttackEnum.TOON_HEAL]
-        elif isinstance(target, DistributedSuitBaseAI):
+        elif isinstance(target, ClashSuitBaseAI):
             choices = [t for t in ATTACK_TRACKS if t != AttackEnum.TOON_HEAL]
 
             # Remove trap & lure from being used on lured cogs.
@@ -1202,7 +1202,7 @@ class RockingInRhythmAI(GenericDamageAttackAI):
     def applyDamageModifiers(self, target: BattleAvatar, attackDamage: int, 
                              damaging: bool = True, invokerMods: bool = True, 
                              targetMods: bool = True):
-        if isinstance(target, DistributedSuitBaseAI):
+        if isinstance(target, ClashSuitBaseAI):
             return attackDamage
         return super().applyDamageModifiers(target, attackDamage, damaging, invokerMods, targetMods)
 
@@ -1433,7 +1433,7 @@ class ShatterDamageAI(GenericDamageAttackAI):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.suit: DistributedSuitBaseAI = self.extraArgs[0]
+        self.suit: ClashSuitBaseAI = self.extraArgs[0]
     
     def cleanup(self) -> None:
         del self.suit
@@ -1449,12 +1449,12 @@ class ShatterDamageAI(GenericDamageAttackAI):
         # Target the nearby suits if possible.
         index = self.suits.index(self.suit)
         if index > 0:
-            suit: DistributedSuitBaseAI = self.suits[index - 1]
+            suit: ClashSuitBaseAI = self.suits[index - 1]
             if suit.canBeAttacked():
                 self.targets.append(suit)
 
         if index < len(self.suits) - 1:
-            suit: DistributedSuitBaseAI = self.suits[index + 1]
+            suit: ClashSuitBaseAI = self.suits[index + 1]
             if suit.canBeAttacked():
                 self.targets.append(suit)
 
@@ -1544,7 +1544,7 @@ class AggrandizeAI(RemoveStatusEffectAttackAI):
     def calculate(self) -> None:
         super().calculate()
 
-        target = self.targets[0]  # type: DistributedSuitBaseAI
+        target = self.targets[0]  # type: ClashSuitBaseAI
 
         overcharge = target.getStatusEffectOfId(SEE.EFFECT_OVERCHARGED)
         isOvercharged = overcharge and overcharge.active
@@ -1627,7 +1627,7 @@ class OffboardingAI(SuitSingleAttackAI):
         # The damage multiplier scales to the health percentage.
         return self.getTargetDamage(self.targets[0])
 
-    def getTargetDamage(self, tgt: DistributedSuitBaseAI) -> int:
+    def getTargetDamage(self, tgt: ClashSuitBaseAI) -> int:
         # Clamp the health percentage between 10% and 120%.
         healthPercentage = min(max(tgt.getHealthPercentage(), 0.1), 1.2)
         return math.ceil(tgt.getActualLevel() * healthPercentage * self.DAMAGE_MULT)
@@ -1661,7 +1661,7 @@ class LayoffsAI(OffboardingAI):
             return target.getHp()
 
         # Get the associated target.
-        tgt: DistributedSuitBaseAI = self.targets[self.targets.index(target) + len(self.targets) // 2]
+        tgt: ClashSuitBaseAI = self.targets[self.targets.index(target) + len(self.targets) // 2]
 
         # The damage multiplier scales to the health percentage.
         return self.getTargetDamage(tgt)
@@ -1689,7 +1689,7 @@ class CutTheSlackAI(GenericDamageAttackAI):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.coolSpecialBoy: DistributedSuitBaseAI = None
+        self.coolSpecialBoy: ClashSuitBaseAI = None
 
     def cleanup(self) -> None:
         del self.coolSpecialBoy

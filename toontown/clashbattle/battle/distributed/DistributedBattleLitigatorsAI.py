@@ -1,12 +1,12 @@
 from toontown.clashsuit.suit import BossCogGlobals
 from toontown.clashbattle.battle.BattleGlobals import BattleOrderPriority
-from toontown.clashbattle.battle.distributed.DistributedBattleFinalAI import DistributedBattleFinalAI
+from toontown.clashbattle.battle.distributed.ClashBattleFinalAI import ClashBattleFinalAI
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 
 @DirectNotifyCategory()
-class DistributedBattleLitigatorsAI(DistributedBattleFinalAI):
+class DistributedBattleLitigatorsAI(ClashBattleFinalAI):
 
     def enterResume(self):
         # We need to do 2 things here, if we have minibosses remaining:

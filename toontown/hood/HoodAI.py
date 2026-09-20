@@ -1,3 +1,4 @@
+from toontown.clashsuit.suit import ClashSuitPlannerAI
 from direct.directnotify.DirectNotifyGlobal import *
 from toontown.building import DistributedBuildingMgrAI
 from toontown.dna.DNAParser import DNAStorage, DNAGroup, DNAVisGroup
@@ -186,13 +187,18 @@ class HoodAI:
             self.buildingManagers.append(buildingManager)
             self.air.buildingManagers[zoneId] = buildingManager
 
+
     def createSuitPlanners(self):
         for zoneId in self.getZoneTable():
             if zoneId == self.zoneId:
                 continue
-            
+
+            CLASH_SUIT_ZONES = {2100}
             zoneId = ZoneUtil.getTrueZoneId(zoneId, self.zoneId)
-            suitPlanner = DistributedSuitPlannerAI.DistributedSuitPlannerAI(self.air, zoneId)
+            if zoneId in CLASH_SUIT_ZONES:
+                suitPlanner = ClashSuitPlannerAI.ClashSuitPlannerAI(self.air, zoneId)
+            else:
+                suitPlanner = DistributedSuitPlannerAI.DistributedSuitPlannerAI(self.air, zoneId)
             suitPlanner.generateWithRequired(zoneId)
             suitPlanner.d_setZoneId(zoneId)
             suitPlanner.initTasks()

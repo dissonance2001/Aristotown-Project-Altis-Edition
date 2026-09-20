@@ -20,7 +20,7 @@ from toontown.utils.DirectNotifyCategory import getNotify
 This file contains a collection of functions to manage battle
 experience and generation of reward movies on the AI side.
 
-These functions used to be methods on DistributedBattleBaseAI,
+These functions used to be methods on ClashBattleBaseAI,
 BattleCalculatorAI, and Movie, but they have been pulled out here to
 collect them together and generalize them for final battles, which
 might have as many as 8 Toons.

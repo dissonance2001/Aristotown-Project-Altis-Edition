@@ -1,8 +1,8 @@
-from .DistributedLawbotBossSuit import *
+from .ClashLawbotBossSuit import *
 
 
-class DistributedHardmodeLawbotBossSuit(DistributedLawbotBossSuit):
+class DistributedHardmodeLawbotBossSuit(ClashLawbotBossSuit):
 
     def __init__(self, cr):
-        DistributedLawbotBossSuit.__init__(self, cr)
+        ClashLawbotBossSuit.__init__(self, cr)
         self.cannonBossState = 'BattleThree'

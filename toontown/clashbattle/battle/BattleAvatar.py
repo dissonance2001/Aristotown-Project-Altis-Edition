@@ -605,8 +605,8 @@ class BattleAvatar(AstronStruct, BattleListenerObject):
 
     def isSuit(self) -> bool:
         if self.isServerSided():
-            from toontown.clashsuit.suit.DistributedSuitAI import DistributedSuitAI
-            return isinstance(self, DistributedSuitAI)
+            from toontown.clashsuit.suit.ClashSuitAI import ClashSuitAI
+            return isinstance(self, ClashSuitAI)
         else:
-            from toontown.clashsuit.suit.DistributedSuit import DistributedSuit
-            return isinstance(self, DistributedSuit)
+            from toontown.clashsuit.suit.ClashSuit import ClashSuit
+            return isinstance(self, ClashSuit)

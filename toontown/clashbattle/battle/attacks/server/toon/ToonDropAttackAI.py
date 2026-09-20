@@ -4,7 +4,7 @@ from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import Attack
 from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
 from toontown.clashbattle.battle.statuses import StatusEffects
 from toontown.clashbattle.battle.statuses.StatusEffectDefinitions import DEBUFF, getEffectIdsOfQuality, StatusEffectDefinitions
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.TOON_DROP)
@@ -18,7 +18,7 @@ class ToonDropAttackAI(ToonAttackAI):
             self.giveMissEffect()
 
         for target in self.targets:
-            target: DistributedSuitBaseAI
+            target: ClashSuitBaseAI
             targetId = target.getDoId()
 
             if not target.canBeAttacked():

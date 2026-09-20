@@ -502,7 +502,7 @@ def makeWitchHunterDeath(suit, battle):
     if not hasattr(battle, 'instance'):
         return
 
-    from toontown.clashsuit.suit import DistributedSuitBase, SuitDNA
+    from toontown.clashsuit.suit import ClashSuitBase, SuitDNA
 
     nextLocalDoId = -2450
 
@@ -513,7 +513,7 @@ def makeWitchHunterDeath(suit, battle):
     possibleSuits = ['bw', 'le', 'sd', 'br', 'sh', 'ad']
     levelRange = [8, 9, 10, 11, 12]
     for _ in range(2):
-        newSuit = DistributedSuitBase.DistributedSuitBase(base.cr)
+        newSuit = ClashSuitBase.ClashSuitBase(base.cr)
         d = SuitDNA.SuitDNA()
         newSuitType = ranGen.choice(possibleSuits)
         d.newSuit(name=newSuitType)

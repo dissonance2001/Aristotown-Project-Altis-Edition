@@ -15,8 +15,8 @@ from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE, SUIT_STATUS_EFFECTS_TO_REMOVE
 from toontown.clashbattle.battle.statuses.StatusEffects import LureStatusEffect, UseGagLevelSenderStatusEffect
 from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
-from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
+from toontown.toon.ClashDistributedToonBaseAI import ClashDistributedToonBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.BAYOU_BASH)
@@ -37,7 +37,7 @@ class BayouBashAI(AttackAI):
         if len(self.targets) >= 6 or self.hasEventBeenSent(BEG.EVENT_LT_LGATOR_BAYOU_BASH):
             luredSuits = []
             for suit in self.targets:
-                suit: DistributedSuitBaseAI
+                suit: ClashSuitBaseAI
                 for effectType in SUIT_STATUS_EFFECTS_TO_REMOVE:
                     effectsOfType = suit.getStatusEffectsOfId(effectType)
                     for effect in effectsOfType:
@@ -162,7 +162,7 @@ class CourtSanctionAI(DamageInflictStatusAttackAI):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.toonsDamageDealt: Dict[DistributedToonBaseAI, int] = self.extraArgs[0]
+        self.toonsDamageDealt: Dict[ClashDistributedToonBaseAI, int] = self.extraArgs[0]
         self.sanctionMult = self.extraArgs[1]
         self.weakened = self.extraArgs[2]
         self.extraArgs = self.extraArgs[1:]
@@ -322,7 +322,7 @@ class SnapAI(DamageInflictStatusAttackAI, SuitSingleAttackAI):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.toonsDamageDealt: Dict[DistributedToonBaseAI, int] = self.extraArgs[0]
+        self.toonsDamageDealt: Dict[ClashDistributedToonBaseAI, int] = self.extraArgs[0]
         self.vulnerableMult = self.extraArgs[1]
         self.weakened = self.extraArgs[2]
         self.extraArgs = self.extraArgs[1:]

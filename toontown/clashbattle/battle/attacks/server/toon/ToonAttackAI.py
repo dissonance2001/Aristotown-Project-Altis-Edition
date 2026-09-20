@@ -13,7 +13,7 @@ from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.clashbattle.battle.statuses import StatusEffects
 from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum, SEE
 from toontown.hood import ZoneUtil
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 from toontown.toon.DistributedToonAI import DistributedToonAI
 from toontown.toon.ToonStatsGlobals import ToonStats
 from toontown.inventory.enums.ItemEnums import BoosterItemType
@@ -343,7 +343,7 @@ class ToonAttackAI(AttackAI):
         self.expGained[toonId][track] = int(min(ExperienceCap, self.expGained[toonId][track] + (level + 1)
                                                 * (self.creditMult + gagExpBoost) * InherentTrackExpMult.get(track, 1)))
 
-    def attemptUnlureSuit(self, suit: DistributedSuitBaseAI, instant: bool = False) -> bool:
+    def attemptUnlureSuit(self, suit: ClashSuitBaseAI, instant: bool = False) -> bool:
         """
         Attempts to unlure suit and give credit to the invoker of the lure.
         """

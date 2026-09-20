@@ -939,8 +939,10 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
 
     def getFirstBattle(self):
         from toontown.battle import DistributedBattleBase
+        from toontown.clashbattle.battle.distributed import ClashBattleBase
+        battleClasses = (DistributedBattleBase.DistributedBattleBase, ClashBattleBase.ClashBattleBase)
         for dobj in list(self.doId2do.values()):
-            if isinstance(dobj, DistributedBattleBase.DistributedBattleBase):
+            if isinstance(dobj, battleClasses):
                 return dobj
 
     def forbidCheesyEffects(self, forbid):

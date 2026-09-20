@@ -4,7 +4,7 @@ from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import Attack
 from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
 from toontown.clashbattle.battle.statuses import SEE, StatusEffects
 from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.TOON_SOUND)
@@ -19,7 +19,7 @@ class ToonSoundAttackAI(ToonAttackAI):
         attackHitSomeone = False
 
         for target in self.targets:
-            target: DistributedSuitBaseAI
+            target: ClashSuitBaseAI
             targetId = target.getDoId()
 
             if not target.canBeAttacked():

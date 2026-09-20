@@ -10,7 +10,7 @@ from toontown.clashbattle.battle.statuses import StatusEffects, SEE
 from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum
 from toontown.inventory.enums.ItemEnums import MaterialItemType
 from toontown.modifiers import ModifierEnums
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 from toontown.toon.ToonStatsGlobals import ToonStats
 
 
@@ -19,7 +19,7 @@ class ToonSueAttackAI(ToonAttackAI):
 
     def calculate(self) -> None:
         for suit in self.targets:
-            suit: DistributedSuitBaseAI
+            suit: ClashSuitBaseAI
             suitId = suit.getDoId()
 
             if suit.getHp() <= 0:
@@ -49,7 +49,7 @@ class ToonSueAttackAI(ToonAttackAI):
             suit.addStatusEffect(SEE.EFFECT_SUIT_SUED)
             self.sendEvent(BEG.EVENT_SUED_SUIT, [suit, self.invoker])
 
-    def useToonSues(self, suit: DistributedSuitBaseAI) -> bool:
+    def useToonSues(self, suit: ClashSuitBaseAI) -> bool:
         """
         This module handles subtracting the correct amount of sues from a toon after usage.
         """

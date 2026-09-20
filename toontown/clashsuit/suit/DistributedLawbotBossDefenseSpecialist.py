@@ -5,11 +5,11 @@ from direct.task.Task import Task
 
 from toontown.clashsuit.suit import BossCogGlobals
 from toontown.clashbattle.battle import MovieUtil
-from toontown.clashsuit.suit import DistributedSuitBase, SuitHealthMeter
+from toontown.clashsuit.suit import ClashSuitBase, SuitHealthMeter
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 
 
-class DistributedLawbotBossDefenseSpecialist(DistributedSuitBase.DistributedSuitBase, FSM.FSM):
+class DistributedLawbotBossDefenseSpecialist(ClashSuitBase.ClashSuitBase, FSM.FSM):
 
     def __init__(self, cr):
         try:
@@ -18,8 +18,8 @@ class DistributedLawbotBossDefenseSpecialist(DistributedSuitBase.DistributedSuit
         except:
             self.DistributedSuit_initialized = 1
 
-        DistributedSuitBase.DistributedSuitBase.__init__(self, cr)
-        FSM.FSM.__init__(self, 'DistributedLawbotBossSuit')
+        ClashSuitBase.ClashSuitBase.__init__(self, cr)
+        FSM.FSM.__init__(self, 'ClashLawbotBossSuit')
         self.boss = None
         self.flyingSeq = None
         self.propellerInterval = None
@@ -31,13 +31,13 @@ class DistributedLawbotBossDefenseSpecialist(DistributedSuitBase.DistributedSuit
         """
         Called when the DistributedObject is reintroduced to the world, either for the first time or from the cache.
         """
-        DistributedSuitBase.DistributedSuitBase.generate(self)
+        ClashSuitBase.ClashSuitBase.generate(self)
 
     def announceGenerate(self):
         """
         Handle all required fields having been filled in.
         """
-        DistributedSuitBase.DistributedSuitBase.announceGenerate(self)
+        ClashSuitBase.ClashSuitBase.announceGenerate(self)
         self.flyingSeq = Sequence(
             ActorInterval(self, 'landing', startFrame=10, endFrame=20, playRate=0.5),
             ActorInterval(self, 'landing', startFrame=20, endFrame=10, playRate=0.5)
@@ -62,7 +62,7 @@ class DistributedLawbotBossDefenseSpecialist(DistributedSuitBase.DistributedSuit
     def disable(self):
         self.setState('Off')
         self.boss = None
-        DistributedSuitBase.DistributedSuitBase.disable(self)
+        ClashSuitBase.ClashSuitBase.disable(self)
 
     def delete(self):
         try:
@@ -71,7 +71,7 @@ class DistributedLawbotBossDefenseSpecialist(DistributedSuitBase.DistributedSuit
         except:
             self.DistributedSuit_deleted = 1
 
-        DistributedSuitBase.DistributedSuitBase.delete(self)
+        ClashSuitBase.ClashSuitBase.delete(self)
         self.ignoreAll()
         del self.boss
         self.flyingSeq.finish()

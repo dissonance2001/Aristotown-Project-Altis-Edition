@@ -186,7 +186,7 @@ suitToMusic = {
 }
 
 
-# Instance the class (reference DistributedBattle.py) if we want to use the listener in an obscure place
+# Instance the class (reference ClashBattle.py) if we want to use the listener in an obscure place
 class BattleMusicListener:
     """
     ===Battle Music Listener===

@@ -31,7 +31,7 @@ from toontown.clashbattle.battle.visuals.VisualEffects import ChangeSpeciesVisua
 from toontown.cutscene.repository.CutsceneLoader import CutsceneLoader
 from toontown.inventory.enums.ItemEnums import BoosterItemType
 from toontown.clashsuit.suit import SuitHealthMeter
-from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit.ClashSuitBase import ClashSuitBase
 from toontown.clashsuit.suit.SuitDNA import getSuitBodyType
 from toontown.toon import ToonDNA
 from toontown.instances.mercs.InstanceMercGlobals import InvestorEnum2Name
@@ -595,7 +595,7 @@ class DeepDiverPromoteFodder(Attack):
     CHEAT = True
 
     def doAttack(self):
-        specialMan: DistributedSuitBase = self.battle.findSuit(self.extraArgs[0])
+        specialMan: ClashSuitBase = self.battle.findSuit(self.extraArgs[0])
 
         if specialMan:
             def loopNeutralAnim():
@@ -3067,7 +3067,7 @@ class Woodchipper(SuitSingleAttack):
 @AttackClass(attackType=AttackEnum.POWER_NAP_HEAL)
 class PowerNapHeal(SuitHealAttack):
     @staticmethod
-    def updateSuitHP(suit: DistributedSuitBase, hp: int, nonZero: bool=False) -> None:
+    def updateSuitHP(suit: ClashSuitBase, hp: int, nonZero: bool=False) -> None:
         suit.updateHealthBar(hp)
         if nonZero and hp == 0:
             return
@@ -4562,7 +4562,7 @@ class RushJob(Attack):
 
         trackName = TTLocalizer.ToonTrackNames[self.extraArgs[0]]
         trackName = f"\1toon_track_{int(self.extraArgs[0])}\1{trackName} TRACK\2"
-        if isinstance(self.targetObjs[0], DistributedSuitBase):
+        if isinstance(self.targetObjs[0], ClashSuitBase):
             targetName = f"THE {TTLocalizer.suitName(self.targetObjs[0].dna.name)}"
         else:
             targetName = self.targetObjs[0].getName()
@@ -5181,7 +5181,7 @@ class CutTheSlack(SuitSingleAttack):
     CHEAT = True
 
     def doAttack(self):
-        specialMan: DistributedSuitBase = base.cr.getDo(self.extraArgs[0])
+        specialMan: ClashSuitBase = base.cr.getDo(self.extraArgs[0])
 
         if specialMan:
             def loopNeutralAnim():
@@ -5738,7 +5738,7 @@ class Aggrandize(SuitSingleAttack):
         if not self.targetObjs:
             return Sequence()
 
-        target = self.targetObjs[0] # type: DistributedSuitBase
+        target = self.targetObjs[0] # type: ClashSuitBase
 
         def loopNeutralAnim():
             loopAnim = "lured" if target.isLured else "neutral"

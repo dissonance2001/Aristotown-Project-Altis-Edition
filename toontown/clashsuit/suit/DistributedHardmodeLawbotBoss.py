@@ -1,7 +1,7 @@
 from toontown.gui.game.condition import ConditionGlobals
 from toontown.clashsuit.suit import BossCogGlobals
-from toontown.clashsuit.suit.DistributedLawbotBoss import *
-from toontown.clashsuit.suit import DistributedLawbotBossSuit
+from toontown.clashsuit.suit.ClashLawbotBoss import *
+from toontown.clashsuit.suit import ClashLawbotBossSuit
 from toontown.clashbattle.battle import MovieUtil
 from toontown.clashbattle.battle import SuitBattleGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
@@ -10,9 +10,9 @@ from toontown.nametag import NametagGlobals
 from toontown.chat.constants.ChatGlobals import *
 
 @DirectNotifyCategory()
-class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
+class DistributedHardmodeLawbotBoss(ClashLawbotBoss):
     def __init__(self, cr):
-        DistributedLawbotBoss.__init__(self, cr)
+        ClashLawbotBoss.__init__(self, cr)
         FSM.FSM.__init__(self, 'DistributedHardmodeLawbotBoss')
         self.nextLocalDoId = -50
         self.introductionSpotlights = [None, None, None, None, None, None]
@@ -26,7 +26,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
         """
         Handle all required fields having been filled in.
         """
-        DistributedLawbotBoss.announceGenerate(self)
+        ClashLawbotBoss.announceGenerate(self)
         self.bossLandSfx = self.boomSfx
 
     def addSpeedchatMenu(self):
@@ -39,7 +39,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
         """
         Called when the DistributedObject is removed from active duty and stored in a cache.
         """
-        DistributedLawbotBoss.disable(self)
+        ClashLawbotBoss.disable(self)
         self.cleanupIntroductionSpotlights()
         self.cleanupIntroductionVirtuals()
         self.cleanupLitigationTeam()
@@ -52,7 +52,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
         taskMgr.remove(self.uniqueName('RetryDefenseSpecialistSpawn'))
 
     def loadEnvironment(self):
-        DistributedBossCog.DistributedBossCog.loadEnvironment(self)
+        ClashBossCog.ClashBossCog.loadEnvironment(self)
         self.geom = loader.loadModel('phase_11/models/lawbotHQ/LawbotBossRoom')
         self.geom.setPos(0, 0, -71.601)
         self.geom.setScale(1)
@@ -198,7 +198,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
             self.musicSeq = None
 
     def unloadEnvironment(self):
-        DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
+        ClashBossCog.ClashBossCog.unloadEnvironment(self)
         self.geom.removeNode()
         del self.geom
         self.trapdoorMid.removeNode()
@@ -216,7 +216,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
 
     def enterElevator(self):
         base.discord.applyPreset('boss-ol-1')
-        DistributedBossCog.DistributedBossCog.enterElevator(self)
+        ClashBossCog.ClashBossCog.enterElevator(self)
         self.setPosHpr(*BossCogGlobals.LawbotBossBattleOnePosHpr)
         self.reparentTo(render)
         self.happy = 1
@@ -241,7 +241,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
         self.makeCogRoundSpotlights()
         self.makeIntroductionSpotlights()
         self.makeIntroductionVirtuals()
-        DistributedBossCog.DistributedBossCog.enterIntroduction(self)
+        ClashBossCog.ClashBossCog.enterIntroduction(self)
         self.battleANode.setPosHpr(*BossCogGlobals.HardmodeLawyerVirtualBattleAPosHpr)
         self.battleBNode.setPosHpr(*BossCogGlobals.HardmodeLawyerVirtualBattleBPosHpr)
         base.musicMgr.playMusic(self.promotionMusic, looping=1, volume=0.9)
@@ -254,7 +254,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
 
     def exitIntroduction(self):
         self.ignore('skipCutscene')
-        DistributedBossCog.DistributedBossCog.exitIntroduction(self)
+        ClashBossCog.ClashBossCog.exitIntroduction(self)
         self.closeEntryDoors(animated=0)
         self.hideWitnessToon()
         self.hideLawyerToon()
@@ -262,7 +262,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
         self.cleanupIntroductionVirtuals()
 
     def enterBattleOne(self):
-        DistributedBossCog.DistributedBossCog.enterBattleOne(self)
+        ClashBossCog.ClashBossCog.enterBattleOne(self)
         base.musicMgr.playMusic(self.battleOneMusic, looping=1, volume=1.2)
         self.reparentTo(render)
         if self.battleA:
@@ -479,7 +479,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
         self.clearOnscreenMessage()
 
     def enterBattleFour(self):
-        DistributedBossCog.DistributedBossCog.enterBattleFour(self)
+        ClashBossCog.ClashBossCog.enterBattleFour(self)
         # self.find('**/NearBoss').show() # DEBUG
         base.localAvatar.cameraFSM.request("Orbit")
         self.clearChat()
@@ -520,7 +520,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
         messenger.send(ConditionGlobals.SetStateMsg, [ConditionGlobals.ConditionState.BOSS_CLO, stateArgs])
 
     def exitBattleFour(self):
-        DistributedBossCog.DistributedBossCog.exitBattleFour(self)
+        ClashBossCog.ClashBossCog.exitBattleFour(self)
         bossDoneEventName = self.uniqueName('DestroyedBoss')
         self.ignore(bossDoneEventName)
         taskMgr.remove(self.uniqueName('StandUp'))
@@ -1486,7 +1486,7 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
 
     def makeIntroductionVirtuals(self):
         for i in range(6):
-            virtual = DistributedLawbotBossSuit.DistributedLawbotBossSuit(base.cr)
+            virtual = ClashLawbotBossSuit.ClashLawbotBossSuit(base.cr)
             dna = SuitDNA.SuitDNA()
             dna.newSuitRandom(7, 'l', wantAlts=0)
             virtual.setDNA(dna)

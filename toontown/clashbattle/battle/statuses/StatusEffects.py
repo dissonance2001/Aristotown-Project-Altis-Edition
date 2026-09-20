@@ -1859,8 +1859,8 @@ class CogStatusEffect(HPGatekeeper):
         if not self.canGenerateAttack:
             return
 
-        from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
-        suit: DistributedSuitBaseAI = self.getAv()
+        from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
+        suit: ClashSuitBaseAI = self.getAv()
         if suit.noRegularAttackRounds > 0:
             suit.noRegularAttackRounds -= 1
             return
@@ -1877,9 +1877,9 @@ class CogStatusEffect(HPGatekeeper):
             return
 
         from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
-        from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+        from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 
-        suit: DistributedSuitBaseAI = self.getAv()
+        suit: ClashSuitBaseAI = self.getAv()
         choice = suit.getRandomAttack()
 
         from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import createAttack

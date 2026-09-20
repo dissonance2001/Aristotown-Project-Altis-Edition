@@ -18,7 +18,7 @@ from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
 from toontown.clashbattle.battle.statuses.StatusEffects import FindTheFamilyBaseEffect
 from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.events.apriltoons.findthefamily import FindTheFamilyGlobals
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 
 # region Count Erfit / Erclaim
 
@@ -817,7 +817,7 @@ class RandomGamePunishAI(GenericDamageAttackAI):
     def applyDamageModifiers(self, target: BattleAvatar, attackDamage: int,
                              damaging: bool = True, invokerMods: bool = True,
                              targetMods: bool = True, overrideAttackType: int = None):
-        if isinstance(target, DistributedSuitBaseAI):
+        if isinstance(target, ClashSuitBaseAI):
             return attackDamage
         return super().applyDamageModifiers(target, attackDamage, damaging, invokerMods, targetMods)
 
@@ -879,7 +879,7 @@ class HighRollerCloneToonupAI(GenericDamageAttackAI):
     def applyDamageModifiers(self, target: BattleAvatar, attackDamage: int,
                              damaging: bool = True, invokerMods: bool = True,
                              targetMods: bool = True, overrideAttackType: int = None):
-        if isinstance(target, DistributedSuitBaseAI):
+        if isinstance(target, ClashSuitBaseAI):
             return attackDamage
         return super().applyDamageModifiers(target, attackDamage, damaging, invokerMods, targetMods)
 
@@ -928,7 +928,7 @@ class HighRollerCloneSquirtAI(GenericDamageAttackAI, ApplyStatusEffectAttackAI):
     def applyDamageModifiers(self, target: BattleAvatar, attackDamage: int,
                              damaging: bool=True, invokerMods: bool=True,
                              targetMods: bool=True, overrideAttackType: int = None):
-        if isinstance(target, DistributedSuitBaseAI):
+        if isinstance(target, ClashSuitBaseAI):
             return attackDamage
         return super().applyDamageModifiers(target, attackDamage, damaging, invokerMods, targetMods)
 

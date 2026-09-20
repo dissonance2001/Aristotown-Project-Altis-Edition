@@ -35,8 +35,8 @@ class DoprAnimatedSuitHead(AnimatedSuitHead):
         return f'{id(self)}-{str}'
 
     def listenForEvents(self):
-        self.accept('DistributedBattleBase-enterLocalToonWaitForInput', self.__startFreakout)
-        self.accept('DistributedBattleBase-exitLocalToonWaitForInput', self.__stopFreakout)
+        self.accept('ClashBattleBase-enterLocalToonWaitForInput', self.__startFreakout)
+        self.accept('ClashBattleBase-exitLocalToonWaitForInput', self.__stopFreakout)
 
     def __startFreakout(self, battle=None):
         self.__endOldFreakout()

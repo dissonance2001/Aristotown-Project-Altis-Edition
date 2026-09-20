@@ -17,14 +17,14 @@ from toontown.clashbattle.battle.statuses import StatusEffects, SEE
 from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.toon.gui.ToonTipGlobals import TTE
 from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
-from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
+from toontown.toon.ClashDistributedToonBaseAI import ClashDistributedToonBaseAI
 from toontown.utils.AstronStruct import AstronStruct
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 if TYPE_CHECKING:
     from toontown.clashbattle.battle.BattleListenerAI import BattleListenerAI
-    from toontown.clashbattle.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
+    from toontown.clashbattle.battle.distributed.ClashBattleBaseAI import ClashBattleBaseAI
 
 
 @DirectNotifyCategory()
@@ -106,7 +106,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
         self.results = []  # type: list[AttackTarget]
 
         # Variables set by the battle.
-        self.battle = None  # type: DistributedBattleBaseAI
+        self.battle = None  # type: ClashBattleBaseAI
         self.battleListener = None  # type: BattleListenerAI
         self.suits = []  # type: list[BattleAvatar]
         self.toons = []  # type: list[BattleAvatar]
@@ -185,7 +185,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
     def handleHpBonus(self, hpBonus: int, target: BattleAvatar) -> None:
         damageAmount = hpBonus
 
-        if isinstance(target, DistributedSuitBaseAI):
+        if isinstance(target, ClashSuitBaseAI):
             # If we have it, apply a combo damage effectiveness multiplier
             effectiveness = target.getPassive(PassiveAttributeDefs.COMBO_EFFECTIVENESS)
             if effectiveness:
@@ -210,7 +210,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
         damageAmount = kbBonus
 
         # If we have it, apply a knockback damage effectiveness multiplier
-        if isinstance(target, DistributedSuitBaseAI):
+        if isinstance(target, ClashSuitBaseAI):
             effectiveness = target.getPassive(PassiveAttributeDefs.KNOCKBACK_EFFECTIVENESS)
             if effectiveness:
                 damageAmount = int(math.ceil(damageAmount * effectiveness))
@@ -269,16 +269,16 @@ class AttackAI(AstronStruct, BattleListenerObject):
                     result.hpAdjust = hp
     
     def damageAvatar(self, av: BattleAvatar, result: AttackTarget, hp: int) -> int:
-        if isinstance(av, DistributedSuitBaseAI):
+        if isinstance(av, ClashSuitBaseAI):
             return self.damageSuit(av, result, hp)
 
-        elif isinstance(av, DistributedToonBaseAI):
+        elif isinstance(av, ClashDistributedToonBaseAI):
             self.damageToon(av, result, hp)
             return hp
 
         raise Exception(f"Invalid target type in damageAvatar: {type(av)}, {repr(self)}")
 
-    def damageSuit(self, av: DistributedSuitBaseAI, result: AttackTarget, hp: int) -> int:
+    def damageSuit(self, av: ClashSuitBaseAI, result: AttackTarget, hp: int) -> int:
         """Updates the HP of a Suit."""
         if hp > 0:
             hp = self.healSuit(av, hp, additive=True, healthCap=self.HEAL_CAP)
@@ -318,7 +318,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
         self.suitLeftBattle(av)
         return hp
     
-    def damageToon(self, av: DistributedToonBaseAI, result: AttackTarget, hp: int) -> None:
+    def damageToon(self, av: ClashDistributedToonBaseAI, result: AttackTarget, hp: int) -> None:
         """Updates the HP of a Toon."""
         toonHp = av.getHp()
 
@@ -446,7 +446,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
 
         return attackDamage
     
-    def suitLeftBattle(self, suit: DistributedSuitBaseAI) -> None:
+    def suitLeftBattle(self, suit: ClashSuitBaseAI) -> None:
         """
         Removes the indicated suit from the battle calculator.
         """
@@ -472,7 +472,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
         """
         deadSuits, needUpdate = [], False
         for target in self.targets:
-            if not isinstance(target, DistributedSuitBaseAI):
+            if not isinstance(target, ClashSuitBaseAI):
                 continue
 
             result = [r for r in self.results if r.avId == target.doId]
@@ -497,19 +497,19 @@ class AttackAI(AstronStruct, BattleListenerObject):
         """
         return any(bool(av.getStatusEffectOfId(status)) for status in self.STATUS_EFFECT)
     
-    def findAllSuitsOfName(self, name: str) -> List[DistributedSuitBaseAI]:
+    def findAllSuitsOfName(self, name: str) -> List[ClashSuitBaseAI]:
         return [suit for suit in self.suits if suit.dna.name == name]
     
-    def getToons(self) -> List[DistributedToonBaseAI]:
+    def getToons(self) -> List[ClashDistributedToonBaseAI]:
         """Returns a list of all toon objects."""
         return self.getObjectsFromIds(self.toons)
     
-    def getAliveToons(self) -> List[DistributedToonBaseAI]:
+    def getAliveToons(self) -> List[ClashDistributedToonBaseAI]:
         """Returns a list of all alive toons.
         """
         return [toon for toon in self.getToons() if toon.getHp() > 0]
     
-    def getAliveSuits(self, suits: list=None) -> List[DistributedSuitBaseAI]:
+    def getAliveSuits(self, suits: list=None) -> List[ClashSuitBaseAI]:
         """Returns a list of all alive suits.
         """
         suits = suits if isinstance(suits, list) else self.suits
@@ -520,7 +520,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
         """
         return self.getAliveToons() + self.getAliveSuits()
     
-    def getOtherSuits(self) -> List[DistributedSuitBaseAI]:
+    def getOtherSuits(self) -> List[ClashSuitBaseAI]:
         """Returns a list of alive suits which are not this
         attack's invoker.
         """
@@ -545,7 +545,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
         return retlist
     
     @staticmethod
-    def getSuitLureResistance(suit: DistributedSuitBaseAI, baseRounds: int) -> int:
+    def getSuitLureResistance(suit: ClashSuitBaseAI, baseRounds: int) -> int:
         newRounds = baseRounds
         lureResistEffects = suit.getStatusEffectsOfType(StatusEffects.LureResistanceStatusEffect)
         for effect in lureResistEffects:
@@ -554,7 +554,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
         return newRounds
     
     @staticmethod
-    def addDamageMultToSuit(suit: DistributedSuitBaseAI, setMultiplier=None, damageCap=None):
+    def addDamageMultToSuit(suit: ClashSuitBaseAI, setMultiplier=None, damageCap=None):
         if setMultiplier == 1.0:
             # why bother
             return
@@ -577,7 +577,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
                 return damageCap / currentMult  # the damage increase ratio
 
     @staticmethod
-    def unlureSuit(suit: DistributedSuitBaseAI, instant: bool=False) -> None:
+    def unlureSuit(suit: ClashSuitBaseAI, instant: bool=False) -> None:
         """Unlures a suit given it is actually lured and it hasn't been already unlured.
         """
         lureEffect = suit.getStatusEffectOfType(StatusEffects.LureStatusEffect)
@@ -589,7 +589,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
                 lureEffect.setUsed(1)
     
     @staticmethod
-    def healSuit(suit: DistributedSuitBaseAI, amount: int, additive: int=0, 
+    def healSuit(suit: ClashSuitBaseAI, amount: int, additive: int=0, 
                  healthCap: float=1.0) -> int:
         """
         This function is used to heal a suit in battle.
@@ -615,7 +615,7 @@ class AttackAI(AstronStruct, BattleListenerObject):
         return healHP
     
     @staticmethod
-    def getSuitHealAmount(suit: DistributedSuitBaseAI, amount: float, healthCap: float) -> int:
+    def getSuitHealAmount(suit: ClashSuitBaseAI, amount: float, healthCap: float) -> int:
         if suit.getHp() <= 0 or healthCap <= suit.getHealthPercentage():
             return 0
 
@@ -631,11 +631,11 @@ class AttackAI(AstronStruct, BattleListenerObject):
     
     @staticmethod
     def isSuit(avatar: BattleAvatar) -> bool:
-        return isinstance(avatar, DistributedSuitBaseAI)
+        return isinstance(avatar, ClashSuitBaseAI)
     
     @staticmethod
     def isToon(avatar: BattleAvatar) -> bool:
-        return isinstance(avatar, DistributedToonBaseAI)
+        return isinstance(avatar, ClashDistributedToonBaseAI)
     
     """
     Taunt functions

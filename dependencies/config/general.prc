@@ -162,6 +162,7 @@ want-dev #f
 want-pstats #f
 want-directtools #f
 want-tk #f
+wantPets #t
 
 # Holidays
 active-holidays 63, 64, 65, 66 #128, 116

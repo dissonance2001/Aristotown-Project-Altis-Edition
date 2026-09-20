@@ -79,7 +79,7 @@ class BattleEventEnum(IntEnum):
     # after battle movie finishes
     EVENT_MOVIE_DONE             = auto()  # no args
 
-    # Called in DistributedBattleBaseAI
+    # Called in ClashBattleBaseAI
     EVENT_TOON_ADDED_TO_BATTLE   = auto()  # args [toon]
     EVENT_SUIT_ADDED_TO_BATTLE   = auto()  # args [suit]
 

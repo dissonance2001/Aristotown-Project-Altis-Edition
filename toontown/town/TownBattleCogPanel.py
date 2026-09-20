@@ -4,7 +4,7 @@ from panda3d.core import *
 
 from toontown.clashbattle.battle.statuses import StatusEffects
 from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.clashsuit.suit.Suit import Suit
+from toontown.clashsuit.suit.ClashSuit import ClashSuit
 from toontown.clashsuit.suit import SuitHealthMeter
 from toontown.toonbase import TTLocalizer
 from toontown.clashbattle.battle import BattleGUI

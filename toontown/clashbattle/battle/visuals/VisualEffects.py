@@ -133,7 +133,7 @@ class VisualEffectBase(DirectObject):
         self.hasCleanedUp = True
 
         # If we're on the server... my dying wish...
-        # ...tell DistributedBattleBaseAI that we've been removed...
+        # ...tell ClashBattleBaseAI that we've been removed...
         if self.avProfile.isServerSided() and tellClientToExpire and self.shouldAddExpired() and self.battle:
             self.avProfile.battle.addExpiredVisualEffect(self)
         self.avProfile = None
@@ -3682,8 +3682,8 @@ class HighRollerCommercialVisualEffect(VisualEffectBase):
         if self.fakeSuit:
             self.fakeSuit.delete()
 
-        from toontown.clashsuit.suit import DistributedSuitBase, SuitDNA, SuitHealthMeter
-        self.fakeSuit = DistributedSuitBase.DistributedSuitBase(base.cr)
+        from toontown.clashsuit.suit import ClashSuitBase, SuitDNA, SuitHealthMeter
+        self.fakeSuit = ClashSuitBase.ClashSuitBase(base.cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('hroller')
 

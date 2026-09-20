@@ -2,14 +2,14 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.task.TaskManagerGlobal import taskMgr
 
 from toontown.clashsuit.suit import SuitTimings
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
 
 
-class DistributedWinterMinigameSuitAI(DistributedSuitBaseAI):
+class DistributedWinterMinigameSuitAI(ClashSuitBaseAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedWinterMinigameSuitAI')
 
     def __init__(self, air, suitPlanner):
-        DistributedSuitBaseAI.__init__(self, air, suitPlanner)
+        ClashSuitBaseAI.__init__(self, air, suitPlanner)
         self.hit = False
         self.canGrab = False
         self.posHpr = (0, 0, 0, 0, 0, 0)

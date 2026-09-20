@@ -2,14 +2,11 @@ from operator import attrgetter
 
 from otp.ai.AIBaseGlobal import simbase
 from toontown.clashbattle.battle.BattleEventDefinitionClasses import EnvironmentalEventDefinition
-from toontown.clashbattle.battle.BattleEventGlobals import BEG
 from toontown.clashbattle.battle import BattleExperienceAI
 from toontown.clashbattle.battle.BattleGlobals import *
 from toontown.clashbattle.battle.BattleListenerAI import BattleListenerAI
-from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.clashbattle.battle.attacks.base.AttackOrder import AttackOrder
-from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
-from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackRepository, createAttack
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import createAttack
 from toontown.clashbattle.battle.attacks.server.suit import *
 from toontown.clashbattle.battle.attacks.server.toon import *
 from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
@@ -19,14 +16,14 @@ from toontown.clashbattle.battle.environmental.server.EnvironmentalRepository im
 from toontown.clashbattle.battle.environmental.server.Environmentals import EnvironmentalBase
 from toontown.clashbattle.battle.statuses import StatusEffects
 from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
-from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
-from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
+from toontown.clashsuit.suit.ClashSuitBaseAI import ClashSuitBaseAI
+from toontown.toon.ClashDistributedToonBaseAI import ClashDistributedToonBaseAI
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 from typing import TYPE_CHECKING, List, Optional
 
 if TYPE_CHECKING:
-    from toontown.clashbattle.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
+    from toontown.clashbattle.battle.distributed.ClashBattleBaseAI import ClashBattleBaseAI
 
 
 @DirectNotifyCategory()
@@ -48,15 +45,15 @@ class BattleCalculatorAI(BattleListenerObject):
     def __init__(self, battle, propBonus: int = -1) -> None:
         self.propBonus = propBonus
         self.skillCreditMultiplier: int = 1
-        self.toons = []  # type: list[DistributedToonBaseAI]
-        self.suits = []  # type: list[DistributedSuitBaseAI]
+        self.toons = []  # type: list[ClashDistributedToonBaseAI]
+        self.suits = []  # type: list[ClashSuitBaseAI]
         self.environmentals = []  # type: list[EnvironmentalBase]
         self.toonSkillPtsGained: dict = {}
         self.attackOrder = AttackOrder()
         self.levelBonus: int = 0
         self.rounds: int = 0
         self.attacksAddedThisIndex: int = 0
-        self.battle = battle  # type: DistributedBattleBaseAI
+        self.battle = battle  # type: ClashBattleBaseAI
         self.battleListener = BattleListenerAI(self)
         self.resetRoundStats()
         self.clearAttacks()
@@ -84,8 +81,8 @@ class BattleCalculatorAI(BattleListenerObject):
         return self.attackOrder.getAttacks()
     
     def setParticipants(self, toons: list, suits: list) -> None:
-        self.toons = toons  # type: list[DistributedToonBaseAI]
-        self.suits = suits  # type: list[DistributedSuitBaseAI]
+        self.toons = toons  # type: list[ClashDistributedToonBaseAI]
+        self.suits = suits  # type: list[ClashSuitBaseAI]
         self.sendEvent(BEG.EVENT_SET_PARTICIPANTS, [toons, suits])
     
     def getParticipants(self) -> list:
@@ -95,10 +92,10 @@ class BattleCalculatorAI(BattleListenerObject):
         self.toonAttacks = {}  # type: dict[int, ToonAttackAI]
         self.attackOrder.cleanup()
     
-    def getToon(self, toonId: int) -> DistributedToonBaseAI:
+    def getToon(self, toonId: int) -> ClashDistributedToonBaseAI:
         return simbase.air.getDo(toonId)
     
-    def getSuit(self, suitId: int) -> DistributedSuitBaseAI:
+    def getSuit(self, suitId: int) -> ClashSuitBaseAI:
         return simbase.air.getDo(suitId)
     
     def showToonTipAll(self, tipId: int) -> None:
@@ -296,7 +293,7 @@ class BattleCalculatorAI(BattleListenerObject):
         """
         # Specific checks if an invoker was provided.
         if attack.invoker:
-            if isinstance(attack.invoker, DistributedSuitBaseAI):
+            if isinstance(attack.invoker, ClashSuitBaseAI):
                 if attack.invoker.getHp() <= 0 or attack.invoker.reviveCheckAndClear():
                     return False
 
@@ -309,7 +306,7 @@ class BattleCalculatorAI(BattleListenerObject):
                     else:
                         return False
 
-            elif isinstance(attack.invoker, DistributedToonBaseAI):
+            elif isinstance(attack.invoker, ClashDistributedToonBaseAI):
                 if attack.invoker.getHp() <= 0:
                     return False
 
@@ -330,7 +327,7 @@ class BattleCalculatorAI(BattleListenerObject):
                         allDead = False
                         break
                 else:
-                    tgt: DistributedToonBaseAI = self.getToon(target)
+                    tgt: ClashDistributedToonBaseAI = self.getToon(target)
                     if tgt and tgt.getHp() > 0:
                         allDead = False
                         break
@@ -353,9 +350,9 @@ class BattleCalculatorAI(BattleListenerObject):
 
         # Calculate the attack.
         attack.calculate()
-        if isinstance(attack.invoker, DistributedSuitBaseAI):
+        if isinstance(attack.invoker, ClashSuitBaseAI):
             self.notify.warning(f'>>> SUIT ATTACK CALC, dodge flag={getattr(simbase, "toonsAlwaysDodge", "MISSING")}')
-        if getattr(simbase, 'toonsAlwaysDodge', False) and isinstance(attack.invoker, DistributedSuitBaseAI):
+        if getattr(simbase, 'toonsAlwaysDodge', False) and isinstance(attack.invoker, ClashSuitBaseAI):
             for result in attack.results:
                 result.landed = False
                 result.hpAdjust = 0
@@ -617,7 +614,7 @@ class BattleCalculatorAI(BattleListenerObject):
             if toonId in suit.aggroMap:
                 del suit.aggroMap[toonId]
 
-    def suitLeftBattle(self, suit: DistributedSuitBaseAI) -> None:
+    def suitLeftBattle(self, suit: ClashSuitBaseAI) -> None:
         """
         Removes the indicated suit from the battle calculator.
         """
@@ -652,7 +649,7 @@ class BattleCalculatorAI(BattleListenerObject):
                 soakedSuits.append(suit)
         return soakedSuits
 
-    def unlureSuit(self, suit: DistributedSuitBaseAI, instant: bool = False) -> None:
+    def unlureSuit(self, suit: ClashSuitBaseAI, instant: bool = False) -> None:
         """
         Unlures a suit given it is actually lured and it hasn't been already unlured.
         """
@@ -664,7 +661,7 @@ class BattleCalculatorAI(BattleListenerObject):
             else:
                 lureEffect.setUsed(1)
 
-    def unsoakSuit(self, suit: DistributedSuitBaseAI) -> None:
+    def unsoakSuit(self, suit: ClashSuitBaseAI) -> None:
         soakEffect = self.getSuitEffectOfType(suit, StatusEffects.SoakStatusEffect)
         if soakEffect:
             soakEffect.delete()
@@ -689,12 +686,12 @@ class BattleCalculatorAI(BattleListenerObject):
 
         return False
 
-    def getSuitEffectOfType(self, suit: DistributedSuitBaseAI, effectType):
+    def getSuitEffectOfType(self, suit: ClashSuitBaseAI, effectType):
         effects = suit.getStatusEffectsOfType(effectType)
         if effects:
             return effects[0]
 
-    def removeStatusEffectsFromSuit(self, suit: DistributedSuitBaseAI) -> None:
+    def removeStatusEffectsFromSuit(self, suit: ClashSuitBaseAI) -> None:
         # Prevent fail fast iteration and other wonky stuff
         suit.clearStatusEffects()
 
@@ -925,7 +922,7 @@ class BattleCalculatorAI(BattleListenerObject):
             suits = self.suits
         return [suit for suit in suits if suit.dna.name == name and suit.getHp() > 0]
 
-    def allSuitsExceptMe(self, exceptSuit: DistributedSuitBaseAI, suits=None):
+    def allSuitsExceptMe(self, exceptSuit: ClashSuitBaseAI, suits=None):
         if not suits:
             suits = self.suits
         return [suit for suit in suits if suit is not exceptSuit]
@@ -1035,7 +1032,7 @@ class BattleCalculatorAI(BattleListenerObject):
             toon.d_debugGagAccuracy(accGUIInfo)
 
     @staticmethod
-    def removeAccuracyGUI(toon: DistributedToonBaseAI):
+    def removeAccuracyGUI(toon: ClashDistributedToonBaseAI):
         """
         Sends a signal to remove the Accuracy GUI from 'toon'
 

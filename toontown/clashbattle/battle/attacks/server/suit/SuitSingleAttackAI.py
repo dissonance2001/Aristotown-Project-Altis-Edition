@@ -2,7 +2,6 @@ import random
 
 from direct.showbase.PythonUtil import lerp
 
-from otp.ai.AIBaseGlobal import simbase
 from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
 from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
 from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum

@@ -2,7 +2,7 @@
 This file contains a collection of functions to manage battle
 experience and generation of reward movies on the client side.
 
-These functions used to be methods on DistributedBattleBase and
+These functions used to be methods on ClashBattleBase and
 Movie, but they have been pulled out here to collect them together
 and generalize them for final battles, which might have as many as 8
 Toons.

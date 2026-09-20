@@ -1,6 +1,6 @@
-from toontown.clashbattle.battle.distributed import DistributedBattleFinalAI
+from toontown.clashbattle.battle.distributed import ClashBattleFinalAI
 
 
-class DistributedBattlePaintingAI(DistributedBattleFinalAI.DistributedBattleFinalAI):
+class DistributedBattlePaintingAI(ClashBattleFinalAI.ClashBattleFinalAI):
     def __init__(self, air, bossCog, roundCallback, finishCallback, battleSide):
-        DistributedBattleFinalAI.DistributedBattleFinalAI.__init__(self, air, bossCog, roundCallback, finishCallback, battleSide)
+        ClashBattleFinalAI.ClashBattleFinalAI.__init__(self, air, bossCog, roundCallback, finishCallback, battleSide)

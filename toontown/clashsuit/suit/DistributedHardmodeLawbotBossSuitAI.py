@@ -1,14 +1,14 @@
 from panda3d.core import Vec2, Vec3, Point3
 
 from toontown.clashsuit.suit import BossCogGlobals
-from .DistributedLawbotBossSuitAI import *
+from .ClashLawbotBossSuitAI import *
 from toontown.toon.gui.ToonTipGlobals import TTE
 
 
-class DistributedHardmodeLawbotBossSuitAI(DistributedLawbotBossSuitAI):
+class DistributedHardmodeLawbotBossSuitAI(ClashLawbotBossSuitAI):
 
     def __init__(self, lawbotBoss, air, suitPlanner, painting):
-        DistributedLawbotBossSuitAI.__init__(self, lawbotBoss, air, suitPlanner, painting)
+        ClashLawbotBossSuitAI.__init__(self, lawbotBoss, air, suitPlanner, painting)
         self.type = BossCogGlobals.LawbotBossSuitNormal
         self.cannonBossState = 'BattleThree'
         self.maxEvidence = BossCogGlobals.HardmodeLawbotBossSoundEvidenceRequirement['max']

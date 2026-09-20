@@ -10,8 +10,8 @@ from toontown.coghq.lawbothq import DistributedHardmodeLawbotCannonAI
 from toontown.inventory.enums.ItemEnums import BackgroundItemType, BoosterItemType, MaterialItemType
 from toontown.clashsuit.suit import (DistributedHardmodeLawbotBossSuitAI,
                            DistributedHardmodeLawbotBossSuitAttackAI,
-                           DistributedSuitAI)
-from toontown.clashsuit.suit.DistributedLawbotBossAI import *
+                           ClashSuitAI)
+from toontown.clashsuit.suit.ClashLawbotBossAI import *
 from toontown.toon.npc.NPCToonClassesAI import DistributedNPCLaurenAI
 from toontown.toon.gui.ToonTipGlobals import TTE
 
@@ -21,12 +21,12 @@ tornadoAttacks = [BossCogGlobals.BossCogSpiralTornadoAreaAttack,
 
 
 @DirectNotifyCategory()
-class DistributedHardmodeLawbotBossAI(DistributedLawbotBossAI):
+class DistributedHardmodeLawbotBossAI(ClashLawbotBossAI):
     groupType = GroupType.OCLO
     WANT_TOONO = True
 
     def __init__(self, air):
-        DistributedLawbotBossAI.__init__(self, air)
+        ClashLawbotBossAI.__init__(self, air)
         FSM.FSM.__init__(self, 'DistributedHardmodeLawbotBossAI')
         self.litigationOrder = ['stenog', 'sgoat', 'lgator', 'caseman']
         # Keep track of summoned cogs separately in litigation team round.
@@ -342,7 +342,7 @@ class DistributedHardmodeLawbotBossAI(DistributedLawbotBossAI):
         return retval
 
     def genBossSuit(self, suitName, battlePriority):
-        newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
+        newSuit = ClashSuitAI.ClashSuitAI(simbase.air, None)
         dna = SuitDNA.SuitDNA()
         dna.newSuit(suitName)
         newSuit.dna = dna
@@ -497,7 +497,7 @@ class DistributedHardmodeLawbotBossAI(DistributedLawbotBossAI):
 
     # Random suit spawning
     def genRandSuit(self, battle):
-        newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
+        newSuit = ClashSuitAI.ClashSuitAI(simbase.air, None)
         dna = SuitDNA.SuitDNA()
         newSuit.dna = dna
 

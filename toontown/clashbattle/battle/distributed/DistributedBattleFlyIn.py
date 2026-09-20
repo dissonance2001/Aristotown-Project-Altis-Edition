@@ -1,16 +1,16 @@
 import random
 from panda3d.core import VBase3, Point3
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Track
-from toontown.clashbattle.battle.distributed import DistributedBattleFinal
+from toontown.clashbattle.battle.distributed import ClashBattleFinal
 from toontown.clashsuit.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 
 @DirectNotifyCategory()
-class DistributedBattleFlyIn(DistributedBattleFinal.DistributedBattleFinal):
+class DistributedBattleFlyIn(ClashBattleFinal.ClashBattleFinal):
     def __init__(self, cr):
-        DistributedBattleFinal.DistributedBattleFinal.__init__(self, cr)
+        ClashBattleFinal.ClashBattleFinal.__init__(self, cr)
         self.initialReservesJoiningDone = False
 
     def showSuitsJoining(self, suits, ts, name, callback):
@@ -59,6 +59,6 @@ class DistributedBattleFlyIn(DistributedBattleFinal.DistributedBattleFinal):
         return
 
     def enterWaitForInput(self, ts = 0):
-        DistributedBattleFinal.DistributedBattleFinal.enterWaitForInput(self, ts)
+        ClashBattleFinal.ClashBattleFinal.enterWaitForInput(self, ts)
         if self.hasLocalToon():
             camera.reparentTo(self)
