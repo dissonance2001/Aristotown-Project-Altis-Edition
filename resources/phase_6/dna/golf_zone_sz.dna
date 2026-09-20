@@ -1411,6 +1411,91 @@ group "goofySpeedway" [
      ]
     ]
    ]
+   prop "linktunnel_gs_8000_DNARoot" [
+    code [ "prop_GS_tunnel" ]
+    pos [ 109.601 -107.531 0 ]
+    nhpr [ 45 0 -0 ]
+    scale [ 1.5 1.5 1.5 ]
+    sign [
+     baseline [
+      code [ "mickey" ]
+      color [ 0.00392157 0.403922 0.803922 1 ]
+      pos [ -1.42167 0 0.30375 ]
+      nhpr [ 0 0 -3.57722 ]
+      scale [ 2.39338 1 2.12201 ]
+      width [ 38.5314 ]
+      height [ 38.5314 ]
+      flags [ "b" ]
+      text [
+       letters [ " " ]
+      ]
+      text [
+       letters [ " " ]
+      ]
+      text [
+       letters [ " " ]
+      ]
+      text [
+       letters [ " " ]
+      ]
+      text [
+       letters [ " " ]
+      ]
+      text [
+       letters [ "R" ]
+      ]
+      text [
+       letters [ "o" ]
+      ]
+      text [
+       letters [ "a" ]
+      ]
+      text [
+       letters [ "d" ]
+      ]
+      text [
+       letters [ "s" ]
+      ]
+      text [
+       letters [ "t" ]
+      ]
+      text [
+       letters [ "e" ]
+      ]
+      text [
+       letters [ "r" ]
+      ]
+     ]
+     baseline [
+      code [ "mickey" ]
+      color [ 1 0.501961 0.25098 1 ]
+      pos [ 0.246999 0 -3.14993 ]
+      nhpr [ 0 0 0.547545 ]
+      scale [ 3.3486 1 3.4338 ]
+      text [
+       letters [ "R" ]
+      ]
+      text [
+       letters [ "a" ]
+      ]
+      text [
+       letters [ "c" ]
+      ]
+      text [
+       letters [ "e" ]
+      ]
+      text [
+       letters [ "w" ]
+      ]
+      text [
+       letters [ "a" ]
+      ]
+      text [
+       letters [ "y" ]
+      ]
+     ]
+    ]
+   ]
    prop "linktunnel_oz_6000_DNARoot" [
     code [ "prop_golf_NoSign_entrance" ]
     pos [ 5 145 0 ]

@@ -21,22 +21,31 @@ class GSPlayground(Playground.Playground):
     def load(self):
         Playground.Playground.load(self)
         self.roadsterRacewayTunnel = loader.loadModel('phase_4/models/modules/Speedway_Tunnel')
-        if not self.roadsterRacewayTunnel.isEmpty():
+        if self.roadsterRacewayTunnel.isEmpty():
+            self.roadsterRacewayTunnel = None
+        else:
             oldTunnel = self.loader.geom.find('**/linktunnel_tt_2000_DNARoot')
             if not oldTunnel.isEmpty():
                 oldTunnel.removeNode()
             tunnelParent = self.loader.geom.find('**/8000:safe_zone')
             if tunnelParent.isEmpty():
                 tunnelParent = self.loader.geom
-            self.roadsterRacewayTunnel.reparentTo(tunnelParent)
-            self.roadsterRacewayTunnel.setPosHprScale(0, 89.1, 0, -180, 0, 0, 1, 1, 1)
+            self.roadsterRacewayTunnelHook = NodePath('roadsterRacewayTunnelHook')
+            self.roadsterRacewayTunnelHook.reparentTo(tunnelParent)
+            self.roadsterRacewayTunnelHook.setPosHprScale(0, 89.1, 0, -180, 0, 0, 1, 1, 1)
+            self.roadsterRacewayTunnel.reparentTo(self.roadsterRacewayTunnelHook)
+            self.roadsterRacewayTunnel.setPosHprScale(0, 0, 0, 0, 0, 0, 1, 1, 1)
             self.roadsterRacewayTunnel.setName('linktunnel_gz_17000_DNARoot')
-        else:
-            self.roadsterRacewayTunnel = None
+            self.loader.nodeList.append(self.roadsterRacewayTunnelHook)
 
     def unload(self):
-        if getattr(self, 'roadsterRacewayTunnel', None) is not None:
+        if getattr(self, 'roadsterRacewayTunnelHook', None) is not None:
+            self.roadsterRacewayTunnelHook.removeNode()
+            self.roadsterRacewayTunnelHook = None
+            self.roadsterRacewayTunnel = None
+        elif getattr(self, 'roadsterRacewayTunnel', None) is not None:
             self.roadsterRacewayTunnel.removeNode()
+            self.roadsterRacewayTunnel = None
         Playground.Playground.unload(self)
 
     def enter(self, requestStatus):

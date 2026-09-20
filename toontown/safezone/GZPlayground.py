@@ -28,23 +28,29 @@ class GZPlayground(Playground.Playground):
         self.dnaroot = base.cr.playGame.hood.loader.geom.find('**/goofy_speedway_DNARoot')
         if not self.dnaroot.isEmpty():
             self.dnaroot.removeNode()
-
         self.roadsterRacewayTunnel = loader.loadModel('phase_4/models/modules/Speedway_Tunnel')
-        if not self.roadsterRacewayTunnel.isEmpty():
-            tunnelParent = self.loader.geom.find('**/8000:safe_zone')
+        if self.roadsterRacewayTunnel.isEmpty():
+            self.roadsterRacewayTunnel = None
+        else:
+            tunnelParent = self.loader.geom.find('**/17000:safe_zone')
             if tunnelParent.isEmpty():
                 tunnelParent = self.loader.geom
-                if tunnelParent not in self.loader.nodeList:
-                    self.loader.nodeList.append(tunnelParent)
-            self.roadsterRacewayTunnel.reparentTo(tunnelParent)
-            self.roadsterRacewayTunnel.setPosHprScale(109.601, -107.531, 0, 45, 0, 0, 1.5, 1.5, 1.5)
+            self.roadsterRacewayTunnelHook = NodePath('roadsterRacewayTunnelHook')
+            self.roadsterRacewayTunnelHook.reparentTo(tunnelParent)
+            self.roadsterRacewayTunnelHook.setPosHprScale(109.601, -107.531, 0, 45, 0, 0, 1.5, 1.5, 1.5)
+            self.roadsterRacewayTunnel.reparentTo(self.roadsterRacewayTunnelHook)
+            self.roadsterRacewayTunnel.setPosHprScale(0, 0, 0, 0, 0, 0, 1, 1, 1)
             self.roadsterRacewayTunnel.setName('linktunnel_gs_8000_DNARoot')
-        else:
-            self.roadsterRacewayTunnel = None
+            self.loader.nodeList.append(self.roadsterRacewayTunnelHook)
 
     def unload(self):
-        if self.roadsterRacewayTunnel is not None:
+        if getattr(self, 'roadsterRacewayTunnelHook', None) is not None:
+            self.roadsterRacewayTunnelHook.removeNode()
+            self.roadsterRacewayTunnelHook = None
+            self.roadsterRacewayTunnel = None
+        elif getattr(self, 'roadsterRacewayTunnel', None) is not None:
             self.roadsterRacewayTunnel.removeNode()
+            self.roadsterRacewayTunnel = None
         Playground.Playground.unload(self)
         self.hub.removeNode()
 
