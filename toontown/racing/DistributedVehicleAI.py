@@ -6,6 +6,7 @@ from direct.distributed import DistributedSmoothNodeAI
 from direct.fsm import FSM
 from direct.task import Task
 from direct.distributed.PyDatagram import *
+from direct.distributed.MsgTypes import *
 
 if (__debug__):
     import pdb

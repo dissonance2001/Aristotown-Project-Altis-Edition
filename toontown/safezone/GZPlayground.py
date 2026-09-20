@@ -29,7 +29,22 @@ class GZPlayground(Playground.Playground):
         if not self.dnaroot.isEmpty():
             self.dnaroot.removeNode()
 
+        self.roadsterRacewayTunnel = loader.loadModel('phase_4/models/modules/Speedway_Tunnel')
+        if not self.roadsterRacewayTunnel.isEmpty():
+            tunnelParent = self.loader.geom.find('**/8000:safe_zone')
+            if tunnelParent.isEmpty():
+                tunnelParent = self.loader.geom
+                if tunnelParent not in self.loader.nodeList:
+                    self.loader.nodeList.append(tunnelParent)
+            self.roadsterRacewayTunnel.reparentTo(tunnelParent)
+            self.roadsterRacewayTunnel.setPosHprScale(109.601, -107.531, 0, 45, 0, 0, 1.5, 1.5, 1.5)
+            self.roadsterRacewayTunnel.setName('linktunnel_gs_8000_DNARoot')
+        else:
+            self.roadsterRacewayTunnel = None
+
     def unload(self):
+        if self.roadsterRacewayTunnel is not None:
+            self.roadsterRacewayTunnel.removeNode()
         Playground.Playground.unload(self)
         self.hub.removeNode()
 
