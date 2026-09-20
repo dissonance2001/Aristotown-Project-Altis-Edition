@@ -3,15 +3,15 @@ import random
 
 from direct.showbase.PythonUtil import lerp
 
-from toontown.suit import BossCogGlobals
-from toontown.battle.BattleGlobals import BattleOrderPriority
-from toontown.battle.distributed import DistributedBattleLitigatorsAI
+from toontown.clashsuit.suit import BossCogGlobals
+from toontown.clashbattle.battle.BattleGlobals import BattleOrderPriority
+from toontown.clashbattle.battle.distributed import DistributedBattleLitigatorsAI
 from toontown.coghq.lawbothq import DistributedHardmodeLawbotCannonAI
 from toontown.inventory.enums.ItemEnums import BackgroundItemType, BoosterItemType, MaterialItemType
-from toontown.suit import (DistributedHardmodeLawbotBossSuitAI,
+from toontown.clashsuit.suit import (DistributedHardmodeLawbotBossSuitAI,
                            DistributedHardmodeLawbotBossSuitAttackAI,
                            DistributedSuitAI)
-from toontown.suit.DistributedLawbotBossAI import *
+from toontown.clashsuit.suit.DistributedLawbotBossAI import *
 from toontown.toon.npc.NPCToonClassesAI import DistributedNPCLaurenAI
 from toontown.toon.gui.ToonTipGlobals import TTE
 
@@ -1100,7 +1100,7 @@ class DistributedHardmodeLawbotBossAI(DistributedLawbotBossAI):
         self.getToonDifficulty()
         # Sets CLO HP, cog levels, # of sound, # of c&ds gained, and max flying cog level in sound round
         self.b_setMaxHp(2000)
-        self.battleOnePlanner = SuitBuildingGlobals.SPE.HARDMODE_CLO
+        self.battleOnePlanner = ClashSuitBuildingGlobals.SPE.HARDMODE_CLO
         self.numSound = 30
         self.numSues = 30
         self.lawyerMaxLevel = 12

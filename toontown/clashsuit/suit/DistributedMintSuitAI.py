@@ -1,4 +1,4 @@
-from toontown.suit import DistributedFactorySuitAI
+from toontown.clashsuit.suit import DistributedFactorySuitAI
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

@@ -5,14 +5,14 @@ from panda3d.core import TextEncoder, TextNode, Vec4
 from direct.gui.DirectGui import *
 from direct.interval.IntervalGlobal import *
 
-from toontown.battle import BattleGlobals, Fanfare
+from toontown.clashbattle.battle import BattleGlobals, Fanfare
 from toontown.coghq import CogDisguiseGlobals
 from toontown.gui.ScaledFrame import ScaledFrame
 from toontown.quest3.base.Quester import Quester
 from toontown.quest3.base.QuestReference import QuestReference
 from toontown.quest3.gui.Quest3Poster import QuestPoster
 from toontown.shtiker import DisguisePage
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import SuitDNA
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 

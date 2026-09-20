@@ -4,3 +4,5 @@ COG_BATTLED = 2
 COG_DEFEATED = 3
 COG_COMPLETE1 = 4
 COG_COMPLETE2 = 5
+
+indexToCogDepartment = ('s', 'm', 'l', 'c', 'g',)

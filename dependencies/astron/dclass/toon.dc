@@ -1091,7 +1091,7 @@ dclass DistributedToon : DistributedPlayer {
   setGumballBounties(blob = []) required ownrecv db;
   setWeeklyBountyGumballs(uint16 = 0, uint32 = 0) required ownrecv db;
   setMaxBankMoney(uint32 maxMoney = 150000) required broadcast ownrecv db;
-  setMaxMoney(uint16 maxMoney = 500) required broadcast ownrecv db;
+  setMaxMoney(int16 = 40) required broadcast ownrecv db;
   setBankMoney(uint64 money = 0) required ownrecv db;
   setMaxHp(int16 = 15) required broadcast ownrecv db;
   setHp(int16 = 15) required broadcast ownrecv db;
@@ -1157,6 +1157,8 @@ dclass DistributedToon : DistributedPlayer {
   checkTeleportAccess(uint16) airecv ownsend;
   checkTeleportAccessResponse(uint16) ownrecv;
   battleSOS(uint32) ownrecv clsend;
+  setGagPreset(blob = [0*8, 0*8, 0*8, 0*8, 0*8, 0*8, 0*8, 0*8]) required ownrecv db;
+  saveNewGagPreset(blob = [0*8, 0*8, 0*8, 0*8, 0*8, 0*8, 0*8, 0*8]) ownsend airecv;
   teleportQuery(uint32) ownrecv clsend;
   teleportResponse(uint32, int8, uint32, uint32, uint32) ownrecv clsend;
   teleportResponseToAI(uint32, int8, uint32, uint32, uint32, uint32) ownsend airecv;

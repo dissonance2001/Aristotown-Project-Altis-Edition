@@ -1,11 +1,11 @@
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.inventory.enums.ItemEnums import ChatStickersItemType, BackgroundItemType, NameplateItemType,\
     ClothingTopItemType, ClothingBottomItemType, HatItemType, BackpackItemType, NeckItemType, GlassesItemType, ShoeItemType, \
     MaterialItemType
-from toontown.suit.SuitDefinitionsBase import *
-from toontown.battle.statuses import SEE
-from toontown.battle.BattleBase import *
-from toontown.battle.PassiveAttributeDefs import *
+from toontown.clashsuit.suit.SuitDefinitionsBase import *
+from toontown.clashbattle.battle.statuses import SEE
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.PassiveAttributeDefs import *
 from toontown.toonbase.ToontownGlobals import CogBountyTypes, HALLOWEEN_MIX_WINTER_HOLIDAY, HALLOWEEN, APRIL_FOOLS
 from toontown.loot.LootTable import *
 from toontown.loot.lootTypes import *

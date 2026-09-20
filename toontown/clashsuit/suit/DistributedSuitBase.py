@@ -5,23 +5,23 @@ from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from direct.task import Task
 from panda3d.core import *
-from toontown.battle import BattleBase
-from toontown.battle import SuitBattleGlobals
-from toontown.battle import PassiveAttributeDefs
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.suit import Suit, SuitDNA
-from toontown.suit import SuitBase
-from toontown.suit import SuitDialog
-from toontown.suit import SuitTimings
-from toontown.suit import SuitHealthMeter
-from toontown.avatar import DistributedAvatar
+from toontown.clashbattle.battle import BattleBase
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.clashbattle.battle import PassiveAttributeDefs
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashsuit.suit import Suit, SuitDNA
+from toontown.clashsuit.suit import SuitBase
+from toontown.clashsuit.suit import SuitDialog
+from toontown.clashsuit.suit import SuitTimings
+from toontown.clashsuit.suit import SuitHealthMeter
+from otp.avatar import DistributedAvatar
 from toontown.toonbase import ToontownGlobals
-from toontown.battle import BattleProps
+from toontown.clashbattle.battle import BattleProps
 from otp import *
 
-from toontown.suit.SuitDefinitionsBase import SuitDefinitions
+from toontown.clashsuit.suit.SuitDefinitionsBase import SuitDefinitions
 from toontown.toonbase import TTLocalizer
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 

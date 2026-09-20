@@ -1,6 +1,6 @@
-from toontown.battle.BattleGlobals import attackAffectsGroup
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.client.Attack import Attack
+from toontown.clashbattle.battle.BattleGlobals import attackAffectsGroup
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.client.Attack import Attack
 from toontown.toon.DistributedToon import DistributedToon
 
 

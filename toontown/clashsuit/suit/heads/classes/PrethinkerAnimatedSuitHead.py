@@ -1,6 +1,6 @@
 from direct.interval.IntervalGlobal import *
-from toontown.suit.heads.AnimatedSuitHead import *
-from toontown.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
+from toontown.clashsuit.suit.heads.AnimatedSuitHead import *
+from toontown.clashsuit.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 from panda3d.core import Point3, LVecBase4f

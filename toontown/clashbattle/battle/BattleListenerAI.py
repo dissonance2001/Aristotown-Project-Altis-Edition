@@ -1,5 +1,5 @@
-from toontown.battle.BattleEventDefinitionClasses import *
-from toontown.battle import BattleEventDefinitionList
+from toontown.clashbattle.battle.BattleEventDefinitionClasses import *
+from toontown.clashbattle.battle import BattleEventDefinitionList
 
 
 @DirectNotifyCategory()

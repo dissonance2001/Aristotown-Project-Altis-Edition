@@ -12,7 +12,7 @@ from toontown.suit import DistributedMinibossAI
 from toontown.building import SuitPlannerInteriorAI
 from direct.fsm import FSM
 from toontown.toonbase import ToontownGlobals
-from toontown.toon import InventoryBase
+from toontown.toon import GagInventoryBase
 from toontown.toonbase import TTLocalizer
 from toontown.battle import BattleBase
 from toontown.toon import NPCToons

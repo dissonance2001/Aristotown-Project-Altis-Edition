@@ -1,7 +1,7 @@
 from panda3d.core import Point3, Vec3
 from direct.interval.IntervalGlobal import *
-from toontown.battle.distributed import DistributedBattleFinal
-from toontown.battle import BattleProps
+from toontown.clashbattle.battle.distributed import DistributedBattleFinal
+from toontown.clashbattle.battle import BattleProps
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

@@ -1,5 +1,5 @@
-from toontown.battle.SuitBattleGlobals import *
-from toontown.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
+from toontown.clashbattle.battle.SuitBattleGlobals import *
+from toontown.clashbattle.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from toontown.toon.gui.ToonTipGlobals import TTE
 

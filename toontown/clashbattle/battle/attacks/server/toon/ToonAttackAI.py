@@ -2,18 +2,18 @@ import math
 import random
 from typing import List
 
-from toontown.ai.AIBaseGlobal import simbase
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.BattleGlobals import ATTACK_TRACKS, NUM_GAG_TRACKS, AccuracyBonusIncrement, \
+from otp.ai.AIBaseGlobal import simbase
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.BattleGlobals import ATTACK_TRACKS, NUM_GAG_TRACKS, AccuracyBonusIncrement, \
     AvPropAccuracy, ExperienceCap, MaxToonAcc, MaxToonTrackAcc, InherentTrackExpMult, attackAffectsGroup, \
     getAvPropDamage, MaxToonAccBrokeCap
-from toontown.battle.attacks.server.AttackAI import AttackAI
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.statuses import StatusEffects
-from toontown.battle.statuses.StatusEffectEnums import StatusEffectEnum, SEE
+from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.statuses import StatusEffects
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum, SEE
 from toontown.hood import ZoneUtil
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.toon.DistributedToonAI import DistributedToonAI
 from toontown.toon.ToonStatsGlobals import ToonStats
 from toontown.inventory.enums.ItemEnums import BoosterItemType

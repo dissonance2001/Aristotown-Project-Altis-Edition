@@ -1,13 +1,13 @@
-from toontown.battle import BattleGlobals
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleGlobals import ThrowPresHealPercent
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.base.AttackTarget import AttackTarget
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackClassAI
-from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
-from toontown.battle.statuses import StatusEffects, SEE
-from toontown.battle.statuses import StatusEffectGlobals as SEG
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleGlobals import ThrowPresHealPercent
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackTarget import AttackTarget
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
+from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+from toontown.clashbattle.battle.statuses import StatusEffects, SEE
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 import math
 
 

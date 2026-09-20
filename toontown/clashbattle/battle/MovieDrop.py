@@ -2,13 +2,13 @@ from direct.interval.IntervalGlobal import *
 from direct.showutil import Effects
 
 from toontown.audio.IsolatedSoundInterval import IsolatedSoundInterval
-from toontown.battle import MovieUtil
-from toontown.battle.BattleBase import *
-from toontown.battle.BattleProps import *
-from toontown.battle.BattleSounds import *
-from toontown.battle.MovieUtil import calcAvgSuitPos
-from toontown.battle.movielistener.BattleMovieListenerEnum import BMLE
-from toontown.suit.SuitDNA import getSuitBodyType
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.BattleProps import *
+from toontown.clashbattle.battle.BattleSounds import *
+from toontown.clashbattle.battle.MovieUtil import calcAvgSuitPos
+from toontown.clashbattle.battle.movielistener.BattleMovieListenerEnum import BMLE
+from toontown.clashsuit.suit.SuitDNA import getSuitBodyType
 from toontown.utils.DirectNotifyCategory import getNotify
 
 notify = getNotify('MovieDrop')

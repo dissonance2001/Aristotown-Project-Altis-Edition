@@ -23,6 +23,7 @@ DefaultSettings = {
 'vertical-sync': False,
 'language': 'English',
 'aspect-ratio': 0,
+'book-scale': 1,
 'streamerMode': False,
 'lastNametag': {},
 'lastEffect': {},
@@ -67,3 +68,5 @@ resolution_table = [
     (1600, 1200),
     (1280, 720),
     (1920, 1080)]
+
+BookScales = (1.2, 1.1, 1.0)

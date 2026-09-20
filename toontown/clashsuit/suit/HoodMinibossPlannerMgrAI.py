@@ -1,8 +1,8 @@
 from direct.showbase import PythonUtil, DirectObject
 from panda3d.core import *
 from direct.task import Task
-from toontown.suit import HoodMinibossGlobals
-from toontown.suit.SuitDefinitionsBase import SuitDefinitions
+from toontown.clashsuit.suit import HoodMinibossGlobals
+from toontown.clashsuit.suit.SuitDefinitionsBase import SuitDefinitions
 import random
 
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory

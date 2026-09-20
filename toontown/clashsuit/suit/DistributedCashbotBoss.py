@@ -1,6 +1,6 @@
 from toontown.gui.game.condition import ConditionGlobals
 from toontown.toonbase.GlobalCacheData import GlobalCacheKey
-from toontown.suit import BossCogGlobals
+from toontown.clashsuit.suit import BossCogGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.fsm import FSM
 from direct.interval.IntervalGlobal import *
@@ -13,14 +13,14 @@ from panda3d.physics import *
 import random
 from direct.gui.DirectGui import *
 from toontown.chat.constants.ChatGlobals import CFSpeech
-from otp.nametag import NametagGlobals
+from toontown.nametag import NametagGlobals
 
-from toontown.suit import DistributedBossCog
-from toontown.suit import DistributedCashbotBossGoon
-from toontown.suit import SuitDNA
-from toontown.suit import SuitHealthMeter
-from toontown.battle import MovieToonVictory, BattleGlobals
-from toontown.battle import RewardPanel
+from toontown.clashsuit.suit import DistributedBossCog
+from toontown.clashsuit.suit import DistributedCashbotBossGoon
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit import SuitHealthMeter
+from toontown.clashbattle.battle import MovieToonVictory, BattleGlobals
+from toontown.clashbattle.battle import RewardPanel
 from toontown.building import ElevatorConstants
 from toontown.building import ElevatorUtils
 from toontown.coghq import CogDisguiseGlobals

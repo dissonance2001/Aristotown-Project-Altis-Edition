@@ -1,6 +1,6 @@
 """Contains a mapping of suit names to a respective animated suit head class."""
 from typing import Dict, Union
-from toontown.suit.heads.AnimatedSuitHead import AnimatedSuitHead
+from toontown.clashsuit.suit.heads.AnimatedSuitHead import AnimatedSuitHead
 
 AnimatedSuitHeadRepository = {}  # type: Dict[str, AnimatedSuitHead]
 

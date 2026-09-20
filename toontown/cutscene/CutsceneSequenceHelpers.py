@@ -11,7 +11,7 @@ class NodePathWithState(NodePath):
     pass
 
 
-def getHprBetweenPoints(a, b):
+def getHprBetweenPoints(a: Point3, b: Point3) -> Point3:
     """
     Gets the HPR between two points.
     Assumption is that they're both relative to the same point.

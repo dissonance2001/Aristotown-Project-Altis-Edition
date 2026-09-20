@@ -1,5 +1,5 @@
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.suit.DistributedGoonAI import DistributedGoonAI
+from toontown.clashsuit.suit.DistributedGoonAI import DistributedGoonAI
 
 
 @DirectNotifyCategory()

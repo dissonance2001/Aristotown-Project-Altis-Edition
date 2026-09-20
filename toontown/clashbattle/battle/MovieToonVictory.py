@@ -1,8 +1,8 @@
-from otp.nametag import NametagGlobals
+from toontown.nametag import NametagGlobals
 from direct.showbase.DirectObject import DirectObject
-from toontown.battle.BattleCamera import BattleCamera
-from toontown.battle.RewardPanel import *
-from toontown.battle.BattleSounds import *
+from toontown.clashbattle.battle.BattleCamera import BattleCamera
+from toontown.clashbattle.battle.RewardPanel import *
+from toontown.clashbattle.battle.BattleSounds import *
 from otp import *
 
 from toontown.utils.DirectNotifyCategory import getNotify

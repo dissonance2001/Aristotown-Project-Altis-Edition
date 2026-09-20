@@ -3,10 +3,10 @@ from direct.interval.MetaInterval import Sequence, Parallel
 from direct.interval.ParticleInterval import ParticleInterval
 from panda3d.core import VBase4, Vec4, CollisionTube, CollisionNode, NodePath
 
-from toontown.suit import BossCogGlobals
+from toontown.clashsuit.suit import BossCogGlobals
 from toontown.toonbase import ToontownGlobals
-from toontown.battle import BattleParticles
-from toontown.suit.DistributedHardmodeLawbotBossSuit import DistributedHardmodeLawbotBossSuit
+from toontown.clashbattle.battle import BattleParticles
+from toontown.clashsuit.suit.DistributedHardmodeLawbotBossSuit import DistributedHardmodeLawbotBossSuit
 from toontown.toonbase import ToontownGlobals
 
 

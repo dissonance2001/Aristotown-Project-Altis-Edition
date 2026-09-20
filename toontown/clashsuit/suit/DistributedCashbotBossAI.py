@@ -5,9 +5,9 @@ from typing import Optional
 from panda3d.core import *
 from direct.fsm import FSM
 
-from toontown.suit import BossCogGlobals
-from toontown.ai.AIBaseGlobal import simbase
-from toontown.building import SuitBuildingGlobals
+from toontown.clashsuit.suit import BossCogGlobals
+from otp.ai.AIBaseGlobal import simbase
+from toontown.building import ClashSuitBuildingGlobals
 from toontown.coghq.cashbothq import (DistributedCashbotBossCraneAI,
                                       DistributedCashbotBossCraneFastAI,
                                       DistributedCashbotBossSafeAI,
@@ -20,7 +20,7 @@ from toontown.inventory.enums.ItemEnums import BackgroundItemType, BoosterItemTy
 from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
 from toontown.quest3.context.CogBossContext import CashbotBossContext
 from toontown.quest3.context.StompGoonContext import StompGoonContext
-from toontown.suit import DistributedBossCogAI, DistributedCashbotBossGoonAI
+from toontown.clashsuit.suit import DistributedBossCogAI, DistributedCashbotBossGoonAI
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from toontown.toon.gui.ToonTipGlobals import TTE
@@ -40,8 +40,8 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.safes = None
         self.goons = None
         self.treasures = {}
-        self.battleOnePlanner = SuitBuildingGlobals.SPE.CFO_HARD
-        self.battleTwoPlanner = SuitBuildingGlobals.SPE.CFO_SKELECOGS_HARD
+        self.battleOnePlanner = ClashSuitBuildingGlobals.SPE.CFO_HARD
+        self.battleTwoPlanner = ClashSuitBuildingGlobals.SPE.CFO_SKELECOGS_HARD
         self.goonMinStrength = 7
         self.goonMaxStrength = 30
         self.healAmount = 0
@@ -561,8 +561,8 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.goonMaxScale = 2.4
         self.knockoutDamage = BossCogGlobals.CashbotBossKnockoutDamage * 2
         self.maxTreasures = 25
-        self.battleOnePlanner = SuitBuildingGlobals.SPE.CFO_HARD
-        self.battleTwoPlanner = SuitBuildingGlobals.SPE.CFO_SKELECOGS_HARD
+        self.battleOnePlanner = ClashSuitBuildingGlobals.SPE.CFO_HARD
+        self.battleTwoPlanner = ClashSuitBuildingGlobals.SPE.CFO_SKELECOGS_HARD
 
     def b_setMaxHp(self, hp):
         self.setMaxHp(hp)

@@ -12,21 +12,21 @@ from direct.task.Task import Task
 from direct.showbase import PythonUtil
 from panda3d.core import ConfigVariableBool
 
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.dna.DNASuitPoint import DNASuitPoint
 from toontown.notifications.notificationData.GenericTextNotification import GenericTextNotification, GenericTextId
 from toontown.quest3.base import QuestGlobals
-from toontown.suit import DistributedSuitAI, SuitTimings
-from toontown.suit import SuitDNA
-from toontown.suit import SuitPlannerBase
-from toontown.battle import BattleManagerAI
-from toontown.battle import SuitBattleGlobals
-from toontown.building import SuitBuildingGlobals
+from toontown.clashsuit.suit import DistributedSuitAI, SuitTimings
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit import SuitPlannerBase
+from toontown.clashbattle.battle import BattleManagerAI
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.building import ClashSuitBuildingGlobals
 from toontown.hood import ZoneUtil
-from toontown.suit.SuitInvasionGlobals import IFSkelecog, IFWaiter, IFV2, IFExe
-from toontown.suit.SuitLegList import SuitLeg
-from toontown.suit import SuitHoodGlobals as SHG
-from toontown.battle import BattleGlobals
+from toontown.clashsuit.suit.SuitInvasionGlobals import IFSkelecog, IFWaiter, IFV2, IFExe
+from toontown.clashsuit.suit.SuitLegList import SuitLeg
+from toontown.clashsuit.suit import SuitHoodGlobals as SHG
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from toontown.utils.RateLimiter import RateLimiter
@@ -1428,7 +1428,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
 
         choices = []
         for level in range(levelMin, levelMax + 1):
-            maxFloors = SuitBuildingGlobals.getSuitBuildingInfo(level - 1).floors
+            maxFloors = ClashSuitBuildingGlobals.getSuitBuildingInfo(level - 1).floors
             # Remember that buildingHeight is numFloors - 1
             if buildingHeight + 1 == maxFloors:
                 # This level is allowed.

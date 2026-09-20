@@ -5,8 +5,8 @@ import math
 import random
 from typing import Dict, List, Tuple, Optional
 
-from toontown.battle import SuitBattleGlobals
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 
 """
 Pre-calculation data for prophetizing

@@ -2,29 +2,29 @@ import math
 import random
 from typing import TYPE_CHECKING, List
 
-from toontown.ai.AIBaseGlobal import simbase
-from toontown.battle import PassiveAttributeDefs
-from toontown.battle.BattleEventDefinitionClasses import AttackEventDefinition
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.BattleGlobals import NO_TRAP
-from toontown.battle.BattleListenerObject import BattleListenerObject
-from toontown.battle.attacks.base.AttackGlobals import getTauntPool
-from toontown.battle.attacks.base.AttackTarget import AttackTarget
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.environmental.server.Environmentals import EnvironmentalBase
-from toontown.battle.statuses import StatusEffects, SEE
-from toontown.battle.statuses import StatusEffectGlobals as SEG
+from otp.ai.AIBaseGlobal import simbase
+from toontown.clashbattle.battle import PassiveAttributeDefs
+from toontown.clashbattle.battle.BattleEventDefinitionClasses import AttackEventDefinition
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.BattleGlobals import NO_TRAP
+from toontown.clashbattle.battle.BattleListenerObject import BattleListenerObject
+from toontown.clashbattle.battle.attacks.base.AttackGlobals import getTauntPool
+from toontown.clashbattle.battle.attacks.base.AttackTarget import AttackTarget
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.environmental.server.Environmentals import EnvironmentalBase
+from toontown.clashbattle.battle.statuses import StatusEffects, SEE
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.toon.gui.ToonTipGlobals import TTE
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
 from toontown.utils.AstronStruct import AstronStruct
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 if TYPE_CHECKING:
-    from toontown.battle.BattleListenerAI import BattleListenerAI
-    from toontown.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
+    from toontown.clashbattle.battle.BattleListenerAI import BattleListenerAI
+    from toontown.clashbattle.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
 
 
 @DirectNotifyCategory()

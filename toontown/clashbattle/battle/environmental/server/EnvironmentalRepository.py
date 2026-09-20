@@ -1,6 +1,6 @@
 """Contains a mapping of every attack enum to a respective environmental object."""
 
-from toontown.battle.environmental.base.EnvironmentalEnum import EnvironmentalEnum
+from toontown.clashbattle.battle.environmental.base.EnvironmentalEnum import EnvironmentalEnum
 
 
 EnvironmentalRepository = {} # type: dict[EnvironmentalEnum]

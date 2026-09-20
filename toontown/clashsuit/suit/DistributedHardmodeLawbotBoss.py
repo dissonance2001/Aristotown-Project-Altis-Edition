@@ -1,12 +1,12 @@
 from toontown.gui.game.condition import ConditionGlobals
-from toontown.suit import BossCogGlobals
-from toontown.suit.DistributedLawbotBoss import *
-from toontown.suit import DistributedLawbotBossSuit
-from toontown.battle import MovieUtil
-from toontown.battle import SuitBattleGlobals
+from toontown.clashsuit.suit import BossCogGlobals
+from toontown.clashsuit.suit.DistributedLawbotBoss import *
+from toontown.clashsuit.suit import DistributedLawbotBossSuit
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashbattle.battle import SuitBattleGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from otp.nametag import NametagGroup
-from otp.nametag import NametagGlobals
+from toontown.nametag import NametagGroup
+from toontown.nametag import NametagGlobals
 from toontown.chat.constants.ChatGlobals import *
 
 @DirectNotifyCategory()

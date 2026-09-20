@@ -1,5 +1,5 @@
-from toontown.battle.BattleGlobals import BattleStateEnum
-from toontown.battle.distributed import DistributedBattleFinalAI
+from toontown.clashbattle.battle.BattleGlobals import BattleStateEnum
+from toontown.clashbattle.battle.distributed import DistributedBattleFinalAI
 
 
 class DistributedBattleWaitersAI(DistributedBattleFinalAI.DistributedBattleFinalAI):

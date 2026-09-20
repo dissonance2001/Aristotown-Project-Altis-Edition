@@ -1,17 +1,17 @@
 import random
-from toontown.ai.AIBaseGlobal import *
-from toontown.avatar import DistributedAvatarAI
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.statuses.StatusEffectEnums import SEE
-from toontown.battle.statuses import StatusEffectGlobals as SEG
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.suit import SuitBase
-from toontown.suit import SuitDNA
+from otp.ai.AIBaseGlobal import *
+from otp.avatar import DistributedAvatarAI
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashsuit.suit import SuitBase
+from toontown.clashsuit.suit import SuitDNA
 from toontown.shtiker import CogPageGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.battle import SuitBattleGlobals
-from toontown.battle import PassiveAttributeDefs
-from toontown.suit.SuitDefinitionsBase import SuitDefinitions
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.clashbattle.battle import PassiveAttributeDefs
+from toontown.clashsuit.suit.SuitDefinitionsBase import SuitDefinitions
 
 
 @DirectNotifyCategory()

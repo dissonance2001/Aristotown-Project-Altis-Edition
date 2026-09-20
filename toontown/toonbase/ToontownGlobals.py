@@ -1,8 +1,12 @@
 from . import TTLocalizer
 from otp.otpbase.OTPGlobals import *
+from enum import IntEnum, auto
 from toontown.toonbase.ToonPythonUtil import Enum, invertDict
 from pandac.PandaModules import BitMask32, Vec4
 from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
+from toontown.quest3.QuestEnums import QuestSource
+from toontown.quest3.SpecialQuestZones import SpecialQuestZones
+from toontown.quest3.base.QuestHistory import QuestHistory
 MapHotkeyOn = 'alt'
 MapHotkeyOff = 'alt-up'
 MapHotkey = 'alt'
@@ -209,6 +213,8 @@ def getSuitFont():
         SuitFont = loader.loadFont(TTLocalizer.SuitFont, pixelsPerUnit = 40, spaceAdvance = 0.25, lineHeight = 1.0)
     return SuitFont
 
+HALLOWEEN_MIX_WINTER_HOLIDAY        = 157
+
 CHRISTMAS = 154
 DonaldsDock = 1000
 ToontownCentral = 2000
@@ -216,7 +222,7 @@ TheBrrrgh = 3000
 MinniesMelodyland = 4000
 DaisyGardens = 5000
 OutdoorZone = 6000
-AcornAvenue = 6100
+AlmondAvenue = 6100
 PeanutPlace = 6200
 WalnutWay = 6300
 LegumeLane = 6400
@@ -229,10 +235,10 @@ KnightKnoll = 7100
 NobleNook = 7200
 WizardWay=7300
 DonaldsDreamland = 9000
-BarnacleBoulevard = 1100
+BuccaneerBoulevard = 1100
 SeaweedStreet = 1200
 LighthouseLane = 1300
-AhoyAvenue = 1400
+AnchorAvenue = 1400
 SillyStreet = 2100
 LoopyLane = 2200
 PunchlinePlace = 2300
@@ -245,10 +251,10 @@ AltoAvenue = 4100
 BaritoneBoulevard = 4200
 TenorTerrace = 4300
 SopranoStreet = 4400
-ElmStreet = 5100
-MapleStreet = 5200
-OakStreet = 5300
-RoseValley = 5400
+PetuniaPlace = 5100
+DaisyDrive = 5200
+TulipTerrace = 5300
+SunflowerStreet = 5400
 LullabyLane = 9100
 PajamaPlace = 9200
 TwilightTerrace = 9300
@@ -263,12 +269,12 @@ Dungeon = 7507
 CountErfitLobby = 25200
 CountErfitBattle = 25201
 HoodHierarchy = {ToontownCentral: (SillyStreet, LoopyLane, PunchlinePlace, WackyWay),
- DonaldsDock: (BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue),
+ DonaldsDock: (BuccaneerBoulevard, SeaweedStreet, LighthouseLane, AnchorAvenue),
  TheBrrrgh: (WalrusWay, SleetStreet, PolarPlace, ArcticAvenue),
  YeOlde: (KnightKnoll, NobleNook, WizardWay),
  MinniesMelodyland: (AltoAvenue, BaritoneBoulevard, TenorTerrace, SopranoStreet),
- DaisyGardens: (ElmStreet, MapleStreet, OakStreet, RoseValley),
- OutdoorZone: (AcornAvenue, PeanutPlace, WalnutWay, LegumeLane),
+ DaisyGardens: (PetuniaPlace, DaisyDrive, TulipTerrace, SunflowerStreet),
+ OutdoorZone: (AlmondAvenue, PeanutPlace, WalnutWay, LegumeLane),
  DonaldsDreamland: (LullabyLane, PajamaPlace, TwilightTerrace),
  GoofySpeedway: (),
  Toonseltown: (),
@@ -279,12 +285,12 @@ WelcomeValleyToken = 0
 # Street Manager Spawns
 streetMgrs = ["duckshfl", "ddiver", "gatekeep", "bellring", 'mouthp', "fires", "treek", "fbed"]
 streetMgrs2Zones = {"duckshfl": [SillyStreet, LoopyLane, PunchlinePlace, WackyWay],
-                    "ddiver": [BarnacleBoulevard, SeaweedStreet, LighthouseLane, AhoyAvenue],
+                    "ddiver": [BuccaneerBoulevard, SeaweedStreet, LighthouseLane, AnchorAvenue],
                     "gatekeep": [KnightKnoll, NobleNook, WizardWay],
-                    "bellring": [ElmStreet, MapleStreet, OakStreet, RoseValley],
+                    "bellring": [PetuniaPlace, DaisyDrive, TulipTerrace, SunflowerStreet],
                     'mouthp': [AltoAvenue, BaritoneBoulevard, TenorTerrace, SopranoStreet],
                     "fires": [WalrusWay, SleetStreet, PolarPlace, ArcticAvenue],
-                    "treek": [AcornAvenue, PeanutPlace, WalnutWay, LegumeLane],
+                    "treek": [AlmondAvenue, PeanutPlace, WalnutWay, LegumeLane],
                     "fbed": [LullabyLane, PajamaPlace, TwilightTerrace]}
 streetMgrs2Levels = {"duckshfl": 5,
                      "ddiver": 7,
@@ -368,7 +374,12 @@ SellbotHQ = 11000
 SellbotLobby = 11100
 SellbotMultislackerLobby = 11300
 SellbotFactoryExt = 11200
+SellbotFactorySideInt = 11300
+SellbotFindForemanInt = 11400
 SellbotFactoryInt = 11500
+SellbotOcFindForemanInt = 11600
+SellbotOcFindFamilyInt = 11700
+
 CashbotHQ = 12000
 CashbotLobby = 12100
 CashbotMintIntA = 12500
@@ -1420,7 +1431,7 @@ MORE_XP_HOLIDAY = 25
 HALLOWEEN_PROPS = 26
 HALLOWEEN_COSTUMES = 27
 DECEMBER_INVASION = 28
-APRIL_FOOLS_COSTUMES = 29
+APRIL_FOOLS = 29
 CRASHED_LEADERBOARD = 30
 OCTOBER31_FIREWORKS = 31
 NOVEMBER19_FIREWORKS = 32
@@ -1529,6 +1540,60 @@ SILLY_METER_GENERAL_PHASE_ELEVEN = 134
 SILLY_METER_GENERAL_PHASE_TWELVE = 135
 SILLY_METER_GENERAL_PHASE_THRITEEN = 136
 SILLY_METER_GENERAL_PHASE_FOURTEEN = 137
+APRIL_FOOLS_COSTUMES = 138
+HYDRANT_ZERO_HOLIDAY                = 58
+VALENTINES_DAY                      = 59
+# Continuation of animted Prop Holidays
+MAILBOX_ZERO_HOLIDAY                = 61
+TRASHCAN_ZERO_HOLIDAY               = 62
+HYDRANTS_BUFF_BATTLES               = 64
+MAILBOXES_BUFF_BATTLES              = 65
+TRASHCANS_BUFF_BATTLES              = 66
+
+IDES_OF_MARCH                       = 105
+COMBO_FIREWORKS                     = 112
+
+SPOOKY_BLACK_CAT                    = 117
+
+SPOOKY_TRICK_OR_TREAT               = 118
+SPOOKY_PROPS                        = 119
+SPOOKY_COSTUMES                     = 120
+WACKY_WINTER_DECORATIONS            = 121
+WACKY_WINTER_CAROLING               = 122
+
+ACTIVITY_EXPERIENCE_HOLIDAY         = 163
+WEALTHY_WEDNESDAY           = 164
+GAG_EXPERIENCE_HOLIDAY              = 139
+MERIT_HOLIDAY                       = 140
+THANKSGIVING                        = 141
+BLACK_FRIDAY                        = 142
+SILLY_SATURDAY                      = 143
+SILLY_MERIT                         = 144
+SILLY_ACTIVITY                      = 145
+SILLY_GAG                           = 146
+BOSS_REWARD_HOLIDAY                 = 147
+SILLY_REWARD                        = 148
+GAG_EXPERIENCE_HOLIDAY_LTO          = 149
+SPOOKY_BATCOIN_BOOST                = 150
+SPOOKY_BATCOIN_BOOST_FINAL          = 151
+DEPARTMENT_EXPERIENCE_HOLIDAY       = 152
+SILLY_DEPARTMENT                    = 153
+# This one is the consolidated winter nonsense, and is only here not reusing the old #s bc CChar code
+CHRISTMAS = 154
+
+# One time holiday so we don't have to actually hack together the winter and HW holidays.
+HALLOWEEN_MIX_WINTER_HOLIDAY        = 157
+# One time holiday to payout double bingo rewards on national bingo day.
+NATIONAL_BINGO_DAY_HOLIDAY          = 158
+# Birthday holiday to payout double gumball rewards.
+CLASH_BIRTHDAY_DOUBLE_GUMBALLS      = 159
+# One time holiday to boost VP rewards
+PIE_IN_THE_FACE_HOLIDAY             = 160
+# One time holiday to market the new Boardbot cogs releasing v1.7.0
+BOARDBOT_MARKETING                  = 161
+# One time holiday that occurs at the end of the v1.7.0 marketing event, putting Boardbots Everywhere
+BOARDBOT_MARKETING_FINALE           = 162
+
 TOT_REWARD_JELLYBEAN_AMOUNT = 100
 TOT_REWARD_END_OFFSET_AMOUNT = 0
 LawbotBossMaxDamage = 2700
@@ -2465,3 +2530,85 @@ CODE_NOT_ENOUGH_ROOM = 10
 # provided via `from otp.otpbase.OTPGlobals import *` above -- no need to
 # redefine them here (an earlier version of this file incorrectly did, which
 # shadowed the real ones and broke the connection to Altis's nametag rendering).
+
+
+# Clash Battle
+class CogBountyTypes(IntEnum):
+    Gumballs = auto()
+    Jellybeans = auto()
+    Experience = auto()
+    # Merits are currently unimplemented, as we haven't needed them yet
+    Merits = auto()
+    # This defines if a sweetener should only display when certain holidays are active
+    HolidayList = auto()
+
+def getNewReservedZoneId():
+    global ZoneIdrLastNum
+    ZoneIdrLastNum += 1
+    return ZoneIdrLastNum
+
+ToonHall            = 2513
+SchoolHouse         = 2516
+Library             = 2518
+Gagsoline           = 2921
+OldeToontownDungeon = 7507
+RandomTunes         = 4507
+BlizzardWizard      = 3607
+TellTaleCarp        = 1511
+Pizzeria            = 3740
+AllStarSuites       = 9613
+ChainsawLogging     = 6837
+MajorPlayerLobby    = 4874
+LighthouseInt       = 1836
+
+DerrickManLobby     = 2921
+DOLAExtZone         = 1410
+
+class CogBountyGroups(IntEnum):
+    LitigationTeam = auto()
+
+
+# Daily cog bounty cap
+# If 0, there is no cap.
+CogBountyDailyCap = 0
+
+# This "6" refers to Sunday, using the datetime.weekday() function
+CogBountyWeeklyGumballResetDay = 6
+CogBountyWeeklyGumballLimit = 1000
+
+MaxGumballs = 9999
+
+LowestToonLevelPerHQ = {
+    SellbotHQ: 38,
+    CashbotHQ: 48,
+    LawbotHQ: 58,
+    BossbotHQ: 68,
+    SpecialQuestZones.SellbotFactory: 38,
+    SpecialQuestZones.CashbotMints: 48,
+    SpecialQuestZones.LawbotLawfices: 58,
+    SpecialQuestZones.BossbotGolfCourses: 68,
+    SpecialQuestZones.AnyCogHQ: 38,
+}
+
+SpecialQuestCogHQZones2Facility = {
+    SpecialQuestZones.SellbotFactory: [SellbotFactoryInt, SellbotFactorySideInt, SellbotFindForemanInt, SellbotOcFindForemanInt, SellbotOcFindFamilyInt],
+    SpecialQuestZones.CashbotMints: [CashbotMintIntA, CashbotMintIntB, CashbotMintIntC],
+    SpecialQuestZones.LawbotLawfices: [LawbotStageIntA, LawbotStageIntB, LawbotStageIntC],
+    SpecialQuestZones.BossbotGolfCourses: [BossbotCountryClubIntA, BossbotCountryClubIntB, BossbotCountryClubIntC],
+}
+
+# Max amount of tracks before the prestige warning stops appearing
+PrestigeWarningMaxTracks = 4
+
+LoadingScreenFadeMusicTime = 0.3
+
+# How big is big and how small is small?
+BigToonScale = 1.4
+SmallToonScale = 0.4
+
+BigHeadScale = 2.5
+SmallHeadScale = 0.5
+
+BigLegsScale = 1.4
+SmallLegsScale = 0.6
+

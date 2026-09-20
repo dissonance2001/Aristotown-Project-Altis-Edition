@@ -1,14 +1,14 @@
 from direct.showbase.DirectObject import DirectObject
 from direct.task.Task import Task
 
-from toontown.battle.SuitBattleGlobals import INVASIONABLE_COGS
+from toontown.clashbattle.battle.SuitBattleGlobals import INVASIONABLE_COGS
 
 from toontown.distributed.OtpDoGlobals import MESSENGER_CHANNEL_AI
 
-from toontown.suit.SuitDNA import suitDepts
+from toontown.clashsuit.suit.SuitDNA import suitDepts
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.suit.SuitInvasionGlobals import *
+from toontown.clashsuit.suit.SuitInvasionGlobals import *
 
 import random
 from typing import TYPE_CHECKING, Optional

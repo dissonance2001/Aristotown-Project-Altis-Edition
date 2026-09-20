@@ -2,27 +2,27 @@ from typing import TYPE_CHECKING, List
 
 from direct.showbase.MessengerGlobal import messenger
 
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleGlobals import BattleOrderPriority, BattleStateEnum
-from toontown.battle.BattleListenerObject import BattleListenerObject
-from toontown.battle.statuses import StatusEffectGlobals as SEG
-from toontown.battle.statuses import StatusEffects
-from toontown.battle.statuses.StatusEffectDefinitions import StatusEffectDefinitions, DEBUFF
-from toontown.battle.statuses.StatusEffectGlobals import StatusEffectId2Type
-from toontown.battle.statuses.StatusEffects import *
-from toontown.battle.statuses.StatusEffects import (OverrideAddedStatusEffect,
-                                                    StatusEffectBase,
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleGlobals import BattleOrderPriority, BattleStateEnum
+from toontown.clashbattle.battle.BattleListenerObject import BattleListenerObject
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashbattle.battle.statuses import StatusEffects
+from toontown.clashbattle.battle.statuses.StatusEffectDefinitions import StatusEffectDefinitions, DEBUFF
+from toontown.clashbattle.battle.statuses.StatusEffectGlobals import StatusEffectId2Type
+from toontown.clashbattle.battle.statuses.StatusEffects import *
+from toontown.clashbattle.battle.statuses.StatusEffects import (OverrideAddedStatusEffect,
                                                     StatusEffectStruct)
-from toontown.battle.visuals import VisualEffectGlobals as VEG
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.battle.visuals.VisualEffects import (VisualEffectBase,
+from toontown.clashbattle.battle.visuals import VisualEffectGlobals as VEG
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.visuals.VisualEffects import (VisualEffectBase,
                                                    VisualEffectStruct,
                                                    debugSuitVisualEffectEnums)
+from toontown.clashbattle.battle.statuses.StatusEffectsBase import StatusEffectBase
 from toontown.toonbase import ProcessGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 if TYPE_CHECKING:
-    from toontown.battle.BattleListenerAI import BattleListenerAI
+    from toontown.clashbattle.battle.BattleListenerAI import BattleListenerAI
 
 
 @DirectNotifyCategory()
@@ -281,7 +281,7 @@ class BattleAvatar(AstronStruct, BattleListenerObject):
                 del newStatusEffect
                 return existingEffect, combined
             else:
-                from toontown.battle.BattleEventDefinitionClasses import StatusEffectEventDefinition
+                from toontown.clashbattle.battle.BattleEventDefinitionClasses import StatusEffectEventDefinition
                 self.addListenerObject(newStatusEffect, StatusEffectEventDefinition)
                 self.sendEvent(BEG.EVENT_STATUS_EFFECT_CREATED, [self, newStatusEffect, effectId])
 
@@ -605,8 +605,8 @@ class BattleAvatar(AstronStruct, BattleListenerObject):
 
     def isSuit(self) -> bool:
         if self.isServerSided():
-            from toontown.suit.DistributedSuitAI import DistributedSuitAI
+            from toontown.clashsuit.suit.DistributedSuitAI import DistributedSuitAI
             return isinstance(self, DistributedSuitAI)
         else:
-            from toontown.suit.DistributedSuit import DistributedSuit
+            from toontown.clashsuit.suit.DistributedSuit import DistributedSuit
             return isinstance(self, DistributedSuit)

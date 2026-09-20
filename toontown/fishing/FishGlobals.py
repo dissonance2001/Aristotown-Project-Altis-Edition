@@ -220,7 +220,7 @@ __fishDict = collections.OrderedDict([
 
     # Cat Fish #
     (2, ((2, 6, 1, (TTG.DaisyGardens, Anywhere)),  # Cat Fish
-         (2, 6, 8, (TTG.ElmStreet, TTG.DaisyGardens)),  # Siamese Cat Fish
+         (2, 6, 8, (TTG.PetuniaPlace, TTG.DaisyGardens)),  # Siamese Cat Fish
          (5, 11, 4, (TTG.LullabyLane,)),  # Alley Cat Fish
          (2, 6, 3, (TTG.DaisyGardens,)),  # Tabby Cat Fish
          (5, 11, 2, (TTG.DonaldsDreamland,)))),  # Tom Cat Fish
@@ -297,7 +297,7 @@ __fishDict = collections.OrderedDict([
 
     # Cutthroat Trout #
     (28, ((2, 10, 2, (TTG.DonaldsDock, Anywhere)),  # Cutthroat Trout
-          (4, 10, 6, (TTG.BarnacleBoulevard, TTG.DonaldsDock)),  # Captain Cutthroat Trout
+          (4, 10, 6, (TTG.BuccaneerBoulevard, TTG.DonaldsDock)),  # Captain Cutthroat Trout
           (4, 10, 7, (TTG.SeaweedStreet, TTG.DonaldsDock)))),  # Scurvy Cutthroat Trout
 
     # Piano Tuna #

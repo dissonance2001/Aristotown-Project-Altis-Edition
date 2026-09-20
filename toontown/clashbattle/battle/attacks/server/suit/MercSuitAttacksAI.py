@@ -4,15 +4,15 @@ import random
 from typing import List
 
 from direct.showbase import PythonUtil
-from toontown.battle import SuitBattleGlobals, BattleGlobals
+from toontown.clashbattle.battle import SuitBattleGlobals, BattleGlobals
 
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.BattleGlobals import ATTACK_TRACKS
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackAI import AttackAI
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackClassAI
-from toontown.battle.attacks.server.suit.BasicAttacksAI import (
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.BattleGlobals import ATTACK_TRACKS
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
+from toontown.clashbattle.battle.attacks.server.suit.BasicAttacksAI import (
     ApplyStatusEffectAttackAI,
     ApplyStatusEffectToSelfAttackAI,
     ApplyVisualEffectToSelfAttackAI,
@@ -29,16 +29,16 @@ from toontown.battle.attacks.server.suit.BasicAttacksAI import (
     SuitHealAttackAI, InstakillAttackAI,
     SuitUnlureAttackAI, DamageRemoveStatusAttackAI, SuitUnlureCreateAttackAttackAI,
 )
-from toontown.battle.attacks.server.suit.SuitGroupAttackAI import SuitGroupAttackAI
-from toontown.battle.attacks.server.suit.SuitSingleAttackAI import SuitSingleAttackAI
-from toontown.battle.environmental.base.EnvironmentalEnum import PlutocratWeather, EnvironmentalEnum
-from toontown.battle.statuses import StatusEffects
-from toontown.battle.statuses.StatusEffectDefinitions import DEBUFF
-from toontown.battle.statuses.StatusEffectEnums import SEE, SUIT_STATUS_EFFECTS_TO_REMOVE
-from toontown.battle.statuses import StatusEffectGlobals as SEG
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
-from toontown.suit.SuitDNA import SuitDNA
+from toontown.clashbattle.battle.attacks.server.suit.SuitGroupAttackAI import SuitGroupAttackAI
+from toontown.clashbattle.battle.attacks.server.suit.SuitSingleAttackAI import SuitSingleAttackAI
+from toontown.clashbattle.battle.environmental.base.EnvironmentalEnum import PlutocratWeather, EnvironmentalEnum
+from toontown.clashbattle.battle.statuses import StatusEffects
+from toontown.clashbattle.battle.statuses.StatusEffectDefinitions import DEBUFF
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE, SUIT_STATUS_EFFECTS_TO_REMOVE
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.SuitDNA import SuitDNA
 from toontown.toon import ToonDNA
 from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
 from toontown.toonbase import TTLocalizer

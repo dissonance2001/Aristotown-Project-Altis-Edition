@@ -1,11 +1,11 @@
 from toontown.gui.PositionedGUI import PositionedGUI, OnscreenPositionData
 from toontown.quest3.gui.Quest3Poster import QuestPoster
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import SuitDNA
 from direct.gui.DirectGui import DirectLabel, DirectFrame, DirectWaitBar, DGG, OnscreenText
 from direct.interval.IntervalGlobal import Sequence, Parallel, Func, LerpFunctionInterval, LerpPosInterval
 from toontown.toonbase.ToontownGlobals import getSuitFont
-from toontown.suit.BossCog import ModelDict
-from toontown.suit import SuitHealthMeter
+from toontown.clashsuit.suit.BossCog import ModelDict
+from toontown.clashsuit.suit import SuitHealthMeter
 from toontown.toonbase import TTLocalizer
 from panda3d.core import TextNode, Vec4, NodePath
 

@@ -1,6 +1,6 @@
 from direct.interval.IntervalGlobal import *
 
-from toontown.suit import SuitBase
+from toontown.clashsuit.suit import SuitBase
 from toontown.toonbase import ToontownGlobals
 from direct.interval.IntervalGlobal import Sequence, LerpFunc
 import random

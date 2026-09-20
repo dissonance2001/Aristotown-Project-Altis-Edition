@@ -259,3 +259,21 @@ def genDNAFileName(zoneId):
     if hoodId == zoneId:
         zoneId = 'sz'
     return 'phase_%s/dna/%s_%s.dna' % (phase, hood, zoneId)
+
+# TODO: get zone names of dynamic zones
+def zoneIdToName(zoneId):  # type: (int) -> Tuple[str, str]
+    # returns channel_name, descriptive_name
+    zoneId = normalizeHoodId(zoneId)
+    if zoneId >= 61000:
+        return 'Dynamic Zones', ''
+    channelName = TTLocalizer.ChitChatZoneId2Name.get(zoneId)
+    if not channelName:
+        channelName = TTLocalizer.ChitChatZoneId2Name.get(zoneId - 500)
+    if not channelName:
+        return str(zoneId), str(zoneId)
+    descriptive = TTLocalizer.RichPresenceZone2Id.get(zoneId)
+    if not descriptive:
+        descriptive = TTLocalizer.RichPresenceZone2Id.get(zoneId - 500)
+    if not descriptive:
+        return channelName, str(zoneId)
+    return channelName, descriptive[1]

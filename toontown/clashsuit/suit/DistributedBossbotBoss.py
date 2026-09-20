@@ -5,8 +5,8 @@ from panda3d.core import *
 from otp import *
 
 from toontown.gui.game.condition import ConditionGlobals
-from toontown.suit import BossCogGlobals
-from toontown.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit import BossCogGlobals
+from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toonbase.GlobalCacheData import GlobalCacheKey
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.distributed.ClockDelta import globalClockDelta
@@ -15,16 +15,16 @@ from direct.interval.IntervalGlobal import *
 from direct.showbase import PythonUtil
 from direct.task import Task
 from toontown.chat.constants.ChatGlobals import CFSpeech
-from toontown.battle import MovieToonVictory
-from toontown.battle import RewardPanel
+from toontown.clashbattle.battle import MovieToonVictory
+from toontown.clashbattle.battle import RewardPanel
 from toontown.building import ElevatorConstants, ElevatorUtils
 from toontown.coghq import CogDisguiseGlobals
 from toontown.distributed import DelayDelete
 from toontown.effects import DustCloud
-from toontown.suit.DistributedBossCog import DistributedBossCog
-from toontown.suit import Suit
-from toontown.suit import SuitDNA
-from toontown.suit import SuitHealthMeter
+from toontown.clashsuit.suit.DistributedBossCog import DistributedBossCog
+from toontown.clashsuit.suit import Suit
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit import SuitHealthMeter
 # from toontown.toon import Toon
 # from toontown.toon import ToonDNA
 from toontown.toon.npc import NPCToons

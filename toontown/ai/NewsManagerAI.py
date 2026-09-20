@@ -1,35 +1,50 @@
-from direct.directnotify.DirectNotifyGlobal import directNotify
+from __future__ import annotations
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
-from toontown.toonbase import ToontownGlobals
-from otp.ai.MagicWordGlobal import *
-from .HolidayGlobals import *
 
+from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
+from .HolidayGlobals import *
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from toontown.ai.ToontownAIRepository import ToontownAIRepository
+
+
+@DirectNotifyCategory()
 class NewsManagerAI(DistributedObjectAI):
-    notify = directNotify.newCategory('NewsManagerAI')
-    
     def __init__(self, air):
+        """
+        :type air: ToontownAIRepository
+        """
         DistributedObjectAI.__init__(self, air)
-        self.air = air
-        self.holidayList = []
+        self.air = air  # type: ToontownAIRepository
         self.weeklyHolidays = WEEKLY_HOLIDAYS
-        self.yearlyHolidays = YEARLY_HOLIDAYS
-        self.oncelyHolidays = ONCELY_HOLIDAYS
+        # decided to handle this a bit different, because we want to send tuple start and end times over the network
+        # but I also wanted to make the logic in HolidayMangerAI cleaner too
+        self.yearlyHolidays = tuple([holidayId, x.startTuple, x.endTuple] for holidayId, x in YEARLY_HOLIDAYS)
+        self.oncelyHolidays = tuple([holidayId, x.startTuple, x.endTuple] for holidayId, x in ONCELY_HOLIDAYS)
 
     def announceGenerate(self):
+        """
+        Handle all required fields having been filled in.
+        """
         DistributedObjectAI.announceGenerate(self)
 
         self.accept('avatarEntered', self.__handleAvatarEntered)
 
     def __handleAvatarEntered(self, avatar):
-        if self.air.suitInvasionManager.getInvading():
-            self.air.suitInvasionManager.notifyInvasionBulletin(avatar.getDoId())
-        if self.air.holidayManager.isHolidayRunning(MORE_XP_HOLIDAY):
+        if hasattr(simbase.air, 'suitInvasionManager'):
+            if simbase.air.suitInvasionManager.getInvading():
+                # Let this poor avatar who just came in the game know that there is a Cog Invasion taking place
+                simbase.air.suitInvasionManager.notifyInvasionBulletin(avatar.getDoId())
+        if not hasattr(simbase.air, 'holidayManager'):
+            return
+        if simbase.air.holidayManager.isHolidayRunning(MORE_XP_HOLIDAY):
             self.sendUpdateToAvatarId(avatar.getDoId(), 'setMoreXpHolidayOngoing', [])
-        if self.air.holidayManager.isHolidayRunning(TROLLEY_HOLIDAY):
-            self.sendUpdateToAvatarId(avatar.getDoId(), 'holidayNotify', [])
-        if self.air.holidayManager.isHolidayRunning(CIRCUIT_RACING_EVENT):
-            self.sendUpdateToAvatarId(avatar.getDoId(), 'startHoliday', [CIRCUIT_RACING_EVENT])
-        if self.air.holidayManager.isHolidayRunning(HYDRANT_ZERO_HOLIDAY):
+        for holiday in self.weeklyHolidays:
+            if simbase.air.holidayManager.isHolidayRunning(holiday[0]):
+                # let them know about all holidays actually...
+                self.sendUpdateToAvatarId(avatar.getDoId(), 'holidayNotify', [])
+        if simbase.air.holidayManager.isHolidayRunning(HYDRANT_ZERO_HOLIDAY):
             self.sendUpdateToAvatarId(avatar.getDoId(), 'startHoliday', [HYDRANT_ZERO_HOLIDAY])
 
     def setPopulation(self, todo0):
@@ -40,7 +55,7 @@ class NewsManagerAI(DistributedObjectAI):
 
     def setBingoStart(self):
         self.sendUpdate('setBingoStart', [])
-    
+
     def setBingoOngoing(self):
         self.sendUpdate('setBingoOngoing', [])
 
@@ -49,7 +64,7 @@ class NewsManagerAI(DistributedObjectAI):
 
     def setCircuitRaceStart(self):
         self.sendUpdate('setCircuitRaceStart', [])
-        
+
     def setCircuitRaceOngoing(self):
         self.sendUpdate('setCircuitRaceOngoing', [])
 
@@ -58,7 +73,7 @@ class NewsManagerAI(DistributedObjectAI):
 
     def setTrolleyHolidayStart(self):
         self.sendUpdate('setTrolleyHolidayStart', [])
-        
+
     def setTrolleyHolidayOngoing(self):
         self.sendUpdate('setTrolleyHolidayOngoing', [])
 
@@ -67,39 +82,30 @@ class NewsManagerAI(DistributedObjectAI):
 
     def setTrolleyWeekendStart(self):
         self.sendUpdate('setTrolleyWeekendStart', [])
-        
+
     def setTrolleyWeekendOngoing(self):
         self.sendUpdate('setTrolleyWeekendOngoing', [])
 
     def setTrolleyWeekendEnd(self):
         self.sendUpdate('setTrolleyWeekendEnd', [])
 
-    def setRoamingTrialerWeekendStart(self):
-        self.sendUpdate('setRoamingTrialerWeekendStart', [])
-    
-    def setRoamingTrialerWeekendOngoing(self):
-        self.sendUpdate('setRoamingTrialerWeekendOngoing', [])
-
-    def setRoamingTrialerWeekendEnd(self):
-        self.sendUpdate('setRoamingTrialerWeekendEnd', [])
-    
     def setSellbotNerfHolidayStart(self):
         self.sendUpdate('setSellbotNerfHolidayStart', [])
-        
+
     def setSellbotNerfHolidayEnd(self):
         self.sendUpdate('setSellbotNerfHolidayEnd', [])
-    
+
     def setMoreXpHolidayStart(self):
         self.sendUpdate('setMoreXpHolidayStart', [])
-        
+
     def setMoreXpHolidayOngoing(self):
         self.sendUpdate('setMoreXpHolidayOngoing', [])
-        
+
     def setMoreXpHolidayEnd(self):
         self.sendUpdate('setMoreXpHolidayEnd', [])
 
     def setInvasionStatus(self, msgType, cogType, numRemaining, skeleton):
-        self.sendUpdate('setInvasionStatus', args=[msgType, cogType, numRemaining, skeleton])
+        self.sendUpdate('setInvasionStatus', args = [msgType, cogType, numRemaining, skeleton])
 
     def d_setHolidayIdList(self, holidays):
         self.sendUpdate('setHolidayIdList', holidays)
@@ -137,23 +143,9 @@ class NewsManagerAI(DistributedObjectAI):
     def getMultipleStartHolidays(self):
         return []
 
-    def sendSystemMessage(self, message, style):
-        self.sendUpdate('sendSystemMessage', [message, style])
-        
-    def sendSystemMessageToAvatar(self, avatar, message, style):
-        self.sendUpdateToAvatarId(avatar.getDoId(), 'sendSystemMessage', [message, style])
-
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
-def startHoliday(holidayId):
-    simbase.air.newsManager.setHolidayIdList([holidayId])
-    return 'Successfully set holiday to %d.' % (holidayId)
-    
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
-def addHoliday(holidayId):
-    simbase.air.newsManager.addHolidayId(holidayId)
-    return 'Successfully added holiday %d to ongoing holidays!' % (holidayId)
-    
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
-def removeHoliday(holidayId):
-    simbase.air.newsManager.removeHolidayId(holidayId)
-    return 'Successfully removed holiday %d from ongoing holidays!' % (holidayId)
+    def sendMilestoneMessage(self, message: str, senderName: str | None):
+        """
+        Send a milestone message to all clients in the server.
+        String transferred through Astron to prevent data mining.
+        """
+        self.sendUpdate('announceMilestone', [message, senderName])

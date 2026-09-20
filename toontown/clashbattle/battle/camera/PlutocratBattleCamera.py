@@ -1,5 +1,5 @@
-from toontown.battle.BattleCamera import BattleCamera
-from toontown.suit import SuitDNA, SuitGlobals
+from toontown.clashbattle.battle.BattleCamera import BattleCamera
+from toontown.clashsuit.suit import SuitDNA, SuitGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

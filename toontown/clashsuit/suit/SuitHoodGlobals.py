@@ -3,14 +3,14 @@ import random
 from toontown.hood import ZoneUtil
 from toontown.shtiker.CogPageGlobals import indexToCogDepartment
 from toontown.toonbase import ToontownGlobals
-from toontown.building import SuitBuildingGlobals
+from toontown.building import ClashSuitBuildingGlobals
 
 from typing import Tuple, Dict, List
 
 from toontown.utils import text
 
-from toontown.suit import SuitDNA
-from toontown.battle.SuitBattleGlobals import SuitAttributes
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashbattle.battle.SuitBattleGlobals import SuitAttributes
 
 
 class CogSpawnDefinition:
@@ -527,7 +527,7 @@ SuitHoodInfo: Dict[int, SuitBranchDefinition] = {
 # Some invasion functions.
 def isZoneInvasionableClient(zoneId: int = None) -> bool:
     # Get the current invasion.
-    currentShard = base.cr.getLocalShard()
+    currentShard = None
     if currentShard is None:
         return False
     zoneId = zoneId or base.localAvatar.zoneId
@@ -738,7 +738,7 @@ for currHoodInfo in SuitHoodInfo.values():
     levels = currHoodInfo.getCogSpawnDefinition().getSuitLevelRange()
     heights = [0, 0, 0, 0, 0, 0]
     for level in levels:
-        maxFloors = SuitBuildingGlobals.getSuitBuildingInfo(level - 1).floors
+        maxFloors = ClashSuitBuildingGlobals.getSuitBuildingInfo(level - 1).floors
         for i in range(maxFloors - 1, maxFloors):
             heights[i] += 1
 

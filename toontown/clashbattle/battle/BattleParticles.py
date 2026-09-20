@@ -1,7 +1,7 @@
 from direct.particles.ParticleEffect import *
 from direct.task.TaskManagerGlobal import taskMgr
 
-from toontown.battle import ParticleDefs
+from toontown.clashbattle.battle import ParticleDefs
 from toontown.utils.DirectNotifyCategory import getNotify
 
 notify = getNotify('BattleParticles')

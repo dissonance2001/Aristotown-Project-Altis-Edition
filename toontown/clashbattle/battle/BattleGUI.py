@@ -5,7 +5,7 @@ from panda3d.core import *
 from direct.gui.DirectGui import *
 from direct.interval.IntervalGlobal import *
 
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.gui.ChatBubbleTextFrame import ChatBubbleTextFrame
 from toontown.gui.DiceButton import DiceButton
 from toontown.inventory.registry.IOURegistry import IOURegistry
@@ -13,15 +13,15 @@ from toontown.modifiers.ModifierEnums import ModifierType
 from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
 from toontown.toon.ToonHead import ToonHead
 from toontown.toon.gui import GuiBinGlobals
-from toontown.toon.npc import NPCToons
+from toontown.toon import NPCToons # Until NPCs are added we will use Reia's NPCToon port file
 from toontown.toon.socialpanel.SocialPanelGlobals import sp_gui
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownGlobals, TTLocalizer
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.gui.TTGui import ExtendedOnscreenText, ScalingButton, ScrollWheelFrame, kwargsToOptionDefs
-from toontown.battle.BattleGUIGlobals import *
-from toontown.battle.statuses import StatusEffectGlobals as SEG, StatusEffects, SEE
-from toontown.battle import SuitBattleGlobals
+from toontown.clashbattle.battle.BattleGUIGlobals import *
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG, StatusEffects, SEE
+from toontown.clashbattle.battle import SuitBattleGlobals
 from toontown.utils import Nodes
 from toontown.utils.text import getTextScaleAfterLength, capTextScaleToWidth
 
@@ -745,7 +745,7 @@ class TargetingGUI(DirectFrame):
 
         def doLockIn():
             # Ignore this if we have chat open.
-            if base.localAvatar.localToonTyping:
+            if localAvatar and getattr(localAvatar, 'localToonTyping', True):
                 return
 
             if self.lockInButton['command']:
@@ -786,7 +786,7 @@ class TargetingGUI(DirectFrame):
 
     def changeGagLevel(self, direction: int, fromHotkey: bool = False):
         # Ignore this if we have chat open and got the input from a hotkey.
-        if fromHotkey and base.localAvatar.localToonTyping:
+        if fromHotkey and getattr(localAvatar, 'localToonTyping', True):
             return
 
         # Change the gag level we plan to use.
@@ -2164,7 +2164,7 @@ def buildVisibleEffectDict():
     if visibleEffectDict:
         return
 
-    from toontown.battle.statuses.StatusEffectDefinitions import StatusEffectDefinitions
+    from toontown.clashbattle.battle.statuses.StatusEffectDefinitions import StatusEffectDefinitions
     visibleEffectDict = {
         effectId: effect.visible for effectId, effect in StatusEffectDefinitions.items()
     }

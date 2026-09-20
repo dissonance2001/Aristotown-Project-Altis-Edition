@@ -4,7 +4,7 @@ from toontown.battle import BattleGlobals
 from toontown.modifiers.Modifier import Modifier
 from toontown.modifiers.ModifierEnums import ModifierType
 
-from toontown.toon.InventoryBase import InventoryBase
+from toontown.toon.GagInventoryBase import GagInventoryBase
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -18,8 +18,8 @@ class GagsContentSyncModifier(Modifier):
         super().__init__([maxGagLevel, int(forceMaxed)])
 
         # We cache the Toon's old and new inventory.
-        self.oldInventory: Optional[InventoryBase] = None
-        self.newInventory: Optional[InventoryBase] = None
+        self.oldInventory: Optional[GagInventoryBase] = None
+        self.newInventory: Optional[GagInventoryBase] = None
         self.excessGags: List[int] = [0] * len(BattleGlobals.Tracks)
         self.maxTrackAccLevel: Optional[int] = maxTrackAccLevel
         self.clearInventory = clearInventory
@@ -31,7 +31,7 @@ class GagsContentSyncModifier(Modifier):
         """
 
         # Some type hinting.
-        value: InventoryBase
+        value: GagInventoryBase
 
         # Get some useful constants.
         maxGagLevel = self.getMaxGagLevel()

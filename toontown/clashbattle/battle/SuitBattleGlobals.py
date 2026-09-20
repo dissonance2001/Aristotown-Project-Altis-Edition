@@ -1,14 +1,14 @@
 from toontown.toonbase import TTLocalizer
-from toontown.battle import PassiveAttributeDefs
-from toontown.battle.BattleBase import *
-from toontown.suit.SuitDefinitions import suitBuildBattleAttributeDict, suitGetMinibossNamesCode,\
+from toontown.clashbattle.battle import PassiveAttributeDefs
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashsuit.suit.SuitDefinitions import suitBuildBattleAttributeDict, suitGetMinibossNamesCode,\
                                           suitGetStreetInfo, suitGetReviveInfo, suitGetMercNamesCode, \
                                           suitGetAlwaysSkelecogNamesCode, suitGetAlwaysExecutiveNamesCode, \
                                           suitGetIterativeChatNamesCode, suitGetBountyNamesCode, suitGroupSuitsByDept, \
                                           suitGetBountyGroupsByType, suitGetLootNamesCode, suitGetOverrideDeaths, \
                                           suitGetExtendMovieTime, suitGetBowtieSuits, suitGetNoTieSuits, \
                                           suitGetDisallowedSpawnsNamesCode
-from toontown.suit.SuitDefinitionsBase import SuitDefinitions, suitGetInvasionableSuits
+from toontown.clashsuit.suit.SuitDefinitionsBase import SuitDefinitions, suitGetInvasionableSuits
 from toontown.toonbase import TTLocalizer
 from toontown.utils.DirectNotifyCategory import getNotify
 

@@ -1,5 +1,5 @@
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.suit import DistributedFactorySuitAI
+from toontown.clashsuit.suit import DistributedFactorySuitAI
 
 
 

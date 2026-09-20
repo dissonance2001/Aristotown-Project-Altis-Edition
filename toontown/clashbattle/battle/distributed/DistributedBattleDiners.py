@@ -3,10 +3,10 @@ import random
 from panda3d.core import VBase3, Point3
 from direct.interval.IntervalGlobal import Sequence, Wait, Func, Parallel, Track, ProjectileInterval, SoundInterval, \
     ActorInterval, ParallelEndTogether, LerpHprInterval
-from toontown.battle.distributed import DistributedBattleFinal
-from toontown.suit import SuitTimings
+from toontown.clashbattle.battle.distributed import DistributedBattleFinal
+from toontown.clashsuit.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
-from toontown.battle import BattleProps
+from toontown.clashbattle.battle import BattleProps
 
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 

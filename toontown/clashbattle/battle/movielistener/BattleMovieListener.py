@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from direct.showbase.DirectObject import *
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.battle.movielistener.BattleMovieListenerEnum import BMLE
+from toontown.clashbattle.battle.movielistener.BattleMovieListenerEnum import BMLE
 
 
 class BattleMovieEventStore:

@@ -3,7 +3,7 @@ import math
 
 from panda3d.core import ConfigVariableBool
 
-from toontown.battle import BattleGlobals, SuitBattleGlobals
+from toontown.clashbattle.battle import BattleGlobals, SuitBattleGlobals
 from toontown.crafting import CraftingGlobals
 from toontown.inventory.enums.ItemEnums import MaterialItemType, ItemType
 from toontown.quest3.context.GagExperienceContext import GagExperienceContext

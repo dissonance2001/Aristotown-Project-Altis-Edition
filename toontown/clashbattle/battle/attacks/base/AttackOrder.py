@@ -1,9 +1,9 @@
 from operator import attrgetter
 from typing import List
 
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.attacks.server.AttackAI import AttackAI
-from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
+from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

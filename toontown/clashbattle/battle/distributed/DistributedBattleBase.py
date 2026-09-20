@@ -9,30 +9,30 @@ from direct.fsm.FSM import FSM
 from direct.interval.IntervalGlobal import *
 from direct.task.Task import Task
 
-from toontown.battle import BattleGlobals
-from toontown.battle import BattleParticles
-from toontown.battle import BattleProps
-from toontown.battle import Movie
-from toontown.battle import MovieUtil
-from toontown.battle.BattleBase import *
-from toontown.battle.BattleCamera import BattleCamera
-from toontown.battle.SuitBattleGlobals import ITERATIVE_CHAT, SuitAttributes
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.movielistener.BattleMovieListener import BattleMovieListener
-from toontown.battle.statuses import SEE
-from toontown.battle.statuses.StatusEffects import GagTracksDisabled, GagLevelsDisabled, MixedGagTracksLevelsDisabled
-from toontown.battle.statuses.StatusEffects import UnitesDisabledStatusEffect, \
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleParticles
+from toontown.clashbattle.battle import BattleProps
+from toontown.clashbattle.battle import Movie
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.BattleCamera import BattleCamera
+from toontown.clashbattle.battle.SuitBattleGlobals import ITERATIVE_CHAT, SuitAttributes
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.movielistener.BattleMovieListener import BattleMovieListener
+from toontown.clashbattle.battle.statuses import SEE
+from toontown.clashbattle.battle.statuses.StatusEffects import GagTracksDisabled, GagLevelsDisabled, MixedGagTracksLevelsDisabled
+from toontown.clashbattle.battle.statuses.StatusEffects import UnitesDisabledStatusEffect, \
     UseGagLevelSenderStatusEffect, UseGagLevelsWithTrackSenderStatusEffect, UntouchableStatusEffect
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.battle.visuals.VisualEffects import VisualEffectRemoved
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.visuals.VisualEffects import VisualEffectRemoved
 from toontown.chat.constants import ChatEvents
 from toontown.chat.ui.speedchat.TTSCUniteTerminal import TTSCUniteStateChangedEvent
 from toontown.distributed import DelayDelete
 from toontown.hood import ZoneUtil
 from toontown.inventory.registry.IOURegistry import IOURegistry
-from toontown.suit import Suit, SuitDNA, SuitGlobals
-from toontown.suit.DistributedSuit import DistributedSuit
-from toontown.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit import Suit, SuitDNA, SuitGlobals
+from toontown.clashsuit.suit.DistributedSuit import DistributedSuit
+from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toon import GagInventory
 from toontown.toon import TTEmote
 from toontown.toon.DistributedToonBase import DistributedToonBase
@@ -430,7 +430,7 @@ class DistributedBattleBase(DistributedNode, FSM, BattleBase):
                                                                         levels=[int(effect.gagLevel),
                                                                                 int(effect.gagLevel2)])
 
-        from toontown.battle.statuses.StatusEffects import PuzzleShowEffect
+        from toontown.clashbattle.battle.statuses.StatusEffects import PuzzleShowEffect
         puzzleEffects: List[List[PuzzleShowEffect]] = [suit.getStatusEffectsOfSpecificType(PuzzleShowEffect) for suit in self.activeSuits]
         # puzzleEffects will start off as a list of lists which sucks. Anyway.
         for effectList in puzzleEffects:

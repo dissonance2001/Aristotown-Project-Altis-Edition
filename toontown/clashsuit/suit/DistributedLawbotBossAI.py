@@ -7,20 +7,20 @@ from direct.distributed.ClockDelta import *
 from direct.showbase.PythonUtil import lerp
 
 from toontown.inventory.enums.ItemEnums import BackgroundItemType, NameplateItemType, BoosterItemType, MaterialItemType
-from toontown.suit import BossCogGlobals
+from toontown.clashsuit.suit import BossCogGlobals
 from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
-from toontown.suit.DistributedLawbotBossDefenseSpecialistAI import DistributedLawbotBossDefenseSpecialistAI
+from toontown.clashsuit.suit.DistributedLawbotBossDefenseSpecialistAI import DistributedLawbotBossDefenseSpecialistAI
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.fsm import FSM
 from direct.interval.IntervalGlobal import *
 
-from toontown.ai.AIBaseGlobal import *
+from otp.ai.AIBaseGlobal import *
 from direct.showbase import PythonUtil
-from toontown.battle import BattleExperienceAI
-from toontown.battle.distributed import DistributedBattlePaintingAI
-from toontown.battle.distributed import DistributedBattleVirtualAI
-from toontown.battle import SuitBattleGlobals
-from toontown.building import SuitBuildingGlobals
+from toontown.clashbattle.battle import BattleExperienceAI
+from toontown.clashbattle.battle.distributed import DistributedBattlePaintingAI
+from toontown.clashbattle.battle.distributed import DistributedBattleVirtualAI
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.building import ClashSuitBuildingGlobals
 from toontown.coghq.lawbothq import DistributedLawbotBossGavelAI
 from toontown.coghq.lawbothq import DistributedLawbotBossTrapAI
 from toontown.coghq.lawbothq import DistributedLawbotBossTreasureAI
@@ -30,13 +30,13 @@ from toontown.instances import DistributedCutsceneSkipButtonAI
 from toontown.quest3.context.CogBossContext import CogBossContext, LawbotBossContext
 from toontown.safezone.ChairConstants import ChairTypeEnum, MusicTypeEnum
 from toontown.safezone.DistributedChairAI import DistributedChairAI
-from toontown.suit import DistributedBossCogAI
-from toontown.suit import DistributedLawbotBossSecurityCameraAI
-from toontown.suit import DistributedLawbotBossSuitAI
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import DistributedBossCogAI
+from toontown.clashsuit.suit import DistributedLawbotBossSecurityCameraAI
+from toontown.clashsuit.suit import DistributedLawbotBossSuitAI
+from toontown.clashsuit.suit import SuitDNA
 from toontown.toon.npc.NPCToonClassesAI import DistributedNPCBumpyAI
 from toontown.toon.npc import NPCToons
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.toon.gui.ToonTipGlobals import TTE
 
@@ -73,7 +73,7 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         self.lawyersPerPainting = {}
         self.cannons = None
         self.bossMaxDamage = BossCogGlobals.LawbotBossMaxDamage[0]
-        self.battleOnePlanner = SuitBuildingGlobals.SPE.CLO_HARD
+        self.battleOnePlanner = ClashSuitBuildingGlobals.SPE.CLO_HARD
         self.bossDamage = 0
         self.numSues = 1
         self.toonLevels = 0
@@ -1445,8 +1445,8 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         self.numSues = 6
         self.lawyerMaxLevel = 10
         self.damageMult = BossCogGlobals.LawbotBossDamageMultipliers[2]
-        self.battleOnePlanner = SuitBuildingGlobals.SPE.CLO_HARD
-        self.battleThreePlanner = SuitBuildingGlobals.SPE.CLO_SKELECOGS_HARD
+        self.battleOnePlanner = ClashSuitBuildingGlobals.SPE.CLO_HARD
+        self.battleThreePlanner = ClashSuitBuildingGlobals.SPE.CLO_SKELECOGS_HARD
         self.universalUnites = 4
 
     def giveEvidence(self, toonID, evidenceAmt, extraMult=1.0):

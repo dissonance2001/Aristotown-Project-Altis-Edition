@@ -7,8 +7,8 @@ For more information, contact Tubby.
 from panda3d.core import Texture
 from direct.actor.Actor import Actor
 
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 OffsetDict = {          # Head Z value offsets for manual relocation of heads

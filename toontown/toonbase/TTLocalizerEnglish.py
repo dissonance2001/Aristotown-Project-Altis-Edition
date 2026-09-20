@@ -1,10 +1,14 @@
+from enum import IntEnum, auto
 from toontown.toonbase.TTLocalizerEnglishProperty import *
 from toontown.catalog import CatalogAccessoryItemGlobals
+from toontown.clashbattle.battle.statuses import SEE
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from otp.otpbase import OTPLocalizer as OL
 OL.SpeedChatStaticText = OL.SpeedChatStaticTextToontown.copy()
 for key in OL.SpeedChatStaticTextCommon.keys():
     OL.SpeedChatStaticText[key] = OL.SpeedChatStaticTextCommon[key]
 
+SatelliteInvestors = ('charon', 'nix', 'hydra', 'styx', 'kerberos')
 commitmantst = 'kptmptest - removable'
 InterfaceFont = 'phase_3/models/fonts/ImpressBT.ttf'
 ToonFont = 'phase_3/models/fonts/ImpressBT.ttf'
@@ -14,6 +18,86 @@ MinnieFont = 'phase_3/models/fonts/MinnieFont'
 FancyFont = 'phase_3/models/fonts/Comedy'
 BuildingNametagFont = 'phase_3/models/fonts/MickeyFont'
 BuildingNametagShadow = None
+Toon = 'Toon'
+Toons = 'Toons'
+GlobalSpeedChatName = 'SpeedChat'
+SCMenuEmotions = 'EMOTIONS'
+SCMenuCustom = 'MY PHRASES'
+SCMenuResistance = 'UNITE!'
+SCMenuCog = 'COG SPEAK'
+SCMenuHello = 'HELLO'
+SCMenuBye = 'GOODBYE'
+SCMenuHappy = 'HAPPY'
+SCMenuQuestions = 'QUESTIONS'
+SCMenuSad = 'SAD'
+SCMenuFriendly = 'FRIENDLY'
+SCMenuReplies = 'REPLIES'
+SCMenuEmoticons = 'EMOTICONS'
+SCMenuExpressions = 'EXPRESSIONS'
+SCMenuPositive = 'POSITIVE'
+SCMenuNegative = 'NEGATIVE'
+SCMenuPronouns = 'PRONOUNS'
+SCMenuSorry = 'SORRY'
+SCMenuStinky = 'STINKY'
+SCMenuPlaces = 'LOCATIONS'
+SCMenuToontasks = 'TOONTASKS'
+SCMenuBattle = 'BATTLE'
+SCMenuBugs = 'BUGS'
+SCMenuGroups = 'GROUPS'
+SCMenuClubs = 'CLUBS'
+SCMenuFactory = 'FACTORY'
+SCMenuGagShop = 'TROLLEY'
+SCMenuHQSellbot = 'SELLBOT HQ'
+SCMenuHQCashbot = 'CASHBOT HQ'
+SCMenuHQLawbot = 'LAWBOT HQ'
+SCMenuHQBossbot = 'BOSSBOT HQ'
+SCMenuKartRacing = 'RACING'
+SCMenuFactoryMeet = 'MEET'
+SCMenuMintBattle = 'MINT'
+SCMenuCFOBattle = 'C.F.O.'
+SCMenuCFOBattleCranes = 'CRANES'
+SCMenuCFOBattleGoons = 'GOONS'
+SCMenuDABattle = 'LAWFICE'
+SCMenuPuzzle = 'PUZZLES'
+SCMenuDABattle_ATS = 'AVOID THE SKULLS'
+SCMenuDABattle_SF = 'SKULL FINDER'
+SCMenuDABattle_M = 'MATCHING'
+SCMenuDABattle_TIAR = 'THREE IN A ROW'
+SCMenuDABattle_CT = 'CONNECT THREE'
+SCMenuDABattle_T = 'TRAPPER'
+SCMenuCLOBattle = 'C.L.O.'
+SCMenuCLOHardmodeBattle = 'O.C.L.O.'
+SCMenuCLOBattleSound = 'SOUND'
+SCMenuCLOBattleTraps = 'TRAPS'
+SCMenuCLOBattleTreasures = 'TREASURES'
+SCMenuCLOHardmodeSpecialists = 'SPECIALISTS'
+SCMenuCGCBattle = 'GOLF COURSE'
+SCMenuCEOBattle = 'C.E.O.'
+SCMenuCEOBattleDining = 'DINING'
+SCMenuCOOBattle = 'C.O.O.'
+SCMenuMinigames = 'MINIGAMES'
+SCMenuPlacesPlayground = 'PLAYGROUND'
+SCMenuPlacesEstate = 'ESTATE'
+SCMenuPlacesCogs = 'COGS'
+SCMenuPlacesWait = 'WAIT'
+SCMenuFriendlyYou = 'YOU...'
+SCMenuFriendlyILike = 'I LIKE YOUR...'
+SCMenuToontasksMyTasks = 'MY TASKS'
+SCMenuToontasksINeedMore = 'I NEED MORE...'
+SCMenuBattleGags = 'GAGS'
+SCMenuBattleRewards = 'REWARDS'
+SCMenuBattleYouShould = 'I THINK YOU SHOULD...'
+SCMenuBattleLetsUse = "LET'S USE..."
+SCMenuBattleImGoingTo = "I'M GOING TO..."
+SCMenuBattleStrategy = 'STRATEGY'
+SCMenuBattleActions = 'ACTIONS'
+SCMenuBattleLetsGoFor = "LET'S GO FOR..."
+SCMenuBattleTaunts = 'TAUNTS'
+SCMenuAprilToons = "MAYPRIL TOONS'"
+SCMenuHalloween = 'HALLOWEEN'
+SCMenuWinter = 'WINTER'
+SCMenuIdesOfMarch = 'GREEN'
+SCMenuHighRoller = "HIGH ROLLER"
 NametagFonts = (
     'phase_3/fonts/ImpressBT.ttf',
     'phase_3/fonts/AnimGothic.ttf',
@@ -13613,14 +13697,7 @@ MovieTutorialReward2 = 'You received 1 Squirt point! When you get 10, you will g
 MovieTutorialReward3 = 'Good job! You completed your first ToonTask!'
 MovieTutorialReward4 = 'Go to Toon Headquarters for your reward!'
 MovieTutorialReward5 = 'Have fun!'
-BattleGlobalTracks = ['toon-up',
- 'trap',
- 'lure',
- 'throw',
- 'squirt',
- 'zap',
-                      'sound',
- 'drop']
+BattleGlobalTracks = ['toon-up', 'trap', 'lure', 'sound', 'squirt', 'zap', 'throw', 'drop']
 BattleGlobalNPCTracks = ['restock', 'toons hit', 'cogs miss', 'boost']
 BattleGlobalAvPropStrings = (('Feather',
   'Megaphone',
@@ -14093,6 +14170,7 @@ CatchGameCoconuts = 'coconuts'
 CatchGameWatermelons = 'watermelons'
 CatchGamePineapples = 'pineapples'
 CatchGameAcorns = 'acorns'
+CatchGameCherries = 'cherries'
 CatchGameAnvils = 'anvils'
 PieTossGameTitle = 'Pie Toss Game'
 PieTossGameInstructions = 'Toss pies at the targets.'
@@ -19211,3 +19289,5316 @@ def GetPossesive(name):
 
 # --- Added for hammerspace IOU item names ---
 BattleGlobalTracksUpper = ['Toon-Up', 'Trap', 'Lure', 'Sound', 'Squirt', 'Zap', 'Throw', 'Drop']
+
+# BClash's Battle GUI
+
+HpTextDamageAbsorbed = '\1damage_subtext\1Absorbed!\2'
+HpTextMarked = '\1damage_subtext\1Marked!\2'
+HpTextDazed = '\1damage_subtext\1Dazed!\2'
+HpTextPowerNapOver = '\1damage_subtext\1Nap Over!\2'
+HpTextAdditionalAttack = '+1 Attack!'
+HpSubTextAdditionalAttack = f'\1damage_subtext\1{HpTextAdditionalAttack}\2'
+HpTextSlushFunded = '\1damage_subtext\1Slush Funded!\2'
+
+HP_TEXT_PLACEHOLDER = 0
+HP_TEXT_PLACEHOLDER_2 = 1
+HP_TEXT_ABILITY_QUEUE = 2
+HP_TEXT_INSURANCE = 3
+HP_TEXT_POLICY_TERMINATED = 4
+HP_TEXT_DESPERATION = 5
+HP_TEXT_LEGALLY_BOUND = 6
+HP_TEXT_VULNERABLE = 7
+HP_TEXT_SANCTIONED = 8
+HP_TEXT_HYDRATED = 9
+HP_TEXT_HYDRATION_PASSED = 10
+HP_TEXT_RIPPED = 11
+HP_TEXT_ABSORBED = 12
+HP_TEXT_WOODCHIPPER = 13
+HP_TEXT_PEELED = 14
+HP_TEXT_TRIAL_BY_FIRE = 15
+HP_TEXT_RED_THREAD = 16
+HP_TEXT_GHOST_PAYROLL = 17
+HP_TEXT_PYROMANIAC = 18
+HP_TEXT_MARKEDWOOD = 19
+HP_TEXT_2_REWARD_CD = 20
+HP_TEXT_SNIPED = 21
+HP_TEXT_CHIPFAN_RPM_1 = 22
+HP_TEXT_CHIPFAN_RPM_2 = 23
+HP_TEXT_CHIPFAN_RPM_3 = 24
+HP_TEXT_CHIPFAN_RPM_4 = 25
+HP_TEXT_CHIPFAN_RPM_1_N = 26
+HP_TEXT_CHIPFAN_RPM_2_N = 27
+HP_TEXT_CHIPFAN_RPM_3_N = 28
+HP_TEXT_CHIPFAN_RPM_4_N = 29
+HP_TEXT_25_DAMAGE_DOWN = 30
+HP_TEXT_LURE_RESISTANCE = 31
+HP_TEXT_CLONE_TAUNT = 32
+HP_TEXT_FAKE_SOAK = 33
+HP_TEXT_FOREMAN_SMOKED = 34
+HP_TEXT_BIG_WIN = 35
+HP_TEXT_SMALL_WIN = 36
+HP_TEXT_BIG_LOSS = 37
+HP_TEXT_SMALL_LOSS = 38
+HP_TEXT_SHOW_PIPS = 39
+HP_TEXT_25_VULNERABLE_ICON = 40
+HP_TEXT_15_VULNERABLE_ICON = 41
+HP_TEXT_VIRAL_SENSATION = 42
+
+# 0: Text
+# 1: Text color
+GeneralAttackHpTexts = {
+    HP_TEXT_PLACEHOLDER: ['Enraged!', (1.0, 0.5, 0, 1)],
+    HP_TEXT_PLACEHOLDER_2: ['Cooling Down!', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_ABILITY_QUEUE: ['Ability Queued!', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_INSURANCE: ['Insurance!', (1, 1, 1, 1)],
+    HP_TEXT_POLICY_TERMINATED: ['Policy Terminated!', (0.31, 0.75, 0.31, 1)],
+    HP_TEXT_DESPERATION: ['Desperation!\n\1damage_subtext\1+1 Lure Resistance\n+40% Damage\2', (1.0, 0.5, 0, 1)],
+    HP_TEXT_LEGALLY_BOUND: ['Legally Bound!', (1, 1, 1, 1)],
+    HP_TEXT_VULNERABLE: ['\1damage_subtext\1Vulnerable!\2', (1, 1, 1, 1)],
+    HP_TEXT_SANCTIONED: ['\1damage_subtext\1Sanctioned!\2', (1, 1, 1, 1)],
+    HP_TEXT_HYDRATED: ['\1damage_subtext\1Hydrated!\2', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_HYDRATION_PASSED: ['\1damage_subtext\1Check Passed!\2', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_RIPPED: ['\1damage_subtext\1RIPPED!!\2', (1, 0.784, 0.239, 1.0)],
+    HP_TEXT_ABSORBED: ['\1damage_subtext\1Absorbed!\2', (0.85, 0.78, 1.0, 1.0)],
+    HP_TEXT_WOODCHIPPER: ['\1damage_subtext\1Woodchipped!\2', (0.85, 0.78, 1.0, 1.0)],
+    HP_TEXT_PEELED: ['\1damage_subtext\1Peeled!\2', (0.85, 0.78, 1.0, 1.0)],
+    HP_TEXT_TRIAL_BY_FIRE: ['\1damage_subtext\1Well Done!\2', (0.85, 0.78, 1.0, 1.0)],
+    HP_TEXT_GHOST_PAYROLL: ['\1damage_subtext\1Ghost Payroll!\2', (0.85, 0.78, 1.0, 1.0)],
+    HP_TEXT_PYROMANIAC: ['\1damage_subtext\1Pyromaniac!\2', (0.85, 0.78, 1.0, 1.0)],
+    HP_TEXT_MARKEDWOOD: ['\1damage_subtext\1MARKED!!\2', (0.839, 0.129, 0.349, 1.0)],
+    HP_TEXT_2_REWARD_CD: ['\1damage_subtext_orange\1+2\1white\1\5battle_reward_cooldownIcon\5\2\2', (1.0, 0.5, 0, 1)],
+    HP_TEXT_SNIPED: ['\1damage_subtext_orange\1SNIPED!!\2', (1.0, 0.5, 0, 1)],
+    HP_TEXT_CHIPFAN_RPM_1: ['+1,000 RPM', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_CHIPFAN_RPM_2: ['+2,000 RPM', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_CHIPFAN_RPM_3: ['+3,000 RPM', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_CHIPFAN_RPM_4: ['+4,000 RPM', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_CHIPFAN_RPM_1_N: ['-1,000 RPM', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_CHIPFAN_RPM_2_N: ['-2,000 RPM', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_CHIPFAN_RPM_3_N: ['-3,000 RPM', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_CHIPFAN_RPM_4_N: ['-4,000 RPM', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_25_DAMAGE_DOWN: ['\1damage_subtext_orange\1-25%\1white\1\5battle_toon_damage_downIcon\5\2\2', (1.0, 0.5, 0, 1)],
+    HP_TEXT_LURE_RESISTANCE: ['\1TextShrink\1Lure Resistance\2', (79 / 255.0, 190 / 255.0, 76 / 255.0, 1.0)],
+    HP_TEXT_CLONE_TAUNT: ['Nice combo!', (1.0, 0.5, 0, 1)],
+    HP_TEXT_FAKE_SOAK: ['\1damage_subtext\1Soaked?!?\2', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_FOREMAN_SMOKED: ['\1damage_subtext\1Smoked!\2', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_BIG_WIN: ['BIG WIN!!\n\1damage_subtext\1x2 DAMAGE!!\2', (0.5, 0, 1, 1)],
+    HP_TEXT_SMALL_WIN: ['WIN!!\n\1damage_subtext\1Level promoted!\2', (0, 1, 0, 1)],
+    HP_TEXT_BIG_LOSS: ['BIG LOSS!!\n\1damage_subtext_orange\1GAG LEVEL DESTROYED!\2', (1, 0, 0, 1)],
+    HP_TEXT_SMALL_LOSS: ['LOSS!!\n\1damage_subtext_orange\1-1 Gag Level!\2', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_SHOW_PIPS: ['%s PIPS!', (0.85, 0.78, 1.0, 1)],
+    HP_TEXT_25_VULNERABLE_ICON: ['\1damage_subtext_orange\1-25%\1white\1\5battle_broken_shieldIcon\5\2\2', (1.0, 0.5, 0, 1)],
+    HP_TEXT_15_VULNERABLE_ICON: ['\1damage_subtext_orange\1-15%\1white\1\5battle_broken_shieldIcon\5\2\2', (1.0, 0.5, 0, 1)],
+    HP_TEXT_VIRAL_SENSATION: ['Viral Sensation!!', (1, 0, 0.906, 1.0)],
+    HP_TEXT_RED_THREAD: ['{}\1white\1\5battle_red_threadIcon\5\2\2', (1, 0, 0, 1)]
+}
+
+StatusEffectInactive = '\1deepRed\1Inactive\2: '
+
+StatusEffectDescriptions = {
+    SEE.EFFECT_BASE: ("Status Effect", "This is a status effect!"),
+    SEE.EFFECT_INK_DRAIN: ("Ink Drain", "All Gags are \1deepRed\1-%s%%\2 less effective."),
+    SEE.EFFECT_OVERWHELMING_AUTHORITY: ("Overwhelming Authority", "Unites are \1deepRed\1disabled\2 for the rest of the battle!"),
+    SEE.EFFECT_DISRUPTIVE_ADVERTISEMENT: ("Disruptive Advertisement", "If not interrupted, the D.O.P.A. will gain an \1deepGreen\1extra attack\2!"),
+    SEE.EFFECT_MULTI_LEVEL_MARKETING: ("Multi-Level Marketing", "The D.O.P.A. has gained \1deepGreen\1+%s\2 extra attack%s!"),
+    SEE.EFFECT_GENERIC_EXTRA_ATTACKS: ("Extra Attacks", "This Cog has gained \1deepGreen\1+%s\2 extra attack%s!"),
+    SEE.EFFECT_TOONS_ACCURACY_UP: ("Toons Accuracy Up", "This Toon's Gag accuracy is increased by \1deepGreen\1+%s%%\2.", "This Toon has \1deepGreen\1perfect\2 Gag Accuracy.", "This Toon has %s%% Gag Accuracy."),
+    SEE.EFFECT_COGS_DAMAGE_DOWN: ("Cogs Damage Down", "This Cog will deal \1deepRed\1-%s%%\2 less damage with their attacks."),
+    SEE.EFFECT_FLATTENED_DAMAGE_TAKEN: ("Damage Reduction", "This Cog will take \1deep{}\1{}\2 {} damage from each Gag!"),
+    SEE.EFFECT_SUIT_SUED: ("Sued", "This Cog cannot attack! Each Gag used against this Cog increases the effect duration by 1 round, up to a maximum of 5 rounds."),
+    SEE.EFFECT_SUIT_SOAKED: ("Soaked", "Soaked Cogs have \1deepRed\1" + "-10%\2 dodge chance and are vulnerable to \1GagTrack_zap\1Zap\2 Gags.\n\nRemoved if this Cog is hit by \1GagTrack_zap\1Zap\2 Gags."),
+    SEE.EFFECT_SUIT_DRENCHED: ("Drenched", "Drenched Cogs have \1deepRed\1-20%\2 dodge chance, deal \1deepRed\1-{}%\2 damage, and are vulnerable to \1GagTrack_zap\1Zap\2 Gags.\n\nLoses one round if this Cog is hit by \1GagTrack_zap\1Zap\2 Gags."),
+    SEE.EFFECT_SUIT_LURED: ("Lured", "\1GagTrack_lure\1Lured\2 Cogs cannot attack and take \1deepGreen\1+%s\2 more damage from each \1GagTrack_throw\1Throw\2 or \1GagTrack_squirt\1Squirt\2 Gag that's used."),
+    SEE.EFFECT_SKELECOG: ("Skeletal Structure", "Due to their reduced volume, this Cog has \1deep%s\1%s%%\2 of their max HP and negative effects applied by Toons will last for \1deepGreen\1-%s\2 less round%s.",
+                                                "Due to their reduced volume, negative effects applied by Toons will last for \1deepGreen\1-%s\2 less round%s."),
+    SEE.EFFECT_VIRTUAL_COG: ("Virtualized", "This Cog's hardware has been virtualized! Due to their abstract nature, they have \1deep%s\1%s%%\2 of their max HP and negative effects applied by Toons will last for \1deepGreen\1-%s\2 less round%s.",
+                                            "This Cog's hardware has been virtualized! Due to their abstract nature, negative effects applied by Toons will last for \1deepGreen\1-%s\2 less round%s."),
+    SEE.EFFECT_SUIT_DAMAGE_BOOST: ("Damage Boost", "Attacks from this Cog will be \1deepGreen\1%sx\2 more powerful."),
+    SEE.EFFECT_SUIT_ADDITIVE_DAMAGE_BOOST: ("Damage Boost", "Attacks from this Cog will deal \1deepGreen\1+%s\2 more damage."),
+    SEE.EFFECT_CANT_ATTACK: ("Cant Attack", "This avatar cannot attack!"),
+    SEE.EFFECT_AMBUSH_MARKETING: ("Ambush Marketing", "The Public Relations Representative can attack \1deepGreen\1twice\2 in one round!"),
+    SEE.EFFECT_UNITE_COOLDOWN: ("Unite Cooldown", "Your Unites are currently on \1deepRed\1cooldown\2."),
+    SEE.EFFECT_REWARD_COOLDOWN: ("Reward Cooldown", "Your Boss Rewards are currently on \1deepRed\1cooldown\2."),
+    SEE.EFFECT_CASE_MANAGER_HOT: ("Insurance", "This Cog is insured! While insured, they have high Lure resistance, heal \1deepGreen\1+%s\2 health every round, and receive the same benefits as Manager Cogs."),
+    SEE.EFFECT_CASE_MANAGER_DOT: ("Legally Bound", "While legally bound, this Toon will take \1deepRed\1-%s\2 damage per round."),
+    SEE.EFFECT_VULNERABLE: ("Vulnerable", "This Toon takes \1deepRed\1+%s%%\2 more damage while vulnerable."),
+    SEE.EFFECT_SANCTIONED: ("Sanctioned", "This Toon's Gags are \1deepRed\1-%s%%\2 less effective while sanctioned."),
+    SEE.EFFECT_COURT_RECORD: ("Court Record", "Using Level %s Gags this round will result in a harsh \1deepRed\1punishment\2."),
+    # Index 0 is rage building mode, index 1 is enraged
+    SEE.EFFECT_SCAPEGOAT_RAGE: (["Rage Building: %s%%", "Enraged"],
+                                  ["Scapegoat's rage is building...\nScapegoat will absorb \1deepGreen\1+30%\2 of the damage dealt to other Cogs while in this mode!",
+                                   "The Scapegoat is enraged!\nScapegoat will {}deal \1deepGreen\1+30%\2 more damage while in this mode!", "take \1deepGreen\1-30%\2 less damage and "]),
+    SEE.EFFECT_SUPERVISOR_INSURED: ("Insurance Policy", "While other Cogs are alive, the Supervisor is insured. At the end of every round that he is insured, he will \1deepGreen\1heal to full health\2 and gain a \1deepGreen\1damage boost\2."),
+    SEE.EFFECT_SUIT_TRAPPED: ("Trapped (%s)", "This Cog is \1GagTrack_trap\1trapped\2 by %s %s! \1GagTrack_lure\1Lure\2 Gags are \1deepGreen\1+%s%%\2 more accurate against this Cog. Once \1GagTrack_lure\1lured\2, they will take \1deepRed\1-%s\2 damage."),
+    SEE.EFFECT_SUIT_DAZED: ("Dazed", "This Cog is dazed due to a \1GagTrack_trap\1Trap\2 activation, and as such has a \1deepRed\1-10%\2 dodge chance reduction!"),
+    SEE.EFFECT_SUIT_NODODGE: ("Can't Dodge", "This Cog \1deepRed\1cannot dodge\2 Gags."),
+    SEE.EFFECT_LURE_RESISTANCE: ("Lure Resistance", ["This Cog is entirely \1deepGreen\1immune\2 to being \1GagTrack_lure\1lured\2.",
+                                                     "This Cog will stay \1GagTrack_lure\1lured\2 for \1deepGreen\1%s\2 round%s."]),
+    SEE.EFFECT_TOON_DAMAGE_UP: ("%sGag Boost", "Next{0} {1}Gag{2} will {3} {4} more {5}!", "\1deepRed\1Inactive\2: {0} {1} to next{2} {3}Gag{4}"),
+    SEE.EFFECT_TOON_MULT_DAMAGE_UP: ("Gag Boost", "Your Gags are \1deepGreen\1%s%%\2 stronger!"),
+    SEE.EFFECT_COUNT_CREEP: ("Scope Creep", "The Count's damage resistance is creeping up, taking \1deepGreen\1-%s%%\2 less damage."),
+    SEE.EFFECT_MARKED_FOR_LAUGH: ("Marked for Laugh", "This Cog is more vulnerable, and will take extra damage equal to \1deepRed\1%s%%\2 of the damage dealt to other Cogs."),
+    SEE.EFFECT_HYDRATED: ("Hydrated", "This Suit is Hydrated, and their attack accuracy is increased by \1deepGreen\1+%s%%\2."),
+    SEE.EFFECT_OVERCHARGED: ("Overcharged", "This Cog is Overcharged!\nWhile Overcharged, they have high Lure resistance, deal \1deepGreen\1+50%\2 more damage, and receive the same benefits as Manager Cogs."),
+    SEE.EFFECT_RIPPED: ("Ripped", "Count Erfit is getting ripped!\nAll of his attacks will deal \1deepGreen\1+%s\2 more damage."),
+    SEE.EFFECT_OVERCLOCKED_FOREMAN: [
+        ("Compensation: Larynx", "Hark! goes the Foreman.\nJust when you think that you're safe,\nYells, and then despair."),
+        ("Compensation: Antergy", "Combo damage? no,\nMight as well zap this foreman,\nZap? zap camp, zap camp"),
+        ("Compensation: Steadfast", "Steady as a rock.\nThere is no persuasion, for\nThere is no lure tech"),
+        ("Compensation: Compensation", "Compensation comp,\nsensation compensation,\nCompensated cog."),
+        ("Compensation: Destruction", "The strongest Foreman.\nYou must defeat it right now!\nBefore it's too late!"),
+        ("Compensation: Prethinking", "Do not drop the drop,\nBut you will, and you will learn,\nFall guys among us."),
+        ("Compensation: Rebalance", "We know Throw is strong.\nNow, there is a hard counter\nto the Throw Prestige."),
+        ("Compensation: Sacrifice", "The Foreman hungers.\n\"Give forth your power to me,\nand it shall be mine!\""),
+        ("Prismatic Foreman", "You found me, I guess.\nThat's it. That's the whole haiku.\nAre you happy now?"),
+    ],
+    SEE.EFFECT_MANAGER_GATEKEEPER: ("Front Line", "The Gatekeeper is taking \1deepGreen\1-%s%%\2 less damage!\n\nDestroy other Cogs to \1deepRed\1pierce\2 her \1deepBlue\1resistance\2!", "You are currently \1deepGreen\1piercing\2 Gatekeeper's \1deepBlue\1resistance\2!"),
+    SEE.EFFECT_GATEKEEPER_FODDER_BONUS: ("Core Competency", "This Cog has a \1deepGreen\1+100\2 health bonus!\nAdditionally, this Cog is dealing \1deepGreen\1+{0}\2 more damage, gaining more every round.\nDestroy this Cog to \1deepRed\1steal\2 their \1deepBlue\1damage bonus\2!"),
+    SEE.EFFECT_GATEKEEPER_TOON_PIERCE: ("Pierce!", "This Toon is currently dealing \1deepGreen\1+%s\2 extra damage.\n\nAttacks will \1deepGreen\1pierce through\2 Gatekeeper's \1deepBlue\1resistance\2."),
+    SEE.EFFECT_BELLRINGER_FODDER_EXPLOSION: ("Explosion Imminent!", "If this Cog is \1deepBlue\1Overcharged\2 at the beginning of the round and then is destroyed, they will \1deepRed\1explode\2, dealing \1deepRed\1massive damage\2 to everybody and will \1deepGreen\1temporarily weaken\2 Bellringer's healing."),
+    SEE.EFFECT_DIVING: ("Diving", ("The Deep Diver \1deepGreen\1cannot be hit\2 while diving.", "The Deep Diver \1deepGreen\1cannot be hit\2 until the promoted Cog is destroyed."), "\nToons take \1deepRed\1-5 damage\2 per round while Deep Diver is diving."),
+    SEE.EFFECT_MANAGER_FEATHERBEDDER: ("Overhire", "The Featherbedder is stronger together!\n", ["...but not when alone.", "Featherbedder is currently dealing \1deepGreen\1+%s%%\2 more damage, and is taking \1deepGreen\1-%s%%\2 less damage."]),
+    SEE.EFFECT_BACKBURNER: ("Backburner", "This Cog is dealing \1deepGreen\1+{0}\2 more damage and taking \1deepRed\1+{1}%\2 more damage! They're also taking \1deepRed\1-{2}%\2 of their max health as damage each turn!\nAlso, negative effects will last for \1deepGreen\1-{3}\2 less round{4}."),
+    SEE.EFFECT_PLASTIC_SUIT: ("Plastic Suit", "This Cog has extremely high damage \1deepGreen\1resistance\2 to \1GagTrack_zap\1Zap\2!"),
+    SEE.EFFECT_MANAGER_PRETHINKER: ("Forward Thinking", "The Prethinker and his peers will brainstorm your demise at the end of every round!"),
+    SEE.EFFECT_MANAGER_CHAINSAW_CONSULTANT: ("Revved-Up: %s RPM", (
+        "The Chainsaw Consultant is operating under normal conditions.",
+        "The Chainsaw Consultant is revving up!",
+        " He will{}!",
+        " deal \1deepGreen\1{}x\2 more damage",
+        " take \1deepGreen\1{}%\2 less damage",
+        " take \1deepRed\1{}%\2 more damage",
+    )),
+    SEE.EFFECT_MANAGER_PACESETTER: (["Mile-a-Minute", "Overclocked!"], ["The battle is playing back at \1deepGreen\1%sx\2 speed.", "The clock's maxxed out at \1deepGreen\1%sx\2 speed!", "Reading this doesn't seem like the best use of your time."]),
+    SEE.EFFECT_ENCORE: ("Encore", "All Gags have a \1deepGreen\1+%s%%\2 effectiveness boost. By using \1GagTrack_sound\1Sound\2 again, you'll become Winded."),
+    SEE.EFFECT_WINDED: ("Winded", "Your \1GagTrack_sound\1Sound\2 Gags will deal \1deepRed\1%s%%\2 less damage."),
+    SEE.EFFECT_SUIT_FROZEN: ("Frozen", "Frozen Cogs have \1deepRed\1-25%\2 reduced dodge chance, low \1GagTrack_zap\1Zap\2 effectiveness, and \1deepGreen\1+10%\2 damage reduction!\nUpon being destroyed, this Cog will \1GagTrack_trap\1Shatter\2."),
+    SEE.EFFECT_CONFUSION: ("Confusion", "Attack accuracy is decreased by \1deepRed\1-%s%%\2."),
+    SEE.EFFECT_LUNCH_BREAK: ("Lunch Break", "Besides \1GagTrack_toon-up\1Toon-Up\2 and Doodles, all Gags will \1deepRed\1miss\2."),
+    SEE.EFFECT_OUT_FOR_LUNCH: ("Off the Clock", "While there are other Cogs in the battle, the Multislacker takes \1deepGreen\1%s%%\2 less damage!"),
+    SEE.EFFECT_LUNCH_BREAK_MSLACKER: ("Mandatory Lunch", "The Multislacker is taking their possibly-company-approved lunch break!\nThey'll rejoin the battle on a later turn."),
+    SEE.EFFECT_FOCUSED_DEFENSE: ("Focused Defense", "This Cog will take \1deepGreen\1-%s%%\2 less damage from the first Gag Track that hits it each turn."),
+    SEE.EFFECT_WORKER_MANAGEMENT: ("Worker Management", "This Cog will cleanse nearby Cogs of negative effects at the end of each round."),
+    SEE.EFFECT_UNION_BUST: ("Union Bust", "This Cog will commence union-busting at the end of ", ("the next round.", "this round.")),
+    SEE.EFFECT_SOAK_RESISTANCE: ("Soak Resistance", "This Cog will take \1deepGreen\1%s%%\2 less damage whenever it is \1BattleInfo_SoakText\1Soaked\2."),
+    SEE.EFFECT_MONSOON: ("Eye of the Storm", "The weather picked up immensely, launching the Toons into the middle of the storm!!\n\1deepRed\1You need to defeat the Cogs.\2"),
+    SEE.EFFECT_MONSOON_DEFENSE: ("Monsoon", "The Rainmaker is taking \1deepGreen\1significantly less damage\2."),
+    SEE.EFFECT_OIL_RAIN_HOT: ("Oil Rain", "This Cog will be healed \1deepGreen\1+%s\2 health per round!"),
+    SEE.EFFECT_OIL_RAIN_DOT: ("Oil Rain", "This Toon will take \1deepRed\1-%s\2 damage per round."),
+    SEE.EFFECT_FOG: ("Fog", "This Toon \1deepRed\1cannot see Cog information\2."),
+    SEE.EFFECT_HEAVY_RAIN: ("Heavy Rain", "Damage taken is \1deepRed\1increased by 20%\2.\n50% of the damage taken \1deepRed\1will be deferred\2 to the next weather transition!\n(Stored: {damageAbsorbed} damage)"),
+    SEE.EFFECT_STORM_CELL: ("Storm Cell", "The Rainmaker is about to unleash a\n\1deepGreen\1powerful lightning attack!\2\nThe power of this attack is \1deepRed\1reduced\2 for each\nGag that hits her."),
+    SEE.EFFECT_TRIAL_BY_FIRE: ("Trial by Fire", "This %s will take \1deepRed\1%s%%\2 damage per round."),
+    SEE.EFFECT_BEWITCHMENT: ("Bewitchment", (
+        "This Toon is Bewitched! Cogs are \1deepRed\1+%s%%\2 more likely to target them, but they will deal \1deepGreen\1%sx\2 more damage to the Witch Hunter.%s",
+        " Additionally, they will take \1deepRed\1%sx\2 more damage."
+    )),
+    SEE.EFFECT_HIVEMIND: ("Hivemind", "These linked consciousnesses will stop at nothing to destroy a singular Toon every round."),
+    SEE.EFFECT_PEELING_THE_BARK: ("Peeled", "This Toon takes \1deepRed\1" + "+75%\2 more damage while peeled."),
+    SEE.EFFECT_PEELING_THE_BARK_SUIT: ("Peeled", "Debuffs on this Cog will last for 1 round."),
+    SEE.EFFECT_WOODCHIPPER: ("Woodchipped", "This Toon is covered in splintery woodchips, and will take \1deepRed\1-%s\2 damage per round."),
+    SEE.EFFECT_GHOST_PAYROLL: ("Ghost Payroll", "This Satellite Investor will deal \1deepGreen\1%sx\2 more damage."),
+    SEE.EFFECT_DEEP_FREEZE: ("Deep Freeze", "This Toon is frozen! Their attacks will happen \1deepRed\1after\2 the Cogs are finished attacking.\n\1deepRed\1Unites are disabled.\2"),
+    SEE.EFFECT_SLUSH_FUND: ("Slush Fund", "This Cog will take \1deepRed\1-%s%%\2 less damage!"),
+    SEE.EFFECT_DAMAGE_TAKEN_UP: ("Vulnerable", "This Toon takes \1deepRed\1+%s%%\2 more damage while vulnerable."),
+    SEE.EFFECT_DAMAGE_TAKEN_DOWN: ("Damage Reduction", "This Cog will take \1deepGreen\1%s%%\2 less damage!"),
+    SEE.EFFECT_RUSH_JOB: ("Rush Job", (
+        "The Pacesetter will punish ALL Toons if you do not use %s on this Cog!!\nThis Cog \1deepGreen\1cannot be fired\2, but the right Gag used against this Cog will be \1deepRed\1much more likely to hit\2.",
+        "\nThe wrong Gag will deal \1deepGreen\1%s%% less damage\2.",
+        "The \1TextSubtitle\1\1TextOnlyShadow\1\1deepRed\1Family\2\2\2 will punish ALL Toons if you do not use %s on this Cog!!\nThis Cog \1deepGreen\1cannot be fired\2, but the right Gag used against this Cog will be \1deepRed\1much more likely to hit\2.",
+    )),
+    SEE.EFFECT_HURRY_SICKNESS: ("Hurry Sickness", (
+        "This Toon couldn't keep up with the Pacesetter and thus will deal \1deepRed\1-%s%%\2 less damage.",
+        "This Toon couldn't keep up with the Pacesetter and thus will deal \1deepRed\1-%s%%\2 less damage, and receive \1deepRed\1-%s%%\2 less incoming healing.",
+        "This Toon couldn't keep up with the \1TextSubtitle\1\1TextOnlyShadow\1\1deepRed\1Family\2\2\2 and thus will deal \1deepRed\1-%s%%\2 less damage.",
+    )),
+    SEE.EFFECT_MOVING_GOALPOSTS: ("Moving Goalposts", "Every round, the Pacesetter \1deepRed\1randomizes blocked Gag levels\2!"),
+    SEE.EFFECT_MARKED_WOOD: (
+        "Marked Wood",
+        "The Chainsaw Consultant has marked this Toon, and unless interrupted by a different Toon, will target them this turn! They will take \1deepRed\1+%s%%\2 more damage from his next attack."
+    ),
+    SEE.EFFECT_MANAGER_MOUTHPIECE: ("Baker Extraordinaire", "You cannot breach the Mouthpiece's confectionary barrier! The barrier will empower all other Cogs, giving them delectable buffs. Defeating Cogs will weaken the barrier."),
+    SEE.EFFECT_MOUTHPIECE_BONUS: (
+        "Fresh From the Oven",
+        "The Mouthpiece's cookie has enriched this Cog!\nDefeating this Cog will wound her pride."
+    ),
+    SEE.EFFECT_RED_THREAD: ("Red Thread", "Bound by the \1deepRed\1red thread\2 of fate! When their partner takes damage, they echo \1deepRed\1{}%\2 of it!"),
+    SEE.EFFECT_RED_THREAD_TANGLED: ("Red Tangle", "Caught in the \1deepRed\1red thread\2 of fate! Every Toon in the tangle echoes \1deepRed\1" + "50%\2 of the damage of the other tangled Toons!"),
+    SEE.EFFECT_STAR_OF_THE_SHOW: (("Rising Star", "Superstar"),
+                                  ("This Cog is a Rising Star!\nAlongside a \1deepGreen\1health boost\2, they will deal \1deepGreen\1+%s\2 more damage (growing every turn). They also receive the same benefits as Manager Cogs.",
+                                  "This Cog is a \1deepYellow\1SUPERSTAR\2!\nAlongside a \1deepYellow\1MASSIVE health boost\2, they will deal \1deepGreen\1+%s\2 more damage, and will deal more every turn. They also receive the same benefits as Manager Cogs.")),
+    SEE.EFFECT_STAR_OF_THE_SHOW_TOON: ("Rising Star", "This Toon is a Rising Star!\nThey will deal \1deepGreen\1+%s\2 more damage."),
+    SEE.EFFECT_VIRAL_SENSATION: ("Viral Sensation", "This Toon is a Viral Sensation!\n\1TextSmaller\1Their Gags will deal \1deepGreen\1+%s\2 more damage. However, they will lose accuracy!\nLevel 5 Gags: \1deepRed\1-8%% Accuracy\2 | Level 6 Gags: \1deepRed\1-16%% Accuracy\2\nLevel 7 Gags: \1deepRed\1-24%% Accuracy\2 | Level 8 Gags: \1deepRed\1-32%% Accuracy\2\2"),
+    SEE.EFFECT_LAST_TAP: ("Last Tap!", "The Major Player is going in for a grand finale!\nHe will be dealing \1deepGreen\1+%s\2 more damage."),
+    SEE.EFFECT_DANCE_PARTNER: ("Dance Partner", "It takes two to tango! Matching Dance Partners deal \1deepGreen\1extra\2 damage to each other and \1deepRed\1less\2 damage to everyone else."),
+    SEE.EFFECT_SIPHON: ("Siphon", "This Cog is ready to siphon your Laff! It does \1deepRed\1-%s%%\2 less damage, but will heal for \1deepGreen\1%sx\2 the damage it deals!"),
+    SEE.EFFECT_POWER_NAP: ("Power Nap", "This Cog is taking a power nap, and will take time to wake up. Currently, they will take \1deepGreen\1-%s%%\2 less damage and deal \1deepRed\1-%s%%\2 less damage."),
+    SEE.EFFECT_PEACEFUL_SLUMBER: ("Peaceful Slumber", "The Featherbedder is taking \1deepGreen\1{0}%\2 less damage!\n\nEvery round that they are alone, they will gain another \1deepGreen\1" + "25%\2 damage resistance."),
+    SEE.EFFECT_POWER_NAP_KILL_DMG_BOOST: ("Well Rested", "This Toon is currently dealing \1deepGreen\1+%s\2 extra damage.\n\nEvery napping Cog defeated will grant an additional \1deepGreen\1+3\2 damage boost!"),
+    SEE.EFFECT_MANAGER_PLUTOCRAT: ("Market Bubble", (
+        "The Market Bubble is growing! The Plutocrat's attacks will deal \1deepGreen\1+%s\2 more damage. \1GagTrack_trap\1Shatter\2 damage dealt to the Plutocrat is increased by \1deepRed\1+%s%%\2, and will burst the Market Bubble.",
+        "The Market Bubble is currently inactive.",
+        "The Market Bubble has crashed! The Plutocrat will take \1deepRed\1+%s%%\2 more damage per attack."
+    )),
+    SEE.EFFECT_CHEER: ("Cheer", "This Toon's attack accuracy is increased by \1deepGreen\1+%s%%\2."),
+    SEE.EFFECT_MANAGER_WITCH_HUNTER: ("Growing Mob", (
+        "The Witch Hunter's Mob is currently empty.",
+        "The Witch Hunter's Mob is currently at \1deepGreen\1%s\2 member%s.",
+        "\nThe larger the Mob gets, the stronger his abilities become!\nThe Mob will \1deepGreen\1grow\2 each time 'Mob Mentality' is used.",
+    )),
+    SEE.EFFECT_WILL_OF_THE_PEOPLE: ("Will of the People", "The Witch Hunter is taking \1deepGreen\1{}%\2 less damage!\nEach time another Cog is defeated, this bonus decreases by \1deepRed\1-{}%\2. Each time 'Mob Mentality' is used, this bonus increases by \1deepGreen\1+{}%\2."),
+    SEE.EFFECT_CHAIN_LINKED: ("Chain Linked", (
+        "This Cog%s.",
+        " is taking \1deepGreen\1-%s%%\2 less damage",
+        " is providing a \1deepGreen\1+25%\2 damage resistance to the Cogs to their \1deepBlue\1right\2",
+        ", and",
+    )),
+    SEE.EFFECT_KICKBACK: ("Kickback", "The Chainsaw Consultant will take \1deepRed\1+%s%%\2 more damage."),
+    SEE.EFFECT_MINIBOSS: ("Manager Beneficiary", "This Cog cannot be fired or sued."),
+    SEE.EFFECT_SPARK_PLUG: ("Spark Plug", "This Toon will take \1deepRed\1-%s\2 damage per round."),
+    SEE.EFFECT_AGGRANDIZE: ("Aggrandize", "This Cog will absorb \1deepRed\1%s%%\2 of the damage taken to the Chainsaw Consultant."),
+    SEE.EFFECT_COGS_DAMAGE_ABSORB: ("Damage Absorption", "This Cog will absorb \1deepGreen\1%s%%\2 of damage dealt to other Cogs."),
+    SEE.EFFECT_COGS_DAMAGE_ABSORB_INSTANT: ("Damage Absorption", "This Cog will absorb \1deepGreen\1%s%%\2 of damage dealt to other Cogs."),
+    SEE.EFFECT_MANAGER_FIRESTARTER: (
+        "Pyromaniac",
+        "The Firestarter is taking \1deepGreen\1-%s%%\2 less damage and dealing \1deepGreen\1+%s\2 more damage!"
+    ),
+    SEE.EFFECT_COMMERCIAL: (
+        "Commercial Break",
+        "High Roller is currently on break from minigames! He will return in \1deepGreen\1%s\2 round%s.",
+    ),
+    SEE.EFFECT_TRIVIA: (
+        "Flunky Trivia!",
+        "This Flunky is awaiting your answer! It represents the answer: \1deepGreen\1%s\2\nIf you hit this Flunky and it was wrong, \1deepRed\1you lose!\2\nIf you didn't hit this Flunky and it was right, \1deepRed\1you lose!\2",
+    ),
+    SEE.EFFECT_PUZZLE: (
+        "Puzzle Show!",
+        "This Cog is awaiting your gags!\nIf it is not defeated by the end of this round, or if the Toons don't use any %s Gags, \1deepRed\1everyone loses!\2",
+    ),
+    SEE.EFFECT_SHUFFLE: (
+        "Cog Shuffle!",
+        "This Cog is awaiting your answer!\nWas this the one High Roller picked? If you answer wrong, \1deepRed\1you lose!\2",
+    ),
+    SEE.EFFECT_HOLLYWOOD_STAR: (
+        "Hollywood Star",
+        "This Cog is a \1deepYellow\1HOLLYWOOD STAR\2!\nAlongside a \1deepYellow\1MASSIVE health boost\2, they will deal \1deepGreen\1+%s\2 more damage, and will deal more every turn. They kind of look familiar...",
+        "This Cog is a \1deepYellow\1HOLLYWOOD STAR\2!\nAlongside a \1deepYellow\1MASSIVE health boost\2, they will deal more damage every turn. They kind of look familiar..."
+    ),
+    SEE.EFFECT_HARMONIOUS_COLORS: (
+        "Harmonious Colors",
+        "The colors, they are so pretty...\nHigh Roller's Silhouettes are causing him to take \1deepGreen\1-%s%%\2 less damage!",
+        "The colors, they are so pretty...\nHigh Roller is currently \1deepYellow\1INVINCIBLE!!\2",
+    ),
+    SEE.EFFECT_HIGHROLLER_CLONE: [
+        ("\1deepTrackCol_0\1C45HB4CK\2",
+         "This Silhouette is making sure the Toons don't get too cheery!\nIt will \1deepGreen\1retaliate\2 against the Toons you heal."),
+        ("\1deepTrackCol_1\1TR4P-C4RD\2",
+         "This Silhouette is eager to play its Trap Card!\nIt will use a powerful group attack if left unlured or if \1GagTrack_trap\1Trap\2 Gags are placed on the field."),
+        ("\1deepTrackCol_2\1GR33NL1GHT3R\2",
+         "This Silhouette is practicing persuasion prevention!\nIt has \1deepYellow\1virtualized\2 all Silhouettes, and will make \na different Silhouette \1deepGreen\1lure immune\2 every round."),
+        ("\1deepTrackCol_6\1F4C3 V4LU3\2",
+         "This Silhouette HATES teamwork!\nIt \1deepGreen\1refuses\2 to let it or its friends deal with your \1deepGreen\1combo damage.\2"),
+        ("\1deepTrackCol_4\1SPL45HB4CK\2",
+         "This Silhouette loves water parks!\nIts reflective properties will cause your \1GagTrack_squirt\1Squirt\2 Gags to \1deepGreen\1bounce back to you\2! Silhouettes will recieve a\1deepGreen\1 50% damage resistance effect\2 when \1BattleInfo_SoakText\1Soaked\2."),
+        ("\1deepTrackCol_5\1F1ZZL3\2",
+         "This Silhouette wore a rubber suit to work today!\nIt will reduce your \1GagTrack_zap\1Zap\2 jump damage by \n\1deepGreen\1a lot.\2"),
+        ("\1deepTrackCol_3\1S1NG1N' BLU35\2",
+         "This Silhouette takes the wind out of your sails!\nIt will \1deepGreen\1knock the wind\2 out of you for a \1deepGreen\1small amount\2 of time."),
+        ("\1deepTrackCol_7\1J0K3R\2",
+         "This Silhouette is \1deepGreen\1messing\2 \1deepRed\1with\2 \1deepGreen\1your\2 \1deepRed\1Gags??\2\n \1TextSmaller\1Your Gags will occasionally get demoted by ?? levels, or promoted 1 level."
+         + "\nPromoted level 8 Gags deal \1deepGreen\1double damage.\2 He ESPECIALLY loves messing with \1GagTrack_drop\1Drop\2 Gags...\2"),
+    ],
+    SEE.EFFECT_HIGHROLLER_SHIELD_SUIT: (
+        "Refraction Barrier",
+        "This Silhouette is a strange being of light!\nAttacks will do \1deepGreen\1-200\2 less damage on it!"
+    ),
+    SEE.EFFECT_FAKE_SOAKED: (
+        "Soaked?",
+        "This Toon must have used a defective gag or something..."
+    ),
+    SEE.EFFECT_RAISING_THE_ANTE: (
+        "Raising the Ante",
+        "The stakes are much higher, and so are your Gag damages!\nGags are \1deepGreen\1" + "10x\2 more powerful."
+    ),
+    SEE.EFFECT_PIP_COUNTER: (
+        "Pips",
+        "This Toon is wielding \1TextSubtitle\1\1deepBlue\1%s Pip%s\2\2.",
+        "\n%s\1deepBlue\1%s-Pip Dice\2 on \1deepRed\1cooldown\2 for \1deepRed\1%s round%s\2.",
+    ),
+    SEE.EFFECT_PIP_DISCOUNT: (
+        "Pip Discount",
+        "This \1deepGreen\1thrifty little Toon\2 is spending \1deepGreen\1%s less Pips\2 on Dice and Gags!",
+    ),
+    SEE.EFFECT_AITH_DAMAGE_TAKEN_UP: (
+        "Vulnerable",
+        "The ace up the High Roller's sleeve causes this Toon to take \1deepRed\1+%s%%\2 more damage from attacks."
+    ),
+    SEE.EFFECT_HIGHROLLER_MINIGAME_HOST: (
+        "Minigame Host",
+        "To keep the minigame fair, the High Roller has \1deepRed\1disabled the Toons' buffs and dice effects\2.\n"
+        "They will not count down rounds or have any effect during the minigame."
+    ),
+    # Find the Family
+    SEE.EFFECT_FTF_SUPERVISOR_INSURED: ("Insurance Policy", "While other Cogs are alive, the Supervisor is insured. At the end of every round that he is insured, he will \1deepGreen\1heal 225 health\2 and gain a \1deepGreen\1damage boost\2."),
+    SEE.EFFECT_FTF_NUCLEAR: ("Unstable Core Upgrade", "This Cog is \1deepRed\1unstable!\2\n\nThey receive \1deepGreen\1" + "2x health\2 at the cost of an \1deepRed\1unstable framework\2."),
+    SEE.EFFECT_FTF_DUALCORE: ("Nuclear Core Upgrade", "This Cog has reached their \1deepGreen\1full potential\2.\n\nThey receive \1deepGreen\1" + "8x health\2 and \1deepGreen\1" + "2x damage\2 as well as an \1deepGreen\1adaptive framework\2."),
+    SEE.EFFECT_FTF_PRISMATIC_TOON: ("Prismatic %s", "This Toon has reached their \1deepGreen\1full potential\2.\n\nThey receive \1deepGreen\1" + "3x health\2 and \1deepGreen\1" + "3x damage\2."),
+
+    SEE.EFFECT_FTF_FOREMAN_CONTRACTOR: ("Contractor Factory Foreman", "Caught the blues, baby?\nIt's me babe, I'm a haiku!\nSkibitibapbap!"),
+    SEE.EFFECT_FTF_FOREMAN_CONTRACTOR_TANGO: ("Contractually Obligated", "It takes two to fill out paperwork! Matching Contract Partners deal \1deepGreen\1extra\2 damage to each other and \1deepRed\1less\2 damage to everyone else."),
+    SEE.EFFECT_FTF_FOREMAN_REDTAPE: ("Red Tape Factory Foreman", "Keep enemies close\nBureaucracy, binds them all\nto insanity"),
+    SEE.EFFECT_FTF_FOREMAN_SNIPER: ("Sniper Factory Foreman", "A good friend helps you\nWhen you are at your lowest\nI am not your friend"),
+    SEE.EFFECT_FTF_FOREMAN_SLEEPY: ("Sleepy Factory Foreman", "Work is tiring\nInsane productivity\nSleep is good for thee"),
+    SEE.EFFECT_FTF_FOREMAN_SLEEPY_POWER_NAP: ("Power Nap", "The Foreman is taking a power nap, and will take time to wake up. Currently, they will take \1deepGreen\1-%s%%\2 less damage and deal \1deepRed\1-%s%%\2 less damage."),
+    SEE.EFFECT_FTF_FOREMAN_EXPLOSIVE: ("Explosive Factory Foreman", "I will blow up soon\nPlease don't let me blow up soon\nIt will hurt a lot"),
+    SEE.EFFECT_FTF_FOREMAN_BURNING: ("Burning Factory Foreman", "Fifteen packs a day\nPuffs a nasty cloud of smoke\nA \1TextSubtitle\1\1deepRed\1bad\2\2 role model"),
+    SEE.EFFECT_FTF_FOREMAN_BURNING_SMOKED: ("Smoked", "This Toon will take damage equal to \1deepRed\1" + "15% of their max Laff\2 per round."),
+
+    SEE.EFFECT_FTF_SUPERVISOR_ABSORPTION: ("Spongy Mint Supervisor", "This man is a tank\nGood golly gee! What a tank!\nHe sure is a tank"),
+    SEE.EFFECT_FTF_SUPERVISOR_FRAUD: ("Fraudulent Mint Supervisor", "He should go to jail\nHe is not quite trustworthy\nCommit tax fraud now?"),
+    SEE.EFFECT_FTF_SUPERVISOR_ABACUS: ("Abacus Mint Supervisor", "Math's his specialty\nGraduated top of class\nOne plus Two is Three\1TextSmaller\1\n\nLevel Requirement: %s\2"),
+    SEE.EFFECT_FTF_SUPERVISOR_CONFUSED: ("Confused Mint Supervisor", "Mid-life crisis soon\nWrong build given on build-day\nSelf-discovery"),
+    SEE.EFFECT_FTF_SUPERVISOR_CONTROLLING: ("Controlling Mint Supervisor", "Boxing you in quick\nOnly focused strikes will thrive\nWeakness is spread out"),
+    SEE.EFFECT_FTF_SUPERVISOR_ACCOUNTANT: ("Accountant Mint Supervisor", "Keeps track of numbers\nGood friends with the Abacus\nTargets, not levels\1TextSmaller\1\n\nTarget Requirement: %s\2"),
+
+    SEE.EFFECT_FTF_ATTORNEY_SNEAKY: ("Sneaky Head Attorney", "Out of Ivy League\nThe lawyer knows more than you\nWhat you gonna do?"),
+    SEE.EFFECT_FTF_ATTORNEY_CHRONO: ("Chrono Head Attorney", "Lawful Timekeeper\nMakes you question your choices\nTick-Tock Tick-Tock Boom"),
+    SEE.EFFECT_FTF_ATTORNEY_OVERSEER: ("Overseer Head Attorney", "Mr. Attorney\nEnjoys Combo and Knockback\nIt just smells so good"),
+    SEE.EFFECT_FTF_ATTORNEY_RUSHJOB: ("Laborious Head Attorney", "He has connections\nQuite the spicy trial soon\nYou must choose wisely"),
+    SEE.EFFECT_FTF_ATTORNEY_MONOLITH: ("Monolithic Head Attorney", "Quite the large presence\nBattle tactic canceller\nYou will be squashed soon"),
+    SEE.EFFECT_FTF_ATTORNEY_OMNIPOTENT: ("Omnipotent Head Attorney", "Always watching you\nLegal system on his side\nYou will be squashed soon"),
+
+    SEE.EFFECT_FTF_PRESIDENT_MULLIGAN: ("Mulligan Club President", "Mr. Mulligan\nHe will get bonus attacks\nThey are mulligans"),
+    SEE.EFFECT_FTF_PRESIDENT_CHIPFAN: ("Chip Fan Club President", "Welcome to the club\nWe don't need any more Chips\nI'm already Chip\1TextSmaller\1\n\n10,000 RPM\2"),
+    SEE.EFFECT_FTF_PRESIDENT_ANCIENT: ("Ancient Club President", "Prehistoric Suit\nGrandma's favorite employee\nChocolate chip cookies"),
+    SEE.EFFECT_FTF_PRESIDENT_PUZZLING: ("Puzzling Club President", "Brain is very large\nCan't be trusted, in control\nTrust is just for fools"),
+    SEE.EFFECT_FTF_PRESIDENT_PUZZLING_CONFUSED: ("Confused", "This Toon is \1deepRed\1Confused!\2\n\nGroup target Gags are \1deepRed\1disabled\2, and this Toon's target choice will be \1deepRed\1randomized.\2"),
+    SEE.EFFECT_FTF_PRESIDENT_SHIVERING: ("Shivering Club President", "Snowflakes falling down\nCrystals forming in the air\nIt is cold outside"),
+    SEE.EFFECT_FTF_PRESIDENT_HIGHSTAKES: ("High Stakes Club President", "Randomness is fun\nGood friends with that crazy duck\nLearned a thing or two"),
+}
+
+SuitNameDefs = {}
+
+
+def suitName(suitType, index=0):
+    if suitType not in SuitNameDefs:
+        raise Exception(f"suitName called for undefined suit name {suitType}!")
+    return SuitNameDefs[suitType][index]
+
+
+def defineNames(suitType, baseName, s=None, p=None, short=None, wordwrap=8.0):
+    # todo - make sure this handles names like 'an Autocaddie'
+    if s is None:
+        prefix = 'a '
+        if baseName[0].lower() in ('a', 'e', 'i', 'o', 'u'):
+            prefix = 'an '
+        s = prefix + baseName
+    if p is None:
+        p = baseName + 's'
+    SuitNameDefs[suitType] = (baseName, s, p, short, wordwrap)
+
+
+def nameToAbbreviation(fullSuitName):
+    """
+    Gets the full name of a suit, and returns its abbreviation.
+
+    :param str fullSuitName: Example: "Penny Pincher"
+    :return: Example: "pp"
+    """
+    #
+    for suitType in SuitNameDefs:
+        if fullSuitName in SuitNameDefs[suitType]:
+            return suitType
+    return ''
+
+
+defineNames('test', 'Test Dummy')
+### BOSSBOT ###
+defineNames('f', 'Flunky', p='Flunkies')
+defineNames('p', 'Pencil Pusher')
+defineNames('ym', 'Yesman', p='Yesmen')
+defineNames('mm', 'Micro\x03manager', 'a Micromanager', 'Micromanagers')
+defineNames('ds', 'Downsizer')
+defineNames('hh', 'Head Hunter')
+defineNames('cr', 'Corporate Raider')
+defineNames('tbc', 'Big Cheese')
+defineNames('clubpres', 'Club President')
+defineNames('autocad', 'Autocaddie')
+### BOARDBOT ###
+defineNames('bgh', 'Bagholder')
+defineNames('pph', 'Paper Hands', p='Paper Hands')
+defineNames('ins', 'Insider')
+defineNames('cbr', 'Circuit Breaker')
+defineNames('dl', 'Deadlock')
+defineNames('shw', 'Shark Watcher')
+defineNames('mg', 'Magnate')
+defineNames('hho', 'Head Honcho')
+defineNames('chairman', 'Chairman', p='Chairmen')
+defineNames('ottoman', 'C. O. O.', s='C. O. O.', p='C. O. O.\'s')
+### SELLBOT ###
+defineNames('cc', 'Cold Caller')
+defineNames('tm', 'Tele\x03marketer', 'a Telemarketer', 'Telemarketers')
+defineNames('nd', 'Name Dropper')
+defineNames('gh', 'Glad Hander')
+defineNames('ms', 'Mover & Shaker', p='Movers & Shakers')
+defineNames('tf', 'Two-Face')
+defineNames('mi', 'Mingler')
+defineNames('mh', 'Mr. Hollywood')
+defineNames('foreman', 'Factory Foreman', p='Factory Foremen')
+defineNames('msfore', 'Factory Foreman', p='Factory Foremen')
+### CASHBOT ###
+defineNames('sc', 'Short Change')
+defineNames('pp', 'Penny Pincher')
+defineNames('tw', 'Tightwad')
+defineNames('bc', 'Bean Counter')
+defineNames('nc', 'Number Cruncher')
+defineNames('mb', 'Money Bags', p='Money Bags')
+defineNames('ls', 'Loan Shark')
+defineNames('rb', 'Robber Baron')
+defineNames('supervis', 'Mint Supervisor')
+### LAWBOT ###
+defineNames('bf', 'Bottom Feeder')
+defineNames('b', 'Blood\x03sucker', s='a Bloodsucker', p='Bloodsuckers')
+defineNames('btto', 'Blood\x03sucker', s='a Bloodsucker', p='Bloodsuckers')
+defineNames('pf', 'Petti\x03fogger', s='a Pettifogger', p='Pettifoggers')
+defineNames('dt', 'Double Talker')
+defineNames('nn', 'Needlenose')
+defineNames('ac', 'Ambulance Chaser')
+defineNames('cv', 'Convey\x03ancer', s='a Conveyancer', p='Conveyancers')
+defineNames('bs', 'Back Stabber')
+defineNames('ad', 'Advocate')
+defineNames('sd', 'Spin Doctor')
+defineNames('sh', 'Shyster')
+defineNames('le', 'Legal Eagle')
+defineNames('br', 'Barrister')
+defineNames('bw', 'Big Wig')
+defineNames('clerk', 'Head Attorney')
+### TASKLINE MINIBOSSES ###
+defineNames('derrman', 'Derrick Man', s='Derrick Man', p='Derrick Men')
+defineNames('dlao', 'Land Acquisition Architect', s='Land Acquisition Architect',
+            p='Land Acquisition Architects', short='L.A.A.')
+defineNames('dopr', 'Public Relations Representative', s='Public Relations Representative',
+            p='Public Relations Representatives', short='P.R.R.', wordwrap=9.0)
+defineNames('derrhand', 'Derrick Hand', s='Derrick Hand')
+defineNames('dold', 'Director of Land Development', s='Director of Land Development',
+            p='Directors of Land Development', short='D.O.L.D.')
+defineNames('dopa', 'Director of Public Affairs', s='Director of Public Affairs',
+            p='Directors of Public Affairs', short='D.O.P.A.')
+### EVENT BOSSES ###
+defineNames('count', 'Count Erclaim', s='Count Erclaim', p='Count Erclaims')
+defineNames('redd', "Redd 'Heir' Wing", s="Redd 'Heir' Wing", p="Redd 'Heir' Wings", short='Redd')
+defineNames('judy', 'Judy', s='Judy', p='Judies')
+defineNames('erfit', 'Count Erfit', s='Count Erfit', p='Count Erfits')
+defineNames('hroller', 'High Roller')
+defineNames('hrollerc', 'High Roller Silhouette')
+defineNames('ftf_s', 'Factory Foreman')
+defineNames('ftf_m', 'Mint Supervisor')
+defineNames('ftf_l', 'Head Attorney')
+defineNames('ftf_c', 'Club President')
+defineNames('ftf_s_rt', 'Factory Foreman')
+defineNames('ftf_s_br', 'Factory Foreman')
+defineNames('ftf_m_cf', 'Mint Supervisor')
+defineNames('ftf_c_ac', 'Club President')
+# This is only used for loot tracking
+defineNames('ftf_nuclear', 'Nuclear Cog')
+### HARDMODE BOSSES ###
+defineNames('lgator', 'Litigator', s='Litigator')
+defineNames('stenog', 'Stenographer', s='Stenographer')
+defineNames('caseman', 'Case Manager', s='Case Manager')
+defineNames('sgoat', 'Scapegoat', s='Scapegoat')
+### STREET MERCS ###
+defineNames('duckshfl', 'Duck Shuffler')
+defineNames('ddiver', 'Deep Diver')
+defineNames('gatekeep', 'Gatekeeper')
+defineNames('bellring', 'Bellringer')
+defineNames('mouthp', 'Mouthpiece')
+defineNames('fires', 'Firestarter')
+defineNames('treek', 'Treekiller')
+defineNames('fbed', 'Featherbedder')
+
+StreetManagers = ['duckshfl', 'ddiver', 'gatekeep', 'bellring', 'mouthp', 'fires', 'treek', 'fbed']
+### INSTANCE MERCS ###
+defineNames('prethink', 'Prethinker')
+defineNames('rainmake', 'Rainmaker')
+defineNames('whunter', 'Witch Hunter')
+defineNames('mslacker', 'Multislacker')
+defineNames('mplayer', 'Major Player')
+defineNames('pcrat', 'Plutocrat')
+defineNames('chainsaw', 'Chainsaw Consultant')
+defineNames('psetter', 'Pacesetter')
+
+# Satellite Investors
+defineNames('charon', 'Charon')
+defineNames('nix', 'Nix')
+defineNames('hydra', 'Hydra')
+defineNames('styx', 'Styx')
+defineNames('kerberos', 'Kerberos')
+
+### TUTORIAL DUMMY ###
+defineNames('djockey', 'Desk Jockey')
+defineNames('ptjockey', 'Desk Jockey')
+
+SuitFaceoffDefaultTaunts = ['Boo!']
+SuitAttackDefaultTaunts = ['Take that!', 'Take a memo on this!']
+SuitAttackNames = {
+    AttackEnum.AUDIT: 'AUDIT!',
+    AttackEnum.BITE: 'BITE!',
+    AttackEnum.BLUE_CHIP: 'BLUE CHIP!',
+    AttackEnum.BOUNCE_CHECK: 'BOUNCE CHECK!',
+    AttackEnum.BRAIN_STORM: 'BRAIN STORM!',
+    AttackEnum.BUZZ_WORD: 'BUZZ WORD!',
+    AttackEnum.CALCULATE: 'CALCULATE!',
+    AttackEnum.CANNED: 'CANNED!',
+    AttackEnum.CHOMP: 'CHOMP!',
+    AttackEnum.CIGAR_SMOKE: 'CIGAR SMOKE!',
+    AttackEnum.CIGAR_SMOKE_HEAD_HONCHO: 'CIGAR SMOKE!',
+    AttackEnum.CIGAR_SMOKE_FIRESTARTER: 'CIGAR SMOKE!',
+    AttackEnum.CIGAR_SMOKE_PLUTOCRAT: 'CIGAR SMOKE!',
+    AttackEnum.CLIPON_TIE: 'CLIP ON TIE!',
+    AttackEnum.CRUNCH: 'CRUNCH!',
+    AttackEnum.DEMOTION: 'DEMOTION!',
+    AttackEnum.DOWNSIZE: 'DOWNSIZE!',
+    AttackEnum.DOUBLE_TALK: 'DOUBLE TALK!',
+    AttackEnum.EVICTION_NOTICE: 'EVICTION NOTICE!',
+    AttackEnum.EVIL_EYE: 'EVIL EYE!',
+    AttackEnum.FALLING_KNIFE: 'FALLING KNIFE!',
+    AttackEnum.FILIBUSTER: 'FILIBUSTER!',
+    AttackEnum.FILL_WITH_LEAD: 'FILL WITH LEAD!',
+    AttackEnum.FINGER_WAG: 'FINGER WAG!',
+    AttackEnum.FIRED: 'FIRED!',
+    AttackEnum.FOUNTAIN_PEN: 'FOUNTAIN PEN!',
+    AttackEnum.FREEZE_ASSETS: 'FREEZE ASSETS!',
+    AttackEnum.GLOWER_POWER: 'GLOWER POWER!',
+    AttackEnum.GUILT_TRIP: 'GUILT TRIP!',
+    AttackEnum.HALF_WINDSOR: 'HALF WINDSOR!',
+    AttackEnum.HANG_UP: 'HANG UP!',
+    AttackEnum.HEAD_SHRINK: 'HEAD SHRINK!',
+    AttackEnum.HOT_AIR: 'HOT AIR!',
+    AttackEnum.JARGON: 'JARGON!',
+    AttackEnum.LEGALESE: 'LEGALESE!',
+    AttackEnum.LIQUIDATE: 'LIQUIDATE!',
+    AttackEnum.MARKET_CRASH: 'MARKET CRASH!',
+    AttackEnum.MUMBO_JUMBO: 'MUMBO JUMBO!',
+    AttackEnum.PARADIGM_SHIFT: 'PARADIGM SHIFT!',
+    AttackEnum.PECKING_ORDER: 'PECKING ORDER!',
+    AttackEnum.PENNY_PINCH: 'PENNY PINCH!',
+    AttackEnum.PICK_POCKET: 'PICK POCKET!',
+    AttackEnum.PINK_SLIP: 'PINK SLIP!',
+    AttackEnum.PLAY_HARDBALL: 'PLAY HARDBALL!',
+    AttackEnum.POUND_KEY: 'POUND KEY!',
+    AttackEnum.POWER_TIE: 'POWER TIE!',
+    AttackEnum.MS_POWER_TIE: 'POWER TIE!',
+    AttackEnum.POWER_TRIP: 'POWER TRIP!',
+    AttackEnum.QUAKE: 'QUAKE!',
+    AttackEnum.AFTERSHOCK: 'AFTERSHOCK!',
+    AttackEnum.RAZZLE_DAZZLE: 'RAZZLE DAZZLE!',
+    AttackEnum.RED_TAPE: 'RED TAPE!',
+    AttackEnum.RE_ORG: 'RE-ORG!',
+    AttackEnum.RE_ARRANGE: 'RE-ARRANGE!',
+    AttackEnum.RESTRAINING_ORDER: 'RESTRAINING ORDER!',
+    AttackEnum.ROLODEX: 'ROLODEX!',
+    AttackEnum.ROLODEX_DOUBLE: 'ROLODEX!',
+    AttackEnum.RUBBER_STAMP: 'RUBBER STAMP!',
+    AttackEnum.RUB_OUT: 'RUB OUT!',
+    AttackEnum.SACKED: 'SACKED!',
+    AttackEnum.SCHMOOZE: 'SCHMOOZE!',
+    AttackEnum.SHAKE: 'SHAKE!',
+    AttackEnum.SHORT_SQUEEZE: 'SHORT SQUEEZE!',
+    AttackEnum.SHRED: 'SHRED!',
+    AttackEnum.SONG_AND_DANCE: 'SONG AND DANCE!',
+    AttackEnum.SPIN: 'SPIN!',
+    AttackEnum.SYNERGY: 'SYNERGY!',
+    AttackEnum.TABULATE: 'TABULATE!',
+    AttackEnum.TEE_OFF: 'TEE OFF!',
+    AttackEnum.THROW_BOOK: 'THROW BOOK!',
+    AttackEnum.TREMOR: 'TREMOR!',
+    AttackEnum.WATERCOOLER: 'WATERCOOLER!',
+    AttackEnum.WATERCOOLER_DOUBLE: 'WATERCOOLER!',
+    AttackEnum.WATERCOOLER_GROUP: 'WATERCOOLER!',
+    AttackEnum.WITHDRAWAL: 'WITHDRAWAL!',
+    AttackEnum.WRITE_OFF: 'WRITE OFF!',
+
+    # Cheat attacks
+
+    # Derrickman attack
+    AttackEnum.REFINEMENT: ('REFINEMENT!', 'HEALS ALL COGS FOR 40% OF THEIR HP!'),
+    # Dola attack
+    AttackEnum.INK_DRAIN: ('INK DRAIN!', 'ALL GAGS 25% LESS EFFECTIVE FOR TWO ROUNDS!'),
+    # Derrickhand attack
+    AttackEnum.REFINEMENT_DIRECTORS: ('REFINEMENT!', 'HEALS ALL COGS FOR 275 HP!'),
+    # Dold attack
+    AttackEnum.INK_DRAIN_DIRECTORS: ('INK DRAIN!', 'ALL GAGS 40% LESS EFFECTIVE FOR TWO ROUNDS!'),
+    # Factory Foreman attack
+    AttackEnum.WORKERS_COMP: ('WORKER\'S COMPENSATION!', 'THE FOREMAN WILL GET STRONGER WITH EACH COG DEFEATED!'),
+    # Mint Supervisor attack
+    AttackEnum.LIFE_INSURANCE: ('LIFE INSURANCE!',
+                                'IF OTHER COGS ARE ALIVE, THE SUPERVISOR WILL HEAL AND GET A DAMAGE BOOST!'),
+    # Head Attorney attack
+    AttackEnum.OBJECTION: ('OBJECTION!', 'THE HEAD ATTORNEY IS OBJECTING TO YOUR COMBO DAMAGE!'),
+    AttackEnum.OBJECTION_SUSTAINED: ('OBJECTION SUSTAINED!', 'SORRY GUYS, HE HAS A POINT.'),
+    AttackEnum.OBJECTION_OVERRULED: ('OBJECTION OVERRULED!', 'THE DEFENDANT HAS NO GROUND FOR THIS OBJECTION.'),
+    # Club pres attack
+    AttackEnum.EXTRA_TIP: ('EXTRA TIP!', 'THE CLUB PRESIDENT WILL UNLURE AND HEAL A RANDOM COG!'),
+    # Director attacks
+    AttackEnum.OVERWHELMING_AUTHORITY: ('OVERWHELMING AUTHORITY!', 'UNITES ARE DISABLED FOR THE REST OF THE BATTLE!'),
+    AttackEnum.DISRUPTIVE_ADVERTISEMENT: ('DISRUPTIVE ADVERTISEMENT!',
+                                          'IF NOT INTERRUPTED, THE D.O.P.A. WILL GAIN A NEW MARKETING ANGLE!'),
+    AttackEnum.MULTI_LEVEL_MARKETING: ('MULTI-LEVEL MARKETING!', 'THE D.O.P.A. GAINED ONE EXTRA ATTACK PER ROUND!'),
+    # Count attacks
+    AttackEnum.LAFF_STEAL: ('LAFF STEAL!', 'THE COUNT SIPHONS YOUR LAFF WITH EACH ATTACK!'),
+    AttackEnum.RISE_FROM_THE_SCRAP: ('RISE FROM THE SCRAP!', 'THE COUNT RESURRECTS AND REFINES DESTROYED COGS!'),
+    AttackEnum.SACRIFICE: ('SACRIFICE!', 'THE COUNT SACRIFICES OTHER COGS TO BECOME STRONGER!'),
+    AttackEnum.SCOPE_CREEP: ('SCOPE CREEP!', 'THE COUNT GETS TANKIER!'),
+    # Erfit atttacks
+    AttackEnum.HYDRATION_CHECK: ('HYDRATION CHECK!', 'ERFIT HYDRATES A RANDOM TOON!'),
+    AttackEnum.PROTOON_SHAKE: ('PRO-TOON SHAKE!', 'ERFIT HEALS THE HEALTHIEST COG WITH EACH ATTACK!'),
+    AttackEnum.PERSONAL_TRAINER: ('PERSONAL TRAINER!', 'ERFIT REVIVES COGS WITH HIS OWN HP!'),
+    AttackEnum.GAINS_FROM_THE_SCRAP: ('GAINS FROM THE SCRAP!',
+                                      'ERFIT DELETES THE WEAKEST COG FOR NOT BEING FIT ENOUGH!'),
+    # CLO Hardmode (Litigation team) Cog attacks
+    # Litigator
+    AttackEnum.BAYOU_BASH: ('BAYOU BASH!', 'THE LITIGATOR ABSOLUTELY SWAMPS YOU WITH COGS!'),
+    AttackEnum.BAYOU_BELLOW: ('BAYOU BELLOW!', 'THE LITIGATOR REMOVES ALL NEGATIVE EFFECTS FROM ALL COGS!'),
+    AttackEnum.SNAP: ('SNAP!', 'THE LITIGATOR RETALIATES AGAINST THE MOST DANGEROUS TOON!'),
+    # Technically 2 different attack variations, so copy paste the pbp text here.
+    AttackEnum.SNAP_RETALIATE: ('SNAP!', 'THE LITIGATOR RETALIATES WHEN SOAKED!'),
+    # Case manager
+    AttackEnum.INSURANCE_PLAN: ('INSURANCE PLAN!', 'THE CASE MANAGER ENSURES THAT COGS ARE HEALED EVERY ROUND!'),
+    AttackEnum.LEGAL_BINDINGS: ('LEGAL BINDINGS!', 'LEGALLY BINDS A TOON TO TAKE DAMAGE EVERY ROUND!'),
+    # Stenographer
+    AttackEnum.COURT_SANCTION: ('COURT SANCTION!', 'THE STENOGRAPHER RETALIATES AGAINST THE LEAST DANGEROUS TOON!'),
+    # Same deal with this as with Snap.
+    AttackEnum.COURT_SANCTION_RETALIATE: ('COURT SANCTION!', 'THE STENOGRAPHER RETALIATES AGAINST UNBOUND TOONS!'),
+    AttackEnum.COURT_RECORD: ('COURT RECORD!', 'LEVEL %s GAGS ARE NOW OFF-LIMITS!'),
+    AttackEnum.SCAPEGOAT_ENRAGED: ('ENRAGED!', 'SCAPEGOAT\'S TEMPER HAS BOILED OVER!'),
+    AttackEnum.SCAPEGOAT_DEFENSE: ('SHIELDS UP!', 'SCAPEGOAT\'S TEMPER HAS COOLED AND IS PROTECTING COGS AGAIN!'),
+    AttackEnum.COURT_COSTS: ('COURT COSTS!', 'THE FEES ARE RACKING UP!'),
+    AttackEnum.STENOG_CALCULATING_COSTS: ('CALCULATING COSTS!', 'AN AUDIT IS APPROACHING!'),
+    ## Street Minibosses ##
+    AttackEnum.WAGER_DUCKS: ('WAGER MANAGEMENT!', 'DUCKS!'),
+    AttackEnum.WAGER_SEVENS: ('WAGER MANAGEMENT!', 'SEVENS!'),
+    AttackEnum.WAGER_BEANS: ('WAGER MANAGEMENT!', 'JELLYBEANS!'),
+    AttackEnum.WAGER_BAR: ('WAGER MANAGEMENT!', 'BAR!'),
+    AttackEnum.WAGER_BUST: ('WAGER MANAGEMENT!', 'BUST!'),
+    AttackEnum.DIVE: ('DIVE!', 'THE DEEP DIVER HIDES AWAY UNDERWATER!'),
+    AttackEnum.SINK_OR_SWIM: ('SINK OR SWIM!', 'THE DEEP DIVER EMERGES!'),
+    AttackEnum.DEEP_DIVER_PROMOTE_FODDER: ('PROMOTION!', 'THE DEEP DIVER HIDES UNDERWATER UNTIL THIS COG IS DEFEATED!'),
+    AttackEnum.DEEP_DIVER_DIVING_DOT: ('DROWNING!', 'TOONS TAKE %s DAMAGE WHILE THE DEEP DIVER IS UNDERWATER!'),
+    AttackEnum.HEALING_BELL: ('HEALING BELL!', 'THE BELL\'S CHIME HEALS THE COGS!'),
+    AttackEnum.RED_THREAD: ('RED THREAD!', 'THE MOUTHPIECE BINDS ALL COGS AND TOONS!'),
+    AttackEnum.BACKBURNER: ('BACKBURNER!', 'THE FIRESTARTER LIGHTS UP HIS ALLIES!'),
+    AttackEnum.BARNBURNER: ('BARNBURNER!', 'THE FIRESTARTER GOES ALL OUT!'),
+    AttackEnum.PYROMANIAC: ('PYROMANIAC!', (
+        'THE FIRESTARTER GETS STRONGER WHEN TWO OR MORE BACKBURNERS ARE DESTROYED!',
+        'THE FIRESTARTER GETS STRONGER WHEN HE\'S ALONE!',
+    )),
+    AttackEnum.PEELING_THE_BARK: ('PEELING THE BARK!', 'THE TOON\'S DEFENSE IS PEELED OFF!'),
+    AttackEnum.WOODCHIPPER: ('WOODCHIPPER!', 'THIS TOON IS COVERED IN SPLINTERY WOOD!'),
+    AttackEnum.INSOMNIA: ('INSOMNIA!', 'THE FEATHERBEDDER RETALIATES FOR EVERY NAPPING COG HIT BY SOUND!'),
+
+    ## Instance Minibosses ##
+    AttackEnum.PICK_UP_THE_PACE: ('PICK UP THE PACE!', 'THE BATTLE GETS FASTER!'),
+    AttackEnum.OVERCLOCKED: ('OVERCLOCKED!', 'THE BATTLE SPEED IS MAXXED OUT!'),
+    AttackEnum.RUSH_JOB: ('RUSH JOB!', 'THE PACESETTER NEEDS YOU TO USE THE\n%s ON %s!'),
+    AttackEnum.HURRY_SICKNESS: ('HURRY SICKNESS!', 'THE PACESETTER PUNISHES YOU FOR NOT FOLLOWING HIS INSTRUCTIONS!'),
+    AttackEnum.HURRY_SICKNESS_MG: ('HURRY SICKNESS!', 'THE PACESETTER PUNISHES YOU FOR USING A BLOCKED LEVEL!'),
+    AttackEnum.CORPORATE_RESTRUCTURING: ('CORPORATE RESTRUCTURING!', 'THE PACESETTER RANDOMIZES THE COG ORDER!'),
+    AttackEnum.CONTENT_SYNC: ('CONTENT SYNC!', 'THE PACESETTER RANDOMIZES THE GAG ORDER!'),
+    AttackEnum.MOVING_GOALPOSTS: ('MOVING GOALPOSTS!', 'THE PACESETTER RANDOMIZES BLOCKED GAG LEVELS EVERY ROUND!'),
+
+    AttackEnum.CASTLING: ('CASTLING!', 'THE PRETHINKER CHANGES HIS POSITION!'),
+    AttackEnum.FORWARD_THINKING: ('FORWARD THINKING!', 'A MASSIVE BRAINSTORM IS BREWING...'),
+    AttackEnum.BRAIN_WAVE: ('BRAIN WAVE!', 'A MASSIVE BRAINSTORM OCCURS!'),
+
+    AttackEnum.OFFBOARDING: ('OFFBOARDING!', 'THE CHAINSAW CONSULTANT FIRES A COG... LITERALLY!'),
+    AttackEnum.REVVING_UP: ('REVVING-UP!', 'THE CHAINSAW CONSULTANT GAINS +%s RPM!'),
+    AttackEnum.LAYOFFS: ('LAYOFFS!', 'THE CHAINSAW CONSULTANT FIRES EVERY COG!!'),
+    AttackEnum.CUT_THE_SLACK: ('CUT THE SLACK!', 'THE CHAINSAW CONSULTANT POWERS UP THE STRONGEST EMPLOYEE!'),
+    AttackEnum.MARKED_WOOD: ('MARKED WOOD!', 'THE CHAINSAW CONSULTANT MARKS THE MOST DANGEROUS TOON FOR TERMINATION!'),
+    AttackEnum.SCABBARD: ('SCABBARD!', 'THE CHAINSAW CONSULTANT RECHARGES THE COGS!'),
+    AttackEnum.CHAIN_LINKED: ('CHAIN LINKED!', 'THE CHAINSAW CONSULTANT BINDS THE COGS TOGETHER!'),
+    AttackEnum.KICKBACK: ('KICKBACK!', 'THE CHAINSAW CONSULTANT IS VULNERABLE FOR THE NEXT FEW ROUNDS!'),
+    AttackEnum.AGGRANDIZE: ('AGGRANDIZE!', 'THE CHAINSAW CONSULTANT PROMOTES A COG!'),
+    AttackEnum.DEADWOOD: ('DEADWOOD!',
+                          "YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED YOU'RE FIRED"),
+    AttackEnum.THROTTLE: ('THROTTLE!', 'THE CHAINSAW CONSULTANT INTERRUPTS HIS OWN ATTACK!'),
+    AttackEnum.SPARK_PLUG: ('SPARK PLUG!', 'THE CHAINSAW CONSULTANT SHOCKS THE HIGHEST LAFF TOON!'),
+
+    AttackEnum.MANDATORY_LUNCH: ('MANDATORY LUNCH!', 'ALL TOONS MUST TAKE A LUNCH BREAK!'),
+    AttackEnum.ZERO_TASK: ('ZERO TASK!', 'THE MULTISLACKER HEALS ALL OTHER COGS!'),
+    AttackEnum.HYPER_TASK: ('HYPER TASK!', 'THE MULTISLACKER ATTACKS ALL TOONS WHO HIT THEM!'),
+    AttackEnum.WASTEFUL_MGMT: ('WASTEFUL MANAGEMENT!', 'THE MULTISLACKER SUMMONS MORE COGS!'),
+    AttackEnum.UNION_BUST: ('UNION BUST!', 'THE FOREMAN DESTROYS ALL OTHER COGS!'),
+
+    AttackEnum.ROCKING_IN_RHYTHM: ('ROCKIN\' IN RHYTHM!', 'THE MAJOR PLAYER PUNISHES THE TOONS WHO COULDN\'T KEEP UP!'),
+
+    AttackEnum.STAR_OF_THE_SHOW: ('STAR OF THE SHOW!', 'THE MAJOR PLAYER WELCOMES A MEMBER OF THE AUDIENCE ON STAGE!'),
+    AttackEnum.GUEST_VERSE_START: ('GUEST VERSE!', 'THE MAJOR PLAYER ASKS A FELLOW COG TO SHOW OFF!'),
+    AttackEnum.DANCE_PARTNERS: ('DANCE PARTNERS!', 'THE MAJOR PLAYER PAIRS UP ALL TOONS AND COGS!'),
+
+    AttackEnum.TRIAL_BY_FIRE: ('TRIAL BY FIRE!', 'THE WITCH HUNTER BURNS TOONS RANDOMLY!'),
+    AttackEnum.MOB_MENTALITY: ('MOB MENTALITY!', 'OTHER COGS GAIN AN EXTRA ATTACK AND THE MOB GROWS!'),
+    AttackEnum.BOILERPLATE: ('BOILERPLATE!', 'THE WITCH HUNTER BURNS ALL TOONS!'),
+    AttackEnum.BEWITCHMENT: ('BEWITCHMENT!', 'THE WITCH HUNTER BEWITCHES THE TOONS!'),
+
+    AttackEnum.DEEP_FREEZE: ('DEEP FREEZE!', 'ALL TOONS SLOW DOWN!'),
+    AttackEnum.SLUSH_FUND: ('SLUSH FUND!', '%s BUFFS THE DEFENSES OF ALL OTHER COGS!'),
+    AttackEnum.SNOW_SQUALL: ('SNOW SQUALL!', (
+        'THE ROOM\'S TEMPERATURE HAS RETURNED TO NORMAL!',
+        'THE ROOM\'S TEMPERATURE HAS GONE BELOW FREEZING!'
+    )),
+    AttackEnum.SNOW_SQUALL_DAMAGE: ('SNOW SQUALL!', 'ALL TOONS ARE BUFFETED BY THE SNOW SQUALL!'),
+    AttackEnum.SHATTER_DAMAGE: ('SHATTER!', 'THE FROZEN COG SHATTERING HURTS THE COGS NEARBY!'),
+
+    AttackEnum.LEGAL_BINDINGS_DAMAGE: ('LEGALLY BOUND!', 'THIS TOON TAKES %s DAMAGE PER ROUND!'),
+    AttackEnum.COURT_RECORD_DAMAGE: ('COURT RECORD!', 'DUE TO AN ILLEGAL ACTION, THIS TOON TAKES %s DAMAGE!'),
+    AttackEnum.WEATHER_MONSOON: ('MONSOON!', 'THE WEATHER PICKS UP IMMENSELY!'),
+    AttackEnum.WEATHER_OIL_RAIN: ('OIL RAIN!', 'THE WEATHER IS CHANGING!'),
+    AttackEnum.WEATHER_FOG: ('FOG!', 'THE WEATHER IS CHANGING!'),
+    AttackEnum.WEATHER_HEAVY_RAIN: ('HEAVY RAIN!', 'THE WEATHER IS CHANGING!'),
+    AttackEnum.WEATHER_STORM_CELL: ('STORM CELL!', 'THE WEATHER IS CHANGING!'),
+    AttackEnum.WEATHER_INVERSION: ('INVERSION!', 'THE WEATHER IS CHANGING!'),
+    AttackEnum.WOODCHIPPER_DAMAGE: ('WOODCHIPPED!', 'THIS TOON TAKES %s DAMAGE PER ROUND!'),
+    AttackEnum.GHOST_PAYROLL_HEAL: ('GHOST PAYROLL!', 'EACH SATELLITE INVESTOR DEFEATED GIVES A DAMAGE BUFF!'),
+    AttackEnum.STANDUP_GUY: ('STAND-UP GUY!', 'CHARON IS ABSORBING DAMAGE DEALT TO OTHER COGS THIS ROUND!'),
+    AttackEnum.SHAKEDOWN: ('SHAKEDOWN!', (
+        'NIX INFLICTS A RANDOM TOON WITH A REWARD COOLDOWN!',
+        'NIX INFLICTS A RANDOM TOON WITH A DAMAGE VULNERABILITY!',
+    )),
+    AttackEnum.KICK_UP: ('KICK UP!', 'HYDRA GIVES A DAMAGE BUFF TO %s!'),
+    AttackEnum.SITDOWN: ('SITDOWN!', 'STYX SUMMONS A WAITER!'),
+    AttackEnum.USURY: ('USURY!', "STYX STEALS SOME OF THE %s HEALTH!"),
+    AttackEnum.TRIBUTE: ('TRIBUTE!', "KERBEROS GIVES UP SOME HEALTH TO %s!"),
+    # TUTORIAL CHEAT
+    AttackEnum.LIGHTS_ON: ('LIGHTS-ON INITIATIVE!', 'THE DESK JOCKEY SUMMONS MORE DUMMIES!'),
+
+    # HIGH ROLLER
+    AttackEnum.SPIN_WHEEL: ('GAME TIME!', 'THE HIGH ROLLER STARTS A NEW MINIGAME!'),
+    AttackEnum.RANDOM_GAME_PUNISH: ('GAME OVER!', 'THE HIGH ROLLER PUNISHES THE TOONS WHO LOST THE GAME!'),
+    AttackEnum.DICE_ROULETTE: ('DICE ROULETTE!', 'THE DICE WILL RANDOMLY DECIDE WHO GETS DAMAGED!'),
+    AttackEnum.ACE_IN_THE_HOLE: ('ACE IN THE HOLE!', 'THE HIGH ROLLER CALLS UPON HIS TRUMP CARD...'),
+    AttackEnum.FREE_CRUISE: 'FREE CRUISE!',
+    AttackEnum.CON_DUCK_TION: 'CON-DUCK-TION!',
+    AttackEnum.ROLLED: 'ROLLED!',
+    AttackEnum.TRICK_OF_THE_LIGHT: ('TRICK OF THE LIGHT!',
+                                    'HIGH ROLLER USES THE POWER OF REFRACTION TO CLONE HIMSELF!'),
+    AttackEnum.HIGHROLLER_CLONE_TOONUP: ('GLOWER POWER!', 'THE PURPLE SILHOUETTE RETALIATES AGAINST HEALED TOONS!'),
+    AttackEnum.HIGHROLLER_CLONE_TRAP: ('BAR!',
+                                       'THE RED SILHOUETTE RETALIATES WHEN LEFT UNLURED OR WHEN A TRAP IS PLACED!'),
+    AttackEnum.HIGHROLLER_CLONE_SQUIRT: ('SPLASHBACK!',
+                                         'THE PINK SILHOUETTE CAUSES SQUIRT ATTACKS TO SPLASH BACK TO THE TOONS!'),
+
+    # FIND THE FAMILY
+    AttackEnum.FTF_NUCLEAR_TRANSFORMATION: ('UNSTABLE TRANSFORMATION!', 'THE UNSTABLE COGS ARE TRANSFORMING!'),
+    AttackEnum.FTF_FOREMAN_REDTAPE: 'RED TAPE!',
+    AttackEnum.FTF_FOREMAN_SNIPE: ('SNIPE!', 'THE FOREMAN DOUBLES DAMAGE ON TOONS WITH REWARD COOLDOWNS!'),
+    AttackEnum.FTF_FOREMAN_CIGAR_SMOKE: 'CIGAR SMOKE!',
+    AttackEnum.FTF_SUPERVISOR_LIFE_INSURANCE: ('LIFE INSURANCE!',
+                                               'IF OTHER COGS ARE ALIVE, THE SUPERVISOR WILL HEAL AND GET A DAMAGE BOOST!'),
+    AttackEnum.FTF_SUPERVISOR_ABACUS_SYNERGY: ('SYNERGY!',
+                                               'THE SUPERVISOR PUNISHES THE TOONS FOR NOT FOLLOWING HIS CALCULATIONS'),
+    AttackEnum.FTF_ATTORNEY_COURT_MANDATE_MONOLITH: ('COURT MANDATE!', '%s AND %s GAGS ARE DISABLED!'),
+    AttackEnum.FTF_ATTORNEY_COURT_MANDATE_OMNIPOTENT: ('COURT MANDATE!', 'LEVEL %s AND %s GAGS ARE DISABLED!'),
+    AttackEnum.FTF_PRESIDENT_MULLIGAN: ('MULLIGAN!', 'THE CLUB PRESIDENT TAKES ANOTHER SHOT!'),
+    AttackEnum.FTF_PRESIDENT_EXTRA_TIP: ('EXTRA TIP!', 'THE CLUB PRESIDENT WILL UNLURE AND HEAL A RANDOM COG!'),
+    AttackEnum.FTF_PRESIDENT_SNAP: ('SNAP!', 'THE CLUB PRESIDENT APPLIES A DAMAGE VULNERABILITY!'),
+    AttackEnum.FTF_PRESIDENT_SNIPE: ('SNIPE!', 'THE CLUB PRESIDENT UNLEASHES A DEVASTATING ATTACK!'),
+    AttackEnum.FTF_PRESIDENT_DRIVER: 'DRIVER!',
+}
+SuitAttackTaunts = {AttackEnum.AUDIT: ["I believe your books don't balance.",
+                                       "Looks like you're in the red.",
+                                       'Let me help you with your books.',
+                                       'Your debit column is much too high.',
+                                       "Let's check your assets.",
+                                       'This will put you in debt.',
+                                       "Let's take a close look at what you owe.",
+                                       'This should drain your account.',
+                                       'Time for you to account for your expenses.',
+                                       "I've found an error in your books."],
+                    AttackEnum.BITE: ['Would you like a bite?',
+                                      'Try a bite of this!',
+                                      "You're biting off more than you can chew.",
+                                      'My bite is bigger than my bark.',
+                                      'Bite down on this!',
+                                      'Watch out, I may bite.',
+                                      "I don't just bite when I'm cornered.",
+                                      "I'm just gonna grab a quick bite.",
+                                      "I haven't had a bite all day.",
+                                      'I just want a bite.  Is that too much to ask?'],
+                    AttackEnum.BLUE_CHIP: [
+                        "You're gonna flip when you see this.",
+                        "You're a real chip on my shoulder, Toon.",
+                        "The house always wins.",
+                        "Sorry to crush your dreams.",
+                        "Take stock of this.",
+                        "I'm investing in your downfall.",
+                        "You'll be feeling blue after this.",
+                        "My methods are only of the highest quality.",
+                        "My history shows I won't fail.",
+                        "Our stocks are to the moon.",
+                    ],
+                    AttackEnum.BOUNCE_CHECK: ["Ah, too bad, you're funless.",
+                                              'You have a payment due.',
+                                              'I believe this check is yours.',
+                                              'You owed me for this.',
+                                              "I'm collecting on this debt.",
+                                              "This check isn't going to be tender.",
+                                              "You're going to be charged for this.",
+                                              'Check this out.',
+                                              'This is going to cost you.',
+                                              "I'd like to cash this in.",
+                                              "I'm just going to kick this back to you.",
+                                              'This is one sour note.',
+                                              "I'm deducting a service charge."],
+                    AttackEnum.BRAIN_STORM: ['I forecast rain.',
+                                             'Hope you packed your umbrella.',
+                                             'I want to enlighten you.',
+                                             'How about a few rain DROPS?',
+                                             'Not so sunny now, are you Toon?',
+                                             'Ready for a down pour?',
+                                             "I'm going to take you by storm.",
+                                             'I call this a lightning attack.',
+                                             'I love to be a wet blanket.'],
+                    AttackEnum.BUZZ_WORD: ['Pardon me if I drone on.',
+                                           'Have you heard the latest?',
+                                           'Can you catch on to this?',
+                                           'See if you can hum this Toon.',
+                                           'Let me put in a good word for you.',
+                                           'I\'ll "B" perfectly clear.',
+                                           'You should "B" more careful.',
+                                           'See if you can dodge this swarm.',
+                                           "Careful, you're about to get stung.",
+                                           'Looks like you have a bad case of hives.'],
+                    AttackEnum.CALCULATE: ['These numbers do add up!',
+                                           'Did you count on this?',
+                                           "Add it up, you're going down.",
+                                           'Let me help you add this up.',
+                                           "It just doesn't add up!",
+                                           'Did you register all your expenses?',
+                                           "According to my calculations, you won't be around much longer.",
+                                           "Here's the grand total.",
+                                           'Wow, your bill is adding up.',
+                                           'Try fiddling with these numbers!',
+                                           Cogs + ': 1 Toons: 0'],
+                    AttackEnum.CANNED: ['Do you like it out of the can?',
+                                        '"Can" you handle this?',
+                                        "This one's fresh out of the can!",
+                                        'Ever been attacked by canned goods before?',
+                                        "I'd like to donate this canned good to you!",
+                                        'Get ready to "Kick the can"!',
+                                        'You think you "can", you think you "can".',
+                                        "I'll throw you in the can!",
+                                        "I'm making me a can o' Toon-a!",
+                                        "You don't taste so good out of the can."],
+                    AttackEnum.CHOMP: ['Take a look at these chompers!',
+                                       'Chomp, chomp, chomp!',
+                                       "Here's something to chomp on.",
+                                       'Looking for something to chomp on?',
+                                       "Why don't you chomp on this?",
+                                       "I'm going to have you for dinner.",
+                                       'I love to feed on Toons!'],
+                    AttackEnum.CIGAR_SMOKE: ['Gentlemen.',
+                                             "It's a good day for me to have a smoke.",
+                                             'Take a breath of this.',
+                                             "It's tradition you know.",
+                                             'Another day, another dollar spent.',
+                                             'I always have the occasional cigar.',
+                                             "I'll quit tomorrow, I swear.",
+                                             "You can't even escape my secondhand smoke.",
+                                             'These fumes are toxic.',
+                                             'I need a good smoke.',
+                                             'Smoking is a dirty habit.'],
+                    AttackEnum.CIGAR_SMOKE_HEAD_HONCHO: ['Gentlemen.',
+                                                         "It's a good day for me to have a smoke.",
+                                                         'Take a breath of this.',
+                                                         "It's tradition you know.",
+                                                         'Another day, another dollar spent.',
+                                                         'I always have the occasional cigar.',
+                                                         "I'll quit tomorrow, I swear.",
+                                                         "You can't even escape my secondhand smoke.",
+                                                         'These fumes are toxic.',
+                                                         'I need a good smoke.',
+                                                         'Smoking is a dirty habit.'],
+                    AttackEnum.CLIPON_TIE: ['Better dress for our meeting.',
+                                            "You can't go OUT without your tie.",
+                                            'The best dressed ' + Cogs + ' wear them.',
+                                            'Try this on for size.',
+                                            'You should dress for success.',
+                                            'No tie, no service.',
+                                            'Do you need help putting this on?',
+                                            'Nothing says powerful like a good tie.',
+                                            "Let's see if this fits.",
+                                            'This is going to choke you up.',
+                                            "You'll want to dress up before you go OUT.",
+                                            "I think I'll tie you up."],
+                    AttackEnum.CRUNCH: ["Looks like you're in a crunch.",
+                                        "It's crunch time!",
+                                        "I'll give you something to crunch on!",
+                                        'Crunch on this!',
+                                        'I pack quite a crunch.',
+                                        'Which do you prefer, smooth or crunchy?',
+                                        "I hope you're ready for crunch time.",
+                                        "It sounds like you're getting crunched!",
+                                        "I'll crunch you like a can."],
+                    AttackEnum.DEMOTION: ["You're moving down the corporate ladder.",
+                                          "I'm sending you back to the Mail Room.",
+                                          'Time to turn in your nameplate.',
+                                          "You're going down, clown.",
+                                          "Looks like you're stuck.",
+                                          "You're going nowhere fast.",
+                                          "You're in a dead end position.",
+                                          "You won't be moving anytime soon.",
+                                          "You're not going anywhere.",
+                                          'This will go on your permanent record.'],
+                    AttackEnum.DOWNSIZE: ['Come on down!',
+                                          'Do you know how to get down?',
+                                          "Let's get down to business.",
+                                          "What's wrong? You look down.",
+                                          'Going down?',
+                                          "What's goin' down? You!",
+                                          'Why pick on people my own size?',
+                                          "Why don't I size you up, or should I say, down?",
+                                          'Would you like a smaller size for just a quarter more?',
+                                          'Try this on for size!',
+                                          'You can get this in a smaller size.',
+                                          'This attack is one size fits all!'],
+                    AttackEnum.EVICTION_NOTICE: ["It's moving time.",
+                                                 'Pack your bags, Toon.',
+                                                 'Time to make some new living arrangements.',
+                                                 'Consider yourself served.',
+                                                 "You're behind on your lease.",
+                                                 'This will be extremely unsettling.',
+                                                 "You're about to be uprooted.",
+                                                 "I'm going to send you packing.",
+                                                 "You're out of place.",
+                                                 'Prepare to be relocated.',
+                                                 "You're in a hostel position."],
+                    AttackEnum.EVIL_EYE: ["I'm giving you the evil eye.",
+                                          'Could you eye-ball this for me?',
+                                          "Wait.  I've got something in my eye.",
+                                          "I've got my eye on you!",
+                                          'Could you keep an eye on this for me?',
+                                          "I've got a real eye for evil.",
+                                          "I'll poke you in the eye!",
+                                          '"Eye" am as evil as they come!',
+                                          "I'll put you in the eye of the storm!",
+                                          "I'm rolling my eye at you."],
+                    AttackEnum.FALLING_KNIFE: [
+                        "This attack is a cut above the rest.",
+                        "Your chances of victory are in free fall.",
+                        "My tactics are on the cutting edge.",
+                        "Get to the point!",
+                        "You'll find that this company never cuts corners.",
+                        "Toons like you can't cut it with us.",
+                        "I won't fall for your childish pranks.",
+                        "It's knife to meet you.",
+                        "I'm the sharpest Suit around!",
+                        "Don't bring a Gag to a knife fight.",
+                        "I'll use this occasion to sharpen my skills.",
+                        "Twice the pride, double the fall.",
+                        "I have some sharp words for you.",
+                    ],
+                    AttackEnum.FILIBUSTER: ["Shall I fill 'er up?",
+                                            'This is going to take awhile.',
+                                            'I could do this all day.',
+                                            "I don't even need to take a breath.",
+                                            'I keep going and going and going.',
+                                            'I never get tired of this one.',
+                                            'I can talk a blue streak.',
+                                            'Mind if I bend your ear?',
+                                            "I think I'll shoot the breeze.",
+                                            'I can always get a word in edgewise.'],
+                    AttackEnum.FINGER_WAG: ['I have told you a thousand times.',
+                                            'Now see here Toon.',
+                                            "Don't make me laugh.",
+                                            "Don't make me come over there.",
+                                            "I'm tired of repeating myself.",
+                                            "I believe we've been over this.",
+                                            'You have no respect for us ' + Cogs + '.',
+                                            "I think it's time you pay attention.",
+                                            'Blah, Blah, Blah, Blah, Blah.',
+                                            "Don't make me stop this meeting.",
+                                            'Am I going to have to separate you?',
+                                            "We've been through this before."],
+                    AttackEnum.FIRED: ['I hope you brought some marshmallows.',
+                                       "It's going to get rather warm around here.",
+                                       'This should take the chill out of the air.',
+                                       "I hope you're cold blooded.",
+                                       'Hot, hot and hotter.',
+                                       'You better stop, drop, and roll!',
+                                       "You're outta here.",
+                                       'How does "well-done" sound?',
+                                       'Can you say ouch?',
+                                       'Hope you wore sunscreen.',
+                                       'Do you feel a little toasty?',
+                                       "You're going down in flames.",
+                                       "You'll go out in a blaze.",
+                                       "You're a flash in the pan.",
+                                       'I think I have a bit of a flare about me.',
+                                       "I just sparkle, don't I?",
+                                       'Oh look, a crispy critter.',
+                                       "Clearly, you don't own an air fryer."],
+                    AttackEnum.FOUNTAIN_PEN: ['This is going to leave a stain.',
+                                              "Let's ink this deal.",
+                                              'Be prepared for some permanent damage.',
+                                              "You're going to need a good dry cleaner.",
+                                              'You should change.',
+                                              'This fountain pen has such a nice font.',
+                                              "Here, I'll use my pen.",
+                                              'Can you read my writing?',
+                                              'I call this the plume of doom.',
+                                              "There's a blot on your performance.",
+                                              "Don't you hate when this happens?"],
+                    AttackEnum.FREEZE_ASSETS: ['Your assets are mine.',
+                                               'Do you feel a draft?',
+                                               "Hope you don't have plans.",
+                                               'This should keep you on ice.',
+                                               "There's a chill in the air.",
+                                               'Winter is coming early this year.',
+                                               'Are you feeling a little blue?',
+                                               'Let me crystallize my plan.',
+                                               "You're going to take this hard.",
+                                               'This should cause freezer burn.',
+                                               'I hope you like cold cuts.',
+                                               'This one will be cold.',
+                                               "I'm very cold blooded."],
+                    AttackEnum.GLOWER_POWER: ['You looking at me?',
+                                              "I'm told I have very piercing eyes.",
+                                              'I like to stay on the cutting edge.',
+                                              "Jeepers, Creepers, don't you love my peepers?",
+                                              "Here's looking at you kid.",
+                                              "How's this for expressive eyes?",
+                                              'My eyes are my strongest feature.',
+                                              'The eyes have it.',
+                                              'Peeka-boo, I see you.',
+                                              'Look into my eyes...',
+                                              'Shall we take a peek at your future?'],
+                    AttackEnum.GUILT_TRIP: ["I'll lay a real guilt trip on you!",
+                                            'Feeling guilty?',
+                                            "It's all your fault!",
+                                            'I always blame everything on you.',
+                                            'Wallow in your own guilt!',
+                                            "I'm never speaking to you again!",
+                                            "You had better say you're sorry.",
+                                            "I wouldn't forgive you in a million years!",
+                                            'Are you ready for your trip?',
+                                            'Call me when you get back from your trip.',
+                                            'When do you get back from your trip?'],
+                    AttackEnum.HALF_WINDSOR: ["This is the fanciest tie you'll ever see!",
+                                              'Try not to get too winded.',
+                                              "This isn't even half the trouble you're in.",
+                                              "You're lucky I don't have a whole Windsor.",
+                                              "You can't afford this tie.",
+                                              "I bet you've never even SEEN a half Windsor!",
+                                              'This tie is out of your league.',
+                                              "I shouldn't even waste this tie on you.",
+                                              "You're not even worth half of this tie!"],
+                    AttackEnum.HANG_UP: ["You've been disconnected.",
+                                         'Good bye!',
+                                         "It's time I end our connection.",
+                                         "...and don't call back!",
+                                         'Click!',
+                                         'This conversation is over.',
+                                         "I'm severing this link.",
+                                         'I think you have a few hang ups.',
+                                         "It appears you've got a weak link.",
+                                         'Your time is up.',
+                                         'I hope you receive this loud and clear.',
+                                         'Thank you come again.',
+                                         'You got the wrong number.'],
+                    AttackEnum.HEAD_SHRINK: ["Looks like you're seeing a shrink.",
+                                             'Honey, I shrunk the Toon.',
+                                             "Hope this doesn't shrink your pride.",
+                                             'Do you shrink in the wash?',
+                                             'I shrink therefore I am.',
+                                             "It's nothing to lose your head over.",
+                                             'Are you going out of your head?',
+                                             'Heads up! Or should I say, down.',
+                                             'Objects may be larger than they appear.',
+                                             'Good Toons come in small packages.'],
+                    AttackEnum.HOT_AIR: ["We're having a heated discussion.",
+                                         "You're experiencing a heat wave.",
+                                         "I've reached my boiling point.",
+                                         'This should cause some wind burn.',
+                                         'I hate to grill you, but...',
+                                         "Always remember, where there's smoke, there's fire.",
+                                         "You're looking a little burned out.",
+                                         'Another meeting up in smoke.',
+                                         "Guess it's time to add fuel to the fire.",
+                                         'Let me kindle a working relationship.',
+                                         'I have some glowing remarks for you.',
+                                         'Air Raid!!!'],
+                    AttackEnum.JARGON: ['What nonsense.',
+                                        'See if you can make sense of this.',
+                                        'I hope you get this loud and clear.',
+                                        "Looks like I'm going to have to raise my voice.",
+                                        'I insist on having my say.',
+                                        "I'm very outspoken.",
+                                        'I must pontificate on this subject.',
+                                        'See, words can hurt you.',
+                                        'Did you catch my meaning?',
+                                        'Words, words, words, words, words.'],
+                    AttackEnum.LEGALESE: ['You must cease and desist.',
+                                          'You will be defeated, legally speaking.',
+                                          'Are you aware of the legal ramifications?',
+                                          "You aren't above the law!",
+                                          'There should be a law against you.',
+                                          "There's no ex post facto with me!",
+                                          "The opinions expressed in this attack are not those of Corporate Clash.",
+                                          'We cannot be held responsible for damages suffered in this attack.',
+                                          'Your results for this attack may vary.',
+                                          'This attack is void where prohibited.',
+                                          "You don't fit into my legal system!",
+                                          "You can't handle the legal matters."],
+                    AttackEnum.LIQUIDATE: ['I like to keep things fluid.',
+                                           'Are you having some cash flow problems?',
+                                           "I'll have to purge your assets.",
+                                           'Time for you to go with the flow.',
+                                           "Remember, it's slippery when wet.",
+                                           'Your numbers are running.',
+                                           'You seem to be slipping.',
+                                           "It's all crashing down on you.",
+                                           "I think you're diluted.",
+                                           "You're all washed up."],
+                    AttackEnum.MARKET_CRASH: ["I'm going to crash your party.",
+                                              "You won't survive the crash.",
+                                              "I'm more than the market can bear.",
+                                              "I've got a real crash course for you!",
+                                              "Now I'll come crashing down.",
+                                              "I'm a real bull in the market.",
+                                              'Looks like the market is going down.',
+                                              'You had better get out quick!',
+                                              'Sell! Sell! Sell!',
+                                              'Shall I lead the recession?',
+                                              "Everybody's getting out, shouldn't you?"],
+                    AttackEnum.MUMBO_JUMBO: ['Let me make this perfectly clear.',
+                                             "It's as simple as this.",
+                                             "This is how we're going to do this.",
+                                             'Let me supersize this for you.',
+                                             'You might call this technobabble.',
+                                             'Here are my five-dollar words.',
+                                             'Boy, this is a mouth full.',
+                                             'Some call me bombastic.',
+                                             'Let me just interject this.',
+                                             'I believe these are the right words.'],
+                    AttackEnum.PARADIGM_SHIFT: ["Watch out! I'm rather shifty.",
+                                                'Prepare to have your paradigm shifted!',
+                                                "Isn't this an interesting paradigm.",
+                                                "You'll get shifted out of place.",
+                                                "I guess it's your shift now.",
+                                                'Your shift is up!',
+                                                "You've never shifted this much in your life.",
+                                                "I'm giving you the bad shift!",
+                                                'Look into my shifty eyes!'],
+                    AttackEnum.PECKING_ORDER: ["This one's for the birds.",
+                                               'Get ready for a bird bath.',
+                                               "Looks like you're going to hit a birdie.",
+                                               'Some think this attack is fowl.',
+                                               "You're on the bottom of the pecking order.",
+                                               'A bird in my hand is worth ten on your head!',
+                                               'Your order is up; the pecking order!',
+                                               "Why don't I peck on someone my own size? Nah.",
+                                               'Birds of a feather strike together.'],
+                    AttackEnum.PENNY_PINCH: ['Let me check your valuables.',
+                                             "Hey, what's that over there?",
+                                             'Like taking candy from a baby.',
+                                             'What a steal.',
+                                             "I'll hold this for you.",
+                                             'Watch my hands at all times.',
+                                             'The hand is quicker than the eye.',
+                                             "There's nothing up my sleeve.",
+                                             'The management is not responsible for lost items.',
+                                             "Finder's keepers.",
+                                             "You'll never see it coming.",
+                                             'One for me, none for you.',
+                                             "Don't mind if I do.",
+                                             "You won't be needing this..."],
+                    AttackEnum.PICK_POCKET: ['Let me check your valuables.',
+                                             "Hey, what's that over there?",
+                                             'Like taking candy from a baby.',
+                                             'What a steal.',
+                                             "I'll hold this for you.",
+                                             'Watch my hands at all times.',
+                                             'The hand is quicker than the eye.',
+                                             "There's nothing up my sleeve.",
+                                             'The management is not responsible for lost items.',
+                                             "Finder's keepers.",
+                                             "You'll never see it coming.",
+                                             'One for me, none for you.',
+                                             "Don't mind if I do.",
+                                             "You won't be needing this..."],
+                    AttackEnum.PINK_SLIP: ['Try not to slip up.',
+                                           "Are you frightened? You've turned pink!",
+                                           'This one will surely slip you up.',
+                                           'Oops, I guess you slipped there, huh?',
+                                           "Watch yourself, wouldn't want to slip!",
+                                           "This one's slippery when wet.",
+                                           "I'll just slip this one in.",
+                                           "Don't mind if you slip by, do you?",
+                                           "Pink isn't really your color.",
+                                           "Here's your pink slip, you're outta here!"],
+                    AttackEnum.PLAY_HARDBALL: ['So you wanna play hardball?',
+                                               "You don't wanna play hardball with me.",
+                                               'Batter up!',
+                                               'Hey batter, batter!',
+                                               "And here's the pitch...",
+                                               "You're going to need a relief pitcher.",
+                                               "I'm going to knock you out of the park.",
+                                               "Once you get hit, you'll run home.",
+                                               'This is your final inning!',
+                                               "You can't play with me!",
+                                               "I'll strike you out.",
+                                               "I'm throwing you a real curve ball!"],
+                    AttackEnum.POUND_KEY: ['Time to return some calls.',
+                                           "I'd like to make a collect call.",
+                                           "Ring-a-ling - it's for you!",
+                                           "I've been wanting to drop a pound or two.",
+                                           'I have a lot of clout.',
+                                           'This may cause a slight pounding sensation.',
+                                           "I'll just punch in this number.",
+                                           'Let me call up a little surprise.',
+                                           "I'll ring you up.",
+                                           "O.K. Toon, it's the pound for you."],
+                    AttackEnum.POWER_TIE: ["I'll call later, you looked tied up.",
+                                           'Are you ready to tie die?',
+                                           "Ladies and gentlemen, it's a tie!",
+                                           'You had better learn how to tie.',
+                                           "I'll have you tongue-tied!",
+                                           "This is the worst tie you'll ever get!",
+                                           'Can you feel the power?',
+                                           'My powers are far too great for you!',
+                                           "I've got the power!",
+                                           "By the powers vested in me, I'll tie you up."],
+                    AttackEnum.MS_POWER_TIE: ["I'll call later, you looked tied up.",
+                                              'Are you ready to tie die?',
+                                              "Ladies and gentlemen, it's a tie!",
+                                              'You had better learn how to tie.',
+                                              "I'll have you tongue-tied!",
+                                              "This is the worst tie you'll ever get!",
+                                              'Can you feel the power?',
+                                              'My powers are far too great for you!',
+                                              "I've got the power!",
+                                              "By the powers vested in me, I'll tie you up."],
+                    AttackEnum.POWER_TRIP: ["Pack your bags, we're taking a little trip.",
+                                            'Did you have a nice trip?',
+                                            "Nice trip, I guess I'll see you next fall.",
+                                            'How was your trip?',
+                                            'Sorry to trip you up there!',
+                                            'You look a little tripped up.',
+                                            "Now you see who's in power!",
+                                            'I am much more powerful than you.',
+                                            "Who's got the power now?",
+                                            "You can't fight the power.",
+                                            'Power corrupts, especially in my hands!'],
+                    AttackEnum.QUAKE: ["Let's quake, rattle, and roll.",
+                                       "I've got a whole lot of quakin' goin' on!",
+                                       "I see you quakin' in your shoes.",
+                                       "Here it comes, it's the big one!",
+                                       "This one's off the Richter scale.",
+                                       'Now the earth will quake!',
+                                       "Hey, what's shakin'? You!",
+                                       'Ever been in an earthquake?',
+                                       "You're on shaky ground now!"],
+                    # If using this normal aftershock dialogue on not DOLD, change this generic version.
+                    AttackEnum.AFTERSHOCK: ["Let's quake, rattle, and roll.",
+                                            "I've got a whole lot of quakin' goin' on!",
+                                            "I see you quakin' in your shoes.",
+                                            "Here it comes, it's the big one!",
+                                            "This one's off the Richter scale.",
+                                            'Now the earth will quake!',
+                                            "Hey, what's shakin'? You!",
+                                            'Ever been in an earthquake?',
+                                            "You're on shaky ground now!"],
+                    AttackEnum.RAZZLE_DAZZLE: ['Read my lips.',
+                                               'How about these choppers?',
+                                               "Aren't I charming?",
+                                               "I'm going to wow you.",
+                                               'My dentist does excellent work.',
+                                               "Blinding aren't they?",
+                                               "Hard to believe these aren't real.",
+                                               "Shocking, aren't they?",
+                                               "I'm going to cap this off.",
+                                               'I floss after every meal.',
+                                               'Say Cheese!'],
+                    AttackEnum.RED_TAPE: ['This should wrap things up.',
+                                          "I'm going to tie you up for awhile.",
+                                          "You're on a roll.",
+                                          'See if you can cut through this.',
+                                          'This will get sticky.',
+                                          "Hope you're claustrophobic.",
+                                          "I'll make sure you stick around.",
+                                          'Let me keep you busy.',
+                                          "Looks like you're in a sticky situation.",
+                                          'Just try to unravel this.',
+                                          'I want this meeting to stick with you.'],
+                    AttackEnum.RE_ORG: ["You don't like the way I reorganized things!",
+                                        'Perhaps a little reorganization is in order.',
+                                        "You're not that bad, you just need to be reorganized.",
+                                        'Do you like my organizational skills?',
+                                        "I just thought I'd give things a new look.",
+                                        'You need to get organized!',
+                                        "You're looking a little disorganized.",
+                                        'Hold on while I reorganize your thoughts.',
+                                        "I'll just wait for you to get a little organized.",
+                                        "You don't mind if I just reorganize a bit?"],
+                    AttackEnum.RE_ARRANGE: ["You don't like the way I reorganized things!",
+                                            'Perhaps a little reorganization is in order.',
+                                            "You're not that bad, you just need to be reorganized.",
+                                            'Do you like my organizational skills?',
+                                            "I just thought I'd give things a new look.",
+                                            'You need to get organized!',
+                                            "You're looking a little disorganized.",
+                                            'Hold on while I reorganize your thoughts.',
+                                            "I'll just wait for you to get a little organized.",
+                                            "You don't mind if I just reorganize a bit?"],
+                    AttackEnum.RESTRAINING_ORDER: ['You should show a little restraint.',
+                                                   "I'm slapping you with a restraining order!",
+                                                   "You can't come within five feet of me.",
+                                                   'Perhaps you better keep your distance.',
+                                                   'You should be restrained.',
+                                                   Cogs + '!  Restrain that Toon!',
+                                                   'Try and restrain yourself.',
+                                                   "I hope I'm being too much of a restraint on you.",
+                                                   'See if you can lift these restraints!',
+                                                   "I'm ordering you to restrain!",
+                                                   "Why don't we start with basic restraining?"],
+                    AttackEnum.ROLODEX: ["Your card's in here somewhere.",
+                                         "Here's the number for a pest exterminator.",
+                                         'I want to give you my card.',
+                                         "I've got your number right here.",
+                                         "I've got you covered from a-z.",
+                                         "You'll flip over this.",
+                                         'Take this for a spin.',
+                                         'Watch out for paper cuts.',
+                                         "I'll let my fingers do the knocking.",
+                                         'Is this how I can contact you?',
+                                         'I want to make sure we stay in touch.'],
+                    AttackEnum.ROLODEX_DOUBLE: ["Your card's in here somewhere.",
+                                                "Here's the number for a pest exterminator.",
+                                                'I want to give you my card.',
+                                                "I've got your number right here.",
+                                                "I've got you covered from a-z.",
+                                                "You'll flip over this.",
+                                                'Take this for a spin.',
+                                                'Watch out for paper cuts.',
+                                                "I'll let my fingers do the knocking.",
+                                                'Is this how I can contact you?',
+                                                'I want to make sure we stay in touch.'],
+                    AttackEnum.RUBBER_STAMP: ['I always make a good impression.',
+                                              "It's important to apply firm and even pressure.",
+                                              'A perfect imprint every time.',
+                                              'I want to stamp you out.',
+                                              'You must be RETURNED TO SENDER.',
+                                              "You've been CANCELLED.",
+                                              'You have a PRIORITY delivery.',
+                                              "I'll make sure you RECEIVED my message.",
+                                              "You're not going anywhere - you have POSTAGE DUE.",
+                                              "I'll need a response ASAP."],
+                    AttackEnum.RUB_OUT: ['And now for my disappearing act.',
+                                         "I sense I've lost you somewhere.",
+                                         'I decided to leave you out.',
+                                         'I always rub out all obstacles.',
+                                         "I'll just erase this error.",
+                                         'I can make any nuisance disappear.',
+                                         'I like things neat and tidy.',
+                                         'Please try and stay animated.',
+                                         "Now I see you...  now I don't.",
+                                         'This will cause some fading.',
+                                         "I'm going to eliminate the problem.",
+                                         'Let me take care of your problem areas.'],
+                    AttackEnum.SACKED: ["Looks like you're getting sacked.",
+                                        "This one's in the bag.",
+                                        "You've been bagged.",
+                                        'Paper or plastic?',
+                                        'My enemies shall be sacked!',
+                                        'I hold the Cog Nation record in sacks per game.',
+                                        "You're no longer wanted around here.",
+                                        "Your time is up around here, you're being sacked!",
+                                        'Let me bag that for you.',
+                                        'No defense can match my sack attack!'],
+                    AttackEnum.SCHMOOZE: ["You'll never see this coming.",
+                                          'This will look good on you.',
+                                          "You've earned this.",
+                                          "I don't mean to gush.",
+                                          'Flattery will get me everywhere.',
+                                          "I'm going to pile it on now.",
+                                          'Time to lay it on thick.',
+                                          "I'm going to get on your good side.",
+                                          'That deserves a good slap on the back.',
+                                          "I'm going to ring your praises.",
+                                          'I hate to knock you off your pedestal, but...'],
+                    AttackEnum.SHAKE: ["You're right on the epicenter.",
+                                       "You're standing on a fault line.",
+                                       "It's going to be a bumpy ride.",
+                                       'I think of this as a natural disaster.',
+                                       "It's a disaster of seismic proportions.",
+                                       "This one's off the Richter scale.",
+                                       'Time to duck and cover.',
+                                       'You seem disturbed.',
+                                       'Ready for a jolt?',
+                                       "I'll have you shaken, not stirred.",
+                                       'This will shake you up.',
+                                       'I suggest a good escape plan.'],
+                    AttackEnum.SHORT_SQUEEZE: [
+                        "I'll squeeze you for all you're worth!",
+                        "I like to extract maximum value for the shareholders.",
+                        "Aw, are these coins for me?",
+                        "You're worth more than you look, Toon!",
+                        "Cha-ching! That's what I like to hear!",
+                        "The best market liquidity, 100% freshly-squeezed.",
+                        "This money belongs to the economy!",
+                        "This'll 'shake' up the stock market!",
+                        "Will you look at that! Your stock is rising!",
+                        "This has got big implications for the stock market!",
+                    ],
+                    AttackEnum.SHRED: ['I need to get rid of some hazardous waste.',
+                                       "I'm increasing my throughput.",
+                                       "I think I'll dispose of you right now.",
+                                       'This will get rid of the evidence.',
+                                       "There's no way to prove it now.",
+                                       'See if you can put this back together.',
+                                       'This should cut you down to size.',
+                                       "I'm going to rip that idea to shreds.",
+                                       "We don't want this to fall into the wrong hands.",
+                                       'Easy come, easy go.',
+                                       "Isn't this your last shred of hope?"],
+                    AttackEnum.SONG_AND_DANCE: ['Whoa whoa whoa...',
+                                                'A-one! A-two! A skiddly-diddly-doo!',
+                                                "Don't trip up!",
+                                                "Think of this as a dance to the death.",
+                                                "It's like dreaming with your feet.",
+                                                'Never miss a chance to dance!',
+                                                'When you feel sad, dance!',
+                                                'I never dance to forget.'],
+                    AttackEnum.SPIN: ['What do you say we go for a little spin?',
+                                      'Do you use the spin cycle?',
+                                      "This'll really make your head spin!",
+                                      "Here's my spin on things.",
+                                      "I'll take you for a spin.",
+                                      "It's time to take a spin!",
+                                      'How do you like to "spin" your time?',
+                                      "Watch it.  Wouldn't want to spin out of control!",
+                                      "Oh what a spin you're in!",
+                                      'My attacks will make your head spin!'],
+                    AttackEnum.SYNERGY: ["I'm taking this to committee.",
+                                         "Your project's been canceled.",
+                                         "Your budget's been cut.",
+                                         "We're restructuring your division.",
+                                         'I put it to a vote, and you lose.',
+                                         'I just received the final approval.',
+                                         'A good team can get rid of any problem.',
+                                         "I'll get back to you on this.",
+                                         "Let's get right to business.",
+                                         'Consider this a Synergy crisis.'],
+                    AttackEnum.TABULATE: ["This doesn't add up.",
+                                          'By my count, you lose.',
+                                          "You're racking up quite a tab.",
+                                          "I'll have you totaled in a moment.",
+                                          'Are you ready for these numbers?',
+                                          'Your bill is now due and payable.',
+                                          'Time for the reckoning.',
+                                          'I like to put things in order.',
+                                          'And the tally is...',
+                                          'These numbers should prove to be quite powerful.'],
+                    AttackEnum.TEE_OFF: ["You're not up to par.",
+                                         'Fore!',
+                                         "I'm getting teed off.",
+                                         "Caddie, I'll need my driver!",
+                                         'Just try and avoid this hazard.',
+                                         'Swing!',
+                                         'This is a sure hole in one.',
+                                         "You're in my fairway.",
+                                         'Notice my grip.',
+                                         'Watch the birdie!',
+                                         'Keep your eye on the ball!',
+                                         'Mind if I play through?'],
+                    AttackEnum.THROW_BOOK: ['My book from Law School should help.',
+                                            'You better have a good lawyer.',
+                                            "I'll have to take legal action.",
+                                            'Legal Eagle will be pleased to see this.',
+                                            'Objection!',
+                                            'Under article 14 subsection C...',
+                                            'I see you have broken the law!',
+                                            "It seems you don't understand the authority of law.",
+                                            "I'll see you in court, Toon."],
+                    AttackEnum.TREMOR: ['Did you feel that?',
+                                        'Not afraid of a little tremor are you?',
+                                        'A tremor is only the beginning.',
+                                        'You look jittery.',
+                                        "I'll shake things up a bit!",
+                                        'Are you ready to rumble?',
+                                        "What's wrong? You look shaken.",
+                                        'Tremor with fear!',
+                                        'Why are you tremoring with fear?'],
+                    AttackEnum.WATERCOOLER: ['This ought to cool you off.',
+                                             "Isn't this refreshing?",
+                                             'I deliver.',
+                                             'Straight from the tap - into your lap.',
+                                             "What's the matter? It's just spring water.",
+                                             "Don't worry, it's purified.",
+                                             'Ah, another satisfied customer.',
+                                             "It's time for your daily delivery.",
+                                             "Hope your colors don't run.",
+                                             'Care for a drink?',
+                                             'It all comes out in the wash.',
+                                             "The drink is on you."],
+                    AttackEnum.WATERCOOLER_DOUBLE: ['This ought to cool you off.',
+                                                    "Isn't this refreshing?",
+                                                    'I deliver.',
+                                                    'Straight from the tap - into your lap.',
+                                                    "What's the matter? It's just spring water.",
+                                                    "Don't worry, it's purified.",
+                                                    'Ah, another satisfied customer.',
+                                                    "It's time for your daily delivery.",
+                                                    "Hope your colors don't run.",
+                                                    'Care for a drink?',
+                                                    'It all comes out in the wash.',
+                                                    "The drink is on you."],
+                    AttackEnum.WATERCOOLER_GROUP: ['This ought to cool you off.',
+                                                   "Isn't this refreshing?",
+                                                   'I deliver.',
+                                                   'Straight from the tap - into your lap.',
+                                                   "What's the matter? It's just spring water.",
+                                                   "Don't worry, it's purified.",
+                                                   'Ah, another satisfied customer.',
+                                                   "It's time for your daily delivery.",
+                                                   "Hope your colors don't run.",
+                                                   'Care for a drink?',
+                                                   'It all comes out in the wash.',
+                                                   "The drink is on you."],
+                    AttackEnum.WITHDRAWAL: ["I believe you're overdrawn.",
+                                            'I hope your balance is high enough for this.',
+                                            'Take that, with interest.',
+                                            'Your balance is dropping.',
+                                            "You're going to need to make a deposit soon.",
+                                            "You've suffered an economic collapse.",
+                                            "I think you're in a slump.",
+                                            'Your finances have taken a decline.',
+                                            'I foresee a definite downturn.',
+                                            "It's a reversal of fortune."],
+                    AttackEnum.WRITE_OFF: ['Let me increase your losses.',
+                                           "Let's make the best of a bad deal.",
+                                           'Time to balance the books.',
+                                           "This won't look good on your books.",
+                                           "I'm looking for some dividends.",
+                                           'You must account for your losses.',
+                                           'You can forget about a bonus.',
+                                           "I'll shuffle your accounts around.",
+                                           "You're about to suffer some losses.",
+                                           'This is going to hurt your bottom line.'],
+
+                    # Cheat attacks
+                    # Desk Jockey
+                    AttackEnum.LIGHTS_ON: [
+                        "Let's get things started, shall we?",
+                        "I'm calling in backup!",
+                        "My initiative may surprise you.",
+                    ],
+                    # Derrickman
+                    AttackEnum.REFINEMENT: [
+                        "Take a breather. Drinks are on me.",
+                        "These Toons have such unrefined tastes, don't they?",
+                        "We should try for something more natural.",
+                    ],
+                    # Land Acquisition Architect
+                    AttackEnum.INK_DRAIN: ["You poor sap... you're looking a bit drained!"],
+                    # Derrickhand
+                    AttackEnum.REFINEMENT_DIRECTORS: ["It's important to stay adequately oiled when defeating Toons.",
+                                                      "Freshly drilled to keep us in working order."],
+                    # Land dev
+                    AttackEnum.INK_DRAIN_DIRECTORS: ["You poor sap... you're looking a bit drained!"],
+                    # Foreman
+                    AttackEnum.WORKERS_COMP: [
+                        "Do you have any idea how much paperwork I will have to file after this?"],
+                    # Supervisor
+                    AttackEnum.LIFE_INSURANCE: ["While I still have assets, I am insured."],
+                    # Head Attorney
+                    AttackEnum.OBJECTION: [
+                        "Objection! Why can the plaintiff utilize combo damage when we, the defendants, cannot?"],
+                    AttackEnum.OBJECTION_SUSTAINED: ["Now for my counter argument."],
+                    AttackEnum.OBJECTION_OVERRULED: ["Unbelievable!"],
+                    # Club pres
+                    AttackEnum.EXTRA_TIP: ["You've done great work today. Here's an extra tip."],
+                    # Director of Public Relations
+                    AttackEnum.OVERWHELMING_AUTHORITY: [
+                        ["I'm suspending this well, Toon.",
+                         "You won't be able to rely on proven reserves."],
+                        ["Sorry pardner, it don't look like ya got much ground ta stand on.",
+                         "Now y'all best'a'known that I wear the tarnished star around here!"],
+                        ["I'm suspending this well, Toon.",
+                         "You won't be able to rely on proven reserves."],
+                    ],
+                    AttackEnum.DISRUPTIVE_ADVERTISEMENT: ["I'm giving you an offer you can't refuse."],
+                    AttackEnum.MULTI_LEVEL_MARKETING: ["It's not a pyramid scheme, I swear!"],
+                    # Count Erclaim
+                    AttackEnum.LAFF_STEAL: ["A drink fit for me.",
+                                            "No Toon can stake me down!",
+                                            "It will only be a pinch!"],
+                    AttackEnum.RISE_FROM_THE_SCRAP: ["All rise under the pale light of the moon."],
+                    AttackEnum.SACRIFICE: ["Give forth your power to me and know it will not go in vain!"],
+                    AttackEnum.SCOPE_CREEP: ["You might find things are getting out of hand...",
+                                             "This isn't even the beginning, Toon!",
+                                             "Surely you don't find this overwhelming!",
+                                             "My power is creeping forward...",
+                                             "Do you feel this is too much to handle?"],
+                    # Count Erfit
+                    AttackEnum.HYDRATION_CHECK: [
+                        "Did you drink your 8 glasses today? If not, here's one on the house, okay?"],
+                    AttackEnum.PROTOON_SHAKE: ["With double the protein powder for extra fighting power!"],
+                    AttackEnum.PERSONAL_TRAINER: ["Push yourself to the limit and try this for a minute!"],
+                    AttackEnum.GAINS_FROM_THE_SCRAP: [
+                        "Time for a much-needed boost! Sorry, bro, but it'll go to a good use!"],
+                    # Litigator
+                    AttackEnum.BAYOU_BASH: ["You seem to be in alligator territory.",
+                                            "It seems we may need a bit of assistance.",
+                                            "Good luck treading these waters now.",
+                                            "The party is over here, fellas!",
+                                            "In just a snap."],
+                    AttackEnum.BAYOU_BELLOW: ["Did I say you could slack on the job?",
+                                              "Are you letting these Toons win!? Not on my watch!",
+                                              "You are on MY turf! What I say goes!"],
+                    AttackEnum.SNAP: ["These chompers could cut out diamonds!",
+                                      "I've had enough with you!",
+                                      "This may hurt a little, but what comes next will hurt a lot.",
+                                      "My colleagues don't like when I get snappy."],
+                    AttackEnum.SNAP_RETALIATE: ["These chompers could cut out diamonds!",
+                                                "I've had enough with you!",
+                                                "This may hurt a little, but what comes next will hurt a lot.",
+                                                "My colleagues don't like when I get snappy."],
+                    # Case Manager
+                    # Case manager has unique dialogue set outside of this definition
+                    AttackEnum.INSURANCE_PLAN: ["Case Manager"],
+                    AttackEnum.LEGAL_BINDINGS: ["Case Manager"],
+                    # Stenographer
+                    AttackEnum.COURT_SANCTION: ["Someone isn't doing their part around here.",
+                                                "What happened to your little strategy called \"teamwork\"?",
+                                                "I spy with my little eye, a Toon who isn't pulling their weight."],
+                    AttackEnum.COURT_SANCTION_RETALIATE: ["Someone isn't doing their part around here.",
+                                                          "What happened to your little strategy called \"teamwork\"?",
+                                                          "I spy with my little eye, a Toon who isn't pulling their weight."],
+                    AttackEnum.COURT_RECORD: [
+                        "Any Level %s Gags Toons use can and will be held against them in a court of law."],
+                    AttackEnum.SCAPEGOAT_ENRAGED: ["I've had enough of all of this!",
+                                                   "You got the goat, Toons!",
+                                                   "You made me maaa-d!"],
+                    AttackEnum.SCAPEGOAT_DEFENSE: ["I can take it!",
+                                                   "It's just a scratch!",
+                                                   "My guard is up!",
+                                                   "Is that the best these Toons have?"],
+                    AttackEnum.COURT_COSTS: ["Consider this a litigation expense.",
+                                             "Time is money, and yours is about to run out.",
+                                             "Litigation is expensive, can you pay the price?",
+                                             "I don't work pro bono, Toon."],
+                    AttackEnum.STENOG_CALCULATING_COSTS: [
+                        "Calculating costs of litigation fees... Price index raised to {}."
+                    ],
+
+                    ### Street Minibosses ###
+
+                    # Duck Shuffler
+                    AttackEnum.WAGER_DUCKS: [
+                        "Thay, that'th a GREAT look for youse!",
+                        "Conthider your thelveth THUFFLED!",
+                        "Lookin' GOOD!!",
+                        "QUACK!",
+                    ],
+                    AttackEnum.WAGER_SEVENS: [
+                        "Lookth like youse hit the JACKPOT!",
+                        "JACKPOT!!",
+                        "EVERYBODY WINTH!!",
+                        "Lookth like Lady Luck'th THMILIN'!",
+                        "THEVEN THEVEN THEVEN-",
+                    ],
+                    AttackEnum.WAGER_BEANS: [
+                        "Time for a PAYOUT!",
+                        "BIG winnin'th comin' your way!",
+                        "You lucky Duckth!",
+                    ],
+                    AttackEnum.WAGER_BAR: [
+                        "INCOMIN'!",
+                        "DON'T TRIP!",
+                        "HAHAHAHAHA!!",
+                        "Watch your HEADTH!",
+                        "I'm raithin' the BAR! HA!!",
+                    ],
+                    AttackEnum.WAGER_BUST: [
+                        "No dithe!",
+                        "NO!!!",
+                        "Thorry folkth!",
+                        "No good at ALL!!",
+                        "Aw, REALLY?!",
+                        "Thith game ith RIGGED!",
+                    ],
+
+                    # Deep Diver
+                    AttackEnum.DIVE: [
+                        "I'll drag you down with me.",
+                        "I'll never submit!",
+                        "Let's sea if you can handle this.",
+                        "With this, the tides shall turn.",
+                        "Time for a subvention.",
+                        "Why don't I stem the tide for a bit?",
+                    ],
+
+                    # Gatekeeper
+                    AttackEnum.GATEKEEPER_JUMP_UNLURE_FODDER: [
+                        "Thou shall awaken at once!",
+                        "How dareth thee slack in my presence!",
+                        "Art thou trying to insulteth me? Awaken, fool!",
+                        "You there! Payeth attention! I commandeth thee!",
+                    ],
+
+                    # Bellringer
+                    AttackEnum.HEALING_BELL: [
+                        "Let me chime in here...",
+                        "Allow me to ring up some assistance.",
+                        "The bell does not toll for thee just yet.",
+                        "Let's fix up these bells and whistles.",
+                    ],
+                    AttackEnum.BELLRINGER_FODDER_EXPLOSION: [
+                        "Ah! I'm heating up, I'm heating up!",
+                        "H-Hey, I don't think I'm built to support this much-",
+                        "Mr. Biggs, you really have overdone it!",
+                        "Well, I suppose everyone has their limit. Pleasure doing business with you.",
+                        "I'm activating the 'explosion when overcharged' clause of my contract.",
+                        "Last I checked, Suits weren't designed to operate under these conditions.",
+                        "Graph #132A shows that destroying a Suit under the current circumstances can have unfortunate consequences.",
+                        "You've caught me in an unstable mood. You'll regret that!"
+                    ],
+
+                    # Mouthpiece
+                    AttackEnum.RED_THREAD: [
+                        "Have you ever tried knitting? Here, let me show you how it's done!",
+                        "Hobbies like this can be a great bonding experience, wouldn't you say?",
+                        "Now, don't you kids know it's important to have strong ties?",
+                        "A little tip for you, darling; strong connections will help you go far!",
+                    ],
+
+                    # Firestarter
+                    AttackEnum.BACKBURNER: [
+                        "Let me turn up the heat...",
+                        "Now we're cooking with gas...",
+                        "Let's crank up the heat.",
+                        "You can't snuff out this battle so soon.",
+                    ],
+                    AttackEnum.BARNBURNER: [
+                        "Feeling hot? Heh heh.",
+                        "I love the smell of arson in the morning.",
+                        "Sorry if you're getting heated...",
+                        "Lookin' crispy.",
+                    ],
+                    # Treekiller
+                    AttackEnum.PEELING_THE_BARK: [
+                        "Bark all yeh want, Toon, You can't step meh!",
+                        "Peeling sad, Toon? Nyahahah!",
+                        "Oh yergh all bark and no bite, Toon!",
+                        "Whahahey! You're barking up the wrong tree!",
+                    ],
+                    AttackEnum.WOODCHIPPER: [
+                        "Baha! I'll shred yah to pieces!",
+                        "Chip on yegh shoulder, eh?!",
+                        "Woodn't yah like to run now, Toon!?",
+                        "This'll chip away at your smile, Toon! Rahahah!",
+                        "Don't chip your tooth, or do! Gaheheheh!",
+                    ],
+                    # Featherbedder
+                    AttackEnum.INSOMNIA: [
+                        "I'm tired."
+                    ],
+
+                    ### Instance Minibosses ###
+
+                    # Prethinker
+                    AttackEnum.CASTLING: [
+                        "Predictable. So painfully... predictable.",
+                    ],
+                    AttackEnum.FORWARD_THINKING: [
+                        "Oh, don't worry. I've thought ahead.",
+                        "I thought about this long before you showed your face!",
+                    ],
+                    AttackEnum.BRAIN_WAVE: [
+                        'I forecast rain.',
+                        'Hope you packed your umbrella.',
+                        'I want to enlighten you.',
+                        'How about a few rain DROPS?',
+                        'Not so sunny now, are you Toon?',
+                        'Ready for a down pour?',
+                        "I'm going to take you by storm.",
+                        'I call this a lightning attack.',
+                        'I love to be a wet blanket.'
+                    ],
+
+                    # Witch Hunter
+                    AttackEnum.TRIAL_BY_FIRE: [
+                        "Are you feeling the heat yet?",
+                        "I've no warmth in my heart for you.",
+                        "If I burn you, do you not hurt?",
+                    ],
+                    AttackEnum.BOILERPLATE: [
+                        "Are you feeling the heat yet?",
+                        "I've no warmth in my heart for you.",
+                        "If I burn you, do you not hurt?",
+                    ],
+                    AttackEnum.MOB_MENTALITY: [
+                        "Fellow Suits, YOU may be next!",
+                        "You are not welcome in our communities.",
+                        "These infidels must be exiled at once."
+                    ],
+                    AttackEnum.BEWITCHMENT: [
+                        "Your condition begets your current contemn!",
+                        "A dandiprat like yourself does not deserve your degree!",
+                        "I will not let this froward embarrass me!"
+                    ],
+
+                    AttackEnum.ROCKING_IN_RHYTHM: [
+                        "Beep-badayadadeep!",
+                        "Skibidididoooodadahradadooh!",
+                        "Lalalabodadeeda-deebadaaaa!",
+                        "Immbadoodadeeda Imbaddadaskidddiiddooodidadoooo!",
+                    ],
+                    AttackEnum.STAR_OF_THE_SHOW: [
+                        "Looks like the band is short a member! Why dont'cha hop on stage and join us?",
+                        "Come on, babe, get a little bit closer and find that vibe!",
+                        "Oh-oh-oh! This stage is hot! Why don't we add more wood to the fire?",
+                        "Anyone is welcome to dance with moi, and babe, that includes you!",
+                        "Looks like we got a rising star in the chairs; better hop on in before you burn out!"
+                    ],
+                    AttackEnum.GUEST_VERSE_START: [
+                        "Spotlight's on you, Baby Blue!",
+                        "Time for a swingin' solo! Take it away, Joe!",
+                        "You haven't seen anything yet, babe! Listen to this!",
+                        "Babe, I'm passing this verse to you; you know what to skibidibbi-do!"
+                    ],
+                    AttackEnum.DANCE_PARTNERS: [
+                        "Time to double up, babe; one bar just ain't enough.",
+                        "It takes two to tango, babe, but you wouldn't know that.",
+                        "Looks like it's your duet, babe; hit those notes!",
+                        "Hope you practiced your steps, babe, 'cause this song ain't a solo.",
+                        "Keep it cool, keep it chic! Babe, it's time to dance, cheek-to-cheek!"
+                    ],
+
+                    # Plutocrat
+                    AttackEnum.SLUSH_FUND: [
+                        "Do I gotta provide the muscle for ya?!",
+                        "Consider this ya share for this operation.",
+                        "C'mon ya neutron stars, keep yourselves together!",
+                        "I said I wouldn't let anyone mess with ya, didn't I?!",
+                    ],
+                    AttackEnum.DEEP_FREEZE: [
+                        "I refuse to be dwarfed by the likes of you!",
+                        "Ya won't be able to handle the gravity of this!",
+                        "Y'know what? It's 'bout time you take a chill pill.",
+                        "You've gone and done it now, haven'tcha!",
+                    ],
+                    AttackEnum.SNOW_SQUALL: [
+                        'Cold'
+                    ],
+
+                    # Satellite investors
+
+                    # Nix
+                    AttackEnum.SHAKEDOWN: [
+                        "Maybe this'll shake some sense into ya.",
+                        "No one ever gave ya the rundown on how this place works, ey?",
+                        "Ya look a little shaken up, Toon.",
+                        "Let's shake things up.",
+                    ],
+
+                    # Hydra
+                    AttackEnum.KICK_UP: [
+                        "Look out, this might have a bit of a kick.",
+                        "I bet an extra kick will send 'em flyin'.",
+                        "Ya gonna be kickin' yourself for not plannin' ahead, Toon.",
+                        "We'll get a kick out of this.",
+                    ],
+
+                    # Styx
+                    AttackEnum.SITDOWN: [
+                        "Let me introduce ya to my little friend.",
+                        "Waiter, please.",
+                        "I think ya gonna like this one, they's a good fella.",
+                    ],
+                    AttackEnum.USURY: [
+                        "These rates are astronomical!",
+                        "Ya gonna be light-years away from paying your debts.",
+                        'Consider this a fiscal "black hole," if ya will.',
+                    ],
+
+                    # Kerberos
+                    AttackEnum.TRIBUTE: [
+                        "In honor of my fallen Satellites.",
+                        "To the Don!",
+                        "Suits like us gotta look out for each other.",
+                    ],
+
+                    # Chainsaw Consultant
+                    AttackEnum.OFFBOARDING: [
+                        # Conditional (Phase 1)
+                        ["IRREPARABLE DAMAGE TO EMPLOYEE SUSTAINED. REDIRECTING USEFULNESS.",
+                         "DAMAGED EMPLOYEE IS NO LONGER OF VALUE TO THE COMPANY."],
+                        ["UNAUTHORIZED TERMINATION DETECTED. DIVERTING ASSETS TO LOSS PREVENTION.",
+                         "RETALIATORY ACTION TAKEN AGAINST STRUCTURAL VIOLATIONS."],
+                        ["ANOMALOUS TARGETING OBSERVED. REDIRECTION OF AGGRESSION SEQUENCE INITIATED.",
+                         "OFFENSIVE INACTION ANALYZED. REDUCING PROBABILITY OF TREND CONTINUATION."],
+                        ["PROJECTIONS WILL BE EXCEEDED ON CURRENT TRAJECTORY. ACTIVATING EXPENSE REDUCTION PROTOCOL.",
+                         "SUBSTANTIAL SELF DEFENSE REQUIRED. REDUCING ENTITIES TO DEFEND."],
+                        # Conditional (Phase 3)
+                        ["DAMAGE TO COMPANY PROPERTY WILL BE MET WITH IMMEDIATE DISMISSAL.",
+                         "RADIUS OF AFFECTED SUITS PROCESSED. ASSETS ARE CONSIDERED COMPROMISED."],
+                        ["EMPLOYEE WAS DISMISSED BY UNAUTHORIZED PARTY.",
+                         "IMPROPER USE OF TERMINATION AUTHORITY DETECTED."],
+                        ["NO ACTION TAKEN. EMPLOYEE IS DEEMED INEFFECTIVE.",
+                         "DEARTH OF TARGETED ACTION PROCESSED. ELIMINATING OFFENSIVE COMPETITION."],
+                        ["EXPECTED EXPENSES TO MAINTAIN FORCES EXCEEDED. REDUCING MAINTENANCE COSTS.",
+                         "EFFORT TO OUTPUT RATIO HIGHLY UNSTABLE. CONSOLIDATING FORCES..."],
+                    ],
+                    AttackEnum.REVVING_UP: [
+                        # Conditional (Phase 1)
+                        ["THREATS HAVE BEGUN TO ADVANCE. BEGIN INCREASING ATTACK POWER.",
+                         "DAMAGE TO SHELL IDENTIFIED. RETALIATION WILL BE MET WITH EQUAL FORCE.",
+                         "OUTER LAYERS AT RISK. TAKING DEFENSIVE ACTION."],
+                        # Conditional (Phase 2)
+                        ["THREATS HAVE- \1CHOVER\1i have-\2 BEGUN TO- \1CHOVER\1been-\2 ADVANCE. BEGIN- \1CHOVER\1hit-\2 INCREASING ATTACK POWER.",
+                         "DAMAGE TO SHELL- \1CHOVER\1increasing-\2 IDENTIFIED. RETALIATION WILL BE- \1CHOVER\1power-\2 MET WITH EQUAL FORCE.",
+                         "OUTER LAYERS AT- \1CHOVER\1getting-\2 RISK. TAKING DEFENSIVE- \1CHOVER\1faster-\2 ACTION."],
+                        # Conditional (Phase 3)
+                        ["THREATS HAVE BEGUN TO ADVANCE. BEGIN INCREASING ATTACK POWER.",
+                         "DAMAGE TO SHELL IDENTIFIED. RETALIATION WILL BE MET WITH EQUAL FORCE.",
+                         "OUTER LAYERS AT RISK. TAKING DEFENSIVE ACTION."],
+                    ],
+                    AttackEnum.LAYOFFS: [
+                        "UNDERPERFORMING DIVISIONS WILL BE ELIMINATED AT-WILL.",
+                        "MASS PRODUCTION OF TERMINATION NOTICES REQUESTED.",
+                    ],
+                    AttackEnum.CUT_THE_SLACK: [
+                        # Conditional (Phase 1)
+                        ["REMOVAL OF LEAST EFFICIENT EMPLOYEES STARTING NOW.",
+                         "INSTANCE AT CAPACITY, INCREASING EFFECTIVENESS."],
+                        ["ADDITIONAL RESOURCES DEPLETING. MOST USEFUL EMPLOYEE WILL RECEIVE ADDITIONAL BENEFITS.",
+                         "FODDER HAS BECOME A LIABILITY, CONDENSING IMMEDIATELY."],
+                        ["EMPLOYEE IS MARRED IN LITIGATION. FUNNELING RESOURCES TO LEGAL FUNDS.",
+                         "ACT OF MARKING INDICATES STRENGTH. REDEVELOPMENT SEQUENCE ACTIVATED."],
+                        # Conditional (Phase 3)
+                        ["INSTANCE CONDITIONS RISK OVERLOAD. CONSOLIDATING MASSES.",
+                         "ASSESSMENT PROMOTES SUBDIVISION TO SINGULARITY. ACT OF COMBINATION IN PROGRESS."],
+                        ["SURVIVING ENTITIES MUST BE ELIMINATED WITH GREAT PREJUDICE.",
+                         "LOSSES INCREASING, PREEMPTIVELY TERMINATING WEAKEST LINKS."],
+                        ["EMPLOYEE IS MARRED IN LITIGATION. FUNNELING RESOURCES TO LEGAL FUNDS.",
+                         "ACT OF MARKING INDICATES STRENGTH. REDEVELOPMENT SEQUENCE ACTIVATED."],
+                    ],
+                    AttackEnum.MARKED_WOOD: [
+                        # Conditional (Phase 1)
+                        ["ONE ANOMALY DEEMED AGGRESSIVE. PROTOCOL TO DISMISS THE ANOMALY ACTIVATED.",
+                         "UNSUPPORTED ACTION DETECTED, PUNISHMENT IN PROGRESS."],
+                        ["UNAUTHORIZED PARTY HAS BEGUN TARGETED ACTION. REMOVAL OF GREATEST THREAT REQUIRED.",
+                         "OFFENSIVE ANOMALY HAS BEEN DETECTED, PUNISHING FROM POINT OF GREATEST RESISTANCE."],
+                        ["THREATS HAVE BEGUN TO REPAIR THEMSELVES. TARGETING LARGEST THREAT.",
+                         "NON-INSTANCE ENTITY DETECTED, OVERCOMPENSATION ACTIVATED."],
+                        # Conditional (Phase 3)
+                        ["THREAT IDENTIFIED. TERMINATION PROTOCOL INITIATED.",
+                         "BUG IN THE SYSTEM IDENTIFIED. ELIMINATION IMMINENT."],
+                        ["MAJOR ANOMALY DETECTED. ISOLATING GREATEST CONTRIBUTOR.",
+                         "ALL TARGETS ARE RESISTING. PUNISHING PERCEIVED LEADER."],
+                        ["TARGET HAS HIRED OUTSIDE CONSULTANCY. ADDING INJURY TO OBSERVED INSULT.",
+                         "UNAUTHORIZED OUTSOURCING OF JOB DETECTED. ACTIVATING DISCIPLINARY PROTOCOL."],
+                    ],
+                    AttackEnum.CHAINSAW_ENTER_DORMANT: [
+                        ""
+                    ],
+                    AttackEnum.CHAINSAW_EXIT_DORMANT: [
+                        ""
+                    ],
+                    AttackEnum.SCABBARD: [
+                        ["OVERFLOW- \1CHOVER\1nothing-\2 OF ASSETS NOT \1CHOVER\1-done\2 NOTICED.",
+                         "DECREASED- \1CHOVER\1you-\2 OFFENS- \1CHOVER\1need to-\2 OFFENSIVE PUSH AGAIN- \1CHOVER\1destroy-\2 AGAINST FODD- \1CHOVER\1them-\2 FODDER DETECTED."],
+                        ["EXCESSIVE LEGAL- \1CHOVER\1too-\2 BINDINGS DETECT- \1CHOVER\1many-\2 DETECTED. ASSISTANCE- \1CHOVER\1sues-\2 GRANTED.",
+                         "BUREAUCRATIC- \1CHOVER\1cease-\2 NIGHTMARE IN- \1CHOVER\1suing-\2 INBOUND, TAKING ACTIONS TO- \1CHOVER\1employees-\2 PROVIDE AID."],
+                    ],
+                    AttackEnum.CHAIN_LINKED: [
+                        ["DIVISION- \1CHOVER\1hit-\2 IS TO- \1CHOVER\1from-\2 TOO THIN, EXTEND- \1CHOVER\1the-\2 EXTENDING BASE RE-HIRE NO- \1CHOVER\1end-\2 NOTICES.",
+                         "ONBOARDING- \1CHOVER\1too- SUITS FOR- \1CHOVER\1many- DOWN THE LINE- \1CHOVER\1destroyed- ACTIVITIES."],
+                        ["OVERWHELMING- \1CHOVER\1too-\2 OFFENSIVE ACTION- \1CHOVER\1much-\2 DETECTED, INCREASING- \1CHOVER\1damage-\2 FODDER.",
+                         "EXTREME- \1CHOVER\1don't-\2 NUMBER OF ATTACKS- \1CHOVER\1all-\2 AGAINST SELF- \1CHOVER\1hit me-\2 DETECTED."],
+                    ],
+                    AttackEnum.AGGRANDIZE: [
+                        ["SOLE FODDER DETECTED, PRO- \1CHOVER\1one-\2 PROVIDING WITH INCREASED- \1CHOVER\1left-\2 FURNISHINGS.",
+                         "UNSUPPORTED- \1CHOVER\1too-\2 EMPLOYEE HAS- \1CHOVER\1few-\2 BEEN PROMOTED."],
+                        ["FODDER HAS- \1CHOVER\1should-\2 SURVIVED, ADMIRA- \1CHOVER\1have-\2 ADMIRABLE ACTION- \1CHOVER\1destroyed-\2 REWARDED.",
+                         "ADDITIONAL- \1CHOVER\1not-\2 SUPPORT EXTENDED TO- \1CHOVER\1enough-\2 DAMAGED EMPLOYEE."],
+                    ],
+                    AttackEnum.DEADWOOD: [
+                        "IMMEDIATE DISMISSAL OF UNAUTHORIZED PARTIES APPROVED.",
+                        "REMOVING TARGETS FROM THE PREMISES."
+                    ],
+                    AttackEnum.THROTTLE: [
+                        "IMMEDIATE- \1CHOVER\1not-\2 DISMISSAL OF- \1CHOVER\1this-\2 UNAUTHORIZED PARTIES- \1CHOVER\1time-\2 APPROVED.",
+                        "REMOVING- \1CHOVER\1i-\2 TARGETS- \1CHOVER\1won't-\2 FROM- \1CHOVER\1let-\2 THE PREMI- \1CHOVER\1you-\2 PREMISES.",
+                    ],
+                    AttackEnum.SPARK_PLUG: [
+                        "OTHER- \1CHOVER\1can't-\2 ACTIONS- \1CHOVER\1do-\2 UNA- \1CHOVER\1anything-\2 UNAVAILABLE.",
+                        "FALLBACK- \1CHOVER\1no-\2  PROCE- \1CHOVER\1other-\2 PROCEDURE ACT- \1CHOVER\1action-\2 ACTIVATED."
+                    ],
+
+                    # Pace Setter
+                    AttackEnum.PICK_UP_THE_PACE: ["Think fast!",
+                                                  "Move it!",
+                                                  "Step on it!",
+                                                  "Hurry it up!",
+                                                  "You've gotta be quicker than that!",
+                                                  ],
+                    AttackEnum.OVERCLOCKED: ["Your time is running out!",
+                                             "I REFUSE to wait any longer!",
+                                             "Pump up those reflexes!",
+                                             "I am just going to be running round and round you rodents!",
+                                             "Let's see how fast you move!",
+                                             ],
+                    AttackEnum.RUSH_JOB: [
+                        "Think fast!",
+                        "Eyes on the prize!",
+                        "Pump up those reflexes!",
+                        "Follow the groove!",
+                    ],
+                    AttackEnum.HURRY_SICKNESS: [
+                        "Time's up!",
+                        "You managed to make me disappointed.",
+                        "I am barely breaking a sweat.",
+                        "Dizzy yet?",
+                    ],
+                    AttackEnum.HURRY_SICKNESS_MG: [
+                        "Time's up!",
+                        "You managed to make me disappointed.",
+                        "I am barely breaking a sweat.",
+                        "Dizzy yet?",
+                    ],
+                    AttackEnum.CORPORATE_RESTRUCTURING: [
+                        "Let's shake things up a little!",
+                        "I'll be running round and round you rodents!",
+                        "Few hops this time!",
+                        "Catch me if you can!",
+                    ],
+                    AttackEnum.CONTENT_SYNC: [
+                        "Want to see a magic trick?",
+                        "Now THIS is gonna suck.",
+                        "Any hopes of you winning just dropped to the negatives, bud.",
+                        "Want to check that order again, pal!",
+                        "Are you paying attention? Are you REALLY?",
+                        "Let's check that attention span!",
+                    ],
+                    AttackEnum.MOVING_GOALPOSTS: [
+                        "You're in the danger zone!",
+                        "Wait a minute, who said YOU could gain the upper hand?!",
+                        "I'm the source of your destruction!",
+                        "Let's crank up the difficulty.",
+                        "New rule: using that Gag against me is BANNED. Just don't. Easy.",
+                    ],
+
+                    # Multislacker
+                    AttackEnum.WASTEFUL_MGMT: [
+                        "Any second now...",
+                    ],
+                    AttackEnum.HYPER_TASK: [
+                        "You probably should've attacked someone else that time.",
+                        "There's more ties where that came from!",
+                        'My dad would describe this as "aggressive sales tactics."',
+                    ],
+                    AttackEnum.ZERO_TASK: [
+                        "I don't have the energy to attack you right now.",
+                        "I can take the hits. Them, not so much.",
+                        "If you're not going to attack me, then there's no point.",
+                    ],
+                    AttackEnum.MANDATORY_LUNCH: [
+                        "Run that by me again in, like, an hour or so.",
+                        "I'm not one for talking business during a meal.",
+                        "My dad says that the union forces us to take breaks.",
+                    ],
+                    AttackEnum.UNION_BUST: [
+                        "I won't have any unionizing while I'm on the payroll, got that?",
+                        "I'm not paying your union dues.",
+                        "Time for me to stamp out this problem.",
+                        "Looks like you're all busted up!",
+                        "Can't handle the pressure?",
+                        "Corporate is giving me a lot of pressure to break this up!",
+                        "This whole operation is a bust.",
+                    ],
+                    # Find the Family
+                    AttackEnum.FTF_FOREMAN_REDTAPE: [
+                        'This should wrap things up.',
+                        "I'm going to tie you up for awhile.",
+                        "You're on a roll.",
+                        'See if you can cut through this.',
+                        'This will get sticky.',
+                        "Hope you're claustrophobic.",
+                        "I'll make sure you stick around.",
+                        'Let me keep you busy.',
+                        "Looks like you're in a sticky situation.",
+                        'Just try to unravel this.',
+                        'I want this meeting to stick with you.'
+                    ],
+                    AttackEnum.FTF_FOREMAN_SNIPE: ["Prepare for pain."],
+                    AttackEnum.FTF_FOREMAN_CIGAR_SMOKE: ['Gentlemen.',
+                                                         "It's a good day for me to have a smoke.",
+                                                         'Take a breath of this.',
+                                                         "It's tradition you know.",
+                                                         'Another day, another dollar spent.',
+                                                         'I always have the occasional cigar.',
+                                                         "I'll quit tomorrow, I swear.",
+                                                         "You can't even escape my secondhand smoke.",
+                                                         'These fumes are toxic.',
+                                                         'I need a good smoke.',
+                                                         'Smoking is a dirty habit.'],
+                    AttackEnum.FTF_SUPERVISOR_LIFE_INSURANCE: ["While I still have assets, I am insured."],
+                    AttackEnum.FTF_SUPERVISOR_ABACUS_SYNERGY: ["I'm taking this to committee.",
+                                                               "Your project's been canceled.",
+                                                               "Your budget's been cut.",
+                                                               "We're restructuring your division.",
+                                                               'I put it to a vote, and you lose.',
+                                                               'I just received the final approval.',
+                                                               'A good team can get rid of any problem.',
+                                                               "I'll get back to you on this.",
+                                                               "Let's get right to business.",
+                                                               'Consider this a Synergy crisis.'],
+                    AttackEnum.FTF_ATTORNEY_PICK_UP_THE_PACE: [
+                        "Think fast!",
+                        "Move it!",
+                        "Step on it!",
+                        "Hurry it up!",
+                        "You've gotta be quicker than that!",
+                    ],
+                    AttackEnum.FTF_ATTORNEY_COURT_MANDATE_MONOLITH: [
+                        "A new mandate has been passed. %s and %s Gags are now disabled."
+                    ],
+                    AttackEnum.FTF_ATTORNEY_COURT_MANDATE_OMNIPOTENT: [
+                        "A new mandate has been passed. Level %s and %s Gags are now disabled."
+                    ],
+                    AttackEnum.FTF_PRESIDENT_MULLIGAN: ["You're not up to par.",
+                                                        'Fore!',
+                                                        "I'm getting teed off.",
+                                                        "Caddie, I'll need my driver!",
+                                                        'Just try and avoid this hazard.',
+                                                        'Swing!',
+                                                        'This is a sure hole in one.',
+                                                        "You're in my fairway.",
+                                                        'Notice my grip.',
+                                                        'Watch the birdie!',
+                                                        'Keep your eye on the ball!',
+                                                        'Mind if I play through?'],
+                    AttackEnum.FTF_PRESIDENT_EXTRA_TIP: ["You've done great work today. Here's an extra tip."],
+                    AttackEnum.FTF_PRESIDENT_SNAP: [
+                        "These chompers could cut out diamonds!",
+                        "I've had enough with you!",
+                        "This may hurt a little, but what comes next will hurt a lot.",
+                        "My colleagues don't like when I get snappy."
+                    ],
+                    AttackEnum.FTF_PRESIDENT_SNIPE: ["Prepare for pain."],
+                    AttackEnum.FTF_PRESIDENT_DRIVER: ["You're not up to par.",
+                                                      'Fore!',
+                                                      "I'm getting teed off.",
+                                                      "Caddie, I'll need my driver!",
+                                                      'Just try and avoid this hazard.',
+                                                      'Swing!',
+                                                      'This is a sure hole in one.',
+                                                      "You're in my fairway.",
+                                                      'Notice my grip.',
+                                                      'Watch the birdie!',
+                                                      'Keep your eye on the ball!',
+                                                      'Mind if I play through?'],
+                    # High Roller
+                    AttackEnum.FINISH_BETWEEN: [
+                        "And now back to our regularly ffcheduled programming.",
+                        "Lookff like they couldn't take the HAHAheat!",
+                        "Another one biteff the dufft, I ffuppoffe! Anywayff...",
+                        "And... we're back!"
+                    ],
+                    AttackEnum.SPIN_WHEEL: [
+                        "Pop the record right, baby doll, let'ff get the ffhow ffpinnin'!",
+                        "The priffe iff alwayff right when it comeff to me and thiff wheel.",
+                        "Around and around the wheel goeff... Where it'll fftop? Nobody knowff!",
+                        "It'ff about time thiff lil' duckie got ffome uffe."
+                    ],
+                    AttackEnum.RANDOM_GAME: [
+                        [
+                            "Pop a look for the camera ffhow, tell me hAHAHAHAhow much ya know!",
+                            "Let'ff wrack thoffe ffilly brainff of yourff. Quick!",
+                            "I bet you're jufft burffting with knowledge! Let'ff find out.",
+                            "Peep your eyeff, we've got ffo much in fftore today for you!",
+                        ],
+                        [
+                            "Alright, alright, let'ff get thoffe efftraff on ffet, baby doll. Bring 'em in.",
+                            "No more buyin' letterff, time to buy a ffpine!",
+                            "Time to bring in the big guyff! Can you keep up with them? I know I can.",
+                            "Thiff iff ffure to get you confuffed! My friendff know thiff all too well, too.",
+                        ],
+                        [
+                            "My memory iffn't aff good, but let'ff ffee if you can keep up.",
+                            "I'll be right back, but I'm ffure you have a keen eye on my friendff here.",
+                            "Keep your eyeff on the prize, don't let them fflip away!",
+                            "One, two, three, two – oh I can't remember! Have you been paying attention?",
+                        ],
+                    ],
+                    AttackEnum.HIGHROLLER_COMMERCIAL: [
+                        "Ooo-well, ya know what they ffay: don't hate the Major Player, change the game!",
+                        "Let'ff get the hip hop ffhop right on top, a-one a-two- let'ff play true!",
+                        "I can jufft hear the crowd going wild for thiff intermiffion!",
+                        "We'll be back after a ffhort break, but I'm ffure you'll fftay occupied in the meantime.",
+                    ],
+                    AttackEnum.TRICK_OF_THE_LIGHT: [
+                        "Every copy of me iff perffonalized.",
+                        "One ffhowfftopper jufft iffn't enough! There needff to be more!"
+                    ],
+                    AttackEnum.CON_DUCK_TION: [
+                        "Ffee, you're going to get well acquainted with what'ff on my head! And that'ff duckieff!",
+                        "You know, I really like bread! And ffo do my little friendff here, iffn't that right?",
+                        "Quack! Can you relate, babe? No? Well, now you can.",
+                        "And the crowd goeff wild for thiff act! A real pecking order iff in action... now.",
+                        "Confuffion can go a long way, and thiff act iff no different."
+                    ],
+                    AttackEnum.FREE_CRUISE: [
+                        "We have a winner! Watch your headff, folkff, thiff might rock your boat!",
+                        "You are right in the ffplaffh zone, babe!",
+                        "Have you ever wondered what it'ff like to have two hundred poundff dropped on your headff? Now you don't have to!",
+                        "Don't waffh affhore just yet, baby doll! We can ride thiff ffhip together!",
+                        "Do you remember thiff? It'ff a real wreck if I mufft ffay ffo myffelf!",
+                        "Congraffulaffionff, you won! Congraffulaffionff, you won! Congraffulaffionff, you won! Congraffulaffionff, you won! Congraffulaffionff, you won! Congraffulaffionff, you won!"
+                    ],
+                    AttackEnum.ROLLED: [
+                        "It'ff all or nothing, doll!",
+                        "You'd befft go big or GO HOME!",
+                        "What'ff life without a little riffk here and there?",
+                        "But what if the fftakeff were EVEN HIGHER?!",
+                        "There'ff no fun in plaHAHAying it ffafe! Live a little!",
+                    ],
+                    }
+
+# There are a couple features to this that can be used
+# If 'all' is a key, then all of their attacks will pull from this pool, regardless of specific attacks defined.
+# If 'rounds' is a key, then their attacks will pull from this round-based pool, regardless of specific attacks defined.
+# If 'afterrounds' is a key, and 'rounds' is ALSO a key, then attacks will use this after the 'rounds' set is exhausted.
+# If a specific attack is defined, then that attack will pull from this pool if the other criteria are not met.
+SuitAttackSpecificTaunts = {
+    'caseman': {
+        'all': [
+            "Hmph...",
+            "Hrm...",
+            "Hrnhmpf...",
+            "Hm, hm..."
+        ]
+    },
+
+    ### STREET MERCS ###
+    # region
+    "duckshfl": {
+        AttackEnum.SPIN: [
+            'Whaddaya thay we go for a little THPIN??',
+            'Ya uthe the THPIN thycle?? HAHAHA!',
+            "THITH oughta really make your head thpin!",
+            "Here'th MY thpin on thingth!",
+            "I'LL take ya for a thpin!",
+            "Time to take a thpin!! HAHA!",
+            'How do ya like to "THPIN" your time? GET IT??',
+            "You're thpinnin' out of control!!",
+            "What a thpin you're in!!",
+            "I'll make your head THPIN!"
+        ],
+    },
+    "gatekeep": {
+        AttackEnum.CANNED: [
+            'Doth thou liketh it out of the can?',
+            '"Can" thou handleth this?',
+            "This one iseth fresh out of the can!",
+            "Has't thou beeneth attacked by canned goods before?",
+            "I would liketh to donateth this canned good to thee!",
+            'Geteth ready to "kicketh the can"!',
+            'Thou thinketh thou "can", thou thinketh thou "can".',
+            "I shall throweth thee in the can!",
+            "I shall maketh me a can of Toon-a!",
+            "Thou doth not tasteth so valorous out of the can."
+        ],
+        AttackEnum.FIRED: [
+            'I hopeth thou broughteth some marshmallows.',
+            "It iseth going to geteth rather warm around hereth.",
+            'This shouldst taketh the chill out of the air.',
+            "I hopeth thou art not cold blooded.",
+            'Hoteth, hoteth, and hotter.',
+            'Thou better stopeth, dropeth, and rolleth!',
+            "Thou art outeth of here.",
+            'How doest "well-done" soundeth?',
+            'Caneth thou sayeth "ouch"?',
+            'I hopeth thee woreth sunscreen.',
+            'Doth thou feeleth a little toasty?',
+            "Thou art going downeth in flames.",
+            "Thou shall goeth out in a blaze.",
+            "Thou art a flasheth in the pan.",
+            'I bethink I haveth a bit of a flare about me.',
+            "I just sparkleth, I not?",
+            'Oh looketh, a burnt boor.',
+            "Clearly, thou doth not owneth an air fryeth contraption."
+        ],
+        AttackEnum.QUAKE: [
+            "Let's quaketh, rattleth, and rolleth.",
+            "I've goteth a whole lot of quakeths going on!",
+            "I see thee quaking in thy shoes.",
+            "Here it cometh, it's the big one!",
+            "This one is offeth the Richter scale.",
+            'Now the earth will quaketh!',
+            "What iseth shaking? Thou!",
+            "Has't thou ever beeneth in an earthquake?",
+            "Thou art on unsteady ground!"
+        ],
+        AttackEnum.RED_TAPE: [
+            'This should wrapeth things up.',
+            "I shall tieeth thee up for awhile.",
+            "Thou art oneth a roll.",
+            'Seeeth if you can cuteth through this.',
+            'This will get sticky.',
+            "I hopeth thee art claustrophobic.",
+            "I shall makeeth sure you sticketh around.",
+            'Let me keepeth thee busy.',
+            "Looks liketh thou art in a sticky situation.",
+            'Just tryeth to unraveleth this.',
+            'I wanteth this meeting to sticketh with thee.'
+        ],
+    },
+    "bellring": {
+        AttackEnum.HANG_UP: [
+            "You've been disconnected.",
+            'Good bye!',
+            "It's really rather time I end our connection.",
+            "...and don't call back!",
+            'Click!',
+            'This conversation is over, mate.',
+            "Right, I'm severin' this link.",
+            "I do think you 'ave a few hang ups.",
+            "It appears you've got a proper weak link.",
+            "Your time's up, love.",
+            "I hope you receive this right loud an' clear.",
+            'Thank you, come again.',
+            'You got the wrong number, mate.'
+        ],
+        AttackEnum.POUND_KEY: [
+            'Time to return some calls.',
+            "I'd like to make a collect call.",
+            "Ring-a-ling - it's for you, mate!",
+            "I 'ave been wantin' to drop a pound or two.",
+            "I 'ave a lot of clout.",
+            "This may cause a slight poundin' sensation.",
+            "I'll just punch in this number.",
+            'Let me call up a cheeky little surprise.',
+            "I'll ring you up, mate.",
+            "Right then, Toon, it's the pound for you."
+        ],
+        AttackEnum.QUAKE: [
+            "Let's quake, rattle, an' roll.",
+            "I've got a whole lot o' quakin' goin' on!",
+            "I see you quakin' in your shoes.",
+            "Here it comes, it's the big one!",
+            "This one's proper off the Richter scale.",
+            'Now the earth will quake!',
+            "Hey, what's shakin'? You!",
+            'Ever been in a proper earthquake?',
+            "You're on dodgy ground now!"
+        ],
+        AttackEnum.ROLODEX: [
+            "Your card's in here somewhere.",
+            "Here's the number for a pest exterminator.",
+            'I want to give you my card.',
+            "I've got your number right here.",
+            "I've got you covered from a-z.",
+            "Oh, you'll right flip over this.",
+            'Take this for a spin, mate.',
+            'Watch out for any cheeky paper cuts!',
+            "I'll let my fingers do the knockin'.",
+            'Is this how I can contact you, mate?',
+            'I want to make sure we stay in touch, love.'
+        ],
+    },
+    "fires": {
+        AttackEnum.HOT_AIR: [
+            "We're having a... heated discussion....",
+            "You're experiencing a heat wave.",
+            "I've reached my boiling point...",
+            'This should cause some wind burn.',
+            'I hate to grill you, but, uh...',
+            "Always remember, uh... where there's smoke, there's fire...!",
+            "You're looking a little... burned out...",
+            'Another meeting up in smoke...',
+            "Well... Guess it's time to add fuel to the fire...",
+            'Can I kindle a working relationship...?',
+            'I have some glowing remarks for you...!',
+            'Uh, um, Air Raid..!?'
+        ],
+        AttackEnum.FIRED: [
+            'I hope you brought some marshmallows, heh heh.',
+            "It's going to get rather... warm around here.",
+            'This should take the chill out of the air...!',
+            "I hope you're, um... cold blooded.",
+            'Hot, hot and hotter...!',
+            'You should probably stop, drop, and roll.',
+            "You're outta here, I think.",
+            'How does "well-done" sound...?',
+            'Can you say ouch...?',
+            'I do hope you wore sunscreen.',
+            'Do you feel a little toasty..?',
+            "You're, um... going down in flames...!",
+            "You'll go out in a blaze.",
+            "You're a flash in the pan.",
+            'I like to think I have a bit of a flare about me.',
+            "Heh... I just sparkle, don't I?",
+            'Oh look, a crispy critter...!',
+            "Clearly, you don't own an air fryer."
+        ],
+        AttackEnum.POWER_TRIP: [
+            "Pack your bags, we're, um... taking a little trip.",
+            'Did you have a nice trip...?',
+            "Nice trip, I guess I'll see you next fall.",
+            'How was your trip...?',
+            'Oh, uh, sorry to trip you up there...!',
+            'You look a little tripped up...',
+            "Now you see who's in power, I think!",
+            'I am pretty sure I am much more powerful than you.',
+            "Heh, who's got the power now?",
+            "You can't fight the power.",
+            'Power corrupts... especially in my hands...'
+        ],
+        AttackEnum.CIGAR_SMOKE_FIRESTARTER: [
+            'Gentlemen...',
+            "Sigh... It's a good day for me to have a smoke.",
+            'Take a breath of this.',
+            "It's tradition you know...",
+            'Another day, another dollar spent...',
+            'I have the occasional cigar... sometimes...',
+            "I'll quit tomorrow, I swear...!",
+            "Sorry... You can't escape my secondhand smoke.",
+            'These fumes are, uh... pretty toxic.',
+            'I need a good smoke...',
+            'Smoking is a dirty habit...'
+        ],
+    },
+    "treek": {
+        AttackEnum.MARKET_CRASH: [
+            "Eyem gonna crash yah party!",
+            "Yeh won't survive theh crash.",
+            "Ahm more than theh market can bear.",
+            "Ah've got a real crash course for yah!",
+            "Now ehe'll come crashing down.",
+            "Yah'll crash like a fresh cut treeh!",
+            "Looks like tha market is goin' down.",
+            "Yah'd better get out quick!",
+            'Shall Eyeh lead the recession?',
+            "Gah! Everybody's getting out, shouldn't yah?"
+        ],
+        AttackEnum.SHRED: [
+            "Eye'h gotsta to get rid of some haz-ar-dous waste.",
+            "Ah'm increasing mah throughput.",
+            "Eyeh think eye'll dispose of yah right now.",
+            'This oughtta get rid of theh evidence.',
+            "Bwahhahe! There's no way to prove it now.",
+            'See if you can put this back together.',
+            'This should cut yah down to size.',
+            "Ah'm gonna rip tat idea tah shreds.",
+            "Weh don't want this to fall into the wrong hands.",
+            'Easeh come, easeh go.',
+            "Here's yourgh last shred ah hope."
+        ],
+        AttackEnum.GUILT_TRIP: [
+            "Ah'll lay a real guilt trip on yah!",
+            "Feelin' guilty?",
+            "It's all yourgh fault!",
+            "Ah always blame everehthin' on yeh.",
+            'Wallow in yah own guilt!',
+            "Ah'm never talkin' to yah again!",
+            "Yah had better say yeh sorry.",
+            "Aye wouldn't for-give yah in a million years!",
+            'Are yah ready for yah trip? Wahahahaha!',
+            'Call meh when yah get back from yourgh trip.',
+            'When do yah get back from yah trip?'
+        ],
+        AttackEnum.FIRED: [
+            "Yah bettah 'ave brought some marshmallows!.",
+            "It's gonna get rather warm around here.",
+            'This oughtta take the chill out of the air.',
+            "Yah wouldn't happen ta be cold-blooded?",
+            'Hot, hot, and hotteh-Hahaheh!',
+            'Yah better stop, drop, and roll!',
+            "Yah outta here.",
+            'How does "well-done" sound?',
+            'Can yah say ouch?',
+            'Hope yah wore sunscreen.',
+            'Do yah feel a tad toasty?',
+            "Yeh going down in flames.",
+            "Yah boutta go out in a blaze.",
+            "Yer a flash in the pan.",
+            'Aye think Ah have a bit of a flare about meh.',
+            "Aye just sparkle, don't eyeh?",
+            'Oh look, a crispy little critter.',
+            "Clearly, yah don't own an air fryer."
+        ],
+    },
+    # endregion
+
+    ### INSTANCE MERCS ###
+    # region
+    "mplayer": {
+        AttackEnum.HOT_AIR: [
+            "How're these for some fire notes, babe?",
+            "I play this one a little con fuoco!",
+            'Better not dance cold on my floor.',
+            "Don't care for the blues? Let's heat it up!",
+            "Clearly you don't own an air fryer, babe.",
+            "Come on babe, here's a real hot tune!",
+            "It ain't a Summer Tune without some sun, baby!",
+            "This tune's got some more flare than you can handle!",
+            "Tune so hot, hot hot tune, tune so hot you fry a Toon.",
+            'Burnin up babe?'
+        ],
+        AttackEnum.QUAKE: [
+            "Let the rhythm quake your core, babe.",
+            "Everybody's jumpin', babe.",
+            "Time for the one o' clock jump!",
+            "I call this one the Jockey Jump!",
+            "Feel the rhythm? Feel the Tappin?",
+            'Shake to the tempo!',
+            "Let's get shakin' babe.",
+            "Babe this song ain't soft.",
+            "Oh now the crowd is shakin to the tune!"
+        ],
+        AttackEnum.SONG_AND_DANCE: [
+            'Tap to the tune, babe, let the music touch your soul.',
+            'A-one! A-two! A skiddly-diddly-doo-doo dibba de-do-do!',
+            "Don't trip up, babe!",
+            "You ain't ready for my Boogie Woogie!",
+            "Don't start snoozin on me babe!",
+            "Don't waltz limp, babe.",
+            'Bop ba bodda bope-Be bop ba bodda bope.',
+            "It don't mean a thing if it ain't got that swing, babe!",
+            "How's this for a jitterbug jolt!"
+        ],
+        AttackEnum.RE_ARRANGE: [
+            "Sorry babe, I've gotta put you back in rhythm.",
+            "I took some creative liberties with this one, babe.",
+            "Let's move some of your notes around.",
+            'Synergize me some tunes!',
+            "Your plays is all out of wack, babe.",
+            "Hope you don't mind if I swap your sheet.",
+            "I've already orchestrated your defeat.",
+            'Let me rearrange your laff meter, babe.',
+            "You've got the wrong tempo, baby.",
+            "Oh no no no, baby, these notes are all wrong!"
+        ],
+    },
+    "pcrat": {
+        AttackEnum.FREEZE_ASSETS: [
+            'Ya assets are mine.',
+            'Ya feel a draft?',
+            "Hope ya don't have plans.",
+            'This should keep ya on ice.',
+            "There's a chill in the air.",
+            "Winter's coming early this year.",
+            'Ya feeling a little blue?',
+            'Let me crystallize my plan.',
+            "Ya going to take this hard.",
+            'This should cause freezer burn.',
+            'I hope ya like cold cuts.',
+            'This one will be cold.',
+            "I'm very cold blooded."
+        ],
+        AttackEnum.PICK_POCKET: [
+            'Let me check ya valuables.',
+            "Hey, what's that over there?",
+            'Like taking candy from a baby.',
+            'What a steal.',
+            "I'll hold this for ya.",
+            'Watch my hands at all times.',
+            'The hands quicker than the eye.',
+            "There ain't nothing up my sleeve.",
+            'This "legitimate businessman" is not responsible for lost items.',
+            "Finder's keepers.",
+            'Ya never see it coming.',
+            "One for me, and ya ain't got nothing.",
+            "Don't mind if I do.",
+            "Ya won't be needing this..."
+        ],
+        AttackEnum.SYNERGY: [
+            "I'm taking this to committee.",
+            "Ya plan's been canceled.",
+            "Ya kickback's been cut.",
+            "We're restructuring ya crew.",
+            'I put it to a vote, and ya lost.',
+            'I just received the final approval.',
+            'A good crew can get rid of any problem.',
+            "I'll get back to ya on this.",
+            "Let's get right to business.",
+            'Consider this a Synergy crisis.'
+        ],
+        AttackEnum.MARKET_CRASH: [
+            "I'm going to crash ya party.",
+            "Ya won't survive the crash.",
+            "I'm more than the market can bear.",
+            "I've got a real crash course for ya!",
+            "Now I'll come crashing down.",
+            "I'm a real bull in the market.",
+            "Looks like the market's going down.",
+            'Ya better get out quick!',
+            'Sell! Sell! Sell!',
+            'Do I gotta lead the recession?',
+            "Everybody's getting out, you oughta do it too!"
+        ],
+        AttackEnum.CIGAR_SMOKE_PLUTOCRAT: [
+            'Gentlemen.',
+            "It's a good day for me ta have a smoke.",
+            'Take a breath of this.',
+            "It's tradition ya know.",
+            "Another day, anotha' dollar spent.",
+            'I have tha occasional cigar.',
+            "I'll quit tomorrow, I swear!",
+            "Ya can't escape my secondhand smoke.",
+            'These fumes are toxic.',
+            'I need a good smoke.',
+            "Smokin' is a dirty habit."
+        ],
+    },
+    "chainsaw": {
+        AttackEnum.GLOWER_POWER: [
+            [
+                'PIERCING EYES HAVE BEEN ESTABLISHED.',
+                "UPDATING PROCESSES... MUST STAY ON THE CUTTING EDGE!!",
+                'ORDER TO ATTACK HAS BEEN RECEIVED AND PROCESSED.',
+                "WARNING: \"GAG\" HAS NO DEFINITION. IGNORING...",
+                "EMPLOYEES ARE RESISTING TERMINATION, CONTINGENCY PROCEDURES ARE IN EFFECT.",
+                "ADDITIONAL DAMAGE TO SUIT DETECTED, CONTINUITY PLAN ACTIVATED."
+            ],
+            [
+                "PIERCING EYES- \1CHOVER\1i'm looking-\2 HAVE BEEN- \1CHOVER\1for a-\2 ESTABLI- \1CHOVER\1way out-\2 ESTABLISHED.",
+                "UPDATING- \1CHOVER\1no-\2 PROCESSES... MUST- \1CHOVER\1can't-\2 MUST STAY ON THE- \1CHOVER\1give in-\2 CUTTING EDGE!!",
+                "ORDER TO- \1CHOVER\1i'm-\2 TO ATTACK HAS- \1CHOVER\1i'm so-\2 BEEN RECEIVED AND- \1CHOVER\1i'm sorry-\2 PROCESSED.",
+                "WARNING- \1CHOVER\1this wa-\2 WARNING: \"GAG\" HAS- \1CHOVER\1wasn't my-\2 NO DEFINIT- \1CHOVER\1choice-\2 DEFINITION. IGNORING...",
+                "EMPLOYEES- \1CHOVER\1i wi-\2 ARE- \1CHOVER\1i wish-\2 RESISTING TERMI- \1CHOVER\1wish i could-\2 TERMNATION, CONTINGENCY- \1CHOVER\1could stop-\2 PROCEDURES ARE- \1CHOVER\1it-\2 IN EFFECT.",
+                "ADDITIONAL DAMAGE- \1CHOVER\1i'm not-\2 TO SUIT- \1CHOVER\1in-\2 DETECTED, CONTIN- \1CHOVER\1in control of-\2 CONTINUITY PLAN- \1CHOVER\1my actions-\2 ACTIVATED.",
+            ],
+        ],
+        AttackEnum.ROLODEX: [
+            [
+                "ATTEMPTING TO LOCATE TARGET'S EMPLOYMENT CARD.",
+                "PROTOCOL FOR PEST EXTERMINATION HAS BEEN TRIGGERED.",
+                "ORDER TO ATTACK HAS BEEN RECEIVED AND PROCESSED.",
+                'WARNING: "GAG" HAS NO DEFINITION. IGNORING...',
+                "EMPLOYEES ARE RESISTING TERMINATION, CONTINGENCY PROCEDURES ARE IN EFFECT.",
+                'ADDITIONAL DAMAGE TO SUIT DETECTED, CONTINUITY PLAN ACTIVATED.'
+            ],
+            [
+                "ATTEMPTING- \1CHOVER\1can't-\2 TO LOCATE- \1CHOVER\1hold-\2 TARGET'S EMPLOY- \1CHOVER\1out-\2 EMPLOYMENT CARD.",
+                "PROTOCOL FOR- \1CHOVER\1hope-\2 PEST EXT- \1CHOVER\1is-\2 EXTERMINATION HAS- \1CHOVER\1paper-\2 BEEN TRI- \1CHOVER\1thin-\2 TRIGGERED.",
+                "ORDER TO- \1CHOVER\1i'm-\2 TO ATTACK HAS- \1CHOVER\1i'm so-\2 BEEN RECEIVED AND- \1CHOVER\1i'm sorry-\2 PROCESSED.",
+                "WARNING- \1CHOVER\1this wa-\2 WARNING: \"GAG\" HAS- \1CHOVER\1wasn't my-\2 NO DEFINIT- \1CHOVER\1choice-\2 DEFINITION. IGNORING...",
+                "EMPLOYEES- \1CHOVER\1i wi-\2 ARE- \1CHOVER\1i wish-\2 RESISTING TERMI- \1CHOVER\1wish i could-\2 TERMNATION, CONTINGENCY- \1CHOVER\1could stop-\2 PROCEDURES ARE- \1CHOVER\1it-\2 IN EFFECT.",
+                "ADDITIONAL DAMAGE- \1CHOVER\1i'm not-\2 TO SUIT- \1CHOVER\1in-\2 DETECTED, CONTIN- \1CHOVER\1in control of-\2 CONTINUITY PLAN- \1CHOVER\1my actions-\2 ACTIVATED.",
+            ],
+        ],
+        AttackEnum.QUAKE: [
+            [
+                "COMMENCING OPERATION: QUAKE, RATTLE, AND ROLL.",
+                "UNCHARTED NUMBERS DETECTED ON THE RICHTER SCALE.",
+                "ORDER TO ATTACK HAS BEEN RECEIVED AND PROCESSED.",
+                "WARNING: \"GAG\" HAS NO DEFINITION. IGNORING...",
+                "EMPLOYEES ARE RESISTING TERMINATION, CONTINGENCY PROCEDURES ARE IN EFFECT.",
+                'ADDITIONAL DAMAGE TO SUIT DETECTED, CONTINUITY PLAN ACTIVATED.'
+            ],
+            [
+                "COMMENCING- \1CHOVER\1stop-\2 OPERATION: QUAKE- \1CHOVER\1stop-\2 RATTLE- \1CHOVER\1the-\2 AND RO- \1CHOVER\1override-\2 ROLL.",
+                "UNCHARTED NU- \1CHOVER\1pl-\2 NUMBERS DETECT- \1CHOVER\1please-\2 DETECTED ON THE- \1CHOVER\1help-\2 RICHTER S- \1CHOVER\1me-\2 SCALE.",
+                "ORDER TO- \1CHOVER\1i'm-\2 TO ATTACK HAS- \1CHOVER\1i'm so-\2 BEEN RECEIVED AND- \1CHOVER\1i'm sorry-\2 PROCESSED.",
+                "WARNING- \1CHOVER\1this wa-\2 WARNING: \"GAG\" HAS- \1CHOVER\1wasn't my-\2 NO DEFINIT- \1CHOVER\1choice-\2 DEFINITION. IGNORING...",
+                "EMPLOYEES- \1CHOVER\1i wi-\2 ARE- \1CHOVER\1i wish-\2 RESISTING TERMI- \1CHOVER\1wish i could-\2 TERMNATION, CONTINGENCY- \1CHOVER\1could stop-\2 PROCEDURES ARE- \1CHOVER\1it-\2 IN EFFECT.",
+                "ADDITIONAL DAMAGE- \1CHOVER\1i'm not-\2 TO SUIT- \1CHOVER\1in-\2 DETECTED, CONTIN- \1CHOVER\1in control of-\2 CONTINUITY PLAN- \1CHOVER\1my actions-\2 ACTIVATED.",
+            ],
+        ],
+        AttackEnum.CANNED: [
+            [
+                'EXECUTING PROGRAM: "KICK THE CAN" ROUTINE.',
+                'ACTIVATING TOON-A CAN SEALING PROCESS.',
+                "ORDER TO ATTACK HAS BEEN RECEIVED AND PROCESSED.",
+                'WARNING: "GAG" HAS NO DEFINITION. IGNORING...',
+                "EMPLOYEES ARE RESISTING TERMINATION, CONTINGENCY PROCEDURES ARE IN EFFECT.",
+                'ADDITIONAL DAMAGE TO SUIT DETECTED, CONTINUITY PLAN ACTIVATED.'
+            ],
+            [
+                "EXECUTING- \1CHOVER\1i-\2 PROGRAM: \"KICK- \1CHOVER\1can't-\2 THE CAN\" RO- \1CHOVER\1help it-\2 ROUTINE.",
+                "ACTIVATING- \1CHOVER\1don't-\2 TOON-A- \1CHOVER\1want-\2 CAN SE- \1CHOVER\1to-\2 SEALING PRO- \1CHOVER\1fight you-\2 PROCESS.",
+                "ORDER TO- \1CHOVER\1i'm-\2 TO ATTACK HAS- \1CHOVER\1i'm so-\2 BEEN RECEIVED AND- \1CHOVER\1i'm sorry-\2 PROCESSED.",
+                "WARNING- \1CHOVER\1this wa-\2 WARNING: \"GAG\" HAS- \1CHOVER\1wasn't my-\2 NO DEFINIT- \1CHOVER\1choice-\2 DEFINITION. IGNORING...",
+                "EMPLOYEES- \1CHOVER\1i wi-\2 ARE- \1CHOVER\1i wish-\2 RESISTING TERMI- \1CHOVER\1wish i could-\2 TERMNATION, CONTINGENCY- \1CHOVER\1could stop-\2 PROCEDURES ARE- \1CHOVER\1it-\2 IN EFFECT.",
+                "ADDITIONAL DAMAGE- \1CHOVER\1i'm not-\2 TO SUIT- \1CHOVER\1in-\2 DETECTED, CONTIN- \1CHOVER\1in control of-\2 CONTINUITY PLAN- \1CHOVER\1my actions-\2 ACTIVATED.",
+            ],
+        ],
+    },
+    # endregion
+
+    ### TASKLINE MINIBOSSES ###
+    # region
+    "dlao": {
+        AttackEnum.RE_ORG: [
+            "Ya got some problem with how I reorganized things?!",
+            'Mayhaps a liddle re-organi-zation is in order.',
+            "Yah ain't that bad, ya just need ta be reorganized.",
+            'Do ya like my org-ani-zational skills?',
+            "I jus' thought I'd give things a bit of a new look.",
+            'Yah need to get organized!',
+            "Ya look just a tad bit disorganized.",
+            'Hold on while I reorganize your thoughts.',
+            "I'll just wait for you to get a little organized.",
+            "You don't mind if I just reorganize a bit?"
+        ],
+        AttackEnum.BRAIN_STORM: [
+            'Mah knees a-shakin, must mean rain.',
+            'Hope you packed ya umbrella.',
+            'I would much like ta enlighten you.',
+            "How 'bout just a few rain DROPS?",
+            'Not so sunny now, are ya Toon?',
+            'Betta get ready for a bitta downpour!',
+            "I'm gonna take you by storm.",
+            "Back home, we'd call this one a lightning attack.",
+            'I do love to be a bit of a wet blanket.'
+        ],
+        AttackEnum.EVICTION_NOTICE: [
+            "Seems ta be movin' time.",
+            'Ya best pack your bags, Toon.',
+            'Looks ta be time for some new living arrangements.',
+            "You look a bit behind on ya lease.",
+            "Now this might just be EX-trem-ely unsettlin'.",
+            "Y'all boutta be uprooted.",
+            "I'm gonna send you packing.",
+            "You look a bit outta place.",
+            'Prepare to be re-located.',
+            "Ya look to be in a hostel position."
+        ],
+        AttackEnum.QUAKE: [
+            "Let's get quakin', rattlin', and rollin'.",
+            "I've got a whole lotta quakin' goin' on!",
+            "It seems ya look ta be quakin' in your boots.",
+            "Here it comes, it's the big one!",
+            "This one's off the Richter scale.",
+            "Now the ground 'ill quake!",
+            "Howdy, what's shakin'? You!",
+            'Ever been in an earthquake?',
+            "Ya look to be on shaky ground now!"
+        ],
+        AttackEnum.TREMOR: [
+            'Did ya feel that?',
+            'Not afraid of a little tremor now are ya?',
+            'A tremor is only the beginning.',
+            'You look jittery.',
+            "I do much like ta shake things up a bit!",
+            'Are ya ready to rumble?',
+            "What's the matter? Ya look shaken.",
+            'Tremor with fear!',
+            'Why are ya tremoring with fear?'
+        ],
+        AttackEnum.INK_DRAIN: [
+            "Ya plans are goin' down the drain!",
+            'Ya look a liddle drained, Toon.',
+            "Ya don't have an inkling of a chance!",
+            "Ya hopes are diluted, Toon.",
+        ],
+    },
+    "dopr": {
+        AttackEnum.SCHMOOZE: [
+            "You'll never- never see thi-i-i-is coming.",
+            'This will look good- good- good on you.',
+            "You've earned- earned this- this.",
+            "I don't- I don't mean to-o-o-o gush.",
+            'Flattery wi-i-i-ill get me every- everywhere.',
+            "I'm go-o-oing to pile it on now- it on now.",
+            'Time to- to- la-a-ay it- it on thick.',
+            "I'm- I'm going to get on your good- good side.",
+            'That deserves a-a-a-a good slap on the back- back.',
+            "I'm going to ring- ring- ring yo-o-our praises.",
+            'I ha-a-ate to knock yo-o-ou off your pedestal, but...'
+        ],
+        AttackEnum.BRAIN_STORM: [
+            'I forecast- forecast- forecast rain.',
+            'Hope yo-o-o-ou packed your umbrella- umbrella.',
+            'I want to- want to-o-o enlighten you.',
+            'How about- about a few rain DROPS- DROPS?',
+            'Not so-o-o-o sunny now, are you- are you Toon?',
+            'Ready for- ready for a do-o-own pour?',
+            "I'm going- going to take you by- by storm.",
+            'I call- I call this a lightning-ning attack.',
+            'I love to be- to be a wet bla-a-a-anket.'
+        ],
+        AttackEnum.GUILT_TRIP: [
+            "I'll lay- I'll lay a real guilt trip o-o-on you!",
+            'Feeling guilty- feeling guilty, feeling guilty?',
+            "It's a-a-a-all your fault- your fault!",
+            'I always blame- blame everything on yo-o-ou.',
+            'Wallow i-i-in your own- own guilt!',
+            "I'm never- never speaking to yo-o-ou again!",
+            "You had better say- say you're- you're sorry.",
+            "I-I-I wouldn't forgive- forgive you in a million years!",
+            'Are you ready fo-o-o-or your trip- trip?',
+            'Call me- call me when you get back from your- your trip.',
+            'When do you get back from your trip?'
+        ],
+        AttackEnum.SYNERGY: [
+            "I'm ta-a-a-aking this to committee- committee.",
+            "Yo-o-o-our project's been- been canceled.",
+            "Your budget's been cut.",
+            "We-e-e-e're restructuring your- your division.",
+            'I-I-I put it to a vote- vote, and yo-o-ou lose.',
+            'I just- I just received the-e-e final approval.',
+            'A good- good team can get rid of- of any problem.',
+            "I'll get- I'll get back to you o-o-o-on this.",
+            "Let's get right to business.",
+            'Consider this a Synergy crisis.'
+        ],
+        AttackEnum.GLOWER_POWER: [
+            'You looking- looking at me- at me?',
+            "I'm told- told I-I-I have very piercing eyes.",
+            'I like- like to stay- stay on the cutting edge.',
+            "Jeepers- Jeepers, don't you love my- my peepers?",
+            "Here's looking a-a-at you kid- you kid.",
+            "How's this- this for expressive eyes- eyes?",
+            'My- my eyes are my strongest- strongest feature.',
+            'The eyes- the eyes- the eyes ha-a-ave it.',
+            'Peeka-peeka-boo, I see- I see yo-o-ou.',
+            'Look into my- into my eyes...',
+            'Shall we-e-e take a peek- peek at your future?'
+        ],
+    },
+    "dold": {
+        AttackEnum.RE_ORG: [
+            "We can't have ya walkin the ranch all helter-skelter!",
+            "I reckon a swig a' re-org-ani-zashyun to be at order.",
+            "Y'all look ta be caught all Higgledy-Piggledy.",
+            'Mind me ta change ya a bit, hither and yon?',
+            "Reckoned I might give this a fire-new look.",
+            'Ya best get put together!',
+            "Ya lookin a tad mite wamble-cropped.",
+            'Pull in ya horns while I re-org-an-ize ya thoughts.',
+            "Ya look crook-ed enough ta swallow nails and spit out corkscrews.",
+            "Mind a peck if I ra-organ-ize ya?"
+        ],
+        AttackEnum.RED_TAPE: [
+            "This oughtta tie the barb on that!",
+            "Gonna need more than a boot ta step over this tape!",
+            "Roll out the thunder boys!",
+            "Ya can't get outta this one, not by a jugful.",
+            "Next time yer gonna get the fence!",
+            "Stick to your gags, yer gonna need 'em.",
+            "Sorry pardner, I don't much think ya can unravel this con-on-drum."
+            "Now, I say, that looks a bad paste!",
+            "Now this is taped fine as a cream gravy!",
+            "Stuck to the saddle, pardner?"
+        ],
+        AttackEnum.EVICTION_NOTICE: [
+            "It looks ta be movin' time.",
+            'Ya best hits the flat, pardner.',
+            'Find the linerider, pardner.',
+            'Off my land, pardner.',
+            "Outta my dice house, pardner.",
+            'Back on the trail, pardner.',
+            "Y'all lookin' ta be uprooted?",
+            "Dontcha start coolin' ya heels.",
+            "Yer a long way from home pardner.",
+            "Best start beatin' the road.",
+            "Cut a path, pardner."
+        ],
+        AttackEnum.QUAKE: [
+            "Pardner, I'm gonna shake that smile right off yer dagnabbed face!",
+            "Whole town is shakin' and quakin'!",
+            "I do believe I see you quakin' n' yer boots.",
+            "WOAH'OH! The land looks to be goin full chisel!",
+            "Feet o' rollin' thunder!",
+            "The earth is lookin' ta quake!",
+            "Don't shake the beans!",
+            "Watch for th' afterclaps!",
+            "Hear the tin a-shakin'!"
+        ],
+        AttackEnum.AFTERSHOCK: [
+            'Yippee-ki-yah-yippee-ki-yo!',
+            "Hope this ain't too shockin' for ya!",
+            'Best plant yerself on that ground you stand on.',
+            'Looks like the lands on fits and starts!',
+            "Shake a can, pardner.",
+            "See a ghost? ya look shakin' up.",
+            "What's wrong? You look worse than a cat n' a room full a' rockers.",
+            "Don't even try, I see yer hand a' shakin'.",
+            'Shake a spur.'
+        ],
+        AttackEnum.INK_DRAIN_DIRECTORS: [
+            'Ink says yer wanted.',
+            'Yer farm looks drained!',
+            'Sorry ta siphon yer hopes!',
+            'Ya look much too drained ta be on the saddle.'
+        ],
+    },
+    # endregion
+
+    # region Event bosses
+    "ftf_l": {
+        AttackEnum.CASTLING: ["I'm taking this opportunity to sequester my client."],
+    },
+    "ftf_m_cf": {
+        AttackEnum.PARADIGM_SHIFT: [
+            "I'm rather shifty... I think.",
+            "I think this is an interesting paradigm.",
+            "This will shift you out of place, maybe.",
+            "I could've sworn it was your shift now.",
+            "I don't think you've ever shifted this much in your life.",
+        ],
+        AttackEnum.QUAKE: [
+            "I've got a whole lot of quaking going on... I think?",
+            "I think you're quaking in your shoes.",
+            "This might be off the Richter scale.",
+            "Hey, what's shaking? You...? And me? And the earth?",
+            "You're maybe on shaky ground now.",
+        ],
+        AttackEnum.EVICTION_NOTICE: [
+            "It may be moving time.",
+            "I think you should pack your bags, Toon.",
+            "Prepare to be confused about your location.",
+            "Consider yourself swerved... err, served?",
+            "I'm out of place... I mean, you're out of place.",
+        ],
+        AttackEnum.SPIN: [
+            "You're spinning around, just like my head is.",
+            "I think you should use the spin cycle.",
+            "This'll really make my head spin... err, I mean, YOUR head spin.",
+            "I'll take you for a rather confusing spin.",
+            "It seems like you're in a spin.",
+        ],
+        AttackEnum.RED_TAPE: [
+            "This should wrap things up... I think.",
+            "Please don't confuse me with that Foreman over there.",
+            "I'm going to tie you up, hopefully for a while.",
+            "I'm on a roll... wait, you are too!!",
+        ],
+        AttackEnum.CONTENT_SYNC: [
+            "Want to see a magic trick?",
+            "I don't think you're really paying attention.",
+            "This is the actual correct order... I think.",
+            "Wait, isn't this the name of a core mechanic rather than an ability?",
+        ],
+        AttackEnum.OBJECTION: ["Objection! The plaintiffs can use combo damage, but I don't think I can."],
+        AttackEnum.OBJECTION_SUSTAINED: ["I guess I have a counter argument."],
+        AttackEnum.OBJECTION_OVERRULED: ["Oh, I guess I was just confused."],
+        AttackEnum.HURRY_SICKNESS: ["I think you got that one wrong, unfortunately."],
+        AttackEnum.LIFE_INSURANCE: ["While I still have insured, I am assets."],
+    },
+    "hrollerc": {
+        AttackEnum.POWER_TRIP: [
+            "Pack your bagff, we're taking a little trip.",
+            "Did you have a niffe trip?",
+            "Niffe trip, I gueffff I'll ffee you next fall.",
+            "How waff your trip?",
+            "Fforry to trip you up there!",
+            "You look a little tripped up.",
+            "Now you ffee who'ff in power!",
+            "I am much more powerful than you.",
+            "Who'ff got the power now?",
+            "You can't fight the power.",
+            "Power corruptff, effpecially in my handff!",
+        ],
+    },
+    # endregion
+}
+
+DuckShufflerRollStart = [
+    "What'th it gonna be fellath?? What'th it gonna BE?",
+    "I'VE got the houthe edge!",
+    "Thpin, thpin, thpin, thpin, thpin...",
+    "Woohoo!! Thith part'th my FAVORITE!!",
+    "Don't you jutht love the THRILL of it?!",
+]
+
+SuitAttackBonusPhrases = {
+    # Overclocked Foreman
+    'workers_compensation': {
+        # punish sound users
+        1: 'WORKER\'S COMPENSATION!\n\1battle_subtext\1THE FOREMAN WILL GET STRONGER WITH EVERY FAILURE OF BASIC ALGEBRA!\2',
+
+        # compensation hijinks
+        2: 'WORKER\'S COMPENSATION!\n\1battle_subtext\1THE FOREMAN\'S COMPENSATION COMPENSATIONS COMPENSATING COMPENSATIONS!\2',
+
+        # marked for laff
+        3: 'WORKER\'S COMPENSATION!\n\1battle_subtext\1THE FOREMAN WILL GET STRONGER WITH EVERY APPLICATION OF MARKED FOR LAUGH!\2',
+
+        # sacrifice
+        4: 'WORKER\'S COMPENSATION!\n\1battle_subtext\1THE FOREMAN WILL GET STRONGER WITH EVERY SACRIFICE!\2',
+
+        # multislacker foreman
+        9: ('WORKER\'S COMPENSATION!', 'THE FOREMAN WILL GET STRONGER WITH EACH COG DEFEATED!'),
+
+        # multislacker union bust
+        10: ('WORKER\'S COMPENSATION!', 'THE FOREMAN WILL GET STRONGER WITH EACH UNION BUSTED!\2'),
+
+        # FTF foreman general compensation
+        11: ('WORKER\'S COMPENSATION!', 'THE FOREMAN WILL GET STRONGER WITH EACH COG DEFEATED!'),
+    },
+    'sacrifice_alts': {
+        # from overclocked foreman
+        1: 'SACRIFICE!\n\1battle_subtext\1THE FOREMAN SACRIFICES OTHER FOREMEN TO BECOME STRONGER!\2'
+    },
+    'castling': {
+        # overclocked find the family
+        'ftf_l': ('REMAND!', 'THE ATTORNEY CHANGES HIS POSITION!'),
+    },
+    'bellow': {
+        'ftf_c': ('BAYOU BELLOW!', 'THE CLUB PRESIDENT REMOVES ALL NEGATIVE EFFECTS FROM ALL COGS!'),
+    },
+    'rushjob': {
+        'ftf_l': ('RUSH JOB!', 'THE HEAD ATTORNEY NEEDS YOU TO USE THE\n%s ON %s!'),
+    },
+    'hurry_sickness': {
+        'ftf_s': ('HURRY SICKNESS!', 'THE FACTORY FOREMAN PUNISHES YOU FOR NOT FOLLOWING THE INSTRUCTIONS!'),
+        'ftf_m': ('HURRY SICKNESS!', 'THE MINT SUPERVISOR PUNISHES YOU FOR NOT FOLLOWING THE INSTRUCTIONS!'),
+        'ftf_l': ('HURRY SICKNESS!', 'THE HEAD ATTORNEY PUNISHES YOU FOR NOT FOLLOWING THE INSTRUCTIONS!'),
+        'ftf_c': ('HURRY SICKNESS!', 'THE CLUB PRESIDENT PUNISHES YOU FOR NOT FOLLOWING THE INSTRUCTIONS!'),
+        'ftf_s_rt': ('HURRY SICKNESS!', 'THE FACTORY FOREMAN PUNISHES YOU FOR NOT FOLLOWING THE INSTRUCTIONS!'),
+        'ftf_s_br': ('HURRY SICKNESS!', 'THE FACTORY FOREMAN PUNISHES YOU FOR NOT FOLLOWING THE INSTRUCTIONS!'),
+        'ftf_m_cf': ('HURRY SICKNESS!', 'THE MINT SUPERVISOR PUNISHES YOU FOR NOT FOLLOWING THE INSTRUCTIONS!'),
+        'ftf_c_ac': ('HURRY SICKNESS!', 'THE CLUB PRESIDENT PUNISHES YOU FOR NOT FOLLOWING THE INSTRUCTIONS!'),
+    },
+    'corporate_restructuring': {
+        'ftf_m_cf': ('CORPORATE RESTRUCTURING!', 'THE MINT SUPERVISOR RANDOMIZES THE COG ORDER!'),
+    },
+    'content_sync': {
+        'ftf_m_cf': ('CONTENT SYNC!', 'THE MINT SUPERVISOR RANDOMIZES THE GAG ORDER!'),
+    },
+    'objection': {
+        'ftf_m_cf': ('OBJECTION!', 'THE MINT SUPERVISOR IS OBJECTING TO YOUR COMBO DAMAGE!'),
+    },
+}
+SuitAttackBonusTaunts = {
+    # Overclocked Foreman
+    'workers_compensation': {
+        # punish sound users
+        1: ["Do you have any idea how much health I have left?"],
+
+        # compensation hijinks
+        2: ["Compensation compensation compensation compensation compensation?"],
+
+        # marked for laff
+        3: ["Do you have any idea how overpowered that is?"],
+
+        # sacrifice
+        4: ["Do you have any idea how much paperwork I will have to file after this?"],
+
+        # Multislacker foreman
+        9: ["Do you have any idea how much paperwork I will have to file after this?"],
+
+        # Multislacker union bust
+        10: ["Do you have any idea how much paperwork I will have to file after this?"],
+
+        # FTF foreman
+        11: ["Do you have any idea how much paperwork I will have to file after this?"],
+    }
+}
+CountErclaimCogSacrificeResponses = ["To my realm I retuuuurnnnnn......!",
+                                     "But I am not finished!",
+                                     "No! Noooooo!",
+                                     "Anything you wish, sire!"]
+CountErfitCogSacrificeResponses = ["For the gaaaaiiiinnnnnns......!",
+                                   "But my routine is not finished!",
+                                   "No! Noooooo!",
+                                   "Anything you wish, sire!"]
+BarnburnerResponses = []
+FirestarterBarnburnerResponses = [
+    "Didn't expect that.",
+    "...Oops.",
+    "HOT, HOT, HOT!",
+    "Hm! Ironic.",
+]
+
+MultislackerResponsesGreat = [
+    "That'll do.",
+    "Delicious.",
+    "Nutritious.",
+    "Delectable.",
+    "Exquisite.",
+    "Scrumptious.",
+    "Succulent.",
+    "Delightful.",
+    "Digestible.",
+    "Palatable.",
+    "Tolerable.",
+    "Sensational.",
+    "Full of bread.",
+    "Okay.",
+    "Where did it go?",
+    "Ouch.",
+    "A little too heavy on the gasoline.",
+]
+MultislackerResponseBruh = "Horrible. I want more."
+
+GhostPayrollResponses = {
+    "charon": "Guess we gotta make use of this raise somehow!",
+    "nix": "We ain't forgettin' ya, gotta use this while it lasts!",
+    "kerberos": "Every little bit counts in tha end!",
+    "hydra": "Money can't provide happiness above the family, but it'll do for now!",
+    "styx": "I'm sure tha raise will be put ta good use!",
+}
+
+SuitAttackDmgMult = 'DMG MULT x%s'
+SuitAttackDmgAdditive = 'DMG BOOST +%s'
+
+for investor in SatelliteInvestors:
+    SuitFaceoffTaunts[investor] = (
+        "We'll launch ya out of town.",
+        "Stick around and we'll put ya on ice, Toon."
+    )
+SuitGameoverTaunts = {
+    'TAUNT_GENERAL': (
+        "You can have your cake, and eat it too.",
+        "That's how the cookie crumbles, Toon.",
+        "Hmph. Moving on.",
+        "Back to the playground with you."),
+    'TAUNT_STREET': (
+        "Should have looked both ways before crossing me, Toon.",
+        "Next time you should stay out of my way.",
+        "You should have known, it's dangerous to play in the street.",
+        "Looks like you should have stayed on the sidewalk, Toon."),
+    'TAUNT_SOLO': (
+        "Bit off more than you can chew?",
+        "Don't stray too far from the pack next time.",
+        "Have you heard there is no 'I' in team?",
+        "I'm not sure what you were expecting."),
+    'TAUNT_GROUP': (
+        "Toons that stay together, green together.",
+        "You'll need better synergy than that to beat us.",
+        "Seems you had many weak links."),
+    'TAUNT_FACILITY': (
+        "Back to work.",
+        "This should teach you to keep your nose out of our business.",
+        "Time to get myself some well-earned coffee.",
+        "Now that I've taken out the trash..."),
+    'TAUNT_BOSS': (
+        "I'm getting promoted for this one.",
+        "The boss will be proud of me.",
+        "Now we're cooking with gas."),
+    'TAUNT_WEAK': (
+        "That is one way to get promoted quickly.",
+        "Oh, I didn't expect that.",
+        "Not bad for my first day.",
+        "I can't wait to tell this story at the water cooler.",
+        "I'm no rug ranker anymore."),
+    'TAUNT_RUN': (
+        "Well, that makes my job easier.",
+        "That's right, you better run.",
+        "Easy."
+    ),
+    'TAUNT_SURRENDER': (
+        "It's such a shame to see you back out of this deal.",
+        "Chickening out? How befitting of a Toon.",
+        "If you've truly learned your lesson, you won't come back.",
+        "Hmph. The Toon Resistance never fails to disappoint.",
+    ),
+}
+SuitGameoverTauntIds = {
+    # litigation team
+    'lgator': (
+        "You call yourself a member of the Resistance? Pathetic.",
+        "I've survived the brutality of the Outback. You are nothing.",
+        "The real joke here is your failure.",
+        "What's wrong? Don't like it when I fire back?"),
+    'stenog': (
+        "It's best that you stay at the playground... For good.",
+        "Next time, be less predictable.",
+        "Never underestimate my calculations.",
+        "Should I even bother documenting this display?",
+        "You think I can't read what you say?"),
+    'caseman': (
+        "Case closed.",
+        "Hmph. Manage with your loss.",
+        "Good that our time was brief.",
+        "If you can't bare the loss, don't consider coming back."),
+    'sgoat': (
+        "Mess with the goat, you get the horns!",
+        "Get out of here, your aura mocks me!",
+        "For the last time! I! Am! Not! A kid!",
+        "Tell that Resistance that Kilo Kidd sent ya cryin' home!"),
+    # the three dopa minibosses
+    'dopa': (
+        "Tune in next time!",
+        "Sounds like your broadcast is ending; all I'm hearing is dead air.",
+        "Goodnight, Toon. Goodnight.",
+        "Now that's what I call good radio!",
+    ),
+    'dold': (
+        "Slither on back to that there playground why don'tcha!?",
+        "Y'all cloudcookoolander's ain't gonna tie up much roundabout these parts.",
+        "Yah happen to be a long lo-o-o-ohng ways from the Playground. "\
+            "Y'all oughtta enjoy ya land while it's still happens ta be yours. ",
+        "Y'all come on back now! There's a whole lot more where that came from!",
+    ),
+    'derrhand': (
+        "That was a spinning success.",
+        "You seem to be getting a bit dizzy.",
+        "I hope this has drilled your unwanted presence in your head.",
+        "I gotta hand it to you, you weren't so hard to defeat after all.",
+    ),
+    # halloween
+    'count': (
+        "What is a Toon? A miserable pile of laughter.",
+        "Begone!",
+        "Wished you were a Stakeholder, hm? Hah!",
+        "This vampire is not famous for forgiveness."),
+    # april toons
+    'erfit': (
+        "I recommend working out more before our next encounter.",
+        "Pro tip: Stay hydrated.",
+        "Didn't even break a sweat."),
+    # early taskline minibosses
+    # PRR
+    'dopr': (
+        "GET- GET- GET OUT! A-A-A-AND NEVER- NEVER COME BACK!",
+        "We could ha-a-ave had such a nice- a nice chat with my bosses!",
+        "They were right- right!  Yo-o-ou are a- are a lousy pushover!",
+        "DON'T- DON'T- DON'T LEAVE- LEAVE- LEAVE ME HERE!",
+    ),
+    # LAA
+    'dlao': (
+        "Send the Toon Council my regards!",
+        "You broke before even the ground did! Pathetic!",
+        "Why don't you acquire some Laff?!",
+        "You look almost as flattened as the ground!",
+    ),
+    'derrman': (
+        "Perhaps that will drill in the point!",
+        "Tell the Council that this is their warning.",
+        "This charade is boar-ing me!",
+        "I'd say that encounter went well.",
+    ),
+    # facility minibosses
+    'foreman': (
+        "You can't stop production.",
+        "To get so far and fail.",
+        "Mr. Bravecog wouldn't appreciate your interruptions.",
+        "Sneaking around like that dog, were you? Nice try."),
+    'msfore': (
+        "You can't stop production.",
+        "To get so far and fail.",
+        "Mr. Bravecog wouldn't appreciate your interruptions.",
+        "Sneaking around like that dog, were you? Nice try."),
+    'supervis': (
+        "Insurance can save a Suit.",
+        "Money means power, Toon, and I watch it all.",
+        "You can't break into this vault.",
+        "Mr. Dolair won't appreciate you stealing anything valuable."),
+    'clerk': (
+        "Looks like you couldn't handle the truth.",
+        "That's another charge against you.",
+        "Nix wins another case.",
+        "It doesn't take a detective to gather the evidence that you are weak."),
+    'clubpres': (
+        "Should've targeted me first.",
+        'Next time, ask your friends "fore" help.',
+        'Your version of "golf" disgusts me.',
+        "You can't win them all, Toon."),
+    # street mercs
+    'duckshfl': (
+        "AHAHA! Better luck nexth time!!",
+        "Thould'a played your cardth better!",
+        "Couldn't put your money where your mouth ith, eh?",
+        "The houthe ALWAYTH winth!",
+    ),
+    'ddiver': (
+        "You can't handle the pressure!",
+        "Well, that performance was subpar.",
+        "Fighting me was a sunk cost, Toon!",
+        "Your skills are abyssmal.",
+    ),
+    'gatekeep': (
+        "Now thee knoweth to keepeth thine distance, Toon.",
+        "See? Thou art not strong enough to beest here.",
+        "Keep thine nose out of mine business.",
+        "Thou art either in or out of business, Toon. I sayeth thou art OUT.",
+    ),
+    'bellring': (
+        'Give a ring if you\'d like to try again.',
+        'Bell, this has been fun, Toon.',
+        '"Defeated Toon" sure has a nice ring to it.',
+        'Consider your bell rung, Toon.',
+    ),
+    'mouthp': (
+        "That's what you get for not calling more.",
+        "Maybe that'll teach you to respect your elders ehh?",
+        "Disrespectful kids like you get sent back to the playground.",
+        "I'd love to chat some more, but you simply must go.",
+    ),
+    'fires': (
+        "Couldn't take the heat?",
+        "Oh. I guess your plan... backfired.",
+        "That really went up in smoke...",
+        "Burnt out so soon?",
+    ),
+    'treek': (
+        "Looks like someone's wilted! Aghghah!",
+        "Timbah!",
+        "Stumped on how to beat me? Hehah!",
+        "Yah Toons ain't all yergh cut out to be, huh?! heghegh!",
+    ),
+    'fbed': (
+        "Good night, Toon.",
+        "You snooze, you lose.",
+        "I won't lose sleep over this.",
+        "Perhaps you should get some rest, you don't look so good.",
+    ),
+    # instance mercs
+    'prethink': (
+        "Come back when you have a higher IQ.",
+        "Maybe next time you'll think twice before challenging me.",
+        "You really thought you could beat me?",
+        "See? Should've planned ahead.",
+    ),
+    'rainmake': (
+        "I'll bring an umbrella for you next time.",
+        "I feel the same way as you do sometimes.",
+        "Why can't you be more like that bull who smells flowers?",
+        "Sorry to rain on your parade...",
+    ),
+    'whunter': (
+        "I expect to see no more of your jiggery-pokery!",
+        "Do not show your countenance here again!",
+        "Take your fiddle-faddle off my floor!",
+        "I will magnify these events to my own kind.",
+    ),
+    'mslacker': (
+        "Maybe you'll think twice next time about interrupting me.",
+        "At least you don't have to go down that flight of stairs.",
+        "It's best that you not, uh... I forgot how that was supposed to end.",
+    ),
+    'mplayer': (
+        "Looks like someone can't catch the rhythm.",
+        "Caught the blues, baby?",
+        "Any good album has a few out-takes.",
+        "Ring-a-ding this!",
+    ),
+    'pcrat': (
+        "Ya can dish it out but ya can't take it no more!",
+        "Perhaps that's \"persuasion\" enough for ya!",
+        "And to think that I almost let ya join up with me!",
+        "Time for ya to sleep with the fishes!",
+    ),
+    'chainsaw': (
+        "HOSTILE HAS BEEN DEFEATED.",
+        "SUBJECT'S REQUEST FOR MERCY DENIED.",
+        "EMPLOYEE TERMINATED, SEVERANCE PACKAGE NOT OFFERED.",
+        "OFFBOARDING SUCCESSFUL, RESUMING PREVIOUS INITIATIVE.",
+    ),
+    'psetter': (
+        "That was a SERIOUS waste of my time.",
+        "Could you move any slower?!",
+        "Did anyone else see me do that? That was great.",
+        "I can't wait to tell Flint about how fast I burned you out.",
+        {'uber': ["I have no RE-SPEC for you."]},  # Possible lines if he kills an uber
+    ),
+}
+for investor in SatelliteInvestors:
+    SuitGameoverTauntIds[investor] = (
+        "Get outta our orbit, Toon.",
+        "Forget about it.",
+        "Enjoy a one-way ride to the stars, Toon.",
+        "Revenge is a dish best served cold."  # If someone wants, make this only apply if other investors are dead
+    )
+
+SuitSurrenderTauntIds = {
+    # Taskline Managers
+    'derrman': ("And don't fall asleep in front of me next time!",),
+    'dlao': ("Next time y'all critters come by, why don't y'all bring that floppy-eared hound dog with ya?",),
+    'dopr': ("N-NO! You c-can't leave me! P-PLEASE DON'T L-E-AVE ME-E!!!",),
+    'derrhand': ("Clearly this meeting was too refined for you to begin with.",),
+    'dold': ("And don't show yer face again, yah varmints! Doggone pests, the lot of yah...",),
+    'dopa': ("It appears our show's runtime has been cut short! I suppose we can move on to the weather.",),
+
+    # Litigation team
+    'lgator': ("Hmph. You really aren't all Ms. Morsecode made you out to be.",),
+    'stenog': ("If you've finally decided to leave, I think I'll go and process all this new data.",),
+    'caseman': ("We still have unfinished business.",),
+    'sgoat': ("Yeah! Go on! Get!! And stay out!!!",),
+
+    # Dept bosses
+    'vp': ("Wow! You Toons didn't even make me bring out my hard sell!",),
+    'cfo': ("And here's an overdraft fee for you now. Start paying it off.",),
+    'clo': ("I see you've finally come to your senses. In that case, meeting adjourned!",),
+    'ceo': ("About time. Now, where the blazes are my REAL waiters?",),
+
+    # Instance Kudos managers
+    'prethink': ("Running away? So you Toons DO have brains, size withstanding...",),
+    'rainmake': ("If you're going to hurt me again, don't come back... Please...",),
+    'whunter': ("This bombard concludes incontrovertibly in my superiority. Now leave me to conspire!",),
+    'mslacker': ("Well, back to my shows. If you see my TV remote on your way out, could you toss it over here?",),
+    'mplayer': ("For a silly, swingin' Toon, I thought'cha would be more in tune, my animated amigo!",),
+    'pcrat': ("See, an' here I was thinkin' you'd be a perfect part of my crew. But now yer runnin' with yer tail between yer legs!!",),
+    'chainsaw': ("SUBJECT HAS CEASED RESISTANCE. CONCLUDING TERMINATION SEQUENCE.",),
+    'psetter': ("Honestly, that's the best choice you could've made.",),
+}
+
+SuitBrushOffs = {
+    'f': ["I'm late for a meeting."],
+    'p': ['Push off.'],
+    'ym': ['Yesman says NO.'],
+    'hh': ["I'm busy hunting for other Toons."],
+    'bf': ["I'm not in the mood for garbage right now."],
+    'bs': ["Back off, Toon."],
+    'pf': ["I'm not even petty enough to fight you.",
+           'Contact me some other time, Toon.'],
+    'dt': ['Talk to the head.'],
+    'nn': ["I've got a haystack to find.",
+           'I have no need-le to fight you.'],
+    'ac': ["Sorry, I'm on the run."],
+    'cv': ["Keep it moving.",
+           "You should tread away from me."],
+    'ad': ["I've got to cat-nip something in the bud.",
+           "If it's a fight you want, you'll have to purr-suade me further."],
+    'sd': ["Make an appointment, I'm busy."],
+    'sh': ["You wouldn't want me to open up.",
+           "You should shy away from me."],
+    'le': ["I'm not winging it in an encounter."],
+    'br': ["Sorry, I've been barred from encounters."],
+    'bw': ["If I'm late, there will be a price toupee."],
+    'sc': ["My time is too short for you."],
+    'pp': ["You're not even worth a pinch of my time."],
+    'tw': ["I'm on a tight schedule."],
+    'cc': ["I'm giving you the cold shoulder."],
+    'tf': ["I'll pretend I don't see you, Toon."],
+    'mh': ["Sorry, I'm on commercial break."],
+    'bgh': [
+        "I'll sell once the time's right, Toon.",
+        "I'm not lookin' to drop my stocks right now.",
+    ],
+    'pph': [
+        "You're walking a fine line, Toon.",
+        "This doesn't look good on paper.",
+    ],
+    'ins': [
+        "Can't talk; there's important things I have to do right now!",
+        'Save the talk when you have more intel.',
+    ],
+    'cbr': [
+        'Shocking offer, but no.',
+        "I'm on my break, go away.",
+    ],
+    'dl': [
+        "I'm all locked up for the day! Scram!",
+        "Can't fight today, Toon! My schedule is already locked in!",
+    ],
+    'shw': [
+        "I've got much bigger fish to fry, Toon.",
+        "Your barking is merely a facade, devoid of any substantial bite.",
+    ],
+    'mg': [
+        "I don't have time for your fowl games.",
+        "Don't egg me on, Toon.",
+    ],
+    'hho': [
+        "I won't lose my head over you, Toon.",
+        "Not now, I need to head over to a meeting.",
+    ],
+    None: ["It's my day off.",
+           "I believe you're in the wrong office.",
+           'Have your people call my people.',
+           "You're in no position to meet with me.",
+           'Talk to my assistant.',
+           "There's a restraining order coming your way."]
+}
+
+SpeedChatStaticTextCommon = {
+    1: "Yes.",
+    2: "No.",
+    3: "OK.",
+    4: 'SPEEDCHAT PLUS',
+    5: 'Maybe.',
+    6: 'Help!'
+}
+SpeedChatStaticText = {
+    100: 'Hi!',
+    101: 'Hello!',
+    102: 'Hi there!',
+    103: 'Hey!',
+    104: 'Howdy!',
+    105: 'Hi everybody!',
+    106: 'Yo!',
+    107: 'Welcome to Corporate Clash!',
+    108: "What's up?",
+    109: 'How are you doing?',
+    110: 'Hello?',
+    200: 'Bye!',
+    201: 'Later!',
+    202: 'See ya!',
+    203: 'Have a nice day!',
+    204: 'Have fun!',
+    205: 'Good luck!',
+    206: "I'll be right back.",
+    207: 'I need to go.',
+    208: "I'll be back later!",
+    209: 'I only have a few minutes.',
+    300: ':-)',
+    301: 'Yay!',
+    302: 'Hooray!',
+    303: 'Cool!',
+    304: 'Woo hoo!',
+    305: 'Yeah!',
+    306: 'Ha ha!',
+    307: 'Hee hee!',
+    308: 'Wow!',
+    309: 'Great!',
+    310: 'Whee!',
+    311: 'Oh boy!',
+    312: 'Whoopee!',
+    313: 'Yippee!',
+    314: 'Yeehaw!',
+    315: 'Toontastic!',
+    316: 'LOL!',
+    317: 'LMHO!',
+    318: "Cool beans!",
+    319: "Epic!",
+    320: 'Awesome!',
+    350: 'Can you help me?',
+    351: 'Do you need help?',
+    352: 'Do you have everything you need?',
+    353: 'Do you know what to do?',
+    354: 'Are you sure about that?',
+    355: 'Where are you?',
+    356: 'Can you teleport to me?',
+    357: 'Are you there?',
+    400: ':-(',
+    401: 'Oh no!',
+    402: 'Uh oh!',
+    403: 'Rats!',
+    404: 'Drat!',
+    405: 'Ouch!',
+    406: 'Oof!',
+    407: 'No!!!',
+    408: 'Yikes!',
+    409: 'Huh?',
+    410: 'I need more Laff points.',
+    411: 'Sad!',
+    450: ":)",
+    451: ":(",
+    452: ":D",
+    453: "D:",
+    454: ">:)",
+    455: ">:(",
+    456: ":O",
+    457: ":^)",
+    458: ":3",
+    459: ">:3",
+    460: "c:",
+    461: ":/",
+    462: "._.",
+    500: 'Thanks!',
+    501: 'No problem.',
+    502: "You're welcome!",
+    503: 'Any time!',
+    504: 'No thank you.',
+    505: 'Good teamwork!',
+    506: 'That was fun!',
+    507: 'Please be my friend!',
+    508: "Let's work together!",
+    509: 'You guys are great!',
+    510: 'Are you new here?',
+    511: 'Did you win?',
+    512: 'I think this is too risky for you.',
+    513: 'Would you like some help?',
+    514: 'Can you help me?',
+    516: "I'm sleepy.",
+    515: 'Have you been here before?',
+    550: 'My pronouns are he/him.',
+    551: 'My pronouns are she/her.',
+    552: 'My pronouns are he/they.',
+    553: 'My pronouns are she/they.',
+    554: 'My pronouns are they/them.',
+    555: 'I use any pronouns.',
+    556: 'What are your pronouns?',
+    557: 'I prefer not to say my pronouns.',
+    558: 'My pronouns are it/its.',
+    600: 'You look nice.',
+    601: 'You are awesome!',
+    602: 'You rock!',
+    603: 'You are a genius!',
+    650: "I think I found a bug.",
+    651: "Sorry, I crashed.",
+    700: 'I like your name.',
+    701: 'I like your look.',
+    702: 'I like your shirt.',
+    703: 'I like your skirt.',
+    704: 'I like your shorts.',
+    705: 'I like your accessories.',
+    706: 'I like this game!',
+    800: 'Sorry!',
+    801: 'Oops!',
+    802: "Sorry, I'm busy fighting Cogs!",
+    803: "Sorry, I'm busy getting jellybeans!",
+    804: "Sorry, I'm busy completing a ToonTask!",
+    805: 'Sorry, I had to leave unexpectedly.',
+    806: 'Sorry, I was delayed.',
+    807: "Sorry, I can't.",
+    808: "I couldn't wait any longer.",
+    809: "I can't understand you.",
+    810: 'Use the %s.' % GlobalSpeedChatName,
+    811: "Sorry, I'm busy fishing!",
+    812: "Sorry, I'm in a building!",
+    813: "Sorry, I'm helping a friend!",
+    814: "Sorry, I'm busy kart racing!",
+    815: "Sorry, I'm busy gardening!",
+    816: "I can't get on the elevator now.",
+    817: "Sorry, I have to go somewhere else.",
+    818: "Sorry, I'm busy golfing!",
+    819: 'Sorry, my Friends List is full.',
+    820: "Sorry, I can't use SpeedChat Plus.",
+    900: 'Hey!',
+    901: 'Please go away!',
+    902: 'Stop that!',
+    903: "That wasn't nice!",
+    904: "Don't be mean!",
+    905: 'You stink!',
+    906: 'Send a bug report.',
+    907: "I'm stuck.",
+    908: "That's not very toony!",
+    909: "No, you!",
+    910: "You fool!",
+    1000: "Let's go!",
+    1001: 'Can you teleport to me?',
+    1002: 'Shall we go?',
+    1003: 'Where should we go?',
+    1004: 'Which way?',
+    1005: 'This way.',
+    1006: 'Follow me.',
+    1007: 'Wait for me!',
+    1008: "Let's wait for my friend.",
+    1009: "Let's find other Toons.",
+    1010: 'Wait here.',
+    1011: 'Wait a minute.',
+    1012: 'Meet here.',
+    1013: 'Can you come to my house?',
+    1014: "Don't wait for me.",
+    1015: 'Wait!',
+    1016: 'Come check out my garden.',
+    1017: "Let's catch the next one.",
+    1100: "Let's go on the trolley!",
+    1101: "Let's go back to the playground!",
+    1102: "Let's go fight the %s!" % Cogs,
+    1103: "Let's go take over a %s building!" % Cog,
+    1104: "Let's go in the elevator!",
+    1105: "Let's go to %s!" % lToontownCentral,
+    1106: "Let's go to %s!" % lDonaldsDock,
+    1107: "Let's go to %s!" % lMinniesMelodyland,
+    1108: "Let's go to %s!" % lDaisyGardens,
+    1109: "Let's go to %s!" % lTheBrrrgh,
+    1110: "Let's go to %s!" % lDonaldsDreamland,
+    1111: "Let's go to %s!" % lGoofySpeedway,
+    1112: "Let's go to my house!",
+    1113: "Let's go to your house!",
+    1114: "Let's go to Sellbot HQ!",
+    1115: "Let's go fight the V.P.!",
+    1116: "Let's go in the Factory!",
+    1117: "Let's go fishing!",
+    1118: "Let's go fishing at my house!",
+    1119: "Let's go to Cashbot HQ!",
+    1120: "Let's go fight the C.F.O.!",
+    1121: "Let's go in the Mint!",
+    1122: "Let's go to Lawbot HQ!",
+    1123: "Let's go fight the C.L.O.!",
+    1124: "Let's go in the Lawfice!",
+    1125: "Let's go to %s!" % lOutdoorZone,
+    1126: "Let's go to %s!" % lGolfZone,
+    1127: "Let's go to Bossbot HQ!",
+    1128: "Let's go fight the C.E.O.!",
+    1129: "Let's go in the Cog Golf Courses!",
+    1130: "Let's go to Boardbot's HQ!",
+    1131: "Let's go fight the Chairman!",
+    1132: "Let's go in the Board Offices!",
+    1133: "Let's go take over a Field Office!",
+    1134: "Let's go to %s!" % lYeOlde,
+    1135: "Let's go fight the Overclocked C.L.O.!",
+
+    1200: 'What ToonTask are you working on?',
+    1201: "Let's work on that.",
+    1202: "This isn't what I'm looking for.",
+    1203: "I'm going to look for that.",
+    1204: "It isn't on this street.",
+    1205: "I haven't found it yet.",
+    1206: 'I need more Invoices.',
+    1207: 'I need more Sellbot Suit Parts.',
+    1208: "This isn't what you need.",
+    1209: 'I found what you need.',
+    1210: 'I need more Cogbucks.',
+    1211: 'I need more Patents.',
+    1212: 'I need more Stock Options.',
+    1213: 'I need more Shares.',
+    1214: 'I need more Cashbot Suit Parts.',
+    1215: 'I need more Lawbot Suit Parts.',
+    1216: 'I need more Bossbot Suit Parts.',
+    1217: 'I need more Boardbot Suit Parts.',
+    1299: 'I need to get a ToonTask.',
+    1300: 'I think you should use Toon-Up.',
+    1301: 'I think you should use Trap.',
+    1302: 'I think you should use Lure.',
+    1303: 'I think you should use Sound.',
+    1304: 'I think you should use Squirt.',
+    1305: 'I think you should use Zap.',
+    1306: 'I think you should use Throw.',
+    1307: 'I think you should use Drop.',
+
+    1320: 'What prestiged Gag Tracks do you have?',
+    1321: 'I have no prestiged Gag Tracks.',
+    1322: 'I have prestige Toon-Up.',
+    1323: 'I have prestige Trap.',
+    1324: 'I have prestige Lure.',
+    1325: 'I have prestige Sound.',
+    1326: 'I have prestige Squirt.',
+    1327: 'I have prestige Zap.',
+    1328: 'I have prestige Throw.',
+    1329: 'I have prestige Drop.',
+    1330: 'All of my Gag Tracks are prestiged.',
+
+    1350: 'I think you should pass.',
+    1351: 'I think you should run.',
+    1353: 'I think you should use an IOU.',
+    1354: 'I think you should sue a Cog.',
+    1355: 'I think you should fire a Cog.',
+    1356: 'I think you should use a different Gag.',
+    1357: "I think you should lock in.",
+    1358: 'I think you should use a Unite.',
+
+    1370: "I'm going to pass.",
+    1371: "I'm going to run.",
+    1373: "I'm going to use an IOU.",
+    1374: "I'm going to sue a Cog.",
+    1375: "I'm going to fire a Cog.",
+
+    1400: 'Hurry!',
+    1401: 'Nice shot!',
+    1402: 'Nice gag!',
+    1403: 'Missed me!',
+    1404: 'You did it!',
+    1405: 'We did it!',
+    1406: 'Bring it on!',
+    1407: 'Piece of cake!',
+    1408: 'That was easy!',
+    1409: 'Run!',
+    1410: 'Help!',
+    1411: 'Phew!',
+    1412: 'We are in trouble.',
+    1413: 'I need more Gags.',
+    1414: 'I need a Toon-Up.',
+    1416: 'We can do this!',
+    1417: 'You need more Gags.',
+    1500: "Let's use Toon-Up!",
+    1501: "Let's use Trap!",
+    1502: "Let's use Lure!",
+    1503: "Let's use Sound!",
+    1504: "Let's use Squirt!",
+    1505: "Let's use Zap!",
+    1506: "Let's use Throw!",
+    1507: "Let's use Drop!",
+
+    1520: 'Rock and roll!',
+    1521: "That's gotta hurt.",
+    1522: 'Catch!',
+    1523: 'Special delivery!',
+    1524: 'Are you still here?',
+    1525: "I'm SO scared!",
+    1526: "That's going to leave a mark!",
+    1527: "Come and get me!",
+
+    1530: "Let's all go for the same Cog.",
+    1531: "Let's go for different Cogs.",
+    1532: 'You should go for a different Cog.',
+    1533: "Let's go for the leftmost Cog.",
+    1534: "Let's go for the rightmost Cog.",
+    1535: "Let's go for the middle-left Cog.",
+    1536: "Let's go for the middle-right Cog.",
+    1537: "Let's go for the middle Cog.",
+    1538: "Let's go for the Executive Cog.",
+    1539: "Let's go for the Manager Cog.",
+    1540: "Let's go for the weakest Cog first.",
+    1541: "Let's go for the strongest Cog first.",
+    1542: 'Save your powerful Gags.',
+    1543: "Don't use Sound on Lured Cogs.",
+    1544: "Make sure the Cog is soaked before using Zap.",
+    1545: "Hit the Lured Cog before using Drop.",
+    1546: "Don't place multiple Traps on the same Cog.",
+    1547: "Let's use the same Gag Track for extra damage!",
+    1548: 'I need help with this Cog!',
+
+    1560: "I'm going to use Toon-Up.",
+    1561: "I'm going to use Trap.",
+    1562: "I'm going to use Lure.",
+    1563: "I'm going to use Sound.",
+    1564: "I'm going to use Squirt.",
+    1565: "I'm going to use Zap.",
+    1566: "I'm going to use Throw.",
+    1567: "I'm going to use Drop.",
+
+    1600: 'I have enough Gags.',
+    1601: 'I need more jellybeans.',
+    1602: 'Me too.',
+    1603: 'Hurry up!',
+    1604: 'One more?',
+    1605: 'Play again?',
+    1606: "Let's play again.",
+    1700: "Let's split up.",
+    1701: "Let's stay together.",
+    1702: "Let's battle the Cogs.",
+    1703: 'Step on the switch.',
+    1704: 'Go through the door.',
+    1803: "I'm in the Front Entrance.",
+    1804: "I'm in the Lobby.",
+    1805: "I'm in the hallway outside the Lobby.",
+    1806: "I'm in the hallway outside the Lobby.",
+    1807: "I'm in the Gear Room.",
+    1808: "I'm in the Boiler Room.",
+    1809: "I'm on the East Catwalk.",
+    1810: "I'm in the Paint Mixer.",
+    1811: "I'm in the Paint Mixer Storage Room.",
+    1812: "I'm on the West Silo Catwalk.",
+    1813: "I'm in the Pipe Room.",
+    1814: "I'm on the stairs to the Pipe Room.",
+    1815: "I'm in the Duct Room.",
+    1816: "I'm in the Side Entrance.",
+    1817: "I'm in Stomper Alley.",
+    1818: "I'm outside the Lava Room.",
+    1819: "I'm in the Lava Room.",
+    1820: "I'm in the Lava Storage Room.",
+    1821: "I'm on the West Catwalk.",
+    1822: "I'm in the Oil Room.",
+    1823: "I'm on the Warehouse Lookout.",
+    1824: "I'm in the Warehouse.",
+    1825: "I'm outside the Paint Mixer.",
+    1827: "I'm outside the Oil Room.",
+    1830: "I'm in the East Silo Control Room.",
+    1831: "I'm in the West Silo Control Room.",
+    1832: "I'm in the Center Silo Control Room.",
+    1833: "I'm at the East Silo.",
+    1834: "I'm on the West Silo.",
+    1835: "I'm on the Center Silo.",
+    1836: "I'm on the West Silo.",
+    1837: "I'm at the East Silo.",
+    1838: "I'm on the East Silo Catwalk.",
+    1840: "I'm on top of the West Silo.",
+    1841: "I'm on top of the East Silo.",
+    1860: "I'm on the West Silo Elevator.",
+    1861: "I'm on the East Silo Elevator.",
+    1903: "Let's meet in the Front Entrance.",
+    1904: "Let's meet in the Lobby.",
+    1905: "Let's meet in the hallway outside the Lobby.",
+    1906: "Let's meet in the hallway outside the Lobby.",
+    1907: "Let's meet in the Gear Room.",
+    1908: "Let's meet in the Boiler Room.",
+    1909: "Let's meet on the East Catwalk.",
+    1910: "Let's meet in the Paint Mixer.",
+    1911: "Let's meet in the Paint Mixer Storage Room.",
+    1912: "Let's meet on the West Silo Catwalk.",
+    1913: "Let's meet in the Pipe Room.",
+    1914: "Let's meet on the stairs to the Pipe Room.",
+    1915: "Let's meet in the Duct Room.",
+    1916: "Let's meet in the Side Entrance.",
+    1917: "Let's meet in Stomper Alley.",
+    1918: "Let's meet outside the Lava Room.",
+    1919: "Let's meet in the Lava Room.",
+    1920: "Let's meet in the Lava Storage Room.",
+    1921: "Let's meet on the West Catwalk.",
+    1922: "Let's meet in the Oil Room.",
+    1923: "Let's meet on the Warehouse Lookout.",
+    1924: "Let's meet in the Warehouse.",
+    1925: "Let's meet outside the Paint Mixer.",
+    1927: "Let's meet outside the Oil Room.",
+    1930: "Let's meet in the East Silo Control Room.",
+    1931: "Let's meet in the West Silo Control Room.",
+    1932: "Let's meet in the Center Silo Control Room.",
+    1933: "Let's meet at the East Silo.",
+    1934: "Let's meet on the West Silo.",
+    1935: "Let's meet on the Center Silo.",
+    1936: "Let's meet on the West Silo.",
+    1937: "Let's meet at the East Silo.",
+    1938: "Let's meet on the East Silo Catwalk.",
+    1940: "Let's meet on top of the West Silo.",
+    1941: "Let's meet on top of the East Silo.",
+    1960: "Let's meet on the West Silo Elevator.",
+    1961: "Let's meet on the East Silo Elevator.",
+    2000: 'Purple',
+    2001: 'Blue',
+    2002: 'Cyan',
+    2003: 'Teal',
+    2004: 'Green',
+    2005: 'Yellow',
+    2006: 'Orange',
+    2007: 'Red',
+    2008: 'Pink',
+    2009: 'Brown',
+    2010: 'Ocean Blue',
+    2011: 'Peach',
+    2012: 'Lavender',
+    2013: 'Dark Red',
+    2014: 'Dark Blue',
+    2015: 'Light Green',
+    2016: 'Light Red',
+    2100: 'Please operate the crane.',
+    2101: 'May I operate the crane?',
+    2102: 'I need practice operating the crane.',
+    2103: 'Pick up a disabled goon.',
+    2104: 'Throw the goon at the C.F.O.',
+    2105: 'Throw a safe now!',
+    2106: "Don't throw a safe now!",
+    2107: 'A safe will knock off his helmet.',
+    2108: 'A safe will become his new helmet.',
+    2109: "I can't reach any safes.",
+    2110: "I can't reach any goons.",
+    2120: 'Please disable the goons.',
+    2121: 'I would rather disable goons.',
+    2122: 'I need practice disabling goons.',
+    2123: 'Please stay nearby.',
+    2124: 'Keep moving.',
+    2125: 'I need to keep moving.',
+    2126: 'Look for someone who needs help.',
+    2130: 'Please save the treasures.',
+    2131: 'Take the treasures.',
+    2132: 'I need treasures!',
+    2133: 'Look out!',
+    # 2200: 'Get these Goons off of me!',
+    2201: 'Watch out for the Virtual Skelecogs!',
+    # 2202: 'I need to use a cannon!',
+    # 2203: 'I would rather grab evidence on the ground.',
+    # 2204: 'I would rather grab evidence in the air.',
+    2209: "Watch out! I'm going to taunt the Cogs!",
+    2210: "I'm gonna destroy the Cogs for treasures!",
+    2211: "There's an Executive at the trap!",
+    # 2212: 'Switch to the blue mode to blast Cogs away!',
+    # 2213: "Switch to the red mode to taunt the Cogs!",
+    2214: "Taunted Cogs will get angry and try to attack you!",
+    2215: 'Use your SECONDARY ACTION key to taunt the Cogs.',
+    2217: 'Watch out for those Cogs!',
+    2218: 'Virtual Skelecogs are swarming!',
+    2219: 'Keep moving.',
+    2220: 'The trap is over here!',
+    2221: 'The trap is over there!',
+    2222: 'The C.L.O. is almost at the trap!',
+    2223: 'Bumpy is setting up a trap.',
+    2224: 'Bumpy is repairing a trap.',
+    2225: 'I will defend the traps.',
+    2226: 'You should defend the traps.',
+    2227: 'Please defend the traps.',
+    2228: 'The trap broke!',
+    2229: 'Lauren is prestiging a trap.',
+    2230: 'The C.L.O. is protecting herself with Defense Specialists!',
+    2231: "Please destroy the Defense Specialists.",
+    2232: "The C.L.O. is covering the field with Attack Specialists!",
+    2233: "Watch out for the Attack Specialists!",
+
+    2300: "Let's feed the Executive Cogs.",
+    2301: "Let's feed the regular Cogs.",
+    2302: "Please feed the Executive Cogs.",
+    2303: "I'll feed the Executive Cogs.",
+    2304: "Please feed the regular Cogs.",
+    2305: "I'll feed the regular Cogs.",
+    2306: 'Please feed the Cogs on the left.',
+    2307: "I'll feed the Cogs on the left.",
+    2308: 'Please feed the Cogs on the right.',
+    2309: "I'll feed the Cogs on the right.",
+    2310: 'Can you serve this table?',
+    2311: "I'll serve this table.",
+    2312: 'Please use the seltzer bottle.',
+    2313: "I'll use the seltzer bottle.",
+    2314: "Please stun the C.E.O.",
+    2315: "I'll stun the C.E.O.",
+    2316: 'Please use the golf tee.',
+    2317: "I'll use the golf tee.",
+    2318: 'Please save the snacks for sadder Toons.',
+
+    2400: "I'm going to water the plants.",
+    2401: "You should water the plants.",
+    2402: "I'm going to play 52 card pickup.",
+    2403: "You should play 52 card pickup.",
+    2404: "I'm going to have a meaningful conversation.",
+    2405: "We are going to have a great time!",
+    2406: "We should really get going...",
+    2407: "We should stay a little longer!",
+    2408: "Watch out! The plants are wilting!",
+    2409: "I'm going to watch the paint dry.",
+    2410: "You should watch the paint dry.",
+    2411: "Those cookies sure do look good.",
+    2412: "I'm going to eat a cookie.",
+    2413: "You should have a cookie.",
+    2414: "I can't reach the cookies!",
+    2415: "I like this song!",
+    2416: "I'm bored...",
+    3010: 'Anyone want to race?',
+    3020: "Let's race!",
+    3030: 'Want to race?',
+    3040: "Let's show off our karts!",
+    3050: "I don't have enough jellybeans.",
+    3060: "Let's race again!",
+    3061: 'Want to race again?',
+    3150: 'I need to go to the Kart Shop.',
+    3160: "Let's go to the Race Tracks!",
+    3170: "Let's go to Champions' Row to check out the record holders!",
+    3180: "Check out my trophy in Champions' Row!",
+    3190: 'Meet me at the Race Tracks!',
+    3110: 'Meet up near the Kart Shop!',
+    3130: 'Where should we meet?',
+    3200: 'Where do you want to race?',
+    3201: "Let's pick a different race.",
+    3210: "Let's do a practice race.",
+    3211: "Let's do a battle race.",
+    3220: 'I like the Screwball Stadium race!',
+    3221: 'I like the Rustic Raceway race!',
+    3222: 'I like the City Circuit race!',
+    3223: 'I like the Corkscrew Coliseum race!',
+    3224: 'I like the Airborne Acres race!',
+    3225: 'I like the Blizzard Boulevard race!',
+    3230: "Let's race in the Screwball Stadium!",
+    3231: "Let's race on the Rustic Raceway!",
+    3232: "Let's race on the City Circuit!",
+    3233: "Let's race in the Corkscrew Coliseum!",
+    3234: "Let's race on the Airborne Acres!",
+    3235: "Let's race on the Blizzard Boulevard!",
+    3600: 'Which track do you want to race on?',
+    3601: 'Pick a track!',
+    3602: 'Can we race on a different track?',
+    3603: "Let's pick a different track!",
+    3640: 'I want to race on the first track!',
+    3641: 'I want to race on the second track!',
+    3642: 'I want to race on the third track!',
+    3643: 'I want to race on the fourth track!',
+    3660: "I don't want to race on the first track!",
+    3661: "I don't want to race on the second track!",
+    3662: "I don't want to race on the third track!",
+    3663: "I don't want to race on the fourth track!",
+    3300: 'Wow! You are FAST!',
+    3301: "You're too fast for me!",
+    3310: 'Good race!',
+    3320: 'I really like your kart!',
+    3330: 'Sweet ride!',
+    3340: 'Your kart is cool!',
+    3350: 'Your kart is awesome!',
+    3360: 'Your kart is totally sweet!',
+    3400: 'Too scared to race me?',
+    3410: 'See you at the finish line!',
+    3430: "I'm as fast as lightning!",
+    3450: "You'll never catch me!",
+    3451: "You'll never beat me!",
+    3452: 'No one can beat my time!',
+    3453: 'Hurry up slow pokes!',
+    3460: 'Give me another shot!',
+    3461: 'You got lucky!',
+    3462: 'Ooooh! That was a close one!',
+    3470: 'Wow, I thought you had me beat!',
+    4000: "Let's play minigolf!",
+    4001: "Let's play again!",
+    4002: 'Want to golf?',
+    4100: "Let's play 'Walk In The Par.'",
+    4101: "Let's play 'Hole Some Fun.'",
+    4102: "Let's play 'The Hole Kit and Caboodle.'",
+    4103: 'That course is too easy.',
+    4104: 'That course is too hard.',
+    4105: 'That course is just right.',
+    4200: 'Try standing more to the left.',
+    4201: 'Try standing more to the right.',
+    4202: 'Try standing right in the middle.',
+    4203: 'Try using a little more power.',
+    4204: 'Try using a little less power.',
+    4205: 'Try aiming more to the left.',
+    4206: 'Try aiming more to the right.',
+    4207: 'Try aiming down the middle.',
+    4300: 'So close!',
+    4301: 'What a great shot!',
+    4302: 'That was a lucky shot.',
+    4303: "I'll take a mulligan...",
+    4304: "That's a gimme.",
+    4305: 'Fore!',
+    4306: 'Shhhh!',
+    4307: 'Good game!',
+    4400: 'Good jump!',
+    4401: 'King me!',
+    4402: 'You\'ve been cornered!',
+    4500: 'Check!',
+    4501: "Checkmate!",
+    4502: 'Good match.',
+    4503: 'How does the horsey move again?',
+    4600: 'TOONO!',
+    4601: 'Prepare to draw!',
+    4602: "You've activated my trap card!",
+    4700: "Let's play checkers!",
+    4701: "Let's play chess!",
+    4702: "Let's play Toono!",
+    4800: 'Ready to play?',
+    4801: 'Come watch us play!',
+    4802: 'Nice move!',
+    4803: 'What a move!',
+    4804: 'All going to plan...',
+    4805: "I wasn't expecting that...",
+    4806: 'Are you sure about that?',
+    4807: 'Your hubris will be your downfall.',
+    4808: 'I know what you\'re planning!',
+    4809: 'Make a move already!',
+    4810: 'What was that?!',
+    4900: "Let's work on our Club Task!",
+    4901: "Can you purchase a new Club Task?",
+    4902: "Can you reroll the Club Tasks?",
+    4903: "Can you invite me to your Club?",
+    4904: "Would you like to join my Club?",
+    4905: "Sorry, my Club is full!",
+    5000: "Let's make a Group.",
+    5001: "Join my Group.",
+    5002: "Can you invite me to your Group?",
+    5003: "I'm already in a Group.",
+    5004: "Leave your Group.",
+    5005: "Are we ready?",
+    5006: "Let's go!",
+    5100: "Let's go to the Silver Sprocket Course.",
+    5101: "Let's go to the Golden Gear Course.",
+    5102: "Let's go to the Diamond Dynamo Course.",
+    5103: "Let's go to the C.E.O. Battle.",
+    5104: "Let's go to the Senior V.P Battle.",
+    5105: "Let's go to the Front Entrance.",
+    5106: "Let's go to the Side Entrance.",
+    5107: "Let's go to the Coin Mint.",
+    5108: "Let's go to the Dollar Mint.",
+    5109: "Let's go to the Bullion Mint.",
+    5110: "Let's go to the C.F.O. Battle.",
+    5111: "Let's go to the C.L.O. Battle.",
+    5112: "Let's go to Lawfice A113.",
+    5113: "Let's go to Lawfice B221.",
+    5114: "Let's go to Lawfice C418.",
+    5119: "Let's go to the Overclocked C.L.O. Battle.",
+    5200: "We're going to the Silver Sprocket Course.",
+    5201: "We're going to the Golden Gear Course.",
+    5202: "We're going to the Diamond Dynamo Course.",
+    5203: "We're going to the C.E.O. Battle.",
+    5204: "We're going to the Senior V.P Battle.",
+    5205: "We're going to the Front Entrance.",
+    5206: "We're going to the Side Entrance.",
+    5207: "We're going to the Coin Mint.",
+    5208: "We're going to the Dollar Mint.",
+    5209: "We're going to the Bullion Mint.",
+    5210: "We're going to the C.F.O. Battle.",
+    5211: "We're going to the C.L.O. Battle.",
+    5212: "We're going to Lawfice A113.",
+    5213: "We're going to Lawfice B221.",
+    5214: "We're going to Lawfice C418.",
+    5219: "We're going to the Overclocked C.L.O. Battle.",
+
+    # April Toons > High Roller
+    30100: "GOOD MOOORNING TOONTOOOOWN!!!",
+    30101: "Have you seen that new show on Tenor Terrace?",
+    30102: "What's with those strange ducks in the Playground?",
+    30103: "Have you met Your Quackjesty yet?",
+    30104: "I won a free cruise!",
+    30105: "Quack!",
+    30106: "Hello, fellow Low Roller!",
+
+    # April Toons > Face the Family
+    30107: "I need to find one Family.",
+    30108: "Will you help me face the Family?",
+    30109: "Let's go face the Family!",
+    30110: "I keep going into the Factory and can't seem to find the Family.",
+    30111: "Why is that Cog twitching?",
+    30112: "I should have carried my Gag-ger Counter.",
+    30113: 'This isn\'t the Family I\'m looking for.',
+    30114: 'I\'m upset.',
+
+    # April Toons > Twilight Terrace
+    30115: 'Have you checked out Twilight Terrace?',
+    30116: "I wonder where Twilight Terrace leads to.",
+    30117: "That tunnel at the end of Twilight Terrace sure smells sweet!",
+
+    # April Toons
+    30118: "Happy MAYpril Toons' Month!",
+    30119: "Let's go talk to Elphabat!",
+    30120: "Let's go talk to Hexadecimal!",
+    30121: "How does the horsey move again?",
+
+    30200: 'Deck the halls... ',
+    30201: 'Load some pies...',
+    30202: 'Joyful Toons...',
+    30203: 'Snowman heads...',
+    30204: "Toontown's merry...",
+    30205: 'Lure good cheer...',
+
+    30220: 'We wish you a merry Toonsmas...',
+    30221: 'Deck the halls with seltzer spray...',
+    30222: 'Zing-le bells...',
+    30223: 'And while we are playing...',
+
+    30224: 'Up on the housetop...',
+    30225: "Eight gag tracks to use each day...",
+    30226: 'I have a little dreidel...',
+    30227: 'Out on the ice...',
+
+    30250: 'Boo!',
+    30251: 'Happy Halloween!',
+    30252: 'Spooky!',
+    30253: 'Scary!',
+    30254: 'Have you seen Elphabat?',
+    30255: 'Have you seen the spooky building on Polar Place?',
+    30256: 'Trick or Treat!',
+
+    30275: 'Happy holidays!',
+    30276: "Season's greetings!",
+    30277: 'Have a Wonderful Winter!',
+    30278: 'Look out for the Cogs!',
+    30279: "I'll defend the tree!",
+    30280: "I'll collect the presents.",
+    30281: "I need more snowballs.",
+    30282: "Where are the presents?",
+    30283: "There's a lot of presents over here!",
+    30284: "Great job team! We saved Toonseltown!",
+    30285: "I LOVE having snowball fights!",
+    30450: "It's easy to be green!",
+    30451: 'Visit Green Bean Jeans and you can be green too!',
+    30452: "It's on Tulip Terrace in Daffodil Gardens.",
+    30508: "Sorry, I crashed!",
+
+    # High Roller (in battle) - Phase 1
+    30600: "I'm going to use a die this round.",
+    30601: "I think you should use a die this round.",
+    30602: "I don't have enough pips to attack.",
+    30603: "Do you know the answer to this question?",
+    30604: "I don't know the answer to this question!",
+    30605: "Nice Combo!",
+    30606: "Let's target the Cog behind podium A!",
+    30607: "Let's target the Cog behind podium B!",
+    30608: "Let's target the Cog behind podium C!",
+    30609: "Let's target the Cog behind podium D!",
+    30610: "I think you should target the Cog behind podium A.",
+    30611: "I think you should target the Cog behind podium B.",
+    30612: "I think you should target the Cog behind podium C.",
+    30613: "I think you should target the Cog behind podium D.",
+    30614: "Let's target the High Roller!",
+    30615: "Let's target the Purple Silhouette!",
+    30616: "Let's target the Red Silhouette!",
+    30617: "Let's target the Green Silhouette!",
+    30618: "Let's target the Orange Silhouette!",
+    30619: "Let's target the Pink Silhouette!",
+    30620: "Let's target the Yellow Silhouette!",
+    30621: "Let's target the Blue Silhouette!",
+    30622: "Let's target the Light Blue Silhouette!",
+    30623: "I think you should target the High Roller.",
+    30624: "I think you should target the Purple Silhouette.",
+    30625: "I think you should target the Red Silhouette.",
+    30626: "I think you should target the Green Silhouette.",
+    30627: "I think you should target the Orange Silhouette.",
+    30628: "I think you should target the Pink Silhouette.",
+    30629: "I think you should target the Yellow Silhouette.",
+    30630: "I think you should target the Blue Silhouette.",
+    30631: "I think you should target the Light Blue Silhouette.",
+
+    40000: 'Jump on the gear.',  # Mint SC
+    40001: 'You should get the barrel.',  # idk what to put here. Gonna ask QA
+    41000: 'Watch out for the red skulls!',  # DA Menu
+    41001: 'Can you help me with the green triangles?',
+    41002: 'Can you help me with the red squares?',
+    41003: 'Can you help me with the blue diamonds?',
+    41004: 'Move the shape this way!',
+    41010: 'We should turn the shapes green!',
+    41011: 'We should turn the shapes red!',
+    41012: 'What color should we make the shapes?',
+    41020: "There's a skull in front of you!",
+    41021: "I think there's a skull to your left!",
+    41022: "Watch out for the skull on your right!",
+    41023: "I'm unsure about this.",
+    41024: "Time to make a guess!",
+    41030: "Be careful a skull will appear on a square!",
+    41100: "Can you help me with this game?",
+    41101: "I will do this game.",
+    41102: "Can you do this game?",
+    41103: "Watch out for the spotlights!",
+    41104: "Step on the arrows to drop a piece.",
+    41105: "Drop a piece in front of me.",
+    41106: "Don't drop a piece there!",
+    41107: "Let's try for a diagonal.",
+    41108: "Let's try for a vertical.",
+    41109: "Let's try for a horizontal.",
+    41110: "Look out!",
+    41111: "To your left!",
+    41112: "To your right!",
+    41113: "I need help on my side!",
+    41114: "Step on the TNT spaces to throw TNT.",
+    41115: "I will do this puzzle.",
+    41116: "You can do this puzzle.",
+    41201: "I'm in the Front Entrance.",
+    41202: "I'm in the Lobby.",
+    41203: "I'm in the Faculty Entrance.",
+    41501: "Let's meet in the Front Entrance.",
+    41502: "Let's meet in the Lobby.",
+    41503: "Let's meet in the Faculty Entrance.",
+    42000: "Let's split up.",  # CGC Menu
+    42001: "Let's stay together.",
+    42002: "Let's battle the Cogs.",
+    42003: "Go through the door.",
+    42004: "Stomp on the red moles.",
+    42005: "Watch out for the yellow moles!",
+    42006: "Follow me through the maze.",
+    42007: "Do you know how to go through this maze?",
+}
+SCFactoryMeetMenuIndexes = (
+    1903,
+    1904,
+    1906,
+    1907,
+    1908,
+    1910,
+    1913,
+    1915,
+    1916,
+    1917,
+    1919,
+    1922,
+    1923,
+    1924,
+    1932,
+    1940,
+    1941
+)
+
+# If you add new phrases here make sure you also add it in CatalogGenerator.MetaItems so it's purchasable
+# NOTE: These phrases are set in CustomSpeedchatRegistry.
+CustomSCStrings = {}
+
+# NOTE: These phrases are set in SuitDNA.
+SCMenuCommonCogIndices = None
+SCMenuCustomCogIndices = {}
+
+
+ClashSuitFaceoffTaunts = {
+    # NORMAL COGS
+    # TODO: Sort these by Department & Level
+
+    # Bloodsucker
+    'b': [
+        'Do you have a donation for me?',
+        "I'm going to make you a sore loser.",
+        "I'm going to leave you high and dry.",
+        'I\'m "A Positive" I\'m going to win.',
+        '"O" don\'t be so "Negative".',
+        "I'm surprised you found me, I'm very mobile.",
+        "I'm going to need to do a quick count on you.",
+        "You're soon going to need a cookie and some juice.",
+        "When I'm through you'll need to lie down.",
+        'This will only hurt for a second.',
+        "I'm going to make you dizzy.",
+        "Good timing, I'm a pint low.",
+        "You'll B the opposite of A happy Toon when I'm finished with you."
+    ],
+    # Mingler
+    'mi': [
+        "You don't know who you're mingling with.",
+        'Ever mingle with the likes of me?',
+        'Good, it takes two to mingle.',
+        "Let's mingle.",
+        "You're mingling with pure evil here.",
+        'This looks like a good place to mingle.',
+        "Well, isn't this cozy?",
+        'Let me introduce myself.',
+        "You're mingling with defeat.",
+        "I'm going to mingle in your business.",
+        "Are you sure you're ready to mingle?",
+        "Enough with the games, let's mingle.",
+        'I think you and I will get along well.'
+    ],
+    # Insider
+    'ins': [
+        "You better stay on the outside! You're not stepping foot in our business.",
+        "This stays between you and me. You got it, Toon?",
+        "I know too much, and you'll never find out what it is!",
+        "You'd gain nothing from instigating ME!",
+        "Can't you see there's important intel I have to collect?!",
+        "It's what's on the inside that matters most!",
+        "I have a sneaking suspicion this won't go well for you...",
+        "You'll never catch me and my secrets!",
+        "I'll have to take the intel from you by force.",
+        "The world isn't ready for my secrets - neither are you!",
+    ],
+    # Mover & Shaker
+    'ms': [
+        'Get ready for a shake down.',
+        'You had better move out of the way.',
+        'Move it or lose it.',
+        "I believe it's my move.",
+        "I believe it's your move.",
+        'This should shake you up.',
+        "Move it Toon! You're a sitting duck.",
+        'Prepare to be moved.',
+        'Move outta my way Toon!',
+        "Glad I found you! You're my ticket to move up the corporate ladder.",
+        "I'm ready to make my move.",
+        "Watch it, Toon - you're on shaky ground.",
+        'This will be a moving moment.',
+        'I feel moved to defeat you.',
+        'Are you shaking yet?',
+        "Careful, you don't want to shake up the wrong people."
+    ],
+    # Head Hunter
+    'hh': [
+        "I'm way ahead of you.",
+        "You're headed for trouble.",
+        "You'll wish this was all in your head.",
+        "Oh good, I've been hunting for a Toon like you.",
+        "I'll have your head for this.",
+        'Heads up!',
+        'I have some job openings that fit your head well.',
+        "Looks like you've got a head for trouble.",
+        'Headed my way? Let me check your references.',
+        'A perfect trophy for my desk.',
+        "You're going to have such a headache after the paperwork.",
+        "Don't lose your head over me."
+    ],
+    # Big Cheese
+    'tbc': [
+        "I'm swissly surprised you came to someone my level.",
+        'This may be cheesy, but you can call me Jack.',
+        'Are you sure?  I can be such a Muenster at times.',
+        'Finally. I was afraid you were stringing me along.',
+        "Let's cut the cheesy lines and get down to business.",
+        "Don't you think I've aged well?",
+        "I'm going to make mozzarella outta ya.",
+        "I've been told I'm very strong.",
+        'Careful, I can assign your expiration date.',
+        "Watch out, I'm a whiz at this game.",
+        'Ending you will be a brieeze.',
+        "I hope I'm not too sharp for you.",
+        'A Toon, you say? Teleme more.',
+        'Grate timing, I was just about to send my Flunkies.'
+    ],
+    # Head Honcho
+    'hho': [
+        "Let's get a head start on your defeat.",
+        "It's time for me to face you head on.",
+        "I'm too headstrong to lose against the likes of you.",
+        "You're my ticket to getting ahead in this company.",
+        "Don't underestimate me. I graduated head of my class.",
+        "This conflict is coming to a head.",
+        "I can't make heads or tails of your kind.",
+        "My ideas would just go over your head.",
+        "You're in way over your head.",
+        "We're going head to head... right now!",
+    ],
+    # Corporate Raider
+    'cr': [
+        'RAID!',
+        'Ahoy matey! Prepare to be raided.',
+        "Why shiver me timbers! I didn't see ye.",
+        "I'll feed ye to the 'Loan Sharks.'",
+        'Piracy is the way o life. Ahoy.',
+        'Prepare for yer doom scallywag.',
+        "Arrgh! Ye don't fit in me corporation.",
+        'Time for ye to walk the plank.',
+        "I will send ye to Davy Jones' Locker.",
+        'Looks like yer primed for a take-over.',
+        'Arrgh! That is not a proper corporate attire.',
+        "Yer looking rather vulnerable.",
+        'Time to sign over ye assets.',
+        "I'm on a Toon removal crusade.",
+        'Avast! Yer defenseless against me ideas.',
+        "Relax, ye will find this is for the best."
+    ],
+    # Bagholder
+    'bgh': [
+        "This'll be tied up quickly.",
+        "I'll be holdin' on to this victory.",
+        "I've got this battle in the bag!",
+        "Looks like your laff's value is gonna depreciate.",
+        "You won't be worth much once we're done here.",
+        "Cat's outta the bag, I'm winnin' this one.",
+        "Hold on Toon, lemme wrap this right up.",
+        "Don't hold on to the idea of you beatin' me now.",
+        "How's about we bag this one up real quick?",
+        "I'm not lettin' go till you've gone sad.",
+    ],
+    # Mr. Hollywood
+    'mh': [
+        'Are you ready for my take?',
+        'Lights, camera, action!',
+        "Let's start rolling! This will be your final act.",
+        'My teeth are brighter than your future.',
+        'Today, the role of the defeated Toon will be played by - YOU!',
+        'This scene will go on the cutting room floor.',
+        'I already know my motivation for this scene.',
+        'Are you ready for your final scene?',
+        "I'm ready to roll your end credits.",
+        'I told you not to call me.',
+        'I rate you one star.',
+        "I'm afraid I'm going to have to cut you from the credits.",
+        "Let's get on with the show.",
+        "There's no business like Hollywood!",
+        "I hope you don't forget your lines."
+    ],
+    # Deadlock
+    'dl': [
+        "I'll lock you up nice and tight, Toon!",
+        "This'll be over soon if you see things MY way.",
+        "My victory is already LOCKED IN!",
+        "Your resilience will get us nowhere!",
+        "Think you know the key to beat me?",
+        "I'm locked on to ya, Toon!",
+        "Persistence is key, don't ya know?",
+        "The secret to my success? That's under lock and key.",
+        "You? Unlock me? Fat chance.",
+        "I've locked this area away from pesky Toons like you!",
+    ],
+    # Number Cruncher
+    'nc': [
+        'Looks like your number is up.',
+        'I hope you prefer extra crunchy.',
+        "Now you're really in a crunch.",
+        'Is it time for crunch already?',
+        "Let's do crunch.",
+        'Where would you like to have your crunch today?',
+        "You've given me something to crunch on.",
+        'This will not be smooth.',
+        'Go ahead, try and take a number.',
+        'I could do with a nice crunch about now.'
+    ],
+    # Paper Hands
+    'pph': [
+        "The writing's on the wall, Toon.",
+        "Your margins are looking paper-thin.",
+        "I'll make sure you fold first.",
+        "My victory will be one for the papers.",
+        "I'll put a wrinkle in your plans.",
+        "I'm worth the paper I’m printed on.",
+        "Hot off the presses: this Toon is done for.",
+        "You'll crumple under the pressure.",
+        "I've got all the necessary papers to take you down.",
+        "I'm no mere paperweight in battle.",
+    ],
+    'ls': ["It's time to collect on your loan.",
+           "You've been on borrowed time.",
+           'Your loan is now due.',
+           'Time to pay up.',
+           'Well you asked for an advance and you got it.',
+           "You're going to pay for this.",
+           "It's pay back time.",
+           'Can you lend me an ear?',
+           "Good thing you're here,  I'm in a frenzy.",
+           'Shall we have a quick bite?',
+           'Let me take a bite at it.'],
+    'mb': ['Time to bring in the big bags.',
+           'I can bag this.',
+           'Paper or plastic?',
+           'Do you have your baggage claim?',
+           "Remember, money won't make you happy.",
+           'Careful, I have some serious baggage.',
+           "You're about to have money trouble.",
+           'Money will make your world go around.',
+           "I'm too rich for your blood.",
+           'You can never have too much money!'],
+    'mg': [
+        "You'll need medical tweetment when I'm done with you.",
+        "Watch out, Toon. I'm a bird of prey.",
+        "Your defeat is cardinal to my career goals.",
+        "This will be a real hoot.",
+        "'Owl' be victorious in this clash.",
+        "You will be 'thrushed' by my cunning.",
+        "You're a sitting duck, Toon.",
+        "I'm a hawk for Toon disposal.",
+        "I'm a 'finch' to win this contest.",
+        "From heron, you will respect my authority.",
+    ],
+    'rb': ["You've been robbed.",
+           "I'll rob you of this victory.",
+           "I'm a royal pain!",
+           'Hope you can grin and baron.',
+           "You'll need to report this robbery.",
+           "Stick 'em up.",
+           "I'm a noble adversary.",
+           "I'm going to take everything you have.",
+           'You could call this neighborhood robbery.',
+           'You should know not to talk to strangers.'],
+    'bs': ['Never turn your back on me.',
+           "You won't be coming back.",
+           'Take that back or else!',
+           "I'm good at cutting costs.",
+           'I have lots of back up.',
+           "There's no backing down now.",
+           "I'm the best and I can back that up.",
+           'Whoa, back up there Toon.',
+           'Let me get your back.',
+           "You're going to have a stabbing headache soon.",
+           'I have perfect puncture.',
+           "Don't worry Toon, you can always trust me.",
+           "I've been told I have a piercing intellect."],
+    'ad': ["I'm not afraid of mew.",
+           "When I'm through with you, you'll be hiss-tory.",
+           "It's time fur you to leave.",
+           "You'll be all out of paw-sitivity when I'm through with you.",
+           "You're awfully catty.",
+           "Quit kitten around, Toon. You know you can't beat me.",
+           "You'll find I'm quite a fur-midable opponent.",
+           "Don't worry Toon, I have a purr-fect record.",
+           "I'm quite versed in paw and order.",
+           "You shouldn't have strayed from the playground.",
+           "It's nothing purr-sonal.",
+           "I'm feline quite good about this encounter.",
+           "It's im-paw-sible for you to win this battle."],
+    'bw': ["Don't brush me aside.",
+           'You make my hair curl.',
+           'I can make this permanent if you want.',
+           "It looks like you're going to have some split ends.",
+           "You can't handle the truth.",
+           "I think it's your turn to be dyed.",
+           "I'm so glad you're on time for your cut.",
+           "You're in big trouble.",
+           "I'm going to wig out on you.",
+           "I'm a big deal little Toon."],
+    'le': ["Careful, my legal isn't very tender.",
+           'I soar, then I score.',
+           "I'm bringing down the law on you.",
+           'You should know, I have some killer instincts.',
+           "I'm going to give you legal nightmares.",
+           "You won't win this battle.",
+           'This is so much fun it should be illegal.',
+           "Legally, you're too small to fight me.",
+           'There is no limit to my talons.',
+           "I call this a citizen's arrest.",
+           "I've got the court under my wing."],
+    'br': ["I'm a real chip off the old block.",
+           "You wouldn't want to see me around the block.",
+           "You've been barred from going any further.",
+           "A Toon? Looks like I'll have to grin and bar it.",
+           "You're blocking my way.",
+           "Consider me a roadblock in your progress.",
+           "Consider yourself blocked.",
+           "I'm not just another brick in the wall.",
+           "You won't pass this exam.",
+           "You're on my block now!",
+           "You can't block progress, Toon."],
+    'sd': ["You'll never know when I'll stop.",
+           'Let me take you for a spin.',
+           'The doctor will see you now.',
+           "I'm going to put you into a spin.",
+           "Looks like you are diagnosed with happiness. Let me take care of that.",
+           'You look like you need a doctor.',
+           'The doctor is in, the Toon is out.',
+           "You won't like my spin on this.",
+           'You are going to spin out of control.',
+           'Care to take a few turns with me?',
+           'I have my own special spin on the subject.'],
+    'sh': ["I won't shy away from a fight.",
+           "A little white lie wouldn't hurt...",
+           "I'm the real deal, trust me.",
+           "I've got everything to hide.",
+           'Perhaps I could let you in on a little secret...',
+           "I reserved all rights to this battle.",
+           'Oh, me? If you insist...',
+           "I'm only one victory shy of a promotion.",
+           "I won't let you hide from me."],
+    'f': ["I'm gonna tell the boss about you!",
+          "I may be just a Flunky - But I'm real spunky.",
+          "I'm using you to step up the corporate ladder.",
+          "You're not going to like the way I work.",
+          'The boss is counting on me to stop you.',
+          "You're going to look good on my resume.",
+          "You'll have to go through me first.",
+          "Let's see how you rate my job performance.",
+          'I excel at Toon disposal.',
+          "You're never going to meet my boss.",
+          "I'm sending you back to the Playground."],
+    'p': ["I'm gonna scratch you out!",
+          'Careful, Toon. You can be easily erased.',
+          "Hey, you can't push me around.",
+          "I'm No.2!",
+          "I'm going to scratch you out.",
+          "I'll have to make my point more clear.",
+          'Let me get right to the point.',
+          "Let's hurry, I bore easily.",
+          'I hate it when things get dull.',
+          'So you want to push your luck?',
+          'Did you pencil me in?',
+          'Careful, I may leave a mark.'],
+    'ym': ["I'm positive you're not going to like this.",
+           "Success is best served with a yes!",
+           'Want to meet? I say yes, anytime.',
+           'You need some positive enforcement.',
+           "I'm going to make a positive impression.",
+           "I haven't been wrong yet.",
+           "Yes, I'm ready for you.",
+           'Are you positive you want to do this?',
+           "I'll be sure to end this on a positive note.",
+           "I'm confirming our meeting time.",
+           "Your downfall will be uplifting."],
+    'mm': ["I'm going to get into your business!",
+           'Sometimes big hurts come in small packages.',
+           'No job is too small for me.',
+           "I want the job done right, so I'll do it myself.",
+           'You need someone to manage your assets.',
+           'Oh good, a project.',
+           'I could probably manage things better than my boss.',
+           "Well, you've managed to find me.",
+           'I think you need some managing.',
+           "I'll take care of you in no time.",
+           "I'm watching every move you make.",
+           'Are you sure you want to do this?',
+           "We're going to do this my way.",
+           "I'm going to be breathing down your neck.",
+           'I can be very intimidating.',
+           "I've been searching for my growth spurt."],
+    'ds': ["You're going down!",
+           'Your options are shrinking.',
+           'Expect diminishing returns.',
+           "You've just become expendable.",
+           "Don't ask me to lay off.",
+           'I might have to make a few cutbacks.',
+           'Things are looking down for you.',
+           'Why do you look so down?'],
+    'cc': ['Surprised to hear from me?',
+           'You rang?',
+           'Are you ready to accept my charges?',
+           'This caller always collects.',
+           "I'm one smooth operator.",
+           "Hold the phone -- I'm here.",
+           'Have you been waiting for my call?',
+           "I was hoping you'd answer my call.",
+           "I'm going to cause a ringing sensation.",
+           'I always make my calls direct.',
+           'Boy, did you get your wires crossed.',
+           'This call is going to cost you.',
+           "You've got big trouble on the line.",
+           "You're on thin ice, Toon."],
+    # Circuit Breaker
+    'cbr': [
+        "Prepare for the shock of a lifetime!",
+        "I'm going to have to cut you off here.",
+        "You've sparked a war, Toon!",
+        "It's about time I cut your cord.",
+        "Don't make me break you!",
+        "This fight will be electrifying!",
+        "Let me break it down for you...",
+        "You? Defeat me? That'd be a shock!",
+        "Now you've sparked my anger!",
+        "Prepare for an electrifying showdown!",
+    ],
+    # Shark Watcher
+    'shw': [
+        "There is always a bigger fish, Toon.",
+        "I possess an exquisitely precise eye that is observing your every move.",
+        "You've recklessly ventured into treacherous waters, my friend.",
+        "I implore you to expedite this encounter without delay.",
+        "There will be no takeovers to be executed under your jurisdiction, Toon.",
+        "You don't possess a bite as strong as I do.",
+        "These waters are not for you.",
+        "Your inevitable demise will surely make a splash.",
+        "You can sea yourself out of town, Toon.",
+    ],
+    'tm': ['I plan on making this inconvenient for you.',
+           'Can I interest you in an insurance plan?',
+           'You should have missed my call.',
+           "You won't be able to get rid of me now.",
+           'Is this a bad time? Good.',
+           "Caller ID can't stop me.",
+           'I was planning on running into you.',
+           'I will be reversing the charges for this call.',
+           'I have some costly items for you today.',
+           'Too bad for you - I make house calls.',
+           "I'm prepared to close this deal quickly.",
+           "I'm going to use up a lot of your resources."],
+    'nd': ['In my opinion, your name is mud.',
+           "I hope you don't mind if I drop your name.",
+           "Haven't we met before?",
+           'I even know your real name.',
+           "I even know the boss's name.",
+           'Even the boss knows my name.',
+           'Name me one good thing you Toons have done.',
+           "Let's hurry, I'm having lunch with 'Mr. Hollywood.'",
+           "Have I mentioned I know 'Mingler?'",
+           "You'll never forget me.",
+           'I know the name of every Cog in Cog Nation.',
+           'I know all the right people to bring you down.',
+           "I think I'll just drop in.",
+           "I'm in the mood to drop some Toons.",
+           "You name it, I've dropped it."],
+    'gh': ['Put it there, Toon.',
+           "Let's shake on it.",
+           "I'm going to enjoy this.",
+           "You'll notice I have a very firm grip.",
+           "Let's seal the deal.",
+           "Let's get right to the business at hand.",
+           "Off handedly I'd say, you're in trouble.",
+           'How handy of you to run into me.',
+           "You'll find I'm a handful.",
+           'I can be quite handy.',
+           "I'm a very hands-on kinda guy.",
+           'Would you like some hand-me-downs?',
+           'Let me show you some of my handiwork.',
+           'I think the handwriting is on the wall.',
+           "I'll gladly handle your gags for you."],
+    'sc': ['I will make short work of you.',
+           "You're about to have money trouble.",
+           "You're about to be overcharged.",
+           'This will be a short-term assignment.',
+           "I'll be done with you in short order.",
+           "You'll soon experience a shortfall.",
+           "Let's make this a short stop.",
+           'I am going to make you short-circuit.',
+           'Your time with me will be short-lived.',
+           'I blame you Toons for all of my short-comings.',
+           "I think you've come up short.",
+           'I have a short temper for Toons.',
+           "I'll be with you shortly.",
+           "You're about to be shorted.",
+           "Well, aren't you a little short on your changes?"],
+    'pp': ['This is going to sting a little.',
+           "I'm going to give you a pinch for luck.",
+           "You don't want to press your luck with me.",
+           "I'm going to put a crimp in your smile.",
+           'Perfect, I have an opening for you.',
+           'Let me add my two cents.',
+           'Prepare to be pinched!',
+           "I've been asked to pinch-hit.",
+           "I'll prove you're not dreaming.",
+           'Heads you lose, tails I win.',
+           'A penny for your gags.'],
+    'tw': ['Things are about to get very tight.',
+           "That's Mr. Tightwad to you.",
+           "I'm going to cut off your funding.",
+           'Is this the best deal you can offer?',
+           "Let's get going - time is money.",
+           "You'll find I'm very tightfisted.",
+           "You're in a tight spot.",
+           'Prepare to walk a tight rope.',
+           'I hate spending my money on things.',
+           'I hope you can afford this.',
+           "I'm going to make this a tight squeeze.",
+           "I'm going to make a big dent in your budget."],
+    'bc': ['I enjoy subtracting Toons.',
+           'You can count on me to make you pay.',
+           'Bean there, done that.',
+           'I can hurt you where it counts.',
+           "I've bean told I look a lot like 'Downsizer.'",
+           'I make every bean count.',
+           'Your expense report is overdue.',
+           'Time for an audit.',
+           "Let's step into my office.",
+           'Where have you bean?',
+           "I've bean waiting for you.",
+           "I'm going to bean you."],
+    'bf': ["Looks like you've hit rock bottom.",
+           "I'm ready to feast.",
+           "I'm a sucker for Toons.",
+           'Oh goody, lunch time.',
+           'Perfect timing, I need a quick bite.',
+           "I'd like some feedback on my performance.",
+           "Let's talk about the bottom line.",
+           "You'll find my talents are bottomless.",
+           'Good, I need a little pick-me-up.',
+           "I'd love to have you for lunch."],
+    'pf': ["A petty you ran into me.",
+           "I can't see you winning this one.",
+           "I'll gladly fight over petty differences.",
+           'Fog-get about winning this one, Toon.',
+           "Your vision must be foggy.",
+           "Don't worry Toon, I'm not walking into this one blind.",
+           "This battle should be quite a spectacle.",
+           "You need glasses if you think you can best me.",
+           "You can't beat my specs, Toon.",
+           "I can see your defeat quite clearly.",
+           "I haven't mist a Toon yet."],
+    'tf': ["It's time to face-off!",
+           'You had better face up to defeat.',
+           'Prepare to face your worst nightmare!',
+           "Face it, I'm better than you.",
+           'Two heads are better than one.',
+           'It takes two to tango, you wanna tango?',
+           "You're in for two times the trouble.",
+           'Which face would you like to defeat you?',
+           "I'm 'two' much for you.",
+           "You don't know who you're facing.",
+           'Are you ready to face your doom?',
+           "My eyes are on you."],
+    'dt': ["I'm gonna give you double the trouble.",
+           'See if you can stop my double cross.',
+           'I serve a mean double-\x04DECKER.',
+           "It's time to do some double-dealing.",
+           'I plan to do some double DIPPING.',
+           "You're not going to like my double play.",
+           'You may want to double think this.',
+           'Get ready for a double TAKE.',
+           'You may want to double up against me.',
+           'Doubles anyone??'],
+    'nn': ["You'll be hanging on by a thread when I'm done with you.",
+           "I've got my eye on you!",
+           "A Toon? Knot a problem.",
+           "Needleless to say, you'll be heading to the playground.",
+           "Sew, you've found me?",
+           "Get to the point, Toon.",
+           "My abilities are on point.",
+           "Toons seem to have a pattern of losing to me.",
+           "You seam-stressed to fight me.",
+           "I'll point you back to the playground."],
+    'ac': ["I'm going to chase you out of town!",
+           'Do you hear a siren?',
+           "I'm going to enjoy this.",
+           'I love the thrill of the chase.',
+           'Let me give you the run down.',
+           'Do you have insurance?',
+           'I hope you brought a stretcher with you.',
+           'I doubt you can keep up with me.',
+           "It's all uphill from here.",
+           "You're going to need some urgent care soon.",
+           'This is no laughing matter.',
+           "I'm going to give you the business."],
+    'cv': ["Watch out Toon, I have a lot of tricks under my belt.",
+           "This battle should convey your weaknesses.",
+           "I can't convey how much you're about to lose.",
+           "You're treading into dangerous territory.",
+           "You've reached the end of the line.",
+           "You're outta line!",
+           "This encounter will be massively productive.",
+           "Stay in line, Toon!",
+           "You have no right to assembly here.",
+           "You are in line for defeat.",
+           "Watch where you tread."],
+
+    # Playground Minibosses
+    'derrman': [
+        "This is a waste of my time.",
+        "You need to refine your approach.",
+        "I thought I smelled something extra crude!",
+        "You Toons have such unrefined tastes.",
+    ],
+    'dlao': [
+        "I'll break the very ground ya stand on!",
+        "Ya plans are goin' down the drain!",
+        "Who could'a seen such a development!",
+        "Your hopes are diluted, Toon.",
+        "Think you know the key to beat me?",
+        "I'm locked on to ya, Toon!",
+        "Persistence is key, don't ya know?",
+        "The secret to my success? That's under lock and key.",
+        "You? Unlock me? Fat chance.",
+        "I've locked this area away from pesky Toons like you!",
+    ],
+    'dopr': [
+        "Why- why don't I introduce you- you to my bosses?",
+        "Wasn't that- wasn't that- wasn't that fun- funny?",
+        "You looking- looking at me- at me?",
+        "Fun-fun-funny Toon- Toon!",
+    ],
+    'derrhand': [
+        "This will be a spinning success.",
+        "I'll be sure to drill in the point.",
+        "You seem to be getting a bit dizzy.",
+        "I'm suspending this well, Toon.",
+    ],
+    'dold': [
+        "There ain't room in this town for tha both o' us.",
+        "Ink says yer wanted.",
+        "Yer farm looks drained.",
+        'Yippee-ki-yah-yippee-ki-yo!',
+    ],
+    'dopa': [
+        "Goodnight, Toon. Goodnight.",
+        "There's only static between us.",
+        "You aren't a good fit for this show.",
+        "Apologies, but I am changing the station.",
+    ],
+
+    # Autocaddie
+    'autocad': ["I'm quite the careless driver.",
+                'You should fore-sake all hope now.',
+                'You sure you want to follow through?',
+                "Don't tee me off, Toon.",
+                "My talents are 'on par' with the boss."],
+
+    # Event mgrs
+    'count': ["How did you find me?",
+              "Gah! I was just out getting 'chup!",
+              'Next time I will send that lazy Skelecog for the errands!'],
+    'erfit': ["Are you looking for a gym membership?",
+              "Look at these gains!",
+              "Try and keep up, Toon."],
+    'redd': ['This is a liquidation sale! All Toons must go!',
+             'EN GARDE!'],
+    'hroller': ["WHAT A TWIFFT, BUTTERCUP BLUE!",
+                "Hope the folkff at home are ready for a real ffhowfftopper!",
+                "You know, I've alwayff got an affe up my ffleeve! Ffee?",
+                "Give a big one for the headline, top banana!",
+                "Oooo-hooo-hooo, ratingff are ffkyrocketing!",
+                "Come on, babe, FFHOW UFF THOFFE NUMBERFF!",
+                "Who'ff ready for ffome cartoon violenffe?!",
+                "Pain iff ffhared equally between all participantff.",
+                "Where the diffe will land, nobody knowff--effept for me!"],
+    # FTF
+    'ftf_s': ["I'm the Foreman."],
+    'ftf_m': ["I'm the Supervisor."],
+    'ftf_l': ["I'm the Head Attorney."],
+    'ftf_c': ["I'm the Club President."],
+    'ftf_s_rt': ["I'm the Foreman."],
+    'ftf_s_br': ["I'm the Foreman."],
+    'ftf_m_cf': ["I'm the Supervisor... I think."],
+    'ftf_c_ac': ["I'm the Club President."],
+    'ftf_nuclear': ["We're the Foreman.",
+                    "We're the Supervisor.",
+                    "We're the Head Attorney.",
+                    "We're the Club President."],
+
+    # Judy
+    'judy': ['Schedule an appointment for some other time.',
+             'Talk to my secretary.',
+             "Not now! This puzzle won't solve itself!",
+             'Important business only, please.', ],
+
+    # Facility Bosses
+
+    'foreman': ["I'm the Foreman."],
+    'supervis': ["I'm the Supervisor."],
+    'clerk': ["I'm the Head Attorney."],
+    'clubpres': ["I'm the Club President."],
+
+    # Bosses
+
+    # V.P.
+    'vp': [
+        "It's a clearance sale! All Toons must go!",
+        "Is that imported blueberry?",
+        "We're sweeping the floor with this limited time offer!",
+        "Step away from the merchandise!",
+        "You're gonna go nuts and bolts for this offer!",
+        "Here's a sale 'geared' towards you!",
+        'Gonna take a lot more than a few pies to stop this sale!'
+    ],
+    'cfo': [
+        'Crashed by cash... unbelievable.',
+        "Step away, before I audit you!",
+        "This isn't legal tender!",
+        'Time to recalculate my strategy.'
+    ],
+    'clo': [
+        "Enough of this incessant noise!",
+        "It looks like we could reinforce this committee.",
+        "Watch out for my new corporate prosecutors!",
+        "There's a storm of legal trouble coming your way.",
+        "You're stirring up a whirlwind of lawsuits, Toon."
+    ],
+    'ceo': ['Get off that table!',
+            "You're grinding my gears, Toon!",
+            "Caddie, I'll need my driver!",
+            'Putter up, Toon.',
+            "Don't be such a 'puttz'."],
+    'ottoman': [
+        'Usually people just step on me.',
+        'Did I forget to water Bubby...'
+    ],
+    'chairman': [
+        "You're fired."
+    ],
+
+    # Litigation Team
+
+    'stenog': [
+        "Want me to run that by you again?",
+        "Not a single word goes amiss."
+    ],
+    'sgoat': [
+        "How baa-d can I be?",
+        "You won't like me maa-d!",
+        "I'll take you all on!",
+        "Goat ready for a fight!"
+    ],
+    'lgator': [
+        "I like to see the big picture.",
+        "Your strategies will go up in smoke, Toon."
+    ],
+    'caseman': [
+        "Hmmph.",
+        "Mmph."
+    ],
+
+    # Street Mercs
+    'duckshfl': [
+        "Deal me IN!",
+        "Watch it, the cardth are THTACKED againtht ya!",
+        "All betth are OFF!",
+        "Taking a chanthe are we??",
+    ],
+    'ddiver': [
+        "This battle will throw you off the deep end.",
+        "I'm not so shore you know what you're getting into.",
+        "Let's dive right into this, shall we?",
+        "You're getting into deep waters, Toon.",
+    ],
+    'gatekeep': [
+        "Halt! Keepeth hence from me!",
+        "I'm obligated to removeth thee, per industry standards.",
+        "I shall putteth this area on lockethdown.",
+        "What art thee doing here? Nay Toons did allow.",
+    ],
+    'bellring': [
+        "You won't be saved by the bell this time, Toon.",
+        "Are your alarm bells ringing?",
+        "I'll run rings around you.",
+        "Throwing your hat into the ring, Toon?",
+    ],
+    'mouthp': [
+        "Come to chat?",
+        "I was hoping you'd come visit me.",
+        "Don't mouth off to me, young Toon!",
+        "You should have called ahead, I could have made you some cookies!",
+    ],
+    'fires': [
+        "Like a moth into a flame...",
+        "Didn't your guardians tell you to not play with fire?",
+        "Hope you know how to stop, drop, and roll.",
+        "You aren't going to like it when I'm heated...",
+    ],
+    'treek': [
+        "CHOP, CHOP, CHOP! Let's hurreh this up!",
+        "AH-HAH-HEH! I'll chop you down!",
+        "Yah oveh-grown, Toon!",
+        "Gegh! Let's cut to the chase!",
+    ],
+    'fbed': [
+        "I'm an undercover agent.",
+        "Isn't it past your bedtime?",
+        "Can't you Toons ever give it a rest?",
+        "This battle will be your worst nightmare.",
+    ],
+
+    # Instance mercs
+
+    'prethink': [
+        "I'll show you what intelligence is truly capable of!",
+        "Such a simple-minded strategy won't work on me!",
+        "I'm always one step ahead!",
+        "It's only natural I thought to prepare for this scenario!",
+    ],
+    'rainmake': [
+        "Sigh, I really don't want to do this.",
+        "My memory is a bit clouded right now.",
+        "You and I should both know that time heals all wounds.",
+        "I can weather the storm, Toon.",
+    ],
+    'whunter': [
+        "Fellow Suits, YOU may be next!",
+        "Your stultiloquence has been a great source of consternation to this organization.",
+        "If I burn you, do you not hurt?",
+        "I've no warmth in my heart for you.",
+    ],
+    'mslacker': [
+        "My show is on in a few minutes.",
+        "I'm assuming you've met my dad.",
+        "My dad says that the union forces us to take breaks.",
+        "You're just trying to mooch off of my cable package.",
+    ],
+    'mplayer': [
+        "Time to face the music and dance, Tune.",
+        "Skibidobabadadoo!",
+        "Let’s tango-ago-go!",
+        "Caught the blues, baby?",
+    ],
+    'pcrat': [
+        "Consider this ya share for this operation.",
+        "Get outta my orbit, Toon!",
+        "Perhaps that's \"persuasion\" enough for ya!",
+        "I'M the one who's gonna put ya away for good!",
+    ],
+    'chainsaw': [
+        "I’m kind of busy right now, can you go away?",
+        "You don’t want to see what happens when I get angry.",
+        "If you worked for this company, you'd be out in a cannon.",
+        "ENTERING EMPLOYEE TERMINATION MODE.",
+    ],
+    'psetter': [
+        "20 meters ain't nothing!",
+        "Ka-pow.",
+        "You gotta do more than hustle to match my speed!",
+        "Bite the dust, buddy!",
+    ],
+}
+
+InventoryTotalGags = 'Total Gags:'
+InventoryRewardStrings = {
+    0: '%s \1deepGreen\1Counterfeits\2',
+    1: '%s \1deepBlue\1C&Ds\2',
+    2: '%s \1deepRed\1Pink Slips\2'
+}
+InventoryHoveroverTip = 'Hover Over\na Gag!'
+InventoryCounterfeitTip = '%s \1deepGreen\1Counterfeits\2\n\nSelect a Gag\nto \1deepGreen\1Forge\2!'
+InventoryCounterfeitAlreadyUsedHover = 'You\'ve already \1deepGreen\1Forged\2\n{gagName}\nthis battle.\n\nEach Gag can only be\n\1deepGreen\1Forged\2 \1deepRed\1once per battle\2.'
+InventoryCounterfeitNotEnoughHover = '\n\1TextSmaller\1\2\n\1deepRed\1\1TextSlightlySmaller\1Not enough to Forge!\2\2'
+InventoryDelete = 'DELETE'
+InventorySavePreset = 'SAVE PRESET'
+InventoryLoadPreset = 'LOAD PRESET'
+InventorySavePresetConfirm = "Are you sure you want to save this as your gag preset?"
+InventoryLoadConfirm = "Are you sure you want to load this preset?\n\nIt will cost: %(cost)s jellybeans.\nYou have %(money)s jellybeans."
+InventoryLoadPresetFail = "Sorry, you do not have enough jellybeans to load this preset.\n\nIt will cost: %(cost)s jellybeans.\nYou have %(money)s jellybeans."
+InventoryDone = 'DONE'
+InventoryDeleteHelp = 'Click on a gag to DELETE it.'
+InventorySkillCredit = 'Skill credit: %s'
+InventorySkillCreditNone = 'Skill credit: None'
+InventoryDetailAmount = '%(numItems)s / %(maxItems)s'
+InventoryDetailBaseHitStr = 'Base Hit'
+InventoryDetailHitStr = 'Hit'
+InventoryDetailData = '%(hitStr)s: %(accuracy)s\n%(damageString)s: %(damage)s%(bonus)s\n%(singleOrGroup)s'
+InventoryDetailDataExtra = '%(hitStr)s: %(accuracy)s\n%(damageString)s: %(damage)s%(bonus)s\n%(singleOrGroup)s\n%(extra)s'
+
+
+PhotoPageDelete = 'Are you sure you want to delete'
+
+GagsPageTitle = 'Gags'
+GagsPageShtikerTitle = 'Gags & Training'
+GagsPageDeleteTitle = 'Delete Gags'
+GagsPageTrackFull = 'You have all the gags in the %s track.'
+GagsPagePluralPoints = 'You will get a new\n%(trackName)s gag when you\nget %(numPoints)s more %(trackName)s points.'
+GagsPageSinglePoint = 'You will get a new\n%(trackName)s gag when you\nget %(numPoints)s more %(trackName)s point.'
+GagsPagePluralMax = 'You will max the\n%(trackName)s track when you\nget %(numPoints)s more %(trackName)s points.'
+GagsPageSingleMax = 'You will max the\n%(trackName)s track when you\nget %(numPoints)s more %(trackName)s point.'
+GagsPageNoAccess = 'You do not have access to the %s track yet.'
+AchievementsPageTitle = 'Achievements \n& Statistics'
+ActivitiesPageTitle = 'Activities'
+PhotoPageTitle = 'Screenshots'
+BattleGlobalAccuracyNever = 'Never'
+BattleGlobalAccuracyAwful = 'Awful'
+BattleGlobalAccuracyLow = 'Low'
+BattleGlobalAccuracyMedium = 'Med.'
+BattleGlobalAccuracyHigh = 'High'
+BattleGlobalAccuracyPerfect = 'Perf.'
+BattleGlobalAccuracyIfSoaked = 'If Soaked'
+AttackMissed = 'MISSED'
+InventoryTargets = 'Targets: %s'
+TrapExtraText = "If Executive: %s"
+LureExtraText = 'Knockback: %s'
+HealExtraText = '%(heal)s self'
+ZapExtraText = 'Jump Damage: %s'
+SquirtExtraText = 'Splash Damage: %s'
+ThrowExtraText = 'Self Heal: %s'
+SoundExtraText = 'Encore: %s%%'
+
+InventoryTrackExp = '%(curExp)s / %(nextExp)s'
+InventoryTargets = 'Targets: %s'
+InventoryAffectsOne = '1 %s'
+InventoryAffectsThree = '1 to 3 %s'
+InventoryAffectsAll = 'All %s'
+InventoryHealString = 'Toon-Up'
+InventoryDamageString = 'Damage'
+InventoryLureString = 'Rounds Active'
+InventorySquirtRoundsString = 'Rounds Soaked: %s'
+InventoryRun = 'RUN'
+InventorySOS = 'IOU'
+InventoryPass = 'PASS'
+InventoryFire = 'FIRE'
+InventorySue = 'SUE'
+InventorySurrender = 'SURRENDER'
+InventoryDamageBonus = '(+%d)'
+InventoryDamageBonusString = '(+%s)'
+GagShopRestocked = "We've restocked your gags just like you asked us to!"
+GagShopPresetSaved = "Your preset has been saved!"
+TownBattleRun = 'Run all the way back to the playground?'
+TownBattleAfk = 'You have been idle for several rounds. Would you like to return to the battle or run all the way back to the playground?'
+TownBattleAfkNoRun = 'You have been idle for several rounds. Would you like to return to the battle?'
+TownBattleAfkChoices = ['Return', 'Run']
+TownBattleSurrenderVote = 'Surrender this fight to the Cogs? Your team will need {votecase} in order to flee.'
+TownBattleSurrenderUnvote = 'Would you like to retract your vote to surrender?'
+TownBattleSurrenderVoteUnanimously = 'to vote unanimously'
+TownBattleSurrenderVoteNumber = 'at least {number} votes'
+TownBattleChooseAvatarToonTitle = 'SELECT TOON'
+TownBattleChooseAvatarCogTitle = 'SELECT COG'
+
+SuitTooltipTitle = 'Modifications'
+ToonTooltipTitle = '{}\'s Gags'
+ToonTooltipTitleWithoutS = '{}\' Gags'
+TownBattleHealthText = '%(hitPoints)s/%(maxHit)s'
+TownBattleBack = 'BACK'
+TownBattleLockIn = 'Lock In?'
+TownBattleLockedIn = 'Locked In!'
+TownBattleLock = 'LOCK'
+TownBattleUndo = 'UNDO'

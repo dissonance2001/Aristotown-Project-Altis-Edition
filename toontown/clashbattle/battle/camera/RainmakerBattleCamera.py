@@ -1,8 +1,8 @@
 from direct.interval.IntervalGlobal import *
 from panda3d.core import *
 
-from toontown.battle.BattleCamera import BattleCamera
-from toontown.battle.environmental.base.EnvironmentalEnum import RainmakerWeather
+from toontown.clashbattle.battle.BattleCamera import BattleCamera
+from toontown.clashbattle.battle.environmental.base.EnvironmentalEnum import RainmakerWeather
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

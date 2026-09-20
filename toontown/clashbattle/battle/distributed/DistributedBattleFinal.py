@@ -1,10 +1,10 @@
-from otp.nametag import NametagGlobals
+from toontown.nametag import NametagGlobals
 from direct.interval.IntervalGlobal import *
-from toontown.battle import MovieUtil
-from toontown.battle.BattleBase import *
-from toontown.battle.distributed.DistributedBattleBase import DistributedBattleBase
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.distributed.DistributedBattleBase import DistributedBattleBase
 from otp import *
-from toontown.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
 
 from toontown.toon.DistributedToonBase import DistributedToonBase
 

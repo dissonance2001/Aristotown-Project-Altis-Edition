@@ -1,8 +1,8 @@
 import random
 from panda3d.core import VBase3, Point3
 from direct.interval.IntervalGlobal import *
-from toontown.battle.distributed import DistributedBattleFinal
-from toontown.suit import SuitTimings
+from toontown.clashbattle.battle.distributed import DistributedBattleFinal
+from toontown.clashsuit.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 

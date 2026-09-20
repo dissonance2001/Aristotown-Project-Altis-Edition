@@ -1,18 +1,18 @@
 from direct.interval.IntervalGlobal import *
-from toontown.battle.BattleBase import *
-from toontown.battle.BattleProps import *
-from toontown.battle.BattleSounds import *
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.BattleProps import *
+from toontown.clashbattle.battle.BattleSounds import *
 from otp import *
 
-from toontown.battle.MovieUtil import applyVisualEffect
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.battle.SuitBattleGlobals import ITERATIVE_CHAT
+from toontown.clashbattle.battle.MovieUtil import applyVisualEffect
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.SuitBattleGlobals import ITERATIVE_CHAT
 from toontown.toon.ToonDNA import *
-from toontown.suit.SuitDNA import *
-from toontown.battle import MovieUtil
+from toontown.clashsuit.suit.SuitDNA import *
+from toontown.clashbattle.battle import MovieUtil
 from toontown.toonbase import TTLocalizer
-from toontown.battle.statuses.StatusEffects import MinibossResistancesStatusEffect
+from toontown.clashbattle.battle.statuses.StatusEffects import MinibossResistancesStatusEffect
 from toontown.utils.DirectNotifyCategory import getNotify
 
 

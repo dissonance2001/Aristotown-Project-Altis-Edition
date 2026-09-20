@@ -1,7 +1,7 @@
 """DistributedSuit module: contains the DistributedSuit class"""
 
 import random
-from toontown.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
 from direct.distributed.ClockDelta import *
 from direct.fsm.FSM import FSM
 from direct.interval.IntervalGlobal import *
@@ -11,7 +11,7 @@ from toontown.chat.constants.ChatGlobals import CFSpeech
 from toontown.toonbase import TTLocalizer
 from toontown.distributed.DelayDeletable import DelayDeletable
 from otp import *
-from toontown.suit.SuitLegList import *
+from toontown.clashsuit.suit.SuitLegList import *
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 

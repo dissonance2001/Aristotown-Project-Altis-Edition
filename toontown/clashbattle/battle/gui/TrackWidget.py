@@ -10,8 +10,8 @@ if __name__ == "__main__":
 
 from typing import Optional
 
-from toontown.battle import BattleGlobals
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.gui.TTGui import kwargsToOptionDefs
 from toontown.gui.GUITemplateSliders import GUITemplateSliders
 from toontown.gui.GUINode import GUINode

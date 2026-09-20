@@ -3,10 +3,10 @@ BattleGlobals: central repository for all battle globals
 """
 
 import math
-
+from enum import IntEnum, auto
 from panda3d.core import ConfigVariableDouble, Point3, Vec3
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.statuses.StatusEffectEnums import SEE
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
 
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase.ToontownGlobals import *
@@ -81,10 +81,10 @@ ATTACK_TRACKS = [
     AttackEnum.TOON_HEAL,
     AttackEnum.TOON_TRAP,
     AttackEnum.TOON_LURE,
-    AttackEnum.TOON_SOUND,
+    AttackEnum.TOON_THROW,
     AttackEnum.TOON_SQUIRT,
     AttackEnum.TOON_ZAP,
-    AttackEnum.TOON_THROW,
+    AttackEnum.TOON_SOUND,
     AttackEnum.TOON_DROP,
 ]
 TRACK_ORDER = [

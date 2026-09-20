@@ -1,11 +1,11 @@
 from direct.fsm import StateData
 from direct.gui.DirectGui import *
 
-from toontown.battle import BattleGUIGlobals, BattleGUI
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.statuses import StatusEffects
+from toontown.clashbattle.battle import BattleGUIGlobals, BattleGUI
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.statuses import StatusEffects
 from toontown.chat.ui.speedchat.TTSCUniteTerminal import TTSCUniteStateChangedEvent
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

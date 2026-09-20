@@ -7,8 +7,8 @@ if __name__ == "__main__":
         startInjector()
 
 
-from toontown.suit.heads.AnimatedSuitHead import *
-from toontown.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
+from toontown.clashsuit.suit.heads.AnimatedSuitHead import *
+from toontown.clashsuit.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 from direct.interval.IntervalGlobal import *
@@ -61,7 +61,7 @@ class HighRollerAnimatedSuitHead(AnimatedSuitHead):
 
 
 if __name__ == "__main__":
-    from toontown.suit import Suit, SuitDNA
+    from toontown.clashsuit.suit import Suit, SuitDNA
     suit = Suit.Suit()
     suitDNA = SuitDNA.SuitDNA()
     suitDNA.newSuit('hroller')

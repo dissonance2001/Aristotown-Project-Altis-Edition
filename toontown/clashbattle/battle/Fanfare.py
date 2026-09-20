@@ -1,10 +1,10 @@
 from direct.interval.IntervalGlobal import *
-from toontown.battle.BattleProps import *
-from toontown.battle.BattleSounds import *
+from toontown.clashbattle.battle.BattleProps import *
+from toontown.clashbattle.battle.BattleSounds import *
 from direct.gui.DirectGui import *
 from panda3d.core import *
-from toontown.battle import MovieUtil
-from toontown.battle import BattleParticles
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashbattle.battle import BattleParticles
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import getNotify
 
@@ -29,7 +29,7 @@ notify = getNotify('Fanfare')
 """
 def makePanel(toon, showToonName):
     panel = DirectFrame(relief=None, geom=DGG.getDefaultDialogGeom(), geom_color=ToontownGlobals.GlobalDialogColor, geom_scale=(1.75, 1, 0.75), pos=(0, 0, 0.587))
-    from toontown.battle import RewardPanel
+    from toontown.clashbattle.battle import RewardPanel
     panel.initialiseoptions(RewardPanel)
     panel.setTransparency(1)
     panel.hide()

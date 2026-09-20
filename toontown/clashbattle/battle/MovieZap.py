@@ -1,13 +1,13 @@
 import random
 from direct.interval.IntervalGlobal import *
-from toontown.battle.BattleBase import *
-from toontown.battle.BattleProps import *
-from toontown.battle.BattleSounds import *
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.BattleProps import *
+from toontown.clashbattle.battle.BattleSounds import *
 from toontown.toon.ToonDNA import *
-from toontown.suit.SuitDNA import *
-from toontown.battle import MovieUtil, SpecialSuitDeaths
-from toontown.battle import BattleParticles
-from toontown.battle import BattleGlobals
+from toontown.clashsuit.suit.SuitDNA import *
+from toontown.clashbattle.battle import MovieUtil, SpecialSuitDeaths
+from toontown.clashbattle.battle import BattleParticles
+from toontown.clashbattle.battle import BattleGlobals
 from collections import OrderedDict
 
 notify = getNotify('MovieZap')

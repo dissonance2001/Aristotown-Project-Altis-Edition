@@ -7,21 +7,21 @@ from direct.task import Task
 import math
 
 from toontown.gui.game.condition import ConditionGlobals
-from toontown.suit import BossCogGlobals
-from toontown.suit import DistributedBossCog
-from toontown.suit import DistributedSuitBase
-from toontown.suit import SuitDNA, Suit
-from toontown.battle import BattleBase
-from toontown.battle import MovieToonVictory
-from toontown.battle import RewardPanel
-from toontown.battle.BattleProps import *
+from toontown.clashsuit.suit import BossCogGlobals
+from toontown.clashsuit.suit import DistributedBossCog
+from toontown.clashsuit.suit import DistributedSuitBase
+from toontown.clashsuit.suit import SuitDNA, Suit
+from toontown.clashbattle.battle import BattleBase
+from toontown.clashbattle.battle import MovieToonVictory
+from toontown.clashbattle.battle import RewardPanel
+from toontown.clashbattle.battle.BattleProps import *
 from toontown.building import ElevatorConstants
 from toontown.building import ElevatorUtils
 from toontown.coghq import CogDisguiseGlobals
 from toontown.distributed import DelayDelete
 from otp import *
-from otp.nametag import NametagGlobals
-from otp.nametag.NametagConstants import CFSpeech, CFTimeout
+from toontown.nametag import NametagGlobals
+from toontown.nametag.NametagConstants import CFSpeech, CFTimeout
 from toontown.toon.npc import NPCToons
 from toontown.toonbase import TTLocalizer
 # from toontown.toonbase import BattleGlobals

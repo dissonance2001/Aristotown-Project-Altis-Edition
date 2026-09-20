@@ -133,3 +133,12 @@ class Experience:
                 nextExpValue = newNextExpValue
 
         return retList
+
+    def __getitem__(self, track):
+        return self.getExp(track)
+
+    def __setitem__(self, track, value):
+        self.setExp(track, value)
+
+    def maxOut(self):
+        self.maxOutExp()

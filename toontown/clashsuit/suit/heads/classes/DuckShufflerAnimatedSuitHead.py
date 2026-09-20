@@ -17,8 +17,8 @@ if __name__ == "__main__":
     base.initCR()  # Initialize Client Repository (defines base.cr)
     base.startHeadlessShow()
 
-from toontown.suit.heads.AnimatedSuitHead import *
-from toontown.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
+from toontown.clashsuit.suit.heads.AnimatedSuitHead import *
+from toontown.clashsuit.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.interval.IntervalGlobal import *
 from panda3d.core import TextureStage
@@ -81,9 +81,9 @@ if __name__ == "__main__":
     # Put whatever you wanna call here (preferably related to the module you're putting this into)
     # Ex: toontown/suit/Suit.py
 
-    from toontown.suit import Suit
+    from toontown.clashsuit.suit import Suit
     s = Suit.Suit()
-    from toontown.suit import SuitDNA
+    from toontown.clashsuit.suit import SuitDNA
     d = SuitDNA.SuitDNA()
     d.newSuit('duckshfl')
     s.setDNA(d)

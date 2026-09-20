@@ -1,14 +1,14 @@
 import math
 
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackClassAI
-from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
-from toontown.battle.statuses import SEE, StatusEffects
-from toontown.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
+from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+from toontown.clashbattle.battle.statuses import SEE, StatusEffects
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
 from toontown.toon.gui.ToonTipGlobals import TTE
-from toontown.battle import BattleGlobals
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.TOON_TRAP)

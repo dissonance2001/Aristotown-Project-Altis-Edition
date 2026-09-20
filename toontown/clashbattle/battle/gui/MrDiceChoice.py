@@ -9,7 +9,7 @@ This template now includes HeadlessStart, as seen below.
 Running this file as a module will open the GUI in a headless setting
 for streamlined testing and development.
 """
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.instances import HighRollerGlobals
 
 if __name__ == "__main__":

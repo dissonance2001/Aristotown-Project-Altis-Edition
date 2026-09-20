@@ -1,5 +1,5 @@
-from toontown.battle import SuitBattleGlobals
-from toontown.battle.distributed import DistributedBattleAI
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.clashbattle.battle.distributed import DistributedBattleAI
 from typing import TYPE_CHECKING
 
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory

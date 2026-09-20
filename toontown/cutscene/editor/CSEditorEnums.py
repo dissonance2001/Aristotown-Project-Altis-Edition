@@ -1,48 +1,226 @@
-# Python 2 compatibility enums for the Clash cutscene runtime.
-
-class _EnumValue(object):
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return self.name
-
-    def __str__(self):
-        return self.name
-
-    def __hash__(self):
-        return hash(self.name)
-
-    def __eq__(self, other):
-        return self is other
+"""
+All of the Enums defined for the Cutscene Editor.
+"""
+from enum import Enum, auto
 
 
-class _NameMap(object):
-    def __init__(self, names):
-        self._values = {}
-        for name in names:
-            value = _EnumValue(name)
-            self._values[name] = value
-            setattr(self, name, value)
+class EventDefinitionEnum(Enum):
+    """
+    An enum representing a given SubEvent.
+    """
+    moveToonsInBlock = auto()
+    turnToonsToNode = auto()
+    turnToonsToPoint = auto()
+    moveSingleToon = auto()
+    turnSingleToonToNode = auto()
+    turnSingleToonToPoint = auto()
+    turnSingleToonToHpr = auto()
+    turnToonsToHpr = auto()
+    tpToonsToElevator = auto()
+    hideSuits = auto()
+    showSuits = auto()
+    moveCameraPosHpr = auto()
+    moveCameraPos = auto()
+    moveCameraHpr = auto()
+    changeCameraFov = auto()
+    reparentCamera = auto()
+    reparentNode = auto()
+    cameraToElevator = auto()
+    actorDialogue = auto()
+    actorDialogueIt = auto()
+    showNametag = auto()
+    hideNametag = auto()
+    actorChat = auto()
+    timeSleep = auto()
+    turnActor = auto()
+    moveActor = auto()
+    particleSystemRun = auto()
+    moveParticleSystemPos = auto()
+    moveParticleSystemHpr = auto()
+    nodePosHprScale = auto()
+    hideSuit = auto()
+    showSuit = auto()
+    doSuitAnim = auto()
+    doSuitBlendAnim = auto()
+    doSuitHeadAnim = auto()
+    doSuitPingpong = auto()
+    suitApplyVisualEffect = auto()
+    suitUnapplyVisualEffect = auto()
+    moveToonsToBattlePos = auto()
+    heavyDropKill = auto()
+    summonSuitErfit = auto()
+    animateSingleToon = auto()
+    animateAllToons = auto()
+    pingpongSingleToon = auto()
+    pingpongAllToons = auto()
+    duckShufflerRoll = auto()
+    duckShufflerEyePos = auto()
+    actorShutUp = auto()
+    showNode = auto()
+    hideNode = auto()
+    scaleNode = auto()
+    scaleNodeList = auto()
+    moveNode = auto()
+    posRelativeToOther = auto()
+    rotateNode = auto()
+    animateAllSuits = auto()
+    pingpongAllSuits = auto()
+    disguiseAllToons = auto()
+    undisguiseAllToons = auto()
+    setAllAnimStates = auto()
+    setOneAnimState = auto()
+    clearAllSuitChat = auto()
+    dyeParticleSystem = auto()
+    toonFireFromCannon = auto()
+    hideToons = auto()
+    showToons = auto()
+    hideToon = auto()
+    showToon = auto()
+    colorScaleNode = auto()
+    alphaScaleNode = auto()
+    setAllEmote = auto()
+    setOneEmote = auto()
+    suitSupaFly = auto()
+    suitLockPropeller = auto()
+    suitProjectileFly = auto()
+    turnSuitsToNode = auto()
+    turnSuitsToPoint = auto()
+    turnSingleSuitToNode = auto()
+    turnSingleSuitToPoint = auto()
+    turnSingleSuitToHpr = auto()
+    turnSuitsToHpr = auto()
+    suitFireFromCannon = auto()
+    chainsawSetHeadGlitch = auto()
+    prethinkerDoBrainBlast = auto()
+    playSoundEffect = auto()
+    stopSoundEffect = auto()
+    playMusic = auto()
+    stopMusic = auto()
+    functionCall = auto()
+    functionLerp = auto()
+    openElev = auto()
+    closeElev = auto()
+    laaTrapdoor = auto()
+    showTimescaleChange = auto()
+    applyStagelight = auto()
+    setClearColorScale = auto()
+    dustcloudNode = auto()
+    doScreenFade = auto()
+    showBoss = auto()
+    hideBoss = auto()
+    showBosses = auto()
+    hideBosses = auto()
+    doBossAnimation = auto()
+    bossRollToPoint = auto()
+    turnAndMoveToon = auto()
+    createFog = auto()
+    destroyFog = auto()
+    setFogColor = auto()
+    setFogDensity = auto()
+    setToonExpression = auto()
+    setToonSpecies = auto()
+    suitColorScale = auto()
+    createExplosion = auto()
+    setToonEyes = auto()
+    basicLabel = auto()
+    colorNode = auto()
+    fakeCannonControl = auto()
+    squishToon = auto()
+    jiggleNode = auto()
 
-    def __getitem__(self, name):
-        return self._values[name]
+    highRollerDropTelevisionSet = auto()
+    highRollerSetTelevisionDice = auto()
+    highRollerSpawnWheel = auto()
+    highRollerSpawnPodiums = auto()
 
-    def __contains__(self, name):
-        return name in self._values
 
-    def names(self):
-        return list(self._values.keys())
+class SubEventArgumentType(Enum):
+    """
+    The different types of EventArguments.
+    """
+    slider_xyz = auto()
+    slider_hpr = auto()
+    slider_min_zero = auto()
+    slider_min_almost_zero = auto()
+    slider_float = auto()
+    slider_xyz_camera = auto()
+    slider_hpr_camera = auto()
+    slider_fov = auto()
+    textbox_str = auto()
+    textbox_float = auto()
+    dropdown_messages = auto()
+    dropdown_actors = auto()
+    dropdown_toons = auto()
+    dropdown_suits = auto()
+    dropdown_toon_anims = auto()
+    dropdown_suit_anims = auto()
+    dropdown_suit_head_anims = auto()
+    dropdown_node = auto()
+    dropdown_function = auto()
+    dropdown_elevators = auto()
+    dropdown_blendType = auto()
+    dropdown_blockShape = auto()
+    dropdown_particles = auto()
+    dropdown_visual_effects = auto()
+    dropdown_targetGroup = auto()
+    dropdown_suitFlyChoice = auto()
+    dropdown_suitFlyPosChoice = auto()
+    dropdown_sound_effects = auto()
+    dropdown_music = auto()
+    dropdown_fogType = auto()
+    dropdown_toonExpression = auto()
+    dropdown_toonSpecies = auto()
+    dropdown_toonEyes = auto()
+    boolean = auto()
+    slider_xyz_scale = auto()
+    slider_xyz_node = auto()
+    slider_hpr_node = auto()
+    dropdown_toon_anim_states = auto()
+    dropdown_arguments = auto()
+    slider_rgb = auto()
+    dropdown_toon_emote = auto()
+    slider_hpr_toon = auto()
+    slider_hpr_suit = auto()
+    slider_hpr_cannon = auto()
+    dropdown_bosses = auto()
+    dropdown_boss_anims = auto()
 
-EventDefinitionEnum = _NameMap(['moveToonsInBlock', 'turnToonsToNode', 'turnToonsToPoint', 'moveSingleToon', 'turnSingleToonToNode', 'turnSingleToonToPoint', 'turnSingleToonToHpr', 'turnToonsToHpr', 'tpToonsToElevator', 'hideSuits', 'showSuits', 'moveCameraPosHpr', 'moveCameraPos', 'moveCameraHpr', 'changeCameraFov', 'reparentCamera', 'reparentNode', 'cameraToElevator', 'actorDialogue', 'actorDialogueIt', 'showNametag', 'hideNametag', 'actorChat', 'timeSleep', 'turnActor', 'moveActor', 'particleSystemRun', 'moveParticleSystemPos', 'moveParticleSystemHpr', 'nodePosHprScale', 'hideSuit', 'showSuit', 'doSuitAnim', 'doSuitBlendAnim', 'doSuitHeadAnim', 'doSuitPingpong', 'suitApplyVisualEffect', 'suitUnapplyVisualEffect', 'moveToonsToBattlePos', 'heavyDropKill', 'summonSuitErfit', 'animateSingleToon', 'animateAllToons', 'pingpongSingleToon', 'pingpongAllToons', 'duckShufflerRoll', 'duckShufflerEyePos', 'actorShutUp', 'showNode', 'hideNode', 'scaleNode', 'scaleNodeList', 'moveNode', 'posRelativeToOther', 'rotateNode', 'animateAllSuits', 'pingpongAllSuits', 'disguiseAllToons', 'undisguiseAllToons', 'setAllAnimStates', 'setOneAnimState', 'clearAllSuitChat', 'dyeParticleSystem', 'toonFireFromCannon', 'hideToons', 'showToons', 'hideToon', 'showToon', 'colorScaleNode', 'alphaScaleNode', 'setAllEmote', 'setOneEmote', 'suitSupaFly', 'suitLockPropeller', 'suitProjectileFly', 'turnSuitsToNode', 'turnSuitsToPoint', 'turnSingleSuitToNode', 'turnSingleSuitToPoint', 'turnSingleSuitToHpr', 'turnSuitsToHpr', 'suitFireFromCannon', 'chainsawSetHeadGlitch', 'prethinkerDoBrainBlast', 'playSoundEffect', 'stopSoundEffect', 'playMusic', 'stopMusic', 'functionCall', 'functionLerp', 'openElev', 'closeElev', 'laaTrapdoor', 'showTimescaleChange', 'applyStagelight', 'setClearColorScale', 'dustcloudNode', 'doScreenFade', 'showBoss', 'hideBoss', 'showBosses', 'hideBosses', 'doBossAnimation', 'bossRollToPoint', 'turnAndMoveToon', 'createFog', 'destroyFog', 'setFogColor', 'setFogDensity', 'setToonExpression', 'setToonSpecies', 'suitColorScale', 'createExplosion', 'setToonEyes', 'basicLabel', 'colorNode', 'fakeCannonControl', 'squishToon', 'jiggleNode', 'highRollerDropTelevisionSet', 'highRollerSetTelevisionDice', 'highRollerSpawnWheel', 'highRollerSpawnPodiums'])
 
-SubEventArgumentType = _NameMap(['slider_xyz', 'slider_hpr', 'slider_min_zero', 'slider_min_almost_zero', 'slider_float', 'slider_xyz_camera', 'slider_hpr_camera', 'slider_fov', 'textbox_str', 'textbox_float', 'dropdown_messages', 'dropdown_actors', 'dropdown_toons', 'dropdown_suits', 'dropdown_toon_anims', 'dropdown_suit_anims', 'dropdown_suit_head_anims', 'dropdown_node', 'dropdown_function', 'dropdown_elevators', 'dropdown_blendType', 'dropdown_blockShape', 'dropdown_particles', 'dropdown_visual_effects', 'dropdown_targetGroup', 'dropdown_suitFlyChoice', 'dropdown_suitFlyPosChoice', 'dropdown_sound_effects', 'dropdown_music', 'dropdown_fogType', 'dropdown_toonExpression', 'dropdown_toonSpecies', 'dropdown_toonEyes', 'boolean', 'slider_xyz_scale', 'slider_xyz_node', 'slider_hpr_node', 'dropdown_toon_anim_states', 'dropdown_arguments', 'slider_rgb', 'dropdown_toon_emote', 'slider_hpr_toon', 'slider_hpr_suit', 'slider_hpr_cannon', 'dropdown_bosses', 'dropdown_boss_anims'])
+class EventSequenceMode(Enum):
+    """
+    The type of sequence which an Event uses.
+    """
+    Sequence = auto()
+    Parallel = auto()
 
-EventSequenceMode = _NameMap(['Sequence', 'Parallel'])
 
-PauseFlags = _NameMap(['ChangingTime', 'TimelineState', 'PauseButton'])
+class PauseFlags(Enum):
+    """
+    Reasons why the sequence is paused right now.
+    """
+    ChangingTime = auto()
+    TimelineState = auto()
+    PauseButton = auto()
 
-ToonBlockShape = _NameMap(['Elevator', 'BigElevator', 'SingleFile', 'DoubleFile', 'FourWide', 'EightWide', 'Line', 'Circle'])
 
-ToonSubEventTargetGroup = _NameMap(['All', 'Players', 'NPCs'])
+class ToonBlockShape(Enum):
+    """
+    The shape of the block in which Toons should congregate (e.g. in seq_moveToonsInBlock()).
+    """
+    Elevator = auto()
+    BigElevator = auto()
+    SingleFile = auto()
+    DoubleFile = auto()
+    FourWide = auto()
+    EightWide = auto()
+    Line = auto()
+    Circle = auto()
 
+
+class ToonSubEventTargetGroup(Enum):
+    """
+    For Toon SubEvents, choice of whether the SubEvent should affect players, NPCs, or both.
+    """
+    All = auto()
+    Players = auto()
+    NPCs = auto()

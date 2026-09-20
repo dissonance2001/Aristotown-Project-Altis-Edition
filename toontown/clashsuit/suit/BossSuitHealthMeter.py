@@ -1,4 +1,4 @@
-from toontown.suit import SuitHealthMeter
+from toontown.clashsuit.suit import SuitHealthMeter
 from toontown.toonbase import ToontownGlobals
 
 class BossSuitHealthMeter(SuitHealthMeter.SuitHealthMeter):

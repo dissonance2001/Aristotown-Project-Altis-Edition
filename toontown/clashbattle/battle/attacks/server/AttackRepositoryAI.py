@@ -1,8 +1,8 @@
 """Contains a mapping of every attack enum to a respective attack object."""
 
 from typing import Dict, Union
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackAI import AttackAI
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

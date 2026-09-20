@@ -1,6 +1,6 @@
-from toontown.battle.BattleCamera import BattleCamera
-from toontown.suit import SuitDNA, SuitGlobals
-from toontown.battle.statuses.StatusEffectEnums import SEE
+from toontown.clashbattle.battle.BattleCamera import BattleCamera
+from toontown.clashsuit.suit import SuitDNA, SuitGlobals
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

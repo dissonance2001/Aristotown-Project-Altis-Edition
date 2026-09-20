@@ -2,7 +2,7 @@ from panda3d.core import *
 from direct.interval.IntervalGlobal import *
 from direct.fsm.FSM import FSM
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
 from direct.task.Task import Task
 from toontown.toonbase import ToontownGlobals
 from toontown.level import LevelConstants

@@ -1,13 +1,13 @@
 import math
 import random
 
-from toontown.battle.BattleGlobals import ToonupMissAmt, ToonupSelfHealAmt
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackClassAI
-from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
-from toontown.battle.statuses import StatusEffectGlobals as SEG
-from toontown.battle.statuses.StatusEffectEnums import SEE
-from toontown.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleGlobals import ToonupMissAmt, ToonupSelfHealAmt
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
+from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
 from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
 
 

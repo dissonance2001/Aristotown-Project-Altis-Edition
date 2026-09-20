@@ -4,8 +4,8 @@ from direct.interval.IntervalGlobal import *
 from panda3d.core import *
 from enum import Enum, auto
 
-from toontown.suit.heads.AnimatedSuitHead import *
-from toontown.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
+from toontown.clashsuit.suit.heads.AnimatedSuitHead import *
+from toontown.clashsuit.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
 
 textureFile = 'phase_12/maps/ttcc_ene_chainsaw'
 

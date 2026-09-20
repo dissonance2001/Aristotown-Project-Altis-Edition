@@ -1,9 +1,9 @@
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleEventDefinitionClasses import *
-from toontown.battle.BattleGlobals import BattleStateEnum
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleEventDefinitionClasses import *
+from toontown.clashbattle.battle.BattleGlobals import BattleStateEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from .environmental.base.EnvironmentalEnum import ENV_ENUM
-from toontown.battle.statuses.StatusEffectEnums import SEE
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
 
 
 EventDefs = BattleEventDefinitions({

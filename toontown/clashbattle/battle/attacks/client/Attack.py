@@ -8,18 +8,18 @@ from direct.interval.IntervalGlobal import *
 from direct.showbase.DirectObject import DirectObject
 
 from toontown.audio.IsolatedSoundInterval import IsolatedSoundInterval
-from toontown.battle import MovieUtil, SuitBattleGlobals
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.BattleCamera import BattleCamera
-from toontown.battle.BattleSounds import globalBattleSoundCache
-from toontown.battle.attacks.base.AttackGlobals import getTauntPool
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.base.AttackTarget import AttackTarget
+from toontown.clashbattle.battle import MovieUtil, SuitBattleGlobals
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.BattleCamera import BattleCamera
+from toontown.clashbattle.battle.BattleSounds import globalBattleSoundCache
+from toontown.clashbattle.battle.attacks.base.AttackGlobals import getTauntPool
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackTarget import AttackTarget
 from toontown.gui.game.condition import ConditionGlobals
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.hood import ZoneUtil
-from toontown.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toon.DistributedToonBase import DistributedToonBase
 from toontown.toonbase import TTLocalizer
 from toontown.utils.AstronStruct import AstronStruct

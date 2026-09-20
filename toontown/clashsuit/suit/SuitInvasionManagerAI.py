@@ -6,9 +6,9 @@ from direct.showbase.DirectObject import DirectObject
 from panda3d.core import ConfigVariableInt
 
 from toontown.distributed.OtpDoGlobals import MESSENGER_CHANNEL_UD
-from toontown.battle import SuitBattleGlobals
-from toontown.suit import SuitDNA
-from toontown.suit.SuitInvasionGlobals import *
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit.SuitInvasionGlobals import *
 from toontown.toonbase import ToontownGlobals
 from toontown.uberdog.DistrictStatsUD import DistrictInvasionStatsUD
 from toontown.uberdog.UberdogGlobalsUD import NET_MESSENGER_SHARD_INVASION_STATUS

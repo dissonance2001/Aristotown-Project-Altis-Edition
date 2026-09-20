@@ -1,8 +1,8 @@
-from toontown.ai.AIBaseGlobal import *
-from toontown.suit.GoonGlobals import *
+from otp.ai.AIBaseGlobal import *
+from toontown.clashsuit.suit.GoonGlobals import *
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from toontown.coghq.entities import DistributedCrushableEntityAI
-from toontown.suit import GoonPathData
+from toontown.clashsuit.suit import GoonPathData
 from direct.distributed import ClockDelta
 import random
 from direct.task import Task

@@ -1,10 +1,10 @@
-from toontown.battle.BattleGlobals import DropHpBonus, DropPrestigeAmt, DropPrestigeStartAmt, DropPrestigeBlacklist
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackClassAI
-from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
-from toontown.battle.statuses import StatusEffects
-from toontown.battle.statuses.StatusEffectDefinitions import DEBUFF, getEffectIdsOfQuality, StatusEffectDefinitions
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashbattle.battle.BattleGlobals import DropHpBonus, DropPrestigeAmt, DropPrestigeStartAmt, DropPrestigeBlacklist
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
+from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+from toontown.clashbattle.battle.statuses import StatusEffects
+from toontown.clashbattle.battle.statuses.StatusEffectDefinitions import DEBUFF, getEffectIdsOfQuality, StatusEffectDefinitions
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 
 
 @AttackClassAI(attackType=AttackEnum.TOON_DROP)

@@ -1,6 +1,6 @@
 from direct.task.Timer import *
 
-from toontown.battle.BattleGlobals import *
+from toontown.clashbattle.battle.BattleGlobals import *
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

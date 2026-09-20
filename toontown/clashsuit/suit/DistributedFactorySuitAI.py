@@ -1,12 +1,12 @@
 import random
 
-from toontown.ai.AIBaseGlobal import *
-from toontown.suit.SuitDNA import SuitDNA
+from otp.ai.AIBaseGlobal import *
+from toontown.clashsuit.suit.SuitDNA import SuitDNA
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
-from toontown.battle import SuitBattleGlobals
-from toontown.suit import DistributedSuitBaseAI
-from toontown.suit import SuitDialog
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.clashsuit.suit import DistributedSuitBaseAI
+from toontown.clashsuit.suit import SuitDialog
 
 
 @DirectNotifyCategory()

@@ -2,7 +2,7 @@
 Contains the SuitPlanner class which handles management of all suits within a single neighborhood.
 """
 
-from toontown.suit import SuitPlannerBase
+from toontown.clashsuit.suit import SuitPlannerBase
 from direct.distributed import DistributedObject
 from panda3d.core import *
 from toontown.dna.DNAParser import DNASuitPoint

@@ -1,14 +1,14 @@
 from direct.interval.IntervalGlobal import *
 from direct.showutil import Effects
 
-from toontown.battle import BattleGlobals
-from toontown.battle import BattleParticles
-from toontown.battle import BattleProps
-from toontown.battle import MovieUtil
-from toontown.battle.BattleBase import *
-from toontown.battle.BattleProps import *
-from toontown.battle.BattleSounds import *
-from toontown.battle.MovieSound import createSuitResetPosTrack
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleParticles
+from toontown.clashbattle.battle import BattleProps
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.BattleProps import *
+from toontown.clashbattle.battle.BattleSounds import *
+from toontown.clashbattle.battle.MovieSound import createSuitResetPosTrack
 from toontown.utils.DirectNotifyCategory import getNotify
 
 notify = getNotify('MovieTrap')

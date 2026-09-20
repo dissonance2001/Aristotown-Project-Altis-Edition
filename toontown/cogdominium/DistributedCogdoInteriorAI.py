@@ -12,7 +12,7 @@ from . import DistCogdoFlyingGameAI, DistributedCogdoBarrelAI
 from .DistributedCogdoBattleBldgAI import DistributedCogdoBattleBldgAI
 from .SuitPlannerCogdoInteriorAI import SuitPlannerCogdoInteriorAI
 from toontown.cogdominium import CogdoBarrelRoomConsts
-from toontown.toon import InventoryBase
+from toontown.toon import GagInventoryBase
 from toontown.battle import BattleExperienceAI
 from toontown.suit import SuitDNA
 from toontown.toon import NPCToons

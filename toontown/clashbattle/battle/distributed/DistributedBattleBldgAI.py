@@ -1,8 +1,8 @@
-from toontown.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
-from toontown.battle.SuitBattleGlobals import *
+from toontown.clashbattle.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
+from toontown.clashbattle.battle.SuitBattleGlobals import *
 from direct.distributed.ClockDelta import *
 from toontown.ai.AIBase import *
-from toontown.battle.BattleGlobals import *
+from toontown.clashbattle.battle.BattleGlobals import *
 from direct.showbase.PythonUtil import addListsByValue
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 

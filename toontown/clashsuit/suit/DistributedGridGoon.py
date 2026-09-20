@@ -1,13 +1,13 @@
 from panda3d.core import *
 from direct.interval.IntervalGlobal import *
-from toontown.battle.BattleProps import *
+from toontown.clashbattle.battle.BattleProps import *
 
 from direct.distributed import ClockDelta
 from . import DistributedGoon
 from .GoonGlobals import *
 
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.suit import DistributedGoon
+from toontown.clashsuit.suit import DistributedGoon
 
 
 @DirectNotifyCategory()

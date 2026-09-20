@@ -1,17 +1,17 @@
-from toontown.ai.AIBaseGlobal import *
+from otp.ai.AIBaseGlobal import *
 from panda3d.core import *
 from direct.distributed.ClockDelta import *
 from direct.task import Task
-from toontown.battle import SuitBattleGlobals
-from toontown.suit import SuitBase
-from toontown.suit import SuitDialog
-from toontown.suit import SuitDefinitionsBase
-from toontown.suit import SuitDNA
-from toontown.suit.SuitLegList import *
-from toontown.suit import SuitHoodGlobals
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.clashsuit.suit import SuitBase
+from toontown.clashsuit.suit import SuitDialog
+from toontown.clashsuit.suit import SuitDefinitionsBase
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit.SuitLegList import *
+from toontown.clashsuit.suit import SuitHoodGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from toontown.building import FADoorCodes
-from toontown.suit import DistributedSuitBaseAI
+from toontown.clashsuit.suit import DistributedSuitBaseAI
 from toontown.hood import ZoneUtil
 
 

@@ -1,15 +1,15 @@
 from direct.interval.IntervalGlobal import *
-from toontown.battle.BattleBase import *
-from toontown.battle.BuildingBattleCamera import BuildingBattleCamera
-from toontown.battle.distributed.DistributedBattleBase import DistributedBattleBase
-from toontown.battle import SuitBattleGlobals
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.BuildingBattleCamera import BuildingBattleCamera
+from toontown.clashbattle.battle.distributed.DistributedBattleBase import DistributedBattleBase
+from toontown.clashbattle.battle import SuitBattleGlobals
 from otp import *
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import SuitDNA
 from toontown.toon import TTEmote
 from toontown.toonbase import TTLocalizer
 from toontown.distributed import DelayDelete
 from toontown.chat.constants.ChatGlobals import CFSpeech, CFTimeout
-from otp.nametag import NametagGlobals
+from toontown.nametag import NametagGlobals
 
 
 class DistributedBattleBldg(DistributedBattleBase):

@@ -3,16 +3,16 @@ from typing import List
 
 from direct.interval.IntervalGlobal import *
 
-from toontown.battle import BattleGlobals, MovieUtil
-from toontown.suit import SuitDNA, SuitGlobals
-from toontown.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashbattle.battle import BattleGlobals, MovieUtil
+from toontown.clashsuit.suit import SuitDNA, SuitGlobals
+from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toon.DistributedToonBase import DistributedToonBase
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from toontown.battle.distributed.DistributedBattleBase import DistributedBattleBase
+    from toontown.clashbattle.battle.distributed.DistributedBattleBase import DistributedBattleBase
 
 
 @DirectNotifyCategory()

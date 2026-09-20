@@ -3,11 +3,11 @@ from panda3d.core import *
 from panda3d.physics import Physical
 
 from toontown.gui.PositionedGUI import OnscreenPositionData
-from toontown.suit import SuitDNA
-from toontown.suit import BossCog
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit import BossCog
 from toontown.shtiker import CogPageGlobals as CPG
 from toontown.toonbase import TTLocalizer
-from toontown.avatar import AvatarPanel
+from otp.avatar import AvatarPanel
 from toontown.friends import FriendsListPanel
 
 

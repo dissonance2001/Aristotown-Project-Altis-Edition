@@ -63,7 +63,7 @@ ShopCategoryToTitle = {
 
     NPCShopCategory.TTC: TTLocalizer.lToontownCentral,
     NPCShopCategory.BB: TTLocalizer.lDonaldsDock,
-    NPCShopCategory.YOTT: TTLocalizer.lYeOlde,  # Clash calls this lOldeToontown
+    NPCShopCategory.YOTT: TTLocalizer.lYeOlde,
     NPCShopCategory.DG: TTLocalizer.lDaisyGardens,
     NPCShopCategory.MML: TTLocalizer.lMinniesMelodyland,
     NPCShopCategory.TB: TTLocalizer.lTheBrrrgh,

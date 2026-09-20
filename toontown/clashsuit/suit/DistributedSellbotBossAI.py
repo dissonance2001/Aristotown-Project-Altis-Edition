@@ -4,9 +4,9 @@ from typing import Optional
 from direct.distributed.ClockDelta import *
 from direct.fsm import FSM
 
-from toontown.suit import BossCogGlobals
-from toontown.ai.AIBaseGlobal import *
-from toontown.building import SuitBuildingGlobals
+from toontown.clashsuit.suit import BossCogGlobals
+from otp.ai.AIBaseGlobal import *
+from toontown.building import ClashSuitBuildingGlobals
 from toontown.groups.GroupEnums import GroupType
 from toontown.instances import DistributedCutsceneSkipButtonAI
 from toontown.inventory.enums.ItemEnums import BackgroundItemType, BoosterItemType, IOUItemType
@@ -15,7 +15,7 @@ from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
 from toontown.quest3.context.CogBossContext import CogBossContext
 from toontown.quest3.context.TossPieContext import TossPieContext
 from toontown.quest3.SpecialQuestZones import SpecialQuestZones
-from toontown.suit import DistributedBossCogAI, DistributedSuitAI, SuitDNA
+from toontown.clashsuit.suit import DistributedBossCogAI, DistributedSuitAI, SuitDNA
 from toontown.toon.DistributedToonAI import DistributedToonAI
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.toon.gui.ToonTipGlobals import TTE
@@ -36,8 +36,8 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.doobers = []
         self.cagedToonNpcId = 90001
         self.bossMaxDamage = BossCogGlobals.SellbotBossMaxDamage
-        self.battleOnePlanner = SuitBuildingGlobals.SPE.VP
-        self.battleTwoPlanner = SuitBuildingGlobals.SPE.VP_SKELECOGS
+        self.battleOnePlanner = ClashSuitBuildingGlobals.SPE.VP
+        self.battleTwoPlanner = ClashSuitBuildingGlobals.SPE.VP_SKELECOGS
         self.recoverRate = 0
         self.recoverStartTime = 0
         self.numIOUs = 2
@@ -629,6 +629,6 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.universalUnites = 2
         self.numPies = 30
         self.pieHealAmt = 3
-        self.battleOnePlanner = SuitBuildingGlobals.SPE.VP
-        self.battleTwoPlanner = SuitBuildingGlobals.SPE.VP_SKELECOGS
+        self.battleOnePlanner = ClashSuitBuildingGlobals.SPE.VP
+        self.battleTwoPlanner = ClashSuitBuildingGlobals.SPE.VP_SKELECOGS
         self.numIOUs = 3

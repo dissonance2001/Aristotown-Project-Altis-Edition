@@ -2,8 +2,8 @@
 from typing import Dict, Union
 
 
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.client.Attack import Attack
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.client.Attack import Attack
 
 
 AttackRepository = {}  # type: Dict[AttackEnum, Attack]

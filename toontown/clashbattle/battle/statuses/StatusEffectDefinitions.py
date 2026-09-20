@@ -1,10 +1,10 @@
 from typing import Dict
 
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from . import StatusEffects
 from toontown.toonbase import TTLocalizer
-from toontown.battle import BattleGlobals
-from toontown.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
 from . import SEE
 from ..visuals.VisualEffectEnums import VisualEffectEnum
 

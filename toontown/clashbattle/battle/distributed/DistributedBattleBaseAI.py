@@ -9,21 +9,21 @@ from direct.fsm import ClassicFSM, State
 from toontown.utils.SafeFSM import SafeFSM
 from direct.task import Task
 
-from toontown.ai.AIBaseGlobal import *
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle import BattleExperienceAI
-from toontown.battle.statuses import SEE
-from toontown.battle.statuses.StatusEffects import *
+from otp.ai.AIBaseGlobal import *
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle import BattleExperienceAI
+from toontown.clashbattle.battle.statuses import SEE
+from toontown.clashbattle.battle.statuses.StatusEffects import *
 from toontown.inventory.registry.IOURegistry import IOURegistry
 from toontown.toon.gui.ToonTipGlobals import TTE
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.BattleBase import *
-from toontown.battle.BattleCalculatorAI import *
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleEventDefinitionClasses import BattleObjectEventDefinition, SuitEventDefinition
-from toontown.battle.SuitBattleGlobals import *
-from toontown.battle import SuitBattleGlobals
-from toontown.battle.visuals.VisualEffects import VisualEffectRemoved
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.BattleCalculatorAI import *
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleEventDefinitionClasses import BattleObjectEventDefinition, SuitEventDefinition
+from toontown.clashbattle.battle.SuitBattleGlobals import *
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.clashbattle.battle.visuals.VisualEffects import VisualEffectRemoved
 from toontown.hood import ZoneUtil
 from toontown.inventory.enums.ItemEnums import MaterialItemType
 from toontown.modifiers import ModifierEnums
@@ -31,11 +31,11 @@ from toontown.modifiers.ModifierEnums import ModifierType
 from toontown.modifiers.contentsync.ContentSyncDefinitions import SuitToContentSyncType
 from toontown.notifications.notificationData.GenericTextNotification import GenericTextNotification, GenericTextId
 from toontown.quest3.base.QuestReference import QuestReference
-from toontown.suit import SuitHoodGlobals
-from toontown.suit.SuitDNA import suitDeptFullnames
+from toontown.clashsuit.suit import SuitHoodGlobals
+from toontown.clashsuit.suit.SuitDNA import suitDeptFullnames
 from toontown.toon.DistributedToonAI import DistributedToonAI
 from toontown.toon.ToonStatsGlobals import ToonStats
-from toontown.battle.BattleGlobals import *
+from toontown.clashbattle.battle.BattleGlobals import *
 from toontown.utils.RateLimiter import IdRateLimiter
 
 

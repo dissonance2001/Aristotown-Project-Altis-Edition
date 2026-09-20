@@ -2,13 +2,13 @@ import random
 
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 
-from toontown.battle import BattleGlobals
-from toontown.battle.BattleGlobals import BattleStateEnum
-from toontown.battle.BattleListenerObject import BattleListenerObject
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.toon import ToonAttackAI
-from toontown.battle.statuses import StatusEffectGlobals as SEG
-from toontown.battle.statuses.StatusEffectEnums import StatusEffectEnum as SEE
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashbattle.battle.BattleGlobals import BattleStateEnum
+from toontown.clashbattle.battle.BattleListenerObject import BattleListenerObject
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.toon import ToonAttackAI
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum as SEE
 from toontown.inventory.enums.ItemEnums import MaterialItemType, UniteItemType
 from toontown.inventory.registry import UniteRegistry, IOURegistry
 from toontown.toon.gui.ToonTipGlobals import TTE

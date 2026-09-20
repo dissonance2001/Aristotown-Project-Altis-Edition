@@ -1,4 +1,4 @@
-from toontown.battle.distributed import DistributedBattleFinalAI
+from toontown.clashbattle.battle.distributed import DistributedBattleFinalAI
 
 
 class DistributedBattlePaintingAI(DistributedBattleFinalAI.DistributedBattleFinalAI):

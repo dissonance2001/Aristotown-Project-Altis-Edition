@@ -237,23 +237,30 @@ class Playground(BattlePlace.BattlePlace):
                 light.setColorScaleOff(0)
 
         newsManager = base.cr.newsManager
+        newsManager = base.cr.newsManager
         if newsManager:
-            holidayIds = base.cr.newsManager.getDecorationHolidayId()
-            #Halloween Event
-            if (ToontownGlobals.HALLOWEEN_COSTUMES in holidayIds or ToontownGlobals.SPOOKY_COSTUMES in holidayIds) and self.loader.hood.spookySkyFile:
-                lightsOff = Sequence(LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(0.55, 0.55, 0.65, 1)), Func(self.loader.hood.startSpookySky), Func(__lightDecorationOn__))
+            holidayId = base.cr.newsManager.getDecorationHolidayId()
+            # Halloween Event
+            if ToontownGlobals.HALLOWEEN == holidayId and self.loader.hood.spookySkyFile:
+                lightsOff = Sequence(
+                    LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(0.55, 0.55, 0.65, 1)),
+                    Func(self.loader.hood.startSpookySky), Func(__lightDecorationOn__))
                 lightsOff.start()
-            else:
-                self.loader.hood.startSky()
-                lightsOn = LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(1, 1, 1, 1))
-                lightsOn.start()
-            #Christmas Event
-            if (ToontownGlobals.WINTER_DECORATIONS in holidayIds or ToontownGlobals.WACKY_WINTER_DECORATIONS in holidayIds) and self.loader.hood.snowySkyFile:
-                lightsOff = Sequence(LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(0.7, 0.7, 0.8, 1)), Func(self.loader.hood.startSnowySky), Func(__lightDecorationOn__))
+            elif ToontownGlobals.APRIL_FOOLS == holidayId and ZoneUtil.getHoodId(
+                    requestStatus['zoneId']) == 3000 and self.loader.hood.spookySkyFile:
+                # We enable the silly little darkness in the Brrrgh during APril Toons for erfit..
+                lightsOff = Sequence(
+                    LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(0.55, 0.55, 0.65, 1)),
+                    Func(self.loader.hood.startSpookySky), Func(__lightDecorationOn__))
+                lightsOff.start()
+            elif ToontownGlobals.CHRISTMAS == holidayId and self.loader.hood.snowySkyFile:
+                lightsOff = Sequence(
+                    LerpColorScaleInterval(base.cr.playGame.hood.loader.geom, 0.1, Vec4(0.7, 0.7, 0.8, 1)),
+                    Func(self.loader.hood.startSnowySky), Func(__lightDecorationOn__))
                 lightsOff.start()
                 self.snowEvent = BattleParticles.loadParticleFile('snowdisk.ptf')
                 self.snowEvent.setPos(0, 30, 10)
-                #2 and 3 are only for the blizzard event and should be removed
+                # 2 and 3 are only for the blizzard event and should be removed
                 self.snowEvent2 = BattleParticles.loadParticleFile('snowdisk.ptf')
                 self.snowEvent2.setPos(0, 10, 10)
                 self.snowEvent3 = BattleParticles.loadParticleFile('snowdisk.ptf')
@@ -261,9 +268,8 @@ class Playground(BattlePlace.BattlePlace):
                 self.snowEventRender = base.cr.playGame.hood.loader.geom.attachNewNode('snowRender')
                 self.snowEventRender.setDepthWrite(2)
                 self.snowEventRender.setBin('fixed', 1)
-                self.snowEventFade = None
                 self.snowEvent.start(camera, self.snowEventRender)
-                #2 and 3 are only for the blizzard event and should be removed
+                # 2 and 3 are only for the blizzard event and should be removed
                 self.snowEvent2.start(camera, self.snowEventRender)
                 self.snowEvent3.start(camera, self.snowEventRender)
             else:

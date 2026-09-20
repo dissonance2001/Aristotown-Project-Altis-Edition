@@ -7,6 +7,7 @@ from sys import platform
 import sys
 import tempfile
 import time
+from .BaseTextProperties import initializeBaseTextProperties, initializeBaseTextGraphics
 from . import ToontownAsyncLoader
 from direct.directnotify import DirectNotifyGlobal
 from direct.filter.CommonFilters import CommonFilters
@@ -28,6 +29,7 @@ from toontown.nametag import NametagGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownAccess
 from toontown.toonbase import ToontownBattleGlobals
+from toontown.toonbase import ToontownTransitions
 from toontown.toontowngui import TTDialog
 from toontown.options import GraphicsOptions
 from toontown.audio.AltisAudio import AltisAudio
@@ -375,6 +377,12 @@ class ToonBase(OTPBase.OTPBase):
         self.aspectRatio = float(self.oldX) / self.oldY
         self.localAvatarStyle = None
         self.filters = CommonFilters(self.win, self.cam)
+
+        initializeBaseTextProperties()
+        initializeBaseTextGraphics()
+
+        del self.transitions
+        self.transitions = ToontownTransitions.ToontownTransitions(self.loader)
         
         self.wantCustomControls = settings.get('want-Custom-Controls', False)
 

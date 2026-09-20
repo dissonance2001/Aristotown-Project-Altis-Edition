@@ -3,24 +3,24 @@ import random
 from typing import List, Optional, Union
 
 from toontown.toonbase import ToontownGlobals
-from toontown.battle import BattleGlobals
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleGlobals import BattleOrderPriority
-from toontown.battle.BattleListenerObject import BattleListenerObject
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.environmental.base.EnvironmentalEnum import ENV_ENUM, EnvironmentalEnum,\
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleGlobals import BattleOrderPriority
+from toontown.clashbattle.battle.BattleListenerObject import BattleListenerObject
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.environmental.base.EnvironmentalEnum import ENV_ENUM, EnvironmentalEnum,\
      PlutocratWeather, RainmakerWeather
-from toontown.battle.environmental.server.EnvironmentalRepository import EnvironmentalClass
-from toontown.battle.statuses.StatusEffectEnums import SEE
-from toontown.battle.statuses.StatusEffects import DrenchStatusEffect, SoakStatusEffect, StatusEffectBase, \
+from toontown.clashbattle.battle.environmental.server.EnvironmentalRepository import EnvironmentalClass
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
+from toontown.clashbattle.battle.statuses.StatusEffects import DrenchStatusEffect, SoakStatusEffect, StatusEffectBase, \
     CogStatusEffect
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.events.apriltoons.findthefamily import FindTheFamilyGlobals
 from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
-from toontown.suit.DistributedSuitAI import DistributedSuitAI
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit.DistributedSuitAI import DistributedSuitAI
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit import SuitDNA
 from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
 
 from typing import TYPE_CHECKING
@@ -28,8 +28,8 @@ from typing import TYPE_CHECKING
 from toontown.utils import AIUtil
 
 if TYPE_CHECKING:
-    from toontown.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
-    from toontown.battle.BattleListenerAI import BattleListenerAI
+    from toontown.clashbattle.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
+    from toontown.clashbattle.battle.BattleListenerAI import BattleListenerAI
 
 
 NORMAL = 0
@@ -1364,7 +1364,7 @@ class HighRollerCloneHandler(PersistentStatusEffectEnvironmental):
         toons = [toon for toon in [simbase.air.getDo(toonId) for toonId in self.toons] if toon]
         damageDict = {toon: 0 for toon in toons}
 
-        from toontown.battle.attacks.server.toon.ToonAttackAI import \
+        from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import \
             ToonAttackAI
 
         # Get the arguments for the attack.
@@ -1378,7 +1378,7 @@ class HighRollerCloneHandler(PersistentStatusEffectEnvironmental):
 
         # Now create the attack.
         if attack:
-            from toontown.battle.attacks.server.AttackRepositoryAI import createAttack
+            from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import createAttack
             attack = createAttack(
                 AttackEnum.HIGHROLLER_CLONE_TOONUP,
                 extraArgs=[damageDict],
@@ -1484,7 +1484,7 @@ class HighRollerCloneHandler(PersistentStatusEffectEnvironmental):
         toons = [toon for toon in [simbase.air.getDo(toonId) for toonId in self.toons] if toon]
         damageDict = {toon: 0 for toon in toons}
 
-        from toontown.battle.attacks.server.toon.ToonAttackAI import \
+        from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import \
             ToonAttackAI
 
         # Get the arguments for the attack.
@@ -1730,7 +1730,7 @@ class FTFPresidentHighStakes(EnvironmentalBase):
 
         # Part one: Create an attack upgrade dictionary (discarding cases where no upgrade occurred).
         for i, attack in enumerate(attackOrder.getAttacks()):
-            from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+            from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
             if (not isinstance(attack, ToonAttackAI)) or attack.attackType in (AttackEnum.TOON_NPC, AttackEnum.TOON_FIRE, AttackEnum.TOON_SUE):
                 continue
             attack: ToonAttackAI

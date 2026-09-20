@@ -3,9 +3,9 @@ import random
 
 from panda3d.core import Vec2, Vec3, Point3
 
-from toontown.suit import BossCogGlobals
-from toontown.ai.AIBaseGlobal import *
-from toontown.suit import DistributedSuitBaseAI
+from toontown.clashsuit.suit import BossCogGlobals
+from otp.ai.AIBaseGlobal import *
+from toontown.clashsuit.suit import DistributedSuitBaseAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toon.gui.ToonTipGlobals import TTE
 

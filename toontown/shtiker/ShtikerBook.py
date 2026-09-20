@@ -267,11 +267,6 @@ class ShtikerBook(DirectFrame, StateData.StateData):
             iconModels = loader.loadModel('phase_3.5/models/gui/sos_textures')
             iconGeom = iconModels.find('**/teleportIcon')
             iconModels.detachNode()
-        elif pageName == TTLocalizer.InventoryPageTitle:
-            iconModels = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            iconGeom = iconModels.find('**/inventory_cup_cake')
-            iconScale = 7
-            iconModels.detachNode()
         elif pageName == TTLocalizer.QuestPageToonTasks:
             iconModels = loader.loadModel('phase_3.5/models/gui/stickerbook_gui')
             iconGeom = iconModels.find('**/questCard')

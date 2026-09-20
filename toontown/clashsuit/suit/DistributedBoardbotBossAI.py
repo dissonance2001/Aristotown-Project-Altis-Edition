@@ -1,12 +1,12 @@
-from toontown.suit import BossCogGlobals
-from toontown.ai.AIBaseGlobal import *
+from toontown.clashsuit.suit import BossCogGlobals
+from otp.ai.AIBaseGlobal import *
 from toontown.inventory.base.Inventory import Inventory
 from toontown.inventory.enums.ItemEnums import ClothingTopItemType
-from toontown.suit import DistributedBossCogAI
+from toontown.clashsuit.suit import DistributedBossCogAI
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.fsm import FSM
 from toontown.toonbase import ToontownGlobals
-from toontown.building import SuitBuildingGlobals
+from toontown.building import ClashSuitBuildingGlobals
 import random
 from toontown.groups.GroupEnums import GroupType
 
@@ -30,7 +30,7 @@ class DistributedBoardbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.F
         self.gavels = None
         self.cagedToonNpcId = 90001
         self.bossMaxDamage = BossCogGlobals.LawbotBossMaxDamage
-        self.battleOnePlanner = SuitBuildingGlobals.SPE.CLO
+        self.battleOnePlanner = ClashSuitBuildingGlobals.SPE.CLO
         self.recoverRate = 0
         self.recoverStartTime = 0
         self.bossDamage = 0

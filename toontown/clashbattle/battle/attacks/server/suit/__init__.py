@@ -1,5 +1,5 @@
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackRepository
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackRepository
 
 from .SuitSingleAttackAI import SuitSingleAttackAI
 from .SuitMultiAttackAI import SuitDoubleAttackAI, SuitTripleAttackAI

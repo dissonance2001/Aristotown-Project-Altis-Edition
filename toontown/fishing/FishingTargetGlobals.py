@@ -29,17 +29,17 @@ __targetInfoDict = {
 
     # Barnacle Boatyard #
     ToontownGlobals.DonaldsDock: (2, -17, 130, 1.73, 15, 1.73 - 3.615),
-    ToontownGlobals.BarnacleBoulevard: (2, 381, -350, -2, 14, -2 - 0.482),
+    ToontownGlobals.BuccaneerBoulevard: (2, 381, -350, -2, 14, -2 - 0.482),
     ToontownGlobals.SeaweedStreet: (2, -395, -226, -2, 14, -2 - 0.482),
     ToontownGlobals.LighthouseLane: (2, 350, 100, -2, 14, -2 - 0.482),
-    ToontownGlobals.AhoyAvenue: (4, 50, -90, -2, 14, -2 - 0.482),
+    ToontownGlobals.AnchorAvenue: (4, 50, -90, -2, 14, -2 - 0.482),
 
     # Daffodil Gardens #
     ToontownGlobals.DaisyGardens: (4, 75, 62, -1.48, 15.6, -1.48 - 0.345),
-    ToontownGlobals.ElmStreet: (2, 149, 44, -1.43, 13, -1.43 - 0.618),
-    ToontownGlobals.MapleStreet: (2, 176, 100, -1.43, 13, -1.43 - 0.618),
-    ToontownGlobals.OakStreet: (2, 134, -70.5, -1.5, 13, -1.5 - 0.377),
-    ToontownGlobals.RoseValley: (2, 259, -217, -1.5, 13, -1.43 - 0.618),
+    ToontownGlobals.PetuniaPlace: (2, 149, 44, -1.43, 13, -1.43 - 0.618),
+    ToontownGlobals.DaisyDrive: (2, 176, 100, -1.43, 13, -1.43 - 0.618),
+    ToontownGlobals.TulipTerrace: (2, 134, -70.5, -1.5, 13, -1.5 - 0.377),
+    ToontownGlobals.SunflowerStreet: (2, 259, -217, -1.5, 13, -1.43 - 0.618),
 
     # Mezzo Melodyland #
     ToontownGlobals.MinniesMelodyland: (2, -0.2, -20.2, -14.65, 14, -14.65 - -12.2),

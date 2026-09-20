@@ -1,9 +1,9 @@
 from typing import Optional
 from enum import Enum, auto
 
-from toontown.battle.statuses.StatusEffectEnums import SEE
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
 from toontown.toonbase import TTLocalizer, ToontownGlobals
-from toontown.battle import PassiveAttributeDefs
+from toontown.clashbattle.battle import PassiveAttributeDefs
 from panda3d.core import VBase4
 import math
 

@@ -1,323 +1,166 @@
-from toontown.toonbase.ToontownBattleGlobals import *
-from toontown.toonbase import ToontownGlobals
-from toontown.toonbase import ToontownBattleGlobals
 from direct.fsm import StateData
-import random
-from panda3d.core import TextureStage, CardMaker
-from direct.interval.IntervalGlobal import *
-from direct.directnotify import DirectNotifyGlobal
-from toontown.battle import BattleBase
+from toontown.clashbattle.battle import BattleGlobals
 from direct.gui.DirectGui import *
-from pandac.PandaModules import *
-from toontown.toonbase import TTLocalizer
-from toontown.toon import IOURegistry
-from toontown.toon import NPCToons
-from toontown.toon import ToonHead
-from toontown.toon import ToonDNA
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.statuses import StatusEffects
+from toontown.chat.ui.speedchat.TTSCUniteTerminal import TTSCUniteMsgEvent
+from toontown.inventory.registry.IOURegistry import IOURegistry
+from toontown.clashbattle.battle import BattleGUIGlobals, BattleGUI
+from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
+
+@DirectNotifyCategory()
 class TownBattleChooseAvatarPanel(StateData.StateData):
-    notify = DirectNotifyGlobal.directNotify.newCategory('ChooseAvatarPanel')
-
-    def __init__(self, doneEvent, toon):
+    def __init__(self, doneEvent, toon, gagChangeEvent, townBattle):
         self.notify.debug('Init choose panel...')
         StateData.StateData.__init__(self, doneEvent)
+        self.gagChangeEvent = gagChangeEvent
         self.numAvatars = 0
         self.chosenAvatar = 0
-        self.track = None
-        self.level = None
         self.toon = toon
-        self.iouHead = None
+        self.townBattle = townBattle
+        self.spacingModifier = 1.0
+        self.npcId = 0
+        self.allowPickLocal = False
+        self.loaded = 0
 
     def load(self):
-        gui = loader.loadModel('phase_3.5/models/gui/battlegui/targeting')
-        self.rowModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
-        self.frame = DirectFrame(relief=None, image=gui.find('**/targeting_main'), text_align=TextNode.ALeft, pos=(0, 0, -0.025), scale=0.425)
+        self.frame = DirectFrame(relief=None)
         self.frame.hide()
-        self.textFrame = DirectFrame(parent=self.frame, relief=None, text='', text_fg=Vec4(0.973, 1, 0, 1), text_font=getMinnieFont(), text_scale=0.1, pos=(0, 0, -0.325))
+
+        self.gui = BattleGUI.TargetingGUI(parent=self.frame, townBattle=self.townBattle)
+        self.gui.setScale(BattleGUIGlobals.TargetingGuiScale)
+        self.gui.activateTargetingMode()
+
+        self.gui.backButton.configure(command=self.__handleBack)
+        self.gui.setGagChangeCallback(self.__handleGagChange)
+
         if self.toon:
-            self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarToonTitle
+            self.gui.applyToonText()
         else:
-            self.textFrame['text'] = TTLocalizer.TownBattleChooseAvatarCogTitle
+            self.gui.applySuitText()
+
         self.avatarButtons = []
-        for i in range(7):
-            button = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/arrow_neutral'), gui.find('**/arrow_press'), gui.find('**/arrow_hover')), command=self.__handleAvatar, extraArgs=[i])
+        for i in range(BattleGlobals.MaxBattleAvatars):
+            button = BattleGUI.generateTargetingArrow()
+            button.reparentTo(self.frame)
+            button.configure(command=self.__handleAvatar, extraArgs=[i])
             if self.toon:
-                button.setScale(.675, .675, -.675)
-                button.setPos(0, 0, -1)
+                button.setScale(BattleGUIGlobals.TargetingArrowScale, BattleGUIGlobals.TargetingArrowScale, -BattleGUIGlobals.TargetingArrowScale)
+                button.setPos(0, 0, -BattleGUIGlobals.TargetingArrowHeight)
             else:
-                button.setScale(.675, .675, .675)
-                button.setPos(0, 0, 1)
-            button.bind(DGG.ENTER, self.__handleAvatarEnter, extraArgs=[i])
-            button.bind(DGG.EXIT, self.__handleAvatarExit, extraArgs=[i])
+                button.setScale(BattleGUIGlobals.TargetingArrowScale)
+                button.setPos(0, 0, BattleGUIGlobals.TargetingArrowHeight)
             self.avatarButtons.append(button)
 
-        self.backButton = DirectButton(parent=self.frame, relief=None, image=(gui.find('**/back_neutral'), gui.find('**/back_press'), gui.find('**/back_hover')), pos=(0, 0, -0.6),
-                                        scale=(.75, .5, .5), text="BACK", text_scale=(.175, .25, .25), text_pos=(0.05, -0.1), text_fg=Vec4(0.973, 1, 0, 1), text_font=getSignFont(), command=self.__handleBack)
-        self.backButton.setBin('fixed', 0) 
-        self.gagEmblem = DirectFrame(
-            parent=self.frame,
-            image=self.rowModels.find('**/emblem_gag'),
-            pos=(0, 0, 0.15),
-            scale=1,
-            relief=None
-        )
-        self.gagEmblem.setBin('fixed', 0) 
-        self.gagEmblemOrganicTex = loader.loadTexture('phase_3.5/maps/battlegui/pres_scroll_bg.png')
-        self.gagEmblemOrganicTex.setWrapU(Texture.WMRepeat)
-        self.gagEmblemOrganicTex.setWrapV(Texture.WMRepeat)
-
-        self.gagEmblemScrollStage = TextureStage('choose-gag-emblem-scroll')
-
-        self.gagEmblemScrollIval = LerpFunctionInterval(
-            self.updateGagEmblemScroll,
-            duration=3.0,
-            fromData=0.0,
-            toData=1.0
-        )
-        self.gagEmblemScrollIval.loop()
-        invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-        self.invModels = []
-        for track in range(len(AvPropsNew)):
-            itemList = []
-            for item in range(len(AvPropsNew[track])):
-                itemList.append(invModel.find('**/' + AvPropsNew[track][item]))
-
-            self.invModels.append(itemList)
-
-
-        self.gagIcon = DirectFrame(
-                parent=self.frame,
-                relief=None,
-                image=None,
-                scale=3,
-                pos=(0, 0, 0.15)
-        )
-        self.gagIcon.setBin('fixed', 20) 
-        self.invModel = invModel
-        gui.removeNode()
-
-    def setGagEmblemOrganic(self, organic):
-        imageNode = self.gagEmblem.component('image0')
-
-        if organic:
-            imageNode.setTexture(self.gagEmblemScrollStage, self.gagEmblemOrganicTex, 1)
-            imageNode.setTexScale(self.gagEmblemScrollStage, 6, 6)
-            imageNode.setTransparency(1)
-        else:
-            imageNode.clearTexture(self.gagEmblemScrollStage)
-
-
-    def updateGagEmblemScroll(self, t):
-        if not hasattr(self, 'gagEmblem') or self.gagEmblem is None:
-            return
-
-        imageNode = self.gagEmblem.component('image0')
-        imageNode.setTexOffset(self.gagEmblemScrollStage, t, -t)
-
     def unload(self):
-        if getattr(self, 'gagEmblemScrollIval', None):
-            self.gagEmblemScrollIval.finish()
-            self.gagEmblemScrollIval = None
-
-        self.__clearIOUHead()
-        if getattr(self, 'gagIcon', None):
-            self.gagIcon.destroy()
-            del self.gagIcon
-
-        if getattr(self, 'gagEmblem', None):
-            self.gagEmblem.destroy()
-            del self.gagEmblem
-
-        if getattr(self, 'textFrame', None):
-            self.textFrame.destroy()
-            del self.textFrame
-
-        for button in self.avatarButtons:
-            button.destroy()
-
-        self.backButton.destroy()
-
+        del self.townBattle
         self.frame.destroy()
-
-        self.invModel.removeNode()
-        self.rowModels.removeNode()
-
-        del self.avatarButtons
-        del self.backButton
         del self.frame
-        del self.invModels
-        del self.invModel
-        del self.rowModels
-        del self.gagEmblemOrganicTex
-        del self.gagEmblemScrollStage
+        del self.gui
+        del self.avatarButtons
+        self.ignoreAll()
 
-    def enter(self, numAvatars, localNum = None, luredIndices = None, trappedIndices = None, track = None, level = None, avatars = None):
-        self.track = track
-        self.level = level
-        self.__clearIOUHead()
-        organicBonus = False
-        invalidTargets = []
-        if self.track == BattleBase.NPCSOS:
-            definition = IOURegistry.getIOU(self.level)
-            self.setGagEmblemOrganic(False)
-            if definition is not None:
-                gagTrack = definition.getGagTrack()
-                if gagTrack == -1:
-                    trackColor = Vec4(1, 1, 1, 1)
-                else:
-                    trackColor = Vec4(TrackColors[gagTrack][0], TrackColors[gagTrack][1], TrackColors[gagTrack][2], 1)
-                    if avatars is not None:
-                        for i in range(min(numAvatars, len(avatars))):
-                            avatar = avatars[i]
-                            if avatar is not None and not avatar.hasTrackAccess(gagTrack):
-                                invalidTargets.append(i)
-                self.gagEmblem['image_color'] = trackColor
-                self.gagIcon['image'] = None
-                self.gagIcon.setScale(1)
-                self.iouHead = self.__createNPCHead(definition.getNpcId(), 0.45)
-                self.iouHead.reparentTo(self.gagIcon)
-            if numAvatars > 1:
-                self.__placeButtons(numAvatars, invalidTargets, localNum)
-            else:
-                self.__placeButtons(numAvatars, invalidTargets, None)
-        else:
-            if self.track is not None and self.level is not None:
-                organicBonus = base.localAvatar.checkGagBonus(self.track, self.level)
-            self.setGagEmblemOrganic(organicBonus)
-            trackColor = Vec4(TrackColors[track][0], TrackColors[track][1], TrackColors[track][2], 1)
-            self.gagEmblem['image_color'] = trackColor
-            self.gagIcon['image'] = self.invModels[self.track][self.level]
-            self.gagIcon.setScale(3)
-            if not self.toon:
-                if len(luredIndices) > 0:
-                    if track == BattleBase.TRAP or track == BattleBase.LURE:
-                        invalidTargets += luredIndices
-                if len(trappedIndices) > 0:
-                    if track == BattleBase.TRAP:
-                        invalidTargets += trappedIndices
-            self.__placeButtons(numAvatars, invalidTargets, localNum)
+    def onUniteUsed(self):
+        rewardsDisabled = bool(base.localAvatar.getStatusEffectsOfType(StatusEffects.RewardCooldownStatusEffect))
+        if self.loaded and rewardsDisabled:
+            self.__handleBack()
+
+    def enter(self, numAvatars, toons: list, localNum=None, luredIndices=None, trappedIndices=None,
+              track=None, untouchableIndices=None, untouchableByTrapIndices=None, npcId=0, allowPickLocal=False):
         self.frame.show()
-        self.gagIcon.show()
+        self.npcId = npcId
+        self.allowPickLocal = allowPickLocal
+        invalidTargets = []
+        if not self.toon:
+            if len(luredIndices) > 0:
+                if track in (AttackEnum.TOON_TRAP, AttackEnum.TOON_LURE):
+                    invalidTargets += luredIndices
+            if len(trappedIndices) > 0:
+                if track == AttackEnum.TOON_TRAP:
+                    invalidTargets += trappedIndices
+        if untouchableIndices is not None and track != AttackEnum.TOON_TRAP:
+            invalidTargets += untouchableIndices
+        if untouchableByTrapIndices is not None and track == AttackEnum.TOON_TRAP:
+            invalidTargets += untouchableByTrapIndices
+        if self.npcId:
+            iou = IOURegistry[self.npcId]
+            npcTrack = iou.getGagTrack()
+            for i, toon in enumerate(toons):
+                if npcTrack != -1 and not toon.hasTrackAccess(npcTrack):
+                    invalidTargets.append(i)
+        self.__placeButtons(numAvatars, invalidTargets, localNum)
+        self.accept(TTSCUniteMsgEvent, self.onUniteUsed)
+        self.loaded = 1
 
     def exit(self):
+        self.loaded = 0
         self.frame.hide()
-        self.__clearIOUHead()
 
-
-    def __clearIOUHead(self):
-        if self.iouHead:
-            self.iouHead.detachNode()
-            self.iouHead.delete()
-            self.iouHead = None
-
-    def __createNPCHead(self, npcId, dimension):
-        npcInfo = NPCToons.NPCToonDict[npcId]
-        dnaList = npcInfo[2]
-        gender = npcInfo[3]
-        if dnaList == 'r':
-            dnaList = NPCToons.getRandomDNA(npcId, gender)
-        dna = ToonDNA.ToonDNA()
-        dna.newToonFromProperties(*dnaList)
-        head = ToonHead.ToonHead()
-        head.setupHead(dna, forGui=1)
-        head.fitAndCenterHead(dimension, forGui=1)
-        return head
+    def setValues(self, track, level):
+        self.gui.emblem.setValues(track, level, base.localAvatar, townBattle=self.townBattle)
+        self.gui.update()
 
     def __handleBack(self):
         doneStatus = {'mode': 'Back'}
         messenger.send(self.doneEvent, [doneStatus])
 
     def __handleAvatar(self, avatar):
-        if self.track == BattleBase.NPCSOS:
-            messenger.send(self.doneEvent + '-preview', [avatar])
         doneStatus = {'mode': 'Avatar',
-         'avatar': avatar}
+                      'avatar': avatar,
+                      'attackType': 'NPCSOS' if self.npcId else 'Attack',
+                      'level': self.npcId}
         messenger.send(self.doneEvent, [doneStatus])
 
-    def __handleAvatarEnter(self, avatar, event):
-        if self.track == BattleBase.NPCSOS:
-            messenger.send(self.doneEvent + '-preview', [avatar])
+    def __handleGagChange(self, track: int, level: int):
+        # If we're choosing a target, and this is a heal, we don't want a battle event, just a GUI update.
+        softChange = track == AttackEnum.TOON_HEAL
+        lockInInfo = {
+            'mode': 'GagChange',
+            'track': track,
+            'level': level,
+            'target': -1,
+            'softChange': softChange
+        }
+        self.townBattle.level = level
+        messenger.send(self.gagChangeEvent, [lockInInfo])
 
-    def __handleAvatarExit(self, avatar, event):
-        if self.track == BattleBase.NPCSOS:
-            messenger.send(self.doneEvent + '-preview', [-1])
-
-    def adjustCogs(self, numAvatars, luredIndices, trappedIndices, track, level=None):
-        self.track = track
-        self.level = level
+    def adjustCogs(self, numAvatars, luredIndices, trappedIndices, track, untouchableIndices=None):
         invalidTargets = []
         if len(luredIndices) > 0:
-            if track == BattleBase.TRAP or track == BattleBase.LURE:
+            if track in (AttackEnum.TOON_TRAP, AttackEnum.TOON_LURE):
                 invalidTargets += luredIndices
         if len(trappedIndices) > 0:
-            if track == BattleBase.TRAP:
+            if track == AttackEnum.TOON_TRAP:
                 invalidTargets += trappedIndices
+        if untouchableIndices is not None and track != AttackEnum.TOON_LURE:
+            invalidTargets += untouchableIndices
         self.__placeButtons(numAvatars, invalidTargets, None)
 
-    def adjustToons(self, numToons, localNum, track=None, level=None, avatars=None):
-        self.track = track
-        self.level = level
+    def adjustToons(self, numToons, toons, localNum, untouchableIndices=None):
         invalidTargets = []
-        if self.track == BattleBase.NPCSOS:
-            if numToons <= 1:
-                localNum = None
-            definition = IOURegistry.getIOU(self.level)
-            if definition is not None and definition.getGagTrack() != -1 and avatars is not None:
-                gagTrack = definition.getGagTrack()
-                for i in range(min(numToons, len(avatars))):
-                    avatar = avatars[i]
-                    if avatar is not None and not avatar.hasTrackAccess(gagTrack):
-                        invalidTargets.append(i)
+        if untouchableIndices is not None:
+            invalidTargets += untouchableIndices
+        if self.npcId:
+            iou = IOURegistry[self.npcId]
+            npcTrack = iou.getGagTrack()
+            for i, toon in enumerate(toons):
+                if npcTrack != -1 and not toon.hasTrackAccess(npcTrack):
+                    invalidTargets.append(i)
         self.__placeButtons(numToons, invalidTargets, localNum)
 
     def __placeButtons(self, numAvatars, invalidTargets, localNum):
-        for i in range(7):
-            if numAvatars > i and i not in invalidTargets and i != localNum:
+        for i in range(BattleGlobals.MaxBattleAvatars):
+            if numAvatars > i and i not in invalidTargets and (self.allowPickLocal or i != localNum):
                 self.avatarButtons[i].show()
             else:
                 self.avatarButtons[i].hide()
 
-        # for i in xrange(7):
-        #     self.gagIcons[i].hide()
+        if self.toon:
+            xSeparation = BattleGUIGlobals.ToonPanelXSpacing * self.spacingModifier
+        else:
+            xSeparation = BattleGUIGlobals.SuitPanelXSpacing * self.spacingModifier
+        startingX = (0.5 * (numAvatars - 1)) * xSeparation
 
-        # if self.track is not None and self.level is not None and self.track >= 0 and self.level >= 0:
-        #     gagNodeName = AvPropsNew[self.track][self.level]
-        #     gagNode = self.invModel.find('**/' + gagNodeName)
-
-        #     for i in xrange(7):
-        #         if not self.avatarButtons[i].isHidden():
-        #             self.gagIcons[i].configure(image=gagNode)
-        #             self.gagIcons[i].show()
-
-        confused = False
-        if 'confused' in base.localAvatar.battleConditions:
-            confused = True
-
-        positions = self.__getAvatarPositions(numAvatars)
-
-        if positions is None:
-            self.notify.error('Invalid number of avatars: %s' % numAvatars)
-            return None
-
-        indices = list(range(numAvatars))
-
-        if confused:
-            random.shuffle(indices)
-
-        for posIndex in range(numAvatars):
-            avatarIndex = indices[posIndex]
-            self.avatarButtons[avatarIndex].setX(positions[posIndex])
-        return None
-    
-    def __getAvatarPositions(self, numAvatars):
-        positionsByCount = {
-            1: [0],
-            2: [0.61, -0.61],
-            3: [1.14, 0.0, -1.14],
-            4: [1.748, 0.61, -0.61, -1.748],
-            5: [2.28, 1.14, 0.0, -1.14, -2.28],
-            6: [2.888, 1.748, 0.61, -0.61, -1.748, -2.888],
-            7: [3.42, 2.28, 1.14, 0.0, -1.14, -2.28, -3.42],
-        }
-
-        return positionsByCount.get(numAvatars)
+        for i in range(numAvatars):
+            self.avatarButtons[i].setX(startingX - (i * xSeparation))

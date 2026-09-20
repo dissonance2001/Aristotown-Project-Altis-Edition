@@ -1,6 +1,6 @@
-from toontown.suit import BossCogGlobals
-from toontown.battle.BattleGlobals import BattleOrderPriority
-from toontown.battle.distributed.DistributedBattleFinalAI import DistributedBattleFinalAI
+from toontown.clashsuit.suit import BossCogGlobals
+from toontown.clashbattle.battle.BattleGlobals import BattleOrderPriority
+from toontown.clashbattle.battle.distributed.DistributedBattleFinalAI import DistributedBattleFinalAI
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 

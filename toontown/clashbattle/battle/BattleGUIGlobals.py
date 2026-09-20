@@ -1,5 +1,5 @@
 # Positioning for the Gag Buttons
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 
 GagButtonsXOffset = -0.22
 GagButtonsXSpacing = 0.084

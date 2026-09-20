@@ -1,6 +1,6 @@
-from toontown.suit.heads.AnimatedSuitHead import *
-from toontown.suit.SuitDNA import getSuitBodyType
-from toontown.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
+from toontown.clashsuit.suit.heads.AnimatedSuitHead import *
+from toontown.clashsuit.suit.SuitDNA import getSuitBodyType
+from toontown.clashsuit.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

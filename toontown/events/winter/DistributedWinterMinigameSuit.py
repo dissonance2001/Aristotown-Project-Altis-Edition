@@ -3,8 +3,8 @@ from direct.fsm import ClassicFSM, State
 from direct.interval.IntervalGlobal import Sequence, Parallel, ActorInterval, Wait, SoundInterval, ParticleInterval, Func, Track
 from pandac.PandaModules import Point3
 
-from toontown.battle import BattleParticles, MovieUtil
-from toontown.suit import DistributedSuitBase
+from toontown.clashbattle.battle import BattleParticles, MovieUtil
+from toontown.clashsuit.suit import DistributedSuitBase
 from toontown.toonbase import ToontownGlobals
 
 

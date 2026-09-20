@@ -2,7 +2,7 @@ import random
 
 from direct.distributed.DistributedObject import DistributedObject
 
-from toontown.battle.gui.MrDiceChoice import MrDiceChoice
+from toontown.clashbattle.battle.gui.MrDiceChoice import MrDiceChoice
 
 from typing import List
 

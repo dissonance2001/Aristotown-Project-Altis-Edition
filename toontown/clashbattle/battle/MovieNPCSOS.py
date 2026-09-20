@@ -1,18 +1,18 @@
 from direct.interval.IntervalGlobal import *
 from panda3d.core import Point3
 
-from toontown.battle import BattleParticles, MovieUtil
-from toontown.battle.BattleProps import *
-from toontown.battle.BattleSounds import *
-from toontown.battle.MovieUtil import applyVisualEffect
+from toontown.clashbattle.battle import BattleParticles, MovieUtil
+from toontown.clashbattle.battle.BattleProps import *
+from toontown.clashbattle.battle.BattleSounds import *
+from toontown.clashbattle.battle.MovieUtil import applyVisualEffect
 from otp import *
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.inventory.registry.IOURegistry import IOURegistry, IOUItemDefinition
-from toontown.toon.npc import NPCToons
+from toontown.toon import NPCToons # Until NPCs are added we will use Reia's NPCToon port file
 from toontown.toonbase import TTLocalizer
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.utils.DirectNotifyCategory import getNotify
 from toontown.chat.constants.ChatGlobals import CFSpeech, CFTimeout
 

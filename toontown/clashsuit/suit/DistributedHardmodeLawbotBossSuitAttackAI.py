@@ -2,8 +2,8 @@ import random
 
 from panda3d.core import Point3, Vec3
 
-from toontown.suit import BossCogGlobals
-from toontown.suit.DistributedHardmodeLawbotBossSuitAI import DistributedHardmodeLawbotBossSuitAI
+from toontown.clashsuit.suit import BossCogGlobals
+from toontown.clashsuit.suit.DistributedHardmodeLawbotBossSuitAI import DistributedHardmodeLawbotBossSuitAI
 from toontown.toonbase import ToontownGlobals
 
 

@@ -1,4 +1,4 @@
-from toontown.battle.SuitBattleGlobals import *
+from toontown.clashbattle.battle.SuitBattleGlobals import *
 from toontown.toonbase import ToontownGlobals
 from direct.interval.IntervalGlobal import *
 from direct.gui import OnscreenText

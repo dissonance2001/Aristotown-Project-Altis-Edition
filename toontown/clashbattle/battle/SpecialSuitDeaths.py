@@ -3,9 +3,9 @@ from toontown.chat.constants.ChatGlobals import CFSpeech
 from direct.interval.IntervalGlobal import *
 import random
 
-from toontown.battle import BattleParticles, MovieUtil
-from toontown.battle.statuses.StatusEffectEnums import StatusEffectEnum
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle import BattleParticles, MovieUtil
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.cutscene.repository.CutsceneKeyEnum import CutsceneKeyEnum
 from toontown.toonbase import TTLocalizer
 from toontown.cutscene.repository.CutsceneLoader import CutsceneLoader
@@ -502,7 +502,7 @@ def makeWitchHunterDeath(suit, battle):
     if not hasattr(battle, 'instance'):
         return
 
-    from toontown.suit import DistributedSuitBase, SuitDNA
+    from toontown.clashsuit.suit import DistributedSuitBase, SuitDNA
 
     nextLocalDoId = -2450
 
@@ -662,7 +662,7 @@ def makeChainsawConsultantDeath(suit, battle):
         if suit.isLured:
             unlureTrack.append(MovieUtil.createSuitUnlureTrack(suit, battle))
 
-    from toontown.battle.gui.special.ChainsawMeterGUI import ChainsawMeterGUI
+    from toontown.clashbattle.battle.gui.special.ChainsawMeterGUI import ChainsawMeterGUI
     return Sequence(
         unlureTrack,
         Parallel(

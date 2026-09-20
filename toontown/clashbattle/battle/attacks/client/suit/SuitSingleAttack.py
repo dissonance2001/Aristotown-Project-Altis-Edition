@@ -1,7 +1,7 @@
 from direct.interval.IntervalGlobal import *
 
-from toontown.battle import MovieUtil
-from toontown.battle.attacks.client.Attack import Attack
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashbattle.battle.attacks.client.Attack import Attack
 
 
 class SuitSingleAttack(Attack):

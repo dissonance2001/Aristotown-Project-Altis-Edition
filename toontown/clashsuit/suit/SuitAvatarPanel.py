@@ -2,12 +2,12 @@ from panda3d.core import Point3, Vec4, TextNode
 from direct.gui.DirectGui import DirectFrame, DirectLabel, DirectButton
 from direct.showbase.MessengerGlobal import messenger
 
-from toontown.avatar import AvatarPanel
-from toontown.battle.statuses import StatusEffects
+from otp.avatar import AvatarPanel
+from toontown.clashbattle.battle.statuses import StatusEffects
 from toontown.friends import FriendsListPanel
 from toontown.gui.PositionedGUI import OnscreenPositionData
-from toontown.suit import SuitDNA
-from toontown.suit.SuitDefinitionsBase import SuitDefinitions
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit.SuitDefinitionsBase import SuitDefinitions
 from toontown.toon.gui import GuiBinGlobals
 from toontown.toonbase import TTLocalizer, ToontownGlobals
 

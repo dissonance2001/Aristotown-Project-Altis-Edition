@@ -4,26 +4,26 @@ Suit module: contains Suit class
 """
 from direct.actor.Actor import Actor
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.avatar import Avatar
+from otp.avatar import Avatar
 from toontown.chat.enums.ChatChannel import ChatChannel
 from toontown.chat.enums.ChatContentType import ChatContentType
 from toontown.chat.enums.ChatNpcPreset import ChatNpcPreset
-from toontown.suit import SuitDNA
-from toontown.suit import SuitVoice
-from toontown.suit.SuitDefinitionsBase import suitDefinitionObjects, ALL_SKELE_HEADS, suitGetNameWordwraps, \
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit import SuitVoice
+from toontown.clashsuit.suit.SuitDefinitionsBase import suitDefinitionObjects, ALL_SKELE_HEADS, suitGetNameWordwraps, \
     BodyModelTypeToPath, BodyModelTypeToUnemployedPath
-from toontown.suit.heads.classes import *  # Instantiate all special suit heads
-from toontown.suit.heads.AnimatedSuitHeadRepository import getAnimatedSuitHead
+from toontown.clashsuit.suit.heads.classes import *  # Instantiate all special suit heads
+from toontown.clashsuit.suit.heads.AnimatedSuitHeadRepository import getAnimatedSuitHead
 from toontown.toonbase import ToontownGlobals
 from panda3d.core import *
-from toontown.battle import SuitBattleGlobals
-from otp.nametag.NametagGroup import *
-from toontown.suit.SuitAnimationIndex import *
-from toontown.suit import SuitHealthMeter
+from toontown.clashbattle.battle import SuitBattleGlobals
+from toontown.nametag.NametagGroup import *
+from toontown.clashsuit.suit.SuitAnimationIndex import *
+from toontown.clashsuit.suit import SuitHealthMeter
 from toontown.toonbase import TTLocalizer
 from panda3d.core import Filename
 from direct.interval.IntervalGlobal import ActorInterval, Sequence, Func
-from toontown.suit import SuitGlobals
+from toontown.clashsuit.suit import SuitGlobals
 
 """
 Suit Types & Tracks

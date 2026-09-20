@@ -2,7 +2,7 @@ from panda3d.core import *
 from direct.interval.IntervalGlobal import *
 import math
 
-from toontown.suit import BossCogGlobals
+from toontown.clashsuit.suit import BossCogGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.distributed import DistributedNode
 from direct.task import Task

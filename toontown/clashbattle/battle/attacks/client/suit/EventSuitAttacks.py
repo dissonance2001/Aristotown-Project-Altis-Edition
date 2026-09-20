@@ -6,23 +6,23 @@ from toontown.chat.constants.ChatGlobals import  CFSpeech, CFTimeout
 from direct.interval.IntervalGlobal import *
 from direct.task.TaskManagerGlobal import taskMgr
 
-from otp.nametag import NametagGroup
+from toontown.nametag import NametagGroup
 from toontown.audio.IsolatedSoundInterval import IsolatedSoundInterval
-from toontown.battle import BattleParticles, BattleProps, MovieUtil, MovieZap, SuitBattleGlobals, BattleGlobals
-from toontown.battle.BattleProps import globalPropPool
-from toontown.battle.BattleSounds import globalBattleSoundCache
-from toontown.battle.MovieUtil import createKapowExplosionTrack
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.client.Attack import Attack
-from toontown.battle.attacks.client.AttackRepository import AttackClass
-from toontown.battle.attacks.client.suit import SuitGroupAttack
-from toontown.battle.attacks.client.suit.BasicAttacks import AvatarSayPhraseAttack
-from toontown.battle.attacks.client.suit.BasicSuitAttacks import TeeOff, Synergy, CigarSmoke
-from toontown.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
-from toontown.battle.attacks.client.suit.MercSuitAttacks import PickUpThePace, ShatterDamage
-from toontown.battle.attacks.client.suit.MinibossSuitAttacks import Objection
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.battle.visuals.VisualEffects import ErfitReviveVisualEffect
+from toontown.clashbattle.battle import BattleParticles, BattleProps, MovieUtil, MovieZap, SuitBattleGlobals, BattleGlobals
+from toontown.clashbattle.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle.BattleSounds import globalBattleSoundCache
+from toontown.clashbattle.battle.MovieUtil import createKapowExplosionTrack
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.client.Attack import Attack
+from toontown.clashbattle.battle.attacks.client.AttackRepository import AttackClass
+from toontown.clashbattle.battle.attacks.client.suit import SuitGroupAttack
+from toontown.clashbattle.battle.attacks.client.suit.BasicAttacks import AvatarSayPhraseAttack
+from toontown.clashbattle.battle.attacks.client.suit.BasicSuitAttacks import TeeOff, Synergy, CigarSmoke
+from toontown.clashbattle.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
+from toontown.clashbattle.battle.attacks.client.suit.MercSuitAttacks import PickUpThePace, ShatterDamage
+from toontown.clashbattle.battle.attacks.client.suit.MinibossSuitAttacks import Objection
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.visuals.VisualEffects import ErfitReviveVisualEffect
 from toontown.building import ElevatorConstants, ElevatorUtils
 from toontown.instances import HighRollerGlobals
 from toontown.toonbase import TTLocalizer, ToontownGlobals
@@ -1569,8 +1569,8 @@ class FTFNuclearTransformation(Attack):
             target.setSpecialContainerId(self.specialContainerId)
 
             # Set the new DNA.
-            from toontown.suit.SuitDNA import SuitDNA
-            from toontown.suit import SuitHealthMeter
+            from toontown.clashsuit.suit.SuitDNA import SuitDNA
+            from toontown.clashsuit.suit import SuitHealthMeter
             dna = SuitDNA()
             dna.newSuit(target.specialContainer.suitType)
             target.dna = dna
@@ -2100,7 +2100,7 @@ class HighRollerCommercial(Attack):
 
     def doAttack(self):
         # Build the cutscene.
-        from toontown.suit import Suit, SuitDNA, SuitHealthMeter
+        from toontown.clashsuit.suit import Suit, SuitDNA, SuitHealthMeter
         fakeSuit = Suit.Suit()
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('hroller')

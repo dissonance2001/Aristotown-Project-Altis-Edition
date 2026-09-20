@@ -1,16 +1,16 @@
 import math
 
-from toontown.ai.AIBaseGlobal import simbase
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleGlobals import SueCostPercent
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackClassAI
-from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
-from toontown.battle.statuses import StatusEffects, SEE
-from toontown.battle.statuses.StatusEffectEnums import StatusEffectEnum
+from otp.ai.AIBaseGlobal import simbase
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleGlobals import SueCostPercent
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
+from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+from toontown.clashbattle.battle.statuses import StatusEffects, SEE
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum
 from toontown.inventory.enums.ItemEnums import MaterialItemType
 from toontown.modifiers import ModifierEnums
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.toon.ToonStatsGlobals import ToonStats
 
 

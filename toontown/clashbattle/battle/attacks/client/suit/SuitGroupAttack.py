@@ -1,4 +1,4 @@
-from toontown.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
+from toontown.clashbattle.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
 
 
 class SuitGroupAttack(SuitSingleAttack):

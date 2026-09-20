@@ -1,6 +1,6 @@
 from panda3d.core import Vec2, Vec3, Point3
 
-from toontown.suit import BossCogGlobals
+from toontown.clashsuit.suit import BossCogGlobals
 from .DistributedLawbotBossSuitAI import *
 from toontown.toon.gui.ToonTipGlobals import TTE
 

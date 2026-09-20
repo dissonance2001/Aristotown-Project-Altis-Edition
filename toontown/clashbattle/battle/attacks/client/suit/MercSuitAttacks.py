@@ -7,32 +7,32 @@ from direct.interval.IntervalGlobal import *
 from direct.showbase.PythonUtil import lerp
 from toontown.audio.IsolatedSoundInterval import IsolatedSoundInterval
 
-from toontown.battle import BattleGlobals, BattleParticles, MovieLure, MovieUtil, MovieTrap
-from toontown.battle.BattleProps import globalPropPool
-from toontown.battle.BattleSounds import globalBattleSoundCache
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.client.Attack import Attack
-from toontown.battle.attacks.client.AttackRepository import AttackClass
-from toontown.battle.attacks.client.suit.BasicAttacks import (
+from toontown.clashbattle.battle import BattleGlobals, BattleParticles, MovieLure, MovieUtil, MovieTrap
+from toontown.clashbattle.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle.BattleSounds import globalBattleSoundCache
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.client.Attack import Attack
+from toontown.clashbattle.battle.attacks.client.AttackRepository import AttackClass
+from toontown.clashbattle.battle.attacks.client.suit.BasicAttacks import (
     AllowGroupingAttack, AvatarSayPhraseAttack, SuitDamageAttack, DoNothing,
     SuitHealAttack, ShowHpTextAttack, PlayCutsceneAttack, ToonDamageAttack,
 )
-from toontown.battle.attacks.client.suit.SuitGroupAttack import SuitGroupAttack
-from toontown.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
-from toontown.battle.attacks.client.suit.BasicSuitAttacks import CigarSmoke
-from toontown.battle.environmental.base.EnvironmentalEnum import RainmakerWeather
-from toontown.battle.gui.special.ChainsawMeterGUI import ChainsawMeterGUI
-from toontown.battle.statuses import SEE
+from toontown.clashbattle.battle.attacks.client.suit.SuitGroupAttack import SuitGroupAttack
+from toontown.clashbattle.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
+from toontown.clashbattle.battle.attacks.client.suit.BasicSuitAttacks import CigarSmoke
+from toontown.clashbattle.battle.environmental.base.EnvironmentalEnum import RainmakerWeather
+from toontown.clashbattle.battle.gui.special.ChainsawMeterGUI import ChainsawMeterGUI
+from toontown.clashbattle.battle.statuses import SEE
 from toontown.cutscene import CutsceneLocalizer
 from toontown.cutscene.repository.CutsceneKeyEnum import CutsceneKeyEnum
 from toontown.effects import DustCloud
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum, SUIT_VISUAL_EFFECTS_TO_REMOVE
-from toontown.battle.visuals.VisualEffects import ChangeSpeciesVisualEffect
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum, SUIT_VISUAL_EFFECTS_TO_REMOVE
+from toontown.clashbattle.battle.visuals.VisualEffects import ChangeSpeciesVisualEffect
 from toontown.cutscene.repository.CutsceneLoader import CutsceneLoader
 from toontown.inventory.enums.ItemEnums import BoosterItemType
-from toontown.suit import SuitHealthMeter
-from toontown.suit.DistributedSuitBase import DistributedSuitBase
-from toontown.suit.SuitDNA import getSuitBodyType
+from toontown.clashsuit.suit import SuitHealthMeter
+from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit.SuitDNA import getSuitBodyType
 from toontown.toon import ToonDNA
 from toontown.instances.mercs.InstanceMercGlobals import InvestorEnum2Name
 from toontown.toonbase import TTLocalizer, ToontownGlobals
@@ -2554,7 +2554,7 @@ class MandatoryLunch(SuitSingleAttack):
 
     def makeLunchCutscene(self, delay=0.0):
         # Build the cutscene.
-        from toontown.suit import Suit, SuitDNA, SuitHealthMeter
+        from toontown.clashsuit.suit import Suit, SuitDNA, SuitHealthMeter
         fakeSuit = Suit.Suit()
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('mslacker')
@@ -5484,7 +5484,7 @@ class ShatterDamage(SuitDamageAttack):
 
             # the plutocrat has his own specil interaction with shattering
             # if the market bubble is active, show that it has burst
-            from toontown.battle.statuses.StatusEffectEnums import StatusEffectEnum as SEE
+            from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum as SEE
             plutoStatus = suit.getStatusEffectOfId(SEE.EFFECT_MANAGER_PLUTOCRAT)
             if plutoStatus:
                 if plutoStatus.marketBubbleStacks > 0:

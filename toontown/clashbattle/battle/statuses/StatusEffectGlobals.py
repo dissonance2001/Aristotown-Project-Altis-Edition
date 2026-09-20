@@ -4,12 +4,12 @@ from direct.interval.LerpInterval import LerpHprInterval
 from panda3d.core import Vec4, NodePath, TextNode
 
 from toontown.utils import text
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.toonbase import TTLocalizer
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.toonbase import ToontownGlobals
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.statuses.StatusEffectDefinitions import buildStatusEffectText, buildStatusEffectAttributes,\
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.statuses.StatusEffectDefinitions import buildStatusEffectText, buildStatusEffectAttributes,\
     buildStatusEffectImageProperties, buildStatusEffectBuffStatus, \
     NO_ROUNDS, THIS_ROUND, DEBUFF, BUFF, NEUTRAL
 from .StatusEffectEnums import *
@@ -18,9 +18,9 @@ from direct.gui.OnscreenImage import OnscreenImage
 from direct.interval.IntervalGlobal import Sequence, LerpColorScaleInterval, Func, Wait, LerpFunctionInterval
 from copy import deepcopy
 
-from ...events.apriltoons.findthefamily import FindTheFamilyGlobals
-from ...toon.gui import GuiBinGlobals
-from ...utils.ColorHelper import hexToPCol
+from toontown.events.apriltoons.findthefamily import FindTheFamilyGlobals
+from toontown.toon.gui import GuiBinGlobals
+from toontown.utils.ColorHelper import hexToPCol
 
 NORMAL = 0
 OVERCLOCKED = 1
@@ -326,7 +326,7 @@ def makeTitleAndDesc(statusEffect, effectId):
         textColor = "Green" if multiplier < 0 else "Red"
         description = description.format(textColor, int(multiplier), relativeText)
     elif effectId == SEE.EFFECT_HEAVY_RAIN:
-        from ...toon.DistributedToonBase import DistributedToonBase
+        from toontown.toon.DistributedToonBase import DistributedToonBase
         description = description.format(
             av = 'Toon' if isinstance(statusEffect.getAv(), DistributedToonBase) else 'Cog',
             multiplier = round(abs(statusEffect.getMultiplier() - 1) * 100),
@@ -556,7 +556,7 @@ def getBackgroundAndIconNames(statusEffect, effectId):
         clubGui.removeNode()
     elif effectId == SEE.EFFECT_PIP_DISCOUNT:
         discount = max(1, min(round(statusEffect.getDiscount()), 6))
-        from ...gui.DiceButton import DiceButton
+        from toontown.gui.DiceButton import DiceButton
         dice = DiceButton.getDicePipIcon(discount)
         dice.setScale(0.64)
         extraGeom = [dice]

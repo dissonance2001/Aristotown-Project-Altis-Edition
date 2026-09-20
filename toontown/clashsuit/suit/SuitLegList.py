@@ -1,5 +1,5 @@
 from toontown.dna.DNAParser import DNASuitPoint
-from toontown.suit import SuitTimings
+from toontown.clashsuit.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
 from bisect import bisect_left
 

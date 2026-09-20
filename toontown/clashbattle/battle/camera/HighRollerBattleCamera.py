@@ -3,12 +3,12 @@ from typing import List
 
 from direct.interval.IntervalGlobal import *
 
-from toontown.battle import BattleGlobals, MovieUtil
-from toontown.battle.BattleCamera import BattleCamera
-from toontown.battle.statuses.StatusEffectEnums import StatusEffectEnum
+from toontown.clashbattle.battle import BattleGlobals, MovieUtil
+from toontown.clashbattle.battle.BattleCamera import BattleCamera
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum
 from toontown.instances.mercs.MajorPlayerBattleRoom import MajorPlayerBattleRoom
-from toontown.suit import SuitDNA, SuitGlobals
-from toontown.suit.DistributedSuitBase import DistributedSuitBase
+from toontown.clashsuit.suit import SuitDNA, SuitGlobals
+from toontown.clashsuit.suit.DistributedSuitBase import DistributedSuitBase
 from toontown.toon.DistributedToonBase import DistributedToonBase
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 

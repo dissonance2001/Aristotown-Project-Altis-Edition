@@ -5,15 +5,15 @@ import random
 from panda3d.core import Point3, Point4, TextNode, VBase3, Vec3, Vec4, VBase4, NodePath
 from direct.interval.IntervalGlobal import *
 
-from toontown.battle import BattleParticles, MovieUtil
-from toontown.battle.BattleProps import globalPropPool
-from toontown.battle.BattleSounds import globalBattleSoundCache
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.client.AttackRepository import AttackClass
-from toontown.battle.attacks.client.suit.SuitGroupAttack import SuitGroupAttack
-from toontown.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
-from toontown.battle.attacks.client.Attack import AttackAnimKeys as AAK
-from toontown.suit.SuitDNA import getSuitBodyType
+from toontown.clashbattle.battle import BattleParticles, MovieUtil
+from toontown.clashbattle.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle.BattleSounds import globalBattleSoundCache
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.client.AttackRepository import AttackClass
+from toontown.clashbattle.battle.attacks.client.suit.SuitGroupAttack import SuitGroupAttack
+from toontown.clashbattle.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
+from toontown.clashbattle.battle.attacks.client.Attack import AttackAnimKeys as AAK
+from toontown.clashsuit.suit.SuitDNA import getSuitBodyType
 from toontown.toonbase import TTLocalizer, ToontownGlobals
 
 

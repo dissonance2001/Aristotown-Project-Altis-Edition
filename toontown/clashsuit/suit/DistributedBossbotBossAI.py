@@ -7,7 +7,7 @@ from panda3d.core import ConfigVariableBool, ConfigVariableInt
 from toontown.inventory.base.Inventory import Inventory
 from toontown.inventory.base.InventoryItem import InventoryItem
 from toontown.inventory.enums.ItemEnums import BackgroundItemType, BoosterItemType, MaterialItemType
-from toontown.suit import BossCogGlobals
+from toontown.clashsuit.suit import BossCogGlobals
 from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.distributed.ClockDelta import globalClockDelta
@@ -15,19 +15,19 @@ from direct.fsm.FSM import FSM
 from direct.interval.IntervalGlobal import *
 from direct.showbase.PythonUtil import fitDestAngle2Src, reduceAngle
 
-from toontown.battle import BattleExperienceAI
-from toontown.battle.distributed import DistributedBattleDinersAI
-from toontown.battle.distributed import DistributedBattleWaitersAI
-from toontown.building import SuitBuildingGlobals
+from toontown.clashbattle.battle import BattleExperienceAI
+from toontown.clashbattle.battle.distributed import DistributedBattleDinersAI
+from toontown.clashbattle.battle.distributed import DistributedBattleWaitersAI
+from toontown.building import ClashSuitBuildingGlobals
 from toontown.coghq.bossbothq.DistributedBanquetTableAI import DistributedBanquetTableAI
 from toontown.coghq.bossbothq import DistributedFoodBeltAI
 from toontown.coghq.bossbothq import DistributedGolfSpotAI
 from toontown.groups.GroupEnums import GroupType, Options
 from toontown.instances import DistributedCutsceneSkipButtonAI
 from toontown.quest3.context.CogBossContext import BossbotBossContext
-from toontown.suit.DistributedSuitAI import DistributedSuitAI
-from toontown.suit import SuitDNA
-from toontown.suit.DistributedBossCogAI import DistributedBossCogAI
+from toontown.clashsuit.suit.DistributedSuitAI import DistributedSuitAI
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit.DistributedBossCogAI import DistributedBossCogAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toon.gui.ToonTipGlobals import TTE
 # from toontown.toonbase import BattleGlobals
@@ -172,7 +172,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI, FSM):
             return suits
     
     def getSuitPlanner(self):
-        return SuitBuildingGlobals.SPE.CEO_HARD
+        return ClashSuitBuildingGlobals.SPE.CEO_HARD
 
     def invokeSuitPlanner(self, buildingCode, skelecog):
         suits = DistributedBossCogAI.invokeSuitPlanner(self, buildingCode, skelecog)
@@ -303,7 +303,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI, FSM):
         self.diffInfo = diffInfo
         self.numTables = diffInfo[0]
         self.numDinersPerTable = diffInfo[1]
-        suitPlanner = SuitBuildingGlobals.getSuitBuildingInfo(self.getSuitPlanner())
+        suitPlanner = ClashSuitBuildingGlobals.getSuitBuildingInfo(self.getSuitPlanner())
         dinerLevel = suitPlanner.suitBossLevels[0]
         # Create a range of levels which the diners can spawn at.
         if dinerLevel == 19:

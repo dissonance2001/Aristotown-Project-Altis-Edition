@@ -5,12 +5,12 @@ from toontown.chat.constants.ChatGlobals import  CFSpeech, CFTimeout
 from direct.interval.IntervalGlobal import *
 
 from toontown.audio.IsolatedSoundInterval import IsolatedSoundInterval
-from toontown.battle import MovieUtil
+from toontown.clashbattle.battle import MovieUtil
 
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.client.Attack import Attack
-from toontown.battle.attacks.client.AttackRepository import AttackClass
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.client.Attack import Attack
+from toontown.clashbattle.battle.attacks.client.AttackRepository import AttackClass
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.cutscene.repository.CutsceneLoader import CutsceneLoader
 from toontown.toonbase import TTLocalizer, ToontownGlobals
 

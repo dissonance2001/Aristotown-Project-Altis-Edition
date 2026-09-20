@@ -1,7 +1,7 @@
-from toontown.suit.heads.AnimatedSuitHead import *
+from toontown.clashsuit.suit.heads.AnimatedSuitHead import *
 from direct.interval.IntervalGlobal import *
 
-from toontown.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
+from toontown.clashsuit.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 filePrefix = 'phase_11/models/char/suits/ttcc_ene_rainmaker-'

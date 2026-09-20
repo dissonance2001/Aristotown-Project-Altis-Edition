@@ -2,12 +2,12 @@ import random
 
 from direct.showbase.PythonUtil import lerp
 
-from toontown.ai.AIBaseGlobal import simbase
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.attacks.server.AttackAI import AttackAI
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.statuses import StatusEffects
-from toontown.battle.statuses.StatusEffectEnums import StatusEffectEnum
+from otp.ai.AIBaseGlobal import simbase
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.statuses import StatusEffects
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum
 
 
 class SuitSingleAttackAI(AttackAI):

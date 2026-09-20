@@ -4,8 +4,8 @@
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 from toontown.hood import ZoneUtil, HoodUtil
-from toontown.battle import BattleGlobals
-from toontown.suit.SuitHoodGlobals import *
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashsuit.suit.SuitHoodGlobals import *
 from toontown.dna.DNAParser import DNASuitPoint, DNAStorage, DNAInteractiveProp, loadDNAFileAI
 
 

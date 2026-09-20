@@ -1,6 +1,6 @@
 import random
 from direct.interval.IntervalGlobal import *
-from toontown.suit.heads.classes.UniqueSkelecogAnimatedSuitHead import *
+from toontown.clashsuit.suit.heads.classes.UniqueSkelecogAnimatedSuitHead import *
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

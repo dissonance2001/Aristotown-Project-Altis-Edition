@@ -4,9 +4,9 @@ The base classes can be found in BattleListenerClasses.py.
 """
 import random
 
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleListenerClasses import *
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleListenerClasses import *
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 
 
 # # # CallbackType Subclasses # # #

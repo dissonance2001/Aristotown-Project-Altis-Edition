@@ -17,7 +17,7 @@ from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
 from toontown.ai import DatabaseObject
 from toontown.toon import DistributedToonAI
-from toontown.toon import InventoryBase
+from toontown.toon import GagInventoryBase
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import NPCToons
 from toontown.toon import IOURegistry
@@ -1003,7 +1003,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.notify.info('toon %d aborted non-street battle; clearing inventory and hp.' % toonId)
             toon = DistributedToonAI.DistributedToonAI(self.air)
             toon.doId = toonId
-            empty = InventoryBase.InventoryBase(toon)
+            empty = GagInventoryBase.GagInventoryBase(toon)
             toon.b_setInventory(empty.makeNetString())
             toon.b_setHp(0)
             db = DatabaseObject.DatabaseObject(self.air, toonId)

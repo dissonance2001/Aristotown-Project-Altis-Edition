@@ -4,7 +4,7 @@ from typing import Optional
 from collections import Counter
 
 from toontown.inventory.registry import UniteRegistry
-from toontown.suit import BossCogGlobals
+from toontown.clashsuit.suit import BossCogGlobals
 from toontown.modifiers.contentsync.ContentSyncApplierAI import ContentSyncApplierAI
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.distributed.MsgTypes import CLIENTAGENT_EJECT
@@ -13,17 +13,17 @@ from panda3d.core import ConfigVariableBool, NodePath
 from direct.showbase.MessengerGlobal import messenger
 from direct.task.TaskManagerGlobal import taskMgr
 
-from toontown.avatar import DistributedAvatarAI
-from toontown.battle import BattleBase
-from toontown.battle import BattleExperienceAI
-from toontown.battle.distributed import DistributedBattleFinalAI
+from otp.avatarimport DistributedAvatarAI
+from toontown.clashbattle.battle import BattleBase
+from toontown.clashbattle.battle import BattleExperienceAI
+from toontown.clashbattle.battle.distributed import DistributedBattleFinalAI
 from toontown.building import SuitPlannerInteriorAI
 from toontown.groups.GroupClasses import GroupAI
 from toontown.groups.GroupEnums import Options
 from toontown.hood import ZoneUtil
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import SuitDNA
 from toontown.toonbase import TTLocalizer, RealmGlobals
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.toonbase import ToontownGlobals
 
 AllBossCogs = []

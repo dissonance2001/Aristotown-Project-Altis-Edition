@@ -1,4 +1,4 @@
-from toontown.battle.BattleCamera import BattleCamera
+from toontown.clashbattle.battle.BattleCamera import BattleCamera
 
 
 class BuildingBattleCamera(BattleCamera):

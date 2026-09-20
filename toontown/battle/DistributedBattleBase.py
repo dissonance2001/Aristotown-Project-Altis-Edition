@@ -13,8 +13,7 @@ from direct.task.Task import Task
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import Movie
 from toontown.battle import MovieUtil
-from toontown.toon import InventoryNewNEW
-from toontown.toon import InventoryNewOLD
+from toontown.toon import GagInventory
 from toontown.suit import Suit
 from direct.actor import Actor
 from toontown.battle import BattleProps
@@ -1750,6 +1749,76 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
     def exitNoLocalToon(self):
         pass
+
+    def handleInvMods(self, battleToon):
+        # Handle inventory modifiers (done on a case by case basis instead of clearing all to not mess with tutorial)
+        base.localAvatar.inventory.clearButtonModifier(GagInventory.INV_MOD_PUNISHMENT)
+        base.localAvatar.inventory.clearButtonModifier(GagInventory.INV_MOD_PROP_BONUS)
+
+        # First handle effect that affects all levels
+        gagLevelPunishment = battleToon.getStatusEffectsOfSpecificType(UseGagLevelSenderStatusEffect)
+        if gagLevelPunishment:
+            for effect in gagLevelPunishment:
+                base.localAvatar.inventory.applyInventoryButtonModifier(GagInventory.INV_MOD_PUNISHMENT,
+                                                                        levels=[int(effect.gagLevel),
+                                                                                int(effect.gagLevel2)])
+
+        from toontown.battle.statuses.StatusEffects import PuzzleShowEffect
+        puzzleEffects: List[List[PuzzleShowEffect]] = [suit.getStatusEffectsOfSpecificType(PuzzleShowEffect) for suit in self.activeSuits]
+        # puzzleEffects will start off as a list of lists which sucks. Anyway.
+        for effectList in puzzleEffects:
+            for effect in effectList:
+                base.localAvatar.inventory.applyInventoryButtonModifier(GagInventory.INV_MOD_PROP_BONUS,
+                                                                        tracks=[effect.getTrack()])
+
+        # Now handle effect that affects each track individually
+        gagLevelTrackPunishment = battleToon.getStatusEffectsOfSpecificType(UseGagLevelsWithTrackSenderStatusEffect)
+        if gagLevelTrackPunishment:
+            for effect in gagLevelTrackPunishment:
+                for track in range(len(BattleGlobals.Tracks)):
+                    gagLevel = int(effect.getGagLevel(track))
+                    if gagLevel == -1:
+                        continue
+                    base.localAvatar.inventory.applyInventoryButtonModifier(GagInventory.INV_MOD_PUNISHMENT,
+                                                                            tracks=[track], levels=[gagLevel])
+
+        # Disable certain gags
+        base.localAvatar.inventory.clearButtonModifier(GagInventory.INV_MOD_DISABLED)
+        isMonsoon = battleToon.getStatusEffectOfId(SEE.EFFECT_MONSOON)
+        if isMonsoon:
+            base.localAvatar.inventory.applyInventoryButtonModifier(GagInventory.INV_MOD_DISABLED,
+                                                                    tracks=[AttackEnum.TOON_HEAL,
+                                                                            AttackEnum.TOON_SOUND])
+
+        trackDisabledEffects = battleToon.getStatusEffectsOfType(GagTracksDisabled)
+        for effect in trackDisabledEffects:
+            disabledTracks = effect.getAllDisabledTracks()
+            if disabledTracks:
+                base.localAvatar.inventory.applyInventoryButtonModifier(GagInventory.INV_MOD_DISABLED,
+                                                                        tracks=disabledTracks)
+
+        levelDisabledEffects = battleToon.getStatusEffectsOfType(GagLevelsDisabled)
+        for effect in levelDisabledEffects:
+            disabledLevels = effect.getAllDisabledLevels()
+            if disabledLevels:
+                base.localAvatar.inventory.applyInventoryButtonModifier(GagInventory.INV_MOD_DISABLED,
+                                                                        levels=disabledLevels)
+
+        mixedTrackLevelDisabledEffects = battleToon.getStatusEffectsOfType(MixedGagTracksLevelsDisabled)
+        for effect in mixedTrackLevelDisabledEffects:
+            disabledTracksLevels = effect.getAllDisabledTracksLevels()
+            if disabledTracksLevels:
+                track2Levels = {AttackEnum(track): [] for track in range(len(BattleGlobals.Tracks))}
+                for track in range(len(BattleGlobals.Tracks)):
+                    for level in range(BattleGlobals.MAX_LEVEL_INDEX + 1):
+                        if effect.getGagTrackLevelDisabled(track, level):
+                            track2Levels[track].append(level)
+
+                    if track2Levels.get(track, []):
+                        base.localAvatar.inventory.applyInventoryButtonModifier(GagInventory.INV_MOD_DISABLED,
+                                                                                levels=track2Levels.get(track, []),
+                                                                                tracks=[track])
+
 
     def setSkippingRewardMovie(self):
         self._skippingRewardMovie = True

@@ -8,7 +8,7 @@ can subclass this object to more easily access it.
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from toontown.battle.BattleListenerAI import BattleListenerAI
+    from toontown.clashbattle.battle.BattleListenerAI import BattleListenerAI
 
 
 class BattleListenerException(AttributeError):

@@ -1,8 +1,8 @@
 # SuitGlobals are used to set the appearance of Cogs.
 from enum import IntEnum, auto
 from panda3d.core import VBase4
-from toontown.suit.SuitDefinitions import suitBuildHeadAttributeDict, MainlineCogs, SUIT_BODY_TYPE_WIDTH
-from toontown.suit import SuitTimings
+from toontown.clashsuit.suit.SuitDefinitions import suitBuildHeadAttributeDict, MainlineCogs, SUIT_BODY_TYPE_WIDTH
+from toontown.clashsuit.suit import SuitTimings
 
 SCALE_INDEX = 0  # The scale of the cog
 HAND_COLOR_INDEX = 1  # The hand color

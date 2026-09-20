@@ -3,10 +3,10 @@ from direct.fsm import FSM
 from direct.interval.IntervalGlobal import *
 from direct.task.Task import Task
 
-from toontown.suit import BossCogGlobals
-from toontown.battle import MovieUtil
-from toontown.suit import DistributedSuitBase
-from toontown.suit import SuitHealthMeter
+from toontown.clashsuit.suit import BossCogGlobals
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashsuit.suit import DistributedSuitBase
+from toontown.clashsuit.suit import SuitHealthMeter
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 
 

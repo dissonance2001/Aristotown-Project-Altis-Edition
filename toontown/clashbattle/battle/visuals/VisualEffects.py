@@ -9,17 +9,17 @@ from direct.showbase.PythonUtil import lerp
 from direct.showutil.Rope import Rope
 from direct.task.TaskManagerGlobal import taskMgr
 
-from toontown.battle import BattleGlobals
-from toontown.battle.BattleBase import *
-from toontown.battle.movielistener.BattleMovieListenerEnum import BMLE
-from toontown.battle.statuses.StatusEffectEnums import *
-from toontown.battle.statuses.StatusEffects import StatusEffectBase, IgnoreVisualEffectMovieUnapplyEffect
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.movielistener.BattleMovieListenerEnum import BMLE
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import *
+from toontown.clashbattle.battle.statuses.StatusEffectsBase import *
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.cutscene.repository.CutsceneKeyEnum import CutsceneKeyEnum
 from toontown.effects import DustCloud
 from toontown.inventory.base.InventoryItem import InventoryItem
 from toontown.inventory.enums.ItemEnums import HatItemType
-from toontown.suit.SuitDNA import getSuitBodyType
+from toontown.clashsuit.suit.SuitDNA import getSuitBodyType
 from toontown.toon import ToonDNA
 from toontown.toonbase import ToontownGlobals
 from toontown.utils.AstronStruct import AstronStruct
@@ -27,7 +27,7 @@ from toontown.utils.AstronStruct import AstronStruct
 # from typing import TYPE_CHECKING, Tuple
 
 # if TYPE_CHECKING:
-#     from toontown.battle.BattleAvatar import BattleAvatar
+#     from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
 
 
 IGNORE = 0
@@ -464,14 +464,14 @@ class ParticleVisualEffect(VisualEffectBase):
 
     def _doApply(self) -> None:
         """Applies the visual effect to the avatar."""
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         self.particleSystem = BattleParticles.createParticleEffect(file=self.particleName)
         self.particleSystem.start(parent=self.getParticleParent(), renderParent=self.getParticleRenderParent())
 
     def _doUnapply(self) -> None:
         """Unapplies the visual effect from the avatar."""
         if self.particleSystem:
-            from toontown.battle import BattleParticles
+            from toontown.clashbattle.battle import BattleParticles
             BattleParticles.cleanupSystem(self.particleSystem,
                                           duration=self.cleanup_duration,
                                           instant=self.cleanup_instant or self.hasCleanedUp)
@@ -500,7 +500,7 @@ class MultiParticleVisualEffect(ParticleVisualEffect):
 
     def _doApply(self) -> None:
         """Applies the visual effect to the avatar."""
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         for particleName in self.particleNames:
             particleSystem = BattleParticles.createParticleEffect(file=particleName)
             particleSystem.start(parent=self.getParticleParent(), renderParent=self.av)
@@ -508,7 +508,7 @@ class MultiParticleVisualEffect(ParticleVisualEffect):
 
     def _doUnapply(self) -> None:
         """Unapplies the visual effect from the avatar."""
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         for particleSystem in self.particleSystems:
             BattleParticles.cleanupSystem(particleSystem,
                                           duration=self.cleanup_duration,
@@ -568,7 +568,7 @@ class SuitLuredVisualEffect(VisualEffectBase):
         if not self.av.isLured or not self.battle:
             return Sequence(), Sequence()
 
-        from toontown.battle import MovieLure, MovieUtil
+        from toontown.clashbattle.battle import MovieLure, MovieUtil
         # This is the end of the round, we need to unlure them ourselves
         seq = Sequence(
             MovieUtil.unlureSuit(self.av, self.battle), 
@@ -898,7 +898,7 @@ class ErfitReviveVisualEffect(VisualEffectBase):
         explodeSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart.ogg')
         explodeSoundTrack = Sequence(SoundInterval(explodeSound, volume=1.0))
 
-        from toontown.battle.MovieUtil import createKapowExplosionTrack
+        from toontown.clashbattle.battle.MovieUtil import createKapowExplosionTrack
         explosionTrack = Sequence()
         explosionTrack.append(createKapowExplosionTrack(battle, explosionPoint=explosionPoint, scale=5))
 
@@ -1046,7 +1046,7 @@ class AvatarSplatVisualEffect(VisualEffectBase):
                 for partName in partNames:
                     u = random.random()
                     v = random.random()
-                    from toontown.battle import BattleProps
+                    from toontown.clashbattle.battle import BattleProps
                     pieName = list(BattleProps.Splats.keys())[pieIndex]
                     self.av.applySplat([pieName, partName, u, v])
             try:
@@ -1108,7 +1108,7 @@ class SuitSuedVisualEffect(VisualEffectBase):
     def _doApply(self) -> None:
         p1 = Point3(0)
         p2 = Point3(0)
-        from toontown.battle.BattleProps import globalPropPool
+        from toontown.clashbattle.battle.BattleProps import globalPropPool
         stars = globalPropPool.getProp('stun')
         # We must use jpg+rgb here because of the ColorBlendAttrib.MAdd that is applied to skelecogs, which breaks PNG.
         tex = loader.loadTexture(
@@ -1236,8 +1236,8 @@ class ToonBoostVisualEffect(VisualEffectBase):
         for i in range(len(self.gagTracks)):
             gagTrack = self.gagTracks[i]
             damageMult = self.damageMults[i]
-            from toontown.battle.BattleGlobals import TrackColors
-            from toontown.battle import BattleParticles
+            from toontown.clashbattle.battle.BattleGlobals import TrackColors
+            from toontown.clashbattle.battle import BattleParticles
             particleSystem = BattleParticles.createParticleEffect(file='toonBoost')
             particles = particleSystem.getParticlesList()[0]
             if 0 <= gagTrack < len(TrackColors):
@@ -1258,7 +1258,7 @@ class ToonBoostVisualEffect(VisualEffectBase):
 
     def _doUnapply(self) -> None:
         """Unapplies the visual effect from the avatar."""
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         for system in self.particleSystems:
             BattleParticles.cleanupSystem(system, duration=1.5, instant=self.hasCleanedUp)
         self.particleSystems = []
@@ -1292,7 +1292,7 @@ class VulnerableVisualEffect(VisualEffectBase):
 
     def _doApply(self) -> None:
         """Applies the visual effect to the avatar."""
-        from toontown.battle.BattleProps import globalPropPool
+        from toontown.clashbattle.battle.BattleProps import globalPropPool
         self.teeth = globalPropPool.getProp('litigator_teeth')
         LerpScaleInterval(self.teeth, 0.3, 1.0 * self.teethScale, startScale=0.01).start()
         self.teeth.reparentTo(self.getLeftHand())
@@ -1322,7 +1322,7 @@ class OldVulnerableVisualEffect(VisualEffectBase):
 
     def _doApply(self) -> None:
         """Applies the visual effect to the avatar."""
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         self.particleSystem = BattleParticles.createParticleEffect(file='snap')
         self.particleSystem.start(parent=self.av, renderParent=self.av)
         renderer = self.particleSystem.getParticlesList()[0].renderer
@@ -1333,7 +1333,7 @@ class OldVulnerableVisualEffect(VisualEffectBase):
 
     def _doUnapply(self) -> None:
         """Unapplies the visual effect from the avatar."""
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         BattleParticles.cleanupSystem(self.particleSystem, duration=1.0, instant=self.hasCleanedUp)
         renderer = self.particleSystem.getParticlesList()[0].renderer
 
@@ -1442,7 +1442,7 @@ class CaseManagerDotVisualEffect(VisualEffectBase):
 
     def _doApply(self) -> None:
         """Applies the visual effect to the avatar."""
-        from toontown.battle.BattleProps import globalPropPool
+        from toontown.clashbattle.battle.BattleProps import globalPropPool
         if self.tube is None:
             self.tube = globalPropPool.getProp('redtape-tube')
             self.tube.setColorScale(0.25, 0.25, 1.0, 1.0)
@@ -1549,7 +1549,7 @@ class OcForemanVisualEffect(ParticleVisualEffect):
         Applies the visual effect to the avatar.
         Override to set color on it.
         """
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         if not self.isPrismatic():
             self.particleSystem = BattleParticles.createParticleEffect(file=self.particleName)
             self.setPsColor(self.particleSystem)
@@ -1573,7 +1573,7 @@ class OcForemanVisualEffect(ParticleVisualEffect):
 
     def _doUnapply(self) -> None:
         """Unapplies the visual effect from the avatar."""
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         if not self.isPrismatic():
             BattleParticles.cleanupSystem(self.particleSystem,
                                           duration=self.cleanup_duration,
@@ -1678,8 +1678,8 @@ class ExtraGlowerPowersVisualEffect(VisualEffectBase):
 
     def _doApply(self) -> None:
         """Applies the visual effect to the avatar."""
-        from toontown.battle.BattleProps import globalPropPool
-        from toontown.battle import MovieUtil
+        from toontown.clashbattle.battle.BattleProps import globalPropPool
+        from toontown.clashbattle.battle import MovieUtil
 
         # Set up a new rotate node to rotate knives around
         self.rotateNode = self.av.attachNewNode('knifeRotateNode')
@@ -1761,7 +1761,7 @@ class ExtraGlowerPowersVisualEffect(VisualEffectBase):
 
     def _doUnapply(self) -> None:
         """Unapplies the visual effect from the avatar."""
-        from toontown.battle import MovieUtil
+        from toontown.clashbattle.battle import MovieUtil
         if self.rotateSeq:
             self.rotateSeq.finish()
             self.rotateSeq = None
@@ -2689,7 +2689,7 @@ class FakeMultislackerVisualEffect(VisualEffectBase):
             self.fakeSuit.delete()
 
         # Create a fake suit that will stand off to the side and do his eating stuff
-        from toontown.suit import Suit, SuitDNA, SuitHealthMeter
+        from toontown.clashsuit.suit import Suit, SuitDNA, SuitHealthMeter
         self.fakeSuit = Suit.Suit()
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('mslacker')
@@ -2812,7 +2812,7 @@ class PropOrbitVisualEffect(VisualEffectBase):
             self._appearSeq = None
 
     def __removeProps(self):
-        from toontown.battle import MovieUtil
+        from toontown.clashbattle.battle import MovieUtil
         for prop in self._propNodes:
             MovieUtil.removeProp(prop)
         self._propNodes = []
@@ -2822,7 +2822,7 @@ class PropOrbitVisualEffect(VisualEffectBase):
 
     def _doApply(self) -> None:
         """Applies the visual effect to the avatar."""
-        from toontown.battle.BattleProps import globalPropPool
+        from toontown.clashbattle.battle.BattleProps import globalPropPool
         self.__finishSeq()
         self.__removeProps()
         # node that does the orbiting
@@ -2923,7 +2923,7 @@ class WindedVisualEffect(ParticleVisualEffect):
 
     def _doApply(self) -> None:
         """Applies the visual effect to the avatar."""
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         self.particleSystem = BattleParticles.createParticleEffect(file=self.particleName)
 
         particles = self.particleSystem.getParticlesList()[0]
@@ -3009,7 +3009,7 @@ class PrethinkerBrainStormVisualEffect(VisualEffectBase):
         To be played during the Battle Movie, if
         the self.removeDuringMovie is set to be True.
         """
-        from toontown.battle import MovieUtil
+        from toontown.clashbattle.battle import MovieUtil
 
         cloudScaleDown = Parallel()
         for cloud in self.clouds:
@@ -3322,7 +3322,7 @@ class SlushFundVisualEffect(AvatarSoakedVisualEffect):
 
     def _doApply(self) -> None:
         super()._doApply()
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle import BattleParticles
         BattleParticles.setEffectTexture(self.particleSystem, 'dollar-sign', color=(.5 * random.random() + .3, .8, 1, 1))
 
 
@@ -3370,7 +3370,7 @@ class MarketBubbleVisualEffect(VisualEffectBase):
                     self.bubble.removeNode()
                     self.bubble = None
 
-                from toontown.suit.SuitDefinitionsBase import SuitDefinitions
+                from toontown.clashsuit.suit.SuitDefinitionsBase import SuitDefinitions
                 plutoHeight = SuitDefinitions['pcrat'].bodyHeight
                 sphere = base.loader.loadModel('phase_3/models/misc/sphere')
                 self.bubble = sphere.copyTo(self.displayNode)
@@ -3682,7 +3682,7 @@ class HighRollerCommercialVisualEffect(VisualEffectBase):
         if self.fakeSuit:
             self.fakeSuit.delete()
 
-        from toontown.suit import DistributedSuitBase, SuitDNA, SuitHealthMeter
+        from toontown.clashsuit.suit import DistributedSuitBase, SuitDNA, SuitHealthMeter
         self.fakeSuit = DistributedSuitBase.DistributedSuitBase(base.cr)
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('hroller')
@@ -3795,7 +3795,7 @@ class HRUntouchableVisualEffect(ParticleVisualEffect):
             self.fakeSuit.delete()
 
         # Create a fake suit that will become God and do his floating stuff
-        from toontown.suit import Suit, SuitDNA, SuitHealthMeter
+        from toontown.clashsuit.suit import Suit, SuitDNA, SuitHealthMeter
         self.fakeSuit = Suit.Suit()
         suitDNA = SuitDNA.SuitDNA()
         suitDNA.newSuit('hroller')

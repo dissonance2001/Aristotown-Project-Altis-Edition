@@ -1,24 +1,24 @@
 import math, random
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.statuses import StatusEffectGlobals as SEG
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.SuitBattleGlobals import calculateHp
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackAI import AttackAI
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackClassAI
-from toontown.battle.attacks.server.suit import SuitDoubleAttackAI
-from toontown.battle.attacks.server.suit.MercSuitAttacksAI import ShatterDamageAI
-from toontown.battle.attacks.server.suit.BasicAttacksAI import GenericDamageAttackAI, DamageInflictStatusAttackAI, \
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.SuitBattleGlobals import calculateHp
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
+from toontown.clashbattle.battle.attacks.server.suit import SuitDoubleAttackAI
+from toontown.clashbattle.battle.attacks.server.suit.MercSuitAttacksAI import ShatterDamageAI
+from toontown.clashbattle.battle.attacks.server.suit.BasicAttacksAI import GenericDamageAttackAI, DamageInflictStatusAttackAI, \
     SuitHealAttackAI, SuitUnlureAttackAI, ApplyStatusEffectAttackAI, DoNothingAI, HitAllParticipantsAttackAI, \
     RemoveStatusEffectAttackAI
-from toontown.battle.attacks.server.suit.SuitSingleAttackAI import SuitSingleAttackAI
-from toontown.battle.attacks.server.suit.SuitGroupAttackAI import SuitGroupAttackAI
-from toontown.battle.statuses import StatusEffects
-from toontown.battle.statuses.StatusEffectEnums import SEE
-from toontown.battle.statuses.StatusEffects import FindTheFamilyBaseEffect
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.attacks.server.suit.SuitSingleAttackAI import SuitSingleAttackAI
+from toontown.clashbattle.battle.attacks.server.suit.SuitGroupAttackAI import SuitGroupAttackAI
+from toontown.clashbattle.battle.statuses import StatusEffects
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE
+from toontown.clashbattle.battle.statuses.StatusEffects import FindTheFamilyBaseEffect
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.events.apriltoons.findthefamily import FindTheFamilyGlobals
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 
 # region Count Erfit / Erclaim
 
@@ -590,8 +590,8 @@ class FTFNuclearTransformationAI(DoNothingAI):
         # Handle moving all this good stuff over server side
         ourSuit.specialContainerId = newContainerId
         ourSuit.specialContainer = newContainer
-        from toontown.suit.SuitDNA import SuitDNA
-        from toontown.battle import SuitBattleGlobals
+        from toontown.clashsuit.suit.SuitDNA import SuitDNA
+        from toontown.clashbattle.battle import SuitBattleGlobals
         dna = SuitDNA()
         dna.newSuit(newContainer.suitType)
         ourSuit.dna = dna

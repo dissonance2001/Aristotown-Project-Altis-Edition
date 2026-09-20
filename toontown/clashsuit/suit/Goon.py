@@ -1,8 +1,8 @@
-from toontown.avatar import Avatar
+from otp.avatar import Avatar
 from toontown.toonbase import ToontownGlobals
 from panda3d.core import *
-from toontown.suit import GoonGlobals
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import GoonGlobals
+from toontown.clashsuit.suit import SuitDNA
 import math
 import random
 

@@ -1,5 +1,5 @@
 # Grabs the correct status effect class based on id
-from toontown.battle.visuals.VisualEffectAttributes import VisualEffectList
+from toontown.clashbattle.battle.visuals.VisualEffectAttributes import VisualEffectList
 
 
 def createVisualEffect(avProfile, effectEnum, extraArgs=None):

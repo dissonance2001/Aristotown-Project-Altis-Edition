@@ -1,8 +1,8 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.task.TaskManagerGlobal import taskMgr
 
-from toontown.suit import SuitTimings
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit import SuitTimings
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 
 
 class DistributedWinterMinigameSuitAI(DistributedSuitBaseAI):

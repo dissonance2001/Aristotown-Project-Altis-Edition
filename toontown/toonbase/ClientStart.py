@@ -1,4 +1,14 @@
 #!/usr/bin/env python2
+from panda3d.core import CullBinManager
+
+_cbm = CullBinManager.getGlobalPtr()
+_i = _cbm.findBin('sorted-gui-popup')
+if _i < 0:
+    _cbm.addBin('sorted-gui-popup', CullBinManager.BTFixed, 65)
+else:
+    _cbm.setBinType(_i, CullBinManager.BTFixed)
+    _cbm.setBinSort(_i, 65)
+
 import builtins
 import os
 import sys

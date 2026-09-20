@@ -1,3 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+
 import math
 import random
 from enum import IntEnum
@@ -5,22 +11,23 @@ from typing import List, Optional
 
 from direct.showbase.PythonUtil import clampScalar
 
-from toontown.battle import PassiveAttributeDefs, BattleAvatar
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle import BattleGlobals
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.visuals.VisualEffectEnums import *
+from toontown.clashbattle.battle import PassiveAttributeDefs
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle import BattleGlobals
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import *
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from ..BattleGlobals import BattleOrderPriority
 from ..BattleListenerObject import BattleListenerObject
 from ..environmental.base.EnvironmentalEnum import RainmakerWeather, ENV_ENUM, EnvironmentalEnum
-from ...instances import HighRollerGlobals
-from ...instances.HighRollerGlobals import HighRollerGameEnum
-from ...toon.GagInventoryBase import GagInventoryBase
+from toontown.instances import HighRollerGlobals
+from toontown.instances.HighRollerGlobals import HighRollerGameEnum
+from toontown.toon.GagInventoryBase import GagInventoryBase
+from toontown.clashbattle.battle.statuses.StatusEffectsBase import *
 
-from ...utils.AstronStruct import AstronStruct
-from toontown.battle.statuses.StatusEffectEnums import SEE, SUIT_STATUS_EFFECTS_TO_REMOVE, SUIT_STATUS_EFFECTS_TO_REDUCE
+from toontown.utils.AstronStruct import AstronStruct
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE, SUIT_STATUS_EFFECTS_TO_REMOVE, SUIT_STATUS_EFFECTS_TO_REDUCE
 from . import StatusEffectGlobals as SEG
 
 NORMAL = 0
@@ -207,282 +214,6 @@ class StatusEffectStruct(AstronStruct):
 # General Status Effect Classes #
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=- #
 # region
-
-
-class StatusEffectBase:
-    VisualSortOrder = 0  # Determines the sort order of this effect on battle panels.
-
-    def __init__(self, avProfile, effectId, rounds, disabledRounds, extraArgs):
-        self.avProfile = avProfile
-        self.effectId = effectId
-        # We increment this by 1 because of the rules of how status effects work.
-        # The rounds you define is how many rounds you want it to last after the round it is created.
-        # The round that it is created should not take away from its round counter.
-        if rounds != SEG.NO_ROUNDS:
-            rounds = rounds + 1
-        self.rounds = rounds
-        self.disabledRounds = disabledRounds
-        self.extraArgs = extraArgs
-        self.combines = True
-        # Fill in names of variables that apply to extraArgs in subclasses.
-        self.fields = []
-        # Do we want to send this to the client?
-        self.wantShow = True
-        # What visual effect enums is this status effect associated with?
-        self.visualEffectEnums = []
-        # Which event definitions do we wanna inherit into this status effect? (Useful for subclasses)
-        # Example: The base status effect definition is a decrement of 1 round on the end round event send.
-        self.inheritedEventDefinitions = []
-        self.lureAbilityQueue = []
-        self.wasDisabledThisRound = False
-
-        self.cleanedUp = False
-
-    def increment(self, amount):
-        self.rounds += amount
-
-    def checkDisabledDecrement(self):
-        if self.disabledRounds > 0:
-            if self.wasDisabledThisRound:
-                self.wasDisabledThisRound = False
-            else:
-                self.disabledRounds -= 1
-
-    def decrement(self, amount):
-        isDisabled = self.isDisabled()
-        self.checkDisabledDecrement()
-        if isDisabled:
-            return
-
-        # Don't decrement NO_ROUNDS status effects (-1 rounds)
-        if self.rounds == SEG.NO_ROUNDS:
-            return
-        self.rounds -= amount
-        # 0 rounds remaining is when the effect dies.
-        if self.rounds <= 0:
-            self.roundsRanOut()
-            return
-
-    def combine(self, otherEffect):
-        # Default combine behavior; override if needed
-        otherRounds = otherEffect.getRounds()
-        # If the other effect's rounds is -1 (permanent), override entirely.
-        # If it's not infinite rounds, then just increment the rounds by the given amount.
-        if otherRounds != SEG.NO_ROUNDS:
-            self.increment(otherRounds)
-        else:
-            self.setRounds(SEG.NO_ROUNDS, adjust=False)
-
-    def wantCombine(self, otherEffect):
-        return self.combines
-
-    def getEffectId(self):
-        return self.effectId
-
-    def getRounds(self):
-        return self.rounds
-
-    def setRounds(self, rounds, adjust=True):
-        # adjust flag adjusts round sets to account for the +1 needed on initial rounds set.
-        # See __init__ for more details.
-        extra = 1 if adjust else 0
-        self.rounds = rounds + extra
-
-    def getExtraArgs(self):
-        return self.extraArgs
-
-    def setExtraArgs(self, extraArgs):
-        self.extraArgs = extraArgs
-
-    def getAv(self):
-        # Returns the actual avatar that this status effect belongs to
-        if self.cleanedUp:
-            return None
-        return self.avProfile
-
-    @property
-    def av(self):
-        return self.getAv()
-
-    def getTranslatedExtraArgs(self):
-        # Call this when sending status effect info over to the client.
-        extraArgs = []
-        # Populate extraArgs with new info for each of these fields for the client.
-        for field in self.fields:
-            extraArgs.append(getattr(self, field))
-        return extraArgs
-
-    def getInfo(self):
-        return [self.getEffectId(), self.getRounds(), self.getTranslatedExtraArgs()]
-
-    def isAi(self):
-        # Sees if the AI is running this effect
-        return self.avProfile.battleListener
-
-    def getBattleCalc(self):
-        # AI Only
-        return self.avProfile.battleListener.battleCalc
-
-    @property
-    def battleCalc(self):
-        return self.getBattleCalc()
-
-    def getBattle(self):
-        # AI Only
-        return self.avProfile.battle
-
-    @property
-    def battle(self):
-        return self.getBattle()
-
-    @property
-    def activeToons(self):
-        return [self.battle.getToon(toonId) for toonId in self.battle.activeToons]
-
-    def roundsRanOut(self):
-        # Define things that need to happen on natural status effect deletion but not in forced ways.
-        self.delete()
-
-    def cleanup(self):
-        if self.cleanedUp:
-            return
-
-        self.cleanedUp = True
-
-        del self.avProfile
-        del self.lureAbilityQueue
-        del self.inheritedEventDefinitions
-        del self.visualEffectEnums
-
-    def delete(self):
-        # Override if needed in subclasses.
-        # Make sure the effect hasn't been cleaned up.
-        # This is to prevent crashes from outside sources trying to delete this after it's already been deleted.
-        if self.cleanedUp:
-            return
-        self.avProfile.deleteStatusEffect(self)
-        self.cleanup()
-
-    def createLureResistanceStatusEffect(self, rounds=2):
-        lureEffect = SEG.createStatusEffect(self.getAv(), SEE.EFFECT_LURE_RESISTANCE)
-        lureEffect.setAmount(rounds)
-        self.getAv().addStatusEffect(SEE.EFFECT_LURE_RESISTANCE, lureEffect)
-
-    @property
-    def lureResistanceEffect(self):
-        return self.getAv().getStatusEffectOfId(SEE.EFFECT_LURE_RESISTANCE)
-
-    def isVisible(self):
-        """
-        Client-only.
-        Can be overridden for making unique cases for when
-        a status effect is supposed to be shown to the Client.
-        """
-        return True
-
-    def createAttack(self, attackType, insertMethod=None, extraArgs=None,
-                     passedArgs=None, attemptQueue=True, unlure=False,
-                     damageMult=1.0, insertArgs=None, targets: list=None,
-                     priority: int=0, tauntIndex: int=0):
-        """
-        Instantly creates and inserts a suit attack with the given arguments
-
-        :param attackType: The enum of suit attack that this attack should be
-        :param insertMethod: The method/placement of insertion. Index, beginning, or end.
-        :param extraArgs: The extra arguments that should be passed into the attack class
-        :param passedArgs: If lure queue is being used, passedArgs are used to feed back into the creation function for that attack.
-        :param attemptQueue: If an ability should attempt to use the lure queue or not
-        :param unlure: If this attack should unlure the cog that is going to be using it
-        :param damageMult: The multiplier of damage for the attack
-        :param targets: If given, the specific targets that this suit attack should be forced to hit
-        :param insertArgs: If insertMethod is index, these define the index and the adjustment.
-        :param priority: The priority of the move.
-        :return:
-        """
-        # Only avatars who are actually in battle can attack.
-        if self.getAv().getBattleState() != BattleGlobals.BattleStateEnum.ACTIVE:
-            return
-
-        extraArgs = extraArgs or []
-        passedArgs = passedArgs or []
-        insertArgs = insertArgs or {}
-        targets = targets or []
-
-        # If the suit is lured, add this attack to the queue of attacks to do after they unlure.
-        if self.getAv().getStatusEffectOfType(LureStatusEffect) and not unlure:
-            if attemptQueue:
-                self.addAttackToLureQueue(attackType, passedArgs)
-        else:
-            from toontown.battle.attacks.server.AttackRepositoryAI import createAttack
-            attack = createAttack(
-                attackType, invoker=self.getAv(), unlure=unlure,
-                damageMult=damageMult, targets=targets, extraArgs=extraArgs,
-                tauntIndex=tauntIndex
-            )
-
-            if insertMethod:
-                if insertMethod == 'index':
-                    insertIndex = insertArgs.get('insertIndex')
-                    adjust = insertArgs.get('adjust', True)
-                    respectPreviousAdditions = insertArgs.get('respectPreviousAdditions', True)
-                    self.getBattleCalc().insertAttack(
-                        attack, "insert", insertIndex, adjust=adjust, priority=priority,
-                        respectPreviousAdditions=respectPreviousAdditions)
-                    return
-                elif insertMethod == 'beginning':
-                    self.getBattleCalc().insertAttack(attack, "beginning", priority=priority)
-                    return
-                elif insertMethod == 'replace':
-                    self.getBattleCalc().insertAttack(attack, "replace", priority=priority)
-                    return
-
-            self.getBattleCalc().insertAttack(attack, "end", priority=priority)
-
-    def createGeneralAttack(self, attackType, extraArgs=None, targetList=None, insertKwargs: dict=None):
-        extraArgs = extraArgs or []
-        targetList = targetList or [self.getAv()]
-        self.getBattleCalc().createAndInsertAttack(
-            attackType,
-            {"targets": targetList, "extraArgs": extraArgs},
-            insertKwargs,
-        )
-
-    def addAttackToLureQueue(self, attackId, passedArgs):
-        self.lureAbilityQueue.append([attackId, passedArgs])
-        self.createGeneralAttack(AttackEnum.SHOW_HP_TEXT, extraArgs=[TTLocalizer.HP_TEXT_ABILITY_QUEUE])
-
-    def checkLureQueue(self):
-        if self.getAv().getStatusEffectOfType(LureStatusEffect):
-            return
-        for attackList in self.lureAbilityQueue[:]:
-            attackId, attackArgs = attackList
-            createFunc = self.attackId2Type.get(attackId, self.createAttack)
-            createFunc(*attackArgs)
-
-            if attackList in self.lureAbilityQueue:
-                self.lureAbilityQueue.remove(attackList)
-
-    def addStatusEffectToAllSuits(self, effectID, suits=None):
-        suits = suits or self.getBattleCalc().suits
-        for suit in suits:
-            suit.addStatusEffect(effectID)
-
-    def getVisualSortOrder(self):
-        return self.VisualSortOrder
-
-    ### Handler for certain disabled status effects
-
-    def setDisabledRounds(self, rounds, doThisRound: bool = False) -> None:
-        self.disabledRounds = rounds
-        if not doThisRound:
-            self.wasDisabledThisRound = True
-
-    def getDisabledRounds(self) -> int:
-        return self.disabledRounds
-
-    def isDisabled(self):
-        return self.disabledRounds and not self.wasDisabledThisRound
-
 
 # General attack effectiveness effect
 class AttackEffectivenessStatusEffect(StatusEffectBase):
@@ -671,7 +402,7 @@ class HealthBonusEffect(StatusEffectBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.boostAmount = self.extraArgs[0]
-        from toontown.suit.SuitBase import SuitBase
+        from toontown.clashsuit.suit.SuitBase import SuitBase
         if self.isAi() and isinstance(self.av, SuitBase):
             self.av.b_setMaxHp(self.av.getMaxHp() + self.boostAmount)
 
@@ -1449,7 +1180,7 @@ class ToonDamageBoostStatusEffect(LureKnockbackModifierStatusEffect, AttackEffec
         return knockback
 
     def checkSendEvent(self, attack) -> None:
-        from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+        from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
         attack: ToonAttackAI = attack  # woes of a shared functionality file
         # Ignore attacks not from our avatar and attacks which don't match
         # our gag track.
@@ -1627,7 +1358,7 @@ class WorkerManagementStatusEffect(StatusEffectBase):
 
             # Give the lured suits an attack.
             if lureEffect:
-                from toontown.battle.attacks.server.AttackRepositoryAI import createAttack
+                from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import createAttack
                 attack = createAttack(suit.getRandomAttack(), invoker=suit)
 
                 self.getBattleCalc().insertAttack(attack, respectPreviousAdditions=True)
@@ -1656,7 +1387,7 @@ class EndBattleOnDeathEffect(StatusEffectBase):
 
     def attemptEndFight(self):
         # Remove pending suits from battle
-        from toontown.battle.BattleGlobals import BattleStateEnum
+        from toontown.clashbattle.battle.BattleGlobals import BattleStateEnum
         battle = self.getBattle()
         suitsToRemove = battle.pendingSuits + battle.joiningSuits + battle.joiningNotPendingSuits
         for suit in suitsToRemove:
@@ -1957,7 +1688,7 @@ class DeepFreezeStatusEffect(AvatarTakeModifiedDamageStatusEffect, UnitesDisable
         self.setShiftOnAllDeepFreezeEffects()
 
         # Sort the attack order based on if the attack is a toon attack.
-        from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+        from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
         attackOrder.sort(key=lambda atk: isinstance(atk, ToonAttackAI))
 
     def setShiftOnAllDeepFreezeEffects(self):
@@ -2018,6 +1749,7 @@ class HPGate:
         return True
 
     def checkGate(self, battleAvatar, statusEffect=None):
+        from toontown.clashbattle.battle import BattleAvatar
         """
         Checks if a gate has been met.
         If it has, return the callback to fire.
@@ -2127,7 +1859,7 @@ class CogStatusEffect(HPGatekeeper):
         if not self.canGenerateAttack:
             return
 
-        from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+        from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
         suit: DistributedSuitBaseAI = self.getAv()
         if suit.noRegularAttackRounds > 0:
             suit.noRegularAttackRounds -= 1
@@ -2144,13 +1876,13 @@ class CogStatusEffect(HPGatekeeper):
         if not self.canGenerateAttack:
             return
 
-        from toontown.battle.attacks.server.AttackAI import AttackAI
-        from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+        from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
+        from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 
         suit: DistributedSuitBaseAI = self.getAv()
         choice = suit.getRandomAttack()
 
-        from toontown.battle.attacks.server.AttackRepositoryAI import createAttack
+        from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import createAttack
         attack: AttackAI = createAttack(choice, *args, **kwargs, invoker=suit)
 
         if suit.getPassive(PassiveAttributeDefs.ATTACKS_FIRST, False):
@@ -2263,7 +1995,7 @@ class HPRandomizerStatusEffect(StatusEffectBase):
     def handleHP(self):
         # This would be way too dangerous to allow to ever go on Toons,
         # so double check this just in case.
-        from toontown.suit.SuitBase import SuitBase
+        from toontown.clashsuit.suit.SuitBase import SuitBase
         if not isinstance(self.av, SuitBase):
             simbase.air.writeServerEvent('suspicious', self.av.doId, "Toon somehow got an HP randomizer status effect. Bad.")
             return
@@ -3443,7 +3175,7 @@ class CountErclaimStatusEffect(StatusEffectBase):
         count = self.getAv()
         if not count:
             return
-        from toontown.battle.attacks.server.AttackRepositoryAI import createAttack
+        from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import createAttack
         attack = createAttack(attackType, unlure=True, invoker=count)
         if not index:
             self.getBattleCalc().insertAttack(attack, respectPreviousAdditions=True, adjust=True)
@@ -3646,7 +3378,7 @@ class CountErfitStatusEffect(StatusEffectBase, MultiTimer, DamageListener):
         count = self.getAv()
         if not count:
             return
-        from toontown.battle.attacks.server.AttackRepositoryAI import createAttack
+        from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import createAttack
         attack = createAttack(attackType, invoker=count, extraArgs=extraArgs, unlure=True)
         if not index:
             self.getBattleCalc().insertAttack(attack,
@@ -3978,7 +3710,7 @@ class OverclockedForemanStatusEffect(StatusEffectBase, MultiTimer):
         damage = None
         canAttack = False
 
-        from toontown.battle.attacks.server.toon.ToonAttackAI import \
+        from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import \
             ToonAttackAI
 
         # Get the arguments for the attack.
@@ -4015,7 +3747,7 @@ class OverclockedForemanStatusEffect(StatusEffectBase, MultiTimer):
         # Now create the attack.
         self.activated = True
         if attack:
-            from toontown.battle.attacks.server.AttackRepositoryAI import createAttack
+            from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import createAttack
             attack = createAttack(
                 AttackEnum.OVERCLOCKED_FOREMAN_DESTRUCTION,
                 extraArgs=[damage, track, level],
@@ -4045,7 +3777,7 @@ class OverclockedForemanStatusEffect(StatusEffectBase, MultiTimer):
         # Set variables in advance for loop.
         attackCount = 0
 
-        from toontown.battle.attacks.server.toon.ToonAttackAI import \
+        from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import \
             ToonAttackAI
 
         # Get the arguments for the attack.
@@ -4520,10 +4252,6 @@ class DeepDiverEffect(CogStatusEffect):
             self.checkSinkOrSwim()
 
 
-# Flag class that will cause the avatar to ignore visual effect unapply movies while this is active
-class IgnoreVisualEffectMovieUnapplyEffect:
-    pass
-
 
 # Deep Diver's Diving effect
 class DivingStatusEffect(UntouchableStatusEffect, IgnoreVisualEffectMovieUnapplyEffect):
@@ -4605,7 +4333,7 @@ class GatekeeperFodderBonusEffect(AdditiveDamageBoostStatusEffect):
         self.fields = ['boostAmount', 'multiplier']
 
         # Was being weird with the health boost effect by itself so I am just doing this here
-        from toontown.suit.SuitBase import SuitBase
+        from toontown.clashsuit.suit.SuitBase import SuitBase
         if self.isAi() and isinstance(self.av, SuitBase):
             self.av.b_setMaxHp(self.av.getMaxHp() + self.boostAmount)
 
@@ -5132,7 +4860,7 @@ class InstanceMercStatusEffectBase(CogStatusEffect):
 
         if self.endFightOnDeath:
             # Remove pending suits from battle
-            from toontown.battle.BattleGlobals import BattleStateEnum
+            from toontown.clashbattle.battle.BattleGlobals import BattleStateEnum
             suitsToRemove = battle.pendingSuits + battle.joiningSuits + battle.joiningNotPendingSuits
             for suit in suitsToRemove:
                 suit.setBattleState(BattleStateEnum.INACTIVE)
@@ -5364,7 +5092,7 @@ class PrethinkerStatusEffectBase(InstanceMercStatusEffectBase):
         """Returns if Prethinker is being directly targeted this round by a Toon attack."""
         av = self.getAv()
 
-        from toontown.battle.attacks.server.AttackAI import AttackAI
+        from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
         for attack in attacks:
             attack: AttackAI
             # Don't check attack types that don't directly target us.
@@ -5505,7 +5233,7 @@ class ChainsawConsultantStatusEffectBase(InstanceMercStatusEffectBase, AttackIOM
         if self.isAi():
             self.handleBeginRound()
         else:
-            from toontown.battle.gui.special.ChainsawMeterGUI import ChainsawMeterGUI
+            from toontown.clashbattle.battle.gui.special.ChainsawMeterGUI import ChainsawMeterGUI
             messenger.send(ChainsawMeterGUI.setRPMEvent(), [self._revvingUpStacks])
 
     def cleanup(self):

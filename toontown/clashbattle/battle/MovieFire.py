@@ -4,15 +4,15 @@ from collections import OrderedDict
 from toontown.chat.constants.ChatGlobals import  CFSpeech, CFTimeout
 from direct.interval.IntervalGlobal import *
 
-from toontown.battle import MovieUtil
-from toontown.battle.BattleBase import *
-from toontown.battle.BattleProps import *
-from toontown.battle.BattleSounds import *
-from toontown.battle.SuitBattleGlobals import ITERATIVE_CHAT
-from toontown.battle.movielistener.BattleMovieListenerEnum import BMLE
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.BattleProps import *
+from toontown.clashbattle.battle.BattleSounds import *
+from toontown.clashbattle.battle.SuitBattleGlobals import ITERATIVE_CHAT
+from toontown.clashbattle.battle.movielistener.BattleMovieListenerEnum import BMLE
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.effects import DustCloud
-from toontown.suit.SuitDNA import *
+from toontown.clashsuit.suit.SuitDNA import *
 from toontown.toon.ToonDNA import *
 
 notify = getNotify("MovieFire")

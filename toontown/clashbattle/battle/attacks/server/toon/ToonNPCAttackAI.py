@@ -1,10 +1,10 @@
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackClassAI
-from toontown.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
-from toontown.battle.statuses import SEE, StatusEffects
-from toontown.battle.statuses import StatusEffectGlobals as SEG
-from toontown.battle.statuses.StatusEffectEnums import StatusEffectEnum
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
+from toontown.clashbattle.battle.attacks.server.toon.ToonAttackAI import ToonAttackAI
+from toontown.clashbattle.battle.statuses import SEE, StatusEffects
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectEnum
 from toontown.inventory.enums.ItemEnums import IOUItemType
 from toontown.inventory.registry.IOURegistry import IOURegistry
 from toontown.modifiers import ModifierEnums

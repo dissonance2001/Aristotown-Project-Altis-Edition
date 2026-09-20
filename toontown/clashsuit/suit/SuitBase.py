@@ -1,11 +1,11 @@
 """SuitBase module: contains the SuitBase class"""
 
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.suit import SuitDNA
-from toontown.suit.SuitLegList import *
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashsuit.suit import SuitDNA
+from toontown.clashsuit.suit.SuitLegList import *
 from direct.distributed.ClockDelta import *
-from toontown.battle import SuitBattleGlobals
+from toontown.clashbattle.battle import SuitBattleGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 

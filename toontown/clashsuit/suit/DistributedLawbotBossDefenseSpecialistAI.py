@@ -1,8 +1,8 @@
 import random
 
-from toontown.suit import BossCogGlobals
-from toontown.ai.AIBaseGlobal import *
-from toontown.suit import DistributedSuitBaseAI
+from toontown.clashsuit.suit import BossCogGlobals
+from otp.ai.AIBaseGlobal import *
+from toontown.clashsuit.suit import DistributedSuitBaseAI
 from toontown.toonbase import ToontownGlobals
 
 

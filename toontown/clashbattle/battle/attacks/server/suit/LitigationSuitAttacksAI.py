@@ -2,20 +2,20 @@ from operator import itemgetter
 import random
 from typing import Dict
 
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.server.AttackAI import AttackAI
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackClassAI
-from toontown.battle.attacks.server.suit.BasicAttacksAI import ApplyStatusEffectAttackAI, \
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackClassAI
+from toontown.clashbattle.battle.attacks.server.suit.BasicAttacksAI import ApplyStatusEffectAttackAI, \
     ApplyVisualEffectToSelfAttackAI, DamageInflictStatusAttackAI, RemoveVisualEffectFromSelfAttackAI
-from toontown.battle.attacks.server.suit.SuitGroupAttackAI import SuitGroupAttackAI
-from toontown.battle.attacks.server.suit.SuitSingleAttackAI import SuitSingleAttackAI
-from toontown.battle.statuses import StatusEffectGlobals as SEG
-from toontown.battle.statuses.StatusEffectEnums import SEE, SUIT_STATUS_EFFECTS_TO_REMOVE
-from toontown.battle.statuses.StatusEffects import LureStatusEffect, UseGagLevelSenderStatusEffect
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashbattle.battle.attacks.server.suit.SuitGroupAttackAI import SuitGroupAttackAI
+from toontown.clashbattle.battle.attacks.server.suit.SuitSingleAttackAI import SuitSingleAttackAI
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG
+from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE, SUIT_STATUS_EFFECTS_TO_REMOVE
+from toontown.clashbattle.battle.statuses.StatusEffects import LureStatusEffect, UseGagLevelSenderStatusEffect
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
 
 

@@ -1,32 +1,32 @@
 from operator import attrgetter
 
-from toontown.ai.AIBaseGlobal import simbase
-from toontown.battle.BattleEventDefinitionClasses import EnvironmentalEventDefinition
-from toontown.battle.BattleEventGlobals import BEG
-from toontown.battle import BattleExperienceAI
-from toontown.battle.BattleGlobals import *
-from toontown.battle.BattleListenerAI import BattleListenerAI
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.base.AttackOrder import AttackOrder
-from toontown.battle.attacks.server.AttackAI import AttackAI
-from toontown.battle.attacks.server.AttackRepositoryAI import AttackRepository, createAttack
-from toontown.battle.attacks.server.suit import *
-from toontown.battle.attacks.server.toon import *
-from toontown.battle.BattleAvatar import BattleAvatar
-from toontown.battle.BattleListenerObject import BattleListenerObject
-from toontown.battle.environmental.base.EnvironmentalEnum import EnvironmentalEnum
-from toontown.battle.environmental.server.EnvironmentalRepository import createEnvironmental
-from toontown.battle.environmental.server.Environmentals import EnvironmentalBase
-from toontown.battle.statuses import StatusEffects
+from otp.ai.AIBaseGlobal import simbase
+from toontown.clashbattle.battle.BattleEventDefinitionClasses import EnvironmentalEventDefinition
+from toontown.clashbattle.battle.BattleEventGlobals import BEG
+from toontown.clashbattle.battle import BattleExperienceAI
+from toontown.clashbattle.battle.BattleGlobals import *
+from toontown.clashbattle.battle.BattleListenerAI import BattleListenerAI
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackOrder import AttackOrder
+from toontown.clashbattle.battle.attacks.server.AttackAI import AttackAI
+from toontown.clashbattle.battle.attacks.server.AttackRepositoryAI import AttackRepository, createAttack
+from toontown.clashbattle.battle.attacks.server.suit import *
+from toontown.clashbattle.battle.attacks.server.toon import *
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.clashbattle.battle.BattleListenerObject import BattleListenerObject
+from toontown.clashbattle.battle.environmental.base.EnvironmentalEnum import EnvironmentalEnum
+from toontown.clashbattle.battle.environmental.server.EnvironmentalRepository import createEnvironmental
+from toontown.clashbattle.battle.environmental.server.Environmentals import EnvironmentalBase
+from toontown.clashbattle.battle.statuses import StatusEffects
 from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
-from toontown.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
+from toontown.clashsuit.suit.DistributedSuitBaseAI import DistributedSuitBaseAI
 from toontown.toon.DistributedToonBaseAI import DistributedToonBaseAI
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 from typing import TYPE_CHECKING, List, Optional
 
 if TYPE_CHECKING:
-    from toontown.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
+    from toontown.clashbattle.battle.distributed.DistributedBattleBaseAI import DistributedBattleBaseAI
 
 
 @DirectNotifyCategory()

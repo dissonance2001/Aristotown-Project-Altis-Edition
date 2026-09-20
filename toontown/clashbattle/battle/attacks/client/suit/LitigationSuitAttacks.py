@@ -5,14 +5,14 @@ from toontown.chat.constants.ChatGlobals import  CFSpeech, CFTimeout
 from direct.interval.IntervalGlobal import *
 
 from toontown.audio.IsolatedSoundInterval import IsolatedSoundInterval
-from toontown.battle import BattleParticles, MovieLure, MovieUtil
-from toontown.battle.BattleProps import globalPropPool
-from toontown.battle.BattleSounds import globalBattleSoundCache
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.attacks.client.Attack import Attack
-from toontown.battle.attacks.client.AttackRepository import AttackClass
-from toontown.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum, SUIT_VISUAL_EFFECTS_TO_REMOVE
+from toontown.clashbattle.battle import BattleParticles, MovieLure, MovieUtil
+from toontown.clashbattle.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle.BattleSounds import globalBattleSoundCache
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.client.Attack import Attack
+from toontown.clashbattle.battle.attacks.client.AttackRepository import AttackClass
+from toontown.clashbattle.battle.attacks.client.suit.SuitSingleAttack import SuitSingleAttack
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum, SUIT_VISUAL_EFFECTS_TO_REMOVE
 from toontown.toonbase import TTLocalizer, ToontownGlobals
 from toontown.cutscene.repository.CutsceneLoader import CutsceneLoader
 from toontown.cutscene.repository.CutsceneKeyEnum import CutsceneKeyEnum

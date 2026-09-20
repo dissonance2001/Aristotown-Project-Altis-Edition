@@ -2,14 +2,14 @@
 multipart actors with a simple class"""
 
 from typing import Iterable
-from toontown.battle.SuitBattleGlobals import COG_DEPARTMENTS
-from toontown.suit.SuitDefinitionsBase import suitGetAllNamesCode, suitGetFemales
+from toontown.clashbattle.battle.SuitBattleGlobals import COG_DEPARTMENTS
+from toontown.clashsuit.suit.SuitDefinitionsBase import suitGetAllNamesCode, suitGetFemales
 from toontown.toonbase import TTLocalizer
 import random
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
-from toontown.suit import SuitGlobals
-from toontown.avatar import AvatarDNA
+from toontown.clashsuit.suit import SuitGlobals
+from otp.avatar import AvatarDNA
 from toontown.utils.DirectNotifyCategory import getNotify
 
 notify = getNotify('SuitDNA')
@@ -78,7 +78,7 @@ for suitName in suitHeadTypes + allAlternates:
         if brushOffs.index(brushOff) != len(brushOffs) - 1 or len(brushOffs) == 1:
             currId += 1
 
-    faceOffs = TTL.SuitFaceoffTaunts[suitName]
+    faceOffs = TTL.ClashSuitFaceoffTaunts[suitName]
     for faceOff in faceOffs:
         TTL.SpeedChatStaticText[currId] = faceOff
         if faceOffs.index(faceOff) != len(faceOffs) - 1:

@@ -1,17 +1,17 @@
 from panda3d.core import ConfigVariableBool, Point3, VBase3
 from toontown.chat.constants.ChatGlobals import  CFSpeech, CFTimeout
-from otp.nametag import NametagGlobals
+from toontown.nametag import NametagGlobals
 from direct.interval.IntervalGlobal import *
 from direct.showbase.MessengerGlobal import messenger
 
-from toontown.battle import BattleMusicListener, SuitBattleGlobals
-from toontown.battle.BattleBase import *
-from toontown.battle.distributed import DistributedBattleBase
+from toontown.clashbattle.battle import BattleMusicListener, SuitBattleGlobals
+from toontown.clashbattle.battle.BattleBase import *
+from toontown.clashbattle.battle.distributed import DistributedBattleBase
 from toontown.discord import DiscordPresets
 from toontown.distributed import DelayDelete
 from toontown.hood import ZoneUtil
 from toontown.toon import TTEmote
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.discord.DiscordPresets import presets as discord_presets
 
 

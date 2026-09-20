@@ -2,9 +2,9 @@ from panda3d.core import Texture
 from enum import Enum, auto
 from typing import Dict
 
-from toontown.suit.heads.AnimatedSuitHead import AnimatedSuitHead
-from toontown.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
-from toontown.suit import SuitGlobals
+from toontown.clashsuit.suit.heads.AnimatedSuitHead import AnimatedSuitHead
+from toontown.clashsuit.suit.heads.AnimatedSuitHeadRepository import AnimatedSuitHeadClass
+from toontown.clashsuit.suit import SuitGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 
