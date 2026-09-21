@@ -397,12 +397,6 @@ class LaffMeter(DirectFrame):
             if hp < 0 and self.hp < 0:
                 numToShow = 0
 
-                # Show or hide the content sync icon.
-                if self.av and (self.av.hasModifier(ModifierType.LaffContentSync) and not self.battleGui):
-                    self.syncIcon.show()
-                else:
-                    self.syncIcon.hide()
-
             self.makeDeltaNumber(numToShow)
             self.hp = hp
             self.maxHp = maxHp
@@ -426,7 +420,6 @@ class LaffMeter(DirectFrame):
 
             if (float(self.hp) / float(self.maxHp)) <= 0.166666:
                 self.startFlash()
-
 
     def start(self):
         if self.av:
