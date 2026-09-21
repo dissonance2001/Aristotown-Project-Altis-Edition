@@ -10,6 +10,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.quest import QuestBookPoster
 from toontown.quest.QuestPoster import QuestPoster
 from toontown.club import ClubGlobals
+from toontown.menu import MainMenuGui
 from direct.gui import DirectGuiGlobals as DGG
 from direct.directnotify import DirectNotifyGlobal
 
@@ -34,6 +35,13 @@ class QuestPage(ShtikerPage.ShtikerPage):
         self.clubTaskGui = None
         self.clubTaskCogGui = None
         self.clubTaskSosGui = None
+        self.questFrameScales = [1.06 for _ in range(ToontownGlobals.MaxQuestCarryLimit)]
+        self.questFramePlaceListOnscreen = (
+            (-0.46, 0, 0.3, 0, 0, 0),
+            (0.44, 0, 0.3, 0, 0, 0),
+            (-0.46, 0, -0.3, 0, 0, 0),
+            (0.44, 0, -0.3, 0, 0, 0),
+        )
         self.normalQuestFramePlaceList = (
             (-0.45, 0, 0.25, 0, 0, 0),
             (-0.45, 0, -0.35, 0, 0, 0),
@@ -371,8 +379,11 @@ class QuestPage(ShtikerPage.ShtikerPage):
                 self.questFrames[i].mapIndex.show()
 
         self.updatePage()
+        for i in range(ToontownGlobals.MaxQuestCarryLimit):
+            self.questFrames[i].setPosHpr(*self.questFramePlaceListOnscreen[i])
         self.reparentTo(aspect2d)
         self.title.hide()
+        MainMenuGui.staggeredFadePopin(self.questFrames, self.questFrameScales)
         self.show()
 
     def hideQuestsOnscreenTutorial(self):
@@ -386,6 +397,7 @@ class QuestPage(ShtikerPage.ShtikerPage):
         for i in range(ToontownGlobals.MaxQuestCarryLimit):
             if hasattr(self.questFrames[i], 'mapIndex'):
                 self.questFrames[i].mapIndex.hide()
+            self.questFrames[i].setPosHpr(*self.normalQuestFramePlaceList[i])
 
         self.reparentTo(self.book)
         self.title.show()
