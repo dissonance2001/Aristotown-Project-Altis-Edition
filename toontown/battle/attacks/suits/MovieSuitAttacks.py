@@ -3148,52 +3148,62 @@ def doDiskScratch(attack):
 def doFingerWag(attack):
     suit = attack['suit']
     battle = attack['battle']
+    targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
-    particleEffects = []
-    for t in attack['target']:
-        particleEffect = BattleParticles.createParticleEffect('FingerWag')
-        BattleParticles.setEffectTexture(particleEffect, 'blah', color=Vec4(0.55, 0, 0.55, 1))
-        suitName = attack['suitName']
+    particleEffect = BattleParticles.createParticleEffect('FingerWag')
+    BattleParticles.setEffectTexture(particleEffect, 'blah', color=Vec4(0.55, 0.0, 0.55, 1.0))
+    partDelay = 1.3
+    damageDelay = 2.7
+    dodgeDelay = 1.5
+    suitTrack = getSuitTrack(attack)
+    partTracks: tuple[Sequence, ...] = ()
+    for t in targets:
+        toon = t['toon']
+        particleNode = battle.attachNewNode('finger-wag-particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+        particleNode.setBin('fixed', 1)
+        partTrack = Sequence(
+            getPartTrack(particleEffect, partDelay, 3.5, [particleEffect, particleNode, 0], softStop=-2.0),
+            Func(particleNode.removeNode)
+        )
         if suit.dna.name == "mm":
             particleEffect.setPos(0.167, 1.0, 1.3)
         elif suit.dna.name == "tm":
-            particleEffect.setPos(0, 1.1, suit.getHeight() - 1.2)
-        elif suit.dna.name == "tw" or suit.dna.name == "stg":
-            particleEffect.setPos(0.167, 1.8, 5)
+            particleEffect.setPos(0.0, 1.1, suit.getHeight() - 1.2)
+        elif suit.dna.name in ("tw", "stg"):
+            particleEffect.setPos(0.167, 1.8, 5.0)
             particleEffect.setHpr(-90.0, -60.0, 180.0)
         elif suit.dna.name == "p":
             particleEffect.setPos(0.167, 1.4, 3.6)
         elif suit.dna.name == "pp":
-            particleEffect.setPos(0.167, 1, 4.1)
+            particleEffect.setPos(0.167, 1.0, 4.1)
         elif suit.dna.name == "pf":
             particleEffect.setPos(0.167, 1.4, 4.65)
-        elif suit.dna.name == "bs" or suit.dna.name == "fct":
+        elif suit.dna.name in ("bs", "fct"):
             particleEffect.setPos(0.167, 1.4, 5.3)
         elif suit.dna.name == "bw":
             particleEffect.setPos(0.167, 2.0, suit.getHeight() - 1.75)
-            particleEffect.setP(-110)
+            particleEffect.setP(-110.0)
         elif suit.dna.name == "sgoat":
-            particleEffect.setPos(0.167, 1.9, suit.getHeight() - 2)
-            particleEffect.setP(-110)
+            particleEffect.setPos(0.167, 1.9, suit.getHeight() - 2.0)
+            particleEffect.setP(-110.0)
         elif suit.dna.name == "mouthp":
             particleEffect.setPos(0.167, 2.2, suit.getHeight() - 1.9)
-            particleEffect.setP(-110)
-        elif suit.dna.name in ["erfit", "cdirector", "videog", "safesupervis"]:
+            particleEffect.setP(-110.0)
+        elif suit.dna.name == "erfit":
             particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
-            particleEffect.setP(-105)
+            particleEffect.setP(-115.0)
+        elif suit.dna.name in ("cdirector", "videog", "safesupervis"):
+            particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
+            particleEffect.setP(-105.0)
         else:
-            particleEffect.setPos(0, 1.1, suit.getHeight() - 1.2)
-        particleEffects.append(particleEffect)
+            particleEffect.setPos(0.0, 1.1, suit.getHeight() - 1.2)
+        partTracks += (partTrack,)
 
-    suitType = getSuitBodyType(attack['suitName'])
-    partDelay = 1.3
-    damageDelay = 2.7
-    dodgeDelay = 1.7
-    suitTrack = getSuitTrack(attack)
-    partTracks = getPartTracks(attack, particleEffects, partDelay, 3.5, 0, softStop=-2.0)
-    toonTracks = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['sidestep'])
+    toonTracks = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['duck'], dodgeAnimPlayRate=1.15, showMissedExtraTime=0.85)
     soundTrack = getSoundTrack('SA_finger_wag.ogg', delay=1.3, node=suit)
-    return Parallel(suitTrack, toonTracks, partTracks, soundTrack)
+    return Parallel(suitTrack, toonTracks, *partTracks, soundTrack)
 
 
 def doWriteOff(attack):
@@ -4822,29 +4832,63 @@ def doRolodex(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    toon = targets[0]['toon'] # I normally do not want to, but I'll leave this because the only thing that really needs it is hitPoint, which is pretty much for nothing since Anesidora reveals Disney's Toontown Online cut out one of their Rolodex particles that would have used it.
+    suitTrack = getSuitAnimTrack(attack)
     rollodex = globalPropPool.getProp('rollodex')
-    particleEffect2 = BattleParticles.createParticleEffect(file='rollodexWaterfall')
-    particleEffects3 = [BattleParticles.createParticleEffect(file='rollodexStream') for t in targets]
-    suitType = getSuitBodyType(attack['suitName'])
-    propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
-    propScale = Point3(1.2, 1.2, 1.2)
-    partDelay = 2.6
-    part2Delay = 2.2
-    part3Delay = 2.6
-    partDuration = 1.6
-    part2Duration = 2.3
-    part3Duration = 2
-    damageDelay = 3.0
-    dodgeDelay = 1.9
-    hitPoint = lambda toon = toon: __toonFacePoint(toon)
-    partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, suit, 0], softStop=-1)
-    partTracks3 = getPartTracks(attack, particleEffects3, part3Delay, part3Duration, 0, softStop=-1)
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 3.7, scaleUpPoint=propScale)
-    toonTracks = getToonTracks(attack, damageDelay, ['conked'], dodgeDelay, ['sidestep'])
-    soundTrack = getSoundTrack('SA_rolodex.ogg', delay=1.8, node=suit)
-    return Parallel(suitTrack, toonTracks, propTrack, soundTrack, partTrack2, partTracks3)
+    part2Duration = 1.9
+    part3Duration = 2.5
+    suitType = getSuitBodyType(suit.dna.name)
+    if suitType == 'a':
+        propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
+        propScale = Point3(1.2, 1.2, 1.2)
+        part2Delay = 2.8
+        part3Delay = 3.2
+        damageDelay = 3.8
+        dodgeDelay = 2.5
+    elif suitType == 'b':
+        propPosPoints = [Point3(0.12, 0.24, 0.01), VBase3(99.032, 5.973, -179.839)]
+        propScale = Point3(0.91, 0.91, 0.91)
+        part2Delay = 3.1
+        part3Delay = 3.5
+        damageDelay = 4.0
+        dodgeDelay = 2.5
+    elif suitType == 'c':
+        propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
+        propScale = Point3(1.2, 1.2, 1.2)
+        part2Delay = 2.8
+        part3Delay = 3.2
+        damageDelay = 3.5
+        dodgeDelay = 2.5
+    propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.6, scaleUpPoint=propScale, scaleUpTime=0.5, scaleDownTime=0.5)
+    partTracks: tuple[Sequence, ...] = ()
+    for t in targets:
+        toon = t['toon']
+        particleEffect2 = BattleParticles.createParticleEffect(file='rollodexWaterfall')
+        particleEffect3 = BattleParticles.createParticleEffect(file='rollodexStream')
+
+        particleNode = suit.attachNewNode('rolodex-particle-node')
+        headsUp = Sequence(Func(particleNode.headsUp, toon))
+
+        if suit.style.name == 'hh':
+            headsUp.append(Func(particleNode.setZ, 2.0))
+            headsUp.append(Func(particleNode.setP, -12.0))
+        elif suit.style.name in ('caseman', 'chainsaw'):
+            headsUp.append(Func(particleNode.setZ, 2.9))
+            headsUp.append(Func(particleNode.setP, -17.0))
+        partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, particleNode, 0], softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, part3Delay, part3Duration, [particleEffect3, particleNode, 0], softStop=-1.0)
+        particleTrack = Sequence(
+            headsUp,
+            Parallel(
+                partTrack2,
+                partTrack3
+            ),
+            Func(particleNode.removeNode)
+        )
+        partTracks += (particleTrack,)
+
+    toonTracks = getToonTracks(attack, damageDelay, ['cringe'], dodgeDelay, ['sidestep'], dodgeAnimPlayRate=1.2)
+    soundTrack = getSoundTrack('SA_rolodex.ogg', delay=2.8, node=suit)
+    return Parallel(suitTrack, toonTracks, propTrack, soundTrack, *partTracks)
 
 
 def doEvilEye(attack):

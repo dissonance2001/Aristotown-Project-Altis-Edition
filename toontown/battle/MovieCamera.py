@@ -822,7 +822,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'FillWithLead':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'FingerWag':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == 'Fired':
         camTrack.append(defaultCamera(openShotDuration=0.5))
     elif name == 'FountainPen':
@@ -905,7 +905,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RestrainingOrder':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Rolodex':
-        camTrack.append(defaultCamera(openShotDuration=3.0))
+        camTrack.append(defaultCamera())
     elif name == 'RubberStamp':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'RubOut':
