@@ -241,23 +241,11 @@ def clashPresentThiefEnd():
 
 
 
-@magicWord(name='setrod', category=CATEGORY_PROGRAMMER, types=[str])
-def clashSetRod(rodName):
-    """Sets the target's hammerspace fishing rod by name (cardboard, twig, bamboo, hardwood, steel, gold, platinum)."""
-    from toontown.inventory.enums.ItemEnums import ItemType, FishingRodItemType
-    from toontown.inventory.base.InventoryItem import InventoryItem
-
-    try:
-        rodSubtype = FishingRodItemType[rodName.capitalize()]
-    except KeyError:
-        return 'Rod name must be one of: %s' % ', '.join(member.name.lower() for member in FishingRodItemType)
-
+@magicWord(name='setrod', category=CATEGORY_PROGRAMMER, types=[int])
+def clashSetRod(rodId):
+    """Sets the target's fishing rod (0=Twig, 1=Bamboo, 2=Hardwood, 3=Steel, 4=Gold). Temporary testing aid until the Tell-Tale Carp rod clerk is placed."""
+    if rodId < 0 or rodId > 4:
+        return 'Rod id must be 0-4 (0=Twig, 1=Bamboo, 2=Hardwood, 3=Steel, 4=Gold).'
     target = spellbook.getTarget()
-    hs = target.getHammerspace()
-    ownedRods = InventoryItem.findItemTypesFromItemList(ItemType.Fishing_Rod, hs.getItems())
-    existing = next((item for item in ownedRods if item.getItemSubtype() == rodSubtype), None)
-    if existing is None:
-        existing = InventoryItem.fromSubtype(rodSubtype)
-        hs.addItem(existing)
-    hs.equipItem(existing)
-    return 'Set rod to %s.' % rodSubtype.name
+    target.b_setFishingRod(rodId)
+    return 'Set rod to %s.' % TTLocalizer.FishingRodNameDict.get(rodId, rodId)

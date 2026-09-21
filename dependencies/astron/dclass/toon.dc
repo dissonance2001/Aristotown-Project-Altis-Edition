@@ -2745,12 +2745,8 @@ dclass DistributedNPCFisherman : DistributedNPCToonBase {
 };
 
 dclass DistributedNPCRodClerk : DistributedNPCToonBase {
-  // NOTE: replaced the old money/index-based setMovie/completeSale fields
-  // with Clash's generic NPC item-shop system, same as DistributedNPCTailor.
-  requestItemPurchase(ShopItem shopItem) airecv clsend;
-  handleBuyResponse(uint8) ownrecv;
-  handleInteraction(uint8, uint8) broadcast;
-  toonInteracted(uint8) clsend airecv;
+  setMovie(uint8, uint32, uint32, uint32[], int16) broadcast ram;
+  completeSale(uint8) airecv clsend;
 };
 
 dclass DistributedNPCPartyPerson : DistributedNPCToonBase {

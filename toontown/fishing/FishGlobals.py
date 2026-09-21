@@ -5,8 +5,7 @@ Codes passed between DistributedFishingSpotAI and DistributedFishingSpot.
 
 Also includes debug functions to test fishing probability.
 """
-from toontown.inventory.enums.ItemEnums import FishingRodItemType
-from toontown.inventory.registry.ItemTypeRegistry import getItemDefinition as getRodDefinition
+from toontown.fishing.FishingRodCompat import FishingRodItemType, getRodDefinition as _compatGetRodDefinition  # TODO: swap to toontown.inventory once ported
 from toontown.toonbase import TTLocalizer
 from math import ceil, pow
 import random
@@ -343,30 +342,8 @@ def getEffectiveRarity(rarity, offset):
     return min(MAX_RARITY, rarity + offset)
 
 
-def getCastCostForRod(rodSubtype):
-    """
-    Real hammerspace-item-backed cast cost lookup, keyed by FishingRodItemType.
-    Distinct from the legacy getCastCost(rodId) further down this module, which
-    is keyed by the old dockside 0-4 rod index and is still used by
-    not-yet-migrated code (CatalogPoleItem.py, FishPage.py, etc).
-    """
-    return getRodDefinition(rodSubtype).getCastCost()
-
-
-# Real hammerspace-item-backed jellybean-fishing-holiday rewards, keyed by
-# FishingRodItemType. Distinct from the legacy Rod2JellybeanDict above, which
-# is keyed by the old 0-4 dockside rod index and is only used by
-# generateFishingReport() below (a debug sim that's explicitly not
-# hammerspace-aware).
-RodJellybeanRewards = {
-    FishingRodItemType.Cardboard: 10,
-    FishingRodItemType.Twig: 20,
-    FishingRodItemType.Bamboo: 30,
-    FishingRodItemType.Hardwood: 75,
-    FishingRodItemType.Steel: 150,
-    FishingRodItemType.Gold: 250,
-    FishingRodItemType.Platinum: 500,
-}
+def getRodDefinition(rodSubtype):
+    return _compatGetRodDefinition(rodSubtype)
 
 
 def canBeCaughtByRod(genus, species, rodSubtype):
@@ -848,8 +825,26 @@ def getRodWeightRange(rodIndex):
     return (rodProps[ROD_WEIGHT_MIN_INDEX], rodProps[ROD_WEIGHT_MAX_INDEX])
 
 
-# legacyRodIdToFishingRodItemType() used to live here, translating the old
-# dockside 0-4 rod id to a FishingRodItemType for FishManagerAI.py's catch
-# resolution. Removed now that FishManagerAI.py reads the real equipped
-# hammerspace rod directly via DistributedToonAI.getEquippedFishingRodSubtype()
-# -- no more legacy id to translate at that call site.
+# Your legacy dockside rod system uses 5 tiers, numbered 0-4 (see RodFileDict
+# above). Corporate Clash's rod system (FishingRodItemType, in
+# FishingRodCompat.py) uses 7 tiers numbered 1-7, since Clash added two more
+# rods (Twig and Platinum) that don't exist in the legacy system. Both
+# systems call the same getRandomFishVitals()/getRodDefinition() below, so
+# any legacy rod ID has to be translated to its closest new-style equivalent
+# first - matched by rod name/material where Clash kept the same tier, and
+# by closest progression position for tiers Clash inserted.
+_LegacyRodIdToFishingRodItemType = {
+    0: FishingRodItemType.Cardboard,   # pole_treebranch-mod
+    1: FishingRodItemType.Bamboo,      # pole_bamboo-mod
+    2: FishingRodItemType.Hardwood,    # pole_wood-mod (closest match to "Wood")
+    3: FishingRodItemType.Steel,       # pole_steel-mod
+    4: FishingRodItemType.Gold,        # pole_gold-mod
+}
+
+
+def legacyRodIdToFishingRodItemType(legacyRodId):
+    """Translate a legacy (0-4) rod id, as stored on the avatar and used by
+    the dockside DistributedFishingSpotAI system, to the corresponding
+    FishingRodItemType used by getRandomFishVitals()/getRodDefinition().
+    """
+    return _LegacyRodIdToFishingRodItemType.get(legacyRodId, FishingRodItemType.Cardboard)

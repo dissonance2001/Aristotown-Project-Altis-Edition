@@ -1,85 +1,159 @@
-"""
-DistributedNPCRodClerk -- rewritten to use Clash's generic NPC item-shop
-system (toontown/shop/, toontown/toon/npc/shop/) instead of the old
-RodBuyGUI/setMovie-based buying flow. Sells items from
-RodShopGlobals.RodShopItems.
-
-Pattern adapted directly from DistributedNPCTailor.py. RodBuyGUI.py is no
-longer used by this class (left in place, unused, in case anything else
-still references it) -- NPCToonShopGUI replaces it.
-"""
-from panda3d.core import Vec3
-
+from direct.gui.DirectGui import *
+from direct.interval.LerpInterval import LerpPosHprInterval
+from direct.task.Task import Task
+from pandac.PandaModules import *
+import time
 from toontown.toon.DistributedNPCToonBase import *
-from toontown.toonbase.CooldownManager import CooldownManager
+from toontown.toon import NPCToons
+from toontown.chat.ChatGlobals import *
+from toontown.fishing import RodBuyGUI
+from toontown.nametag.NametagGlobals import *
 from toontown.toonbase import TTLocalizer
-from toontown.toon.npc.shop.gui.NPCToonShopGUI import NPCToonShopGUI
 
 
 class DistributedNPCRodClerk(DistributedNPCToonBase):
-    # Constant codes to use for decrypting chat phrases upon certain interactions
-    START_INTERACT_CODE = 1
-    EXIT_INTERACT_CODE = 2
-
-    CLIENT_SIDE_CONTEXTS = (
-        START_INTERACT_CODE,
-        EXIT_INTERACT_CODE
-    )
 
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)
+        self.isLocalToon = 0
+        self.av = None
+        self.button = None
+        self.popupInfo = None
+        self.buyGui = None
+        self.nextCollision = 0
         self.npcType = 'Rod Salesman'
-        self.storeGui = None
-        self.interactCooldown = CooldownManager(2)
-        self.responseCooldown = CooldownManager(3)
+        return
 
     def disable(self):
         self.ignoreAll()
-        taskMgr.remove(self.uniqueName('__popupStoreGUI'))
+        taskMgr.remove(self.uniqueName('popupFishGUI'))
         taskMgr.remove(self.uniqueName('lerpCamera'))
-        if self.storeGui:
-            self.storeGui.destroy()
-            self.storeGui = None
+        if self.popupInfo:
+            self.popupInfo.destroy()
+            self.popupInfo = None
+        if self.buyGui:
+            self.buyGui.destroy()
+            self.buyGui = None
+        self.av = None
+        if self.isLocalToon:
+            base.localAvatar.posCamera(0, 0)
         DistributedNPCToonBase.disable(self)
+        return
+
+    def generate(self):
+        DistributedNPCToonBase.generate(self)
+        self.buyGuiDoneEvent = 'buyGuiDone'
 
     def announceGenerate(self):
         DistributedNPCToonBase.announceGenerate(self)
         self.setHat(18, 0, 0)
 
     def handleCollisionSphereEnter(self, collEntry):
-        if not self.interactCooldown.check(base.localAvatar.doId).outcome:
+        self.currentTime = time.time()
+        if self.nextCollision > self.currentTime:
+            self.nextCollision = self.currentTime + 2
+        else:
+            base.cr.playGame.getPlace().fsm.request('purchase')
+            self.sendUpdate('avatarEnter', [])
+            self.nextCollision = self.currentTime + 2
+
+    def __handleUnexpectedExit(self):
+        self.notify.warning('unexpected exit')
+        self.av = None
+        return
+
+    def setupAvatars(self, av):
+        self.ignoreAvatars()
+        av.stopLookAround()
+        av.lerpLookAt(Point3(-0.5, 4, 0), time=0.5)
+        self.stopLookAround()
+        self.lerpLookAt(Point3(av.getPos(self)), time=0.5)
+
+    def resetFisherman(self):
+        self.ignoreAll()
+        taskMgr.remove(self.uniqueName('popupFishGUI'))
+        taskMgr.remove(self.uniqueName('lerpCamera'))
+        if self.buyGui:
+            self.buyGui.destroy()
+            self.buyGui = None
+        self.show()
+        self.startLookAround()
+        self.detectAvatars()
+        self.clearMat()
+        if self.isLocalToon:
+            self.freeAvatar()
+        return Task.done
+
+    def setMovie(self, mode, npcId, avId, extraArgs, timestamp):
+        timeStamp = ClockDelta.globalClockDelta.localElapsedTime(timestamp)
+        self.remain = NPCToons.CLERK_COUNTDOWN_TIME - timeStamp
+        self.npcId = npcId
+        self.isLocalToon = avId == base.localAvatar.doId
+        if mode == NPCToons.SELL_MOVIE_CLEAR:
             return
+        if mode == NPCToons.SELL_MOVIE_TIMEOUT:
+            taskMgr.remove(self.uniqueName('lerpCamera'))
+            if self.isLocalToon:
+                self.ignore(self.buyGuiDoneEvent)
+                if self.popupInfo:
+                    self.popupInfo.reparentTo(hidden)
+                if self.buyGui:
+                    self.buyGui.destroy()
+                    self.buyGui = None
+            self.setChatAbsolute(TTLocalizer.STOREOWNER_TOOKTOOLONG, CFSpeech | CFTimeout)
+            self.resetFisherman()
+        elif mode == NPCToons.SELL_MOVIE_START:
+            self.av = base.cr.doId2do.get(avId)
+            if self.av is None:
+                self.notify.warning('Avatar %d not found in doId' % avId)
+                return
+            else:
+                self.accept(self.av.uniqueName('disable'), self.__handleUnexpectedExit)
+            self.setupAvatars(self.av)
+            if self.isLocalToon:
+                camera.wrtReparentTo(render)
+                quat = Quat()
+                quat.setHpr((-150, -2, 0))
+                camera.posQuatInterval(1, Point3(-5, 9, base.localAvatar.getHeight() - 0.5), quat, other=self, blendType='easeOut').start()
+            if self.isLocalToon:
+                taskMgr.doMethodLater(1.0, self.popupFishGUI, self.uniqueName('popupFishGUI'))
+        elif mode == NPCToons.SELL_MOVIE_COMPLETE:
+            chatStr = TTLocalizer.STOREOWNER_GOODBYE
+            self.setChatAbsolute(chatStr, CFSpeech | CFTimeout)
+            self.resetFisherman()
+        elif mode == NPCToons.SELL_MOVIE_NOROD:
+            chatStr = TTLocalizer.STOREOWNER_NEEDJELLYBEANS
+            self.setChatAbsolute(chatStr, CFSpeech | CFTimeout)
+            self.resetFisherman()
+        elif mode == NPCToons.SELL_MOVIE_ROD:
+            self.av = base.cr.doId2do.get(avId)
+            if self.av is None:
+                self.notify.warning('Avatar %d not found in doId' % avId)
+                return
+            else:
+                self.setChatAbsolute(TTLocalizer.STOREOWNER_ROD_BUY, CFSpeech | CFTimeout)
+            self.resetFisherman()
+        elif mode == NPCToons.SELL_MOVIE_BUCKET:
+            self.av = base.cr.doId2do.get(avId)
+            if self.av is None:
+                self.notify.warning('Avatar %d not found in doId' % avId)
+                return
+            else:
+                self.setChatAbsolute(TTLocalizer.STOREOWNER_BUCKET_BUY, CFSpeech | CFTimeout)
+            self.resetFisherman()
+        elif mode == NPCToons.SELL_MOVIE_NO_MONEY:
+            self.notify.warning('SELL_MOVIE_NO_MONEY should not be called')
+            self.resetFisherman()
+        return
 
-        # Freeze the toon and make them look at us
-        base.cr.playGame.getPlace().setState('Stopped')
-        self.lookAt(base.localAvatar)
+    def __handleSaleDone(self, type):
+        self.ignore(self.buyGuiDoneEvent)
+        self.sendUpdate('completeSale', [type])
+        self.buyGui.destroy()
+        self.buyGui = None
+        return
 
-        TRANSITION_LENGTH = 1.0
-        # Do a pretty camera pan into opening the GUI
-        camera.posQuatInterval(TRANSITION_LENGTH, Vec3(-5, 9, self.getHeight() - 0.5), Vec3(-150, -2, 0), other=self,
-                               blendType='easeOut', name=self.uniqueName('lerpCamera')).start()
-
-        taskMgr.doMethodLater(TRANSITION_LENGTH, self.__popupStoreGUI, self.uniqueName('__popupStoreGUI'))
-
-        # Tell server we interacted with a ctx code of 1
-        self.sendUpdate('toonInteracted', [self.START_INTERACT_CODE])
-
-    def __popupStoreGUI(self, _=None):
-        self.storeGui = NPCToonShopGUI(aspect2d, npc=self)
-
-    def doExit(self):
-        # Tell the server we exited
-        self.sendUpdate('toonInteracted', [self.EXIT_INTERACT_CODE])
-
-    def handleBuyResponse(self, code):
-        if self.storeGui:
-            self.setChatAbsolute(TTLocalizer.NPCStoreResponses[code], CFSpeech | CFTimeout)
-            self.cr.chatManager.sendSystemMessageLocally(TTLocalizer.NPCStoreResponses[code], senderName=self.getName())
-            self.storeGui.updatePage()
-
-    # Called from AI, given avId that triggered this interaction, in which context, and which phrase
-    def handleInteraction(self, ctxCode, phraseId):
-        phraseChoices = TTLocalizer.NPCStoreEnterExitResponses[ctxCode]
-        phrase = phraseChoices[phraseId]
-        phrase = phrase.replace('_avName_', base.localAvatar.getName())
-        self.setChatAbsolute(phrase, CFSpeech | CFTimeout)
+    def popupFishGUI(self, task):
+        self.setChatAbsolute('', CFSpeech)
+        self.acceptOnce(self.buyGuiDoneEvent, self.__handleSaleDone)
+        self.buyGui = RodBuyGUI.RodBuyGUI(self.buyGuiDoneEvent)

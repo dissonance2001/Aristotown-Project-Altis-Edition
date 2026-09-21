@@ -314,8 +314,11 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         return (self.nodePath, Point3())
 
     def __loadStuff(self):
-        rodSubtype = self.av.getEquippedFishingRodSubtype()
-        rodPath = FishGlobals.getRodDefinition(rodSubtype).getModelPath()
+        rodId = self.av.getFishingRod()
+        rodPath = FishGlobals.RodFileDict.get(rodId)
+        if not rodPath:
+            self.notify.warning('Rod id: %s model not found' % rodId)
+            rodPath = FishGlobals.RodFileDict[0]
         self.pole = Actor.Actor()
         self.pole.loadModel(rodPath)
         self.pole.loadAnims({'cast': 'phase_4/models/props/fishing-pole-chan'})
@@ -907,7 +910,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
         self.__hideLine()
         self.__hideBob()
         self.howToDialog.hide()
-        castCost = FishGlobals.getCastCostForRod(self.av.getEquippedFishingRodSubtype())
+        castCost = FishGlobals.getCastCost(self.av.getFishingRod())
         if self.av.getMoney() < castCost:
             self.__hideCastGui()
             self.__showBroke()
@@ -948,7 +951,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
             self.av.loop('pole-neutral')
             self.track = None
             return
-        castCost = FishGlobals.getCastCostForRod(self.av.getEquippedFishingRodSubtype())
+        castCost = FishGlobals.getCastCost(self.av.getFishingRod())
         self.jar['text'] = str(max(self.av.getMoney() - castCost, 0))
         if not self.castTrack:
             self.createCastTrack()
