@@ -44,6 +44,7 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     __throwBouncePoint,
     getResetTrack,
     __createSuitResetPosTrack,
+    hitAtleastOneToon,
     getSuitTrack,
     getSuitAnimTrack,
     getSuitAnimTrackAttack,
@@ -252,11 +253,6 @@ def doFloodTheMarket(attack):
     battle = attack['battle']
     targets = attack['target']
     damageDelay = 1.7
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     particleEffect = BattleParticles.createParticleEffect(file='floodTheMarket2')
     waterfallEffect = BattleParticles.createParticleEffect(file='floodTheMarketWaterfall2')
     value = int(attack['target'][0]['hp'] / 2)
@@ -274,7 +270,7 @@ def doFloodTheMarket(attack):
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0, showDamageExtraTime=1.0)
     synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_floodTheMarket.ogg'), node=suit))
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         puddleCounter = 0
         for t in targets:
             toon = t['toon']
@@ -330,11 +326,7 @@ def doOverheat(attack):
     flecksTracks = Parallel()
     colorTracks = Parallel()
     suitTrack = Parallel(getSuitAnimTrackAttack(attack), MovieUtil.createSuitFirestarterCigarSmokeInterval2(suit))
-    hitAtleastOneToon = False
     BattleParticles.loadParticles()
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -433,7 +425,7 @@ def doOverheat(attack):
     toonTracks = getToonTracksCheat(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3,
                                     dodgeAnimNames=['sidestep'])
     soundTrack = getSoundTrack('SA_boilerplate_a.ogg', delay=1.0, node=suit)
-    if hitAtleastOneToon == True:
+    if hitAtleastOneToon(targets):
         multiTrackList = Parallel(suitTrack, baseFlameTracks, notifyTracks, flameTracks, partTracks4, flecksTracks,
                                   toonTracks, colorTracks, soundTrack)
     else:
@@ -1362,7 +1354,6 @@ def doUnionBusterDamage(attack):
     suitTrack = Parallel(getSuitTrack(attack))
     suitTracks = Parallel()
     notifyTracks = Parallel()
-    hitAtleastOneToon = 0
     soundTracks.append(
                 Track(
                     (0.9, SoundInterval(loader.loadSfx('phase_9/audio/sfx/CHQ_SOS_cage_land.ogg'), node=toon)),
@@ -1776,11 +1767,7 @@ def doLimitedTimeOfferDenied(attack):
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_objection_overruled.ogg'), node=theSuit))
     managerHealTrack = Sequence(Wait(3))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=theSuit.getDuration('frustrated'), node=theSuit)
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         return Parallel(suitTrack, managerHealTrack, soundTrack2, notifyTracks, soundTrack)
     else:
         return Parallel()
@@ -2458,11 +2445,6 @@ def doSalesPitch(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     suitType = getSuitBodyType(attack['suitName'])
     suitDelay = 1.3
     damageDelay = 2.25
@@ -2698,10 +2680,6 @@ def doContingencyClauseRetaliation(attack):
     manager = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
     suitTrack = Sequence(
             # Let the damage/reaction animation reach its ending pose.
             ActorInterval(
@@ -2805,7 +2783,7 @@ def doContingencyClauseRetaliation(attack):
             propTracks.append(Parallel(propTrack2, soundTrack4))
     soundTrack = getSoundTrack('SA_sanction.ogg', node=suit)
     toonDamageTrack = getToonTracksCheat(attack, .5, ['nothing'], 0, ['neutral'])
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         return Parallel(suitTrack, toonDamageTrack, notifyTracks, smokeTracks, toonTracks, soundTrack, propTracks)
     else:
         return Parallel()
@@ -3099,11 +3077,7 @@ def doYieldGroup(attack):
     soundTrack = getSoundTrack('SA_hurry_sickness.ogg', delay =.5, node=suit)
     toonTracks = Parallel()
     propTracks = Parallel()
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         soundTracks.append(soundTrack)
     for t in targets:
         toon = t['toon']

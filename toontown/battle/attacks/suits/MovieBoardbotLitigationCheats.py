@@ -44,6 +44,7 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     __throwBouncePoint,
     getResetTrack,
     __createSuitResetPosTrack,
+    hitAtleastOneToon,
     getSuitTrack,
     getSuitAnimTrack,
     getSuitAnimTrackAttack,
@@ -1381,11 +1382,6 @@ def doTotalMarketMeltdownOLD(attack):
     battle = attack['battle']
     targets = attack['target']
     damageDelay = 1.7
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     particleEffect = BattleParticles.createParticleEffect(file='floodTheMarket')
     waterfallEffect = BattleParticles.createParticleEffect(file='floodTheMarketWaterfall')
     suitTrack = getSuitAnimTrackAttack(attack)
@@ -1403,7 +1399,7 @@ def doTotalMarketMeltdownOLD(attack):
     synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('SA_synergy.ogg'), node=suit))
     suitTrack.append(Parallel(Func(suit.showHpTextNew, 0, text="+1 Attack!", colorCode=1), Func(suit.makeExtraAttacks, suit.getExtraAttacks() + 1)))
     makeDamageDowns = Parallel()
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         puddleCounter = 0
         for t in targets:
             toon = t['toon']
@@ -2103,10 +2099,6 @@ def doRevisedFiling(attack):
 
     throwSfx = loader.loadSfx('phase_5/audio/sfx/SA_hardball_impact_only.ogg')
     throwSfx.setVolume(.25)
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
 
     def throwBook(attack, targets, bookshelf, throwSfx=None, end=False):
         hitTargets = [t for t in targets if t['hp'] > 0]
@@ -2170,7 +2162,7 @@ def doRevisedFiling(attack):
 
         return Parallel(throwTrack, notifyTrack, throwTrack2)
 
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         suitTrack = Parallel(getSuitAnimTrack(attack), Sequence(Func(bookshelf.setH, bookshelf.getH() + 180), Func(bookshelf.wrtReparentTo, battle),
                          Sequence(
                              Wait(1.0), bookshelf.posInterval(0, (0, -125, -22)), bookshelf.hprInterval(0, (180, 0, 0)), bookshelf.scaleInterval(1.0, (3.5, 3.5, 3.5)), Sequence(
@@ -2200,10 +2192,6 @@ def doMinutesTakenDamageBooks(attack):
                               int(attack['target'][0]['hp']), CFSpeech | CFTimeout))
     throwSfx = loader.loadSfx('phase_5/audio/sfx/SA_hardball_impact_only.ogg')
     throwSfx.setVolume(.25)
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
 
     def throwBook(attack, targets, bookshelf, throwSfx=None, end=False):
         hitTargets = [t for t in targets if t['hp'] > 0]
@@ -2268,7 +2256,7 @@ def doMinutesTakenDamageBooks(attack):
         else:
             return Parallel(throwTrack, throwTrack2)
 
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         bookThrows = []
 
         numBooks = int(math.ceil(dmg / 5))
@@ -2953,11 +2941,7 @@ def doMissedPayment(attack):
     toonTracks = Parallel()
     notifyTracks = Parallel()
     billPropTracks = Parallel()
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         soundTracks = Parallel(SoundInterval(globalBattleSoundCache.getSound('AA_drop_safe_miss.ogg')))
     for t in targets:
         toon = t['toon']

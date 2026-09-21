@@ -41,6 +41,7 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     __throwBouncePoint,
     # Do not import getResetTrack method here, as one exists later in the file with differing code from the one in MovieIntervals.
     __createSuitResetPosTrack,
+    hitAtleastOneToon,
     getSuitTrack,
     getSuitAnimTrack,
     getSuitAnimTrackAttack,
@@ -89,11 +90,7 @@ def doOverheat(attack):
     flameTracks = Parallel()
     flecksTracks = Parallel()
     colorTracks = Parallel()
-    hitAtleastOneToon = False
     BattleParticles.loadParticles()
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -179,7 +176,7 @@ def doOverheat(attack):
     toonTracks = getToonTracksCheat(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3,
                                     dodgeAnimNames=['sidestep'])
     soundTrack = getSoundTrack('SA_boilerplate_a.ogg', delay=1.0, node=suit)
-    if hitAtleastOneToon == True:
+    if hitAtleastOneToon(targets):
         multiTrackList = Parallel(suitTrack, baseFlameTracks, notifyTracks, flameTracks, partTracks4, flecksTracks,
                                   toonTracks, colorTracks, soundTrack)
     else:
@@ -1030,11 +1027,6 @@ def doShakedownCooldown(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     damageDelay = 1.35
     dodgeDelay = 0.95
     suitName = suit.getStyleName()
@@ -1098,7 +1090,7 @@ def doShakedownCooldown(attack):
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.7)
     toonTracks.append(Parallel(Func(toon.setToonStatusEffect, 'cooldown', turns=2, mode='refreshTurns')))
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         soundTrack = getSoundTrack('SA_paradigm_shift.ogg', delay=1.5, node=suit)
         return Parallel(suitTrack, soundTrack, liftTracks, toonTracks, toonRiseTracks)
     else:
@@ -1398,11 +1390,6 @@ def doShakedownVulnerable(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     damageDelay = 1.35
     dodgeDelay = 0.95
     suitName = suit.getStyleName()
@@ -1466,7 +1453,7 @@ def doShakedownVulnerable(attack):
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.7)
     toonTracks.append(Parallel(Func(toon.setToonStatusEffect, 'vulnerable', modifier=25, turns=3)))
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         soundTrack = getSoundTrack('SA_paradigm_shift.ogg', delay=1.5, node=suit)
         return Parallel(suitTrack, soundTrack, liftTracks, toonTracks, toonRiseTracks)
     else:

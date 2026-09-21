@@ -43,6 +43,7 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     __throwBouncePoint,
     getResetTrack,
     __createSuitResetPosTrack,
+    hitAtleastOneToon,
     getSuitTrack,
     getSuitAnimTrack,
     getSuitAnimTrackAttack,
@@ -2792,12 +2793,8 @@ def doAftershockDamage(attack):
     targets = attack['target']
     notifyTracks = Parallel()
     waitTrack = Sequence()
-    hitAtleastOneToon = 0
     shakeTracks = Parallel()
     tContact = 1
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
     damageAnims = []
     damageAnims.append(['cringe',
                         0.01,
@@ -2809,7 +2806,7 @@ def doAftershockDamage(attack):
                         1.2])
     damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.8, startTime=1.2))
     soundTracks = Parallel()
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         waitTrack.append(Sequence(Wait(4.0)))
         soundTrack = getSoundTrack('AA_battery.ogg', delay=1.0, node=suit)
         soundTracks.append(soundTrack)
@@ -3584,11 +3581,7 @@ def doOverheat(attack):
     flecksTracks = Parallel()
     colorTracks = Parallel()
     moveTracks = Parallel()
-    hitAtleastOneToon = False
     BattleParticles.loadParticles()
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -3695,7 +3688,7 @@ def doOverheat(attack):
     toonTracks = getToonTracksCheat(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3,
                                     dodgeAnimNames=['sidestep'])
     soundTrack = getSoundTrack('SA_boilerplate_a.ogg', delay=1.0, node=suit)
-    if hitAtleastOneToon == True:
+    if hitAtleastOneToon(targets):
         multiTrackList = Parallel(suitTrack, moveTracks, baseFlameTracks, notifyTracks, flameTracks, partTracks4, flecksTracks,
                                   toonTracks, colorTracks, soundTrack)
     else:

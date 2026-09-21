@@ -326,6 +326,14 @@ def __createSuitResetPosTrack(suit, battle):
     return Parallel(unluredTrack, updateTrack, walkTrack, moveTrack)
 
 
+def hitAtleastOneToon(targets: list[dict]) -> bool:
+    for t in targets:
+        if t['hp'] > 0:
+            return True
+
+    return False
+
+
 def getSuitTrack(attack: dict, delay: float = 1e-06, splicedAnims: Optional[list[Union[dict, list]]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
     suit = attack['suit']
     battle = attack['battle']

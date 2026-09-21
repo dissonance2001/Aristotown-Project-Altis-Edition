@@ -41,6 +41,7 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     __throwBouncePoint,
     getResetTrack,
     __createSuitResetPosTrack,
+    hitAtleastOneToon,
     getSuitTrack,
     getSuitAnimTrack,
     getSuitAnimTrackAttack,
@@ -1143,7 +1144,7 @@ def doBar(attack):
             closestTarget = i
             nearestDistance = distance
 
-    hitAtleastOneToon = 1
+    hitAtleastOneToon = True
     shipTrack.append(Func(posObject, ship, targets[closestTarget]['toon'], not hitAtleastOneToon))
     shipTrack2.append(Func(posObject2, ship4, targets[closestTarget]['toon'], not hitAtleastOneToon))
     if hitAtleastOneToon:
@@ -1347,18 +1348,14 @@ def doFreeCruise(attack):
             closestTarget = i
             nearestDistance = distance
 
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-    shipTrack.append(Func(posObject, ship, targets[closestTarget]['toon'], not hitAtleastOneToon))
-    if hitAtleastOneToon:
+    shipTrack.append(Func(posObject, ship, targets[closestTarget]['toon'], not hitAtleastOneToon(targets)))
+    if hitAtleastOneToon(targets):
         if hasattr(ship, 'getAnimControls'):
             pass  # Not imperative at the moment given the Toontanic does not have the getAnimControls attribute
         else:
             startingScale = 1.0
             ship2 = MovieUtil.copyProp(ship)
-            posObject(ship2, targets[closestTarget]['toon'], not hitAtleastOneToon)
+            posObject(ship2, targets[closestTarget]['toon'], not hitAtleastOneToon(targets))
             endingPos = ship2.getPos()
             startPos = Point3(endingPos[0], endingPos[1], endingPos[2] + 5)
             startHpr = ship2.getHpr()
@@ -1375,7 +1372,7 @@ def doFreeCruise(attack):
     else:
         startingScale = 1.0
         ship2 = MovieUtil.copyProp(ship)
-        posObject(ship2, targets[closestTarget]['toon'], not hitAtleastOneToon)
+        posObject(ship2, targets[closestTarget]['toon'], not hitAtleastOneToon(targets))
         endingPos = ship2.getPos()
         startPos = Point3(endingPos[0], endingPos[1], endingPos[2] + 5)
         startHpr = ship2.getHpr()
@@ -1436,10 +1433,10 @@ def doFreeCruise(attack):
         else:
             toonTrack2 = Sequence(Func(toon.setHpr, battle, origHpr))
         toonTracks.append(toonTrack2)
-    soundTrack = getSoundTrack('AA_drop_boat%s.ogg' % ('' if hitAtleastOneToon else '_miss'),
+    soundTrack = getSoundTrack('AA_drop_boat%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'),
                                delay=(0.9 if targets[0]['hp'] == 0 else 1.0) + freeCruiseDelay, node=suit)
     hitSounds = Parallel()
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         hitSounds.append(getSoundTrack('AA_drop_boat_cog.ogg', delay=2.86 + freeCruiseDelay))
     suitTrack.append(Func(suit.makeNonImmortal))
     multiTrackList = Parallel(suitTrack, shipTrack, shadowTrack, toonTracks, soundTrack, hitSounds)
@@ -1482,7 +1479,7 @@ def doAceInTheHoleOLD(attack):
     cardPos = [Point3(toonPos.getX(), toonPos.getY() - 25, -3.5), toon.getHpr(battle)]
     headPos = [Point3(toonPos.getX(), toonPos.getY() - 25, -3.5), toon.getHpr(battle)]
     scaleUpPoint = Point3(1.1, 1.1, 1.1)
-    hitAtleastOneToon = 1
+    hitAtleastOneToon = True
     propTrackHead = Parallel()
     propTrackNew = Parallel()
     propTrackHead.append(Func(posObject, highRollerHead, targets[closestTarget]['toon'], not hitAtleastOneToon))

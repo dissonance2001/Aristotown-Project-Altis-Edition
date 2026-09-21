@@ -40,6 +40,7 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     __throwBouncePoint,
     getResetTrack,
     __createSuitResetPosTrack,
+    hitAtleastOneToon,
     getSuitTrack,
     getSuitAnimTrack,
     getSuitAnimTrackAttack,
@@ -582,11 +583,6 @@ def doSnap2(attack, suit):
     #suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     propDelay = 0.25
     propScaleUpTime = 0.25
     suitDelay = 1.45
@@ -649,7 +645,7 @@ def doSnap2(attack, suit):
       0.01,
       0.7,
       0.2], ['duck', 0.01, 1.6]]
-    #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon else '_miss'), delay=2, node=suit)
+    #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
@@ -662,11 +658,6 @@ def doSnapBindings(attack, suit):
     #suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     propDelay = 0.25
     propScaleUpTime = 0.25
     suitDelay = 1.45
@@ -719,7 +710,7 @@ def doSnapBindings(attack, suit):
       0.01,
       0.7,
       0.2], ['duck', 0.01, 1.6]]
-    #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon else '_miss'), delay=2, node=suit)
+    #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
@@ -732,11 +723,6 @@ def doSnapStenographer(attack, suit):
     #suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     propDelay = 0.25
     propScaleUpTime = 0.25
     suitDelay = 1.45
@@ -789,7 +775,7 @@ def doSnapStenographer(attack, suit):
       0.01,
       0.7,
       0.2], ['duck', 0.01, 1.6]]
-    #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon else '_miss'), delay=2, node=suit)
+    #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
@@ -802,11 +788,6 @@ def doSnap(attack, suit):
     #suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     propDelay = 0.25
     propScaleUpTime = 0.25
     suitDelay = 1.45
@@ -859,7 +840,7 @@ def doSnap(attack, suit):
       0.01,
       0.7,
       0.2], ['duck', 0.01, 1.6]]
-    #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon else '_miss'), delay=2, node=suit)
+    #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']

@@ -30,6 +30,7 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     __throwBouncePoint,
     getResetTrack,
     __createSuitResetPosTrack,
+    hitAtleastOneToon,
     getSuitTrack as suitTrackIval,
     getSuitAnimTrackAttack as suitAnimTrackAtkIval,
     getPartTrack,
@@ -2267,11 +2268,6 @@ def doGoldRush(attack):
     battle = attack['battle']
     targets = attack['target']
     damageDelay = 1.7
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     particleEffect = BattleParticles.createParticleEffect('GoldRush')
     waterfallEffect = BattleParticles.createParticleEffect(file='goldRushWaterfall')
     suitTrack = getSuitAnimTrack(attack)
@@ -2287,7 +2283,7 @@ def doGoldRush(attack):
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['slip-forward'], dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
     synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('SA_synergy.ogg'), node=suit))
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         fallingSoundTrack = Sequence(Wait(damageDelay + 0.5), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
         return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, fallingSoundTrack, toonTracks)
     else:
@@ -2311,10 +2307,6 @@ def doClipOnTie(attack):
         posPoints = [Point3(0.66, 0.51, -0.45), VBase3(-69.652, -57.199, 67.96)]
         scale = Point3(1.0, 1.0, 1.0)
     tiePropTracks = Parallel()
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -2719,11 +2711,6 @@ def doFillWithLead(attack):
 def doBeguile(attack):
     suit = attack['suit']
     targets = attack['target']
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     if base.config.GetBool('want-new-cogs', False):
         head = suit.find('**/to_head')
         if head.isEmpty():
@@ -2747,7 +2734,7 @@ def doBeguile(attack):
     sparklePropTrack.append(Func(MovieUtil.removeProp, sparkle))
     dodgeAnims = [['duck', 1e-06, 0.8]]
     toonTracks = getToonTracks(attack, damageDelay=2.1, damageAnimNames=['cringe'], dodgeDelay=1.7, splicedDodgeAnims=dodgeAnims)
-    soundTrack = getSoundTrack('ttr_s_ene_bat_beguile%s.ogg' % ('' if hitAtleastOneToon else 'Miss'), node=suit)
+    soundTrack = getSoundTrack('ttr_s_ene_bat_beguile%s.ogg' % ('' if hitAtleastOneToon(targets) else 'Miss'), node=suit)
     return Parallel(suitTrack, sparklePropTrack, toonTracks, soundTrack)
 
 def doHostileTakeover(attack):
@@ -2797,11 +2784,6 @@ def doNickelAndDime(attack):
     battle = attack['battle']
     targets = attack['target']
     damageDelay = 1.7
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     particleEffect = BattleParticles.createParticleEffect('NickelAndDime') 
     waterfallEffect = BattleParticles.createParticleEffect(file='nickelDimeWaterfall')
     suitTrack = getSuitAnimTrack(attack)
@@ -2816,7 +2798,7 @@ def doNickelAndDime(attack):
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['slip-forward'], dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
-    soundTrack = getSoundTrack('ttr_s_ene_bat_nickelAndDime%s.ogg' % ('' if hitAtleastOneToon else ''), node=suit)
+    soundTrack = getSoundTrack('ttr_s_ene_bat_nickelAndDime%s.ogg' % ('' if hitAtleastOneToon(targets) else ''), node=suit)
     return Parallel(suitTrack, partTrack, waterfallTrack, soundTrack, toonTracks)
 
 
@@ -2826,10 +2808,6 @@ def doQuash(attack):
     partTracks = Parallel()
     toonTracks = getToonTracks(attack, 1.6, ['slip-forward'], 1e-06, ['duck'])
     soundTracks = Parallel()
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -2838,7 +2816,7 @@ def doQuash(attack):
             partTrack = getPartTrack(particleEffect, 0.01, 3.5, [particleEffect, toon, 0], softStop=-1)
             partTracks.append(partTrack)
 
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         soundTracks.append(getSoundTrack('ttr_s_ene_bat_quash.ogg', node=toon))
 
     return Parallel(suitTrack, partTracks, toonTracks, soundTracks)
@@ -3316,11 +3294,6 @@ def doSynergy(attack):
     battle = attack['battle']
     targets = attack['target']
     damageDelay = 1.7
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     particleEffect = BattleParticles.createParticleEffect('Synergy')
     waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
     suitTrack = getSuitAnimTrack(attack)
@@ -3336,7 +3309,7 @@ def doSynergy(attack):
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['slip-forward'], dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
     synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('SA_synergy.ogg'), node=suit))
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         fallingSoundTrack = Sequence(Wait(damageDelay + 0.5), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
         return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, fallingSoundTrack, toonTracks)
     else:
@@ -3415,11 +3388,6 @@ def doFloodTheMarket(attack):
     battle = attack['battle']
     targets = attack['target']
     damageDelay = 1.7
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     particleEffect = BattleParticles.createParticleEffect(file='floodTheMarket')
     waterfallEffect = BattleParticles.createParticleEffect(file='floodTheMarketWaterfall')
     suitTrack = getSuitAnimTrack(attack)
@@ -3435,7 +3403,7 @@ def doFloodTheMarket(attack):
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0, showDamageExtraTime=1.0)
     synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_floodTheMarket.ogg'), node=suit))
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         puddleCounter = 0
         for t in targets:
             toon = t['toon']
@@ -4087,11 +4055,6 @@ def doDownsize(attack):
     targets = attack['target']
     toon = targets[0]['toon']
     dmg = targets[0]['hp']
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     damageDelay = 2.0
     sprayEffects = [BattleParticles.createParticleEffect(file='downsizeSpray') for t in targets]
     cloudEffect = BattleParticles.createParticleEffect(file='downsizeCloud')
@@ -4142,7 +4105,7 @@ def doDownsize(attack):
      2.97,
      1.49])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.6, dodgeAnimNames=['sidestep'])
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         soundTrack = getSoundTrack('SA_head_shrink_only.ogg', delay=2.5, node=suit)
         return Parallel(suitTrack, sprayTracks, cloudTracks, shrinkTracks, soundTrack, toonTracks)
     else:
@@ -4568,10 +4531,6 @@ def doHalfWindsor(attack):
     else:
         posPoints = [Point3(-0.13024602026049337, -1.2590448625180883, 0.04341534008683112), VBase3(87.00434153400869, -180.0, -257.88712011577422)]
     tiePropTracks = Parallel()
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -4622,7 +4581,7 @@ def doHalfWindsor(attack):
     soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
     toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [])
     throwSound = getSoundTrack('SA_half_windsor_throw.ogg', delay=throwDelay + 0.8, node=suit)
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         hitSound = getSoundTrack('SA_writeoff_ding_only.ogg', delay=throwDelay + 1.05, node=suit)
         return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound, hitSound)
     else:
@@ -4755,11 +4714,6 @@ def doHeadShrink(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     damageDelay = 1.5
     dodgeDelay = 0.9
     shrinkSprays = [BattleParticles.createParticleEffect(file='headShrinkSpray') for t in targets]
@@ -4855,7 +4809,7 @@ def doHeadShrink(attack):
      3.1,
      0.4])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         shrinkSound = globalBattleSoundCache.getSound('SA_head_shrink_only.ogg')
         growSound = globalBattleSoundCache.getSound('SA_head_grow_back_only.ogg')
         soundTrack = Sequence(Wait(1.5), SoundInterval(shrinkSound, duration=2.1, node=suit), SoundInterval(growSound, node=suit))
@@ -4965,11 +4919,6 @@ def doPlayHardball(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     suitType = getSuitBodyType(attack['suitName'])
     suitDelay = 1.3
     damageDelay = 2.25
@@ -5018,7 +4967,7 @@ def doPlayHardball(attack):
       0.01,
       0.5], ['slip-backward', 0.01, 0.7]]
     toonTracks = getToonTracks(attack, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showDamageExtraTime=3.9)
-    soundTrack = getSoundTrack('SA_hardball%s.ogg' % ('_impact_only' if hitAtleastOneToon else ''), delay=1.8, node=suit)
+    soundTrack = getSoundTrack('SA_hardball%s.ogg' % ('_impact_only' if hitAtleastOneToon(targets) else ''), delay=1.8, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack)
 
 def doPowerTie(attack):
@@ -5038,10 +4987,6 @@ def doPowerTie(attack):
     else:
         posPoints = [Point3(-0.13024602026049337, 0.5643994211287975, -0.9985528219971052), VBase3(90, 11.201157742402302, 0)]
     tiePropTracks = Parallel()
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -5092,7 +5037,7 @@ def doPowerTie(attack):
     soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
     toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [])
     throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit)
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         hitSound = getSoundTrack('SA_powertie_impact.ogg', delay=throwDelay + 1.05, node=suit)
         return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound, hitSound)
     else:
@@ -5103,11 +5048,6 @@ def doPowerTieOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     suitType = getSuitBodyType(attack['suitName'])
     throwDelay = 1.25
     damageDelay = 2
@@ -5171,7 +5111,7 @@ def doPowerTieOLD(attack):
 
     toonTracks = getToonTracks(attack, damageDelay, ['conked'], dodgeDelay, ['duck'])
     throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=2, node=suit)
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         hitSound = getSoundTrack('SA_powertie_impact.ogg', delay=2.4, node=suit)
         return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound, hitSound)
     else:
@@ -5226,11 +5166,7 @@ def doCloseTheLoop(attack):
         receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
     propTrack = Sequence(Func(__showProp, phone, suit.getLeftHand(), *phonePosPoints), Func(__showProp, receiver, suit.getLeftHand(), *receiverPosPoints), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_ONE, MovieUtil.PNT3_NEARZERO), Wait(0.24), Func(receiver.wrtReparentTo, suit.getRightHand()), LerpPosHprInterval(receiver, 0.0001, Point3(-0.45, 0.48, -0.62), VBase3(-87.47, -18.21, 7.82)), Wait(2.14), Func(receiver.wrtReparentTo, phone), Wait(0.62), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProps, [receiver, phone]))
     toonTracks = getToonTracks(attack, 2.8, ['slip-forward'], 2.29, ['jump'])
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-    if hitAtleastOneToon > 0:
+    if hitAtleastOneToon(targets):
         soundTrack = Parallel(getSoundTrack('ttr_s_ene_bat_closeTheLoop.ogg', delay=0, node=suit))
     else:
         soundTrack = Parallel(getSoundTrack('ttr_s_ene_bat_closeTheLoopMiss.ogg', delay=0, node=suit))
@@ -5241,11 +5177,6 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
-    hitAtleastOneToon: bool = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     numWords: int = 25
     wordDelay: float = 3.7
     suitTrack: Sequence = getSuitAnimTrack(attack)
@@ -5270,7 +5201,7 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
 
     dodgeAnims = [['duck', 0.01, 1.4]]
     toonTracks: Parallel = getToonTracks(attack, damageDelay=4.4, damageAnimNames=['conked'], dodgeDelay=3.7, splicedDodgeAnims=dodgeAnims)
-    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon else 'Miss'}.ogg", node=suit)
+    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", node=suit)
     return Parallel(suitTrack, wordTracks, toonTracks, soundTrack)
 
 
@@ -6234,11 +6165,6 @@ def doParadigmShift(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = False
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = True
-
     damageDelay = 1.35
     dodgeDelay = 0.95
     sprayEffect = BattleParticles.createParticleEffect('ShiftSpray')
@@ -6304,7 +6230,7 @@ def doParadigmShift(attack):
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.0, startTime=0.6))
     dodgeAnims.append(['jump', 0, 0.91])
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.7)
-    if hitAtleastOneToon:
+    if hitAtleastOneToon(targets):
         soundTrack = getSoundTrack('SA_paradigm_shift.ogg', delay=1.5, node=suit)
         return Parallel(suitTrack, sprayTrack, soundTrack, liftTracks, toonTracks, toonRiseTracks)
     else:
@@ -7453,11 +7379,6 @@ def doBite(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
-
     propDelay = 0.25
     propScaleUpTime = 0.25
     suitDelay = 1.45
@@ -7511,7 +7432,7 @@ def doBite(attack):
       0.7,
       0.2], ['duck', 0.01, 1.6]]
     toonTracks = getToonTracks(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.7, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.4)
-    soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon else '_miss'), delay=2, node=suit)
+    soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     return Parallel(suitTrack, toonTracks, soundTrack, propTracks)
 
@@ -7520,10 +7441,6 @@ def doChomp(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    hitAtleastOneToon = 0
-    for t in targets:
-        if t['hp'] > 0:
-            hitAtleastOneToon = 1
     propDelay = 0.25
     propScaleUpTime = 0.25
     suitDelay = 1.55
@@ -7628,7 +7545,7 @@ def doChomp(attack):
     dodgeAnims = [['jump', 0.01, 0.01]]
     toonTracks = getToonTracks(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
                                splicedDodgeAnims=dodgeAnims, showDamageExtraTime=1.4)
-    soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon else '_miss'), delay=2, node=suit)
+    soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     return Parallel(suitTrack, toonTracks, soundTrack, propTracks)
 
