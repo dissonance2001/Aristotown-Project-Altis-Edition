@@ -1,131 +1,67 @@
-from otp.ai.AIBaseGlobal import *
-from pandac.PandaModules import *
-from toontown.toon.DistributedNPCToonBaseAI import *
-from toontown.fishing import FishGlobals
-from toontown.hood import ZoneUtil
-from toontown.toonbase import TTLocalizer
-from toontown.toonbase import ToontownGlobals
-from toontown.fishing import FishGlobals
-from direct.task import Task
+"""
+DistributedNPCRodClerkAI -- rewritten to use Clash's generic NPC item-shop
+system (toontown/shop/, toontown/toon/npc/shop/) instead of the old
+money/index-based rod-selling flow (completeSale/NPCToons movie codes,
+avatar.fishingRods/b_setFishingRod). Sells items from
+RodShopGlobals.RodShopItems, which grants (and, since Fishing_Rod has
+forceEquipOnAdd=True, auto-equips) a real hammerspace fishing rod item.
 
-class DistributedNPCRodClerkAI(DistributedNPCToonBaseAI):
+Pattern adapted directly from DistributedNPCTailorAI.py.
+
+NOTE: this class's dclass in the .dc file needs to declare the same fields
+DistributedNPCTailor(AI) has for the generic shop system to work:
+requestItemPurchase (client->AI), toonInteracted (client->AI),
+onItemPurchase / handleBuyResponse / handleInteraction (AI->client). The old
+avatarEnter/completeSale/setMovie fields this class used to rely on are no
+longer called by this file.
+"""
+import random
+
+from toontown.toon.DistributedNPCToonBaseAI import *
+from toontown.shop.ShopManagerAI import ShopManagerAI
+from toontown.shop.base.ShopItem import ShopItem
+from toontown.toon.RodShopGlobals import RodShopItems
+from toontown.toonbase import TTLocalizer
+
+
+class DistributedNPCRodClerkAI(DistributedNPCToonBaseAI, ShopManagerAI):
 
     def __init__(self, air, npcId):
         DistributedNPCToonBaseAI.__init__(self, air, npcId)
-        self.givesQuests = 0
-        self.busy = 0
+        ShopManagerAI.__init__(self, air, RodShopItems)
 
-    def delete(self):
-        taskMgr.remove(self.uniqueName('clearMovie'))
-        self.ignoreAll()
-        DistributedNPCToonBaseAI.delete(self)
+    def sendPurchaseNotification(self, av):
+        pass
 
-    def avatarEnter(self):
-        avId = self.air.getAvatarIdFromSender()
-        if avId not in self.air.doId2do:
-            self.notify.warning('Avatar: %s not found' % avId)
-            return
-        if self.isBusy():
-            self.freeAvatar(avId)
-            return
-        for spot in self.air.hoodId2Hood[ZoneUtil.getCanonicalBranchZone(self.zoneId)].fishingSpots: 
-            if spot.avId == avId:
-                return
+    def callbackAvatarCannotAfford(self, shopItem: ShopItem, av):
+        self.sendUpdateToAvatarId(av.doId, 'handleBuyResponse', [1])
 
-        av = self.air.doId2do[avId]
-        self.busy = avId
-        self.acceptOnce(self.air.getAvatarExitEvent(avId), self.__handleUnexpectedExit, extraArgs=[avId])
-        flag = NPCToons.SELL_MOVIE_START
-        self.d_setMovie(avId, flag)
-        taskMgr.doMethodLater(30.0, self.sendTimeoutMovie, self.uniqueName('clearMovie'))
-        DistributedNPCToonBaseAI.avatarEnter(self)
-        return
+    def performAdditionalPurchaseChecks(self, shopItem: ShopItem, av) -> bool:
+        return super().performAdditionalPurchaseChecks(shopItem=shopItem, av=av)
 
-    def rejectAvatar(self, avId):
-        self.notify.warning('rejectAvatar: should not be called by a fisherman!')
+    def callbackAvatarCannotPurchase(self, shopItem: ShopItem, av):
+        self.sendUpdateToAvatarId(av.doId, 'handleBuyResponse', [3])
 
-    def d_setMovie(self, avId, flag, extraArgs = []):
-        self.sendUpdate('setMovie', [flag,
-         self.npcId,
-         avId,
-         extraArgs,
-         ClockDelta.globalClockDelta.getRealNetworkTime()])
+    def callbackPurchaseAttemptFailed(self, shopItem: ShopItem, av):
+        self.sendUpdateToAvatarId(av.doId, 'handleBuyResponse', [4])
 
-    def sendTimeoutMovie(self, task):
-        self.d_setMovie(self.busy, NPCToons.SELL_MOVIE_TIMEOUT)
-        self.sendClearMovie(None)
-        return Task.done
-
-    def sendClearMovie(self, task):
-        self.ignore(self.air.getAvatarExitEvent(self.busy))
-        taskMgr.remove(self.uniqueName('clearMovie'))
-        self.busy = 0
-        self.d_setMovie(0, NPCToons.SELL_MOVIE_CLEAR)
-        return Task.done
-
-    def completeSale(self, type):
-        avId = self.air.getAvatarIdFromSender()
-        if self.busy != avId:
-            self.air.writeServerEvent('suspicious', avId, 'DistributedNPCFishermanAI.completeSale busy with %s' % self.busy)
-            self.notify.warning('somebody called setMovieDone that I was not busy with! avId: %s' % avId)
-            return
-
-        for spot in self.air.hoodId2Hood[ZoneUtil.getCanonicalBranchZone(self.zoneId)].fishingSpots:
-            if spot.avId == avId:
-                self.sendClearMovie(None)
-                return
-
-        if type == 1: # Rods
-            av = simbase.air.doId2do.get(avId)
-            if av:
-                newIndex = 0
-                for rod in av.getFishingRods():
-                    if rod > newIndex:
-                        newIndex = rod
-                newIndex += 1
-                extraArgs = []
-                try:
-                    if av.getTotalMoney() >= ToontownGlobals.FishingRodCosts[newIndex]:
-                        av.takeMoney(ToontownGlobals.FishingRodCosts[newIndex], bUseBank=True)
-                        rods = av.getFishingRods()
-                        rods.append(newIndex)
-                        av.b_setFishingRods(rods)
-                        av.b_setFishingRod(newIndex)
-                        movieType = NPCToons.SELL_MOVIE_ROD
-                    else:
-                        movieType = NPCToons.SELL_MOVIE_NOROD
-                        extraArgs = []
-                except:
-                    movieType = NPCToons.SELL_MOVIE_COMPLETE
-                    extraArgs = []
-                self.d_setMovie(avId, movieType, extraArgs)
-        elif type == 2: # Buckets
-            av = simbase.air.doId2do.get(avId)
-            if av:
-                currMaxTank = av.getMaxFishTank()
-                newTank = currMaxTank + 10
-                extraArgs = []
-                try:
-                    if av.getTotalMoney() >= ToontownGlobals.BucketCosts.get(newTank):
-                        av.takeMoney(ToontownGlobals.BucketCosts.get(newTank), bUseBank=True)
-                        av.b_setMaxFishTank(newTank)
-                        movieType = NPCToons.SELL_MOVIE_BUCKET
-                    else:
-                        movieType = NPCToons.SELL_MOVIE_NOROD
-                except:
-                    movieType = NPCToons.SELL_MOVIE_COMPLETE
-                    extraArgs = []
-                self.d_setMovie(avId, movieType, extraArgs)
+    def callbackPurchaseSuccessful(self, shopItem: ShopItem, av, returnValue=None):
+        if returnValue is True:
+            self.sendUpdateToAvatarId(av.doId, 'handleBuyResponse', [5])
         else:
-            av = simbase.air.doId2do.get(avId)
-            if av:
-                self.d_setMovie(avId, NPCToons.SELL_MOVIE_COMPLETE)
-        self.sendClearMovie(None)
-        return
+            self.sendUpdateToAvatarId(av.doId, 'handleBuyResponse', [0])
 
-    def __handleUnexpectedExit(self, avId):
-        self.notify.warning('avatar:' + str(avId) + ' has exited unexpectedly')
-        self.notify.warning('not busy with avId: %s, busy: %s ' % (avId, self.busy))
-        taskMgr.remove(self.uniqueName('clearMovie'))
-        self.sendClearMovie(None)
-        return
+    def toonInteracted(self, contextCode):
+        avId = self.air.getAvatarIdFromSender()
+        av = self.air.doId2do.get(avId)
+        if not av:
+            return
+
+        # Get the pool of phrases we can say using the context code.
+        # Since this is given from the client, make sure it's allowed.
+        phrasePool = TTLocalizer.NPCStoreEnterExitResponses.get(contextCode)
+        if not phrasePool:
+            return
+
+        phraseIndex = random.randint(0, len(phrasePool) - 1)
+        self.sendUpdateToAvatarId(avId, 'handleInteraction', [contextCode, phraseIndex])

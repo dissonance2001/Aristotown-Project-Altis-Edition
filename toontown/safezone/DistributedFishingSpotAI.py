@@ -91,7 +91,7 @@ class DistributedFishingSpotAI(DistributedObjectAI):
             return
         av = self.air.doId2do[avId]
         money = av.getMoney()
-        cost = FishGlobals.getCastCost(av.getFishingRod())
+        cost = FishGlobals.getCastCostForRod(av.getEquippedFishingRodSubtype())
         if money < cost:
             self.air.writeServerEvent('suspicious', avId, 'Toon tried to cast without enough jellybeans!')
             return

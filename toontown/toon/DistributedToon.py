@@ -288,6 +288,20 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         from toontown.inventory.base.InventoryItem import InventoryItem
         return InventoryItem.findItemTypesFromItemList(itemType, self.getEquippedItems())
 
+    def getEquippedFishingRodSubtype(self):
+        """
+        Client-side mirror of DistributedToonAI.getEquippedFishingRodSubtype().
+        Read-only (no self-heal here -- the AI owns equip state and is the
+        one that self-heals; this just reads whatever it last broadcast).
+        Falls back to Cardboard if the client hasn't received an equipped
+        rod yet (e.g. briefly during login).
+        """
+        from toontown.inventory.enums.ItemEnums import ItemType, FishingRodItemType
+        equipped = self.getEquippedItemsOfType(ItemType.Fishing_Rod)
+        if equipped:
+            return equipped[0].getItemSubtype()
+        return FishingRodItemType.Cardboard
+
     def getHammerspace(self):
         """Returns this (local) toon's own hammerspace Inventory, or None if not yet loaded."""
         return base.cr.inventoryManager.getInventory()
