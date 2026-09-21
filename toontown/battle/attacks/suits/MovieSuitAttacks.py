@@ -75,6 +75,7 @@ from toontown.suit.SuitDNA import *
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
+AAK = MovieUtil.AttackAnimKeys
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSuitAttacks')
 

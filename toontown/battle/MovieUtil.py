@@ -19,6 +19,7 @@ from toontown.nametag import NametagGlobals
 from toontown.nametag.NametagGlobals import *
 from panda3d.direct import *
 from toontown.toonbase import TTLocalizer
+from enum import Enum, auto
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieUtil')
 SUIT_LOSE_DURATION = 6.0
@@ -60,6 +61,15 @@ largeSuits = ['f',
  'mh',
  'txm']
 shotDirection = 'left'
+
+class AttackAnimKeys(Enum):
+    Anim = auto()
+    Delay = auto()
+    Duration = auto()
+    StartTime = auto()
+    PlayRate = auto()
+    Actor = auto()
+
 
 def avatarDodge(leftAvatars, rightAvatars, leftData, rightData):
     if len(leftAvatars) > len(rightAvatars):
