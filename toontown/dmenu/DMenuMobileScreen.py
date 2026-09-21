@@ -72,7 +72,7 @@ class DMenuMobileScreen(DirectObject):
         dna = ToonDNA.ToonDNA()
         dna.newToonFromProperties('pls', 'ls', 'l', 'm', 9, 0, 9, 9, 98, 27, 86, 27, 38, 27)
         self.surlee.setDNA(dna)
-        self.surlee.loop('scientistGame')
+        self.surlee.loop('neutral')
         self.surlee.reparentTo(self.background)
         self.surlee.setPosHpr(13, 24, 0.025, -180, 0, 0)
 
@@ -83,7 +83,7 @@ class DMenuMobileScreen(DirectObject):
         dna = ToonDNA.ToonDNA()
         dna.newToonFromProperties('fll', 'ss', 's', 'm', 15, 0, 15, 15, 99, 27, 86, 27, 39, 27)
         self.dimm.setDNA(dna)
-        self.dimm.loop('scientistGame')
+        self.dimm.loop('neutral')
         self.dimm.reparentTo(self.background)
         self.dimm.setPosHpr(16, 24, 0.025, -180, 0, 0)
 

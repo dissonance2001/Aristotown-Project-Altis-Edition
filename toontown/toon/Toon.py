@@ -316,7 +316,7 @@ Phase4AnimList = (('sit', 'sit'),
  ('scientistJealous', 'scientistJealous'),
  ('scientistEmcee', 'scientistEmcee'),
  ('scientistWork', 'scientistWork'),
- ('scientistGame', 'scientistGame'),
+ ('taunt', 'taunt'),
  ('taunt', 'taunt'))
 Phase5AnimList = (('water-gun', 'water-gun'),
  ('hold-bottle', 'hold-bottle'),
@@ -8570,7 +8570,7 @@ class Toon(Avatar.Avatar, ToonHead):
         self.stop()
 
     def enterScientistPlay(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
-        self.loop('scientistGame')
+        self.loop('neutral')
 
     def exitScientistPlay(self):
         self.stop()

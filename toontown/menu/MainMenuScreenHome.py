@@ -92,7 +92,7 @@ class MainMenuScreenHome(MainMenuScreen):
                 self.npc3.hprInterval(0.2, Point3(-115, 0, 0))
             ),
             Parallel(Func(self.npc2.loop, 'neutral'), Func(self.npc3.loop, 'neutral')),
-            Parallel(Func(self.npc2.loop, 'scientistGame'), Func(self.npc3.loop, 'scientistGame')),
+            Parallel(Func(self.npc2.loop, 'neutral'), Func(self.npc3.loop, 'neutral')),
             Wait(3),
             Func(self.cog1.setScale, 0.85),
             self.cog1.posHprInterval(2, Point3(0.7, 42, 4), Point3(90, 0, 0)),
