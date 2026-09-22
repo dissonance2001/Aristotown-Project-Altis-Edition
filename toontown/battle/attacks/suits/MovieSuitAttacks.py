@@ -3270,29 +3270,46 @@ def doRubberStamp(attack):
 def doRazzleDazzle(attack):
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
+    suitB: bool = getSuitBodyType(suit.dna.name) == 'b'
     sign = globalPropPool.getProp('smile')
-    signPropTracks = Parallel()
-    signPropAnimTracks = Parallel()
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
     BattleParticles.loadParticles()
+    suitTrack: Sequence = getSuitTrack(attack)
+    signPosPoints = [Point3(0.0, -0.42, -0.04), VBase3(105.715, 73.977, 65.932)]
+    signPropTrack: Sequence = Sequence(
+        Wait(0.5),
+        Func(__showProp, sign, suit.getRightHand(), signPosPoints[0], signPosPoints[1]),
+        LerpScaleInterval(sign, 0.5, Point3(1.39, 1.39, 1.39)),
+        Wait(0.5 if not suitB else 0.0)
+    )
+    partTracks: Parallel = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        hitSuit = dmg > 0
         particleEffect = BattleParticles.createParticleEffect('Smile')
-        signPosPoints = [Point3(0.0, -0.42, -0.04), VBase3(105.715, 73.977, 65.932)]
-        if hitSuit:
+        if dmg > 0:
             hitPoint = lambda toon = toon: __toonFacePoint(toon)
         else:
             hitPoint = lambda particleEffect = particleEffect, toon = toon, suit = suit: __toonMissPoint(particleEffect, toon, parent=suit.getRightHand())
-        signPropTrack = Sequence(Func(__showProp, sign, suit.getRightHand(), signPosPoints[0], signPosPoints[1]), LerpScaleInterval(sign, 0.5, Point3(1.39, 1.39, 1.39)), Wait(0.5), Func(battle.movie.needRestoreParticleEffect, particleEffect), Func(particleEffect.start, sign), Func(particleEffect.wrtReparentTo, render), LerpPosInterval(particleEffect, 1.0, pos=hitPoint, blendType='easeInOut'), Func(particleEffect.cleanup), LerpScaleInterval(sign, 0.5, Point3(0, 0, 0)), Func(battle.movie.clearRestoreParticleEffect, particleEffect))
-        signPropAnimTrack = ActorInterval(sign, 'smile', duration=2.5, startTime=1)
-        signPropTracks.append(signPropTrack)
-        signPropAnimTracks.append(signPropAnimTrack)
-    toonTrack = getToonTracks(attack, 2.0, ['cringe'], 1.0, ['sidestep'])
-    soundTrack = getSoundTrack('SA_razzle_dazzle.ogg', delay=0.8, node=suit)
-    return Sequence(Parallel(suitTrack, signPropTracks, signPropAnimTracks, toonTrack, soundTrack), Func(MovieUtil.removeProp, sign))
+        partTrack = Sequence(
+            Func(battle.movie.needRestoreParticleEffect, particleEffect),
+            Func(particleEffect.start, sign),
+            Func(particleEffect.wrtReparentTo, render),
+            Track(
+                (0.0, LerpPosInterval(particleEffect, 2.0, pos=hitPoint)),
+                (1.0, Func(particleEffect.softStop))
+            ),
+            Func(particleEffect.cleanup),
+            Func(battle.movie.clearRestoreParticleEffect, particleEffect)
+        )
+        partTracks.append(partTrack)
+
+    signPropTrack.append(partTracks)
+    signPropAnimTrack: ActorInterval = ActorInterval(sign, 'smile', duration=4.0, startTime=0.0, playRate=1.0 if not suitB else 1.25)
+    offset: float = 0.5 if not suitB else 0.0
+    toonTracks: Parallel = getToonTracks(attack, 2.1 + offset, ['cringe'], 1.4 + offset, ['sidestep'], dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('SA_razzle_dazzle.ogg', delay=1.1 + offset, node=suit)
+    return Sequence(Parallel(suitTrack, signPropTrack, signPropAnimTrack, toonTracks, soundTrack), Func(MovieUtil.removeProp, sign))
 
 
 def doInterestCalculations(attack):

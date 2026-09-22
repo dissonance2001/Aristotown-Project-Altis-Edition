@@ -897,7 +897,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
                                  Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
     elif name == 'RazzleDazzle':
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == 'RedTape':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'ReOrg':
