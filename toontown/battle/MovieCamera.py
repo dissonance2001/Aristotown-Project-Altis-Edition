@@ -857,9 +857,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HotAir':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Jargon':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=3.5))
     elif name == 'Legalese':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'LawBook':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Liquidate':
@@ -869,7 +869,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'MoneyTalks':
         camTrack.append(defaultCamera())
     elif name == 'MumboJumbo':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'ParadigmShift':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'PeckingOrder':
