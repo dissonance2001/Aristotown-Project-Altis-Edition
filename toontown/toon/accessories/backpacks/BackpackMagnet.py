@@ -6,7 +6,8 @@ class BackpackMagnet(ToonAccessory):
 
     def fixupAccessoryGeom(self):
         lightning = self.accessoryGeom.find('**/lightning')
-        lightning.hide()
+        if not lightning.isEmpty():
+            lightning.hide()
 
     @classmethod
     def modifyPreview(cls, geom):
