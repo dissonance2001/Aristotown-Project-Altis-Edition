@@ -428,7 +428,6 @@ class MainMenuScreenPlay(MainMenuScreen):
         def doDelete(arg=None):
             if self.passwordEntry.get().lower() == TTLocalizer.AvatarChoiceDeleteConfirmUserTypes:
                 self.deleteWithPasswordFrame.destroy()
-                delDialog.cleanup()
                 self.enableButtons()
                 base.transitions.noFade()
                 messenger.send(self.doneEvent, [{'mode': 'delete', 'choice': self.selectedToon}])
