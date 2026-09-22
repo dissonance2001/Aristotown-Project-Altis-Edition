@@ -721,8 +721,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
 
     if name == 'AcidRain':
         camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'Audit':
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+    elif name in ('Audit', 'Calculate', 'Tabulate'):
+        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Bash':
         camTrack.append(Sequence(defaultCamera(openShotDuration=1.75, attackDuration=1.75), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(2.0),
                                  Func(taskMgr.remove, 'camera_shake'), Wait(attackDuration - 3.75)))
@@ -775,8 +775,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'BuzzWord':
         camTrack.append(defaultCamera(openShotDuration=2.0))
-    elif name == 'Calculate':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Canned':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvictionNotice':
@@ -929,8 +927,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Synergy':
         camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'Tabulate':
-        camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'Golf':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'ThrowBook':
