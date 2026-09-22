@@ -2,7 +2,7 @@ from toontown.fishing import FishGlobals
 from toontown.fishing import BingoGlobals
 from direct.showbase import RandomNumGen
 
-from toontown.fishing.FishingRodCompat import FishingRodItemType  # TODO: swap to toontown.inventory.enums.ItemEnums once ported
+from toontown.inventory.enums.ItemEnums import FishingRodItemType
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

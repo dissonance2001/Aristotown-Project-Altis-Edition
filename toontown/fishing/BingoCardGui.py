@@ -9,7 +9,7 @@ from toontown.fishing import FishGlobals
 from direct.showbase import RandomNumGen
 
 from toontown.gui.GUIPositionGlobals import ScreenCorner
-from toontown.fishing.FishingRodCompat import FishingRodItemType  # TODO: swap to toontown.inventory.enums.ItemEnums once ported
+from toontown.inventory.enums.ItemEnums import FishingRodItemType
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownTimer
 from toontown.toonbase import TTLocalizer

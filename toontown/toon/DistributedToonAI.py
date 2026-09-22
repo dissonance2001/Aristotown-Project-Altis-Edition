@@ -348,6 +348,35 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def getEquippedItemsOfType(self, itemType):
         return InventoryItem.findItemTypesFromItemList(itemType, self.getEquippedItems())
 
+    def getEquippedFishingRodSubtype(self):
+        """
+        Returns the FishingRodItemType of this Toon's currently equipped
+        hammerspace fishing rod. This is what real fishing gameplay
+        (DistributedFishingSpot(AI), FishManagerAI) should read -- NOT the
+        old legacy fishingRod DC field, which is no longer wired to anything.
+
+        Self-heals if nothing is equipped (e.g. a pre-existing Toon whose
+        starter Cardboard rod was added before forceEquipOnAdd existed):
+        equips an already-owned rod if there is one, otherwise grants and
+        equips the starter Cardboard rod.
+        """
+        from toontown.inventory.enums.ItemEnums import ItemType, FishingRodItemType
+
+        equipped = self.getEquippedItemsOfType(ItemType.Fishing_Rod)
+        if equipped:
+            return equipped[0].getItemSubtype()
+
+        hs = self.getHammerspace()
+        ownedRods = InventoryItem.findItemTypesFromItemList(ItemType.Fishing_Rod, hs.getItems())
+        if ownedRods:
+            hs.equipItem(ownedRods[0])
+            return ownedRods[0].getItemSubtype()
+
+        starterRod = InventoryItem.fromSubtype(FishingRodItemType.Cardboard)
+        hs.addItem(starterRod)
+        hs.equipItem(starterRod)
+        return FishingRodItemType.Cardboard
+
     def getActivityLevels(self):
         return self.activityLevels
 
