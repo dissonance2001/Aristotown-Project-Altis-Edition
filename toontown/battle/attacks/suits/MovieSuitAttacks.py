@@ -2294,73 +2294,70 @@ def doClipOnTie(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    suitType = getSuitBodyType(attack['suitName'])
     throwDelay = 1.0
     damageDelay = throwDelay + 1.23
     dodgeDelay = damageDelay - 0.20
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'a':
-        posPoints = [Point3(0.66, 0.51, -0.45), VBase3(-69.652, -57.199, 67.96)]
-        scale = Point3(1.0, 1.0, 1.0)
-    else:
-        posPoints = [Point3(0.66, 0.51, -0.45), VBase3(-69.652, -57.199, 67.96)]
-        scale = Point3(1.0, 1.0, 1.0)
-    tiePropTracks = Parallel()
+    suitTrack = getSuitTrack(attack, playRate=1.5)
+    posPoints = [Point3(0.66, 0.51, -0.45), VBase3(-69.652, -57.199, 67.96)]
+    tiePropTracks: Parallel = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         tie = globalPropPool.getProp('clip-on-tie')
         tiePropTrack = Sequence(
-                        getPropAppearTrack(
-                            tie,
-                            suit.getRightHand(),
-                            posPoints,
-                            0.25,
-                            scale,
-                            scaleUpTime=0.25,
-                            poseExtraArgs=['clip-on-tie', 0],
-                            blendType='easeIn',
-                        )
-                    )
-        tiePropTrack.append(
-                            ActorInterval(tie, 'clip-on-tie', duration=throwDelay, startTime=1.1)
-                        )
+            getPropAppearTrack(
+                tie,
+                suit.getRightHand(),
+                posPoints,
+                0.25,
+                MovieUtil.PNT3_ONE,
+                scaleUpTime=0.25,
+                poseExtraArgs=['clip-on-tie', 0],
+                blendType='easeIn',
+            )
+        )
+        if dmg > 0:
+            tiePropTrack.append(
+                ActorInterval(tie, 'clip-on-tie', duration=throwDelay, startTime=1.1)
+            )
+        else:
+            tiePropTrack.append(Wait(throwDelay))
         tiePropTrack.append(Wait(0.50))
         tiePropTrack.append(Func(battle.movie.needRestoreRenderProp, tie))
         tiePropTrack.append(Func(tie.wrtReparentTo, render))
-        tiePropTrack.append(Func(tie.setHpr, Point3(0, -90, 0)))
+        tiePropTrack.append(Func(tie.setHpr, Point3(0.0, -90.0, 0.0)))
         if dmg > 0:
             tiePropTrack.append(Parallel(
                 ProjectileInterval(
                     tie, endPos=__toonFacePoint(toon), duration=0.3, gravityMult=-5.0,
                 ),
-                LerpHprInterval(tie, 0.3, (110, 160, 0)),
+                LerpHprInterval(tie, 0.3, (110.0, 160.0, 0.0)),
             ))
         else:
-            startH, endH = 180, 280
+            startH, endH = 180.0, 280.0
             yoffset = random.randint(0, 20) / 10.0
             xoffset = random.randint(-7, 7) / 10.0
             tiePropTrack.append(Parallel(
                 ProjectileInterval(
-                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(0, 4 + yoffset, 0), duration=0.5, gravityMult=4.0,
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(0.0, 4.0 + yoffset, 0.0), duration=0.5, gravityMult=4.0,
                 ),
-                LerpHprInterval(tie, 0.5, (startH, 270, 0)),
+                LerpHprInterval(tie, 0.5, (startH, 270.0, 0.0)),
             ))
             tiePropTrack.append(Parallel(
                 ProjectileInterval(
-                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(xoffset, 3.5 + yoffset, 0), duration=0.15, gravityMult=1.0,
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(xoffset, 3.5 + yoffset, 0.0), duration=0.15, gravityMult=1.0,
                 ),
-                LerpHprInterval(tie, 0.30, (endH + random.randint(-30, 30), 270, 45), blendType='easeOut'),
+                LerpHprInterval(tie, 0.30, (endH + random.randint(-30, 30), 270.0, 45.0), blendType='easeOut'),
                 Wait(0.60),
             ))
             tiePropTrack.append(LerpScaleInterval(tie, duration=0.30, scale=MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
-        tiePropTrack.append(Func(tie.removeNode))
+        tiePropTrack.append(Func(MovieUtil.removeProp, tie))
+        tiePropTrack.append(Func(battle.movie.clearRenderProp, tie))
         tiePropTracks.append(tiePropTrack)
-    soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [])
-    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 1.05, node=suit)
-    return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound)
+
+    toonTracks = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
+    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit, playRate=1.2)
+    return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound)
 
 
 def doSandTrap(attack):
@@ -4545,74 +4542,68 @@ def doHalfWindsor(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    suitType = getSuitBodyType(attack['suitName'])
     throwDelay = 1.0
     damageDelay = throwDelay + 1.23
     dodgeDelay = damageDelay - 0.20
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'c':
-        posPoints = [Point3(-0.04341534008683112, -1.0853835021707674, 0.04341534008683112), VBase3(87.00434153400869, -180.0, -257.88712011577422)]
-    elif suitType == 'b':
-        posPoints = [Point3(-0.04341534008683112, -1.0853835021707674, 0.04341534008683112), VBase3(87.00434153400869, -180.0, -257.88712011577422)]
-    else:
-        posPoints = [Point3(-0.13024602026049337, -1.2590448625180883, 0.04341534008683112), VBase3(87.00434153400869, -180.0, -257.88712011577422)]
-    tiePropTracks = Parallel()
+    suitTrack = getSuitTrack(attack, playRate=1.5)
+    posPoints = [Point3(-0.3, 1.2, 0.58), VBase3(109.0, -3.0, -108.2)]
+    tiePropTracks: Parallel = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         tie = globalPropPool.getProp('half-windsor')
         tiePropTrack = Sequence(
-                        getPropAppearTrack(
-                            tie,
-                            suit.getRightHand(),
-                            posPoints,
-                            0.25,
-                            Vec3(7, 7, 7),
-                            scaleUpTime=0.25,
-                            blendType='easeIn',
-                        )
-                    )
+            getPropAppearTrack(
+                tie,
+                suit.getRightHand(),
+                posPoints,
+                0.25,
+                Vec3(7.0, 7.0, 7.0),
+                scaleUpTime=0.25,
+                blendType='easeIn',
+            )
+        )
         tiePropTrack.append(Wait(throwDelay))
         tiePropTrack.append(Wait(0.50))
         tiePropTrack.append(Func(battle.movie.needRestoreRenderProp, tie))
         tiePropTrack.append(Func(tie.wrtReparentTo, render))
-        tiePropTrack.append(Func(tie.setHpr, Point3(0, -90, 0)))
+        tiePropTrack.append(Func(tie.setHpr, Point3(0.0, -90.0, 0.0)))
         if dmg > 0:
             tiePropTrack.append(Parallel(
                 ProjectileInterval(
                     tie, endPos=__toonFacePoint(toon), duration=0.3, gravityMult=-5.0,
                 ),
-                LerpHprInterval(tie, 0.3, (110, 160, 0)),
+                LerpHprInterval(tie, 0.3, (110.0, 160.0, 0.0)),
             ))
         else:
-            startH, endH = -180, -280
+            startH, endH = -180.0, -280.0
             yoffset = random.randint(0, 20) / 10.0
             xoffset = random.randint(-7, 7) / 10.0
             tiePropTrack.append(Parallel(
                 ProjectileInterval(
-                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(0, 4 + yoffset, 0), duration=0.5, gravityMult=4.0,
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(0.0, 4.0 + yoffset, 0.0), duration=0.5, gravityMult=4.0,
                 ),
-                LerpHprInterval(tie, 0.5, (startH, 270, 0)),
+                LerpHprInterval(tie, 0.5, (startH, 270.0, 0.0)),
             ))
             tiePropTrack.append(Parallel(
                 ProjectileInterval(
-                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(xoffset, 3.5 + yoffset, 0), duration=0.15, gravityMult=1.0,
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(xoffset, 3.5 + yoffset, 0.0), duration=0.15, gravityMult=1.0,
                 ),
-                LerpHprInterval(tie, 0.30, (endH + random.randint(-30, 30), 270, 45), blendType='easeOut'),
+                LerpHprInterval(tie, 0.30, (endH + random.randint(-30, 30), 270.0, 45.0), blendType='easeOut'),
                 Wait(0.60),
             ))
             tiePropTrack.append(LerpScaleInterval(tie, duration=0.30, scale=MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
-        tiePropTrack.append(Func(tie.removeNode))
+        tiePropTrack.append(Func(MovieUtil.removeProp, tie))
+        tiePropTrack.append(Func(battle.movie.clearRenderProp, tie))
         tiePropTracks.append(tiePropTrack)
-    soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [])
-    throwSound = getSoundTrack('SA_half_windsor_throw.ogg', delay=throwDelay + 0.8, node=suit)
+
+    toonTracks = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
+    throwSound = getSoundTrack('SA_half_windsor_throw.ogg', delay=throwDelay + 0.8, node=suit, playRate=1.2)
     if hitAtleastOneToon(targets):
         hitSound = getSoundTrack('SA_writeoff_ding_only.ogg', delay=throwDelay + 1.05, node=suit)
-        return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound, hitSound)
+        return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound, hitSound)
     else:
-        return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound)
+        return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound)
 
 
 def doHalfWindsorOLD(attack):
@@ -5035,69 +5026,62 @@ def doPowerTie(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    suitType = getSuitBodyType(attack['suitName'])
     throwDelay = 1.0
     damageDelay = throwDelay + 1.23
     dodgeDelay = damageDelay - 0.20
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'a':
-        posPoints = [Point3(0.10380622837370268, 0.7266435986159152, -1.0380622837370233), VBase3(90, -6.228373702422147, 0)]
-    elif suitType == 'b':
-        posPoints = [Point3(-0.04341534008683112, 0.6512301013024597, -0.9117221418234465), VBase3(90, 0, 0)]
-    else:
-        posPoints = [Point3(-0.13024602026049337, 0.5643994211287975, -0.9985528219971052), VBase3(90, 11.201157742402302, 0)]
-    tiePropTracks = Parallel()
+    suitTrack = getSuitTrack(attack, playRate=1.5)
+    posPoints = [Point3(0.6, -0.5, -0.3), VBase3(90.0, 90.0, -163.443)]
+    tiePropTracks: Parallel = Parallel()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         tie = globalPropPool.getProp('power-tie')
         tiePropTrack = Sequence(
-                        getPropAppearTrack(
-                            tie,
-                            suit.getRightHand(),
-                            posPoints,
-                            0.25,
-                            Vec3(3.5, 3.5, 3.5),
-                            scaleUpTime=0.25,
-                            blendType='easeIn',
-                        )
-                    )
+            getPropAppearTrack(
+                tie,
+                suit.getRightHand(),
+                posPoints,
+                0.25,
+                Vec3(3.5, 3.5, 3.5),
+                scaleUpTime=0.25,
+                blendType='easeIn',
+            )
+        )
         tiePropTrack.append(Wait(throwDelay))
         tiePropTrack.append(Wait(0.50))
         tiePropTrack.append(Func(battle.movie.needRestoreRenderProp, tie))
         tiePropTrack.append(Func(tie.wrtReparentTo, render))
-        tiePropTrack.append(Func(tie.setHpr, Point3(0, -90, 0)))
+        tiePropTrack.append(Func(tie.setHpr, Point3(0.0, -90.0, 0.0)))
         if dmg > 0:
             tiePropTrack.append(Parallel(
                 ProjectileInterval(
                     tie, endPos=__toonFacePoint(toon), duration=0.3, gravityMult=-5.0,
                 ),
-                LerpHprInterval(tie, 0.3, (110, 160, 0)),
+                LerpHprInterval(tie, 0.3, (110.0, 160.0, 0.0)),
             ))
         else:
-            startH, endH = 180, 240
+            startH, endH = 180.0, 240.0
             yoffset = random.randint(0, 20) / 10.0
             xoffset = random.randint(-7, 7) / 10.0
             tiePropTrack.append(Parallel(
                 ProjectileInterval(
-                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(0, 4 + yoffset, 0), duration=0.5, gravityMult=4.0,
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(0.0, 4.0 + yoffset, 0.0), duration=0.5, gravityMult=4.0,
                 ),
-                LerpHprInterval(tie, 0.5, (startH, 270, 0)),
+                LerpHprInterval(tie, 0.5, (startH, 270.0, 0.0)),
             ))
             tiePropTrack.append(Parallel(
                 ProjectileInterval(
-                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(xoffset, 3.5 + yoffset, 0), duration=0.15, gravityMult=1.0,
+                    tie, endPos=__toonGroundPoint(attack, toon, 0.1) + Vec3(xoffset, 3.5 + yoffset, 0.0), duration=0.15, gravityMult=1.0,
                 ),
-                LerpHprInterval(tie, 0.30, (endH + random.randint(-30, 30), 270, 45), blendType='easeOut'),
+                LerpHprInterval(tie, 0.30, (endH + random.randint(-30, 30), 270.0, 45.0), blendType='easeOut'),
                 Wait(0.60),
             ))
             tiePropTrack.append(LerpScaleInterval(tie, duration=0.30, scale=MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
-        tiePropTrack.append(Func(tie.removeNode))
+        tiePropTrack.append(Func(MovieUtil.removeProp, tie))
         tiePropTracks.append(tiePropTrack)
-    soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [])
-    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit)
+
+    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
+    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit, playRate=1.2)
     if hitAtleastOneToon(targets):
         hitSound = getSoundTrack('SA_powertie_impact.ogg', delay=throwDelay + 1.05, node=suit)
         return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound, hitSound)

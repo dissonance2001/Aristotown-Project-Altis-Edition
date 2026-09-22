@@ -789,8 +789,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'SmokeAndMirrors':
         camTrack.append(defaultCamera(openShotDuration=2.0))
-    elif name == 'ClipOnTie':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name in ('ClipOnTie', 'HalfWindsor', 'PowerTie'):
+        if groupStatus == ATK_TGT_GROUP:
+            camTrack.append(defaultCamera())
+        else:
+            camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
     elif name in ('Crunch', 'MudSling'):
         camTrack.append(defaultCamera())
     elif name == 'Demotion':
@@ -849,8 +852,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'MoneyTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'HalfWindsor':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'HangUp':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'HeadShrink':
@@ -884,8 +885,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PlayHardball':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PoundKey':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
-    elif name == 'PowerTie':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PowerTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
