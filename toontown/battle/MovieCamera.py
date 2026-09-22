@@ -789,7 +789,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'SmokeAndMirrors':
         camTrack.append(defaultCamera(openShotDuration=2.0))
-    elif name in ('ClipOnTie', 'HalfWindsor', 'PowerTie'):
+    elif name in ('ClipOnTie', 'DoubleWindsor', 'HalfWindsor', 'PowerTie'):
         if groupStatus == ATK_TGT_GROUP:
             camTrack.append(defaultCamera())
         else:
