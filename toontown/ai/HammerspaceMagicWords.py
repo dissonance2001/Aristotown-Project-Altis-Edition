@@ -116,15 +116,22 @@ def hammerspace(subcommand, rest=''):
     elif subcommand == 'giveall':
         quantity = max(1, int(rest)) if rest.isdigit() else 1
         given = 0
-        for itemType, subtypeDict in ItemTypeRegistry.items():
-            for itemSubtype, itemDef in subtypeDict.items():
-                try:
-                    item = InventoryItem.fromSubtype(itemSubtype, quantity=quantity)
-                    item.getItemDefinition()
-                except Exception:
-                    continue
-                if inventory.addItem(item, quantity=quantity):
-                    given += 1
+        savedCallbacks = list(inventory._deltaCallbacks)
+        inventory._deltaCallbacks = []
+        try:
+            for itemType, subtypeDict in ItemTypeRegistry.items():
+                for itemSubtype, itemDef in subtypeDict.items():
+                    try:
+                        item = InventoryItem.fromSubtype(itemSubtype, quantity=quantity)
+                        item.getItemDefinition()
+                    except Exception:
+                        continue
+                    if inventory.addItem(item, quantity=quantity):
+                        given += 1
+        finally:
+            inventory._deltaCallbacks = savedCallbacks
+
+        invoker.air.inventoryManager.setAvatarInventory(invoker.doId, inventory)
         return f"Gave {given} different items."
 
     return ("Usage: ~hammerspace give [quantity] <search text> | "
