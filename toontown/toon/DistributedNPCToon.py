@@ -40,11 +40,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
 
 
     def _getClubVinciData(self):
-        if self.isEmpty():
-            return None
-        name = self.__dict__.get('name', '')
-        if not isinstance(name, str):
-            return None
+        name = getattr(self, 'name', '')
         if name == 'Doe Vinci':
             return {
                 'kind': 'creation',
@@ -412,11 +408,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
         if not data:
             return DistributedNPCToonBase.initToonState(self)
 
-        clubDeskOrigin = render.find('**/clubdesk_origin_0;+s')
-        if not clubDeskOrigin.isEmpty():
-            self.reparentTo(clubDeskOrigin)
-        else:
-            self.reparentTo(render)
+        self.reparentTo(render)
         self.setPos(*data['position'])
         self.setH(data['heading'])
         self.setAnimState('neutral', 0.9, None, None)
