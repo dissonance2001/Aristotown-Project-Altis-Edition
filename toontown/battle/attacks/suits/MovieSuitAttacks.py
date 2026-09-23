@@ -2627,14 +2627,8 @@ def doPoundKey(attack: dict) -> MetaInterval:
     battle = attack['battle']
     targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
-    particleEffects = []
-    for t in targets:
-        particleEffect = BattleParticles.createParticleEffect('PoundKey')
-        BattleParticles.setEffectTexture(particleEffect, 'poundsign', color=Vec4(0, 0, 0, 1))
-        particleEffects.append(particleEffect)
-
     suitTrack: Sequence = getSuitTrack(attack)
-    partTracks = ()
+    partTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         particleEffect = BattleParticles.createParticleEffect('PoundKey')
