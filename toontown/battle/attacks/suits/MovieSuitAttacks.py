@@ -2272,8 +2272,8 @@ def doGoldRush(attack):
     particleEffect = BattleParticles.createParticleEffect('GoldRush')
     waterfallEffect = BattleParticles.createParticleEffect(file='goldRushWaterfall')
     suitTrack = getSuitAnimTrack(attack)
-    partTrack = getPartTrack(particleEffect, 1.0, 3.9, [particleEffect, suit, 0], softStop=-2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.9, [waterfallEffect, suit, 0], softStop=-2)
+    partTrack: Sequence = getPartTrack(particleEffect, 1.0, 3.9, (particleEffect, suit, 0), softStop=-2.0)
+    waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.8, 3.9, (waterfallEffect, suit, 0), softStop=-2.0)
     damageAnims = [['slip-forward']]
     dodgeAnims = []
     dodgeAnims.append(['jump',
@@ -2487,7 +2487,7 @@ def doDisassemble(attack):
     BattleParticles.loadParticles()
     BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
                                         color=Vec4(1, 0, 0, 1))
-    partTrack = getPartTrack(sprayEffects, 1.5, 3.0, [sprayEffects, toon, 0], softStop=-1)
+    partTrack: Sequence = getPartTrack(sprayEffects, 1.5, 3.0, (sprayEffects, toon, 0), softStop=-1.0)
     if dmg > 0:
         headParts = toon.getHeadParts()
         headTracks = Parallel()
@@ -2585,7 +2585,7 @@ def doShred(attack):
     shredder = globalPropPool.getProp('shredder')
     particleEffect = BattleParticles.createParticleEffect('Shred')
     suitTrack = getSuitTrack(attack)
-    partTrack = getPartTrack(particleEffect, 3.5, 3.9, [particleEffect, suit, 0], softStop=-2.0)
+    partTrack: Sequence = getPartTrack(particleEffect, 3.5, 3.9, (particleEffect, suit, 0), softStop=-2.0)
     paperPosPoints = [Point3(0.59, -0.31, 0.81), VBase3(79.224, 32.576, -179.449)]
     paperPropTrack = getPropTrack(paper, suit.getRightHand(), paperPosPoints, 2.4, 1e-05, scaleUpTime=0.2, anim=True, propName='shredder-paper', animDuration=1.5, animStartTime=2.8)
     shredderPosPoints = [Point3(0, 0, -0.5), VBase3(-90.0, -53.77, -0.0)]
@@ -2683,9 +2683,9 @@ def doFillWithLead(attack):
         torsoSmotherEffect.setPos(effectX, effectY - 1, torsoEffectHeight)
         legsSmotherEffect.setPos(effectX, effectY - 0.6, legsEffectHeight)
         if dmg > 0:
-            headTracks.append(getPartTrack(headSmotherEffect, partDelay, partDuration, [headSmotherEffect, toon, 0], softStop=-1))
-            torsoTracks.append(getPartTrack(torsoSmotherEffect, partDelay + partIvalDelay, partDuration, [torsoSmotherEffect, toon, 0], softStop=-1))
-            legsTracks.append(getPartTrack(legsSmotherEffect, partDelay + partIvalDelay * 2, partDuration, [legsSmotherEffect, toon, 0], softStop=-1))
+            headTracks.append(getPartTrack(headSmotherEffect, partDelay, partDuration, (headSmotherEffect, toon, 0), softStop=-1.0))
+            torsoTracks.append(getPartTrack(torsoSmotherEffect, partDelay + partIvalDelay, partDuration, (torsoSmotherEffect, toon, 0), softStop=-1.0))
+            legsTracks.append(getPartTrack(legsSmotherEffect, partDelay + partIvalDelay * 2, partDuration, (legsSmotherEffect, toon, 0), softStop=-1.0))
             colorTrack = Sequence()
             headParts = toon.getHeadParts()
             torsoParts = toon.getTorsoParts()
@@ -2785,8 +2785,8 @@ def doNickelAndDime(attack):
     particleEffect = BattleParticles.createParticleEffect('NickelAndDime') 
     waterfallEffect = BattleParticles.createParticleEffect(file='nickelDimeWaterfall')
     suitTrack = getSuitAnimTrack(attack)
-    partTrack = getPartTrack(particleEffect, 1.0, 2.9, [particleEffect, suit, 0], softStop=-2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 2.9, [waterfallEffect, suit, 0], softStop=-2)
+    partTrack: Sequence = getPartTrack(particleEffect, 1.0, 2.9, (particleEffect, suit, 0), softStop=-2.0)
+    waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.8, 2.9, (waterfallEffect, suit, 0), softStop=-2.0)
     damageAnims = [['slip-forward']]
     dodgeAnims = []
     dodgeAnims.append(['jump',
@@ -2811,7 +2811,7 @@ def doQuash(attack):
         dmg = t['hp']
         if dmg > 0:
             particleEffect = BattleParticles.createParticleEffect(file='quash')
-            partTrack = getPartTrack(particleEffect, 0.01, 3.5, [particleEffect, toon, 0], softStop=-1)
+            partTrack = getPartTrack(particleEffect, 0.01, 3.5, (particleEffect, toon, 0), softStop=-1.0)
             partTracks.append(partTrack)
 
     if hitAtleastOneToon(targets):
@@ -2880,7 +2880,7 @@ def doFountainPen(attack):
 
     penSpill = BattleParticles.createParticleEffect(file='penSpill')
     penSpill.setPos(getPenTip())
-    penSpillTrack = getPartTrack(penSpill, 1.4, 0.7, [penSpill, pen, 0])
+    penSpillTrack: Sequence = getPartTrack(penSpill, 1.4, 0.7, (penSpill, pen, 0))
     toonTracks = getToonTracks(attack, 1.81, ['conked'], dodgeDelay=0.11, splicedDodgeAnims=[['duck', 0.01, 0.6]], showMissedExtraTime=1.66)
     soundTrack = getSoundTrack('SA_fountain_pen.ogg', delay=1.6, node=suit)
     return Parallel(suitTrack, toonTracks, propTrack, soundTrack, penSpillTrack, splashTracks)
@@ -3103,9 +3103,9 @@ def doRubOut(attack):
         legsEffect.setPos(effectX, effectY - 0.6, legsEffectHeight)
         partDelay = 2.5
         if dmg > 0:
-            headTracks.append(getPartTrack(headEffect, partDelay + 0, 1.5, [headEffect, toon, 0], softStop=-1))
-            torsoTracks.append(getPartTrack(torsoEffect, partDelay + 1.1, 1.5, [torsoEffect, toon, 0], softStop=-1))
-            legsTracks.append(getPartTrack(legsEffect, partDelay + 2.2, 1.5, [legsEffect, toon, 0], softStop=-1))
+            headTracks.append(getPartTrack(headEffect, partDelay + 0.0, 1.5, (headEffect, toon, 0), softStop=-1.0))
+            torsoTracks.append(getPartTrack(torsoEffect, partDelay + 1.1, 1.5, (torsoEffect, toon, 0), softStop=-1.0))
+            legsTracks.append(getPartTrack(legsEffect, partDelay + 2.2, 1.5, (legsEffect, toon, 0), softStop=-1.0))
             hideTracks.append(Sequence(
                 Wait(2.2),
                 Func(battle.movie.needRestoreColor),
@@ -3162,7 +3162,7 @@ def doFingerWag(attack):
         particleNode.headsUp(toon)
         particleNode.setBin('fixed', 1)
         partTrack = Sequence(
-            getPartTrack(particleEffect, partDelay, 3.5, [particleEffect, particleNode, 0], softStop=-2.0),
+            getPartTrack(particleEffect, partDelay, 3.5, (particleEffect, particleNode, 0), softStop=-2.0),
             Func(particleNode.removeNode)
         )
         if suit.dna.name == "mm":
@@ -3322,8 +3322,8 @@ def doSynergy(attack):
     particleEffect = BattleParticles.createParticleEffect('Synergy')
     waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
     suitTrack = getSuitAnimTrack(attack)
-    partTrack = getPartTrack(particleEffect, 1.0, 3.4, [particleEffect, suit, 0], softStop=-2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.4, [waterfallEffect, suit, 0], softStop=-2)
+    partTrack: Sequence = getPartTrack(particleEffect, 1.0, 3.4, (particleEffect, suit, 0), softStop=-2.0)
+    waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.8, 3.4, (waterfallEffect, suit, 0), softStop=-2.0)
     damageAnims = [['slip-forward']]
     dodgeAnims = []
     dodgeAnims.append(['jump',
@@ -3416,8 +3416,8 @@ def doFloodTheMarket(attack):
     particleEffect = BattleParticles.createParticleEffect(file='floodTheMarket')
     waterfallEffect = BattleParticles.createParticleEffect(file='floodTheMarketWaterfall')
     suitTrack = getSuitAnimTrack(attack)
-    partTrack = getPartTrack(particleEffect, 1.0, 3.4, [particleEffect, suit, 0], softStop=-2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.4, [waterfallEffect, suit, 0], softStop=-2)
+    partTrack: Sequence = getPartTrack(particleEffect, 1.0, 3.4, (particleEffect, suit, 0), softStop=-2.0)
+    waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.8, 3.4, (waterfallEffect, suit, 0), softStop=-2.0)
     damageAnims = [['melt'], ['jump', 1.5, 0.4]]
     dodgeAnims = []
     dodgeAnims.append(['jump',
@@ -3595,13 +3595,13 @@ def doMoneyTrip(attack):
         waterfallEffect.setPos(0, 4, 3.6)
     suitTrack = getSuitAnimTrack(attack)
 
-    def getPowerTrack(effect, suit = suit, battle = battle):
-        partTrack = Sequence(Wait(1.0), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 15, 0.4)), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
+    def getPowerTrack(effect: ParticleEffect.ParticleEffect, suit = suit, battle = battle) -> Sequence:
+        partTrack: Sequence = Sequence(Wait(1.0), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0.0, 15.0, 0.4)), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
         return partTrack
 
-    partTrack1 = getPowerTrack(powerBar1)
-    partTrack2 = getPowerTrack(powerBar2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.6, 2.3, [waterfallEffect, suit, 0], softStop=-1)
+    partTrack1: Sequence = getPowerTrack(powerBar1)
+    partTrack2: Sequence = getPowerTrack(powerBar2)
+    waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.6, 2.3, (waterfallEffect, suit, 0), softStop=-1.0)
     toonTracks = getToonTracks(attack, 1.8, ['slip-forward'], 1.29, ['jump'])
     soundTrack = Sequence(Wait(1), SoundInterval(globalBattleSoundCache.getSound('SA_money_fall.ogg'), node=suit))
     return Parallel(cameraTrack, suitTrack, partTrack1, partTrack2, waterfallTrack, toonTracks, soundTrack)
@@ -3848,7 +3848,7 @@ def doBuzzWord(attack):
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     particleTracks = []
     for effect in particleEffects:
-        particleTracks.append(getPartTrack(effect, partDelay, partDuration, [effect, suit, 0], softStop=-1))
+        particleTracks.append(getPartTrack(effect, partDelay, partDuration, (effect, suit, 0), softStop=-1.0))
 
     toonTrack = getToonTrack(attack, damageDelay=damageDelay, damageAnimNames=['cringe'], splicedDodgeAnims=[['duck', dodgeDelay, 1.4]], showMissedExtraTime=dodgeDelay + 0.5)
     soundTrack = getSoundTrack('SA_buzz_word.ogg', delay=2.0, node=suit)
@@ -3880,11 +3880,11 @@ def doDemotion(attack: dict) -> MetaInterval:
         sprayNode.lookAt(toon)
         sprayNode.setP(sprayNode.getP() + 15.0)
         partTrack = Sequence(
-            getPartTrack(sprayEffect, 0.7, 2.1, [sprayEffect, sprayNode, 0], softStop=-1.0),
+            getPartTrack(sprayEffect, 0.7, 2.1, (sprayEffect, sprayNode, 0), softStop=-1.0),
             Func(sprayNode.removeNode)
         )
-        partTrack2 = getPartTrack(freezeEffect, 1.4, 3.6, [freezeEffect, toon, 0], softStop=-1.0)
-        partTrack3 = getPartTrack(unFreezeEffect, 4.65, 0.5, [unFreezeEffect, toon, 0], softStop=-1.0)
+        partTrack2 = getPartTrack(freezeEffect, 1.4, 3.6, (freezeEffect, toon, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(unFreezeEffect, 4.65, 0.5, (unFreezeEffect, toon, 0), softStop=-1.0)
         partTracks += (partTrack,)
         if dmg > 0:
             partTracks += (partTrack2, partTrack3)
@@ -3923,10 +3923,10 @@ def doDataBreach(attack):
         facePoint = __toonFacePoint(toon)
         freezeEffect.setPos(0, 0, facePoint.getZ())
         unFreezeEffect.setPos(0, 0, facePoint.getZ())
-        partTrack = getPartTrack(sprayEffect, 1.7, 1.1, [sprayEffect, suit, 0], softStop=-1)
-        partTrack4 = getPartTrack(sprayEffect, 2.4, 3.9, [sprayEffect2, toon, 0], softStop=-1)
-        partTrack2 = getPartTrack(freezeEffect, 2.4, 3.9, [freezeEffect, toon, 0], softStop=-1)
-        partTrack3 = getPartTrack(unFreezeEffect, 6.65, 1.5, [unFreezeEffect, toon, 0], softStop=-1)
+        partTrack = getPartTrack(sprayEffect, 1.7, 1.1, (sprayEffect, suit, 0), softStop=-1.0)
+        partTrack4 = getPartTrack(sprayEffect, 2.4, 3.9, (sprayEffect2, toon, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(freezeEffect, 2.4, 3.9, (freezeEffect, toon, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(unFreezeEffect, 6.65, 1.5, (unFreezeEffect, toon, 0), softStop=-1.0)
         partTracks.append(partTrack)
         if dmg > 0:
             partTracks4.append(partTrack4)
@@ -4096,10 +4096,10 @@ def doDownsize(attack: dict) -> MetaInterval:
         sprayNode.setPos(battle.getActorPosHpr(suit)[0])
         sprayNode.headsUp(toon)
         sprayTrack = Sequence(
-            getPartTrack(sprayEffect, 1.0, 2.28, [sprayEffect, sprayNode, 0], softStop=-1.0),
+            getPartTrack(sprayEffect, 1.0, 2.28, (sprayEffect, sprayNode, 0), softStop=-1.0),
             Func(sprayNode.removeNode)
         )
-        cloudTrack = getPartTrack(cloudEffect, 2.1, 1.9, [cloudEffect, toon, 0], softStop=-1.0)
+        cloudTrack = getPartTrack(cloudEffect, 2.1, 1.9, (cloudEffect, toon, 0), softStop=-1.0)
         partTracks += (sprayTrack,)
         if dmg > 0:
             initialScale = toon.getScale()
@@ -4149,8 +4149,8 @@ def doVersionControl(attack):
         toonPos = toon.getPos(toon)
         cloudPos = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.getHeight() * 0.55)
         cloudEffect.setPos(cloudPos)
-        sprayTrack = getPartTrack(sprayEffect, 1.0, 2.28, [sprayEffect, suit, 0], softStop=-1)
-        cloudTrack = getPartTrack(cloudEffect, 2.1, 2.9, [cloudEffect, toon, 0], softStop=-1)
+        sprayTrack = getPartTrack(sprayEffect, 1.0, 2.28, (sprayEffect, suit, 0), softStop=-1.0)
+        cloudTrack = getPartTrack(cloudEffect, 2.1, 2.9, (cloudEffect, toon, 0), softStop=-1.0)
         if dmg > 0:
             initialScale = toon.getScale()
             downScale = Vec3(0.4, 0.4, 0.4)
@@ -4265,7 +4265,7 @@ def doReOrg(attack):
         sprayEffects = BattleParticles.createParticleEffect('ReOrgSprayNew')
         BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
                                          color=Vec4(1, 0, 0, 1))
-        partTrack = getPartTrack(sprayEffects, 0.5, 3.0, [sprayEffects, toon, 0], softStop=-1)
+        partTrack = getPartTrack(sprayEffects, 0.5, 3.0, (sprayEffects, toon, 0), softStop=-1.0)
         partTracks.append(partTrack)
         if dmg > 0:
             headParts = toon.getHeadParts()
@@ -4696,7 +4696,7 @@ def doHeadShrink(attack: dict) -> MetaInterval:
         sprayNode.setPos(battle.getActorPosHpr(suit)[0])
         sprayNode.headsUp(toon)
         sprayTrack = Sequence(
-            getPartTrack(shrinkSpray, 0.3, 1.4, [shrinkSpray, sprayNode, 0], softStop=-1.0),
+            getPartTrack(shrinkSpray, 0.3, 1.4, (shrinkSpray, sprayNode, 0), softStop=-1.0),
             Func(sprayNode.removeNode)
         )
         shrinkCloud.reparentTo(battle)
@@ -4762,7 +4762,7 @@ def doHeadShrink(attack: dict) -> MetaInterval:
             shrinkTrack.append(Func(battle.movie.clearRestoreHeadScale))
             shrinkTrack.append(Wait(0.7))
             shrinkTracks += (shrinkTrack,)
-        dropTrack = getPartTrack(shrinkDrop, 1.5, 2.5, [shrinkDrop, toon, 0], softStop=-1.0)
+        dropTrack = getPartTrack(shrinkDrop, 1.5, 2.5, (shrinkDrop, toon, 0), softStop=-1.0)
         partTracks += (sprayTrack, cloudTrack, dropTrack)
 
     damageAnims = []
@@ -4827,8 +4827,8 @@ def doRolodex(attack):
         elif suit.style.name in ('caseman', 'chainsaw'):
             headsUp.append(Func(particleNode.setZ, 2.9))
             headsUp.append(Func(particleNode.setP, -17.0))
-        partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, [particleEffect2, particleNode, 0], softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, part3Delay, part3Duration, [particleEffect3, particleNode, 0], softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, part2Delay, part2Duration, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, part3Delay, part3Duration, (particleEffect3, particleNode, 0), softStop=-1.0)
         particleTrack = Sequence(
             headsUp,
             Parallel(
@@ -5138,7 +5138,7 @@ def doCloseTheLoop(attack):
 
     partTrack1 = getPowerTrack(powerBar1)
     partTrack2 = getPowerTrack(powerBar2)
-    waterfallTrack = getPartTrack(waterfallEffect, 2.5, 2.3, [waterfallEffect, suit, 0], softStop=-1)
+    waterfallTrack = getPartTrack(waterfallEffect, 2.5, 2.3, (waterfallEffect, suit, 0), softStop=-1.0)
     phone = globalPropPool.getProp('phone')
     receiver = globalPropPool.getProp('receiver')
     BattleParticles.loadParticles()
@@ -5208,8 +5208,8 @@ def doDoubleTalk(attack):
     damageDelay = 2.0
     dodgeDelay = 2.25
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    partTrack = getPartTrack(particleEffect, partDelay, 2.5, [particleEffect, suit, 0], softStop=-.5)
-    partTrack2 = getPartTrack(particleEffect2, partDelay, 2.5, [particleEffect2, suit, 0], softStop=-.5)
+    partTrack: Sequence = getPartTrack(particleEffect, partDelay, 2.5, (particleEffect, suit, 0), softStop=-0.5)
+    partTrack2: Sequence = getPartTrack(particleEffect2, partDelay, 2.5, (particleEffect2, suit, 0), softStop=-0.5)
     damageAnims = [['duck',
       0.01,
       0.4,
@@ -5307,9 +5307,9 @@ def doHotAir(attack):
         BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
         BattleParticles.setEffectTexture(flameEffect, 'fire')
         BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
-        baseFlameTrack = getPartTrack(baseFlameEffect, flameDelay, flameDuration, [baseFlameEffect, toon, 0], softStop=-1)
-        flameTrack = getPartTrack(flameEffect, flameDelay, flameDuration, [flameEffect, toon, 0], softStop=-1)
-        flecksTrack = getPartTrack(flecksEffect, flecksDelay, flecksDuration, [flecksEffect, toon, 0], softStop=-1)
+        baseFlameTrack = getPartTrack(baseFlameEffect, flameDelay, flameDuration, (baseFlameEffect, toon, 0), softStop=-1.0)
+        flameTrack = getPartTrack(flameEffect, flameDelay, flameDuration, (flameEffect, toon, 0), softStop=-1.0)
+        flecksTrack = getPartTrack(flecksEffect, flecksDelay, flecksDuration, (flecksEffect, toon, 0), softStop=-1.0)
         if dmg > 0:
             headParts = toon.getHeadParts()
             torsoParts = toon.getTorsoParts()
@@ -5559,9 +5559,9 @@ def doCigarSmoke(attack):
     baseFlameSmall.setScale(0.7)
     cigar = globalPropPool.getProp('cigar')
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.5, 3.5, scaleUpPoint=cigarScale)
-    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2.0)
-    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2.0)
-    partTrack = getPartTrack(cigarSmoke, 1, 4.0, [cigarSmoke, suit, 0], softStop=-2.0)
+    baseFlameTrack: Sequence = getPartTrack(baseFlameEffect, 2.25, 3.25, (baseFlameEffect, suit, 0), softStop=-2.0)
+    baseFlameSmallTrack: Sequence = getPartTrack(baseFlameSmall, 2.25, 3.25, (baseFlameSmall, suit, 0), softStop=-2.0)
+    partTrack: Sequence = getPartTrack(cigarSmoke, 1.0, 4.0, (cigarSmoke, suit, 0), softStop=-2.0)
 
     def changeColor(parts) -> Parallel:
         track: Parallel = Parallel()
@@ -5641,7 +5641,7 @@ def doCigarSmokeOLD(attack):
     cigarPropTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.0, 4.0, scaleUpPoint=Point3(7.0, 7.0, 7.0))
     toonTrack = getToonTrack(attack, 2.8, ['cringe'], 2.0, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
-    smokeTrack = getPartTrack(smoke, 2.75, 2.75, [smoke, suit, 0], softStop=-2.0)
+    smokeTrack: Sequence = getPartTrack(smoke, 2.75, 2.75, (smoke, suit, 0), softStop=-2.0)
     multiTrackList.append(cigarPropTrack)
     multiTrackList.append(smokeTrack)
     baseFlameEffect = BattleParticles.createParticleEffect(file='cigarSmokeAtk')
@@ -5682,9 +5682,9 @@ def doFilibuster(attack):
     damageDelay = 1.25
     dodgeDelay = 0.7
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    sprayTracks = getPartTracks(attack, sprayEffects, partDelay, partDuration, 0, softStop=-1)
-    sprayTracks2 = getPartTracks(attack, sprayEffects2, partDelay + 0.5, partDuration, 0, softStop=-1)
-    sprayTracks3 = getPartTracks(attack, sprayEffects3, partDelay + 1.0, partDuration, 0, softStop=-1)
+    sprayTracks = getPartTracks(attack, sprayEffects, partDelay, partDuration, 0, softStop=-1.0)
+    sprayTracks2 = getPartTracks(attack, sprayEffects2, partDelay + 0.5, partDuration, 0, softStop=-1.0)
+    sprayTracks3 = getPartTracks(attack, sprayEffects3, partDelay + 1.0, partDuration, 0, softStop=-1.0)
     # How many of the fourth Filibuster word we need will depend on the Toons that get hit.  Therefore, we will have to manually recreate this rather than use the method.
     sprayTracks4 = Parallel()
     origHpr = battle.getActorPosHpr(suit)[1]
@@ -5695,7 +5695,7 @@ def doFilibuster(attack):
             sprayEffects4[i].reparentTo(suit)
             suit.headsUp(battle, toon.getPos(battle))
             sprayEffects4[i].wrtReparentTo(battle)
-            sprayTracks.append(getPartTrack(sprayEffects4[i], partDelay + 1.5, partDuration, [sprayEffects4[i], battle, 0]))
+            sprayTracks.append(getPartTrack(sprayEffects4[i], partDelay + 1.5, partDuration, (sprayEffects4[i], battle, 0)))
 
     suit.setHpr(battle, origHpr)
     damageAnims = []
@@ -5739,8 +5739,8 @@ def doSchmooze(attack):
     upperPartTracks = Parallel()
     lowerPartTracks = Parallel()
     for i in range(0, 6):
-        upperPartTracks.append(getPartTrack(upperEffects[i], partDelay + i * 0.35, 1.25, [upperEffects[i], suit, 0]))
-        lowerPartTracks.append(getPartTrack(lowerEffects[i], partDelay + i * 0.35 + 0.7, 1.25, [lowerEffects[i], suit, 0]))
+        upperPartTracks.append(getPartTrack(upperEffects[i], partDelay + i * 0.35, 1.25, (upperEffects[i], suit, 0)))
+        lowerPartTracks.append(getPartTrack(lowerEffects[i], partDelay + i * 0.35 + 0.7, 1.25, (lowerEffects[i], suit, 0)))
 
     damageAnims = []
     for i in range(0, 3):
@@ -6076,7 +6076,7 @@ def doParadigmShift(attack):
     suitName = suit.getStyleName()
     sprayEffect.setPos(Point3(-5.2, 4.6, 2.7))
     suitTrack = Sequence(getSuitAnimTrack(attack))
-    sprayTrack = getPartTrack(sprayEffect, 1.0, 2.9, [sprayEffect, suit, 0], softStop=-1)
+    sprayTrack: Sequence = getPartTrack(sprayEffect, 1.0, 2.9, (sprayEffect, suit, 0), softStop=-1.0)
     liftTracks = Parallel()
     toonRiseTracks = Parallel()
     for t in targets:
@@ -6086,7 +6086,7 @@ def doParadigmShift(attack):
             liftEffect = BattleParticles.createParticleEffect('ShiftLift')
             liftEffect.setPos(toon.getPos(battle))
             liftEffect.setZ(liftEffect.getZ() - 1.3)
-            liftTracks.append(getPartTrack(liftEffect, 1.1, 5.1, [liftEffect, battle, 0], softStop=-1))
+            liftTracks.append(getPartTrack(liftEffect, 1.1, 5.1, (liftEffect, battle, 0), softStop=-1.0))
             shadow = toon.dropShadow
             fakeShadow = MovieUtil.copyProp(shadow)
             x = toon.getX()
@@ -6169,13 +6169,13 @@ def doPowerTrip(attack):
         waterfallEffect.setPos(0, 4, 3.6)
     suitTrack = Sequence(getSuitAnimTrack(attack))
 
-    def getPowerTrack(effect, suit = suit, battle = battle):
-        partTrack = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4), blendType='easeInOut'), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
+    def getPowerTrack(effect: ParticleEffect.ParticleEffect, suit = suit, battle = battle) -> Sequence:
+        partTrack: Sequence = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4), blendType='easeInOut'), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
         return partTrack
 
-    partTrack1 = getPowerTrack(powerBar1)
-    partTrack2 = getPowerTrack(powerBar2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.6, 1.6, [waterfallEffect, suit, 0], softStop=-1)
+    partTrack1: Sequence = getPowerTrack(powerBar1)
+    partTrack2: Sequence = getPowerTrack(powerBar2)
+    waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.6, 1.6, (waterfallEffect, suit, 0), softStop=-1.0)
     toonTracks = getToonTracks(attack, 1.5, ['slip-forward'], 0.86, ['jump'])
     soundTrack = getSoundTrack('SA_powertrip.ogg', delay=1.1, node=suit)
     return Parallel(suitTrack, partTrack1, partTrack2, waterfallTrack, soundTrack, toonTracks)
@@ -6258,7 +6258,7 @@ def doBounceCheck(attack: dict) -> MetaInterval:
             LerpHprInterval(check, endDur, startHpr=(0.0, 90.0, 0.0), hpr=(1200.0, 90.0, 0.0)),
         )
 
-        partTrack = getPartTrack(trailEffect, releaseDur, endDur+1.0, [trailEffect, check, 1], softStop=-1.0)
+        partTrack = getPartTrack(trailEffect, releaseDur, endDur+1.0, (trailEffect, check, 1), softStop=-1.0)
 
         toonTrack = Parallel(
             getToonTrack(attack, damageDelay, [], dodgeDelay, [], target=t),
@@ -6454,7 +6454,7 @@ def doBounceRate(attack):
 
     BattleParticles.loadParticles()
     trailEffect = BattleParticles.createParticleEffect(file='bouncecheck')
-    partTrack = getPartTrack(trailEffect, releaseDur, endDur+1.0, [trailEffect, check, 1], softStop=-1.0)
+    partTrack = getPartTrack(trailEffect, releaseDur, endDur+1.0, (trailEffect, check, 1), softStop=-1.0)
 
     return Parallel(suitTrack, checkPropTrack, toonTrack, soundTracks, spinCheckTrack, partTrack, hitSeq)
 
@@ -6557,12 +6557,12 @@ def doFired(attack):
         baseFlameSmall.setScale(0.7)
         flameSmall.setScale(0.7)
         flecksSmall.setScale(0.7)
-        baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, [baseFlameEffect, toon, 0], softStop=-1)
-        flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, toon, 0], softStop=-1)
-        flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, toon, 0], softStop=-1)
-        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 2.9, [baseFlameSmall, toon, 0], softStop=-1)
-        flameSmallTrack = getPartTrack(flameSmall, 1.0, 2.9, [flameSmall, toon, 0], softStop=-1)
-        flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, [flecksSmall, toon, 0], softStop=-1)
+        baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, (baseFlameEffect, toon, 0), softStop=-1.0)
+        flameTrack = getPartTrack(flameEffect, 1.0, 3.9, (flameEffect, toon, 0), softStop=-1.0)
+        flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, (flecksEffect, toon, 0), softStop=-1.0)
+        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 2.9, (baseFlameSmall, toon, 0), softStop=-1.0)
+        flameSmallTrack = getPartTrack(flameSmall, 1.0, 2.9, (flameSmall, toon, 0), softStop=-1.0)
+        flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, (flecksSmall, toon, 0), softStop=-1.0)
         if dmg > 0:
             colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
             baseFlameTracks.append(baseFlameTrack)
@@ -6615,12 +6615,12 @@ def doFiredPressurizer(attack):
         baseFlameSmall.setScale(0.7)
         flameSmall.setScale(0.7)
         flecksSmall.setScale(0.7)
-        baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, [baseFlameEffect, toon, 0], softStop=-1)
-        flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, toon, 0], softStop=-1)
-        flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, toon, 0], softStop=-1)
-        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 2.9, [baseFlameSmall, toon, 0], softStop=-1)
-        flameSmallTrack = getPartTrack(flameSmall, 1.0, 2.9, [flameSmall, toon, 0], softStop=-1)
-        flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, [flecksSmall, toon, 0], softStop=-1)
+        baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, (baseFlameEffect, toon, 0), softStop=-1.0)
+        flameTrack = getPartTrack(flameEffect, 1.0, 3.9, (flameEffect, toon, 0), softStop=-1.0)
+        flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, (flecksEffect, toon, 0), softStop=-1.0)
+        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 2.9, (baseFlameSmall, toon, 0), softStop=-1.0)
+        flameSmallTrack = getPartTrack(flameSmall, 1.0, 2.9, (flameSmall, toon, 0), softStop=-1.0)
+        flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, (flecksSmall, toon, 0), softStop=-1.0)
         if dmg > 0:
             colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
             baseFlameTracks.append(baseFlameTrack)
@@ -6677,9 +6677,9 @@ def doHotAirPressurizer(attack):
         flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
         flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
         BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
-        baseFlameTrack = getPartTrack(baseFlameEffect, flameDelay, flameDuration, [baseFlameEffect, toon, 0], softStop=-1)
-        flameTrack = getPartTrack(flameEffect, flameDelay, flameDuration, [flameEffect, toon, 0], softStop=-1)
-        flecksTrack = getPartTrack(flecksEffect, flecksDelay, flecksDuration, [flecksEffect, toon, 0], softStop=-1)
+        baseFlameTrack = getPartTrack(baseFlameEffect, flameDelay, flameDuration, (baseFlameEffect, toon, 0), softStop=-1.0)
+        flameTrack = getPartTrack(flameEffect, flameDelay, flameDuration, (flameEffect, toon, 0), softStop=-1.0)
+        flecksTrack = getPartTrack(flecksEffect, flecksDelay, flecksDuration, (flecksEffect, toon, 0), softStop=-1.0)
         if dmg > 0:
             colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
             baseFlameTracks.append(baseFlameTrack)
@@ -6715,12 +6715,12 @@ def doAudit(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
         particleNode.setBin('fixed', 1)
-        partTrack = getPartTrack(particleEffect, 1.4, 1.9, [particleEffect, particleNode, 0], softStop=-1.0)
-        partTrack2 = getPartTrack(particleEffect2, 1.5, 2.0, [particleEffect2, particleNode, 0], softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, 1.6, 2.1, [particleEffect3, particleNode, 0], softStop=-1.0)
-        partTrack4 = getPartTrack(particleEffect4, 1.7, 2.2, [particleEffect4, particleNode, 0], softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, 1.4, 1.9, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, 1.5, 2.0, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, 1.6, 2.1, (particleEffect3, particleNode, 0), softStop=-1.0)
+        partTrack4 = getPartTrack(particleEffect4, 1.7, 2.2, (particleEffect4, particleNode, 0), softStop=-1.0)
         partTrack5 = Sequence(
-            getPartTrack(particleEffect5, 1.8, 2.3, [particleEffect5, particleNode, 0], softStop=-1.0),
+            getPartTrack(particleEffect5, 1.8, 2.3, (particleEffect5, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
@@ -6768,12 +6768,12 @@ def doCalculate(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
         particleNode.setBin('fixed', 1)
-        partTrack = getPartTrack(particleEffect, 1.4, 1.9, [particleEffect, particleNode, 0], softStop=-1.0)
-        partTrack2 = getPartTrack(particleEffect2, 1.5, 2.0, [particleEffect2, particleNode, 0], softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, 1.6, 2.1, [particleEffect3, particleNode, 0], softStop=-1.0)
-        partTrack4 = getPartTrack(particleEffect4, 1.7, 2.2, [particleEffect4, particleNode, 0], softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, 1.4, 1.9, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, 1.5, 2.0, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, 1.6, 2.1, (particleEffect3, particleNode, 0), softStop=-1.0)
+        partTrack4 = getPartTrack(particleEffect4, 1.7, 2.2, (particleEffect4, particleNode, 0), softStop=-1.0)
         partTrack5 = Sequence(
-            getPartTrack(particleEffect5, 1.8, 2.3, [particleEffect5, particleNode, 0], softStop=-1.0),
+            getPartTrack(particleEffect5, 1.8, 2.3, (particleEffect5, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
@@ -6822,12 +6822,12 @@ def doTabulate(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
         particleNode.setBin('fixed', 1)
-        partTrack = getPartTrack(particleEffect, 1.4, 1.9, [particleEffect, particleNode, 0], softStop=-1.0)
-        partTrack2 = getPartTrack(particleEffect2, 1.5, 2.0, [particleEffect2, particleNode, 0], softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, 1.6, 2.1, [particleEffect3, particleNode, 0], softStop=-1.0)
-        partTrack4 = getPartTrack(particleEffect4, 1.7, 2.2, [particleEffect4, particleNode, 0], softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, 1.4, 1.9, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, 1.5, 2.0, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, 1.6, 2.1, (particleEffect3, particleNode, 0), softStop=-1.0)
+        partTrack4 = getPartTrack(particleEffect4, 1.7, 2.2, (particleEffect4, particleNode, 0), softStop=-1.0)
         partTrack5 = Sequence(
-            getPartTrack(particleEffect5, 1.8, 2.3, [particleEffect5, particleNode, 0], softStop=-1.0),
+            getPartTrack(particleEffect5, 1.8, 2.3, (particleEffect5, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
@@ -6887,8 +6887,8 @@ def doCrunch(attack: dict) -> MetaInterval:
         numberSpill2 = BattleParticles.createParticleEffect(file='numberSpill')
         BattleParticles.setEffectTexture(numberSpill1, **getPartTex())
         BattleParticles.setEffectTexture(numberSpill2, **getPartTex())
-        numberSpillTrack1 = getPartTrack(numberSpill1, 1.1, 2.2, [numberSpill1, suit, 0], softStop=-1.0)
-        numberSpillTrack2 = getPartTrack(numberSpill2, 1.5, 1.0, [numberSpill2, suit, 0], softStop=-1.0)
+        numberSpillTrack1 = getPartTrack(numberSpill1, 1.1, 2.2, (numberSpill1, suit, 0), softStop=-1.0)
+        numberSpillTrack2 = getPartTrack(numberSpill2, 1.5, 1.0, (numberSpill2, suit, 0), softStop=-1.0)
         numberSpillTracks += (numberSpillTrack1, numberSpillTrack2)
 
     allSprayTracks = ()
@@ -6904,7 +6904,7 @@ def doCrunch(attack: dict) -> MetaInterval:
             BattleParticles.setEffectTexture(nextSpray, **getPartTex())
             nextStartTime = random.random() * 0.2 + throwDuration
             nextDuration = random.random() * 0.3 + 1.2
-            nextSprayTrack = getPartTrack(nextSpray, nextStartTime, nextDuration, [nextSpray, particleNode, 0], softStop=-1.0)
+            nextSprayTrack = getPartTrack(nextSpray, nextStartTime, nextDuration, (nextSpray, particleNode, 0), softStop=-1.0)
             numberSprayTracks.append(nextSprayTrack)
 
         numberSprayTracks = ParallelEndTogether(
@@ -7572,9 +7572,9 @@ def doSmokeAndMirrors(attack):
     cigarPosPoints = [Point3(-0.05, -0.2, -0.25), VBase3(180.0, 0.0, 0.0)]
     cigarScale = Point3(7.0, 7.0, 7.0)
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 1.5, 2.5, scaleUpPoint=cigarScale)
-    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2.0)
-    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2.0)
-    partTrack = getPartTrack(cigarSmoke, 2.0, 3.5, [cigarSmoke, suit, 0], softStop=-2.0)
+    baseFlameTrack: Sequence = getPartTrack(baseFlameEffect, 2.25, 3.25, (baseFlameEffect, suit, 0), softStop=-2.0)
+    baseFlameSmallTrack: Sequence = getPartTrack(baseFlameSmall, 2.25, 3.25, (baseFlameSmall, suit, 0), softStop=-2.0)
+    partTrack: Sequence = getPartTrack(cigarSmoke, 2.0, 3.5, (cigarSmoke, suit, 0), softStop=-2.0)
     hitSuit = dmg > 0
     particles = []
     particleTracks = Parallel()
@@ -7667,9 +7667,9 @@ def doHeadHonchoCigarSmoke(attack):
     cigarPosPoints = [Point3(-0.05, -0.2, -0.25), VBase3(180.0, 0.0, 0.0)]
     cigarScale = Point3(7.0, 7.0, 7.0)
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 1.5, 2.5, scaleUpPoint=cigarScale)
-    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2.0)
-    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2.0)
-    partTrack = getPartTrack(cigarSmoke, 2.0, 3.5, [cigarSmoke, suit, 0], softStop=-2.0)
+    baseFlameTrack: Sequence = getPartTrack(baseFlameEffect, 2.25, 3.25, (baseFlameEffect, suit, 0), softStop=-2.0)
+    baseFlameSmallTrack: Sequence = getPartTrack(baseFlameSmall, 2.25, 3.25, (baseFlameSmall, suit, 0), softStop=-2.0)
+    partTrack: Sequence = getPartTrack(cigarSmoke, 2.0, 3.5, (cigarSmoke, suit, 0), softStop=-2.0)
 
     def changeColor(parts) -> Parallel:
         track = Parallel()
@@ -7734,9 +7734,9 @@ def doFirestarterCigarSmoke(attack):
     cigarPosPoints = [Point3(0, -0.08670520231213885, 0), VBase3(180.0, 0.0, 0.0)]
     cigarScale = Point3(4.0, 4.0, 4.0)
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.5, 3.5, scaleUpPoint=cigarScale)
-    baseFlameTrack = getPartTrack(baseFlameEffect, 2.25, 3.25, [baseFlameEffect, suit, 0], softStop=-2.0)
-    baseFlameSmallTrack = getPartTrack(baseFlameSmall, 2.25, 3.25, [baseFlameSmall, suit, 0], softStop=-2.0)
-    partTrack = getPartTrack(cigarSmoke, 2.0, 3.5, [cigarSmoke, suit, 0], softStop=-2.0)
+    baseFlameTrack: Sequence = getPartTrack(baseFlameEffect, 2.25, 3.25, (baseFlameEffect, suit, 0), softStop=-2.0)
+    baseFlameSmallTrack: Sequence = getPartTrack(baseFlameSmall, 2.25, 3.25, (baseFlameSmall, suit, 0), softStop=-2.0)
+    partTrack: Sequence = getPartTrack(cigarSmoke, 2.0, 3.5, (cigarSmoke, suit, 0), softStop=-2.0)
 
     def changeColor(parts) -> Parallel:
         track: Parallel = Parallel()
@@ -8183,7 +8183,7 @@ def doWithdrawal(attack):
     particleEffect = BattleParticles.createParticleEffect('Withdrawal')
     BattleParticles.setEffectTexture(particleEffect, 'snow-particle')
     suitTrack = getSuitAnimTrack(attack)
-    partTrack = getPartTrack(particleEffect, 1e-05, suitTrack.getDuration() + 2.2, [particleEffect, suit, 0], softStop=-1)
+    partTrack: Sequence = getPartTrack(particleEffect, 1e-05, suitTrack.getDuration() + 2.2, (particleEffect, suit, 0), softStop=-1.0)
     toonTracks = getToonTracks(attack, 1.2, ['cringe'], 0.2, splicedDodgeAnims=[['duck', 1e-05, 0.8]], showMissedExtraTime=0.8)
     soundTrack = getSoundTrack('SA_withdrawl.ogg', delay=1.4, node=suit)
     colorTracks: tuple[Sequence, ...] = ()
@@ -8229,11 +8229,11 @@ def doJargon(attack: dict) -> MetaInterval:
             particleNode.setZ(particleNode.getZ() + 4.0)
             particleNode.setP(particleNode.getP() - 23.0)
 
-        partTrack = getPartTrack(particleEffect, partDelay + partInterval * 0.0, 2.0, [particleEffect, particleNode, 0], softStop=-1.0)
-        partTrack2 = getPartTrack(particleEffect2, partDelay + partInterval * 1.0, 2.0, [particleEffect2, particleNode, 0], softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, partDelay + partInterval * 2.0, 2.0, [particleEffect3, particleNode, 0], softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, partDelay + partInterval * 0.0, 2.0, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, partDelay + partInterval * 1.0, 2.0, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, partDelay + partInterval * 2.0, 2.0, (particleEffect3, particleNode, 0), softStop=-1.0)
         partTrack4 = Sequence(
-            getPartTrack(particleEffect4, partDelay + partInterval * 3.0, 1.5, [particleEffect4, particleNode, 0], softStop=-1.0),
+            getPartTrack(particleEffect4, partDelay + partInterval * 3.0, 1.5, (particleEffect4, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack, partTrack2, partTrack3, partTrack4)
@@ -8258,8 +8258,8 @@ def doOverload(attack):
     damageDelay = 2.0
     dodgeDelay = 2.25
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    partTrack = getPartTrack(particleEffect, partDelay, 2.5, [particleEffect, suit, 0], softStop=-1)
-    partTrack2 = getPartTrack(particleEffect2, partDelay, 2.5, [particleEffect2, suit, 0], softStop=-1)
+    partTrack: Sequence = getPartTrack(particleEffect, partDelay, 2.5, (particleEffect, suit, 0), softStop=-1.0)
+    partTrack2: Sequence = getPartTrack(particleEffect2, partDelay, 2.5, (particleEffect2, suit, 0), softStop=-1.0)
     damageAnims = [['duck',
       0.01,
       0.4,
@@ -8293,9 +8293,9 @@ def doMumboJumbo(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
         particleNode.setBin('fixed', 1)
-        partTrack = getPartTrack(particleEffect, 3.3, 3.0, [particleEffect, particleNode, 0], softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, 3.3, 3.0, (particleEffect, particleNode, 0), softStop=-1.0)
         partTrack2 = Sequence(
-            getPartTrack(particleEffect2, 3.3, 3.0, [particleEffect2, particleNode, 0], softStop=-1.0),
+            getPartTrack(particleEffect2, 3.3, 3.0, (particleEffect2, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
 
@@ -8306,9 +8306,9 @@ def doMumboJumbo(attack: dict) -> MetaInterval:
             particleNode.setZ(particleNode.getZ() + 4.1)
             particleNode.setP(particleNode.getP() - 25.0)
 
-        partTrack3 = getPartTrack(particleEffect3, 4.1, 2.7, [particleEffect3, toon, 0], softStop=-1.0)
-        partTrack4 = getPartTrack(particleEffect4, 4.1, 2.7, [particleEffect4, toon, 0], softStop=-1.0)
-        partTrack5 = getPartTrack(particleEffect5, 4.1, 2.7, [particleEffect5, toon, 0], softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, 4.1, 2.7, (particleEffect3, toon, 0), softStop=-1.0)
+        partTrack4 = getPartTrack(particleEffect4, 4.1, 2.7, (particleEffect4, toon, 0), softStop=-1.0)
+        partTrack5 = getPartTrack(particleEffect5, 4.1, 2.7, (particleEffect5, toon, 0), softStop=-1.0)
         partTracks += (partTrack, partTrack2)
         if dmg > 0:
             partTracks += (partTrack3, partTrack4, partTrack5)
@@ -8344,13 +8344,13 @@ def doGuiltTrip(attack):
     waterfallParticles.renderer.setEdgeColor(edgeColor)
     suitTrack = Sequence(getSuitAnimTrack(attack))
 
-    def getPowerTrack(effect, suit = suit, battle = battle):
-        partTrack = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4), blendType='easeInOut'), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
+    def getPowerTrack(effect: ParticleEffect.ParticleEffect, suit = suit, battle = battle) -> Sequence:
+        partTrack: Sequence = Sequence(Wait(0.7), Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), Wait(0.4), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4), blendType='easeInOut'), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
         return partTrack
 
-    partTrack1 = getPowerTrack(powerBar1)
-    partTrack2 = getPowerTrack(powerBar2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.6, 1.6, [waterfallEffect, suit, 0], softStop=-1)
+    partTrack1: Sequence = getPowerTrack(powerBar1)
+    partTrack2: Sequence = getPowerTrack(powerBar2)
+    waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.6, 1.6, (waterfallEffect, suit, 0), softStop=-1.0)
     toonTracks = getToonTracks(attack, 1.5, ['slip-forward'], 0.86, ['jump'])
     soundTrack = getSoundTrack('SA_guilt_trip.ogg', delay=1.1, node=suit)
     return Parallel(suitTrack, partTrack1, partTrack2, soundTrack, waterfallTrack, toonTracks)
@@ -8549,9 +8549,9 @@ def doSpin(attack):
         spinEffect2.wrtReparentTo(battle)
         spinEffect3.wrtReparentTo(battle)
         if dmg > 0:
-            spinTracks1.append(getPartTrack(spinEffect1, 1.5, 5.9, [spinEffect1, battle, 0], softStop=-2))
-            spinTracks2.append(getPartTrack(spinEffect2, 1.5, 5.9, [spinEffect2, battle, 0], softStop=-2))
-            spinTracks3.append(getPartTrack(spinEffect3, 1.5, 5.9, [spinEffect3, battle, 0], softStop=-2))
+            spinTracks1.append(getPartTrack(spinEffect1, 1.5, 5.9, (spinEffect1, battle, 0), softStop=-2.0))
+            spinTracks2.append(getPartTrack(spinEffect2, 1.5, 5.9, (spinEffect2, battle, 0), softStop=-2.0))
+            spinTracks3.append(getPartTrack(spinEffect3, 1.5, 5.9, (spinEffect3, battle, 0), softStop=-2.0))
             soundTracks.append(getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=2.0, node=suit))
             toonSpinTracks.append(Sequence(Wait(damageDelay + 0.9), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)), LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)), LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)), LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)), LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)), LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5)))
 
@@ -8593,12 +8593,12 @@ def doLegalese(attack: dict) -> MetaInterval:
             sprayNode.setZ(sprayNode.getZ() + 3.0)
             sprayNode.setP(sprayNode.getP() - 10.0)
 
-        sprayTrack1 = getPartTrack(sprayEffect1, partDelay, partDuration, [sprayEffect1, suit, 0], softStop=-0.5)
-        sprayTrack2 = getPartTrack(sprayEffect2, partDelay + 0.4, partDuration, [sprayEffect2, suit, 0], softStop=-0.5)
-        sprayTrack3 = getPartTrack(sprayEffect3, partDelay + 0.8, partDuration, [sprayEffect3, suit, 0], softStop=-0.5)
-        sprayTrack4 = getPartTrack(sprayEffect4, partDelay + 1.2, partDuration, [sprayEffect4, suit, 0], softStop=-0.5)
+        sprayTrack1 = getPartTrack(sprayEffect1, partDelay, partDuration, (sprayEffect1, suit, 0), softStop=-0.5)
+        sprayTrack2 = getPartTrack(sprayEffect2, partDelay + 0.4, partDuration, (sprayEffect2, suit, 0), softStop=-0.5)
+        sprayTrack3 = getPartTrack(sprayEffect3, partDelay + 0.8, partDuration, (sprayEffect3, suit, 0), softStop=-0.5)
+        sprayTrack4 = getPartTrack(sprayEffect4, partDelay + 1.2, partDuration, (sprayEffect4, suit, 0), softStop=-0.5)
         sprayTrack5 = Sequence(
-            getPartTrack(sprayEffect6, partDelay + 1.6, partDuration, [sprayEffect5, suit, 0], softStop=-0.5),
+            getPartTrack(sprayEffect6, partDelay + 1.6, partDuration, (sprayEffect5, suit, 0), softStop=-0.5),
             Func(sprayNode.removeNode)
         )
         sprayTracks += (sprayTrack1, sprayTrack2, sprayTrack3, sprayTrack4, sprayTrack5)

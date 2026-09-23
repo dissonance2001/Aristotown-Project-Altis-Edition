@@ -136,7 +136,7 @@ def doHardCut(attack):
         sprayEffects = BattleParticles.createParticleEffect('ReOrgSprayNew')
         BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
                                          color=Vec4(random.random(), random.random(), random.random(), 1))
-        partTrack = getPartTrack(sprayEffects, 0.5, 3.0, [sprayEffects, toon, 0], softStop=-1)
+        partTrack = getPartTrack(sprayEffects, 0.5, 3.0, (sprayEffects, toon, 0), softStop=-1.0)
         partTracks.append(partTrack)
         print
         '***********headParts pos=', headParts[0].getPos()
@@ -223,7 +223,7 @@ def doViralSensation(attack):
             sprayEffects = BattleParticles.createParticleEffect('ReOrgSprayNew')
             BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
                                              color=Vec4(random.random(), random.random(), random.random(), 1))
-            partTrack = getPartTrack(sprayEffects, 0.5, 3.0, [sprayEffects, toon, 0], softStop=-1)
+            partTrack = getPartTrack(sprayEffects, 0.5, 3.0, (sprayEffects, toon, 0), softStop=-1.0)
             partTracks.append(partTrack)
             toonTrack = Sequence()
             toonTrack.append(Wait(damageDelay + 5))
@@ -2236,8 +2236,8 @@ def doSynergy(attack):
     damageDelay = 1.7
     particleEffect = BattleParticles.createParticleEffect('Synergy')
     waterfallEffect = BattleParticles.createParticleEffect(file='synergyWaterfall')
-    partTrack = getPartTrack(particleEffect, 1.0, 3.4, [particleEffect, suit, 0], softStop=-2)
-    waterfallTrack = getPartTrack(waterfallEffect, 0.8, 3.4, [waterfallEffect, suit, 0], softStop=-2)
+    partTrack: Sequence = getPartTrack(particleEffect, 1.0, 3.4, (particleEffect, suit, 0), softStop=-2.0)
+    waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.8, 3.4, (waterfallEffect, suit, 0), softStop=-2.0)
     damageAnims = [['slip-forward']]
     dodgeAnims = []
     dodgeAnims.append(['jump',

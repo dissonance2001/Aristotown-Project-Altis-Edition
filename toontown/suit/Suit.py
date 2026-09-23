@@ -30,6 +30,7 @@ from toontown.suit import SuitAnimations
 import string
 import os
 from toontown.suit import SuitGlobals
+from typing import Any, Literal, Union
 FreakoutTaskName = 'headPartFreakout'
 HeadFreakoutWaitRangeVideographer = (0.25, 1.0)
 HeadFreakoutTwitchTimeRangeVideographer = (0.07, 0.12)
@@ -7703,9 +7704,10 @@ class Suit(Avatar.Avatar):
         if not self.isSkeleton:
             modelRoot.find('**/body').setTexture(texture, 1)
 
-    def getPartTrack(self, particleEffect, startDelay, durationDelay, partExtraArgs, softStop=0):
-        particleEffect = partExtraArgs[0]
+    def getPartTrack(self, particleEffect: ParticleEffect.ParticleEffect, startDelay: float, durationDelay: float, partExtraArgs: Union[tuple[ParticleEffect.ParticleEffect, Any, Literal[0, 1]], tuple[ParticleEffect.ParticleEffect, Any]], softStop: float = 0.0):
+        particleEffect: ParticleEffect.ParticleEffect = partExtraArgs[0]
         parent = partExtraArgs[1]
+        worldRelative: Literal[0, 1]
         if len(partExtraArgs) > 2:
             worldRelative = partExtraArgs[2]
         else:
@@ -8975,9 +8977,9 @@ class Suit(Avatar.Avatar):
         BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
         BattleParticles.setEffectTexture(flameEffect, 'fire')
         BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
-        self.baseFlameTrack = self.getPartTrack(baseFlameEffect, 0, 5.5, [baseFlameEffect, self, 0])
-        self.flameTrack = self.getPartTrack(flameEffect, 0, 5.5, [flameEffect, self, 0])
-        self.flecksTrack = self.getPartTrack(flecksEffect, 0, 5.5, [flecksEffect, self, 0])
+        self.baseFlameTrack = self.getPartTrack(baseFlameEffect, 0.0, 5.5, (baseFlameEffect, self, 0))
+        self.flameTrack = self.getPartTrack(flameEffect, 0.0, 5.5, (flameEffect, self, 0))
+        self.flecksTrack = self.getPartTrack(flecksEffect, 0.0, 5.5, (flecksEffect, self, 0))
         self.baseFlameTrack.loop()
         self.flameTrack.loop()
         self.flecksTrack.loop()

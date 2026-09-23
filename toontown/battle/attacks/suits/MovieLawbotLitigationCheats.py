@@ -1484,9 +1484,9 @@ def doLegallyBound(attack):
         spinEffect3.wrtReparentTo(battle)
         notifyTrack = Sequence(Wait(damageDelay + 1.9), Func(toon.showHpTextNew, -int(dmg)))
         if dmg > 0:
-            spinTracks1.append(getPartTrack(spinEffect1, 0, 5.9, [spinEffect1, battle, 0], softStop=-2))
-            spinTracks2.append(getPartTrack(spinEffect2, 0, 5.9, [spinEffect2, battle, 0], softStop=-2))
-            spinTracks3.append(getPartTrack(spinEffect3, 0, 5.9, [spinEffect3, battle, 0], softStop=-2))
+            spinTracks1.append(getPartTrack(spinEffect1, 0.0, 5.9, (spinEffect1, battle, 0), softStop=-2.0))
+            spinTracks2.append(getPartTrack(spinEffect2, 0.0, 5.9, (spinEffect2, battle, 0), softStop=-2.0))
+            spinTracks3.append(getPartTrack(spinEffect3, 0.0, 5.9, (spinEffect3, battle, 0), softStop=-2.0))
             soundTracks.append(getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=0.9))
             soundTracks.append(getSoundTrack('LB_boss_paper_spin.ogg', delay=0))
             notifyTracks.append(notifyTrack)
@@ -1519,7 +1519,7 @@ def doCaseInsurancePlanInsuranceScapegoat(attack, ind=None, ind2=None, ind3=None
         liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
         liftEffect.setZ(liftEffect.getZ() - 1.3)
 
-        liftTracks.append(getPartTrack(liftEffect, 4.5, 3.0, [liftEffect, targetSuit, 0], softStop=-2))
+        liftTracks.append(getPartTrack(liftEffect, 4.5, 3.0, (liftEffect, targetSuit, 0), softStop=-2.0))
 
         # =====================================================
         # TARGET STATUS / REACTION
@@ -1603,7 +1603,7 @@ def doCaseInsurancePlanInsurance(attack, ind, ind2, ind3):
         liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
         liftEffect.setZ(liftEffect.getZ() - 1.3)
 
-        liftTracks.append(getPartTrack(liftEffect, 4.5, 3.0, [liftEffect, targetSuit, 0], softStop=-2))
+        liftTracks.append(getPartTrack(liftEffect, 4.5, 3.0, (liftEffect, targetSuit, 0), softStop=-2.0))
 
         # =====================================================
         # TARGET STATUS / REACTION
@@ -1695,7 +1695,7 @@ def doCaseInsurancePlanInsurance2(attack):
         liftEffect = BattleParticles.createParticleEffect('InsuranceLift')
         liftEffect.setZ(liftEffect.getZ() - 1.3)
 
-        liftTracks.append(getPartTrack(liftEffect, 4.5, 3.0, [liftEffect, targetSuit, 0], softStop=-2))
+        liftTracks.append(getPartTrack(liftEffect, 4.5, 3.0, (liftEffect, targetSuit, 0), softStop=-2.0))
 
         # =====================================================
         # TARGET EFFECT
@@ -1773,7 +1773,7 @@ def doCaseInsurancePlanSkelecogInsurance2(attack):
         # liftEffect.setPos(target.getPos(battle))
         liftEffect.setZ(liftEffect.getZ() - 1.3)
         liftEffect.reparentTo(target)
-        liftTracks.append(getPartTrack(liftEffect, 4, 4.0, [liftEffect, target, 0], softStop=-2))
+        liftTracks.append(getPartTrack(liftEffect, 4.0, 4.0, (liftEffect, target, 0), softStop=-2.0))
 
         suitTrack = Sequence(
             Wait(4.25)
@@ -1896,7 +1896,7 @@ def doCaseInsurancePlanSkelecogInsurance(attack, ind, ind2, ind3):
             #liftEffect.setPos(target.getPos(battle))
             liftEffect.setZ(liftEffect.getZ() - 1.3)
             liftEffect.reparentTo(target)
-            liftTracks.append(getPartTrack(liftEffect, 4, 4.0, [liftEffect, target, 0], softStop=-2))
+            liftTracks.append(getPartTrack(liftEffect, 4.0, 4.0, (liftEffect, target, 0), softStop=-2.0))
 
             suitTrack = Sequence(
                 Wait(4.25)

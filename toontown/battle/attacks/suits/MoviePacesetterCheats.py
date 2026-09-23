@@ -314,9 +314,9 @@ def doMovingGoalposts(attack):
         spinEffect1.wrtReparentTo(battle)
         spinEffect2.wrtReparentTo(battle)
         spinEffect3.wrtReparentTo(battle)
-        spinTracks1.append(getPartTrack(spinEffect1, 1.5, 5.9, [spinEffect1, battle, 0], softStop=-2))
-        spinTracks2.append(getPartTrack(spinEffect2, 1.5, 5.9, [spinEffect2, battle, 0], softStop=-2))
-        spinTracks3.append(getPartTrack(spinEffect3, 1.5, 5.9, [spinEffect3, battle, 0], softStop=-2))
+        spinTracks1.append(getPartTrack(spinEffect1, 1.5, 5.9, (spinEffect1, battle, 0), softStop=-2.0))
+        spinTracks2.append(getPartTrack(spinEffect2, 1.5, 5.9, (spinEffect2, battle, 0), softStop=-2.0))
+        spinTracks3.append(getPartTrack(spinEffect3, 1.5, 5.9, (spinEffect3, battle, 0), softStop=-2.0))
         soundTracks.append(getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=2.0, node=suit))
         toonSpinTracks.append(Sequence(Wait(damageDelay + 0.9), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)), LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)), LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)), LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)), LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)), LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5)))
 

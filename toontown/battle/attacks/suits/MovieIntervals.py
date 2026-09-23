@@ -23,7 +23,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from direct.actor.Actor import Actor
-from typing import Literal, Union, Optional
+from typing import Any, Literal, Union, Optional
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSuitAttacks')
 
@@ -673,7 +673,7 @@ def getSuitAnimTrack(attack: dict, delay: float = 0.0, splicedAnims: Optional[li
     return track
 
 
-def getPartTrack(particleEffect: ParticleEffect.ParticleEffect, startDelay: float, durationDelay: float, partExtraArgs: list, softStop: float = 0.0) -> Sequence:
+def getPartTrack(particleEffect: ParticleEffect.ParticleEffect, startDelay: float, durationDelay: float, partExtraArgs: Union[tuple[ParticleEffect.ParticleEffect, Any, Literal[0, 1]], tuple[ParticleEffect.ParticleEffect, Any]], softStop: float = 0.0) -> Sequence:
     particleEffect: ParticleEffect.ParticleEffect = partExtraArgs[0]
     parent = partExtraArgs[1]
     worldRelative: Literal[0, 1]
@@ -703,7 +703,7 @@ def getPartTracks(attack: dict, particleEffects: list[ParticleEffect.ParticleEff
         particleEffects[i].reparentTo(suit) # Reparent the particle effect to the Cog.
         suit.headsUp(battle, toon.getPos(battle)) # Briefly turn the Cog to the Toon.
         particleEffects[i].wrtReparentTo(battle) # Drop the particle effect.
-        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, [particleEffects[i], battle, worldRelative], softStop))
+        partTracks.append(getPartTrack(particleEffects[i], startDelay, durationDelay, (particleEffects[i], battle, worldRelative), softStop))
 
     suit.setHpr(battle, origHpr) # After all that, set the Cog back like nothing ever happened.
     suit.setPos(battle, origPos2)
