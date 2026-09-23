@@ -854,7 +854,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'MoneyTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HangUp':
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera(openShotDuration=66.0/24.0))
     elif name == 'HeadShrink':
         camTrack.append(defaultCamera(openShotDuration=1.3))
     elif name == 'HotAir':
@@ -886,7 +886,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PlayHardball':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PoundKey':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=46.0/24.0))
     elif name == 'PowerTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Quake':
