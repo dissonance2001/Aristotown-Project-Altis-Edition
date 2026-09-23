@@ -2634,10 +2634,31 @@ def doPoundKey(attack: dict) -> MetaInterval:
         particleEffects.append(particleEffect)
 
     suitTrack: Sequence = getSuitTrack(attack)
-    partTracks = getPartTracks(attack, particleEffects, 1.6, 2.55, 0, softStop=-2.0)
+    partTracks = ()
+    for t in targets:
+        toon = t['toon']
+        particleEffect = BattleParticles.createParticleEffect('PoundKey')
+        BattleParticles.setEffectTexture(particleEffect, 'poundsign', color=Vec4(0.0, 0.0, 0.0, 1.0))
+        particleNode = battle.attachNewNode('pound-key-particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+
+        if suit.dna.name == 'stenog':
+            particleNode.setZ(particleNode.getZ() + 3.5)
+            particleNode.setP(particleNode.getP() - 15.0)
+        elif suit.dna.name == 'mouthp':
+            particleNode.setZ(particleNode.getZ() + 1.0)
+            particleNode.setP(particleNode.getP() - 5.0)
+
+        partTrack = Sequence(
+            getPartTrack(particleEffect, 1.6, 2.55, (particleEffect, particleNode, 0), softStop=-2.0),
+            Func(particleNode.removeNode)
+        )
+        partTracks += (partTrack,)
+
     propTrack: Parallel = getPhoneTrack(suit)
     toonTracks: Parallel = getToonTracks(attack, 2.3, ['cringe'], 1.8, ['sidestep'], dodgeAnimPlayRate=1.2)
-    return Parallel(suitTrack, toonTracks, propTrack, partTracks)
+    return Parallel(suitTrack, toonTracks, propTrack, *partTracks)
 
 
 def doShred(attack):
