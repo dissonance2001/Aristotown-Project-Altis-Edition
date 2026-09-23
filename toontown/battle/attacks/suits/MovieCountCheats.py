@@ -121,7 +121,7 @@ def doHydrationCheck(attack):
         facePoint = __toonFacePoint(toon)
         freezeEffect.setPos(toon.getPos() + (0, 0, facePoint.getZ()))
         partTrack2 = getPartTrack(
-            freezeEffect, 0.0, 0.5, [freezeEffect, render, 0]
+            freezeEffect, 0.0, 0.5, (freezeEffect, render, 0)
         )
         toonMoveTrack = Sequence(
                 Wait(2.3),
@@ -248,9 +248,9 @@ def doWringOut(attack):
                 Func(battle.movie.clearRestoreToonScale)
             )
             squeezeTracks.append(squeezeTrack)
-            partTracks.append(getPartTrack(particleEffect, 1.0, 1.5, [particleEffect, toon, 0]))
-            partTracks2.append(getPartTrack(particleEffect2, 1.1, 1.4, [particleEffect2, toon, 0]))
-            partTracks3.append(getPartTrack(particleEffect3, 1.1, 1.4, [particleEffect3, toon, 0]))
+            partTracks.append(getPartTrack(particleEffect, 1.0, 1.5, (particleEffect, toon, 0)))
+            partTracks2.append(getPartTrack(particleEffect2, 1.1, 1.4, (particleEffect2, toon, 0)))
+            partTracks3.append(getPartTrack(particleEffect3, 1.1, 1.4, (particleEffect3, toon, 0)))
             soundTracks.append((1.0, SoundInterval(globalBattleSoundCache.getSound('SA_short_squeeze.ogg'), node=toon)))
             soundTracks.append((2.4, SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=toon)))
 
@@ -415,7 +415,7 @@ def doLaffSteal(attack):
         particleEffectRed,
         1e-05,
         suitTrack.getDuration(),
-        [particleEffectRed, theSuit, 0],
+        (particleEffectRed, theSuit, 0),
         softStop=-1.0,
     )
 
