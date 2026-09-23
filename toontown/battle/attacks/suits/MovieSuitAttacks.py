@@ -6289,93 +6289,94 @@ def getThrowEndPointOLD(suit, toon, battle, whichBounce):
         pnt.setY(pnt[1] - 5)
     return Point3(pnt)
 
-def doBounceCheck(attack):
+def doBounceCheck(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    battle = attack['battle']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    hitSuit = dmg > 0
-    check = globalPropPool.getProp("bounced-check")
-    checkPosPoints = [MovieUtil.PNT3_ZERO, VBase3(90, 90, 180)]
-    bounce1Point = lambda: getThrowEndPoint(toon, "one", battle)
-    bounce2Point = lambda: getThrowEndPoint(toon, "two", battle)
-    hitPoint = lambda: getThrowEndPoint(toon, "hit", battle)
-    missPoint = lambda: getThrowEndPoint(toon, "miss", battle)
-    throwDelay = 48/24 / 2
-    dodgeDelay = 1.7 + throwDelay
-    damageDelay = 2.0 + throwDelay
-    suitTrack = getSuitTrack(attack, playRate=2.0)
-    checkPropTrack = Sequence(
-        getPropAppearTrack(
-            check,
-            suit.getRightHand(),
-            checkPosPoints,
-            1e-05,
-            Point3(8.5, 8.5, 8.5),
-            startScale=MovieUtil.PNT3_ONE,
+    targets: list[dict] = attack['target']
+    checkPosPoints = [MovieUtil.PNT3_ZERO, VBase3(90.0, 90.0, 180.0)]
+    throwDelay: float = 48.0/24.0 / 2.0
+    dodgeDelay: float = 1.7 + throwDelay
+    damageDelay: float = 2.0 + throwDelay
+    suitTrack: Sequence = getSuitTrack(attack, playRate=2.0)
+    perToonTracks: Parallel = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        check = globalPropPool.getProp("bounced-check")
+        trailEffect = BattleParticles.createParticleEffect(file='bouncecheck')
+        bounce1Point = lambda: getThrowEndPoint(toon, "one", battle)
+        bounce2Point = lambda: getThrowEndPoint(toon, "two", battle)
+        hitPoint = lambda: getThrowEndPoint(toon, "hit", battle)
+        missPoint = lambda: getThrowEndPoint(toon, "miss", battle)
+        checkPropTrack = Sequence(
+            getPropAppearTrack(
+                check,
+                suit.getRightHand(),
+                checkPosPoints,
+                1e-05,
+                Point3(8.5, 8.5, 8.5),
+                startScale=MovieUtil.PNT3_ONE,
+            )
         )
-    )
-    checkPropTrack.append(Wait(throwDelay))
-    checkPropTrack.append(Func(check.wrtReparentTo, battle))
-    releaseDur = checkPropTrack.getDuration()
-    grav = -130
-    checkPropTrack.append(
-        getThrowTrack(check, bounce1Point, duration=0.5, parent=battle, gravity=grav)
-    )
-    checkPropTrack.append(
-        getThrowTrack(check, bounce2Point, duration=0.6, parent=battle, gravity=grav)
-    )
-    if hitSuit:
+        checkPropTrack.append(Wait(throwDelay))
+        checkPropTrack.append(Func(check.wrtReparentTo, battle))
+        releaseDur = checkPropTrack.getDuration()
+        grav = -130.0
         checkPropTrack.append(
-            getThrowTrack(check, hitPoint, duration=0.5, parent=battle, gravity=grav)
-        )
-    else:
-        checkPropTrack.append(
-            getThrowTrack(check, missPoint, duration=0.5, parent=battle, gravity=grav)
+            getThrowTrack(check, bounce1Point, duration=0.5, parent=battle, gravity=grav)
         )
         checkPropTrack.append(
-            LerpScaleInterval(check, 0.1, MovieUtil.PNT3_NEARZERO, blendType='easeIn')
+            getThrowTrack(check, bounce2Point, duration=0.6, parent=battle, gravity=grav)
         )
-    endDur = checkPropTrack.getDuration() - releaseDur - 0.01
-    checkPropTrack.append(Sequence(
-        Func(check.setScale, MovieUtil.PNT3_NEARZERO),
-        Wait(1.0),
-        Func(MovieUtil.removeProp, check)
-    ))
-    spinCheckTrack = Sequence(
-        Wait(releaseDur),
-        LerpHprInterval(check, endDur, startHpr=(0, 90, 0), hpr=(1200, 90, 0)),
-    )
-    toonTrack = Parallel(
-        getToonTrack(attack, damageDelay, [], dodgeDelay, []),
-        Sequence(
-            Wait(damageDelay),
-            ActorInterval(toon, 'slip-backward', playRate=1.3),
-            Func(toon.loop, 'neutral'),
-        ) if hitSuit else Sequence(Wait(dodgeDelay), Func(toon.doEmote, 24), Wait(1.5), Func(toon.loop, 'neutral')),
-    )
+        if dmg > 0:
+            checkPropTrack.append(
+                getThrowTrack(check, hitPoint, duration=0.5, parent=battle, gravity=grav)
+            )
+        else:
+            checkPropTrack.append(
+                getThrowTrack(check, missPoint, duration=0.5, parent=battle, gravity=grav)
+            )
+            checkPropTrack.append(
+                LerpScaleInterval(check, 0.1, MovieUtil.PNT3_NEARZERO, blendType='easeIn')
+            )
+        endDur = checkPropTrack.getDuration() - releaseDur - 0.01
+        checkPropTrack.append(Sequence(
+            Func(check.setScale, MovieUtil.PNT3_NEARZERO),
+            Wait(1.0),
+            Func(MovieUtil.removeProp, check)
+        ))
+        spinCheckTrack = Sequence(
+            Wait(releaseDur),
+            LerpHprInterval(check, endDur, startHpr=(0.0, 90.0, 0.0), hpr=(1200.0, 90.0, 0.0)),
+        )
 
-    soundName = "SA_pink_slip.ogg"  # "AA_drop_anvil_miss.ogg"  # "SA_pink_slip.ogg"
-    soundTracks = Parallel(
+        partTrack = getPartTrack(trailEffect, releaseDur, endDur+1.0, [trailEffect, check, 1], softStop=-1.0)
+
+        toonTrack = Parallel(
+            getToonTrack(attack, damageDelay, [], dodgeDelay, [], target=t),
+            Sequence(
+                Wait(damageDelay),
+                ActorInterval(toon, 'slip-backward', playRate=1.3),
+                Func(toon.loop, 'neutral'),
+            ) if dmg > 0 else Sequence(Wait(dodgeDelay), Func(toon.doEmote, 24), Wait(1.5), Func(toon.loop, 'neutral')),
+        )
+        perToonTracks.append(Parallel(checkPropTrack, toonTrack, spinCheckTrack, partTrack))
+
+    soundName: str = "SA_pink_slip.ogg"  # "AA_drop_anvil_miss.ogg"  # "SA_pink_slip.ogg"
+    soundTracks: Parallel = Parallel(
         getSoundTrack(soundName, delay=throwDelay + 0.2, duration=0.7,
-                            node=suit, playRate=1.05),
+                      node=suit, playRate=1.05),
         getSoundTrack(soundName, delay=throwDelay+0.8, duration=0.7, node=suit, playRate=1.05, volume=0.8),
         getSoundTrack(soundName, delay=throwDelay+1.4, duration=0.7, node=suit, playRate=1.05, volume=0.8),
     )
-    hitSeq = Sequence()
-    if hitSuit:
+    hitSeq: Sequence = Sequence()
+    if hitAtleastOneToon(targets):
         hitSeq = getSoundTrack("Toon_bodyfall_synergy.ogg", delay=throwDelay + 1.9,
-                                    duration=0.6, node=suit)
+                               duration=0.6, node=suit)
 
-    BattleParticles.loadParticles()
-    trailEffect = BattleParticles.createParticleEffect(file='bouncecheck')
-    partTrack = getPartTrack(trailEffect, releaseDur, endDur+1.0, [trailEffect, check, 1], softStop=-1.0)
+    return Parallel(suitTrack, perToonTracks, soundTracks, hitSeq)
 
-    return Parallel(suitTrack, checkPropTrack, toonTrack, soundTracks, spinCheckTrack, partTrack, hitSeq)
-
-def getThrowEndPoint(toon, whichBounce, battle):
+def getThrowEndPoint(toon, whichBounce: str, battle):
     pnt = toon.getPos(battle)
     if whichBounce == "one":
         pnt = Vec3(-5.0, 0.0, 0.8)

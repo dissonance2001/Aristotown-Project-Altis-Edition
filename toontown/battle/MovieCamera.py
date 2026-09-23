@@ -770,7 +770,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Bite':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'BounceCheck':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        if groupStatus == ATK_TGT_GROUP:
+            camTrack.append(defaultCamera())
+        else:
+            camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
     elif name == 'BrainStorm':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'BuzzWord':
