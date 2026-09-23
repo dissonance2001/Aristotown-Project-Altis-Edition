@@ -284,7 +284,7 @@ class HoodMgr(DirectObject.DirectObject):
     def getPlaygroundCenterFromId(self, hoodId):
         dropPointList = self.dropPoints.get(hoodId, None)
         if dropPointList:
-            return self.getDropPoint(dropPointList)
+            return dropPointList[0]
         else:
             self.notify.warning('getPlaygroundCenterFromId: No such hood name as: ' + str(hoodId))
             return self.DefaultDropPoint
