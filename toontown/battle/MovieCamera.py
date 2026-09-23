@@ -798,11 +798,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name in ('Crunch', 'MudSling'):
         camTrack.append(defaultCamera())
     elif name == 'Demotion':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
+        camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == 'DoubleTalk':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Downsize':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=1.8))
     elif name == 'EvictionNotice':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvilEye':
@@ -856,7 +856,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HangUp':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'HeadShrink':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=1.3))
     elif name == 'HotAir':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Jargon':
