@@ -1164,3 +1164,45 @@ def getSoundTrack(fileName: str, delay: float = 0.01, duration: float = 0.0, nod
     else:
         return Sequence(Wait(delay), intervalClass(soundEffect, duration=duration, node=node, volume=volume, startTime=startTime))
 
+
+def getColorTrack(battle, toon, delay: float, parts: Literal['head', 'torso', 'legs', 'all'], duration: float, color) -> Sequence:
+    '''
+    This method creates a convenient track to change and revert a Toon's color.
+
+    Parameters:
+        battle: The battle that this track is playing in.  This is used for the needRestoreColor and clearRestoreColor methods.
+        toon: The Toon whose colors are going to be changed.
+        delay (float): The time before the parts change in color.
+        parts (str): The parts that will change in color.  Only select Literals will be accepted&mdash;'head' for the head, 'torso' for the torso, 'legs' for the legs, or 'all' for all parts.
+        duration (float): The time after the colors are applied before the colors are removed.
+        color: The color to change the Toon's parts to.
+
+    Returns:
+        out (Sequence): A sequence playing the Toon's changing colors.
+    '''
+    partsToColor: tuple = ()
+    if parts in ('head', 'all'):
+        partsToColor += tuple(toon.getHeadParts())
+    if parts in ('torso', 'all'):
+        partsToColor += tuple(toon.getTorsoParts())
+    if parts in ('legs', 'all'):
+        partsToColor += tuple(toon.getLegsParts())
+
+    def changeColor(parts) -> None:
+        for nextPart in parts:
+            nextPart.setColorScale(color)
+
+
+    def resetColor(parts) -> None:
+        for nextPart in parts:
+            nextPart.clearColorScale()
+
+    return Sequence(
+        Wait(delay),
+        Func(battle.movie.needRestoreColor),
+        Func(changeColor, partsToColor),
+        Wait(duration),
+        Func(resetColor, partsToColor),
+        Func(battle.movie.clearRestoreColor)
+    )
+

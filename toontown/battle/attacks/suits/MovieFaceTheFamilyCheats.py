@@ -62,7 +62,8 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     getSoundTrack,
     getToonTrackCheat,
     getToonDodgeTrackCheat,
-    getToonTracksCheat
+    getToonTracksCheat,
+    getColorTrack
 )
 from toontown.battle.attacks.suits.MovieBossbotLitigationCheats import getToonTrackCheat2
 from direct.gui.OnscreenText import OnscreenText
@@ -115,22 +116,6 @@ def doOverheat(attack):
         baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 3.9, [baseFlameSmall, toon, 0], softStop=-1)
         flameSmallTrack = getPartTrack(flameSmall, 1.0, 3.9, [flameSmall, toon, 0], softStop=-1)
         flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, [flecksSmall, toon, 0], softStop=-1)
-
-        def changeColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-            return track
-
-        def resetColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.clearColorScale))
-
-            return track
         sprayEffect = BattleParticles.createParticleEffect('BurnSpray')
         sprayEffect2 = BattleParticles.createParticleEffect('BurnSpray')
         BattleParticles.setEffectTexture(sprayEffect2, 'fire')
@@ -139,20 +124,7 @@ def doOverheat(attack):
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpTextNew, -int(dmg), text="SMOKED!", colorCode=4))
         if dmg > 0:
             partTracks4.append(partTrack4)
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
-            colorTrack = Sequence()
-            colorTrack.append(Wait(2.0))
-            colorTrack.append(Func(battle.movie.needRestoreColor))
-            colorTrack.append(changeColor(headParts))
-            colorTrack.append(changeColor(torsoParts))
-            colorTrack.append(changeColor(legsParts))
-            colorTrack.append(Wait(2.5))
-            colorTrack.append(resetColor(headParts))
-            colorTrack.append(resetColor(torsoParts))
-            colorTrack.append(resetColor(legsParts))
-            colorTrack.append(Func(battle.movie.clearRestoreColor))
+            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
             notifyTracks.append(notifyTrack)
             notifyTracks.append(Parallel(Func(toon.setToonStatusEffect, 'burned', turns=4)))
             baseFlameTracks.append(baseFlameTrack)
@@ -1484,21 +1456,18 @@ def doInkDrain(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        def changeColor(parts):
-            track = Parallel()
+        def changeColor(parts) -> Parallel:
+            track: Parallel = Parallel()
             for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
                 track.append(nextPart.colorScaleInterval(0.1, Vec4(0.5, 0.5, 0.5, 1)))
 
             return track
 
-        def resetColor(parts):
-            track = Parallel()
+        def resetColor(parts) -> None:
             for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.clearColorScale))
-
-            return track
+                nextPart.clearColorScale()
 
         headParts = toon.getHeadParts()
         torsoParts = toon.getTorsoParts()
@@ -1509,9 +1478,9 @@ def doInkDrain(attack):
         colorTrack.append(changeColor(torsoParts))
         colorTrack.append(changeColor(legsParts))
         colorTrack.append(Wait(suitTrack.getDuration() + 5.2))
-        colorTrack.append(resetColor(headParts))
-        colorTrack.append(resetColor(torsoParts))
-        colorTrack.append(resetColor(legsParts))
+        colorTrack.append(Func(resetColor, headParts))
+        colorTrack.append(Func(resetColor, torsoParts))
+        colorTrack.append(Func(resetColor, legsParts))
         colorTrack.append(Func(battle.movie.clearRestoreColor))
         colorTracks.append(colorTrack)
         toonTracks.append(Parallel(Func(toon.setToonStatusEffect, 'inkDrain', modifier=10, turns=2)))

@@ -62,7 +62,8 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     getSoundTrack,
     getToonTrackCheat,
     getToonDodgeTrackCheat,
-    getToonTracksCheat
+    getToonTracksCheat,
+    getColorTrack
 )
 from toontown.battle.attacks.suits.MovieBossbotLitigationCheats import getToonTrackCheat2
 
@@ -4328,23 +4329,6 @@ def doRaisingTheAnte(attack):
     partTracks = Parallel()
     explosionTracks = Parallel()  # It seems fitting this source gets to make Toons explode to have their ante raised.
     toonTracks = getToonTracks(attack, 2.0, ['slip-backward'], 2.0, ['shrug'])
-
-    def changeColor(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-        return track
-
-    def resetColor(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.clearColorScale))
-
-        return track
-
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -4388,9 +4372,6 @@ def doRaisingTheAnte(attack):
         partTracks.append(partTrack)
 
         if dmg > 0:
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
             suitPos, suitHpr = battle.getActorPosHpr(suit)
             gearPoint = Point3(suitPos.getX(), suitPos.getY() - 10, suitPos.getZ() + suit.height - 0.2)
             explosionTracks.append(Sequence(
@@ -4398,16 +4379,7 @@ def doRaisingTheAnte(attack):
                 MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3)
             ))
             # I guess it doesn't hurt to put the color track inside of explosionTracks.
-            explosionTracks.append(Sequence(
-                Wait(2.0),
-                changeColor(headParts),
-                changeColor(torsoParts),
-                changeColor(legsParts),
-                Wait(3.5),
-                resetColor(headParts),
-                resetColor(torsoParts),
-                resetColor(legsParts)
-            ))
+            explosionTracks.append(getColorTrack(battle, toon, 2.0, 'all', 3.5, Vec4(0.0, 0.0, 0.0, 1.0)))
             explosionTracks.append(Parallel(Func(toon.makeRaisedAnte)))
             explosionTracks.append(Parallel(Func(toon.checkRaisedAnte, 1000)))
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.0)

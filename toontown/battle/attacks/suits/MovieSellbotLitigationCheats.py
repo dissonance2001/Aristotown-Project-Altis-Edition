@@ -65,7 +65,8 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     getSoundTrack,
     getToonTrackCheat,
     getToonDodgeTrackCheat,
-    getToonTracksCheat
+    getToonTracksCheat,
+    getColorTrack
 )
 from toontown.battle.attacks.suits.MovieBossbotLitigationCheats import getToonTrackCheat2
 
@@ -347,22 +348,6 @@ def doOverheat(attack):
         baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 3.9, [baseFlameSmall, toon, 0], softStop=-1)
         flameSmallTrack = getPartTrack(flameSmall, 1.0, 3.9, [flameSmall, toon, 0], softStop=-1)
         flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, [flecksSmall, toon, 0], softStop=-1)
-
-        def changeColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-            return track
-
-        def resetColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.clearColorScale))
-
-            return track
         sprayEffect = BattleParticles.createParticleEffect('FireSpray')
         sprayEffect2 = BattleParticles.createParticleEffect('FireSpray')
         partTrack4 = getPartTrack(sprayEffect, 1, 3.25, [sprayEffect2, toon, 0], softStop=-1)
@@ -390,20 +375,7 @@ def doOverheat(attack):
                                       Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)),
                                       Func(suit.setNeutralAnimationDrop)))
             partTracks4.append(partTrack4)
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
-            colorTrack = Sequence()
-            colorTrack.append(Wait(2.0))
-            colorTrack.append(Func(battle.movie.needRestoreColor))
-            colorTrack.append(changeColor(headParts))
-            colorTrack.append(changeColor(torsoParts))
-            colorTrack.append(changeColor(legsParts))
-            colorTrack.append(Wait(2.5))
-            colorTrack.append(resetColor(headParts))
-            colorTrack.append(resetColor(torsoParts))
-            colorTrack.append(resetColor(legsParts))
-            colorTrack.append(Func(battle.movie.clearRestoreColor))
+            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
             notifyTracks.append(notifyTrack)
             baseFlameTracks.append(baseFlameTrack)
             flameTracks.append(flameTrack)
@@ -667,27 +639,6 @@ def doHeatWave(attack):
     colorTracks = Parallel()
 
     # ==================================================
-    # COLOR HELPERS
-    # ==================================================
-    def changeColor(parts):
-        track = Parallel()
-
-        for partNum in range(parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-        return track
-
-    def resetColor(parts):
-        track = Parallel()
-
-        for partNum in range(parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.clearColorScale))
-
-        return track
-
-    # ==================================================
     # TOON TARGET EFFECTS
     # ==================================================
     for t in toonTargets:
@@ -728,24 +679,7 @@ def doHeatWave(attack):
 
             partTracks4.append(partTrack4)
 
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
-
-            colorTracks.append(
-                Sequence(
-                    Wait(1.5),
-                    Func(battle.movie.needRestoreColor),
-                    changeColor(headParts),
-                    changeColor(torsoParts),
-                    changeColor(legsParts),
-                    Wait(3.1),
-                    resetColor(headParts),
-                    resetColor(torsoParts),
-                    resetColor(legsParts),
-                    Func(battle.movie.clearRestoreColor)
-                )
-            )
+            colorTracks.append(getColorTrack(battle, toon, 1.5, 'all', 3.1, Vec4(0.0, 0.0, 0.0, 1.0)))
 
     # ==================================================
     # TOON DAMAGE / DODGE ANIMS
@@ -2310,23 +2244,6 @@ def doDetourOLD(attack):
     toonTrack = getToonTrackCheat(attack, 2.0, ['conked'], 0.2, ['sidestep'])
     notifyTrack = Sequence(Wait(2.0), Func(toon.showHpTextNew, -int(dmg), text="DETOURED!", colorCode=1))
     notifyTrack.append(Parallel(Func(toon.makeConfused), Func(toon.addConfusedRounds, 2)))
-
-    def changeColor(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-        return track
-
-    def resetColor(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.clearColorScale))
-
-        return track
-
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -2365,9 +2282,6 @@ def doDetourOLD(attack):
         partTracks.append(partTrack)
 
         if dmg > 0:
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
             suitPos, suitHpr = battle.getActorPosHpr(suit)
             gearPoint = Point3(suitPos.getX(), suitPos.getY() - 10, suitPos.getZ() + suit.height - 0.2)
             explosionTracks.append(Sequence(
@@ -2375,16 +2289,7 @@ def doDetourOLD(attack):
                 MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=3)
             ))
             # I guess it doesn't hurt to put the color track inside of explosionTracks.
-            explosionTracks.append(Sequence(
-                Wait(2.0),
-                changeColor(headParts),
-                changeColor(torsoParts),
-                changeColor(legsParts),
-                Wait(3.5),
-                resetColor(headParts),
-                resetColor(torsoParts),
-                resetColor(legsParts)
-            ))
+            explosionTracks.append(getColorTrack(battle, toon, 2.0, 'all', 3.5, Vec4(0.0, 0.0, 0.0, 1.0)))
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=2.0)
 
     return Parallel(suitTrack, notifyTrack, partTracks, explosionTracks, soundTrack1, toonTrack)

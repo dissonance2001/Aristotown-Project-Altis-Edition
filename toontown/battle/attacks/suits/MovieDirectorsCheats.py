@@ -145,21 +145,19 @@ def doInkDrainDOLA(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        def changeColor(parts):
-            track = Parallel()
+
+        def changeColor(parts) -> Parallel:
+            track: Parallel = Parallel()
             for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
                 track.append(nextPart.colorScaleInterval(0.1, Vec4(0.5, 0.5, 0.5, 1)))
 
             return track
 
-        def resetColor(parts):
-            track = Parallel()
+        def resetColor(parts) -> None:
             for partNum in range(0, parts.getNumPaths()):
                 nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.clearColorScale))
-
-            return track
+                nextPart.clearColorScale()
 
         headParts = toon.getHeadParts()
         torsoParts = toon.getTorsoParts()
@@ -170,9 +168,9 @@ def doInkDrainDOLA(attack):
         colorTrack.append(changeColor(torsoParts))
         colorTrack.append(changeColor(legsParts))
         colorTrack.append(Wait(suitTrack.getDuration() + 5.2))
-        colorTrack.append(resetColor(headParts))
-        colorTrack.append(resetColor(torsoParts))
-        colorTrack.append(resetColor(legsParts))
+        colorTrack.append(Func(resetColor, headParts))
+        colorTrack.append(Func(resetColor, torsoParts))
+        colorTrack.append(Func(resetColor, legsParts))
         colorTrack.append(Func(battle.movie.clearRestoreColor))
         colorTracks.append(colorTrack)
         toonTracks.append(Parallel(Func(toon.setToonStatusEffect, 'inkDrain', modifier=25, turns=3)))

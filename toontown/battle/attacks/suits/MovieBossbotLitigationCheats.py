@@ -65,7 +65,8 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     getSoundTrack,
     getToonTrackCheat,
     getToonDodgeTrackCheat,
-    getToonTracksCheat
+    getToonTracksCheat,
+    getColorTrack
 )
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSuitAttacks')
@@ -3011,42 +3012,12 @@ def doSlowBurn(attack):
         baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, [baseFlameEffect, toon, 0], softStop=-1)
         flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, toon, 0], softStop=-1)
         flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, toon, 0], softStop=-1)
-
-        def changeColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-            return track
-
-        def resetColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.clearColorScale))
-
-            return track
-
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpText, - int(dmg)))
         if dmg > 0:
             soundTrack = getSoundTrack('SA_hot_air.ogg', delay=1.0, node=suit)
             soundTracks.append(soundTrack)
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
             notifyTracks.append(notifyTrack)
-            colorTrack = Sequence()
-            colorTrack.append(Wait(2.0))
-            colorTrack.append(Func(battle.movie.needRestoreColor))
-            colorTrack.append(changeColor(headParts))
-            colorTrack.append(changeColor(torsoParts))
-            colorTrack.append(changeColor(legsParts))
-            colorTrack.append(Wait(2.5))
-            colorTrack.append(resetColor(headParts))
-            colorTrack.append(resetColor(torsoParts))
-            colorTrack.append(resetColor(legsParts))
-            colorTrack.append(Func(battle.movie.clearRestoreColor))
+            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
             baseFlameTracks.append(baseFlameTrack)
             flameTracks.append(flameTrack)
             flecksTracks.append(flecksTrack)
@@ -3606,22 +3577,6 @@ def doOverheat(attack):
         baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 3.9, [baseFlameSmall, toon, 0], softStop=-1)
         flameSmallTrack = getPartTrack(flameSmall, 1.0, 3.9, [flameSmall, toon, 0], softStop=-1)
         flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, [flecksSmall, toon, 0], softStop=-1)
-
-        def changeColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-            return track
-
-        def resetColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.clearColorScale))
-
-            return track
         sprayEffect = BattleParticles.createParticleEffect('BurnSpray')
         sprayEffect2 = BattleParticles.createParticleEffect('BurnSpray')
         BattleParticles.setEffectTexture(sprayEffect2, 'fire')
@@ -3652,20 +3607,7 @@ def doOverheat(attack):
                                        Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)),
                                        Func(suit.setNeutralAnimationDrop)))
             partTracks4.append(partTrack4)
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
-            colorTrack = Sequence()
-            colorTrack.append(Wait(2.0))
-            colorTrack.append(Func(battle.movie.needRestoreColor))
-            colorTrack.append(changeColor(headParts))
-            colorTrack.append(changeColor(torsoParts))
-            colorTrack.append(changeColor(legsParts))
-            colorTrack.append(Wait(2.5))
-            colorTrack.append(resetColor(headParts))
-            colorTrack.append(resetColor(torsoParts))
-            colorTrack.append(resetColor(legsParts))
-            colorTrack.append(Func(battle.movie.clearRestoreColor))
+            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
             notifyTracks.append(notifyTrack)
             baseFlameTracks.append(baseFlameTrack)
             flameTracks.append(flameTrack)

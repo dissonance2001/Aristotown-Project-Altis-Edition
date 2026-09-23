@@ -65,7 +65,8 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     getSoundTrack,
     getToonTrackCheat,
     getToonDodgeTrackCheat,
-    getToonTracksCheat
+    getToonTracksCheat,
+    getColorTrack
 )
 from toontown.battle.attacks.suits.MovieBossbotLitigationCheats import getToonTrackCheat2
 
@@ -1129,42 +1130,9 @@ def doMeltdownDamage(attack):
             flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, toon, 0], softStop=-1)
             flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, toon, 0], softStop=-1)
 
-            def changeColor(parts):
-                track = Parallel()
-
-                for partNum in range(parts.getNumPaths()):
-                    nextPart = parts.getPath(partNum)
-                    track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-                return track
-
-            def resetColor(parts):
-                track = Parallel()
-
-                for partNum in range(parts.getNumPaths()):
-                    nextPart = parts.getPath(partNum)
-                    track.append(Func(nextPart.clearColorScale))
-
-                return track
-
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
-
             notifyTrack = Sequence(Wait(1.5), Func(toon.showHpText, -int(dmg)))
 
-            colorTrack = Sequence(
-                Wait(2.0),
-                Func(battle.movie.needRestoreColor),
-                changeColor(headParts),
-                changeColor(torsoParts),
-                changeColor(legsParts),
-                Wait(2.5),
-                resetColor(headParts),
-                resetColor(torsoParts),
-                resetColor(legsParts),
-                Func(battle.movie.clearRestoreColor)
-            )
+            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
 
             notifyTracks.append(notifyTrack)
 
@@ -1208,23 +1176,6 @@ def doTotalMarketMeltdown(attack):
     flecksTracks = Parallel()
     partTracks4 = Parallel()
     makeDamageDowns = Parallel()
-
-    def changeColor(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-        return track
-
-    def resetColor(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.clearColorScale))
-
-        return track
-
     colorTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -1244,21 +1195,7 @@ def doTotalMarketMeltdown(attack):
             baseFlameTracks.append(getPartTrack(baseFlameEffect, flameDelay, flameDuration, [baseFlameEffect, toon, 0]))
             flameTracks.append(getPartTrack(flameEffect, flameDelay, flameDuration, [flameEffect, toon, 0]))
             flecksTracks.append(getPartTrack(flecksEffect, flecksDelay, flecksDuration, [flecksEffect, toon, 0]))
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
-            colorTracks.append(Sequence(
-                Wait(1.5),
-                Func(battle.movie.needRestoreColor),
-                changeColor(headParts),
-                changeColor(torsoParts),
-                changeColor(legsParts),
-                Wait(3.1),
-                resetColor(headParts),
-                resetColor(torsoParts),
-                resetColor(legsParts),
-                Func(battle.movie.clearRestoreColor)
-            ))
+            colorTracks.append(getColorTrack(battle, toon, 1.5, 'all', 3.1, Vec4(0.0, 0.0, 0.0, 1.0)))
 
     damageAnims = []
     damageAnims.append(['cringe',
@@ -1303,23 +1240,6 @@ def doTotalMarketMeltdown2(attack):
     flecksTracks = Parallel()
     partTracks4 = Parallel()
     makeDamageDowns = Parallel()
-
-    def changeColor(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-        return track
-
-    def resetColor(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.clearColorScale))
-
-        return track
-
     colorTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -1339,21 +1259,7 @@ def doTotalMarketMeltdown2(attack):
             baseFlameTracks.append(getPartTrack(baseFlameEffect, flameDelay, flameDuration, [baseFlameEffect, toon, 0]))
             flameTracks.append(getPartTrack(flameEffect, flameDelay, flameDuration, [flameEffect, toon, 0]))
             flecksTracks.append(getPartTrack(flecksEffect, flecksDelay, flecksDuration, [flecksEffect, toon, 0]))
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
-            colorTracks.append(Sequence(
-                Wait(1.5),
-                Func(battle.movie.needRestoreColor),
-                changeColor(headParts),
-                changeColor(torsoParts),
-                changeColor(legsParts),
-                Wait(3.1),
-                resetColor(headParts),
-                resetColor(torsoParts),
-                resetColor(legsParts),
-                Func(battle.movie.clearRestoreColor)
-            ))
+            colorTracks.append(getColorTrack(battle, toon, 1.5, 'all', 3.1, Vec4(0.0, 0.0, 0.0, 1.0)))
 
     damageAnims = []
     damageAnims.append(['cringe',
@@ -4898,42 +4804,12 @@ def doSparkPlugDamage(attack):
         baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, [baseFlameEffect, toon, 0], softStop=-1)
         flameTrack = getPartTrack(flameEffect, 1.0, 3.9, [flameEffect, toon, 0], softStop=-1)
         flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, [flecksEffect, toon, 0], softStop=-1)
-
-        def changeColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-            return track
-
-        def resetColor(parts):
-            track = Parallel()
-            for partNum in range(0, parts.getNumPaths()):
-                nextPart = parts.getPath(partNum)
-                track.append(Func(nextPart.clearColorScale))
-
-            return track
-
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpText, - int(dmg)))
         if dmg > 0:
             soundTrack = getSoundTrack('AA_battery.ogg', delay=1.0, node=suit)
             soundTracks.append(soundTrack)
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
             notifyTracks.append(notifyTrack)
-            colorTrack = Sequence()
-            colorTrack.append(Wait(2.0))
-            colorTrack.append(Func(battle.movie.needRestoreColor))
-            colorTrack.append(changeColor(headParts))
-            colorTrack.append(changeColor(torsoParts))
-            colorTrack.append(changeColor(legsParts))
-            colorTrack.append(Wait(2.5))
-            colorTrack.append(resetColor(headParts))
-            colorTrack.append(resetColor(torsoParts))
-            colorTrack.append(resetColor(legsParts))
-            colorTrack.append(Func(battle.movie.clearRestoreColor))
+            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
             baseFlameTracks.append(baseFlameTrack)
             flameTracks.append(flameTrack)
             flecksTracks.append(flecksTrack)
