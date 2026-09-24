@@ -35,6 +35,7 @@ from toontown.battle.attacks.suits.MovieIntervals import (
     getSuitAnimTrackAttack as suitAnimTrackAtkIval,
     getPartTrack,
     getPartTracks,
+    getIndicatorTracks,
     getToonTrack,
     getToonTracks,
     getToonDodgeTrack,
@@ -571,6 +572,8 @@ def doSuitAttack(attack):
         suitTrack = doSongAndDance(attack)
     elif name == 'Spin':
         suitTrack = doSpin(attack)
+    elif name == 'StumpSpeech':
+        suitTrack = doStumpSpeech(attack)
     elif name == 'Synergy':
         suitTrack = doInterestCalculations(attack)
     elif name == 'Tabulate':
@@ -8745,3 +8748,115 @@ def doPeckingOrder(attack):
                               dodgeAnimNames=['duck'], showMissedExtraTime=1.1)
     soundTrack = getSoundTrack('tt_s_ara_cfg_eagleCry.ogg', delay=2, node=suit)
     return Parallel(suitTrack, toonTrack, soundTrack, birdTracks)
+
+
+def doStumpSpeech(attack: dict) -> MetaInterval:
+    suit = attack['suit']
+    battle = attack['battle']
+    tauntIndex = attack['taunt']
+    target: list[dict] = attack['target']
+    toon = target[0]['toon']
+    dmg = target[0]['hp']
+    rightToons = target[0]['rightToons'] # So that they can move with the dodging Toon; otherwise, the Toon will move into the others.
+
+    damageDelay: float = 1.55
+    dodgeDelay: float = 1.0
+
+    # Unique suitTrack for moving the Cog toward the Toon and back.
+    taunt = getAttackTaunt(attack['name'], suit.dna.name, tauntIndex)
+
+    suitPos = suit.getPos(battle)
+    suitHpr = suit.getHpr(battle)
+
+    suitStomp: ActorInterval = ActorInterval(suit, 'quick-jump', startTime=1.0)
+    stompTimes = (1.6, 2.6, 3.7, 4.7)
+    numStomps: int = len(stompTimes)
+
+    toonPos = toon.getPos(battle)
+    suitTrack = Sequence(
+        Func(suit.headsUp, battle, toonPos),
+        Func(suit.loop, 'walk'),
+        Wait(1.0),
+        Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
+        suitStomp,
+        Func(suit.loop, 'walk'),
+        LerpHprInterval(suit, 1.0, (suit.getH(battle) - 180.0, 0.0, 0.0), other=battle), # The Toon should have turned to the Cog, so their H should work.
+        Wait(1.0),
+        LerpHprInterval(suit, 1.0, suitHpr, other=battle),
+        Func(suit.setNeutralAnimationDrop)
+    )
+    moveSuitTrack = Sequence(
+        LerpPosInterval(suit, 1.5, toonPos, other=battle),
+        Wait(suitStomp.getDuration() + 0.5),
+        LerpPosInterval(suit, 1.0, suitPos, other=battle)
+    )
+
+    origHpr = battle.getActorPosHpr(toon)[1]
+    toonFinalTrack = Parallel(getIndicatorTracks(toon, battle))
+    toonTrack = Sequence(Func(toon.headsUp, battle, suitPos))
+    animTrack: Sequence
+    if dmg > 0:
+        showDamageExtraTime: float = 0.01
+        animTrack = Sequence(
+            Wait(damageDelay),
+            Func(base.playSfx, globalBattleSoundCache.getSound('target_impact_grunt1.ogg'), node=toon),
+            Func(toon.enterFlattened),
+            Wait(suitStomp.getDuration() + 0.5),
+            Track(
+                (0.0, ActorInterval(toon, 'jump', startTime=0.2)),
+                (0.0, SoundInterval(loader.loadSfx('phase_9/audio/sfx/toon_decompress.ogg'))),
+                (0.4, Func(toon.exitFlattened))
+            ),
+            Func(toon.loop, 'neutral')
+        )
+        # Unique indicator track for the spread-out damage.
+        indicatorTrack = Track()
+        for i in range(numStomps - 1):
+            time = stompTimes[i]
+            indicatorTrack.append((time + showDamageExtraTime, Func(__doDamage, toon, dmg // numStomps, target[0]['died'])))
+
+        indicatorTrack.append((stompTimes[numStomps - 1] + showDamageExtraTime, Func(__doDamage, toon, dmg // numStomps + (dmg % numStomps), target[0]['died'])))
+    else:
+
+        def getAllyToonsDodgeParallel(target: dict) -> Parallel:
+            '''
+            Use this method to move all the Toons along with the targeted Toon to avoid the Toon walking into their allies, similar to the original before we stopped other Toons dodging.
+            '''
+            toon = target['toon']
+            rightToons: list = target['rightToons']
+            toonDodgeList: list = rightToons
+
+            def dodgeSequence(toon) -> Sequence:
+                return Sequence(
+                    Func(toon.loop, 'walk'),
+                    LerpPosInterval(toon, 0.5, Point3(toon.getX(battle) + suit.getRadius() * 2.0, toon.getY(battle), toon.getZ(battle)), other=battle),
+                    Func(toon.loop, 'neutral'),
+                    Wait(suitStomp.getDuration() + 0.5),
+                    Func(toon.loop, 'walk'),
+                    LerpPosInterval(toon, 0.5, Point3(toon.getX(battle), toon.getY(battle), toon.getZ(battle)), other=battle),
+                    Func(toon.loop, 'neutral')
+                )
+            toonTracks: Parallel = Parallel()
+            for t in toonDodgeList:
+                toonTracks.append(dodgeSequence(t))
+
+            toonTracks.append(dodgeSequence(toon))
+            return toonTracks
+
+        animTrack = Sequence(
+            Wait(dodgeDelay),
+            getAllyToonsDodgeParallel(target[0])
+        )
+        indicatorTrack = Sequence(
+            Wait(dodgeDelay + 0.5),
+            Func(MovieUtil.indicateMissed, toon)
+        )
+    animTrack.append(Func(toon.setHpr, battle, origHpr))
+    toonTrack.append(Parallel(animTrack, indicatorTrack))
+    toonFinalTrack.append(toonTrack)
+
+    soundTrack: Track = Track()
+    for time in stompTimes:
+        soundTrack.append((time, SoundInterval(globalBattleSoundCache.getSound('tt_s_ara_cmg_cogStomp.ogg'), node=suit)))
+
+    return Parallel(suitTrack, moveSuitTrack, toonFinalTrack, soundTrack)

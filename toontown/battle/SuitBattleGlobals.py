@@ -7151,6 +7151,7 @@ SuitAttacks = {
  'SolidState': ('magic1', ATK_TGT_SINGLE), # Professor Control: I don't play Operation: Dessert Storm to know if the animation and the group status are correct.
  'SongAndDance': ('song-and-dance', ATK_TGT_GROUP),
  'Spin': ('magic3', ATK_TGT_SINGLE),
+ 'StumpSpeech': ('quick-jump', ATK_TGT_SINGLE),
  'Synergy': ('magic3', ATK_TGT_GROUP), # not actually synergy
  'Tabulate': ('calculator', ATK_TGT_SINGLE),
  'TeeOff': ('golf-club-swing', ATK_TGT_SINGLE),

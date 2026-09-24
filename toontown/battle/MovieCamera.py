@@ -928,6 +928,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=4.0))
     elif name == 'Spin':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name == 'StumpSpeech':
+        camTrack.append(defaultCamera())
     elif name == 'Synergy':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Golf':
