@@ -230,6 +230,7 @@ class DistributedGolfCourse(DistributedObject.DistributedObject, FSM, DelayDelet
                     y += 1
 
     def enterJoin(self):
+        messenger.send('activityStart', [ToontownGlobals.ACTIVITY_GOLFING])
         self.sendUpdate('setAvatarJoined', [])
 
     def handleFallingAsleepGolf(self, task):
@@ -273,6 +274,7 @@ class DistributedGolfCourse(DistributedObject.DistributedObject, FSM, DelayDelet
 
         self.ignoreAll()
         if self.hasLocalToon:
+            messenger.send('activityStop')
             messenger.send('leavingGolf')
             self._destroyDelayDelete()
 

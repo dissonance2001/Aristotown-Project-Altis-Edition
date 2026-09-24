@@ -277,6 +277,7 @@ ExpBarLevel = 'Level '
 ExpGagReward = 'Congratulations on reaching level %s! You can now carry 10 additional gags!'
 ExpTPReward = 'Congratulations on reaching level %s! You have gained a training point!'
 ExpMoneyReward = 'Congratulations on reaching level %s! You can now carry 500 additional jellybeans!'
+ActivityExpBarLevel = ['Fishing Level ', 'Golfing Level ', 'Racing Level ', 'Trolley Level ']
 QuestsCompleteString = 'Complete'
 QuestsNotChosenString = 'Not chosen'
 Period = '.'
@@ -13617,6 +13618,35 @@ NPCForceAcknowledgeMessage6 = 'Great job defeating those Cogs!\n\n\n\n\n\n\n\n\n
 NPCForceAcknowledgeMessage7 = "Don't forget to make a friend!\n\n\n\n\n\n\nClick on another player and use the New Friend button."
 NPCForceAcknowledgeMessage8 = 'Great! You made a new friend!\n\n\n\n\n\n\n\n\nYou should go back at Toon Headquarters now.'
 NPCForceAcknowledgeMessage9 = 'Good job using the phone!\n\n\n\n\n\n\n\n\nReturn to Toon Headquarters to claim your reward.'
+
+# Generic NPC item-shop responses (toontown/toon/npc/shop/), used by any NPC
+# using the shop system -- e.g. DistributedNPCTailor(AI), DistributedNPCRodClerk(AI).
+NPCStoreEnterExitResponses = {
+    1: (
+        "I've got clothing, accessories, and more!",
+        'How can I help you today?',
+    ),
+    2: (
+        'Have a nice day!',
+        'Make sure to come back soon!',
+        "There's always something available for purchase, come back soon!",
+    )
+}
+
+NPCStoreResponses = {
+    0: 'Thank you for your purchase!',
+    1: "Uh oh! You don't have enough for that item!",
+    2: 'Uh oh! It looks like you already own this item!',
+    3: "Uh oh! You don't have enough for that item!",
+    4: 'An error has occured, sorry about that!',
+    5: 'Thank you for your purchase! You can equip it at any time.',
+    'exit': 'See you later!'
+}
+
+NPCStorePurchase = "Would you like to purchase {name}?\n\n" \
+                   "This will cost: {costType} {costName}\n" \
+                   "You have: {amountOwned} {costName}"
+
 ToonSleepString = '. . . ZZZ . . .'
 MovieTutorialReward1 = 'You received 1 Throw point! When you get 10, you will get a new gag!'
 MovieTutorialReward2 = 'You received 1 Squirt point! When you get 10, you will get a new gag!'

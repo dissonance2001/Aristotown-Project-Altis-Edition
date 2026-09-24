@@ -45,7 +45,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             return
 
         # Freeze the toon and make them look at us
-        base.cr.playGame.getPlace().setState('Stopped')
+        base.cr.playGame.getPlace().setState('stopped')
         self.lookAt(base.localAvatar)
 
         TRANSITION_LENGTH = 1.0

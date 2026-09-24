@@ -390,6 +390,35 @@ Winnings = [4.0,
  1.5,
  1.15]
 PracticeWinnings = 20
+
+# Activity Level exp constants (ported from Corporate Clash).
+MinuteXP = 100
+QualifyMult = 1
+DisqualifyMult = 0.25
+PracticeMult = 0.67
+
+ExpWinnings = [
+    8,
+    7,
+    6,
+    5,
+    4,
+    3.5,
+    3,
+    2.5
+]
+
+GagUsedXP = [
+    100,
+    90,
+    80,
+    70,
+    60,
+    50,
+    40,
+    30,
+    20
+]
 SpeedwayQuals = 0
 RuralQuals = 1
 UrbanQuals = 2

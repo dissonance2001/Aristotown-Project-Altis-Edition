@@ -78,6 +78,9 @@ class DistributedGolfCourseAI(DistributedObjectAI.DistributedObjectAI, FSM):
         self.drivingToons = []
         self.__barrier = None
         self.winnerByTieBreak = 0
+        # Activity Level exp banked per still-playing avatar (index matches
+        # getStillPlayingAvIds()), paid out in enterWaitReward.
+        self.endExpTotal = [0, 0, 0, 0]
 
     def initHistory(self):
         for avId in self.avIdList:
@@ -389,6 +392,14 @@ class DistributedGolfCourseAI(DistributedObjectAI.DistributedObjectAI, FSM):
         self.awardCourseBest()
         self.recordHoleInOne()
         self.recordCourseUnderPar()
+
+        # Pay out the Activity Level exp banked across the round.
+        stillPlaying = self.getStillPlayingAvIds()
+        for avId in stillPlaying:
+            av = simbase.air.doId2do.get(avId)
+            if av:
+                av.addActivityExp(self.endExpTotal[stillPlaying.index(avId)], ToontownGlobals.ACTIVITY_GOLFING)
+
         trophiesList = []
         for index in range(len(self.avIdList)):
             avId = self.avIdList[index]
@@ -533,6 +544,7 @@ class DistributedGolfCourseAI(DistributedObjectAI.DistributedObjectAI, FSM):
     def updateHistoryForBallIn(self, avId):
         if self.currentHole == None:
             return
+        av = simbase.air.doId2do.get(avId)
         holeId = self.currentHole.holeId
         holeInfo = GolfGlobals.HoleInfo[holeId]
         par = holeInfo['par']
@@ -546,16 +558,38 @@ class DistributedGolfCourseAI(DistributedObjectAI.DistributedObjectAI, FSM):
         strokes = self.scores[avId][holeIndex]
         self.notify.debug('self.scores = %s' % self.scores)
         diff = strokes - par
+
+        stillPlaying = self.getStillPlayingAvIds()
+        expTotal = 0
+
+        # check for hole in one
         if strokes == 1:
             self.incrementEndingHistory(avId, GolfGlobals.HoleInOneShots)
+            expTotal += 78 * self.numHoles * len(self.avIdList)
+
+        # now do eagle, birdie, par
         if diff <= -2:
             self.incrementEndingHistory(avId, GolfGlobals.EagleOrBetterShots)
+            expTotal += 46 * self.numHoles * len(self.avIdList)
         if diff <= -1:
             self.incrementEndingHistory(avId, GolfGlobals.BirdieOrBetterShots)
+            expTotal += 18 * self.numHoles * len(self.avIdList)
         if diff <= 0:
             self.endingHistory[avId][GolfGlobals.ParOrBetterShots] += 1
+            expTotal += 4 * self.numHoles * len(self.avIdList)
+
         if strokes < self.endingHoleBest[avId][holeId] or self.endingHoleBest[avId][holeId] == 0:
             self.endingHoleBest[avId][holeId] = strokes
+
+        # Activity Level exp: banked per-avatar until the course finishes if
+        # this isn't the last hole (so the reward lands with everything else
+        # in enterWaitReward), otherwise awarded immediately.
+        if self.isPlayingLastHole():
+            if avId in stillPlaying:
+                self.endExpTotal[stillPlaying.index(avId)] += expTotal
+        else:
+            if av:
+                av.addActivityExp(expTotal, ToontownGlobals.ACTIVITY_GOLFING)
 
     def incrementEndingHistory(self, avId, historyIndex):
         if avId in self.endingHistory and historyIndex in GolfGlobals.TrophyRequirements:

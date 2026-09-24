@@ -2453,6 +2453,27 @@ ACTIVITY_FISHING = 0
 ACTIVITY_GOLFING = 1
 ACTIVITY_RACING = 2
 ACTIVITY_TROLLEY = 3
+TOTAL_ACTIVITIES = 4
+
+# Activity Level Caps
+# Index:    Activity
+# 0:        Fishing
+# 1:        Golfing
+# 2:        Racing
+# 3:        Trolley
+MaxActivityLevel = [70 - 1, 30 - 1, 30 - 1, 30 - 1]
+
+# Activity levels where you will receive laff (max HP) boosts.
+# 0:    Fishing
+# 1:    Golfing
+# 2:    Racing
+# 3:    Trolley
+ActivityHPLevels = [
+    [10 - 1, 20 - 1, 30 - 1, 40 - 1, 50 - 1, 60 - 1, 70 - 1],
+    [10 - 1, 20 - 1, 30 - 1],
+    [10 - 1, 20 - 1, 30 - 1],
+    [10 - 1, 20 - 1, 30 - 1],
+]
 
 # Additional code-redemption result codes (continuing Altis's own CODE_* sequence,
 # used by the hammerspace-based code redemption GUI)

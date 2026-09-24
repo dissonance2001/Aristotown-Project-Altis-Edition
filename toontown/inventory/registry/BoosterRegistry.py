@@ -19,6 +19,7 @@ AllStarBoosts: list[BoosterItemType] = [
     BoosterItemType.Merit_Global,
     BoosterItemType.Reward_Boss_Global,
     BoosterItemType.Exp_Dept_Global,
+    BoosterItemType.Exp_Activity_Global,
 ]
 BossRewardBoosts: list[BoosterItemType] = [
     BoosterItemType.Reward_Boss_Sellbot,

@@ -288,6 +288,7 @@ class Purchase(PurchaseBase):
          -1.75,
          -5.0)
         self.toons = []
+        self._activityExpShown = False
         self.toonsKeep = []
         self.counters = []
         self.totalCounters = []
@@ -500,6 +501,9 @@ class Purchase(PurchaseBase):
         return Task.cont
 
     def countDown(self):
+        if not self._activityExpShown:
+            self._activityExpShown = True
+            messenger.send('activityStart', [ToontownGlobals.ACTIVITY_TROLLEY])
         totalDelay = 0
         for total in self.totalCounters:
             total.startAmount = total.count
@@ -574,6 +578,8 @@ class Purchase(PurchaseBase):
             totalDelay += COUNT_DOWN_RATE
 
     def exitReward(self):
+        messenger.send('activityStop')
+        self._activityExpShown = False
         self.ignore('clientCleanup')
         taskMgr.remove('countUpTask')
         taskMgr.remove('countVotesUpTask')

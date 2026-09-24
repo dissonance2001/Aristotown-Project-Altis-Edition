@@ -115,12 +115,15 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         # requestEquipItems/requestUnequipItems below.
         self.equippedItems = []
         self.inventoryRateLimiter = IdRateLimiter(max_hits=3, period=1)
-        # STUB: racing/kart activity-level progression tracking. Altis has no
-        # such system yet (planned for later); this always reports level 0 so
-        # ActivityLevelPurchaseRequirement-gated shop items are structurally
-        # wired but simply stay locked until the real system is built.
-        import collections
-        self.activityLevels = collections.defaultdict(int)
+        # Activity leveling (fishing/golfing/racing/trolley) -- real, DC-synced
+        # implementation, ported from Clash but without the booster-multiplier
+        # step (Altis's booster system uses a different calling convention --
+        # GumballGlobals.applyBoosters(self.getEffectiveBoosters(), ...) --
+        # than Clash's per-activity boosters; that's a follow-up, not needed
+        # for the base leveling logic to be correct). See addActivityExp/
+        # setActivityLevel below, and FishManagerAI.py for the fishing hookup.
+        self.activityLevels = [0] * ToontownGlobals.TOTAL_ACTIVITIES
+        self.activityExp = [0] * ToontownGlobals.TOTAL_ACTIVITIES
         self._lastStickerTime = 0.0
         self.dna = ToonDNA.ToonDNA()
         self.magicWordDNABackups = {}
@@ -382,6 +385,83 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def getActivityLevel(self, activity):
         return self.activityLevels[activity]
+
+    def _fixActivityArray(self, arr):
+        arr = list(arr)
+        while len(arr) < ToontownGlobals.TOTAL_ACTIVITIES:
+            arr.append(0)
+        return arr[:ToontownGlobals.TOTAL_ACTIVITIES]
+
+    def getActivityExp(self):
+        return self.activityExp
+
+    def setActivityExp(self, expArray):
+        if len(expArray) != ToontownGlobals.TOTAL_ACTIVITIES:
+            expArray = self._fixActivityArray(expArray)
+        self.activityExp = expArray
+
+    def b_setActivityExp(self, expArray):
+        self.setActivityExp(expArray)
+        self.d_setActivityExp(expArray)
+
+    def d_setActivityExp(self, expArray):
+        self.sendUpdate('setActivityExp', [expArray])
+
+    def setActivityLevels(self, levelArray):
+        if len(levelArray) != ToontownGlobals.TOTAL_ACTIVITIES:
+            levelArray = self._fixActivityArray(levelArray)
+        self.activityLevels = levelArray
+
+    def b_setActivityLevels(self, levelArray):
+        self.setActivityLevels(levelArray)
+        self.d_setActivityLevels(levelArray)
+
+    def d_setActivityLevels(self, levelArray):
+        self.sendUpdate('setActivityLevels', [levelArray])
+
+    def addActivityExp(self, deltaExp, activity):
+        from toontown.gumball import GumballGlobals
+        activityExpInstance = __import__('toontown.toon.ActivityExperience', fromlist=['ActivityExperience']).ActivityExperience()
+        activityExpArray = self.getActivityExp()
+        activityLevel = self.getActivityLevel(activity)
+        maxLevel = ToontownGlobals.MaxActivityLevel[activity]
+        activityBooster = {
+            ToontownGlobals.ACTIVITY_FISHING: GumballGlobals.EXP_ACTIVITY_FISHING,
+            ToontownGlobals.ACTIVITY_GOLFING: GumballGlobals.EXP_ACTIVITY_GOLF,
+            ToontownGlobals.ACTIVITY_RACING: GumballGlobals.EXP_ACTIVITY_RACING,
+            ToontownGlobals.ACTIVITY_TROLLEY: GumballGlobals.EXP_ACTIVITY_TROLLEY,
+        }[activity]
+        deltaExp = GumballGlobals.applyBoosters(
+            self.getEffectiveBoosters(),
+            [GumballGlobals.EXP_ACTIVITY_GLOBAL, activityBooster],
+            int(deltaExp),
+            applyRound=True
+        )
+
+        if activityLevel >= maxLevel:
+            activityExpArray[activity] = 0
+            self.b_setActivityExp(activityExpArray)
+            return
+
+        activityExpArray[activity] += deltaExp
+        while activityLevel < maxLevel and activityExpArray[activity] >= activityExpInstance.getLevelMaxExp(activityLevel):
+            activityExpArray[activity] -= activityExpInstance.getLevelMaxExp(activityLevel)
+            activityLevel += 1
+            self.setActivityLevel(activityLevel, activity)
+
+        self.b_setActivityExp(activityExpArray)
+
+    def setActivityLevel(self, level, activity):
+        levels = self.getActivityLevels()
+        maxLevel = ToontownGlobals.MaxActivityLevel[activity]
+        if level > maxLevel:
+            level = maxLevel
+        levels[activity] = level
+        if level in ToontownGlobals.ActivityHPLevels[activity]:
+            self.b_setMaxHp(self.maxHp + 1)
+            self.toonUp(self.maxHp - self.hp)
+            self.sendUpdate('notifyExpReward', [level, activity + 3])
+        self.b_setActivityLevels(levels)
 
     def sendDeleteEvent(self):
         if simbase.wantPets:

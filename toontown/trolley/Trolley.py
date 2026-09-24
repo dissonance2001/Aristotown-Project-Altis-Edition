@@ -93,6 +93,7 @@ class Trolley(StateData.StateData):
         return None
 
     def exit(self):
+        messenger.send('activityStop')
         self.ignoreAll()
         return None
 
@@ -155,6 +156,7 @@ class Trolley(StateData.StateData):
         return None
 
     def enterBoarded(self):
+        messenger.send('activityStart', [ToontownGlobals.ACTIVITY_TROLLEY])
         if base.config.GetBool('want-qa-regression', 0):
             self.notify.info('QA-REGRESSION: RIDETHETROLLEY: Ride the Trolley')
         self.enableExitButton()

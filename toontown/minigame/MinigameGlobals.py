@@ -37,6 +37,28 @@ def getScoreMult(trolleyZone):
     multiplier = PythonUtil.lerp(1.0, 1.5, float(SafeZones.index(szId)) / (len(SafeZones) - 1))
     return multiplier
 
+# Activity Level exp multipliers for Trolley minigames.
+_trolleyZoneExperienceMultipliers = [
+    1.0,
+    1.075,
+    1.15,
+    1.2,
+    1.25,
+    1.325,
+    1.4,
+]
+Zone2ExperienceMultiplierDict = {
+    hoodZone: _trolleyZoneExperienceMultipliers[index]
+    for index, hoodZone in enumerate(SafeZones)
+}
+
+Player2ExperienceMultiplierDict = {
+    1: 1.0,
+    2: 1.3333333333333333,
+    3: 1.6666666666666667,
+    4: 2.0
+}
+
 # For Blueprint ARG
 SuitSerialMessages = [
     'DS-DEBUG1: Suit Serial #0043 -- METHOD',

@@ -302,6 +302,27 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             return equipped[0].getItemSubtype()
         return FishingRodItemType.Cardboard
 
+    def setActivityLevels(self, levelArray):
+        oldLevels = getattr(self, 'activityLevels', None)
+        self.activityLevels = levelArray
+        if oldLevels != self.activityLevels:
+            messenger.send(self.uniqueName('activityLevelChange'), [self.activityLevels])
+
+    def getActivityLevels(self):
+        return getattr(self, 'activityLevels', [0, 0, 0, 0])
+
+    def getActivityLevel(self, activity):
+        return self.getActivityLevels()[activity]
+
+    def setActivityExp(self, expArray):
+        oldExp = getattr(self, 'activityExp', None)
+        self.activityExp = expArray
+        if oldExp != self.activityExp:
+            messenger.send(self.uniqueName('activityExpChange'), [self.activityExp])
+
+    def getActivityExp(self):
+        return getattr(self, 'activityExp', [0, 0, 0, 0])
+
     def getHammerspace(self):
         """Returns this (local) toon's own hammerspace Inventory, or None if not yet loaded."""
         return base.cr.inventoryManager.getInventory()
@@ -1056,6 +1077,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.setSystemMessage(0, TTLocalizer.ExpGagReward % (level+1), WTSystem)
         if type == 2:
             self.setSystemMessage(0, TTLocalizer.ExpMoneyReward % (level+1), WTSystem)
+        if type >= 3:
+            activity = type - 3
+            self.setSystemMessage(0, '%s%d! You gained an extra Laff point!' % (TTLocalizer.ActivityExpBarLevel[activity], level + 1), WTSystem)
 
     def setLastHood(self, lastHood):
         self.lastHood = lastHood

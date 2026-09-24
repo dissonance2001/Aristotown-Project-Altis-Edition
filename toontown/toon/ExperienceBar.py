@@ -81,7 +81,7 @@ class ExperienceBar(DirectFrame):
         currLevel = self.level
         self.level = level
         self.maxExp = ToonExperience.ToonExperience().getLevelMaxExp(self.level)
-        name = self.av.uniqueName('laffMeterBoing') + '-' + str(self.this)
+        name = self.av.uniqueName('laffMeterBoing')
         if currLevel != self.level:
            self.levelLabel['text'] = TTLocalizer.ExpBarLevel + str(self.level+1)
         
@@ -92,7 +92,12 @@ class ExperienceBar(DirectFrame):
         self.expBar['range'] = self.maxExp
         self.expBar['value'] = exp
         self.expBar['text'] = str(exp)+'/'+str(self.maxExp)
-        ToontownIntervals.start(ToontownIntervals.getPulseLargerIval(self.bgBar, name))
+        pulse = Sequence(
+            LerpScaleInterval(self.bgBar, 0.1, 1.5, blendType='easeOut'),
+            LerpScaleInterval(self.bgBar, 0.1, 1.0, blendType='easeIn'),
+            name=name
+        )
+        pulse.start()
 
     def start(self):
         if self.isToon:

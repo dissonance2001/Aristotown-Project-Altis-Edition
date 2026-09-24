@@ -475,6 +475,7 @@ class DistributedRace(DistributedObject.DistributedObject):
         self.waitingLabel.removeNode()
 
     def enterStart(self):
+        messenger.send('activityStart', [ToontownGlobals.ACTIVITY_RACING])
         waitTime = self.baseTime - globalClock.getFrameTime()
         taskName = 'enableRaceModeLater'
         taskMgr.doMethodLater(1, self.gui.enableRaceMode, taskName, extraArgs=[])
@@ -592,6 +593,7 @@ class DistributedRace(DistributedObject.DistributedObject):
         return Task.cont
 
     def enterFinished(self):
+        messenger.send('activityStop')
         taskMgr.remove('raceWatcher')
         self.fadeOutMusic()
         self.localKart.interruptTurbo()
@@ -624,6 +626,7 @@ class DistributedRace(DistributedObject.DistributedObject):
         return
 
     def enterLeave(self):
+        messenger.send('activityStop')
         kart = base.cr.doId2do.get(self.kartMap.get(localAvatar.doId, None), None)
         taskMgr.remove('raceWatcher')
         self.gui.disable()

@@ -6,6 +6,7 @@ import zlib
 from toontown.toon import DistributedToon
 from toontown.toon import LaffMeter
 from toontown.toon import ExperienceBar
+from toontown.toon import ActivityExperienceBar
 from toontown.toon import Toon
 from toontown.touch import TouchControls
 from direct.directnotify import DirectNotifyGlobal
@@ -552,6 +553,11 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         del self.laffMeter
         self.expBar.destroy()
         del self.expBar
+        if hasattr(self, 'activityExpBar'):
+            self.ignore('activityStart')
+            self.ignore('activityStop')
+            self.activityExpBar.destroy()
+            del self.activityExpBar
         if self.touchControls:
             self.touchControls.destroy()
             del self.touchControls
@@ -711,12 +717,21 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.expBar.setAvatar(self)
         self.expBar.setScale(0.075)
         self.expBar.reparentTo(base.a2dBottomLeft)
+        self.activityExpBar = ActivityExperienceBar.ActivityExperienceBar(self.getActivityExp(), self.getActivityLevels(), self.style)
+        self.activityExpBar.setAvatar(self)
+        self.activityExpBar.setScale(0.075)
+        self.activityExpBar.setPos(0.0, 0.0, 0.0)
+        self.activityExpBar.reparentTo(base.a2dBottomLeft)
         if self.style.getAnimal() == 'monkey':
             self.laffMeter.setPos(0.153, 0.0, 0.13)
         else:
             self.laffMeter.setPos(0.133, 0.0, 0.13)
         self.laffMeter.stop()
         self.expBar.start()
+        self.activityExpBar.start()
+        self.activityExpBar.hide()
+        self.accept('activityStart', self._startActivityExperience)
+        self.accept('activityStop', self._stopActivityExperience)
         
         if base.wantMobile:
             self.touchControls = TouchControls.TouchControls()
@@ -988,6 +1003,24 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.pieHandler.addInPattern('pieHit')
             self.pieHandler.addInPattern('pieHit-%in')
         return self.__pieBubble
+
+    def _startActivityExperience(self, activity):
+        if not hasattr(self, 'activityExpBar'):
+            return
+        activity = int(activity)
+        if activity < 0 or activity >= ToontownGlobals.TOTAL_ACTIVITIES:
+            return
+        if self.getActivityLevel(activity) >= ToontownGlobals.MaxActivityLevel[activity]:
+            return
+        if self.expBar:
+            self.expBar.hide()
+        self.activityExpBar.setActivity(activity, show=True)
+
+    def _stopActivityExperience(self):
+        if hasattr(self, 'activityExpBar'):
+            self.activityExpBar.stop()
+        if self.expBar and self.level < ToontownGlobals.MaxToonLevel and settings.get('experienceBarMode'):
+            self.expBar.show()
 
     def initializeMovementHotkeys(self):
         self.__clearMovementHotkeys()

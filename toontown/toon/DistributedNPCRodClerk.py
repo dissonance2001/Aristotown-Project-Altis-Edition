@@ -1,19 +1,30 @@
 """
 DistributedNPCRodClerk -- rewritten to use Clash's generic NPC item-shop
 system (toontown/shop/, toontown/toon/npc/shop/) instead of the old
-RodBuyGUI/setMovie-based buying flow. Sells items from
-RodShopGlobals.RodShopItems.
+RodBuyGUI/setMovie-based buying flow.
 
-Pattern adapted directly from DistributedNPCTailor.py. RodBuyGUI.py is no
-longer used by this class (left in place, unused, in case anything else
-still references it) -- NPCToonShopGUI replaces it.
+IMPORTANT: NPCToonShopGUI.__init__ reads npc.npc_id (as
+NPCToonShopGlobals.getNPCItemCatalogue(npc.npc_id) / getNPCShopVisualDef)
+to look up its catalogue and visuals -- but nothing in
+DistributedNPCToonBase ever sets that attribute (confirmed: it's not set
+anywhere in the base class chain, and there's no matching DC field either).
+That means the shop GUI would throw AttributeError the instant it tried to
+open, for this NPC or the Tailor. Since Tell-Tale Carp is a single, specific,
+named individual (Clash's NPCToonID.EdgarAllanPole) rather than a generic
+NPC type reused across many placements, we just set npc_id directly here.
+
+Pattern otherwise adapted directly from DistributedNPCTailor.py.
+RodBuyGUI.py is no longer used by this class (left in place, unused, in case
+anything else still references it) -- NPCToonShopGUI replaces it.
 """
 from panda3d.core import Vec3
 
 from toontown.toon.DistributedNPCToonBase import *
 from toontown.toonbase.CooldownManager import CooldownManager
 from toontown.toonbase import TTLocalizer
+from toontown.toon.npc.NPCToonConstants import NPCToonID
 from toontown.toon.npc.shop.gui.NPCToonShopGUI import NPCToonShopGUI
+from toontown.chat.ChatGlobals import CFSpeech, CFTimeout
 
 
 class DistributedNPCRodClerk(DistributedNPCToonBase):
@@ -29,6 +40,7 @@ class DistributedNPCRodClerk(DistributedNPCToonBase):
     def __init__(self, cr):
         DistributedNPCToonBase.__init__(self, cr)
         self.npcType = 'Rod Salesman'
+        self.npc_id = NPCToonID.EdgarAllanPole
         self.storeGui = None
         self.interactCooldown = CooldownManager(2)
         self.responseCooldown = CooldownManager(3)
@@ -51,7 +63,7 @@ class DistributedNPCRodClerk(DistributedNPCToonBase):
             return
 
         # Freeze the toon and make them look at us
-        base.cr.playGame.getPlace().setState('Stopped')
+        base.cr.playGame.getPlace().setState('stopped')
         self.lookAt(base.localAvatar)
 
         TRANSITION_LENGTH = 1.0

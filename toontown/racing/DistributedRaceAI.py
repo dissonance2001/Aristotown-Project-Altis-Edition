@@ -4,10 +4,12 @@ from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from direct.fsm.FSM import FSM
 from direct.task import Task
 import random
+import collections
 from toontown.racing import RaceGlobals
 from toontown.racing.DistributedGagAI import DistributedGagAI
 from toontown.racing.DistributedVehicleAI import DistributedVehicleAI
 from toontown.toonbase import TTLocalizer
+from toontown.toonbase import ToontownGlobals
 
 class DistributedRaceAI(DistributedObjectAI, FSM):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedRaceAI")
@@ -30,6 +32,9 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         self.livingGags = []
         self.currentlyAffectedByAnvil = {}
         self.avatarProgress = {}
+        # Activity Level exp banked per avatar across calculateTrophies (win
+        # bonus) and avatarFinished (base track xp), awarded once per finish.
+        self.endExpTotal = collections.defaultdict(float)
 
     def generate(self):
         for avatar in self.avatars:
@@ -253,6 +258,10 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
             return
         self.gags[slot] = [0, 0]
         self.avatarGags[avId] = requestedGag
+        av = self.air.doId2do.get(avId)
+        if av:
+            gagIndex = max(0, min(len(RaceGlobals.GagUsedXP) - 1, int(requestedGag) - 1))
+            av.addActivityExp(RaceGlobals.GagUsedXP[gagIndex], ToontownGlobals.ACTIVITY_RACING)
         taskMgr.doMethodLater(5, self.__regenGag, 'regenGag%i-%i' % (slot, self.doId), [slot])
 
     def __regenGag(self, index):
@@ -299,24 +308,36 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
         bonus = 0
         totalTime = globalClockDelta.networkToLocalTime(globalClockDelta.getRealNetworkTime()) - self.startTime
         qualify = False
+        offset = 4 - len(self.avatarProgress) # self.avatarProgress contains the amount of STARTING players.
         if totalTime < RaceGlobals.getQualifyingTime(self.trackId):
             qualify = True
+        RaceTypeMult = 1
         if self.raceType == RaceGlobals.Practice:
             winnings = RaceGlobals.PracticeWinnings
             trophies = []
+            RaceTypeMult = RaceGlobals.PracticeMult
         elif qualify:
-            offset = 4 - len(self.avatarProgress) # self.avatarProgress contains the amount of STARTING players.
             winnings = entryFee * RaceGlobals.Winnings[(place+offset)-1]
-            trophies = self.calculateTrophies(avId, place == 1, qualify, totalTime)
+            trophies = self.calculateTrophies(avId, place == 1, qualify, totalTime, place, winnings)
         else:
             winnings = 0
             trophies = []
         av.b_setTickets(av.getTickets() + winnings)
         if av.getTickets() > RaceGlobals.MaxTickets:
             av.b_setTickets(RaceGlobals.MaxTickets)
+
+        # Activity Level exp: base track time budget, scaled by how well you
+        # placed, whether you qualified, and practice-race dampening.
+        BaseTrackXP = (RaceGlobals.getQualifyingTime(self.trackId) / 60) * RaceGlobals.MinuteXP
+        ExpWinnings = RaceGlobals.ExpWinnings[(place+offset)-1]
+        QualifyMult = RaceGlobals.QualifyMult if qualify else RaceGlobals.DisqualifyMult
+        self.endExpTotal[avId] += BaseTrackXP * ExpWinnings * QualifyMult * RaceTypeMult
+        if av:
+            av.addActivityExp(int(self.endExpTotal[avId]), ToontownGlobals.ACTIVITY_RACING)
+
         self.sendUpdate('setPlace', [avId, totalTime, place, entryFee, qualify, max((winnings-entryFee), 0), bonus, trophies, [], 0])
 
-    def calculateTrophies(self, avId, won, qualify, time):
+    def calculateTrophies(self, avId, won, qualify, time, place, winnings):
         av = self.air.doId2do[avId]
         kartingHistory = av.getKartingHistory()
         avTrophies = av.getKartingTrophies()
@@ -326,6 +347,8 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
                 numTrophies += 1
         oldLaffBoost = int(numTrophies/10)
         genre = RaceGlobals.getTrackGenre(self.trackId)
+        # Activity Level exp: a small bonus tied to how much you won by.
+        self.endExpTotal[avId] += (winnings * 2) / max(place, 1)
         trophies = []
         if won:
             kartingHistory[genre] += 1
@@ -370,8 +393,9 @@ class DistributedRaceAI(DistributedObjectAI, FSM):
                 if avTrophies[RaceGlobals.TrophyCups[i]] != 1:
                     avTrophies[RaceGlobals.TrophyCups[i]] = 1
                     trophies.append(RaceGlobals.TrophyCups[i])
-            av.b_setMaxHp(av.getMaxHp() + newLaffBoost - oldLaffBoost)
-            av.toonUp(av.getMaxHp())
+                    self.endExpTotal[avId] += 5000
+            av.b_setMaxHp(av.maxHp + newLaffBoost - oldLaffBoost)
+            av.toonUp(av.maxHp)
         av.b_setKartingTrophies(avTrophies)
         return trophies
 

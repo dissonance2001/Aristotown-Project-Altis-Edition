@@ -265,6 +265,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
             if self.avId == base.localAvatar.doId:
                 base.setCellsActive(base.bottomCells, 0)
                 self.localToonFishing = 1
+                messenger.send('activityStart', [ToontownGlobals.ACTIVITY_FISHING])
                 if base.wantBingo:
                     self.pond.setLocalToonSpot(self)
             self.av = self.cr.doId2do.get(self.avId)
@@ -277,6 +278,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
             self.av.setAnimState('neutral', 1.0)
             self.createCastTrack()
         if wasLocalToon and not self.localToonFishing:
+            messenger.send('activityStop')
             self.__hideCastGui()
             if base.wantBingo:
                 self.pond.setLocalToonSpot()

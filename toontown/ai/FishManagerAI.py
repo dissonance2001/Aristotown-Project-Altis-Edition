@@ -12,6 +12,11 @@ class FishManagerAI:
         self.ponds = {}
         self.requestedFish = {}
 
+    def getFishExp(self, fish):
+        rarity = fish.getRarity()
+        weight = max(1, (fish.getWeight() / 16.0))
+        return int((2 * rarity * weight) ** 2 + (5 * rarity * weight))
+
     def creditFishTank(self, av):
         totalFish = len(av.fishCollection)
         trophies = int(totalFish / 10)
@@ -19,8 +24,8 @@ class FishManagerAI:
         av.addMoney(av.fishTank.getTotalValue())
         av.b_setFishTank([], [], [])
         if trophies > curTrophies:
-            av.b_setMaxHp(av.getMaxHp() + trophies - curTrophies)
-            av.toonUp(av.getMaxHp())
+            av.b_setMaxHp(av.maxHp + trophies - curTrophies)
+            av.toonUp(av.maxHp)
             av.b_setFishingTrophies(list(range(trophies)))
             return True
         return False
@@ -51,6 +56,7 @@ class FishManagerAI:
             av.d_setFishTank(netlist[0], netlist[1], netlist[2])
             del self.requestedFish[av.doId]
             av.addStat(ToontownGlobals.STATS_FISH)
+            av.addActivityExp(self.getFishExp(fish), ToontownGlobals.ACTIVITY_FISHING)
             simbase.air.achievementsManager.fish(av.doId)
             return [itemType, genus, species, weight]
         if itemType == FishGlobals.FishItem:
@@ -69,6 +75,7 @@ class FishManagerAI:
             netlist = av.fishTank.getNetLists()
             av.d_setFishTank(netlist[0], netlist[1], netlist[2])
             av.addStat(ToontownGlobals.STATS_FISH)
+            av.addActivityExp(self.getFishExp(fish), ToontownGlobals.ACTIVITY_FISHING)
             simbase.air.achievementsManager.fish(av.doId)
             return [itemType, genus, species, weight]
         elif itemType == FishGlobals.BootItem:

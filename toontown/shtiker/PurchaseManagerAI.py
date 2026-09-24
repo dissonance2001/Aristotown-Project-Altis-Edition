@@ -75,6 +75,8 @@ class PurchaseManagerAI(DistributedObjectAI.DistributedObjectAI):
                     simbase.air.writeServerEvent('suspicious', avId, 'toon has invalid money %s, forcing to zero' % money)
                     self.playerMoney[avIndex] = 0
                 av.addMoney(self.minigamePoints[avIndex])
+                playerCount = len([playerId for playerId in self.getInvolvedPlayerIds() if playerId > 3])
+                av.addActivityExp(int(self.minigamePoints[avIndex] * 15 * MinigameGlobals.Zone2ExperienceMultiplierDict.get(self.trolleyZone, 1.0) * MinigameGlobals.Player2ExperienceMultiplierDict.get(playerCount, 1.0)), ToontownGlobals.ACTIVITY_TROLLEY)
                 self.air.writeServerEvent('minigame', avId, '%s|%s|%s|%s' % (self.previousMinigameId,
                  self.trolleyZone,
                  self.playerIds,

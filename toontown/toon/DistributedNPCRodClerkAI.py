@@ -2,11 +2,14 @@
 DistributedNPCRodClerkAI -- rewritten to use Clash's generic NPC item-shop
 system (toontown/shop/, toontown/toon/npc/shop/) instead of the old
 money/index-based rod-selling flow (completeSale/NPCToons movie codes,
-avatar.fishingRods/b_setFishingRod). Sells items from
-RodShopGlobals.RodShopItems, which grants (and, since Fishing_Rod has
-forceEquipOnAdd=True, auto-equips) a real hammerspace fishing rod item.
+avatar.fishingRods/b_setFishingRod).
 
-Pattern adapted directly from DistributedNPCTailorAI.py.
+Unlike DistributedNPCTailorAI (a generic NPC type shared by many placements,
+so it uses one static catalogue), this NPC IS a specific named individual --
+Tell-Tale Carp, Clash's NPCToonID.EdgarAllanPole -- and Altis already has a
+full, better catalogue for it sitting in NPCToonShopGlobals.py (proper
+fishing-activity-level gating via ActivityLevelPurchaseRequirement, plus
+fishing bucket upgrades), so we pull from there instead of duplicating it.
 
 NOTE: this class's dclass in the .dc file needs to declare the same fields
 DistributedNPCTailor(AI) has for the generic shop system to work:
@@ -20,7 +23,8 @@ import random
 from toontown.toon.DistributedNPCToonBaseAI import *
 from toontown.shop.ShopManagerAI import ShopManagerAI
 from toontown.shop.base.ShopItem import ShopItem
-from toontown.toon.RodShopGlobals import RodShopItems
+from toontown.toon.npc.NPCToonConstants import NPCToonID
+from toontown.toon.npc.shop.NPCToonShopGlobals import getNPCItemCatalogue
 from toontown.toonbase import TTLocalizer
 
 
@@ -28,7 +32,7 @@ class DistributedNPCRodClerkAI(DistributedNPCToonBaseAI, ShopManagerAI):
 
     def __init__(self, air, npcId):
         DistributedNPCToonBaseAI.__init__(self, air, npcId)
-        ShopManagerAI.__init__(self, air, RodShopItems)
+        ShopManagerAI.__init__(self, air, getNPCItemCatalogue(NPCToonID.EdgarAllanPole))
 
     def sendPurchaseNotification(self, av):
         pass
