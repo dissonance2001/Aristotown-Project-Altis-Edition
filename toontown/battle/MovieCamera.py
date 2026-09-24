@@ -947,7 +947,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Withdrawal':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'WriteOff':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=65.0/24.0))
         # redd heir wing cheats
     elif name == 'ReddLiquidationSale':
         camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
