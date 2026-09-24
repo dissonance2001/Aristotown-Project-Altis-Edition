@@ -897,8 +897,8 @@ class AltisCutsceneEditor(DirectObject):
         if not value:
             return None
         try:
-            from toontown.suit import SuitDNA
-            from toontown.battle import SuitBattleGlobals
+            from toontown.clashsuit.suit import SuitDNA
+            from toontown.clashbattle.battle import SuitBattleGlobals
         except:
             return None
         for suitType in SuitDNA.suitHeadTypes:

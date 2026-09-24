@@ -10,7 +10,7 @@ from toontown.battle import MovieUtil
 from toontown.chat.ChatGlobals import *
 from toontown.nametag.NametagGlobals import *
 from toontown.toon import LaughingManGlobals
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toon import IOURegistry
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals

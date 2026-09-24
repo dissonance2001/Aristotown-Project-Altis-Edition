@@ -549,8 +549,8 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
         if newZ <= self.trampHeight and z > self.trampHeight:
             if self.animFSM.state == 'Falling':
                 self.b_requestAnim('Land')
-            elif self.animFSM.state != 'Neutral':
-                self.b_requestAnim('Neutral')
+            elif self.animFSM.state != 'neutral':
+                self.b_requestAnim('neutral;')
         if bottomOfJump and a > self.boingThreshold:
             base.playSfx(self.boingSound)
         return (newZ, a)

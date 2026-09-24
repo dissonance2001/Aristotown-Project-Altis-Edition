@@ -13,7 +13,7 @@ from toontown.modifiers.ModifierEnums import ModifierType
 from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
 from toontown.toon.ToonHead import ToonHead
 from toontown.toon.gui import GuiBinGlobals
-from toontown.toon import NPCToons # Until NPCs are added we will use Reia's NPCToon port file
+from toontown.toon.npc import NPCToons # Until NPCs are added we will use Reia's NPCToon port file
 from toontown.toon.socialpanel.SocialPanelGlobals import sp_gui
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownGlobals, TTLocalizer
@@ -744,9 +744,6 @@ class TargetingGUI(DirectFrame):
         self.accept(base.MOVE_RIGHT, self.changeGagLevel, extraArgs=[1, True])
 
         def doLockIn():
-            # Ignore this if we have chat open.
-            if localAvatar and getattr(localAvatar, 'localToonTyping', True):
-                return
 
             if self.lockInButton['command']:
                 self.lockInButton['command']()
@@ -785,10 +782,6 @@ class TargetingGUI(DirectFrame):
             self.button_gagRight.show()
 
     def changeGagLevel(self, direction: int, fromHotkey: bool = False):
-        # Ignore this if we have chat open and got the input from a hotkey.
-        if fromHotkey and getattr(localAvatar, 'localToonTyping', True):
-            return
-
         # Change the gag level we plan to use.
         track = self.emblem.track
         level = self.emblem.level

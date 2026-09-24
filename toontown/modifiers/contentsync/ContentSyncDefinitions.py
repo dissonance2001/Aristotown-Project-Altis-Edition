@@ -4,7 +4,7 @@ Defines the modifiers that are applied onto Toons for each type of Content Sync.
 The general container/data classes are at the top.
 The actual definitions are listed at the bottom of the module.
 """
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.modifiers.Modifier import Modifier
 from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
 from toontown.modifiers.classes.LaffContentSyncModifier import LaffContentSyncModifier

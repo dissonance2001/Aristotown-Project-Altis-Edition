@@ -11,7 +11,7 @@ from .DistributedMinigame import *
 from . import PatternGameGlobals
 from toontown.chat.ChatGlobals import *
 from toontown.nametag.NametagGlobals import *
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toon import ToonHead
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals

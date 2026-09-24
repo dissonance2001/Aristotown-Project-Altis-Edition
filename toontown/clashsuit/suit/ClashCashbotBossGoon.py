@@ -7,7 +7,7 @@ from toontown.clashsuit.suit import BossCogGlobals
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 from direct.task.Task import Task
 from toontown.toonbase import ToontownGlobals
-from toontown.coghq.cashbothq import DistributedCashbotBossObject
+from toontown.coghq import DistributedCashbotBossObject
 from direct.showbase import PythonUtil
 from toontown.clashsuit.suit import ClashGoon
 

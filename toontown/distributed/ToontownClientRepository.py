@@ -108,7 +108,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.deliveryManager = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_DELIVERY_MANAGER, 'DistributedDeliveryManager')
         self.groupManager = None
         self.groupMgr = None
-        self.clubMgr = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_TOONTOWN_CLUB_MANAGER, 'DistributedToonClub')
         self.streetSign = None
         self.furnitureManager = None
         self.objectManager = None
@@ -125,6 +124,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.hydrantZeroMgr = DistributedHydrantZeroMgr.DistributedHydrantZeroMgr(self)
         self.mailboxZeroMgr = DistributedMailboxZeroMgr.DistributedMailboxZeroMgr(self)
         self.trashcanZeroMgr = DistributedTrashcanZeroMgr.DistributedTrashcanZeroMgr(self)
+        self.clubMgr = self.generateGlobalObject(OtpDoGlobals.OTP_DO_ID_GLOBAL_CLUB_MANAGER, 'DistributedClubManager')
         self.setZonesEmulated = 0
         self.old_setzone_interest_handle = None
         self.setZoneQueue = Queue()

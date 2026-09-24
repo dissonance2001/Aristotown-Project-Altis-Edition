@@ -1,7 +1,7 @@
 from direct.showbase.PythonUtil import lerp
 
-from toontown.battle import BattleProps, MovieUtil
-from toontown.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle import BattleProps, MovieUtil
+from toontown.clashbattle.battle.BattleProps import globalPropPool
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE
 from toontown.cutscene.editor.CSEditorEnums import SubEventArgumentType as SEAT
 from toontown.cutscene.CutsceneSequenceBase import cutsceneSequence, getUniqueCutsceneId

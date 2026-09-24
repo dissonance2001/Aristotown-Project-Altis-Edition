@@ -49,7 +49,7 @@ class ClientServicesManager(DistributedObjectGlobal):
 
     def setAvatars(self, avatars):
         avList = []
-        for avNum, avName, avDNA, avPosition, nameState, hp, maxHp, hat, glasses, backpack, shoes in avatars:
+        for avNum, avName, avDNA, avPosition, nameState, hp, maxHp, hat, glasses, backpack, shoes, nametagStyle, club in avatars:
             avDNA, equippedItems = unpackPotentialAvatarDNA(avDNA)
             nameOpen = int(nameState == 1)
             names = [avName, '', '', '']
@@ -59,7 +59,7 @@ class ClientServicesManager(DistributedObjectGlobal):
                 names[2] = avName
             elif nameState == 4: # REJECTED
                 names[3] = avName
-            av = PotentialAvatar(avNum, names, avDNA, avPosition, nameOpen, hp = hp, maxHp = maxHp, hat = hat, glasses = glasses, backpack = backpack, shoes = shoes)
+            av = PotentialAvatar(avNum, names, avDNA, avPosition, nameOpen, hp = hp, maxHp = maxHp, hat = hat, glasses = glasses, backpack = backpack, shoes = shoes, nametagStyle=nametagStyle, club=club)
             av.equippedItems = equippedItems
             avList.append(av)
 

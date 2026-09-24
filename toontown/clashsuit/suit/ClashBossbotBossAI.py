@@ -19,10 +19,10 @@ from toontown.clashbattle.battle import BattleExperienceAI
 from toontown.clashbattle.battle.distributed import ClashBattleDinersAI
 from toontown.clashbattle.battle.distributed import ClashBattleWaitersAI
 from toontown.building import ClashSuitBuildingGlobals
-from toontown.coghq.bossbothq.DistributedBanquetTableAI import DistributedBanquetTableAI
-from toontown.coghq.bossbothq import DistributedFoodBeltAI
-from toontown.coghq.bossbothq import DistributedGolfSpotAI
-from toontown.groups.GroupEnums import GroupType, Options
+from toontown.coghq.DistributedBanquetTableAI import DistributedBanquetTableAI
+from toontown.coghq import DistributedFoodBeltAI
+from toontown.coghq import DistributedGolfSpotAI
+#from toontown.groups.GroupEnums import GroupType, Options
 from toontown.instances import DistributedCutsceneSkipButtonAI
 from toontown.quest3.context.CogBossContext import BossbotBossContext
 from toontown.clashsuit.suit.ClashSuitAI import ClashSuitAI
@@ -38,7 +38,7 @@ class ClashBossbotBossAI(ClashBossCogAI, FSM):
     maxToonLevels = 77
     toonUpLevels = [3, 6, 9, 12]
 
-    groupType = GroupType.CEO
+   # groupType = GroupType.CEO
 
     def __init__(self, air):
         ClashBossCogAI.__init__(self, air, 'c')

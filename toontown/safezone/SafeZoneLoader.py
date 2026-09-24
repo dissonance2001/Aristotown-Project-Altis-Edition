@@ -37,9 +37,6 @@ class SafeZoneLoader(StateData.StateData):
         self.place = None
         self.playgroundClass = None
         self.townBattleDoneEvent = 'town-battle-done'
-        self.kudosBoardTouching = False
-        self.kudosBoardTouchTaskName = 'kudosBoardTouch-%s' % id(self)
-        self.kudosBoardControlsLocked = False
 
     def load(self):
         self.music = base.loader.loadMusic(self.musicFile)
@@ -50,7 +47,6 @@ class SafeZoneLoader(StateData.StateData):
         self.townBattle.load()
 
     def unload(self):
-        self.stopKudosBoardInteraction()
         self.parentFSMState.removeChild(self.fsm)
         del self.parentFSMState
         self.geom.removeNode()
@@ -90,7 +86,6 @@ class SafeZoneLoader(StateData.StateData):
             self.geom = hidden.attachNewNode(node)
         self.makeDictionaries(self.hood.dnaStore)
         self.createAnimatedProps(self.nodeList)
-        self.createKudosBoard()
         self.holidayPropTransforms = {}
         npl = self.geom.findAllMatches('**/=DNARoot=holiday_prop')
         for i in range(npl.getNumPaths()):
@@ -102,98 +97,6 @@ class SafeZoneLoader(StateData.StateData):
             self.geom.prepareScene(gsg)
         self.geom.flattenMedium()
 
-    def createKudosBoard(self):
-        placements = {
-            ToontownCentral: ((27.704, -42.685, 4.025), (134.023, 0.0, 0.0), 'ttcc_ext_ttc_kudosboard.png'),
-            DonaldsDock: ((2.691, 178.833, 3.281), (-19.623, 0.0, 0.0), 'ttcc_ext_bb_kudosboard.png'),
-            YeOlde: ((32.270, 44.393, -6.974), (-63.965, 0.0, 0.0), 'ttcc_ext_yott_kudosboard.png'),
-            DaisyGardens: ((-19.239, 82.249, 0.025), (-24.761, 0.0, 0.0), 'ttcc_ext_dg_kudosboard.png'),
-            MinniesMelodyland: ((71.344, 33.380, -14.498), (-66.793, 0.0, 0.0), 'ttcc_ext_mml_kudosboard.png'),
-            TheBrrrgh: ((-148.572, -74.862, 6.175), (109.773, 0.0, 0.0), 'ttcc_ext_tb_kudosboard.png'),
-            OutdoorZone: ((-7.216, -171.365, -0.143), (227.297, 0.0, 0.0), 'ttcc_ext_aa_kudosboard.png'),
-            DonaldsDreamland: ((-44.987, -33.449, -15.688), (98.051, 0.0, 0.0), 'ttcc_ext_ddl_kudosboard.png')
-        }
-        placement = placements.get(self.hood.hoodId)
-        if placement is None:
-            self.kudosBoard = None
-            return
-        self.kudosBoard = loader.loadModel('phase_4/models/props/ttcc_ext_kudosboard')
-        if self.kudosBoard.isEmpty():
-            self.notify.warning('Could not load Kudo Board model')
-            self.kudosBoard = None
-            return
-        texture = loader.loadTexture('phase_4/maps/kudos/' + placement[2])
-        if texture:
-            boardNodes = self.kudosBoard.findAllMatches('**/board')
-            if boardNodes.getNumPaths() == 0:
-                self.notify.warning('Could not find Kudo Board texture node: board')
-            else:
-                for i in range(boardNodes.getNumPaths()):
-                    boardNodes.getPath(i).setTexture(texture, 1)
-        else:
-            self.notify.warning('Could not load Kudo Board texture: %s' % placement[2])
-        self.kudosBoard.reparentTo(self.geom)
-        self.kudosBoard.setPos(*placement[0])
-        self.kudosBoard.setHpr(*placement[1])
-        self.kudosBoardInteractionPos = Point3(*placement[0])
-
-    def startKudosBoardInteraction(self):
-        taskMgr.remove(self.kudosBoardTouchTaskName)
-        self.kudosBoardTouching = False
-        self.accept('kudosBoardGuiClosed', self.unlockKudosBoardControls)
-        taskMgr.doMethodLater(
-            0.25,
-            self.__checkKudosBoardTouch,
-            self.kudosBoardTouchTaskName
-        )
-
-    def stopKudosBoardInteraction(self):
-        taskMgr.remove(self.kudosBoardTouchTaskName)
-        self.kudosBoardTouching = False
-        if hasattr(base, 'localAvatar') and base.localAvatar:
-            if hasattr(base.localAvatar, 'closeKudosBoardGui'):
-                base.localAvatar.closeKudosBoardGui()
-        self.unlockKudosBoardControls()
-        self.ignore('kudosBoardGuiClosed')
-
-    def __checkKudosBoardTouch(self, task):
-        if not hasattr(base, 'localAvatar') or base.localAvatar is None:
-            return Task.again
-        if not hasattr(self, 'kudosBoardInteractionPos'):
-            return Task.done
-
-        toonPos = base.localAvatar.getPos(render)
-        dx = toonPos[0] - self.kudosBoardInteractionPos[0]
-        dy = toonPos[1] - self.kudosBoardInteractionPos[1]
-        dz = toonPos[2] - self.kudosBoardInteractionPos[2]
-        distanceSquared = dx * dx + dy * dy
-
-        if distanceSquared <= 16.0 and abs(dz) <= 10.0:
-            if not self.kudosBoardTouching:
-                self.kudosBoardTouching = True
-                self.openKudosBoardGui()
-        elif distanceSquared >= 36.0 or abs(dz) > 14.0:
-            self.kudosBoardTouching = False
-
-        return Task.again
-
-    def openKudosBoardGui(self):
-        if not hasattr(base, 'localAvatar') or base.localAvatar is None:
-            return
-        if getattr(base.localAvatar, 'kudosBoardGui', None):
-            return
-        if hasattr(base.localAvatar, 'disableAvatarControls'):
-            base.localAvatar.disableAvatarControls()
-            self.kudosBoardControlsLocked = True
-        base.localAvatar.requestKudosBoard()
-
-    def unlockKudosBoardControls(self):
-        if not self.kudosBoardControlsLocked:
-            return
-        self.kudosBoardControlsLocked = False
-        if hasattr(base, 'localAvatar') and base.localAvatar:
-            if hasattr(base.localAvatar, 'enableAvatarControls'):
-                base.localAvatar.enableAvatarControls()
 
     def makeDictionaries(self, dnaStore):
         self.nodeList = []
@@ -229,10 +132,8 @@ class SafeZoneLoader(StateData.StateData):
         self.place.load()
         self.place.enter(requestStatus)
         base.cr.playGame.setPlace(self.place)
-        self.startKudosBoardInteraction()
 
     def exitPlayground(self):
-        self.stopKudosBoardInteraction()
         self.ignore(self.placeDoneEvent)
         self.place.exit()
         self.place.unload()

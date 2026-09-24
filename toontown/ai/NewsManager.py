@@ -224,7 +224,9 @@ class NewsManager(DistributedObject.DistributedObject):
         return hasattr(base, 'localAvatar') and hasattr(base.localAvatar, 'chatContainer') and hasattr(base.localAvatar.chatContainer, 'speedChatMenu')
 
     def announceMessage(self, message: str, senderName=TTLocalizer.lToonHQ):
-        self.cr.chatManager.sendSystemMessageLocally(message, senderName=senderName)
+        av = getattr(base, 'localAvatar', None)
+        if av:
+            av.setSystemMessage(0, '%s: %s' % (senderName, message) if senderName else message, WTSystem)
 
     def startHoliday(self, holidayId):
         if holidayId not in self.holidayIdList:

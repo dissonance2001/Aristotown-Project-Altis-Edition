@@ -14,7 +14,7 @@ from toontown.clashsuit.suit import BossCogGlobals
 from toontown.clashbattle.battle import BattleBase, MovieToonVictory, RewardPanel
 from toontown.clashbattle.battle.BattleProps import *
 from toontown.coghq import CogDisguiseGlobals
-from toontown.coghq.sellbothq.HQRamp import HQRamp
+from toontown.coghq.HQRamp import HQRamp
 from toontown.distributed import DelayDelete
 from toontown.gui.game.condition import ConditionGlobals
 from toontown.inventory.enums.ItemEnums import IOUItemType
@@ -35,7 +35,6 @@ from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 OneBossCog = None
 
 
-@DirectNotifyCategory()
 class ClashSellbotBoss(ClashBossCog.ClashBossCog, FSM):
     # The cage slowly drops from the ceiling to the floor as the battle progresses.
     cageHeights = [100, 81, 63, 44, 25, 18]

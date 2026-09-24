@@ -7,7 +7,7 @@ from toontown.building.HQBuildingAI import HQBuildingAI
 from toontown.building.TutorialBuildingAI import TutorialBuildingAI
 from toontown.quest import Quests
 from toontown.suit.DistributedTutorialSuitAI import DistributedTutorialSuitAI
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import ToontownGlobals
 

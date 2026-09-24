@@ -567,6 +567,8 @@ class GetAvatarsFSM(AvatarOperationFSM):
             index = self.avList.index(avId)
             wishNameState = fields.get('WishNameState', [''])[0]
             name = fields['setName'][0]
+            nametagStyle = 1  # TODO: Make this work with hammerspace, if we dont rework the whole main menu
+            club = fields.get('setToonClubs', [[]])[0]
             nameState = 0
 
             if wishNameState == 'OPEN':
@@ -603,7 +605,7 @@ class GetAvatarsFSM(AvatarOperationFSM):
             except Exception:
                 self.notify.warning(f"Couldn't fetch equipped items for avatar {avId}:\n{traceback.format_exc()}")
 
-            potentialAvs.append([avId, name, avatarDNA, index, nameState, fields['setHp'][0], fields['setMaxHp'][0], fields.get('setHat', []), fields.get('setGlasses', []), fields.get('setBackpack', []), fields.get('setShoes', [])])
+            potentialAvs.append([avId, name, avatarDNA, index, nameState, fields['setHp'][0], fields['setMaxHp'][0], fields.get('setHat', []), fields.get('setGlasses', []), fields.get('setBackpack', []), fields.get('setShoes', []), nametagStyle, club])
 
         self.csm.sendUpdateToAccountId(self.target, 'setAvatars', [potentialAvs])
         self.demand('Off')

@@ -27,7 +27,7 @@ DefaultPosHpr = (-65.6, -17.579, -1.975, 149, 0, 0)
 ZoneToPosHpr = {
     ToontownGlobals.ToontownCentral:   (-65.6, -17.579, -1.975, 149, 0, 0),
     ToontownGlobals.DonaldsDock:       (59.5, 108.45, 3.28, 116, 0, 0),
-    ToontownGlobals.OldeToontown:      (-15.05, -114.3, -7.0, 22, 0, 0),
+    ToontownGlobals.YeOlde:      (-15.05, -114.3, -7.0, 22, 0, 0),
     ToontownGlobals.DaisyGardens:      (-45.61, 275.14, 14.028, 22.8, 0, 0),
     ToontownGlobals.MinniesMelodyland: (-85.862, -84.032, 6.525, -39.55, 0, 0),
     ToontownGlobals.TheBrrrgh:         (17.98, -45.79, 6.192, 62.925, 0, 0),

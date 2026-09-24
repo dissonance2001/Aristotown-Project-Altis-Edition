@@ -6,7 +6,7 @@ from direct.interval.IntervalGlobal import *
 from toontown.clashbattle.battle import BattleGlobals, MovieUtil
 from toontown.clashsuit.suit import SuitDNA, SuitGlobals
 from toontown.clashsuit.suit.ClashSuitBase import ClashSuitBase
-from toontown.toon.DistributedToonBase import DistributedToonBase
+from toontown.toon.ClashDistributedToonBase import ClashDistributedToonBase
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 from typing import TYPE_CHECKING
@@ -26,7 +26,7 @@ class BattleCamera:
     AUTO_WAITFORINPUT_HEIGHT = True
 
     def __init__(self, battle) -> None:
-        self.toons = []  # type: List[DistributedToonBase]
+        self.toons = []  # type: List[ClashDistributedToonBase]
         self.suits = []  # type: List[ClashSuitBase]
         self.battle = battle  # type: ClashBattleBase
 

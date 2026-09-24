@@ -1,4 +1,4 @@
-from toontown.toon.DistributedNPCSpecialQuestGiverAI import DistributedNPCSpecialQuestGiverAI
+from toontown.toon.npc.NPCToons import DistributedNPCSpecialQuestGiverAI
 from toontown.building import FADoorCodes
 from otp.ai.MagicWordGlobal import *
 from toontown.hood import ZoneUtil

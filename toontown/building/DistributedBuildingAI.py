@@ -662,6 +662,9 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     def setSuitPlannerExt(self, planner):
         self.suitPlannerExt = planner
 
+    def setSuitPlannerExt(self, planner):
+        self.suitPlannerExt = planner
+
     def _createSuitInterior(self):
         return DistributedSuitInteriorAI.DistributedSuitInteriorAI(self.air, self.elevator)
 

@@ -3,7 +3,7 @@ from toontown.hood import HoodAI
 from toontown.safezone import ButterflyGlobals
 from toontown.safezone import DistributedButterflyAI
 from toontown.safezone import DistributedTrolleyAI
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.ai import DistributedTrickOrTreatTargetAI

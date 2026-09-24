@@ -1,3 +1,4 @@
+import random
 from panda3d.core import ConfigVariableBool, Point3, VBase3
 from toontown.chat.constants.ChatGlobals import  CFSpeech, CFTimeout
 from toontown.nametag import NametagGlobals
@@ -157,7 +158,7 @@ class ClashBattle(ClashBattleBase.ClashBattleBase):
             pos, hpr = camPos.getPos(camera.getParent()), camPos.getHpr(camera.getParent())
             camPos.detachNode()
 
-            if base.settings["reduce-battle-effects"]:
+            if settings.get('reduce-battle-effects'):
                 camTrack = Sequence(
                     Func(base.camLens.setMinFov, self.camFOFov/(4./3.)),
                     Func(camera.setPos, pos),
@@ -322,7 +323,7 @@ class ClashBattle(ClashBattleBase.ClashBattleBase):
 
         if self.hasLocalToon():
             NametagGlobals.setMasterArrowsOn(0)
-            base.cr.gameGui.expBar.show()
+            base.localAvatar.expBar.show
             if self.localToonActive() == 0:
                 self.removeInactiveLocalToon(base.localAvatar)
     

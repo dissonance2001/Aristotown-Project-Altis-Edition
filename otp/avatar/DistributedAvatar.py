@@ -15,6 +15,7 @@ from toontown.battle.BattleProps import globalPropPool
 from toontown.modifiers.ModifiableDO import ModifiableDO
 from toontown.modifiers.Modifier import Modifier
 from toontown.modifiers.ModifierEnums import HP_MODIFIERS
+from toontown.gui.game.condition import ConditionGlobals
 
 class DistributedAvatar(DistributedActor, Avatar, ModifiableDO):
     HpTextGenerator = TextNode('HpTextGenerator')

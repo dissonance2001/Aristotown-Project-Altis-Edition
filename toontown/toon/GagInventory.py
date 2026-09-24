@@ -98,6 +98,7 @@ class GagInventory(GagInventoryBase.GagInventoryBase, DirectFrame):
 
         self.counterfeitBackSeq = None
         self.surrenderSeq = None
+        self.__respectInvasions = 1
         self.lastSurrenderNum = 0
         self.surrenderIncSfx = None
         self.surrenderDecSfx = None
@@ -2495,3 +2496,9 @@ class GagInventory(GagInventoryBase.GagInventoryBase, DirectFrame):
             self.surrenderButtonFlag.surrenderActive = False
 
         self.surrenderSeq.start()
+
+    def setRespectInvasions(self, flag):
+        self.__respectInvasions = flag
+
+    def getRespectInvasions(self):
+        return self.__respectInvasions

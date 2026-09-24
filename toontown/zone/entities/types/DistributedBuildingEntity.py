@@ -609,7 +609,7 @@ class DistributedBuildingEntity(DistributedNodePathEntity, FSM):
                         toon, TOON_VICTORY_EXIT_TIME * 0.25, Point3(0, 0, 0), other=self.elevatorNodePath
                     ),
                     # Stop the toon from running
-                    Func(toon.request, 'Neutral'),
+                    Func(toon.request, 'neutral'),
                     # Free the toon up to walk around on his own again
                     Func(toon.startSmooth),
                     Func(TTEmote.globalEmote.releaseBody, toon, 'getVictory')

@@ -1092,7 +1092,7 @@ class DropdownSuitAnims(CSPanelAdjusterBase, DirectScrollableOptionMenu):
     def __init__(self, parent, subevent, kwarg, cutsceneDict, **kw):
         CSPanelAdjusterBase.__init__(self, subevent, kwarg, cutsceneDict)
 
-        from toontown.suit.SuitAnimationIndex import AllSuits, AllSuitsMinigame, AllSuitsTutorialBattle, AllSuitsBattle, ExtraSuitAnims
+        from toontown.clashsuit.suit.SuitAnimationIndex import AllSuits, AllSuitsMinigame, AllSuitsTutorialBattle, AllSuitsBattle, ExtraSuitAnims
         self.items = list(map(lambda x: x[0], list(AllSuits) + list(AllSuitsMinigame) + list(AllSuitsTutorialBattle) +
                               list(AllSuitsBattle) + list(ExtraSuitAnims)))
 
@@ -1147,8 +1147,8 @@ class DropdownSuitHeadAnims(CSPanelAdjusterBase, DirectScrollableOptionMenu):
     def __init__(self, parent, subevent, kwarg, cutsceneDict, **kw):
         CSPanelAdjusterBase.__init__(self, subevent, kwarg, cutsceneDict)
 
-        from toontown.suit.SuitAnimationIndex import ExtraSuitHeadAnims
-        from toontown.suit.heads.AnimatedSuitHead import AllSuitHeads, AllSuitBattleHeads
+        from toontown.clashsuit.suit.SuitAnimationIndex import ExtraSuitHeadAnims
+        from toontown.clashsuit.suit.heads.AnimatedSuitHead import AllSuitHeads, AllSuitBattleHeads
         self.items = list(map(lambda x: x[0], list(AllSuitHeads) + list(AllSuitBattleHeads) + list(ExtraSuitHeadAnims)))
 
         self.selectedIndex = self.subevent[kwarg]
@@ -1202,7 +1202,7 @@ class DropdownBossAnims(CSPanelAdjusterBase, DirectScrollableOptionMenu):
     def __init__(self, parent, subevent, kwarg, cutsceneDict, **kw):
         CSPanelAdjusterBase.__init__(self, subevent, kwarg, cutsceneDict)
 
-        from toontown.suit.BossCog import AnimList
+        from toontown.clashsuit.suit.BossCog import AnimList
         self.items = list(map(lambda x: x[0], list(AnimList)))
 
         self.selectedIndex = self.subevent[kwarg]

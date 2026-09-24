@@ -2,7 +2,7 @@ from panda3d.core import CollisionTube, CollisionNode
 from otp.nametag.NametagGroup import *
 from toontown.pets import Pet
 from toontown.suit import DistributedSuitBase, SuitDNA, Suit
-from toontown.toon import NPCToons, Toon, ToonDNA
+from toontown.toon.npc import NPCToons, Toon, ToonDNA
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 

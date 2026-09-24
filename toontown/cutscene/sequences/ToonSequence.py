@@ -2,7 +2,7 @@ import random
 import math
 
 from direct.showbase.PythonUtil import lerp
-from toontown.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle.BattleProps import globalPropPool
 
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE
 from toontown.cutscene.editor.CSEditorEnums import SubEventArgumentType as SEAT
@@ -11,14 +11,14 @@ from toontown.cutscene.CutsceneSequenceBase import cutsceneSequence, getUniqueCu
 from panda3d.core import Point3, LVecBase3f, LVecBase4f, NodePath
 from direct.interval.IntervalGlobal import *
 
-from toontown.battle.BattleBase import BattleBase
+from toontown.clashbattle.battle.BattleBase import BattleBase
 from toontown.cutscene.editor.CSEditorClasses import EventArgument, CSEditorException
 from toontown.cutscene.editor.CSEditorEnums import ToonBlockShape, ToonSubEventTargetGroup
 from toontown.building.ElevatorConstants import ElevatorPoints, BigElevatorPoints
 from toontown.cutscene.CutsceneSequenceHelpers import NodePathWithState, getHprBetweenPoints
 from toontown.toonbase import TTLocalizer
 from toontown.effects import DustCloud
-from toontown.suit.SuitDNA import allSuitNames
+from toontown.clashsuit.suit.SuitDNA import allSuitNames
 
 
 # Conditionally call loop on toon or their disguise.
@@ -596,7 +596,7 @@ def seq_undisguiseAllToons(delay:         SEAT.slider_min_zero = 0,
 @cutsceneSequence(name='Toon: Set One Anim State', enum=EDE.setOneAnimState)
 def seq_setOneToonAnimState(toonIndex:      SEAT.dropdown_toons = 0,
                             delay:          SEAT.slider_min_zero = 0,
-                            animState:      SEAT.dropdown_toon_anim_states = 'Neutral',
+                            animState:      SEAT.dropdown_toon_anim_states = 'neutral',
                             cutsceneDict:   dict = None) -> Sequence:
     retParallel = Parallel()
     toon = cutsceneDict['toons'][toonIndex]
@@ -618,7 +618,7 @@ def seq_setOneToonAnimState(toonIndex:      SEAT.dropdown_toons = 0,
 
 @cutsceneSequence(name='Toon: Set All Anim State', enum=EDE.setAllAnimStates)
 def seq_setToonAnimState(delay:         SEAT.slider_min_zero = 0,
-                         animState:     SEAT.dropdown_toon_anim_states = 'Neutral',
+                         animState:     SEAT.dropdown_toon_anim_states = 'neutral',
                          cutsceneDict:  dict = None) -> Sequence:
     retParallel = Parallel()
     for toon in cutsceneDict['toons']:
@@ -931,7 +931,7 @@ def seq_squishToon(toonIndex:  SEAT.dropdown_toons = 0,
         Func(toon.setAnimState, "Squish"),
         Func(toon.playDialogueForString, "!"),
         Wait(2.7),
-        Func(toon.setAnimState, "Neutral"),
+        Func(toon.setAnimState, "neutral"),
     )
 
 

@@ -29,7 +29,7 @@ from toontown.toonbase import TTLocalizer
 # from toontown.toonbase import BattleGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownTimer
-from toontown.coghq.lawbothq import EvidenceGUI
+from toontown.coghq import EvidenceGUI
 from toontown.toonbase.GlobalCacheData import GlobalCacheKey
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
@@ -163,17 +163,17 @@ class ClashLawbotBoss(ClashBossCog.ClashBossCog, FSM.FSM):
         self.makeWitnessToon()
         self.makeLawyerToon()
         self.__loadMopaths()
-        self.addSpeedchatMenu()
+       # self.addSpeedchatMenu()
         self.treads = self.find('**/treads')
         if OneBossCog is not None:
             self.notify.warning('Multiple BossCogs visible.')
         OneBossCog = self
 
-    def addSpeedchatMenu(self):
-        base.localAvatar.chatContainer.speedChatMenu.addCLOMenu()
+   # def addSpeedchatMenu(self):
+    #    base.localAvatar.chatContainer.speedChatMenu.addCLOMenu()
 
-    def removeSpeedchatMenu(self):
-        base.localAvatar.chatContainer.speedChatMenu.removeCLOMenu()
+   # def removeSpeedchatMenu(self):
+    #    base.localAvatar.chatContainer.speedChatMenu.removeCLOMenu()
 
     def disable(self):
         """
@@ -206,7 +206,7 @@ class ClashLawbotBoss(ClashBossCog.ClashBossCog, FSM.FSM):
         self.cr.relatedObjectMgr.abortRequest(self.lawyerRequest)
         self.lawyerRequest = None
         base.musicMgr.stopMusic()
-        self.removeSpeedchatMenu()
+       # self.removeSpeedchatMenu()
         if OneBossCog == self:
             OneBossCog = None
         if self.victorySequence:

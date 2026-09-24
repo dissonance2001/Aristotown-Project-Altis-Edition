@@ -12,6 +12,10 @@ def isCogHQZone(zoneId):
     return zoneId >= 10000 and zoneId < 15000 or (zoneId >= 19000 and zoneId <= 19999) or (zoneId >= 21000 and zoneId <= 21999)
 
 
+def normalizeHoodId(zoneId: int) -> int:
+    return zoneId - (zoneId % 100)
+
+
 def isMintInteriorZone(zoneId):
     return zoneId in (CashbotMintIntA, CashbotMintIntB, CashbotMintIntC)
 
@@ -277,3 +281,4 @@ def zoneIdToName(zoneId):  # type: (int) -> Tuple[str, str]
     if not descriptive:
         return channelName, str(zoneId)
     return channelName, descriptive[1]
+

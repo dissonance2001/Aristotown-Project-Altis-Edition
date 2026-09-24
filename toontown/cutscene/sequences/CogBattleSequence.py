@@ -3,9 +3,9 @@ import random
 from direct.gui.OnscreenText import OnscreenText
 from direct.showbase.PythonUtil import lerp
 
-from toontown.battle.BattleProps import globalPropPool
-from toontown.battle.BattleSounds import globalBattleSoundCache
-from toontown.suit import SuitTimings
+from toontown.clashbattle.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle.BattleSounds import globalBattleSoundCache
+from toontown.clashsuit.suit import SuitTimings
 from toontown.cutscene.CutsceneSequenceHelpers import NodePathWithState, getHprBetweenPoints
 from toontown.cutscene.sequences.SuitSequence import createSuitMoveIvalErfit, seq_showSuit
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE

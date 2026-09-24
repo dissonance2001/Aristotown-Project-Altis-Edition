@@ -1,7 +1,7 @@
 from direct.showbase.PythonUtil import lerp
 
-from toontown.battle import BattleProps, MovieUtil
-from toontown.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle import BattleProps, MovieUtil
+from toontown.clashbattle.battle.BattleProps import globalPropPool
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE
 from toontown.cutscene.editor.CSEditorEnums import SubEventArgumentType as SEAT
 from toontown.cutscene.CutsceneSequenceBase import cutsceneSequence, getUniqueCutsceneId
@@ -774,7 +774,7 @@ def seq_setChainsawHeadGlitchState(suitIndex: SEAT.dropdown_suits = 0,
     if not suit:
         return Sequence()
 
-    from toontown.suit.heads.classes.ChainsawAnimatedSuitHead import ChainsawAnimatedSuitHead
+    from toontown.clashsuit.suit.heads.classes.ChainsawAnimatedSuitHead import ChainsawAnimatedSuitHead
     if not (suit.specialHead and isinstance(suit.specialHead, ChainsawAnimatedSuitHead)):
         return Sequence()
 
@@ -794,7 +794,7 @@ def seq_setPrethinkerBrainBlastState(suitIndex: SEAT.dropdown_suits = 0,
     if not suit:
         return Sequence()
 
-    from toontown.suit.heads.classes.PrethinkerAnimatedSuitHead import PrethinkerAnimatedSuitHead
+    from toontown.clashsuit.suit.heads.classes.PrethinkerAnimatedSuitHead import PrethinkerAnimatedSuitHead
     if not (suit.specialHead and isinstance(suit.specialHead, PrethinkerAnimatedSuitHead)):
         return Sequence()
 

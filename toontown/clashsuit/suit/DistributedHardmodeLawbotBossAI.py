@@ -6,7 +6,7 @@ from direct.showbase.PythonUtil import lerp
 from toontown.clashsuit.suit import BossCogGlobals
 from toontown.clashbattle.battle.BattleGlobals import BattleOrderPriority
 from toontown.clashbattle.battle.distributed import DistributedBattleLitigatorsAI
-from toontown.coghq.lawbothq import DistributedHardmodeLawbotCannonAI
+from toontown.coghq import DistributedHardmodeLawbotCannonAI
 from toontown.inventory.enums.ItemEnums import BackgroundItemType, BoosterItemType, MaterialItemType
 from toontown.clashsuit.suit import (DistributedHardmodeLawbotBossSuitAI,
                            DistributedHardmodeLawbotBossSuitAttackAI,
@@ -20,9 +20,8 @@ tornadoAttacks = [BossCogGlobals.BossCogSpiralTornadoAreaAttack,
                   BossCogGlobals.BossCogFourWayTornadoAreaAttack]
 
 
-@DirectNotifyCategory()
 class DistributedHardmodeLawbotBossAI(ClashLawbotBossAI):
-    groupType = GroupType.OCLO
+  #  groupType = GroupType.OCLO
     WANT_TOONO = True
 
     def __init__(self, air):
@@ -1154,13 +1153,13 @@ class DistributedHardmodeLawbotBossAI(ClashLawbotBossAI):
         if lawyerLevel <= 5:
             styleList = [ToontownGlobals.ToontownCentral,
                          ToontownGlobals.DonaldsDock,
-                         ToontownGlobals.OldeToontown,
+                         ToontownGlobals.YeOlde,
                          ToontownGlobals.GolfZone,
                          ToontownGlobals.GoofySpeedway,
                          ToontownGlobals.DaisyGardens]
         elif lawyerLevel <= 7:
             styleList = [ToontownGlobals.DonaldsDock,
-                         ToontownGlobals.OldeToontown,
+                         ToontownGlobals.YeOlde,
                          ToontownGlobals.GolfZone,
                          ToontownGlobals.GoofySpeedway,
                          ToontownGlobals.DaisyGardens,

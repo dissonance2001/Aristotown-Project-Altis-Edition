@@ -35,7 +35,7 @@ from toontown.clashsuit.suit.ClashSuit import ClashSuit
 from toontown.clashsuit.suit.ClashSuitBase import ClashSuitBase
 from toontown.toon import GagInventory
 from toontown.toon import TTEmote
-from toontown.toon.DistributedToonBase import DistributedToonBase
+from toontown.toon.ClashDistributedToonBase import ClashDistributedToonBase
 from toontown.toonbase.MarginManagerCell import ScreenCellFlag
 from toontown.toonbase.ToonBase import *
 
@@ -210,9 +210,13 @@ class ClashBattleBase(DistributedNode, FSM, BattleBase):
     def _cleanupLocalToon(self):
         self.removeLocalToon()
         base.camLens.setMinFov(settings['fieldofview'] / (4. / 3.))
-        base.localAvatar.cameraFSM.request('Off')
+        cameraFSM = getattr(base.localAvatar, 'cameraFSM', None)
+        if cameraFSM is not None:
+            cameraFSM.request('Off')
         camera.wrtReparentTo(base.localAvatar)
-        base.localAvatar.cameraFSM.request('Orbit')
+        cameraFSM = getattr(base.localAvatar, 'cameraFSM', None)
+        if cameraFSM is not None:
+            cameraFSM.request('Orbit')
         self.townBattle.battle = None
 
     def cleanupBattle(self):
@@ -786,7 +790,7 @@ class ClashBattleBase(DistributedNode, FSM, BattleBase):
         self.toons = []
 
         for toonId, state, _ in toons:
-            toon: DistributedToonBase = self.getToon(toonId)
+            toon: ClashDistributedToonBase = self.getToon(toonId)
             if toon is None:
                 self.notify.warning('setMembers() - toon not in cr!')
                 continue
@@ -1088,7 +1092,7 @@ class ClashBattleBase(DistributedNode, FSM, BattleBase):
         self.notify.debug('883 suit.battleTrapProp = None')
         suit.battleTrapIsFresh = 0
 
-    def __removeToon(self, toon: DistributedToonBase, unexpected = 0):
+    def __removeToon(self, toon: ClashDistributedToonBase, unexpected = 0):
         self.notify.debug('__removeToon(%d)' % toon.doId)
         if toon in self.toons:
             self.toons.remove(toon)
@@ -1121,11 +1125,12 @@ class ClashBattleBase(DistributedNode, FSM, BattleBase):
         if base.cr.playGame.getPlace() is not None:
             base.cr.playGame.getPlace().setState('Walk')
             camera.wrtReparentTo(base.localAvatar)
-            base.localAvatar.cameraFSM.request('Orbit')
+            cameraFSM = getattr(base.localAvatar, 'cameraFSM', None)
+            if cameraFSM is not None:
+                cameraFSM.request('Off')
         base.localAvatar.earnedExperience = None
         self.localToonFsm.request('NoLocalToon')
         # Earlier we went and got rid of bottom chat messages, so go ahead and re-enable these.
-        base.unflagScreenCells(ScreenCellFlag.inBattle, base.bottomCells)
         self.cleanupLocalBattleToon()
 
     def removeInactiveLocalToon(self, toon):
@@ -1338,7 +1343,6 @@ class ClashBattleBase(DistributedNode, FSM, BattleBase):
         hpr = VBase3(openSpot[1], 0.0, 0.0)
         toon.neutralAvatar()
         toon.setPosHpr(self, pos, hpr)
-        toon.setGeomNodeH(0)
 
         # Start playing the cinematic version of the movie
         # if base.localAvatar == toon:
@@ -1372,11 +1376,10 @@ class ClashBattleBase(DistributedNode, FSM, BattleBase):
 
         self.accept(suit.uniqueName("avatarUpdated"), self.__requestAdjustTownBattle, extraArgs=[True])
 
-    def makeToonActive(self, toon: DistributedToonBase) -> None:
+    def makeToonActive(self, toon: ClashDistributedToonBase) -> None:
         toonPos, toonHpr = self.getActorPosHpr(toon)
         toon.setPosHpr(self, toonPos, toonHpr)
         toon.neutralAvatar()
-        toon.setGeomNodeH(0)
 
         toon.resetBattle()
         toon.setBattle(self)
@@ -1396,7 +1399,7 @@ class ClashBattleBase(DistributedNode, FSM, BattleBase):
         if toon.isLocal():
             self.updateInvMods()
 
-    def __makeToonRun(self, toon: DistributedToonBase, ts):
+    def __makeToonRun(self, toon: ClashDistributedToonBase, ts):
         self.notify.debug('__makeToonRun(%d)' % toon.doId)
         # Clean up their battle avatar, since they are gone gone
         toon.cleanupBattle()
@@ -1552,8 +1555,7 @@ class ClashBattleBase(DistributedNode, FSM, BattleBase):
         # No arrows - they just get in the way
         NametagGlobals.setMasterArrowsOn(0)
         # Toon panels will cover up the entire bottom of the screen, so disallow those chat messages.
-        base.flagScreenCells(ScreenCellFlag.inBattle, base.bottomCells)
-        base.cr.gameGui.expBar.hide()
+        base.localAvatar.expBar.hide
         # Put local toon into 'Attack' state
         if self.townBattle.fsm.getCurrentState().getName() == 'Off':
             self.townBattle.setState('Attack')
@@ -1856,9 +1858,13 @@ class ClashBattleBase(DistributedNode, FSM, BattleBase):
         else:
             # Otherwise, reparent the camera back to the toon where it
             # belongs (most of the time).
-            base.localAvatar.cameraFSM.request('Off')
+            cameraFSM = getattr(base.localAvatar, 'cameraFSM', None)
+            if cameraFSM is not None:
+                cameraFSM.request('Off')
             camera.wrtReparentTo(base.localAvatar)
-            base.localAvatar.cameraFSM.request('Orbit')
+            cameraFSM = getattr(base.localAvatar, 'cameraFSM', None)
+            if cameraFSM is not None:
+                cameraFSM.request('Orbit')
             messenger.send('localToonLeftBattle')
         base.camLens.setMinFov(settings['fieldofview'] / (4. / 3.))
 

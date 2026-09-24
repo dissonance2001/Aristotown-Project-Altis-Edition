@@ -993,7 +993,7 @@ class ClashSuit(ClashSuitBase, FSM, DelayDeletable):
                 # returns just the current page of a multi-page chat
                 # message.  This way we aren't fooled by long pages
                 # that end in question marks.
-                self.playDialogueForString(self.nametag.getChat())
+                self.playDialogueForString(self.nametag.getChatText())
                 if self.soundChatBubble is not None:
                     base.playSfx(self.soundChatBubble, node=self)
             elif self.nametag.getStompText():

@@ -257,9 +257,9 @@ class CutsceneLoader:
 
         from toontown.toon.Toon import Toon
         from direct.actor.Actor import Actor
-        from toontown.suit.BossCog import BossCog
-        from toontown.suit.Suit import Suit
-        from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
+        from toontown.clashsuit.suit.BossCog import BossCog
+        from toontown.clashsuit.suit.Suit import Suit
+        from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
         from toontown.building.DistributedElevator import DistributedElevator
         TYPE_MATCH = {
             Toon: (toons, actors, nodes),

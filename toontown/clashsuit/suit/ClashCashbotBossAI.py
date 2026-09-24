@@ -8,13 +8,13 @@ from direct.fsm import FSM
 from toontown.clashsuit.suit import BossCogGlobals
 from otp.ai.AIBaseGlobal import simbase
 from toontown.building import ClashSuitBuildingGlobals
-from toontown.coghq.cashbothq import (DistributedCashbotBossCraneAI,
+from toontown.coghq import (DistributedCashbotBossCraneAI,
                                       DistributedCashbotBossCraneFastAI,
                                       DistributedCashbotBossSafeAI,
                                       DistributedCashbotBossTreasureAI)
-from toontown.coghq.cashbothq.DistributedCashbotBossObjectAI import \
+from toontown.coghq.DistributedCashbotBossObjectAI import \
     DistributedCashbotBossObjectAI
-from toontown.groups.GroupEnums import GroupType, Options
+#from toontown.groups.GroupEnums import GroupType, Options
 from toontown.instances import DistributedCutsceneSkipButtonAI
 from toontown.inventory.enums.ItemEnums import BackgroundItemType, BoosterItemType, MaterialItemType
 from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
@@ -31,7 +31,7 @@ class ClashCashbotBossAI(ClashBossCogAI.ClashBossCogAI, FSM.FSM):
     
     maxGoons = 8
 
-    groupType = GroupType.CFO
+   # groupType = GroupType.CFO
 
     def __init__(self, air):
         ClashBossCogAI.ClashBossCogAI.__init__(self, air, 'm')
@@ -197,10 +197,10 @@ class ClashCashbotBossAI(ClashBossCogAI.ClashBossCogAI, FSM.FSM):
         dy = radius * math.sin(angle)
         fpos = self.scene.getRelativePoint(self, Point3(v[0] + dx, v[1] + dy, 0))
         if goon.strength <= 10:
-            style = random.choice([ToontownGlobals.ToontownCentral, ToontownGlobals.DonaldsDock, ToontownGlobals.OldeToontown, ToontownGlobals.GoofySpeedway, ToontownGlobals.GolfZone, ToontownGlobals.DaisyGardens])
+            style = random.choice([ToontownGlobals.ToontownCentral, ToontownGlobals.DonaldsDock, ToontownGlobals.YeOlde, ToontownGlobals.GoofySpeedway, ToontownGlobals.GolfZone, ToontownGlobals.DaisyGardens])
             healAmount = 4
         elif goon.strength <= 15:
-            style = random.choice([ToontownGlobals.OldeToontown, ToontownGlobals.GoofySpeedway, ToontownGlobals.GolfZone, ToontownGlobals.DaisyGardens, ToontownGlobals.MinniesMelodyland])
+            style = random.choice([ToontownGlobals.YeOlde, ToontownGlobals.GoofySpeedway, ToontownGlobals.GolfZone, ToontownGlobals.DaisyGardens, ToontownGlobals.MinniesMelodyland])
             healAmount = 8
         else:
             style = random.choice([ToontownGlobals.TheBrrrgh, ToontownGlobals.OutdoorZone, ToontownGlobals.DonaldsDreamland])

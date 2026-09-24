@@ -7,7 +7,7 @@ from direct.fsm import FSM
 from toontown.clashsuit.suit import BossCogGlobals
 from otp.ai.AIBaseGlobal import *
 from toontown.building import ClashSuitBuildingGlobals
-from toontown.groups.GroupEnums import GroupType
+#from toontown.groups.GroupEnums import GroupType
 from toontown.instances import DistributedCutsceneSkipButtonAI
 from toontown.inventory.enums.ItemEnums import BackgroundItemType, BoosterItemType, IOUItemType
 from toontown.inventory.registry.IOURegistry import IOURegistry
@@ -21,14 +21,13 @@ from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.toon.gui.ToonTipGlobals import TTE
 
 
-@DirectNotifyCategory()
 class ClashSellbotBossAI(ClashBossCogAI.ClashBossCogAI, FSM.FSM):
 
     limitHitCount = 6
     hitCountDamage = 350
     numPies = 50
 
-    groupType = GroupType.VP
+   # groupType = GroupType.VP
 
     def __init__(self, air):
         ClashBossCogAI.ClashBossCogAI.__init__(self, air, 's')

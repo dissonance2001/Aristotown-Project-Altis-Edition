@@ -7,7 +7,7 @@ from toontown.effects import DustCloud
 from toontown.suit import SuitTimings
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.battle.BattleBase import PASS, NPCSOS
 from toontown.chat import ResistanceChat
 from toontown.chat.ChatGlobals import *

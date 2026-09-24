@@ -32,7 +32,7 @@ from toontown.coghq import CogDisguiseGlobals
 from toontown.distributed import DelayDelete
 from toontown.nametag.NametagGlobals import *
 from toontown.suit import SellbotBossGlobals
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toonbase import ToontownGlobals

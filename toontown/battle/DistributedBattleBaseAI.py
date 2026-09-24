@@ -19,7 +19,7 @@ from toontown.ai import DatabaseObject
 from toontown.toon import DistributedToonAI
 from toontown.toon import GagInventoryBase
 from toontown.toonbase import ToontownGlobals
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toon import IOURegistry
 from otp.ai.MagicWordGlobal import *
 from toontown.hood import ZoneUtil

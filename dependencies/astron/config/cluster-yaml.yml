@@ -56,6 +56,11 @@ uberdogs:
       id: 4681
       anonymous: false
 
+
+    - class: DistributedClubManager
+      id: 4707
+      anonymous: false
+
     - class: FriendManager
       id: 4501
       anonymous: false
@@ -88,6 +93,3 @@ uberdogs:
       id: 4695
       anonymous: false
 
-    - class: DistributedToonClub
-      id: 4720
-      anonymous: false

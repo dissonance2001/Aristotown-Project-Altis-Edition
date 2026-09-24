@@ -17,16 +17,19 @@ from toontown.toonbase import ToonPythonUtil as PythonUtil
 from direct.task.Task import Task
 from panda3d.core import *
 from toontown.modifiers.ModifierEnums import REWARD_MODIFIERS, ModifierType
-from toontown.inventory.enums.ItemEnums import MaterialItemType
+from toontown.inventory.enums.ItemEnums import MaterialItemType, ItemType
+from toontown.inventory.registry import UniteRegistry, IOURegistry
 from otp.ai.MagicWordGlobal import *
 from toontown.booster.BoosterBase import BoosterBase
 from toontown.booster.BoosterHandler import (BoosterHandler,
                                              getHolidayBoosterHandler)
 from otp.avatar import Avatar, DistributedAvatar
+from toontown.toon.gui.ToonTipGlobals import TTE
 from otp.otpbase import OTPLocalizerEnglish
 from otp.avatar import DistributedPlayer
 from otp.chat import TalkAssistant
 from otp.otpbase import OTPGlobals
+from toontown.shtiker import CogPageGlobals
 from otp.otpbase import OTPLocalizer
 from otp.speedchat import SCDecoders
 from toontown.catalog import CatalogItem
@@ -66,7 +69,16 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon.LaffMeter import LaffMeter
 from toontown.toon import GMUtils
 from toontown.toon import ToonProfileGlobals as TPG
+from toontown.toon.ToonStatsGlobals import TOTAL_STATS, ToonStats
 from toontown.stickers import StickerGlobals
+from toontown.quest3.QuestEnums import QuestSource, QuesterType
+from toontown.quest3.base.QuestHistory import QuestHistory
+from toontown.quest3.base.QuestLine import QuestLine
+from toontown.quest3.base.QuestObjective import QuestObjective
+from toontown.quest3.base.QuestReference import QuestId, QuestReference
+from toontown.quest3.base.Quester import Quester
+from toontown.quest3.kudos import KudosConstants
+
 
 if base.wantKarts:
     from toontown.racing.KartDNA import *
@@ -75,11 +87,13 @@ if (__debug__):
     import pdb
 
 
-class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, DistributedSmoothNode.DistributedSmoothNode, DelayDeletable, BattleAvatar, BoosterHandler):
+class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, DistributedSmoothNode.DistributedSmoothNode, DelayDeletable, BattleAvatar, BoosterHandler, Quester):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToon')
     partyNotify = DirectNotifyGlobal.directNotify.newCategory('DistributedToon_Party')
     chatGarbler = ToonChatGarbler.ToonChatGarbler()
     gmNameTag = None
+
+    questerType = QuesterType.Toon
 
     def __init__(self, cr, bFake = False):
         try:
@@ -109,6 +123,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.track = None
         self.effect = None
         self.maxCarry = 0
+        self.toonQuests = []
+        self.toonQuestHistory = []
+        self.dailyQuestRerolls = 0
+        self.kudos = {}
         # Hammerspace: list of currently-equipped InventoryItems, kept in sync by
         # InventoryManager whenever this toon's inventory is (re)received. See
         # setEquippedItems/getEquippedItems below.
@@ -218,6 +236,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.gmNameTagEnabled = 0
         self.gmNameTagColor = 'whiteGM'
         self.gmNameTagString = ''
+        self.toonTipsSeen = []
         self.achievements = []
         self.profilePose = TPG.DEFAULT_POSE
         self.profileNameplate = TPG.DEFAULT_NAMEPLATE
@@ -225,7 +244,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.canEarnAchievements = False
         self.promotionStatus = [0, 0, 0, 0, 0, 0, 0]
         self.buffs = []
-        self.stats = [0] * ToontownGlobals.TOTAL_STATS
+        self.stats = [0] * TOTAL_STATS
         self.trueFriends = []
         self.interiorLayout = 0
         self.redeemedCodes = []
@@ -233,7 +252,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.certs = []
         self.spentTrainingPoints = [0, 0, 0, 0, 2, 2, 0, 0]
         self.battleConditions = {}
-        self.kudosBoardGui = None
         self.playgroundGagMultipliers = {}
         self.playgroundGagDiscounts = {}
         self.preset = None
@@ -941,7 +959,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         
         self.setTrophyScore(0)
         self.removeGMIcon()
-        self.closeKudosBoardGui()
         if self.doId in self.cr.toons:
             del self.cr.toons[self.doId]
         
@@ -1573,13 +1590,13 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             pass
 
     def __shouldDisplayMeter(self):
-        if base.meterMode == 0:
+        if self.hp is None or self.maxHp is None:
             return False
-        elif base.meterMode == 1:
-            return True
-        elif base.meterMode == 2:
-            return self.hp < self.maxHp
-            
+        return self.hp < self.maxHp
+
+    def hasLocalNametag(self):
+        return self.isLocal() or self.getDoId() in base.localAvatar.getFavoriteFriends()
+
     def died(self):
         self.makeContentSync(0)
         self.clearAllToonStatusEffects()
@@ -1948,65 +1965,55 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def getFishingTrophies(self):
         return self.fishingTrophies
 
-    def setQuests(self, flattenedQuests):
-        questList = []
-        questLen = 5
-        for i in range(0, len(flattenedQuests), questLen):
-            questList.append(flattenedQuests[i:i + questLen])
+    def setRawQuestReferences(self, rawQuestReferences):
+        self.toonQuests = QuestReference.fromStructList(rawQuestReferences)
 
-        self.quests = questList
-        if self == base.localAvatar:
-            messenger.send('questsChanged')
+    def setRawQuestHistory(self, rawQuestHistory):
+        self.toonQuestHistory = QuestHistory.fromStructList(rawQuestHistory)
+        self.__considerUpdateMeter()
+
+    def getQuestHistory(self):
+        return self.toonQuestHistory
+
+    def getDailyQuests(self):
+        return self.getQuestReferencesOfSource(QuestSource.DailyQuest)
+
+    def getQuestReferences(self):
+        """Shows ALL quest refs."""
+        return self.toonQuests
+
+    def canAddQuest(self):
+        return len(self.getQuestReferencesOfSource(*HiddenQuestSources, negate=True)) < self.questCarryLimit
+
+    def inQuestChain(self, questId: QuestId) -> bool:
+        """Is this Quester in a quest chain?"""
+        for ref in self.getQuestReferences():
+            otherId = ref.getQuestId()  # type: QuestId
+            if questId.getQuestSource() == otherId.getQuestSource() and questId.getChainId() == otherId.getChainId():
+                return True
+        return False
+
+    def getQuestObjectivesOfType(self, questObjectiveCls, includeComplete=False) -> list:
+        """Given a quest objective class, returns a list of all matching objectives of type"""
+        retObjectives = []
+        for questRef in self.getVisibleQuests():
+            multiObjective = QuestLine.dereferenceQuestReference(questRef, quester=self)
+            for i, objective in enumerate(multiObjective.getQuestObjectives()):
+                objective: QuestObjective
+                if not includeComplete and objective.isComplete(questRef, i, self):
+                    continue
+                if type(objective) is questObjectiveCls:
+                    retObjectives.append(objective)
+        return retObjectives
 
     def setQuestCarryLimit(self, limit):
         self.questCarryLimit = limit
-        if self == base.localAvatar:
-            messenger.send('questsChanged')
 
     def getQuestCarryLimit(self):
         return self.questCarryLimit
 
-    def d_requestDeleteQuest(self, questDesc):
-        self.sendUpdate('requestDeleteQuest', [list(questDesc)])
-
-    def requestKudosBoard(self):
-        if self != base.localAvatar:
-            return
-        self.sendUpdate('requestKudosBoard', [])
-
-    def setKudosBoardOffers(self, flattenedOffers):
-        if self != base.localAvatar:
-            return
-
-        offers = []
-        for i in range(0, len(flattenedOffers), 3):
-            offer = flattenedOffers[i:i + 3]
-            if len(offer) == 3:
-                offers.append(offer)
-
-        self.closeKudosBoardGui()
-
-        from toontown.quest.KudosBoardGui import KudosBoardGui
-        self.kudosBoardGui = KudosBoardGui(offers)
-
-    def chooseKudosBoardQuest(self, questId):
-        if self != base.localAvatar:
-            return
-        self.sendUpdate('chooseKudosBoardQuest', [questId])
-
-    def setKudosBoardResult(self, resultCode):
-        if self != base.localAvatar:
-            return
-
-        if self.kudosBoardGui:
-            self.kudosBoardGui.showResult(resultCode)
-
-    def closeKudosBoardGui(self):
-        if self.kudosBoardGui:
-            gui = self.kudosBoardGui
-            self.kudosBoardGui = None
-            gui.destroy()
-
+    def d_requestDeleteQuest(self, questReference: QuestReference):
+        self.sendUpdate('requestDeleteQuest', [questReference.toStruct()])
     def setMaxCarry(self, maxCarry):
         self.maxCarry = maxCarry
         if self.inventory:
@@ -2267,12 +2274,6 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def getScavengerHunt(self):
         return self.scavengerHuntArray
 
-    def setQuestHistory(self, questList):
-        self.questHistory = questList
-
-    def getQuestHistory(self):
-        return self.questHistory
-
     def doSmoothTask(self, task):
         self.smoother.computeAndApplySmoothPosHpr(self, self)
         self.setSpeed(self.smoother.getSmoothForwardVelocity(),
@@ -2347,6 +2348,14 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.nametag.updateAll()
         if self.isLocal():
             messenger.send('SpeedChatStyleChange', [])
+
+    def setKudos(self, kudos):
+        self.kudos = dict(kudos)
+        if self.isLocal():
+            messenger.send('kudosUpdated', [self.kudos])
+
+    def getKudos(self):
+        return self.kudos
 
     def getSpeedChatStyleIndex(self):
         return self.speedChatStyleIndex
@@ -3273,7 +3282,15 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         if self.hasSeenCutscene(cutsceneId):
             return
 
+
         self.sendUpdate('addSeenCutscene', [cutsceneId])
+
+
+    def setToonTipsSeen(self, tips):
+        self.toonTipsSeen = tips
+
+    def sendToonTip(self, tipId: int):
+        messenger.send(ConditionGlobals.AddTimedReleaseMsg, [TTE(tipId), 40.0])
 
     def setAccess(self, access):
         self.setGameAccess(access)
@@ -4363,11 +4380,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def setAchievements(self, achievements):
         self.achievements = achievements
         messenger.send(localAvatar.uniqueName('achievementsChange'))
-        
+
     def setStats(self, stats):
-        if len(stats) != ToontownGlobals.TOTAL_STATS:
+        stats[ToonStats.CURR_FRIENDS] = len(self.friendsList)
+        if len(stats) != TOTAL_STATS:
             stats = self.fixStats(stats)
-        self.stats = stats
     
     def getStats(self):
         return self.stats
@@ -4591,6 +4608,14 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
         return healBoost
 
+    def setDailyQuestRerolls(self, rerolls: int) -> None:
+        self.dailyQuestRerolls = rerolls
+        if self.isLocal():
+            messenger.send('dailyQuestRerollsChanged')
+
+    def getDailyQuestRerolls(self) -> int:
+        return self.dailyQuestRerolls
+
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
 def zone(zoneId):
     """
@@ -4668,3 +4693,82 @@ def i60PanStop():
     base.cam.setP(0)
     base.oobe()
     base.oobe()
+
+
+@magicWord(category=CATEGORY_MODERATOR)
+def unites(amount=9999):
+    """Restocks your Unite messages."""
+    amount = max(0, min(int(amount), 9999))
+    av = spellbook.getTarget()
+    av.getHammerspace().removeAllItemsOfType(ItemType.Unite)
+    for unite in UniteRegistry.getTypes():
+        av.getHammerspace().addItem(unite, quantity=amount)
+    return "Restocked your unites."
+
+@magicWord(category=CATEGORY_MODERATOR)
+def ious(amount=9999):
+    """Restocks your IOUs."""
+    amount = max(0, min(int(amount), 9999))
+    av = spellbook.getTarget()
+    av.getHammerspace().removeAllItemsOfType(ItemType.IOU)
+    for iou in IOURegistry.IOURegistry.keys():
+        av.getHammerspace().addItem(iou, quantity=amount)
+    return "Restocked your IOUs."
+
+@magicWord(category=CATEGORY_MODERATOR)
+def sues(amount=9999):
+    """Sets your C&D count."""
+    amount = max(0, min(int(amount), 9999))
+    av = spellbook.getTarget()
+    av.getHammerspace().removeAllItemsOfSubtype(MaterialItemType.CeaseAndDesists)
+    av.getHammerspace().addItem(MaterialItemType.CeaseAndDesists, quantity=amount)
+    return f"Set C&Ds to {amount}."
+
+@magicWord(category=CATEGORY_MODERATOR)
+def fires(amount=9999):
+    """Sets your fires (Pink Slips) count."""
+    amount = max(0, min(int(amount), 9999))
+    av = spellbook.getTarget()
+    av.getHammerspace().removeAllItemsOfSubtype(MaterialItemType.PinkSlips)
+    av.getHammerspace().addItem(MaterialItemType.PinkSlips, quantity=amount)
+    return f"Set fires to {amount}."
+
+@magicWord(category=CATEGORY_MODERATOR)
+def counterfeits(amount=9999):
+    """Sets your counterfeits count."""
+    amount = max(0, min(int(amount), 9999))
+    av = spellbook.getTarget()
+    av.getHammerspace().removeAllItemsOfSubtype(MaterialItemType.Counterfeits)
+    av.getHammerspace().addItem(MaterialItemType.Counterfeits, quantity=amount)
+    return f"Set counterfeits to {amount}."
+
+@magicWord(category=CATEGORY_MODERATOR)
+def fillGallery():
+    """Fills your Cog gallery."""
+    av = spellbook.getTarget()
+    bonusCogs = []
+    for customPage in CogPageGlobals.customCogPages:
+        bonusCogs.extend(customPage.displayAbr)
+    for cog in [deptCog for dept in CogPageGlobals.indexToCogName for deptCog in dept] + bonusCogs:
+        if cog != '':
+            av.suitGalleryDict[cog] = 250
+    av.suitGalleryDict['clo_hm'] = 250
+
+    galleryList = CogPageGlobals.galleryDictToList(av.suitGalleryDict)
+    av.b_setGalleryStatus(galleryList)
+    return "Your Cog Gallery has been filled."
+
+@magicWord(category=CATEGORY_MODERATOR)
+def clearGallery():
+    """Clears your Cog gallery."""
+    av = spellbook.getTarget()
+    bonusCogs = []
+    for customPage in CogPageGlobals.customCogPages:
+        bonusCogs.extend(customPage.displayAbr)
+    for cog in [deptCog for dept in CogPageGlobals.indexToCogName for deptCog in dept] + bonusCogs:
+        if cog != '' and cog in av.suitGalleryDict:
+            del av.suitGalleryDict[cog]
+
+    galleryList = CogPageGlobals.galleryDictToList(av.suitGalleryDict)
+    av.b_setGalleryStatus(galleryList)
+    return "Your Cog Gallery has been cleared."

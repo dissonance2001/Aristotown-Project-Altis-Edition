@@ -56,7 +56,7 @@ def moveActorsToBattlePositions(toons: list = None, suits: list = None, newParen
     suits = suits or []
     if newParent is not None:
         [actor.reparentTo(newParent) for actor in toons + suits]
-    from toontown.battle.BattleBase import BattleBase
+    from toontown.clashbattle.battle.BattleBase import BattleBase
     for i, suit in enumerate(suits):
         suitPointList = BattleBase.suitPoints[len(suits) - 1]
         xyz, h = suitPointList[i]

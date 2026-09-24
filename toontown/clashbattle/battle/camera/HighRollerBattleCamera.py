@@ -9,7 +9,7 @@ from toontown.clashbattle.battle.statuses.StatusEffectEnums import StatusEffectE
 from toontown.instances.mercs.MajorPlayerBattleRoom import MajorPlayerBattleRoom
 from toontown.clashsuit.suit import SuitDNA, SuitGlobals
 from toontown.clashsuit.suit.ClashSuitBase import ClashSuitBase
-from toontown.toon.DistributedToonBase import DistributedToonBase
+from toontown.toon.ClashDistributedToonBase import ClashDistributedToonBase
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 

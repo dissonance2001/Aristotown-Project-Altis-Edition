@@ -41,7 +41,7 @@ class BossHealthBar(DirectFrame, PositionedGUI):
         self.stunCount = 0
         self.cogDestruction = 0
         self.goonsStomped = 0
-        self.accept(base.TOGGLE_PERSONAL_BOSS_STATS, self.toggleBossStats)
+      #  self.accept(base.TOGGLE_PERSONAL_BOSS_STATS, self.toggleBossStats)
 
     def load(self):
         gui = loader.loadModel('phase_5/models/cogdominium/tt_m_gui_csa_flyThru')

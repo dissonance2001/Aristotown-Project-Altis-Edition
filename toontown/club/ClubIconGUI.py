@@ -1,161 +1,151 @@
-from direct.gui.DirectGui import DirectFrame
-from pandac.PandaModules import TransparencyAttrib
-
+"""
+The ClubIcon GUI class.
+Can be created and set anywhere with a ClubIcon passed in.
+"""
 from toontown.club.ClubClasses import ClubIcon
-
-try:
-    from toontown.club.ClubShopCatalog import (
-        SHOP_COLORS,
-        SHOP_COLOR_PULSERS,
-        COLOR_PAYLOAD_OFFSET,
-    )
-except ImportError:
-    SHOP_COLORS = ()
-    SHOP_COLOR_PULSERS = {}
-    COLOR_PAYLOAD_OFFSET = 1000
+from toontown.club.ClubGlobals import ClubItemIndex
+from toontown.hood import ZoneUtil
+from toontown.toonbase import ToontownGlobals
+from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
+from toontown.utils.InjectorTarget import InjectorTarget
+from direct.gui.DirectGui import *
 
 
+@DirectNotifyCategory()
 class ClubIconGUI(DirectFrame):
-    backgrounds = loader.loadModel('phase_3.5/models/gui/clubs/club_backgrounds')
-    icons = loader.loadModel('phase_3.5/models/gui/clubs/club_icons')
+    """
+    Visualizes a ClubIcon.
+    Use ClubIconGUI.setIcon(ClubIcon) to set the visual property of the icon.
+    """
+    clubBackgrounds = loader.loadModel('phase_3.5/models/gui/clubs/club_backgrounds')
+    clubIcons = loader.loadModel('phase_3.5/models/gui/clubs/club_icons')
 
-    # Corporate Clash's sixteen default Club colours used by Club creation.
-    COLORS = (
-        (0.800, 0.176, 0.176, 1),
-        (0.804, 0.408, 0.176, 1),
-        (0.804, 0.647, 0.176, 1),
-        (0.729, 0.804, 0.176, 1),
-        (0.490, 0.804, 0.176, 1),
-        (0.259, 0.804, 0.176, 1),
-        (0.176, 0.804, 0.333, 1),
-        (0.176, 0.804, 0.565, 1),
-        (0.176, 0.804, 0.804, 1),
-        (0.176, 0.573, 0.804, 1),
-        (0.176, 0.333, 0.804, 1),
-        (0.251, 0.176, 0.804, 1),
-        (0.490, 0.176, 0.804, 1),
-        (0.722, 0.176, 0.804, 1),
-        (0.804, 0.176, 0.647, 1),
-        (0.804, 0.176, 0.416, 1),
-    )
+    @InjectorTarget
+    def __init__(self, parent, **kw):
+        # GUI boilerplate.
+        optiondefs = ()
+        self.defineoptions(kw, optiondefs)
+        super().__init__(parent, **kw)
+        self.initialiseoptions(self.__class__)
 
-    @classmethod
-    def _normalizeColorId(cls, colorId):
-        try:
-            return int(colorId or 0)
-        except (TypeError, ValueError):
-            return 0
+        # Define objects of this GUI.
+        self.frame_background = None
+        self.frame_icon = None
+        self.clubIcon = ClubIcon()
 
-    @classmethod
-    def getColorSource(cls, colorId):
-        """Resolve a saved colour ID to a static tuple or ClubColorPulser."""
-        colorId = cls._normalizeColorId(colorId)
+        # Load elements of this GUI.
+        self.load()
 
-        # Shop colours are saved as 1000 + palette index.
-        if SHOP_COLORS and colorId >= COLOR_PAYLOAD_OFFSET:
-            paletteIndex = colorId - COLOR_PAYLOAD_OFFSET
-            pulser = SHOP_COLOR_PULSERS.get(paletteIndex)
-            if pulser is not None:
-                return pulser
-            if 0 <= paletteIndex < len(SHOP_COLORS):
-                return SHOP_COLORS[paletteIndex]
-
-        # Club creation uses the original sixteen zero-based indexes.
-        if 0 <= colorId < len(cls.COLORS):
-            return cls.COLORS[colorId]
-
-        # Compatibility fallback for malformed or old saved values.
-        return cls.COLORS[colorId % len(cls.COLORS)]
-
-    @classmethod
-    def getColor(cls, colorId):
-        source = cls.getColorSource(colorId)
-        if hasattr(source, 'getColor'):
-            return source.getColor()
-        return source
-
-    @classmethod
-    def isAnimatedColor(cls, colorId):
-        return hasattr(cls.getColorSource(colorId), 'canUpdate') and \
-               cls.getColorSource(colorId).canUpdate()
-
-    def __init__(self, parent=None, clubIcon=None, **kw):
-        DirectFrame.__init__(self, parent=parent, relief=None, **kw)
-        self.initialiseoptions(ClubIconGUI)
-        self.setTransparency(TransparencyAttrib.MAlpha)
-        self.clubIcon = clubIcon or ClubIcon()
-        self.backgroundFrame = DirectFrame(parent=self, relief=None)
-        self.iconFrame = DirectFrame(parent=self, relief=None, scale=0.88)
-        self.backgroundFrame.setTransparency(TransparencyAttrib.MAlpha)
-        self.iconFrame.setTransparency(TransparencyAttrib.MAlpha)
-        self._colorTaskName = 'ClubIconGUI-colorPulse-%s' % id(self)
-        self._destroyed = False
-        self.refresh()
-
-    def setIcon(self, clubIcon):
+    def setIcon(self, clubIcon: ClubIcon):
+        """Sets the icon appearance of this ClubIcon."""
         self.clubIcon = clubIcon
+        self.notify.info(f"Updated clubIcon - {clubIcon}")
         self.refresh()
 
-    def _findFirst(self, model, names):
-        for name in names:
-            node = model.find('**/%s' % name)
-            if not node.isEmpty():
-                return node
-        return None
+    """
+    Loading methods
+    """
 
-    def _stopColorTask(self):
-        taskMgr.remove(self._colorTaskName)
+    def load(self):
+        # Load in the background and icon assets.
+        statusEffectImages = base.loader.loadModel('phase_3.5/models/gui/battlegui/status_effects')
+        bgImage = statusEffectImages.find('**/default_background')
+        self.frame_background = DirectFrame(
+            parent=self,
+            relief=None,
+            image=bgImage,
+        )
+        self.frame_icon = DirectFrame(
+            parent=self,
+            relief=None,
+            geom=None,
+            geom_scale=0.86,
+        )
+        statusEffectImages.removeNode()
 
-    def _startColorTask(self):
-        self._stopColorTask()
-        icon = self.clubIcon
-        if self.isAnimatedColor(icon.clubCol) or self.isAnimatedColor(icon.bgCol):
-            taskMgr.doMethodLater(0.05, self._updateColorPulse,
-                                  self._colorTaskName)
-
-    def _applyColors(self):
-        if self._destroyed:
-            return
-        icon = self.clubIcon
-        self.backgroundFrame['image_color'] = self.getColor(icon.clubCol)
-        self.backgroundFrame['geom_color'] = self.getColor(icon.bgCol)
-
-    def _updateColorPulse(self, task):
-        if self._destroyed or self.isEmpty():
-            return task.done
-        self._applyColors()
-        task.delayTime = 0.05
-        return task.again
-
-    def refresh(self):
-        self._stopColorTask()
-        icon = self.clubIcon
-        baseNode = self._findFirst(self.backgrounds, ('base', 'Base', 'background_base'))
-        backgroundNode = None
-        iconNode = None
-
-        if icon.backgroundId:
-            backgroundNode = self._findFirst(self.backgrounds, (
-                'bg_%s' % icon.backgroundId,
-                'background_%s' % icon.backgroundId,
-            ))
-
-        if icon.iconId:
-            iconNode = self._findFirst(self.icons, (
-                'icon_%s' % icon.iconId,
-                'Icon_%s' % icon.iconId,
-            ))
-
-        self.backgroundFrame['image'] = baseNode
-        self.backgroundFrame['geom'] = backgroundNode
-        self.iconFrame['geom'] = iconNode
-        self.iconFrame['geom_color'] = (1, 1, 1, 1)
-        self._applyColors()
-        self._startColorTask()
+        # Now use the default clubIcon appearance.
+        self.refresh()
 
     def destroy(self):
-        if self._destroyed:
-            return
-        self._destroyed = True
-        self._stopColorTask()
-        DirectFrame.destroy(self)
+        super().destroy()
+        self.ignoreAll()
+        self.clubIcon = None
+
+    """
+    Model accessors
+    """
+
+    def _getBaseNode(self):
+        return self.clubBackgrounds.find('**/base')
+
+    def _getBackground(self, clubIcon: ClubIcon):
+        if clubIcon.backgroundId in (0, None):
+            return None
+        clubItem = ClubItemIndex.getItem(clubIcon.backgroundId)
+        return self.clubBackgrounds.find(f'**/bg_{clubItem.getValue()}')
+
+    def _getIconGeom(self, clubIcon: ClubIcon):
+        if clubIcon.iconId in (0, None):
+            return None
+        clubItem = ClubItemIndex.getItem(clubIcon.iconId)
+        return self.clubIcons.find(f'**/icon_{clubItem.getValue()}')
+
+    """
+    Refresh methods
+    """
+
+    def refresh(self):
+        """Updates the appearance of the GUI to match our set clubIcon."""
+        self.notify.info("Refreshing clubIcon.")
+
+        # Set model data.
+        self.frame_background['image'] = self._getBaseNode()
+        self.frame_background['geom'] = self._getBackground(self.clubIcon)
+        self.frame_icon['geom'] = self._getIconGeom(self.clubIcon)
+        self.frame_icon['geom_scale'] = 0.9
+
+        # Set color data.
+        clubColor = self.clubIcon.getClubColor()
+        bgColor = self.clubIcon.getBackgroundCol()
+        self.setThemeColor(clubColor.getColor())
+        self.setBackgroundColor(bgColor.getColor())
+
+        # Listen for color changes.
+        self.ignoreAll()
+        self.accept(clubColor.getUpdateName(), self.setThemeColor)
+        self.accept(bgColor.getUpdateName(), self.setBackgroundColor)
+
+    def setThemeColor(self, col):
+        self.frame_background['image_color'] = col
+
+    def setBackgroundColor(self, col):
+        self.frame_background['geom_color'] = col
+
+    """
+    Static methods
+    """
+
+    @staticmethod
+    def getImageOfPlayground(zoneId: int):
+        """Returns the icon image of a given zone id."""
+        index = {
+            ToontownGlobals.ToontownCentral: 12,
+            ToontownGlobals.DonaldsDock: 13,
+            ToontownGlobals.YeOlde: 14,
+            ToontownGlobals.DaisyGardens: 15,
+            ToontownGlobals.MinniesMelodyland: 16,
+            ToontownGlobals.TheBrrrgh: 17,
+            ToontownGlobals.OutdoorZone: 18,
+            ToontownGlobals.DonaldsDreamland: 19,
+            ToontownGlobals.SellbotHQ: 26,
+            ToontownGlobals.CashbotHQ: 27,
+            ToontownGlobals.LawbotHQ: 28,
+            ToontownGlobals.BossbotHQ: 29,
+            ToontownGlobals.BoardbotHQ: 30,
+        }.get(ZoneUtil.getHoodId(zoneId))
+        return ClubIconGUI.clubIcons.find(f'**/icon_{index}')
+
+    @staticmethod
+    def getThatSillyArrow():
+        """Gets that silly arrow"""
+        return ClubIconGUI.clubBackgrounds.find(f'**/bg_30')

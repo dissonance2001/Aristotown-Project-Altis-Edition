@@ -8,7 +8,7 @@ from direct.distributed.ClockDelta import *
 from direct.fsm import FSM
 from otp.ai.AIBaseGlobal import *
 from toontown.battle import BattleExperienceAI
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.building import SuitBuildingGlobals

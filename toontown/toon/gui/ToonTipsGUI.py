@@ -7,7 +7,7 @@ from toontown.gui.TTGui import kwargsToOptionDefs
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from direct.task.Task import Task
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toon.gui import ToonTipGlobals, GuiBinGlobals
 from toontown.toon import ToonHead
 from toontown.menu import MainMenuGui

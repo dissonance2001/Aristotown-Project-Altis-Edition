@@ -5,8 +5,8 @@ from panda3d.core import NodePath
 from toontown.cutscene.repository.CutsceneRuntime import buildCutscene
 from toontown.cutscene.PlutocratCutsceneParticles import getPlutocratParticles
 from toontown.distributed import DelayDelete
-from toontown.suit import Suit
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import Suit
+from toontown.clashsuit.suit import SuitDNA
 
 INTRO_PATH = 'phase_10/data/cutscenes/plutocrat/plutocrat_intro.ctsc'
 DEATH_PATH = 'phase_10/data/cutscenes/plutocrat/plutocrat_death.ctsc'

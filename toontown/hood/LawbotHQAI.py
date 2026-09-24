@@ -1,10 +1,10 @@
-from toontown.building import DistributedCJElevatorAI
-from toontown.building import DistributedCountErclaimElevatorAI
+from toontown.building import DistributedHardmodeCLOElevatorAI
 from toontown.building import FADoorCodes
+from toontown.building import DistributedCountErclaimElevatorAI
 from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPartyAI
 from toontown.coghq.DistributedLawOfficeElevatorExtAI import DistributedLawOfficeElevatorExtAI
 from toontown.hood import CogHQAI
-from toontown.suit import DistributedLawbotBossAI
+from toontown.clashsuit.suit import DistributedHardmodeLawbotBossAI
 from toontown.suit import DistributedCountErclaimBossAI
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.toonbase import ToontownGlobals
@@ -16,10 +16,10 @@ class LawbotHQAI(CogHQAI.CogHQAI):
             self, air, ToontownGlobals.LawbotHQ, ToontownGlobals.LawbotLobby, ToontownGlobals.LawbotLounge,
             FADoorCodes.LB_DISGUISE_INCOMPLETE,
             FADoorCodes.LB_WASHROOM_MISSING,
-             DistributedCountErclaimElevatorAI.DistributedCountErclaimElevatorAI,
+            DistributedCountErclaimElevatorAI.DistributedCountErclaimElevatorAI,
             DistributedCountErclaimBossAI.DistributedCountErclaimBossAI,
-            DistributedCJElevatorAI.DistributedCJElevatorAI,
-            DistributedLawbotBossAI.DistributedLawbotBossAI,
+            DistributedHardmodeCLOElevatorAI.DistributedHardmodeCLOElevatorAI,
+            DistributedHardmodeLawbotBossAI.DistributedHardmodeLawbotBossAI,
             ToontownGlobals.ZoneIdrCLO)
 
         # Required for our plants NPCs.

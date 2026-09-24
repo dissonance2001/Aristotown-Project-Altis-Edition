@@ -12,12 +12,26 @@ class BattlePlace(Place.Place):
         Place.Place.load(self)
         Toon.loadBattleAnims()
 
-    def setState(self, state, battleEvent = None):
+    def setState(self, state, battleEvent=None):
+        state = self._resolveBattleStateName(state)
         if battleEvent:
             if not self.fsm.request(state, [battleEvent]):
-                self.notify.warning("fsm.request('%s') returned 0 (zone id %s, avatar pos %s)." % (state, self.zoneId, base.localAvatar.getPos(render)))
+                self.notify.warning("fsm.request('%s') returned 0 (zone id %s, avatar pos %s)." % (state, self.zoneId,
+                                                                                                   base.localAvatar.getPos(
+                                                                                                       render)))
         elif not self.fsm.request(state):
-            self.notify.warning("fsm.request('%s') returned 0 (zone id %s, avatar pos %s)." % (state, self.zoneId, base.localAvatar.getPos(render)))
+            self.notify.warning("fsm.request('%s') returned 0 (zone id %s, avatar pos %s)." % (state, self.zoneId,
+                                                                                               base.localAvatar.getPos(
+                                                                                                   render)))
+
+    def _resolveBattleStateName(self, state):
+        if self.fsm.getStateNamed(state):
+            return state
+        alt = state[:1].lower() + state[1:]
+        if self.fsm.getStateNamed(alt):
+            return alt
+        return state
+
 
     def enterWalk(self, flag = 0):
         base.localAvatar.isInBattle = False

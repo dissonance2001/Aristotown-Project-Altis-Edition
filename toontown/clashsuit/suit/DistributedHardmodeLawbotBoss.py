@@ -29,11 +29,11 @@ class DistributedHardmodeLawbotBoss(ClashLawbotBoss):
         ClashLawbotBoss.announceGenerate(self)
         self.bossLandSfx = self.boomSfx
 
-    def addSpeedchatMenu(self):
-        base.localAvatar.chatContainer.speedChatMenu.addHardModeCLOMenu()
+   # def addSpeedchatMenu(self):
+    #    base.localAvatar.chatContainer.speedChatMenu.addHardModeCLOMenu()
 
-    def removeSpeedchatMenu(self):
-        base.localAvatar.chatContainer.speedChatMenu.removeHardModeCLOMenu()
+   # def removeSpeedchatMenu(self):
+    #    base.localAvatar.chatContainer.speedChatMenu.removeHardModeCLOMenu()
 
     def disable(self):
         """

@@ -12,7 +12,7 @@ from toontown.battle.attacks.toons import MovieNPCSOS
 from toontown.battle import MovieUtil
 from toontown.chat.ChatGlobals import *
 from toontown.effects import Splash
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase.ToontownBattleGlobals import AvPropDamage
 

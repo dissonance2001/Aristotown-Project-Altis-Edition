@@ -18,6 +18,8 @@ ELEVATOR_CBM = 11
 ELEVATOR_PACE = 12
 ELEVATOR_ERFIT = 13
 ELEVATOR_SIGIL = 45
+ELEVATOR_CLO = 14
+ELEVATOR_CLO_HARDMODE = 15
 REJECT_NOREASON = 0
 REJECT_SHUFFLE = 1
 REJECT_MINLAFF = 2
@@ -101,6 +103,23 @@ ELEVATOR_ERCLAIM: {
                'countdown': bboard.get('elevatorCountdown', 5.0),
                'sfxVolume': 0.7,
                'collRadius': 7.5},
+ELEVATOR_CLO: {
+        'openTime': 4.0,
+        'closeTime': 4.0,
+        'width': 15.8,
+        'countdown': bboard.get('elevatorCountdown', 30.0),
+        'sfxVolume': 0.7,
+        'collRadius': 10.5
+},
+ ELEVATOR_CLO_HARDMODE: {
+        'openTime': 4.0,
+        'closeTime': 4.0,
+        'width': 15.8,
+        'countdown': bboard.get('elevatorCountdown', 5.0),
+        'sfxVolume': 0.7,
+        'collRadius': 10.5
+},
+
 ELEVATOR_DIRECTORS: {'openTime': 4.0,
                'closeTime': 4.0,
                'width': 6.3,

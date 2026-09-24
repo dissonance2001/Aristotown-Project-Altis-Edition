@@ -378,7 +378,7 @@ class NPCToonShopGUI(TilingScaledFrame, Bounds):
         self.shop_purchase['shopItem'] = nextUpgrade
 
     def handleExit(self):
-        base.cr.playGame.getPlace().setState('Walk')
+        base.cr.playGame.getPlace().setState('walk')
         base.localAvatar.unlockControlsForEntry()
         if hasattr(self, 'timer') and self.timer:
             self.timer.stop()

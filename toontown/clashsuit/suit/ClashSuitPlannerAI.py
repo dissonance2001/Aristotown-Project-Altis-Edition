@@ -122,15 +122,24 @@ class ClashSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlannerBas
         # blocks (used to find suit source and destination locations
         # when creating paths)
         if self.buildingMgr:
-            (blocks, animBldgBlocks, uncapturableBlocks) = self.buildingMgr.getDNABlockLists()
+            result = self.buildingMgr.getDNABlockLists()
+
+            blocks = result[0]  # normal buildings
+            # hqBlocks         = result[1]   # not needed here
+            # uncapturableBlocks = result[2]
+            # gagshopBlocks    = result[3]
+            # petshopBlocks    = result[4]
+            # kartshopBlocks   = result[5]
+            animBldgBlocks = result[6]
+
             for currBlock in blocks:
                 bldg = self.buildingMgr.getBuilding(currBlock)
                 bldg.setSuitPlannerExt(self)
+
             for currBlock in animBldgBlocks:
                 bldg = self.buildingMgr.getBuilding(currBlock)
                 if bldg is not None:
                     bldg.setSuitPlannerExt(self)
-
         # The block number to zone map was created for the building
         # and door creation.  Now that it's done, we clear the map:
         self.dnaStore.resetBlockNumbers()
@@ -219,16 +228,16 @@ class ClashSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlannerBas
 
         # Now make sure that each building has *at least* one of each
         # kind of door.
-        from toontown.building.DistributedUncapturableBuildingAI import DistributedUncapturableBuildingAI
-        for bldg in self.buildingMgr.getBuildings():
-            if isinstance(bldg, DistributedUncapturableBuildingAI):
+        #from toontown.building.DistributedUncapturableBuildingAI import DistributedUncapturableBuildingAI
+       # for bldg in self.buildingMgr.getBuildings():
+        #    if isinstance(bldg, DistributedUncapturableBuildingAI):
                 # Move to the next one
-                continue
-            blockNumber = bldg.getBlock()[0]
-            if blockNumber not in self.buildingFrontDoors:
-                self.notify.debug('No front door for building %s in zone %s' % (blockNumber, self.zoneId))
-            if blockNumber not in self.buildingSideDoors:
-                self.notify.debug('No side door for building %s in zone %s' % (blockNumber, self.zoneId))
+         #       continue
+          #  blockNumber = bldg.getBlock()[0]
+          #  if blockNumber not in self.buildingFrontDoors:
+          #      self.notify.debug('No front door for building %s in zone %s' % (blockNumber, self.zoneId))
+          #  if blockNumber not in self.buildingSideDoors:
+           #     self.notify.debug('No side door for building %s in zone %s' % (blockNumber, self.zoneId))
 
     def countNumSuitsPerTrack(self, count):
         """
@@ -1489,18 +1498,6 @@ class ClashSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlannerBas
         # so check if we are already in a battle first.
         if toon.getBattleId() > 0:
             self.notify.warning(f'{toonId} tried to request a battle when the toon was already in battle')
-            return 0
-
-        toonGroup = self.air.groupManager.getGroupOfAvId(toonId)
-        # Group exists and they already announced battle, you can't start a new one!
-        if toonGroup and toonGroup.announcedBattle:
-            # This Toon has a battle waiting for them! You can't start a new one.
-            if toon:
-                toon.addNotification(GenericTextNotification(
-                    textId=GenericTextId.DeniedBattle,
-                    title='Denied Battle',
-                    subtitle='You cannot start this battle as your group already has an active battle.',
-                ))
             return 0
 
         # Then set our battleID right up here, to lock out any further requests from getting triggered.

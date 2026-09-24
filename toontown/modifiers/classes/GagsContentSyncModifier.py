@@ -1,6 +1,6 @@
 from typing import Any, Optional, List
 
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.modifiers.Modifier import Modifier
 from toontown.modifiers.ModifierEnums import ModifierType
 

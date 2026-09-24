@@ -1,6 +1,6 @@
 import random
 
-from toontown.battle import MovieUtil
+from toontown.clashbattle.battle import MovieUtil
 from toontown.cutscene.editor.CSEditorEnums import EventDefinitionEnum as EDE
 from toontown.cutscene.editor.CSEditorEnums import SubEventArgumentType as SEAT
 from toontown.cutscene.CutsceneSequenceBase import cutsceneSequence
@@ -10,7 +10,7 @@ from direct.interval.IntervalGlobal import *
 from panda3d.core import Point3, LVecBase3f, LVecBase4f
 from toontown.chat.constants.ChatGlobals import  CFSpeech, CFTimeout
 
-from toontown.suit.Suit import Suit
+from toontown.clashsuit.suit.Suit import Suit
 
 
 @cutsceneSequence(name='Actor: Dialogue', enum=EDE.actorDialogue)

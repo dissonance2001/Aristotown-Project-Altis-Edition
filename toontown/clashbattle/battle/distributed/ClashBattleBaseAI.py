@@ -827,7 +827,14 @@ class ClashBattleBaseAI(DistributedObjectAI, SafeFSM, BattleBase, BattleListener
         return False
 
     def handleToonAddedGroupInfo(self, avId):
-        toonGroup = self.air.groupManager.getGroupOfAvId(avId)
+        groupManager = getattr(self.air, 'groupManager', None)
+        if groupManager is None:
+            # No group system on this AI: nothing to announce, reserve or disband.
+            return
+        toonGroup = groupManager.getGroupOfAvId(avId)
+        # They have a group, and its the type we're looking for. Yippee!!!
+        if toonGroup and toonGroup.groupDefinition.suitName is not None:
+           toonGroup = self.air.groupManager.getGroupOfAvId(avId)
         # They have a group, and its the type we're looking for. Yippee!!!
         if toonGroup and toonGroup.groupDefinition.suitName is not None:
             suitNames = [suit.dna.name for suit in self.suits]
@@ -2093,7 +2100,7 @@ class ClashBattleBaseAI(DistributedObjectAI, SafeFSM, BattleBase, BattleListener
         if not activeToons or not activeSuits:
             return Task.done
 
-        self.air.netMessenger.send('sendBattleLog', [json.dumps(roundLog)])
+       # self.air.netMessenger.send('sendBattleLog', [json.dumps(roundLog)]) another netMessgner, altis does not supoprt these neither do we at the moment
 
         # Turn the hpOwnedByBattle flag on for each active toon.
         for toonId in activeToons:

@@ -14,7 +14,7 @@ from toontown.battle import SuitBattleGlobals
 from toontown.building import FADoorCodes
 from toontown.suit import DistributedSuitBaseAI
 from toontown.hood import ZoneUtil
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 import random
 
 class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):

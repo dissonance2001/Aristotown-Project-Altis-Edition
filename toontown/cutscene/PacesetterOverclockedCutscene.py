@@ -46,7 +46,7 @@ class PacesetterOverclockedSetup(object):
 
     def _findController(self):
         try:
-            from toontown.suit.DistributedPacesetterBoss import DistributedPacesetterBoss
+            from toontown.clashsuit.suit.DistributedPacesetterBoss import DistributedPacesetterBoss
             for obj in list(base.cr.doId2do.values()):
                 if isinstance(obj, DistributedPacesetterBoss):
                     return obj

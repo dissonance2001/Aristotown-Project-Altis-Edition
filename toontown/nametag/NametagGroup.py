@@ -2,8 +2,10 @@ from direct.task.Task import Task
 from panda3d.core import VBase4, PandaNode
 from toontown.margins.MarginVisible import MarginVisible
 from toontown.nametag import NametagGlobals
+from toontown.nametag.NametagGlobals import *
 from toontown.nametag.Nametag2d import Nametag2d
 from toontown.nametag.Nametag3d import Nametag3d
+from toontown.chat.ChatGlobals import *
 
 class NametagGroup:
     CHAT_TIMEOUT_MIN = 4.0
@@ -18,6 +20,7 @@ class NametagGroup:
         self.chatReversed = False
         self.font = None
         self.chatFont = None
+        self.speechFont = None
         self.shadow = None
         self.marginManager = None
         self.visible3d = True
@@ -31,6 +34,7 @@ class NametagGroup:
         self.text = ''
         self.name = ''
         self.chatPages = []
+        self.chatFlags = 0
         self.chatPageIndex = 0
         self.chatTimeoutTask = None
         self.chatTimeoutTaskName = self.getUniqueName() + '-timeout'
@@ -43,6 +47,9 @@ class NametagGroup:
         self.nametags = set()
         self.add(self.nametag2d)
         self.add(self.nametag3d)
+        self.displayName = ''
+        self.qtColor = VBase4(1, 1, 1, 1)
+        self.colorCode = CCNormal
 
         # Add the tick task:
         self.tickTaskName = self.getUniqueName() + '-tick'
@@ -75,11 +82,30 @@ class NametagGroup:
 
         self.avatar = None
 
+    def setWordwrap(self, wrap):
+        self.wordWrap = wrap
+        self.updateTags()
+
+    def setNameWordwrap(self, wrap):
+        self.setWordwrap(wrap)
+
     def getUniqueName(self):
         return 'NametagGroup-%s' % id(self)
 
     def getNameIcon(self):
         return self.icon
+
+    def setDisplayName(self, name):
+        self.displayName = name
+        self.updateTags()
+
+    def setQtColor(self, color):
+        self.qtColor = color
+        self.updateTags()
+
+
+    def getUniqueId(self):
+        return 'Nametag-%d' % id(self)
 
     def tick(self, task):
         if (self.avatar is None) or (self.avatar.isEmpty()):
@@ -133,6 +159,38 @@ class NametagGroup:
     def setObjectCode(self, objectCode):
         self.objectCode = objectCode
 
+    def getButtons(self):
+        if self.getNumChatPages() < 2:
+            # Either only one page or no pages displayed. This means no button,
+            # unless the game code specifically requests one.
+            if self.chatFlags & CFQuitButton:
+                return NametagGlobals.quitButtons
+            elif self.chatFlags & CFPageButton:
+                return NametagGlobals.pageButtons
+            else:
+                return None
+        elif self.chatPage == self.getNumChatPages()-1:
+            # Last page of a multiple-page chat. This calls for a quit button,
+            # unless the game says otherwise.
+            if not self.chatFlags & CFNoQuitButton:
+                return NametagGlobals.quitButtons
+            else:
+                return None
+        else:
+            # Non-last page of a multiple-page chat. This calls for a page
+            # button, but only if the game requests it:
+            if self.chatFlags & CFPageButton:
+                return NametagGlobals.pageButtons
+            else:
+                return None
+
+
+    def getChat(self):
+        if self.chatPage >= len(self.chatPages):
+            return ''
+        else:
+            return self.chatPages[self.chatPage]
+
     def getObjectCode(self):
         return self.objectCode
 
@@ -151,6 +209,24 @@ class NametagGroup:
         self.chatReversed = reversed
         for nametag in self.nametags:
             nametag.setChatReversed(reversed)
+
+    def updateNametag(self, tag):
+        tag.font = self.font
+        tag.speechFont = self.speechFont
+        tag.wordWrap = self.wordWrap or DEFAULT_WORDWRAPS[self.colorCode]
+        tag.displayName = self.displayName or self.name
+        tag.qtColor = self.qtColor
+        tag.colorCode = self.colorCode
+        tag.buttons = self.getButtons()
+        tag.chatFlags = self.chatFlags
+        tag.avatar = self.avatar
+        tag.icon = self.icon
+
+        tag.update()
+
+    def setName(self, name):
+        self.name = name
+        self.updateTags()
 
     def getChatReversed(self):
         return self.chatReversed
@@ -215,6 +291,10 @@ class NametagGroup:
 
     def getChatColor(self):
         return self.chatColor
+
+    def updateTags(self):
+        for nametag in self.nametags:
+            self.updateNametag(nametag)
 
     def setSpeedChatColor(self, speedChatColor):
         self.speedChatColor = speedChatColor
@@ -436,3 +516,9 @@ class NametagGroup:
     def __chatStomp(self, timeout=False):
         self.setChatText(self.stompChatText, timeout=timeout)
         self.stompChatText = None
+
+    def removeNametag(self, nametag):
+        self.nametags.remove(nametag)
+        if hasattr(self, 'manager') and self.manager is not None and isinstance(nametag, MarginPopup):
+            nametag.unmanage(manager)
+        nametag.destroy()

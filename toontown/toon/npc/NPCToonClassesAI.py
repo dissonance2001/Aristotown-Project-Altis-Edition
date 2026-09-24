@@ -4,9 +4,9 @@ from panda3d.core import ConfigVariableBool, Point3, Vec3
 from direct.distributed.ClockDelta import globalClockDelta
 from direct.task.TaskManagerGlobal import taskMgr, Task
 
-from toontown.suit import BossCogGlobals
+from toontown.clashsuit.suit import BossCogGlobals
 from toontown.ai.DatabaseObject import DatabaseObject
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.chat.enums.ChatSystemMessagePreset import ChatSystemMessagePreset
 from toontown.fishing import FishGlobals
 from toontown.inventory.base.Inventory import Inventory
@@ -314,7 +314,6 @@ class DistributedNPCToonAI(DistributedNPCToonBaseAI):
 
         self.task = None
 
-
 @NPCToonClassAI(npcType=NPCToonEnum.CLUB_CREATION)
 class DistributedNPCClubCreationAI(DistributedNPCToonAI):
     pass
@@ -323,7 +322,6 @@ class DistributedNPCClubCreationAI(DistributedNPCToonAI):
 @NPCToonClassAI(npcType=NPCToonEnum.CLUB_SHOP)
 class DistributedNPCClubShopAI(DistributedNPCToonAI):
     pass
-
 
 @NPCToonClassAI(npcType=NPCToonEnum.EASTER)
 class DistributedNPCEasterAI(DistributedNPCToonAI):
@@ -647,7 +645,7 @@ class DistributedNPCBumpyAI(DistributedNPCToonAI):
         x, y, z = BossCogGlobals.LawbotBossBumpyTrapsPos[trapIndex]
         toPos = Point3(x, y, z)
         self.distance = Vec3(toPos - self.currPos).length()
-        time = self.getTimeToWalk()
+        time = self.getTimeTowalk()
         self.setPos(toPos)
         self.sendUpdate("doTravelMove", [str(time), x, y])
         self.waitToDoTrap(time)
@@ -697,12 +695,12 @@ class DistributedNPCBumpyAI(DistributedNPCToonAI):
         x, y, z, h, p, r = BossCogGlobals.LawbotBossBumpyIdlePosHpr
         toPos = Point3(x, y, z)
         self.distance = Vec3(toPos - self.currPos).length()
-        time = self.getTimeToWalk()
+        time = self.getTimeTowalk()
         self.setPos(Point3(x, y, z))
         self.sendUpdate('doIdleMove', [str(time), x, y, h])
         self.waitForNextMove(time)
 
-    def getTimeToWalk(self):
+    def getTimeTowalk(self):
         return self.distance / self.speed
 
     def bossLandBroken(self):
@@ -1191,7 +1189,7 @@ class DistributedNPCLaurenAI(DistributedNPCToonAI):
         x, y, z = BossCogGlobals.LawbotBossBumpyTrapsPos[trapIndex]
         toPos = Point3(x, y, z)
         self.distance = Vec3(toPos - self.currPos).length()
-        time = self.getTimeToWalk()
+        time = self.getTimeTowalk()
         self.setPos(toPos)
         self.sendUpdate("doTravelMove", [str(time), x, y])
         self.waitToDoTrap(time)
@@ -1227,12 +1225,12 @@ class DistributedNPCLaurenAI(DistributedNPCToonAI):
         x, y, z, h, p, r = BossCogGlobals.LawbotBossLaurenIdlePosHpr
         toPos = Point3(x, y, z)
         self.distance = Vec3(toPos - self.currPos).length()
-        time = self.getTimeToWalk()
+        time = self.getTimeTowalk()
         self.setPos(Point3(x, y, z))
         self.sendUpdate('doIdleMove', [str(time), x, y, h])
         self.waitForNextMove(time)
 
-    def getTimeToWalk(self):
+    def getTimeTowalk(self):
         return self.distance / self.speed
 
     def bossLand(self):

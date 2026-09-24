@@ -52,7 +52,7 @@ suitToMusic = {
              ZONE_FALLBACK: ["count_battle_two"],  # Default/Fallback
              ToontownGlobals.ToontownCentral: ["count_battle_two"],
              ToontownGlobals.DonaldsDock: ["count_battle_two"],
-             ToontownGlobals.OldeToontown: ["count_battle_street_yott"],
+             ToontownGlobals.YeOlde: ["count_battle_street_yott"],
              ToontownGlobals.DaisyGardens: ["count_battle_street_dg"],
              ToontownGlobals.MinniesMelodyland: ["count_battle_street_mml"],
              ToontownGlobals.TheBrrrgh: ["count_battle_street_tb"],

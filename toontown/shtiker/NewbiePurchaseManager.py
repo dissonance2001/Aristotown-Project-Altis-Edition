@@ -1,6 +1,6 @@
 from toontown.shtiker import PurchaseManager
 from toontown.quest import QuestParser
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 
 class NewbiePurchaseManager(PurchaseManager.PurchaseManager):
 

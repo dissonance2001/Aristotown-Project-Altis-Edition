@@ -12,7 +12,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.suit import DistributedSuitBaseAI
 from toontown.battle import SuitBattleGlobals
 from toontown.battle import BattleExperienceAI
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toon import IOURegistry
 from toontown.pets import PetTricks, DistributedPetProxyAI
 from toontown.hood import ZoneUtil

@@ -1,16 +1,20 @@
 from __future__ import annotations
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
 import pickle
 import random
 import time
 import re
 import json
+from toontown.toon.gui import ToonTipGlobals
 import os
+from toontown.time import TimeUtil
 from toontown.quest3.kudos import KudosConstants
 from toontown.toon import Experience
 from toontown.toon import ToonExperience
 from toontown.toon import GagInventoryBase
 from toontown.toon import ModuleListAI
 from toontown.toon import ToonDNA
+from toontown.toon.ClashDistributedToonBaseAI import ClashDistributedToonBaseAI
 from toontown.utils.RateLimiter import IdRateLimiter
 from toontown.inventory.base.InventoryItem import InventoryItem
 from toontown.inventory.base.Inventory import Inventory
@@ -27,7 +31,7 @@ from direct.distributed.MsgTypes import *
 from direct.distributed.PyDatagram import PyDatagram
 from direct.task import Task
 from panda3d.core import *
-from toontown.toon.NPCToons import npcFriends
+from toontown.toon.gui.ToonTipGlobals import TTE
 from otp.ai.AIBaseGlobal import *
 from otp.ai.MagicWordGlobal import *
 from otp.avatar import DistributedAvatarAI
@@ -52,6 +56,32 @@ from toontown.minigame import MinigameCreatorAI
 from toontown.parties import PartyGlobals
 from toontown.parties.SimpleMailBase import SimpleMailBase
 from toontown.parties.InviteInfo import InviteInfoBase
+from toontown.quest3.base.Quester import Quester
+from toontown.quest3.context.EarnJellybeanContext import EarnJellybeanContext
+from toontown.quest3.objectives.InvestigateObjective import GlobalInvestigateZones
+from toontown.quest3.base.QuestGlobals import HiddenQuestSources
+from toontown.quest3.context.ManualContext import ManualContext
+from toontown.quest3.kudos import KudosConstants
+from toontown.quest3.base import QuestGlobals
+from toontown.quest3.QuestEnums import QuestSource, QuesterType
+from toontown.quest3.base.QuestChain import QuestChain
+from toontown.quest3.base.QuestHistory import QuestHistory
+from toontown.quest3.base.QuestLine import QuestLine
+from toontown.quest3.base.QuestReference import QuestReference, QuestId
+from toontown.quest3.base.Quester import Quester
+from toontown.quest3.context.CogFriendContext import CogFriendContext
+from toontown.quest3.context.OpenBookContext import OpenBookContext
+from toontown.quest3.context.KnockKnockContext import KnockKnockContext
+from toontown.quest3.context.SnowballContext import SnowballContext
+from toontown.quest3.context.SwimContext import SwimContext
+from toontown.quest3.context.TossPieContext import TossPieContext
+from toontown.quest3.context.ZoneContext import ZoneContext
+from toontown.quest3.context.GoSadContext import GoSadContext
+from toontown.quest3.questlines.DailyQuestLine import DailyQuestLine
+from toontown.quest3.questlines.MainQuestLine import MainQuestLine
+from toontown.quest3.questlines.SideQuestLine import SideQuestLine
+from toontown.quest3.questlines.DirectiveQuestLine import DirectiveQuestLine
+from toontown.quest3.rewards.LaffReward import LaffReward
 from toontown.parties.PartyGlobals import InviteStatus
 from toontown.parties.PartyInfo import PartyInfoAI
 from toontown.parties.PartyReplyInfo import PartyReplyInfoBase
@@ -61,7 +91,6 @@ from toontown.racing import RaceGlobals
 from toontown.shtiker import CogPageGlobals
 from toontown.suit.SuitInvasionGlobals import *
 from toontown.suit import SuitDNA
-from toontown.toon import NPCToons
 from toontown.toon import ToonProfileGlobals as TPG
 from toontown.stickers import StickerGlobals
 from toontown.toonbase import TTLocalizer
@@ -72,6 +101,10 @@ from toontown.toonbase.ToontownGlobals import *
 from toontown.toonbase.TTLocalizerEnglish import SuitNameDropper
 from datetime import datetime
 from functools import reduce
+from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG  # not used here but prevents a circular import.
+from toontown.clashbattle.battle.statuses import SEE
+from toontown.clashbattle.battle import BattleGlobals, SuitBattleGlobals
+from toontown.clashbattle.battle.statuses.StatusEffects import UnitesDisabledStatusEffect
 
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
@@ -83,9 +116,9 @@ else:
 if simbase.wantKarts:
     from toontown.racing.KartDNA import *
 
-class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoothNodeAI.DistributedSmoothNodeAI, PetLookerAI.PetLookerAI, BoosterHandler):
+class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, ClashDistributedToonBaseAI, DistributedSmoothNodeAI.DistributedSmoothNodeAI, PetLookerAI.PetLookerAI, BoosterHandler, Quester, BattleAvatar):
+    questerType = QuesterType.Toon
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToonAI')
-    maxCallsPerNPC = 100
     partTypeIds = {ToontownGlobals.FT_FullSuit: (CogDisguiseGlobals.leftLegIndex,
                                    CogDisguiseGlobals.rightLegIndex,
                                    CogDisguiseGlobals.torsoIndex,
@@ -111,6 +144,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         DistributedPlayerAI.DistributedPlayerAI.__init__(self, air)
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.__init__(self, air)
         BoosterHandler.__init__(self)
+        BattleAvatar.__init__(self)
 
         if simbase.wantPets:
             PetLookerAI.PetLookerAI.__init__(self)
@@ -131,6 +165,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.dna = ToonDNA.ToonDNA()
         self.magicWordDNABackups = {}
         self.inventory = None
+        self.kudos = {}
         self.fishCollection = None
         self.fishTank = None
         self.experience = None
@@ -144,7 +179,13 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.petId = None
         self.quests = []
         self.questHistory = []
-        self.kudosBoardOffers = []
+        self.lastOnline = 0
+        self.__rawQuestReferences = []
+        self.__rawQuestHistory = []
+        self.toonQuests = []
+        self.toonQuestHistory = []
+        self.wantPurgeKudosQuests = False
+        self.toonTipsSeen = []
         self.achievements = []
         self.profilePose = TPG.DEFAULT_POSE
         self.profileNameplate = TPG.DEFAULT_NAMEPLATE
@@ -152,7 +193,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.cogs = []
         self.cogCounts = []
         self.cogSummonsEarned = []
-        self.NPCFriendsDict = {}
         self.clothesTopsList = []
         self.clothesBottomsList = []
         self.hatList = []
@@ -187,6 +227,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.ghostMode = 0
         self.immortalMode = 0
         self.unlimitedGags = 0
+        self.dailyQuestRerolls = 0
         self.numPies = 0
         self.pieType = 0
         self.uber = 0
@@ -267,23 +308,79 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def announceGenerate(self):
         DistributedPlayerAI.DistributedPlayerAI.announceGenerate(self)
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.announceGenerate(self)
-
+        self.checkLaff()
+        self.checkGagCarryLimit()
+        self.checkTracks(wantLoginChecks=True)
         if self.isPlayerControlled():
             if self.maxBankMoney != ToontownGlobals.DefaultMaxBankMoney:
                 self.b_setMaxBankMoney(ToontownGlobals.DefaultMaxBankMoney)
             self.repairTrainingPointState()
             messenger.send('avatarEntered', [self])
 
-        from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
-        if not isinstance(self, DistributedNPCToonBaseAI):
+            # Validate quests.
+            validatedQuests = QuestReference.validateRawQuestRefs(self.__rawQuestReferences)
+            if validatedQuests != self.__rawQuestReferences:
+                for questRef in self.__rawQuestReferences:
+                    if questRef not in validatedQuests:
+                        # Send out a warning.
+                        questId, progress = questRef
+                        questId = QuestId.fromStruct(questId)
+                        if questId.getQuestSource() != QuestSource.MainQuest:
+                            # Normal warning, since it's not a critical quest
+                            self.air.writeServerEvent('warning', self.doId,
+                                                      f'Toon had quest ref that needed to be scrubbed: {questId}')
+                        else:
+                            # CRITICAL QUEST! Let the user crash.
+                            self.air.writeServerEvent('warning', self.doId,
+                                                      f'Toon had CRITICAL quest ref that needed to be scrubbed: {questId}')
+                            break
+                else:
+                    # All quests were processed without the for loop breaking early.
+                    self.b_setRawQuestReferences(validatedQuests)
+
+            if self.getLastOnline():
+                # Clear out all completed kudos quests if the nearest
+                # bidaily timestamp has changed.
+                if TimeUtil.getNextTimestampOfInterval(KudosConstants.KUDOS_RESET_INTERVAL, self.getLastOnline()) != \
+                        TimeUtil.getNextTimestampOfInterval(KudosConstants.KUDOS_RESET_INTERVAL):
+                    self.purgeKudosQuests()
+
+                # Add a new daily quest for each full day they've been offline.
+                daysPassed = TimeUtil.countIntervalsBetweenTimestamps(
+                    timeA=self.getLastOnline(), timeB=int(time.time()), interval=24,
+                )
+
+                # Give a daily quest for each day passed.
+                # Cap it out at 3 so nothing stupid happens when a really old player logs on.
+                for _ in range(min(daysPassed, 3)):
+                    self.giveNewDailyQuest()
+
+            # Accept a hook which will accept kudos quests every 12 hours.
+            self.accept("kudos_purge", self.purgeKudosQuests)
+
+            # Extend boosters by our last online time.
+            lastOnline = self.getLastOnline()
+            if lastOnline != 0:
+                boosterExtendDuration = time.time() - lastOnline
+                if boosterExtendDuration > 0:
+                    self.extendRawBoosterDurations(int(boosterExtendDuration))
+
+            # Accept a hook which will attempt to add a new daily quest every 24 hours.
+            self.accept("daily_dailyQuestUpdate", self.giveNewDailyQuest)
+            self.accept("mw_daily_dailyQuestUpdate", self.giveNewDailyQuest)
+
+            # Send event log for entry.
+           # self.air.netMessenger.send('sendEventLog',
+            #                           ['avatar_enter', self.doId, str(self.zoneId), json.dumps(dict(na='n/a'))])
+#
+            self.__startLastOnlineTask()
             self.sendUpdate('setDefaultShard', [self.air.districtId])
 
     def setLocation(self, parentId, zoneId):
         DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
 
-        from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
-        if not isinstance(self, DistributedNPCToonBaseAI):
-            if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
+
+        if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
                 hood = ZoneUtil.getHoodId(zoneId)
                 self.b_setLastHood(hood)
                 self.b_setDefaultZone(hood)
@@ -374,6 +471,30 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
         DistributedAvatarAI.DistributedAvatarAI.sendDeleteEvent(self)
 
+    def setKudos(self, kudos) -> None:
+        if isinstance(kudos, dict):
+            self.kudos = kudos
+        else:
+            self.kudos = dict(kudos)
+        self.validateKudos()
+
+    def getKudos(self):
+        return self.kudos
+
+    def validateKudos(self):
+        """Add any kudos that are supposed to be present."""
+        addedAny = False
+        for zoneId, questHistory in QuestGlobals.QuestHistoryForPlaygroundCompletion.items():
+            if zoneId in self.kudos:
+                continue
+            if not self.hasCompletedQuestHistory(questHistory):
+                continue
+            # Add this to the kudos dict.
+            self.kudos[zoneId] = 0
+            addedAny = True
+        if addedAny:
+            self.b_setKudos(self.kudos)
+
     def delete(self):
         self.inventoryRateLimiter = None
         if self._dbCheckDoLater:
@@ -419,6 +540,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         taskName = self.uniqueName('next-catalog')
         taskMgr.remove(taskName)
 
+    def getTrueMaxCarry(self):
+        return self.getMaxCarry()
+
     def ban(self, comment):
         pass
 
@@ -460,6 +584,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if newZoneId == 2741: # Loopy's balls
             self.air.achievementsManager.loopysBalls(self.doId)
         self.air.achievementsManager.zone(self.doId, ZoneUtil.getHoodId(newZoneId))
+
+        if newZoneId in GlobalInvestigateZones:
+            self.air.quest3Manager.progressObjective(quester=self, context=ZoneContext(zoneId=newZoneId))
 
     def announceZoneChange(self, newZoneId, oldZoneId):
         if simbase.wantPets:
@@ -838,7 +965,238 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.experience = Experience.Experience(experience, self)
 
     def getExperience(self):
-        return self.experience.makeNetString()
+        for gagModifier in self.getModifiersOfType(ModifierType.GagsContentSync):
+            if gagModifier.getForceMaxed():
+                e = Experience()
+                e.maxOut()
+                return e
+        return self.experience
+
+    def showToonTip(self, tipId):
+        toonTip = ToonTipGlobals.ToonTipAttributes.get(tipId)
+        if not toonTip:
+            return
+
+        if toonTip.canRepeat or (not toonTip.canRepeat and tipId not in self.toonTipsSeen):
+            self.d_sendToonTip(tipId)
+            self.addToonTip(tipId)
+
+    def addToonTip(self, tipId):
+        toonTips = self.getToonTipsSeen()
+        if tipId not in toonTips:
+            toonTips.append(tipId)
+            self.b_setToonTipsSeen(toonTips)
+
+    def b_setToonTipsSeen(self, tips):
+        self.setToonTipsSeen(tips)
+        self.d_setToonTipsSeen(tips)
+
+    def setToonTipsSeen(self, tips):
+        self.toonTipsSeen = tips
+
+    def d_setToonTipsSeen(self, tips):
+        self.sendUpdate('setToonTipsSeen', [tips])
+
+    def d_sendToonTip(self, tipId):
+        self.sendUpdate('sendToonTip', [tipId])
+
+    def getToonTipsSeen(self):
+        return self.toonTipsSeen
+
+    def getExpectedLaff(self):
+        baseLaff = BattleGlobals.BaseHp
+        level = self.getToonLevel()
+        cogLevels = self.getCogLevels()
+        cogReviveLevels = self.getCogReviveLevels()
+        cogTiers = self.getCogTypes()
+        activityLevels = self.getActivityLevels()
+        suitHp = 0
+        questLaff = 0
+        activityHp = 0
+        for dept in range(len(cogTiers)):
+            if cogTiers[dept] >= 7:
+                # 1 Laff from tier 7 suit
+                suitHp += 1
+                for milestoneLevel in ToontownGlobals.CogSuitHPLevels:
+                    if cogLevels[dept] >= milestoneLevel:
+                        suitHp += 1
+                    else:
+                        break
+            else:
+                if cogReviveLevels[dept] >= 0:
+                    # 6 laff from regular promos
+                    suitHp += 6
+
+        # Get all of the quest laff points.
+        for questHistory in self.getQuestHistory():
+            chain: QuestChain = QuestLine.getQuestChainFromId(questHistory.questSource, questHistory.chainId, quester=self)
+            if not chain:
+                continue
+
+            # Iterate through the chain's rewards.
+            for reward in chain.getQuestRewards():
+                # If it has a LaffReward, add the boost which it provides.
+                if isinstance(reward, LaffReward):
+                    questLaff += reward.boost
+
+        for activity in range(len(activityLevels)):
+            for milestoneLevel in ToontownGlobals.ActivityHPLevels[activity]:
+                if activityLevels[activity] >= milestoneLevel:
+                    activityHp += 1
+                else:
+                    break
+
+        totalLaff = baseLaff + level + suitHp + questLaff + activityHp
+        if totalLaff > ToontownGlobals.MaxHpLimit:
+            totalLaff = ToontownGlobals.MaxHpLimit
+        return totalLaff
+
+    def checkLaff(self):
+        expectedLaff = self.getExpectedLaff()
+        actualLaff = self.getMaxHp()
+        if actualLaff != expectedLaff:
+            self.air.writeServerEvent(
+                'suspicious', avId = self.doId,
+                issue = 'Toon laff was corrected from ' + str(actualLaff) + 'to ' + str(
+                    expectedLaff))
+            self.b_setMaxHp(expectedLaff)
+        if self.getHp() > self.getMaxHp():
+            self.b_setHp(self.getMaxHp())
+
+    def checkGagCarryLimit(self):
+        level = self.getToonLevel()
+        expectedCarryLimit = 20
+        for gagIncLevel in ToontownGlobals.ExperienceGagLevels:
+            if level >= gagIncLevel:
+                expectedCarryLimit += 10
+            else:
+                break
+
+        if self.getTrueMaxCarry() != expectedCarryLimit:
+            self.air.writeServerEvent(
+                'suspicious', avId = self.doId,
+                issue = 'Toon gag carry limit was corrected from ' + str(self.getTrueMaxCarry()) + 'to ' + str(
+                    expectedCarryLimit))
+            self.b_setMaxCarry(expectedCarryLimit)
+
+    def getExpectedTrainingPoints(self):
+        # Base points
+        trainingPoints = BattleGlobals.BaseTrainingPoints
+
+        # Toon Level points
+        level = self.getToonLevel()
+        for pointLevel in ToontownGlobals.ExperienceTrainingPointLevels:
+            if level >= pointLevel:
+                trainingPoints += 1
+            else:
+                break
+
+     #   # Department Level point
+      #  departmentLevels = self.getDepartmentLevels()
+       # i = 0
+        #for department in range(len(departmentLevels)):
+        #    if self.departmentLevels[department] == ToontownGlobals.MaxDepartmentLevel[department]:
+        #        i += 1
+       # if i >= 4:
+       #     trainingPoints += 1
+
+        return trainingPoints
+
+    def checkTracks(self, wantLoginChecks=False):
+        # Do the login checks first if we want them.
+        if wantLoginChecks:
+            # Fix training points, no 1-spend tracks
+            pointsBack = 0
+            pointsSpent = self.getSpentTrainingPoints()
+            for index, points in enumerate(pointsSpent):
+                if points != 1:
+                    continue
+                # We need to give a point back.
+                pointsBack += 1
+                pointsSpent[index] = 0
+            if pointsBack:
+                self.b_setSpentTrainingPoints(pointsSpent)
+                self.b_setTrainingPoints(self.getTrainingPoints() + pointsBack)
+
+            # If a Toon has a maxed track achievement, make sure their track is maxed.
+            experience = self.getExperience()
+            expUpdated = False
+            for trackIndex, achievementIndex in enumerate(
+                Achievements.type2AchievementIds.get(Achievements.MaxGagAchievement)):
+                if self.hasAchievement(achievementIndex) and not experience.isTrackMaxed(trackIndex):
+                    # This track is not maxed, but they have the achievement.
+                    experience.maxOutTrack(trackIndex)
+                    expUpdated = True
+            if expUpdated:
+                self.b_setExperience(experience.experience)
+
+        # Make sure there's no discrepancies between spent points and track access
+        discrepancyFixed = False
+        for i in range(8):
+            if self.trackArray[i] == 1 and self.spentTrainingPoints[i] < 2:
+                self.spentTrainingPoints[i] = 2
+                self.trackBonusLevel[i] = -1
+                discrepancyFixed = True
+            elif self.trackArray[i] == 0 and self.spentTrainingPoints[i] != 0:
+                self.spentTrainingPoints[i] = 0
+                self.trackBonusLevel[i] = -1
+                discrepancyFixed = True
+
+        if discrepancyFixed:
+            self.d_setTrackBonusLevel(self.trackBonusLevel)
+            self.d_setSpentTrainingPoints(self.spentTrainingPoints)
+
+        # Find out how many training points they SHOULD have.
+        expectedPoints = self.getExpectedTrainingPoints()
+        # Find out how many training point they currently have.
+        actualPoints = self.getTrainingPoints()
+        for trackPoints in self.getSpentTrainingPoints():
+            actualPoints += trackPoints
+
+        if actualPoints != expectedPoints:
+            self.air.writeServerEvent(
+                'suspicious', avId=self.doId,
+                issue='Toon training points were corrected from ' + str(actualPoints) + 'to ' + str(
+                    expectedPoints))
+            # If positive, we have more training points than we should
+            # If negative, we have less training points than we should
+            difference = actualPoints - expectedPoints
+            # Remove excess points
+            if difference > 0:
+                # First, we remove unspent training points
+                unspentPoints = self.getTrainingPoints()
+                difference -= unspentPoints
+                if difference >= 0:
+                    self.b_setTrainingPoints(0)
+                    if difference == 0:
+                        return
+                elif difference < 0:
+                    self.b_setTrainingPoints(-difference)
+                    return
+
+                # Then, we remove prestiges
+                for track, pointsSpent in enumerate(self.getSpentTrainingPoints()):
+                    if pointsSpent == 3:
+                        self.requestSkillReturn(track, returnPoint=False)
+                        difference -= 1
+                    if difference == 0:
+                        return
+
+                # Then, we remove tracks
+                for track, pointsSpent in enumerate(self.getSpentTrainingPoints()):
+                    if pointsSpent == 2:
+                        self.requestRefundSpend(track, returnPoint=False)
+                        difference -= 2
+                    if difference == 0:
+                        return
+                    elif difference < 0:
+                        self.b_setTrainingPoints(-difference)
+                        return
+            # Give missing points
+            elif difference < 0:
+                missingPoints = -difference
+                if self.getTrainingPoints() + missingPoints >= 0:
+                    self.b_setTrainingPoints(self.getTrainingPoints() + missingPoints)
 
     def b_setInventory(self, inventory):
         self.setInventory(inventory)
@@ -971,31 +1329,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         if self.air.wantAchievements:
             self.air.achievementsManager.friends(self.doId)
 
-    def d_setMaxNPCFriends(self, max):
-        self.sendUpdate('setMaxNPCFriends', [max])
-
-    def setMaxNPCFriends(self, max):
-        if max & 32768:
-            self.b_setSosPageFlag(1)
-            max &= 32767
-        configMax = simbase.config.GetInt('max-sos-cards', 32)
-        if configMax != max:
-            if self.sosPageFlag == 0:
-                self.b_setMaxNPCFriends(configMax)
-            else:
-                self.b_setMaxNPCFriends(configMax | 32768)
-        else:
-            self.maxNPCFriends = max
-        if self.maxNPCFriends not in (8, 16, 32):
-            self.notify.warning('Wrong max SOS cards %s, %d' % (self.maxNPCFriends, self.doId))
-
-    def b_setMaxNPCFriends(self, max):
-        self.setMaxNPCFriends(max)
-        self.d_setMaxNPCFriends(max)
-
-    def getMaxNPCFriends(self):
-        return self.maxNPCFriends
-
     def getBattleId(self):
         if self.battleId >= 0:
             return self.battleId
@@ -1014,71 +1347,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setBattleId(self, battleId):
         self.battleId = battleId
-
-    def d_setNPCFriendsDict(self, NPCFriendsDict):
-        NPCFriendsList = []
-        for friend in list(NPCFriendsDict.keys()):
-            NPCFriendsList.append((friend, NPCFriendsDict[friend]))
-
-        self.sendUpdate('setNPCFriendsDict', [NPCFriendsList])
-
-    def setNPCFriendsDict(self, NPCFriendsList):
-        self.NPCFriendsDict = {}
-        for friendPair in NPCFriendsList:
-            self.NPCFriendsDict[friendPair[0]] = friendPair[1]
-        oldRainCount = self.NPCFriendsDict.pop(7778, 0)
-        if oldRainCount:
-            self.NPCFriendsDict[90001] = self.NPCFriendsDict.get(90001, 0) + oldRainCount
-
-    def getNPCFriendsDict(self):
-        return self.NPCFriendsDict
-
-    def b_setNPCFriendsDict(self, NPCFriendsList):
-        self.setNPCFriendsDict(NPCFriendsList)
-        self.d_setNPCFriendsDict(self.NPCFriendsDict)
-
-    def resetNPCFriendsDict(self):
-        self.b_setNPCFriendsDict([])
-
-    def attemptAddNPCFriend(self, npcFriend, numCalls = 1):
-        if numCalls <= 0:
-            self.notify.warning('invalid numCalls: %d' % numCalls)
-            return 0
-        if npcFriend in self.NPCFriendsDict:
-            self.NPCFriendsDict[npcFriend] += numCalls
-        elif npcFriend in npcFriends:
-            if len(list(self.NPCFriendsDict.keys())) >= self.maxNPCFriends:
-                return 0
-            self.NPCFriendsDict[npcFriend] = numCalls
-        else:
-            self.notify.warning('invalid NPC: %d' % npcFriend)
-            return 0
-        if self.NPCFriendsDict[npcFriend] > self.maxCallsPerNPC:
-            self.NPCFriendsDict[npcFriend] = self.maxCallsPerNPC
-        self.d_setNPCFriendsDict(self.NPCFriendsDict)
-        if self.sosPageFlag == 0:
-            self.b_setMaxNPCFriends(self.maxNPCFriends | 32768)
-        return 1
-
-    def attemptSubtractNPCFriend(self, npcFriend):
-        if npcFriend not in self.NPCFriendsDict:
-            self.notify.warning('attemptSubtractNPCFriend: invalid NPC %s' % npcFriend)
-            return 0
-        if hasattr(self, 'autoRestockSOS') and self.autoRestockSOS:
-            cost = 0
-        else:
-            cost = 1
-        self.NPCFriendsDict[npcFriend] -= cost
-        if self.NPCFriendsDict[npcFriend] <= 0:
-            del self.NPCFriendsDict[npcFriend]
-        self.d_setNPCFriendsDict(self.NPCFriendsDict)
-        return 1
-
-    def restockAllNPCFriends(self):
-        desiredNpcFriends = [2121, 2132, 2001, 1001, 3007, 2011, 1323, 2308, 3112, 4108, 2316, 5012, 1223, 5125, 2217, 2101, 1123, 9203, 4115, 4219, 4119, 4140, 2311, 1116, 90001]
-        self.resetNPCFriendsDict()
-        for npcId in desiredNpcFriends:
-            self.attemptAddNPCFriend(npcId, 1)
 
     def d_setMaxAccessories(self, max):
         self.sendUpdate('setMaxAccessories', [self.maxAccessories])
@@ -1726,7 +1994,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         else:
             self.cogReviveLevels[dept] += 1
             self.d_setCogReviveLevels(self.cogReviveLevels)
-            if lastCog:
+        if lastCog:
                 if self.cogReviveLevels[dept] in ToontownGlobals.CogReviveSuitHPLevels:
                     if self.cogMerits[dept] != 0:
                         self.cogMerits[dept] = 0
@@ -1735,6 +2003,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                     maxHp = min(ToontownGlobals.MaxHpLimit, maxHp + 1)
                     self.b_setMaxHp(maxHp)
                     self.toonUp(maxHp)
+
+
         self.air.writeServerEvent('cogReviveSuit', self.doId, '%s|%s|%s' % (dept, self.cogTypes[dept], self.cogReviveLevels[dept]))
 
     def getNumPromotions(self, dept):
@@ -2025,254 +2295,255 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def getFishingTrophies(self):
         return self.fishingTrophies
 
-    def b_setQuests(self, questList):
-        flattenedQuests = []
-        for quest in questList:
-            flattenedQuests.extend(quest)
+    def b_setRawQuestReferences(self, rawQuestReferences):
+        rawQuestReferences = self.__processRawQuests(rawQuestReferences)
+        self.setRawQuestReferences(rawQuestReferences)
+        self.d_setRawQuestReferences(rawQuestReferences)
 
-        self.setQuests(flattenedQuests)
-        self.d_setQuests(flattenedQuests)
+    def d_setRawQuestReferences(self, rawQuestReferences):
+        self.sendUpdate('setRawQuestReferences', [rawQuestReferences])
 
-    def d_setQuests(self, flattenedQuests):
-        self.sendUpdate('setQuests', [flattenedQuests])
+    def setRawQuestReferences(self, rawQuestReferences):
+        self.__rawQuestReferences = rawQuestReferences
 
-    def setQuests(self, flattenedQuests):
-        self.notify.debug('setting quests to %s' % flattenedQuests)
-        questList = []
-        questLen = 5
-        migrated = False
-        for i in range(0, len(flattenedQuests), questLen):
-            quest = flattenedQuests[i:i + questLen]
-            if quest and 90000 <= quest[0] <= 90025:
-                quest[0] -= 82000
-                migrated = True
-            questList.append(quest)
+        # Update true QuestReference list.
+        self.toonQuests = QuestReference.fromStructList(rawQuestReferences)
 
-        self.quests = questList
-        if migrated:
-            self.d_setQuests(self.getQuests())
+    def getRawQuestReferences(self):
+        return self.__rawQuestReferences
 
-    def getQuests(self):
-        flattenedQuests = []
-        for quest in self.quests:
-            flattenedQuests.extend(quest)
+    def __processRawQuests(self, rawQuestReferences):
+        """
+        Processes raw quests.
+        Gets rid of any expiring quests.
 
-        return flattenedQuests
+        :return: None.
+        """
+        newRawQuests = []
+        for i, questRefData in enumerate(rawQuestReferences):
+            # Process this quest reference. Should we have it?
+            questReference: QuestReference = QuestReference.fromStruct(questRefData)
 
-    def getQuest(self, questId, visitNpcId = None, rewardId = None):
-        for quest in self.quests:
-            if quest[0] != questId:
+            chain: QuestChain = QuestLine.getQuestChainFromQuestId(questReference.getQuestId(), quester=self)
+            # This quest chain has expired, we don't want it.
+            if chain.isExpired():
                 continue
-            if visitNpcId != None:
-                if visitNpcId != quest[1] and visitNpcId != quest[2]:
+
+            newRawQuests.append(questReference.toStruct())
+
+        # Return our true raw quest list.
+        return newRawQuests
+
+    def b_setRawQuestHistory(self, rawQuestHistory):
+        self.d_setRawQuestHistory(rawQuestHistory)
+        self.setRawQuestHistory(rawQuestHistory)
+
+    def d_setRawQuestHistory(self, rawQuestHistory):
+        self.sendUpdate('setRawQuestHistory', [rawQuestHistory])
+
+    def setRawQuestHistory(self, rawQuestHistory):
+        self.__rawQuestHistory = rawQuestHistory
+
+        # Update true QuestHistory list.
+        self.toonQuestHistory = QuestHistory.fromStructList(rawQuestHistory)
+
+        if self.wantPurgeKudosQuests:
+            self.wantPurgeKudosQuests = False
+
+            # Remove all of their kudos quest history.
+            for qh in self.toonQuestHistory[:]:
+                # Quest must be kudos.
+                if qh.questSource != QuestSource.KudosQuest:
                     continue
-            if rewardId != None:
-                if rewardId != quest[3]:
+                # Quest must not be rank-up.
+                if qh.getChainId() < 1000:
                     continue
-            return quest
+                # Remove history.
+                self.toonQuestHistory.remove(qh)
 
-        return
+            self.b_setRawQuestHistory(QuestHistory.toStructList(self.toonQuestHistory))
 
-    def hasQuest(self, questId, visitNpcId = None, rewardId = None):
-        if self.getQuest(questId, visitNpcId=visitNpcId, rewardId=rewardId) == None:
+    def getRawQuestHistory(self):
+        return self.__rawQuestHistory
+
+    def getQuestHistory(self):
+        return self.toonQuestHistory
+
+    """
+    Quester methods
+    """
+
+    def canAddQuest(self):
+        return len(self.getQuestReferencesOfSource(*HiddenQuestSources, negate=True)) < self.questCarryLimit
+
+    def addQuest(self, questId: QuestId, force: bool = False) -> bool:
+        if not self.canAddQuest() and not force:
             return False
-        else:
-            return True
-        return
-
-    def removeQuest(self, id, visitNpcId = None):
-        index = -1
-        for i in range(len(self.quests)):
-            if self.quests[i][0] == id:
-                if visitNpcId:
-                    otherId = self.quests[i][2]
-                    if visitNpcId == otherId:
-                        index = i
-                        break
-                else:
-                    index = i
-                    break
-
-        if index >= 0:
-            del self.quests[i]
-            self.b_setQuests(self.quests)
-            return 1
-        else:
-            return 0
-
-    def addQuest(self, quest, finalReward):
-        self.quests.append(quest)
-        self.b_setQuests(self.quests)
-
-    def _isValidKudosBoardQuest(self, questId):
-        if questId not in Quests.KudosBoardQuestIds:
-            return False
-
-        questEntry = Quests.QuestDict.get(questId)
-        if not questEntry:
-            return False
-        if questEntry[Quests.QuestDictStartIndex] != Quests.Start:
-            return False
-
-        for currentQuest in self.quests:
-            if currentQuest[0] == questId:
-                return False
-
-        questClass = Quests.getQuestClass(questId)
-        if not questClass:
-            return False
-        hoodId = ZoneUtil.getHoodId(self.zoneId)
-        if hoodId in (
-            ToontownGlobals.ToontownCentral,
-            ToontownGlobals.DonaldsDock,
-            ToontownGlobals.YeOlde
-        ) and questClass == Quests.SkelecogQuest:
-            return False
-        if hoodId == ToontownGlobals.ToontownCentral:
-            if questClass == Quests.BuildingQuest:
-                return False
-        if hoodId in (
-            ToontownGlobals.DaisyGardens,
-            ToontownGlobals.MinniesMelodyland,
-            ToontownGlobals.TheBrrrgh,
-            ToontownGlobals.OutdoorZone,
-            ToontownGlobals.DonaldsDreamland
-        ) and questClass == Quests.DeliverGagQuest:
-            return False
-        allowedQuestClasses = (
-            Quests.CogQuest,
-            Quests.CogTrackQuest,
-            Quests.CogLevelQuest,
-            Quests.SkelecogQuest,
-            Quests.FishingQuest,
-            Quests.BuildingQuest,
-            Quests.TrolleyQuest,
-            Quests.DeliverGagQuest
-        )
-        if questClass not in allowedQuestClasses:
-            return False
-
-        try:
-            if not questClass.filterFunc(self):
-                return False
-        except:
-            return False
-
+        self.toonQuests.append(QuestReference(questId=questId))
+        self.updateQuestProgress()
         return True
 
-    def _getKudosBoardOffer(self, questId):
-        if not self._isValidKudosBoardQuest(questId):
-            return None
-
-        toNpcId = Quests.getQuestToNpcId(questId)
-        if toNpcId == Quests.Any or toNpcId == Quests.Same:
-            toNpcId = Quests.ToonHQ
-
-        hoodId = ZoneUtil.getHoodId(self.zoneId)
-        rewardRanges = {
-            ToontownGlobals.ToontownCentral: (60, 130),
-            ToontownGlobals.DonaldsDock: (140, 200),
-            ToontownGlobals.YeOlde: (210, 270),
-            ToontownGlobals.DaisyGardens: (280, 340),
-            ToontownGlobals.MinniesMelodyland: (350, 410),
-            ToontownGlobals.TheBrrrgh: (420, 480),
-            ToontownGlobals.OutdoorZone: (490, 550),
-            ToontownGlobals.DonaldsDreamland: (560, 620)
-        }
-        minimumReward, maximumReward = rewardRanges.get(
-            hoodId,
-            rewardRanges[ToontownGlobals.ToontownCentral]
-        )
-        rewardAmount = random.randrange(
-            minimumReward,
-            maximumReward + 1,
-            10
-        )
-        rewardId = Quests.KudosBoardMoneyRewardIds[rewardAmount]
-
-        return [questId, toNpcId, rewardId]
-
-    def requestKudosBoard(self):
-        validOffers = []
-        hoodId = ZoneUtil.getHoodId(self.zoneId)
-        questIds = list(Quests.KudosBoardQuestIdsByHood.get(
-            hoodId,
-            Quests.KudosBoardQuestIdsByHood[ToontownGlobals.ToontownCentral]
-        ))
-        random.shuffle(questIds)
-
-        for questId in questIds:
-            offer = self._getKudosBoardOffer(questId)
-            if offer:
-                validOffers.append(offer)
-                if len(validOffers) >= 12:
-                    break
-
-        self.kudosBoardOffers = dict(
-            (offer[0], offer) for offer in validOffers
-        )
-        flattenedOffers = []
-        for offer in validOffers:
-            flattenedOffers.extend(offer)
-
-        self.sendUpdate('setKudosBoardOffers', [flattenedOffers])
-        if not validOffers:
-            self.sendUpdate('setKudosBoardResult', [4])
-
-    def chooseKudosBoardQuest(self, questId):
-        if questId not in self.kudosBoardOffers:
-            self.sendUpdate('setKudosBoardResult', [3])
+    def addQuestHistory(self, questHistory: QuestHistory) -> None:
+        """
+        Adds new QuestHistory to the Quester.
+        :param questHistory: The QuestHistory object.
+        """
+        # Daily quests don't need to be stored.
+        if questHistory.questSource in (QuestSource.DailyQuest,):
             return
 
-        if len(self.quests) >= self.getQuestCarryLimit():
-            self.sendUpdate('setKudosBoardResult', [2])
+        self.__rawQuestHistory.append(questHistory.toStruct())
+        self.b_setRawQuestHistory(self.__rawQuestHistory)
+        self.validateKudos()
+
+    def extendQuestHistory(self, questHistory: typing.List[QuestHistory]) -> None:
+        """
+        Extends the Quester's quest history.
+        :param questHistory: A list of QuestHistory objects.
+        """
+        self.__rawQuestHistory.extend(QuestHistory.toStructList(questHistory))
+        self.b_setRawQuestHistory(self.__rawQuestHistory)
+
+    def getQuestReferences(self):
+        """
+        Gets the list of QuestReferences off of the Quester.
+        """
+        return self.toonQuests
+
+    def updateQuestProgress(self) -> None:
+        """
+        Whenever the QuestManagerAI updates our quest references,
+        this method gets called.
+        """
+        self.b_setRawQuestReferences(QuestReference.toStructList(self.toonQuests))
+
+    def removeQuest(self, questReference: QuestReference) -> bool:
+        """Remove the given QuestReference from the toon's quests.
+        """
+        for ref in self.toonQuests:
+            ref: QuestReference
+            # The reference matches the one we want to delete, remove it.
+            if ref == questReference:
+                # Remove the reference from their quests.
+                self.toonQuests.remove(ref)
+
+                # Distribute their updated quests.
+                self.updateQuestProgress()
+                return True
+
+        return False
+
+    def gaslightQuestOutOfExistence(self, questHistory: QuestHistory):
+        """
+        Given a questHistory, removes it if it exists AND also
+        removes it from quest refs if it exists too.
+        """
+        updated = False
+        for ref in self.toonQuests[:]:
+            ref: QuestReference
+            if ref.getQuestSource() == questHistory.getQuestSource():
+                if ref.getChainId() == questHistory.getChainId():
+                    self.toonQuests.remove(ref)
+                    updated = True
+        if updated:
+            self.updateQuestProgress()
+
+        # now nuke it from history (commentary)
+        updated = False
+        ourHistory: list = QuestHistory.fromStructList(self.getRawQuestHistory())
+        for his in ourHistory[:]:
+            if his == questHistory:
+                ourHistory.remove(his)
+                updated = True
+        if updated:
+            self.b_setRawQuestHistory(QuestHistory.toStructList(ourHistory))
+
+    def requestDeleteQuest(self, questReference):
+        # Create the QuestReference object.
+        questReference = QuestReference.fromStruct(questReference)
+        questChain = QuestLine.getQuestChainFromQuestId(questReference.getQuestId(), quester=self)
+
+        # Is the quest chain deletable?
+        if not questChain.isDeletable():
+            self.air.writeServerEvent('suspicious', self.doId,
+                                      f'Toon tried to delete non-deletable quest {questReference.toStruct()}')
+            self.notify.warning(
+                f'{self}.requestDeleteQuest({questReference.toStruct()}) -- Tried to delete non-deletable quest')
             return
 
-        offer = self.kudosBoardOffers.get(questId)
-        if not offer or not self._isValidKudosBoardQuest(questId):
-            self.sendUpdate('setKudosBoardResult', [3])
+        # Attempt to remove the quest reference.
+        result = self.removeQuest(questReference)
+        if not result:
+            self.air.writeServerEvent('suspicious', self.doId,
+                                      f"Toon tried to delete quest they don't have {questReference.toStruct()}")
+            self.notify.warning(f"{self}.requestDeleteQuest({questReference.toStruct()}) -- Toon doesn't have that quest")
+
+    def purgeKudosQuests(self) -> None:
+        """Set a flag which will purge all kudos quest history
+        from this toon upon the next time their quest history is
+        updated. This purge needs to occur after the toon's quest
+        history has been properly populated.
+        """
+        self.wantPurgeKudosQuests = True
+        self.b_setRawQuestHistory(QuestHistory.toStructList(self.toonQuestHistory))
+
+    def giveNewDailyQuest(self) -> None:
+        """Calls to both add a new daily quest and give a reroll.
+        """
+        self.addDailyQuest()
+        # We can only carry 2 rerolls at maximum.
+        self.b_setDailyQuestRerolls(min(self.dailyQuestRerolls + 2, 2))
+
+    def addDailyQuest(self) -> None:
+        if len(self.getQuestReferencesOfSource(QuestSource.DailyQuest)) >= 3:
             return
 
-        toNpcId = offer[1]
-        rewardId = offer[2]
-        quest = [questId, Quests.ToonHQ, toNpcId, rewardId, 0]
+        chainId = DailyQuestLine.getRandomDailyQuestChainId(self)
+        self.addQuest(QuestId(QuestSource.DailyQuest, chainId, 1), force=True)
 
-        try:
-            finalRewardId = Quests.getFinalRewardId(questId, fAll=1)
-        except:
-            finalRewardId = rewardId
+    def b_setDailyQuestRerolls(self, rerolls: int) -> None:
+        self.d_setDailyQuestRerolls(rerolls)
+        self.setDailyQuestRerolls(rerolls)
 
-        self.addQuest(quest, finalRewardId)
-        self.kudosBoardOffers = {}
-        self.sendUpdate('setKudosBoardResult', [1])
+    def d_setDailyQuestRerolls(self, rerolls: int) -> None:
+        self.sendUpdate("setDailyQuestRerolls", [rerolls])
 
-    def removeAllTracesOfQuest(self, questId, rewardId):
-        self.notify.debug('removeAllTracesOfQuest: questId: %s rewardId: %s' % (questId, rewardId))
-        self.notify.debug('removeAllTracesOfQuest: quests before: %s' % self.quests)
-        removedQuest = self.removeQuest(questId)
-        self.notify.debug('removeAllTracesOfQuest: quests after: %s' % self.quests)
-        self.notify.debug('removeAllTracesOfQuest: questHistory before: %s' % self.questHistory)
-        removedQuestHistory = self.removeQuestFromHistory(questId)
-        self.notify.debug('removeAllTracesOfQuest: questHistory after: %s' % self.questHistory)
-        return (removedQuest, removedQuestHistory)
+    def setDailyQuestRerolls(self, rerolls: int) -> None:
+        self.dailyQuestRerolls = rerolls
 
-    def requestDeleteQuest(self, questDesc):
-        if len(questDesc) != 5:
-            self.air.writeServerEvent('suspicious', self.doId, 'Toon tried to delete invalid questDesc %s' % str(questDesc))
-            self.notify.warning('%s.requestDeleteQuest(%s) -- questDesc has incorrect params' % (self, str(questDesc)))
-            return
-        questId = questDesc[0]
-        if not self.hasQuest(questId):
-            self.air.writeServerEvent('suspicious', self.doId, "Toon tried to delete quest they don't have %s" % str(questDesc))
-            self.notify.warning("%s.requestDeleteQuest(%s) -- Toon doesn't have that quest" % (self, str(questDesc)))
-            return
-        if not Quests.isQuestJustForFun(questId):
-            self.air.writeServerEvent('suspicious', self.doId, 'Toon tried to delete non-Just For Fun quest %s' % str(questDesc))
-            self.notify.warning('%s.requestDeleteQuest(%s) -- Tried to cancel non-Just For Fun quest' % (self, str(questDesc)))
-            return
-        removedStatus = self.removeAllTracesOfQuest(questId)
-        if 0 in removedStatus:
-            self.notify.warning('%s.requestDeleteQuest(%s) -- Failed to remove quest, status=%s' % (self, str(questDesc), removedStatus))
+    def getDailyQuestRerolls(self) -> int:
+        return self.dailyQuestRerolls
+
+    def spendDailyQuestReroll(self) -> bool:
+        if self.getDailyQuestRerolls() <= 0:
+            return False
+        self.b_setDailyQuestRerolls(self.getDailyQuestRerolls() - 1)
+        return True
+
+    """
+    Useful quester methods for setting progress via magic words.
+    """
+
+    def mw_setQuestReference(self, questSource: QuestSource, chainId: int, objectiveId: int=1) -> None:
+        questReferences = [QuestReference(QuestId(questSource, chainId, objectiveId))]
+        self.b_setRawQuestReferences(QuestReference.toStructList(questReferences))
+
+    def mw_setQuestHistory(self, questSource: QuestSource, maxChainId: int) -> None:
+        # Get their current quest history.
+        allQuestHistory = self.getQuestHistory()
+
+        newQuestHistory = []
+        for chainId in range(1, maxChainId):
+            questHistory = QuestHistory(questSource, chainId)
+            # Ensure that the Quest isn't already in their quest history, and that the chainId
+            # actually exists.
+            if questHistory not in allQuestHistory and \
+                chainId in QuestLine.questLines[questSource].questLine:
+                newQuestHistory.append(questHistory)
+
+        self.extendQuestHistory(newQuestHistory)
+
+    # The number of quests you can carry at once
 
     def b_setQuestCarryLimit(self, limit):
         self.setQuestCarryLimit(limit)
@@ -2287,6 +2558,20 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def getQuestCarryLimit(self):
         return self.questCarryLimit
+
+
+    def progressSwimQuest(self):
+        self.air.quest3Manager.progressObjective(self, SwimContext())
+
+    def progressTossPieQuest(self, pieType: int):
+        messenger.send("toonTossedPie", [self.doId, pieType])
+        if ZoneUtil.isDynamicZone(self.zoneId):
+            return
+        self.air.quest3Manager.progressObjective(self, TossPieContext(1, pieType, self.zoneId))
+
+    def progressCogFriendQuest(self):
+        self.air.quest3Manager.progressObjective(self, CogFriendContext())
+
 
     def b_setMaxCarry(self, maxCarry):
         self.setMaxCarry(maxCarry)
@@ -2581,7 +2866,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def getQuestHistory(self):
         return self.questHistory
-		
+
     def addToQuestHistory(self, questId):
         self.questHistory.append(questId)
         self.d_setQuestHistory(self.questHistory)
@@ -3082,6 +3367,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             from toontown.gumball import GumballGlobals
             deltaMoney = self.applyGumballBoosters([GumballGlobals.JELLYBEANS_GLOBAL], deltaMoney, True)
         self.addStat(ToontownGlobals.STATS_JB_EARNED, amount = deltaMoney)
+        self.air.quest3Manager.progressObjective(quester=self, context=EarnJellybeanContext(
+            jellybeans=deltaMoney))
         money = deltaMoney + self.money
         pocketMoney = min(money, self.maxMoney)
         self.b_setMoney(pocketMoney)
@@ -3559,6 +3846,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             if numTickets > RaceGlobals.MaxTickets:
                 numTickets = RaceGlobals.MaxTickets
             self.tickets = numTickets
+
+        def getSettingChangeMessage(self, setting: str) -> str:
+            return self.uniqueName(f'setting-changed-{setting}')
 
         def getTickets(self):
             return self.tickets
@@ -4242,10 +4532,55 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
             for i in bm.getToonBlocks():
                 building = bm.getBuilding(i)
                 extZoneId, intZoneId = building.getExteriorAndInteriorZoneId()
-                if not NPCToons.isZoneProtected(intZoneId):
+                if not QuestGlobals.isZoneProtected(intZoneId):
                     if hasattr(building, 'door'):
                         if building.door.zoneId == zone:
                             return building
+
+    def handleStickerBookQuest(self):
+        self.air.quest3Manager.progressObjective(self, OpenBookContext())
+
+    def handleKnockKnockQuest(self):
+        self.air.quest3Manager.progressObjective(self, KnockKnockContext())
+
+    def handleGoSadQuest(self):
+        self.air.quest3Manager.progressObjective(self, GoSadContext())
+
+    def b_setLastOnline(self, timestamp):
+        self.setLastOnline(timestamp)
+        self.d_setLastOnline(timestamp)
+
+    def d_setLastOnline(self, timestamp):
+        self.sendUpdate('setLastOnline', [timestamp])
+
+    def setLastOnline(self, timestamp):
+        self.lastOnline = timestamp
+
+    def getLastOnline(self):
+        return self.lastOnline
+
+    def __startLastOnlineTask(self):
+        taskMgr.doMethodLater(
+            delayTime=600,
+            funcOrTask=self.__doLastOnlineReset,
+            name=self.__getLastOnlineTaskName(),
+        )
+        self.__doLastOnlineReset()
+
+    def __clearLastOnlineTask(self):
+        taskMgr.remove(self.__getLastOnlineTaskName())
+
+    def __doLastOnlineReset(self, task=None):
+        # Reset lastOnline time.
+        self.b_setLastOnline(int(time.time()))
+
+        # Run task again if it exists.
+        if task is not None:
+            task.delayTime = 600
+            return task.again
+
+    def __getLastOnlineTaskName(self):
+        return self.uniqueName('resetLastOnline')
 
     def b_setGardenTrophies(self, trophyList):
         self.setGardenTrophies(trophyList)
@@ -6058,7 +6393,7 @@ def sos(count, name):
     """
     invoker = spellbook.getInvoker()
     if not 0 <= count <= 100:
-        return 'Your SOS count must be in range (0-100).'
+        return 'Your SOS cou nt must be in range (0-100).'
     npcId = None
     for candidateId, npcDesc in list(NPCToons.NPCToonDict.items()):
         if name.lower() == npcDesc[1].lower() and candidateId in NPCToons.npcFriends:

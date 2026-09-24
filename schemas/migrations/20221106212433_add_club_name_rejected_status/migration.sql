@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "ClubLogType" ADD VALUE 'CLUB_NAME_REVOKED';

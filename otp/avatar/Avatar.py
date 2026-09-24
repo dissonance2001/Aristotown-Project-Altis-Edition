@@ -140,6 +140,9 @@ class Avatar(Actor, ShadowCaster):
         
         self.nametag.updateAll()
 
+    def hasLocalNametag(self):
+        return self.isLocal()
+
     def setCommonChatFlags(self, commonChatFlags):
         self.commonChatFlags = commonChatFlags
         self.considerUnderstandable()
@@ -392,7 +395,7 @@ class Avatar(Actor, ShadowCaster):
             retval = dialogueArray[sfxIndex]
         return retval
     
-    def setChatAbsoluteSpecial(self, chatString, chatFlags, dialogue=None, interrupt=True):
+    def setChatAbsoluteSpecial(self, chatString, chatFlags, dialogue=None, interrupt=True, wantSound=True):
         searchString = chatString.lower()
         if chatFlags & CFQuicktalker:
             self.nametag.setChatType(NametagGlobals.SPEEDCHAT)
@@ -434,7 +437,7 @@ class Avatar(Actor, ShadowCaster):
         self.nametag.setChatText(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
 
-    def setChatAbsolute(self, chatString, chatFlags, dialogue=None, interrupt=1):
+    def setChatAbsolute(self, chatString, chatFlags, dialogue=None, interrupt=1, wantSound=True):
         self.clearChat()
         searchString = chatString.lower()
 
@@ -476,12 +479,20 @@ class Avatar(Actor, ShadowCaster):
                 self.animHead = 'statement'
             else:
                 self.animHead = 'statement'
+
         self.nametag.setChatText(chatString, timeout=(chatFlags & CFTimeout))
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
-        for headPart in self.animatedHeadParts: 
-            Sequence(ActorInterval(headPart, self.animHead),
-                    Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and self.healthCondition <= 11 else '',))
-                    ).start()
+
+        if hasattr(self, 'animatedHeadParts') and self.animatedHeadParts:
+            for headPart in self.animatedHeadParts:
+                Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop,
+                         'neutral%s' % ('-hurt' if self.healthCondition >= 8 and self.healthCondition <= 11 else ''))
+                ).start()
+
+        if wantSound:
+            self.playCurrentDialogue(dialogue, chatFlags, interrupt)
 
     def checkCogHP(self, battle):
         pass
@@ -529,9 +540,13 @@ class Avatar(Actor, ShadowCaster):
                 self.animHead = 'statement'
         self.nametag.setChatText(chatString, chatFlags)
         self.playCurrentDialogue(dialogue, chatFlags, interrupt)
-        for headPart in self.animatedHeadParts: 
-            Sequence(ActorInterval(headPart, self.animHead),
-                     Func(headPart.loop, 'neutral%s' % ('-hurt' if self.healthCondition >= 8 and self.healthCondition <= 11 else '',))
+
+        if hasattr(self, 'animatedHeadParts') and self.animatedHeadParts:
+            for headPart in self.animatedHeadParts:
+                Sequence(
+                    ActorInterval(headPart, self.animHead),
+                    Func(headPart.loop,
+                         'neutral%s' % ('-hurt' if self.healthCondition >= 8 and self.healthCondition <= 11 else ''))
                 ).start()
 
     def setChatMuted(self, chatString, chatFlags, dialogue = None, interrupt = 1, quiet = 0):
@@ -649,7 +664,7 @@ class Avatar(Actor, ShadowCaster):
             self.__chatQuitButton = quitButton
             self.b_setPageNumber(self.__chatParagraph, 0)
 
-    def setLocalPageChat(self, message, quitButton, extraChatFlags=None,
+    def setLocalPageChat(self, message, quitButton=0, extraChatFlags=None,
                          dialogueList=[]):
         self.__chatAddressee = base.localAvatar.doId
         self.__chatPageNumber = None

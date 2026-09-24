@@ -26,6 +26,7 @@ DefaultSettings = {
 'book-scale': 1,
 'streamerMode': False,
 'lastNametag': {},
+'auto-lock-in': 1,
 'lastEffect': {},
 'lastRod': {},
 'keymap': {},
@@ -43,6 +44,20 @@ DefaultSettings = {
 'reduce-gui-movement': False,
 "toggle-sprint": False
 }
+
+DistributedSettingKeys = [
+    'want-club-nametag',
+    'acceptingNewFriends',
+    'show-clubcoin-reward',
+    'acceptingClubInvites',
+    'acceptingGroupInvites',
+    'chat-club-message-popups',
+    'chat-club-update-popups',
+    'auto-equip-items',
+    'can-query-club',
+    'acceptingNonFriendWhispers',
+]
+
 
 AnistrophicOptions = [0, 2, 4, 8, 16]
 

@@ -9,7 +9,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.suit import SuitDNA
 from toontown.suit import Suit
 from toontown.battle import SuitBattleGlobals
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 
 TTL = TTLocalizer
 

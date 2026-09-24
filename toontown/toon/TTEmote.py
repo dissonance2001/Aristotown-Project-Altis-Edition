@@ -638,3 +638,4 @@ class TTEmote(Emote.Emote):
 
 
 Emote.globalEmote = TTEmote()
+globalEmote = TTEmote()

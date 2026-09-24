@@ -21,7 +21,7 @@ from toontown.coghq import CogDisguiseGlobals
 from toontown.distributed import DelayDelete
 from otp import *
 from toontown.nametag import NametagGlobals
-from toontown.nametag.NametagConstants import CFSpeech, CFTimeout
+from toontown.chat.constants.ChatGlobals import CFSpeech, CFTimeout
 from toontown.toon.npc import NPCToons
 from toontown.toonbase import TTLocalizer
 # from toontown.toonbase import BattleGlobals

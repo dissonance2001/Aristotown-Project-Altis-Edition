@@ -28,7 +28,6 @@ from toontown.clashbattle.battle.statuses.StatusEffectsBase import *
 
 from toontown.utils.AstronStruct import AstronStruct
 from toontown.clashbattle.battle.statuses.StatusEffectEnums import SEE, SUIT_STATUS_EFFECTS_TO_REMOVE, SUIT_STATUS_EFFECTS_TO_REDUCE
-from . import StatusEffectGlobals as SEG
 
 NORMAL = 0
 OVERCLOCKED = 1
@@ -9495,3 +9494,5 @@ class FindTheFamilyHighStakesClubPresident(FindTheFamilyBossbotEffect):
             # Send an event to destroy the high stakes environmental we created earlier
             self.getBattleCalc().sendEvent(BEG.EVENT_DESTROY_ENVIRONMENTAL, [ENV_ENUM.FTF_PRESIDENT_HIGHSTAKES])
         super().delete()
+
+from . import StatusEffectGlobals as SEG

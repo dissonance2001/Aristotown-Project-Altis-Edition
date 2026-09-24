@@ -21,59 +21,6 @@ class MotoroomInstanceSessionAI(DirectObject):
 
     def generateWithRequired(self, zoneId):
         self.zoneId = zoneId
-        self._createSakamoreo()
-
-    def _createSakamoreo(self):
-        if self.sakamoreo or not self.air or not self.zoneId:
-            return
-
-        from toontown.toon import NPCToons
-
-        bodyColor = (0.298039, 0.298039, 0.349020, 1.0)
-        white = (1.0, 1.0, 1.0, 1.0)
-        dna = (
-            'css',
-            'md',
-            'm',
-            'f',
-            bodyColor,
-            white,
-            white,
-            bodyColor,
-            0,
-            0,
-            0,
-            0,
-            72,
-            0
-        )
-        desc = (
-            -1,
-            'Sakamoreo',
-            dna,
-            'f',
-            0,
-            NPCToons.NPC_REGULAR
-        )
-
-        self.sakamoreo = NPCToons.createNPC(
-            self.air,
-            93901,
-            desc,
-            self.zoneId
-        )
-        self.sakamoreo.b_setBackpack(111, 0, 0)
-        self.sakamoreo.b_setHat(136, 0, 0)
-        self.sakamoreo.b_setGlasses(50, 0, 0)
-        self.sakamoreo.setPosHpr(
-                -16.120, 34.579, -4.02,
-                78.787, 0.0, 0.0
-            )
-        if hasattr(self.sakamoreo, 'd_setPosHpr'):
-            self.sakamoreo.d_setPosHpr(
-                -16.120, 34.579, -4.02,
-                78.787, 0.0, 0.0
-            )
 
     def addToon(self, avId):
         if avId and avId not in self.avIds:

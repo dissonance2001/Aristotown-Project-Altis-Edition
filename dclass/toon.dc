@@ -866,7 +866,6 @@ from toontown.cogdominium import DistCogdoCraneMoneyBag/AI
 from toontown.cogdominium import DistCogdoCraneCog/AI
 from toontown.weather import DistributedWeatherCycle/AI
 from toontown.weather import DistributedWeatherStorm/AI
-from toontown.club import DistributedToonClub/AI/UD
 from toontown.environment import DistributedDayTimeManager/AI
 from toontown.environment import DistributedRainManager/AI
 from toontown.environment import DistributedWeatherMGR/AI
@@ -1228,6 +1227,9 @@ dclass DistributedToon : DistributedPlayer {
   requestSkillSpend(uint8) ownsend airecv;
   requestSkillReturn(uint8) ownsend airecv;
   requestRefundSpend(uint8) ownsend airecv;
+  setToonTipsSeen(uint16[]) required ownrecv db;
+  requestToonTip(uint16) airecv ownsend;
+  sendToonTip(uint16) ownrecv;
   doRefundFailure() ownrecv;
   setCerts(string[] = []) required broadcast ownrecv db;
 };
@@ -4382,51 +4384,6 @@ dclass DistributedWeatherStorm : DistributedObject {
   setDuration(int32) broadcast ram;
 };
 
-dclass DistributedToonClub : DistributedObjectGlobal {
-  requestState() clsend;
-  requestCreateClub(string(0-64), uint16, uint16, uint16, uint16, string(0-64)) clsend;
-  requestInvite(uint32, string(0-64)) clsend;
-  respondToInvite(uint32, uint8, string(0-64)) clsend;
-  requestLeave() clsend;
-  requestKick(uint32) clsend;
-  requestSetRank(uint32, uint8) clsend;
-  requestTransferOwner(uint32) clsend;
-  requestSetMotd(string(0-256)) clsend;
-  requestSetPermission(uint8, uint8, uint8) clsend;
-  requestUpdateIcon(uint16, uint16, uint16, uint16) clsend;
-  requestPurchaseItem(uint16) clsend;
-  requestStartTask(uint16) clsend;
-  requestRerollTask(uint8) clsend;
-  requestLogs(uint16) clsend;
-  sendClubChat(string(0-256)) clsend;
-  receiveState(string(0-65535));
-  receiveInvite(uint32, string(0-64), uint32, string(0-64));
-  receiveNotification(uint8, string(0-256));
-  receiveClubChat(uint32, string(0-64), string(0-256));
-  receiveLogs(string(0-65535));
-  reportProgressAI(uint32, string(0-32), uint32);
-  reportClubCoinsAI(uint32, uint32);
-  groupHeartbeat(string(0-64), uint32) clsend;
-  groupPrepareSuitTeleport(uint32, int8) airecv clsend;
-  groupRequestState() clsend;
-  groupRequestBrowse() clsend;
-  groupRequestCreate(string(0-64), string(0-96), uint32, uint8, uint8, string(0-64)) clsend;
-  groupRequestJoin(uint32, string(0-64)) clsend;
-  groupRequestLeave() clsend;
-  groupRequestDisband() clsend;
-  groupRequestKick(uint32) clsend;
-  groupRequestPublish(uint8) clsend;
-  groupRequestInvite(uint32, string(0-64)) clsend;
-  groupRespondToInvite(uint32, uint8, string(0-64)) clsend;
-  groupReceiveState(string(0-65535));
-  groupReceiveBrowse(string(0-65535));
-  groupReceiveInvite(uint32, uint32, string(0-64), string(0-64), string(0-96));
-  groupReceiveNotification(uint8, string(0-256));
-  groupRequestMassTeleport() clsend;
-  groupRequestMassTeleportReady(uint32) clsend;
-  groupReceiveMassTeleport(uint32, uint32, uint32);
-  groupReceiveMassTeleportStart(uint32);
-};
 
 dclass DistributedWeatherMGR : DistributedObject {
   start() broadcast ram;

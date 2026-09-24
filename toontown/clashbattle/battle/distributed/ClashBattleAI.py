@@ -54,6 +54,7 @@ class ClashBattleAI(ClashBattleBaseAI):
             return
         self.notify.debug('toon: %d done facing off' % toonId)
         self.handleFaceOffDone()
+    
         
     # Each state will have an enter function, an exit function,
     # and a datagram handler, which will be set during each enter function.

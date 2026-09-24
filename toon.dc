@@ -848,7 +848,6 @@ from toontown.betaevent import DistributedBetaEvent/AI
 from toontown.betaevent import DistributedBetaEventTTC/AI
 from toontown.weather import DistributedWeatherCycle/AI
 from toontown.weather import DistributedWeatherStorm/AI
-from toontown.club import DistributedToonClub/AI
 from toontown.environment import DistributedDayTimeManager/AI
 from toontown.environment import DistributedRainManager/AI
 from toontown.environment import DistributedWeatherMGR/AI
@@ -4047,8 +4046,8 @@ struct PotentialToon {
 };
 
 dclass ClientServicesManager : DistributedObjectGlobal {
-  login(string cookie, char auth [0-256]) clsend;
-  acceptLogin(uint32 timestamp);
+  login(string cookie, char auth [0-256], uint32 clientDateTime) clsend;
+  acceptLogin(uint32 timestamp, string mode, uint16 permissions[], uint8 isNameSubmissionLocked);
 
   requestAvatars() clsend;
   setAvatars(PotentialToon[]);
@@ -4225,13 +4224,6 @@ dclass DistributedWeatherStorm : DistributedObject {
 struct Member {
   uint32 doId;
 }
-
-dclass DistributedToonClub : DistributedObjectGlobal {
-  requestStats() clsend;
-  addMember(uint32) clsend;
-  removeMember(uint32);
-  setMembers(Member []);
-};
 
 dclass DistributedWeatherMGR : DistributedObject {
   start() broadcast ram;

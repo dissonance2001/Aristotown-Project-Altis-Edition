@@ -1,3 +1,13 @@
+class _LazyStatusEffectGlobals:
+    """Stands in for the StatusEffectGlobals module (imported as SEG in the other status files).
+    It resolves on first use, so this module never imports StatusEffectGlobals while loading
+    and the circular import stays broken."""
+    def __getattr__(self, name):
+        from toontown.clashbattle.battle.statuses import StatusEffectGlobals
+        return getattr(StatusEffectGlobals, name)
+
+SEG = _LazyStatusEffectGlobals()
+
 class StatusEffectBase:
     VisualSortOrder = 0  # Determines the sort order of this effect on battle panels.
 

@@ -4,7 +4,7 @@ from direct.gui.DirectGui import *
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from toontown.toon import IOURegistry
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toon import ToonHead
 from toontown.toon import ToonDNA
 from toontown.toonbase import TTLocalizer

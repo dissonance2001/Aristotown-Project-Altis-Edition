@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from . import TTLocalizer
 from otp.otpbase.OTPGlobals import *
 from enum import IntEnum, auto
@@ -7,6 +8,7 @@ from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
 from toontown.quest3.QuestEnums import QuestSource
 from toontown.quest3.SpecialQuestZones import SpecialQuestZones
 from toontown.quest3.base.QuestHistory import QuestHistory
+from toontown.inventory.enums.ItemEnums import BoosterItemType
 MapHotkeyOn = 'alt'
 MapHotkeyOff = 'alt-up'
 MapHotkey = 'alt'
@@ -2612,3 +2614,93 @@ SmallHeadScale = 0.5
 BigLegsScale = 1.4
 SmallLegsScale = 0.6
 
+MaxBatcoin = 7777
+BatcoinThreshholds = (200, 500, 800,
+                      1100, 1400, 1700,
+                      2000, 2300, 2600,
+                      2900, 3200, 3500, 5777, MaxBatcoin)
+# Maybe rename the variable differently, but it should be a timestamp when the batcoin is 'released' (default Oct 23)
+BatcoinTimestampStart = ConfigVariableInt64('batcoin-release-timestamp', 1634961600).getValue()  # oops, forgot globals get called before config is set up... guess I do get to find it manually :P
+# define points for battle
+BatcoinBattlePointsBoss = 10
+# currently: 1 point for anything below 15, 2 for 15+ (minus the EX list)
+BatcoinBattlePointsCogs = (2, 3)
+BatcoinBattlePointsEX = {
+    'derrman': 5,
+    'dlao': 7,
+    'dopr': 10,
+    'derrhand': 15,
+    'dold': 15,
+    'dopa': 15,
+    'foreman': 3,
+    'supervis': 6,
+    'clerk': 6,
+    'clubpres': 6,
+    # FTF
+    'ftf_s': 10,
+    'ftf_m': 10,
+    'ftf_l': 10,
+    'ftf_c': 10,
+    'ftf_s_rt': 10,
+    'ftf_s_br': 10,
+    'ftf_m_cf': 10,
+    'ftf_c_ac': 10,
+    'ftf_nuclear': 10,
+}
+BatcoinOverclockedForemanBonus = 6
+BatcoinTrickOrTreatPoints = 60
+BatcoinChanceForPlusOne = 0.25
+BatcoinFromCount = (25, 50)
+
+DepartmentToBooster = [BoosterItemType.Exp_Dept_Boardbot, BoosterItemType.Exp_Dept_Bossbot,
+                       BoosterItemType.Exp_Dept_Lawbot, BoosterItemType.Exp_Dept_Cashbot,
+                       BoosterItemType.Exp_Dept_Sellbot]
+
+TumblesLocations = OrderedDict([
+    # zoneID: ((x, y, z), h, lastTaskOfChain)
+    (ToontownCentral, ((-141.83, -36.685, 0.525), -76, 0)),
+    (DonaldsDock, ((-22.460, 8.088, 5.763), 2.928, 0)),
+    (YeOlde, ((132.451, -164.207, -5.975), 79.192, 0)),
+    (DaisyGardens, ((95.523, 298.032, 14.024), 91.768, 0)),
+    (MinniesMelodyland, ((-35.641, -111.933, 6.525), 310.095, 0)),
+    (TheBrrrgh, ((-83.799, 54.462, 19.789), -173.139, 0)),
+    (OutdoorZone, ((-47.450, -25.570, 3.403), -38.958, 0)),
+    (DonaldsDreamland, ((-112.694, 23.050, 1.32), -103.327, 0)),
+])
+
+# This is done temporarily until we have proper shops for gag and go
+GagAndGoNPCZones = {ToontownCentral:    (2116, 2218, 2326, 2416),
+                    DonaldsDock:        (1128, 1218, 1309),
+                    YeOlde:       (7118, 7229, 7327),
+                    DaisyGardens:       (5123, 5244, 5311),
+                    MinniesMelodyland:  (4115, 4213, 4343, 4410),
+                    TheBrrrgh:          (3115, 3213, 3312, 3412),
+                    OutdoorZone:        (6107, 6206, 6315, 6409),
+                    DonaldsDreamland:   (9130, 9223, 9328)}
+
+cameraPositions = [
+    [-9, 0, 0],
+    [0, 0, 0],
+    [-24, 0, -10],
+    [-12, 0, -15],
+]
+
+# Heads that should be rotated and the angle they should be rotated by in the cog gallery
+rotatedSuitHeads    = {"ls": 90}
+# These cogs have animated heads and, due to their "zero" position,
+# need to have their heads posed to the first frame of their neutral anim
+animSuitHeadsPosedNeutral = ('ddiver', 'chairman', 'cbr', 'shw', 'mg', 'ins')
+
+MainTaskingHoods = [
+    # Ordered.
+    ToontownCentral,
+    DonaldsDock,
+    YeOlde,
+    DaisyGardens,
+    MinniesMelodyland,
+    TheBrrrgh,
+    OutdoorZone,
+    DonaldsDreamland,
+]
+
+LawyerNearbyBitmask     = BitMask32(2048) # Bitmask for DistributedLawbotBossSuit

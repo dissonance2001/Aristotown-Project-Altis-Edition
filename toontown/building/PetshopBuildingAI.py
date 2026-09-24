@@ -5,7 +5,7 @@ from panda3d.core import *
 from panda3d.direct import *
 from toontown.hood import ZoneUtil
 from toontown.pets import DistributedPetAI, PetTraits, PetUtil
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toonbase import ToontownGlobals
 
 class PetshopBuildingAI:

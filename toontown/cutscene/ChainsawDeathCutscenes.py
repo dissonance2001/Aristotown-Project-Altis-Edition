@@ -10,8 +10,8 @@ from toontown.cutscene.AltisCutsceneCompat import (
 )
 from toontown.cutscene.ChainsawIntroCutscene import installChainsawBattleHead
 from toontown.cutscene.repository.CutsceneRuntime import buildCutscene
-from toontown.suit import Suit
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import Suit
+from toontown.clashsuit.suit import SuitDNA
 
 
 DEATH_PATH = 'phase_12/data/cutscenes/chainsawconsultant/chainsawconsultant_death.ctsc'

@@ -23,7 +23,7 @@ from otp.namepanel import NameCheck
 from toontown.toontowngui import TeaserPanel
 from direct.distributed.PyDatagram import PyDatagram
 from direct.showbase import PythonUtil
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from direct.task import Task
 from toontown.makeatoon.TTPickANamePattern import TTPickANamePattern
 from pandac.PandaModules import TextEncoder
@@ -536,25 +536,11 @@ class NameShop(StateData.StateData):
         self.isLoaded = 0
         self.makeAToon = None
 
-
-    def _checkNpcNames(self, name):
-        def match(npcName, name=name):
-            # TextEncoder.upper requires encoded strings
-            name = TextEncoder().encodeWtext(name)
-            name = name.strip()
-            return (TextEncoder.upper(npcName) == TextEncoder.upper(name.decode()))
-
-        for npcId in list(NPCToons.NPCToonDict.keys()):
-            npcName = NPCToons.NPCToonDict[npcId][1]
-            if match(npcName):
-                self.notify.info('name matches NPC name "%s"' % npcName)
-                return TTLocalizer.NCGeneric
-
     def nameIsValid(self, name):
         self.notify.debug('nameIsValid')
         if name in self.usedNames:
             return TTLocalizer.ToonAlreadyExists % name
-        problem = NameCheck.checkName(name, [self._checkNpcNames], font=self.nameEntry.getFont())
+        problem = NameCheck.checkName(name, font=self.nameEntry.getFont())
         if problem:
             return problem
         return None

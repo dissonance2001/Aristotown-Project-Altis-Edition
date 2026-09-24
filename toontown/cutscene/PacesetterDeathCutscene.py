@@ -56,7 +56,7 @@ class PacesetterDeathSetup(object):
 
     def _findController(self):
         try:
-            from toontown.suit import DistributedPacesetterBoss
+            from toontown.clashsuit.suit import DistributedPacesetterBoss
             controller = DistributedPacesetterBoss.OnePacesetterController
             if controller is not None:
                 return controller

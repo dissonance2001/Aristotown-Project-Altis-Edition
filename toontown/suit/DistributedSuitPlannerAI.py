@@ -17,7 +17,7 @@ from toontown.dna.DNAParser import DNASuitPoint
 from toontown.hood import ZoneUtil
 from toontown.suit.SuitInvasionGlobals import IFSkelecog, IFWaiter, IFV2
 from toontown.suit.SuitLegList import *
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.battle import SuitBattleGlobals
 from toontown.toonbase import ToontownGlobals
@@ -570,9 +570,6 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             for blockNumber in self.buildingMgr.getToonBlocks():
                 building = self.buildingMgr.getBuilding(blockNumber)
                 (extZoneId, intZoneId) = building.getExteriorAndInteriorZoneId()
-                if not NPCToons.isZoneProtected(intZoneId):
-                    if blockNumber in self.buildingFrontDoors:
-                        possibles.append((blockNumber, self.buildingFrontDoors[blockNumber]))
             if cogdoTakeover is None:
                 if suit.dna.dept in self.ALLOWED_COGDO_TYPES:
                     cogdoTakeover = random.random() < self.CogdoRatio
@@ -794,8 +791,6 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
                 blockNumber = random.choice(self.buildingMgr.getToonBlocks())
                 building = self.buildingMgr.getBuilding(blockNumber)
                 if building is None:
-                    continue
-                if NPCToons.isZoneProtected(building.getExteriorAndInteriorZoneId()[1]):
                     continue
                 suitName = self.air.suitInvasionManager.getInvadingCog()[0]
                 if suitName is None:

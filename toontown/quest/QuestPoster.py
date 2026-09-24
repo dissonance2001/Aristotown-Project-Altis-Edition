@@ -3,7 +3,7 @@ from panda3d.core import *
 from panda3d.direct import *
 from toontown.quest import Quests
 import random
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toon import ToonHead
 from toontown.toon import ToonDNA
 from toontown.suit import SuitDNA

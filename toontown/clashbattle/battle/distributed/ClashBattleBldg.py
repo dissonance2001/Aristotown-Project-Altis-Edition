@@ -262,7 +262,7 @@ class ClashBattleBldg(ClashBattleBase):
         self.notify.debug('enterReward()')
         self.delayDeleteMembers()
         if self.hasLocalToon():
-            base.cr.gameGui.expBar.show()
+            base.localAvatar.expBar.show
         self.__playReward(ts, self.__handleFloorRewardDone)
 
     def __handleFloorRewardDone(self):

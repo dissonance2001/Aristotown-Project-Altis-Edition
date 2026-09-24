@@ -1078,59 +1078,7 @@ class TownBattle(StateData.StateData):
         self.toonPanels[toonNum].checkAvatarBannedGags()
         return self.toonPanels[toonNum].bannedGags
 
-    def adjustCogsAndToons(self, cogs, luredIndices, trappedIndices, toons, battle):
-        self.battle = battle
-        cogIds = map(lambda cog: cog.doId, cogs)
-        # self.notify.debug('adjustCogsAndToons() cogIds: %s self.cogs: %s' % (cogIds, self.cogs))
-        # self.notify.debug('adjustCogsAndToons() luredIndices: %s self.luredIndices: %s' % (luredIndices, self.luredIndices))
-        # self.notify.debug('adjustCogsAndToons() trappedIndices: %s self.trappedIndices: %s' % (trappedIndices, self.trappedIndices))
-        toonIds = map(lambda toon: toon.doId, toons)
-        # self.notify.debug('adjustCogsAndToons() toonIds: %s self.toons: %s' % (toonIds, self.toons))
-        maxSuitLevel = 0
-        cogFireCostIndex = 0
-        for cog in cogs:
-            maxSuitLevel = max(maxSuitLevel, cog.getActualLevel())
-            self.cogFireCosts[cogFireCostIndex] = 1
-            cogFireCostIndex += 1
-
-        creditLevel = maxSuitLevel
-        resetActivateMode = not (
-                    cogIds == self.cogs and creditLevel == self.creditLevel and luredIndices == self.luredIndices and trappedIndices == self.trappedIndices and toonIds == self.toons)
-        # self.notify.debug('adjustCogsAndToons() resetActivateMode: %s' % resetActivateMode)
-        self.cogs = cogIds
-        self.numCogs = len(cogs)
-        self.creditLevel = creditLevel
-        self.luredIndices = luredIndices
-        self.trappedIndices = trappedIndices
-        self.toons = toonIds
-        self.toonAvatars = list(toons)
-        self.numToons = len(toons)
-        self.localNum = toons.index(base.localAvatar)
-        currStateName = self.fsm.getCurrentState().getName()
-        # for i in range(len(toons)):
-        #     self.toonPanels[i].setLaffMeter(toons[i])
-        if resetActivateMode:
-            self.__enterPanels(self.numToons, self.localNum)
-            self.__cogPanels(self.numCogs)
-            for i in range(len(toons)):
-                self.toonPanels[i].setLaffMeter(toons[i])
-
-            self.setSurrenderedToons(self.surrenderedToons)
-
-            for i in range(len(cogs)):
-                self.cogPanels[i].setCogInformation(cogs[i])
-
-            if currStateName == 'ChooseCog':
-                self.chooseCogPanel.adjustCogs(self.numCogs, self.luredIndices, self.trappedIndices, self.track,
-                                               self.level)
-            elif currStateName == 'ChooseToon':
-                self.chooseToonPanel.adjustToons(self.numToons, self.localNum, self.track, self.level, self.toonAvatars)
-            canHeal, canTrap, canLure = self.checkHealTrapLure()
-            base.localAvatar.inventory.setBattleCreditMultiplier(self.creditMultiplier)
-            base.localAvatar.inventory.setActivateMode('battle', heal=canHeal, trap=canTrap, lure=canLure,
-                                                       bldg=self.bldg, creditLevel=self.creditLevel,
-                                                       tutorialFlag=self.tutorialFlag)
-
+    
     def enterChooseCog(self):
         self.cog = 0
         self.chooseCogPanel.enter(

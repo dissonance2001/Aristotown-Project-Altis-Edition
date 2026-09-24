@@ -326,7 +326,7 @@ def makeTitleAndDesc(statusEffect, effectId):
         textColor = "Green" if multiplier < 0 else "Red"
         description = description.format(textColor, int(multiplier), relativeText)
     elif effectId == SEE.EFFECT_HEAVY_RAIN:
-        from toontown.toon.DistributedToonBase import DistributedToonBase
+        from toontown.toon.ClashDistributedToonBase import ClashDistributedToonBase
         description = description.format(
             av = 'Toon' if isinstance(statusEffect.getAv(), DistributedToonBase) else 'Cog',
             multiplier = round(abs(statusEffect.getMultiplier() - 1) * 100),

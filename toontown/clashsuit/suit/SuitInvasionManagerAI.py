@@ -40,7 +40,7 @@ class SuitInvasionManagerAI(DirectObject):
 
         self.sendInvasionStatus()
 
-        self.air.addPostRemove(self.air.netMessenger.prepare(NET_MESSENGER_SHARD_INVASION_STATUS, [self.air.ourChannel, None]))
+       # self.air.addPostRemove(self.air.netMessenger.prepare(NET_MESSENGER_SHARD_INVASION_STATUS, [self.air.ourChannel, None]))
 
     def getInvading(self):
         return self.invading

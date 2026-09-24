@@ -15,7 +15,7 @@ from toontown.cogdominium import CogdoBarrelRoomConsts
 from toontown.toon import GagInventoryBase
 from toontown.battle import BattleExperienceAI
 from toontown.suit import SuitDNA
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 import random, math
 
 NUM_FLOORS_DICT = {

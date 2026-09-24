@@ -13,7 +13,7 @@ BossSpawnDict = {
                    ((25, 25, 25, 25),
                     180,
                     1)},
- OldeToontown: {'gatekeep':
+ YeOlde: {'gatekeep':
                    ((33, 34, 33),
                     180,
                     1)},

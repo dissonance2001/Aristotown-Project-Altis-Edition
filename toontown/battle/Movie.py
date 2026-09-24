@@ -36,7 +36,7 @@ from toontown.battle import RewardPanel
 from toontown.battle.SuitBattleGlobals import *
 from toontown.chat.ChatGlobals import *
 from toontown.distributed import DelayDelete
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toon import IOURegistry
 from toontown.toon import Toon
 from toontown.toon import LaffMeter

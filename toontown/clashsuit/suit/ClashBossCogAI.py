@@ -13,13 +13,13 @@ from panda3d.core import ConfigVariableBool, NodePath
 from direct.showbase.MessengerGlobal import messenger
 from direct.task.TaskManagerGlobal import taskMgr
 
-from otp.avatarimport DistributedAvatarAI
+from otp.avatar import DistributedAvatarAI
 from toontown.clashbattle.battle import BattleBase
 from toontown.clashbattle.battle import BattleExperienceAI
 from toontown.clashbattle.battle.distributed import ClashBattleFinalAI
-from toontown.building import SuitPlannerInteriorAI
-from toontown.groups.GroupClasses import GroupAI
-from toontown.groups.GroupEnums import Options
+from toontown.building import ClashSuitPlannerInteriorAI
+#from toontown.groups.GroupClasses import GroupAI
+#from toontown.groups.GroupEnums import Options
 from toontown.hood import ZoneUtil
 from toontown.clashsuit.suit import SuitDNA
 from toontown.toonbase import TTLocalizer, RealmGlobals
@@ -572,9 +572,9 @@ class ClashBossCogAI(DistributedAvatarAI.DistributedAvatarAI, ContentSyncApplier
         averageTier = math.floor(totalCogSuitTier / max(1, totalToons)) + 1
         self.toonLevels = int(averageTier)
 
-    def getBossTier(self) -> Options:
-        """Returns the current boss tier."""
-        return Options.TIER_ONE
+  #  def getBossTier(self) -> Options:
+  #      """Returns the current boss tier."""
+  #      return Options.TIER_ONE
 
     def initializeBattles(self, battleNumber, bossCogPosHpr):
         self.resetBattles()
@@ -679,7 +679,7 @@ class ClashBossCogAI(DistributedAvatarAI.DistributedAvatarAI, ContentSyncApplier
     def invokeSuitPlanner(self, buildingCode, skelecog, skelecogRandom=0, dept=None, virtual=False):
         if dept is None:
             dept = self.dna.dept
-        planner = SuitPlannerInteriorAI.SuitPlannerInteriorAI(1, buildingCode, dept, self.zoneId, virtual=virtual, departmentBoss=True)
+        planner = ClashSuitPlannerInteriorAI.ClashSuitPlannerInteriorAI(1, buildingCode, dept, self.zoneId, virtual=virtual, departmentBoss=True)
         planner.respectInvasions = 0
         suits = planner.genFloorSuits(0)
 

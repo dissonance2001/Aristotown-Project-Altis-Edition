@@ -9,8 +9,8 @@ class PrethinkerBrainstormCloud(NodePath):
     def __init__(self, battle, isEditor=False):
         NodePath.__init__(self, 'PrethinkerBrainstormCloud')
 
-        from toontown.battle.BattleProps import globalPropPool
-        from toontown.battle import BattleParticles
+        from toontown.clashbattle.battle.BattleProps import globalPropPool
+        from toontown.clashbattle.battle import BattleParticles
         self.reparentTo(battle)
         self.geom = globalPropPool.getProp('stormcloud')
         self.geom.setScale(0.01)

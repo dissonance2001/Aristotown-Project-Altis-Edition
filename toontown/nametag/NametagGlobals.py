@@ -52,6 +52,11 @@ def setArrowModel(model):
     global arrowModel
     arrowModel = loader.loadModel(model)
 
+masterArrowsOn = 0
+def setMasterArrowsOn(mao):
+    global masterArrowsOn
+    masterArrowsOn = mao
+
 
 def setChatBalloon3dModel(model):
     global chatBalloon3dModel

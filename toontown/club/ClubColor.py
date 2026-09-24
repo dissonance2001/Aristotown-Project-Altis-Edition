@@ -1,105 +1,151 @@
-# -*- coding: utf-8 -*-
-"""Python 2 compatible animated Club colours for Project Altis.
-
-This is a lightweight port of Corporate Clash's ClubColor/ClubColorPulser
-classes.  Colours use wall-clock time, so every GUI displaying the same Club
-colour remains synchronized without storing animation state in Astron.
 """
-
+An theme color for your club.
+"""
 import math
 import time
 
-try:
-    xrange
-except NameError:
-    xrange = range
+from toontown.toonbase import ProcessGlobals
+from toontown.utils.ColorHelper import hexToPCol
 
 
-def _hexToColor(value):
-    value = str(value or 'ffffff').strip().lstrip('#')
-    if len(value) == 3:
-        value = ''.join(character * 2 for character in value)
-    if len(value) != 6:
-        value = 'ffffff'
-    try:
-        red = int(value[0:2], 16) / 255.0
-        green = int(value[2:4], 16) / 255.0
-        blue = int(value[4:6], 16) / 255.0
-    except (TypeError, ValueError):
-        red, green, blue = 1.0, 1.0, 1.0
-    return (red, green, blue, 1.0)
+class ClubColor:
+    """
+    Generic container class for Club color.
+    """
 
+    def __init__(self, color: str = 'ffffff'):
+        self.color = color
+        self.decipheredCol = hexToPCol(self.color)
+        self.uniqueName = self._makeUniqueName()
+        self.updateName = self._makeUpdateName()
 
-class ClubColor(object):
-    """Static Club colour container."""
-
-    def __init__(self, color='ffffff'):
-        self.color = str(color)
-        self.decipheredCol = _hexToColor(self.color)
-
-    def getColor(self):
+    def getColor(self) -> tuple:
         return self.decipheredCol
 
+    """Task methods"""
+
+    def _makeUniqueName(self):
+        return f'ClubColor-{self.color}'
+
+    def getUniqueName(self):
+        return self.uniqueName
+
     def canUpdate(self):
+        # Does this send messenger calls?
         return False
+
+    def getUpdateName(self):
+        return self.updateName
+
+    def _makeUpdateName(self):
+        # For messenger calls.
+        return f'{self.getUniqueName()}-update'
+
+    def getTaskName(self, taskName: str):
+        # For any tasks.
+        return f'{self.getUniqueName()}-task-{taskName}'
 
 
 class ClubColorPulser(ClubColor):
-    """Smoothly interpolates through a sequence of hexadecimal colours.
+    """
+    Given a tuple of colors, we return an interpolated color
+    between two different times.
 
-    ``colors`` is a tuple in the Corporate Clash format::
-
-        (('eb4d4d', 2.0), ('eb8f4d', 2.0), ...)
-
-    Each duration controls the transition from that colour to the next one.
-    The final colour transitions back to the first colour.
+    The colors tuple format is:
+    (
+        (color, duration),
+        (color, duration),
+        [...]
+    )
     """
 
-    def __init__(self, colors):
-        self.colors = tuple(colors or ())
-        if not self.colors:
-            self.colors = (('ffffff', 1.0),)
-        self.optimizedColors = self._makeOptimizedColors()
-        self.duration = sum(max(0.0001, float(entry[1])) for entry in self.colors)
-        ClubColor.__init__(self, self.colors[0][0])
+    def __init__(self, colors: tuple):
+        self.colors = colors
+        self.optimizedColors = self.makeOptimizedColors()
+        self.duration = sum(color[1] for color in colors)
+        super().__init__()
 
-    def _makeOptimizedColors(self):
-        colorList = list(self.colors) + [self.colors[0]]
-        return [(_hexToColor(entry[0]), max(0.0001, float(entry[1])))
-                for entry in colorList]
-
-    def getDuration(self):
-        return self.duration
-
-    def getTime(self):
-        return time.time() % self.getDuration()
-
-    def getColor(self):
+    def getColor(self) -> tuple:
+        # Gets the color at this moment in time.
         return self.getColorAtTime(self.getTime())
 
-    def getColorAtTime(self, currentTime, fancy=False):
-        currentTime = float(currentTime) % self.getDuration()
-        colors = self.optimizedColors
-        for index in range(len(colors) - 1):
-            thisColor, duration = colors[index]
-            nextColor = colors[index + 1][0]
-            if currentTime < duration:
-                amount = currentTime / duration
-                return tuple(self._blendTwoValues(a, b, amount, fancy)
-                             for a, b in zip(thisColor, nextColor))
-            currentTime -= duration
-        return colors[0][0]
+    def getColorAtTime(self, t, fancy: bool = False):
+        colors = self.getColors()
 
-    def getColorAtPercent(self, percent):
-        percent = min(1.0, max(0.0, float(percent)))
-        return self.getColorAtTime(percent * self.getDuration(), fancy=True)
+        # Iterate over the colors until we find the tuples we care about.
+        for thisTuple, nextTuple in zip(colors, colors[1:]):
+            duration = thisTuple[1]
+            if (t - duration) < 0:
+                # Calculate our color difference.
+                return tuple(
+                    self.blendTwoValues(colA, colB, t / duration, fancy=fancy)
+                    for colA, colB in zip(thisTuple[0], nextTuple[0])
+                )
+            else:
+                # We have not yet made it to the color we're looking for.
+                # Reduce the time and move onto the next duration.
+                t -= duration
+
+        raise Exception("ClubColorPulser could not find color.")
+
+    def getColorAtPercent(self, x: float):
+        # Returns the color at a % through the sequence (x is 0 to 1).
+        # We skip the last color in the sequence.
+        seconds = x * sum(color[1] for color in self.colors[:-1])
+        return self.getColorAtTime(seconds, fancy=True)
+
+    def getColors(self) -> list:
+        """Returns a list of the colors to be used during interpolation."""
+        return self.optimizedColors
+
+    def makeOptimizedColors(self) -> list:
+        """Optimizes the colors."""
+        colList = list(self.colors) + [self.colors[0]]
+        colList = list(map(lambda t: (hexToPCol(t[0]), t[1]), colList))
+        return colList
 
     @staticmethod
-    def _blendTwoValues(a, b, amount, fancy=False):
-        if fancy:
-            return math.sqrt(((1.0 - amount) * (a ** 2)) +
-                             (amount * (b ** 2)))
-        return a + ((b - a) * amount)
+    def blendTwoValues(a, b, t, fancy: bool = False):
+        if not fancy:
+            return a + ((b - a) * t)
+        else:
+            # This way is more accurate, but laggy
+            return math.sqrt(((1 - t) * (a ** 2)) + (t * (b ** 2)))
+
+    def getTime(self) -> float:
+        # Gets the current time.
+        return time.time() % self.getDuration()
+
+    def getDuration(self) -> float:
+        # Gets the total duration of the pulse sequence.
+        return self.duration
+
+    """Task methods"""
+
+    def _makeUniqueName(self):
+        uniqueStr = ''
+        for color, duration in self.colors:
+            uniqueStr = f'{uniqueStr}-{color}/{duration}'
+        return 'ClubColorPulser' + uniqueStr
+
+    """Task/Messenger hooks"""
 
     def canUpdate(self):
+        # Does this send messenger calls?
         return True
+
+    def doColorUpdate(self):
+        # Update the color.
+        updateName = self.getUpdateName()
+        if messenger.whoAccepts(updateName):
+            messenger.send(updateName, [self.getColor()])
+
+
+class ClubColorReversePulser(ClubColorPulser):
+    """Same as the ColorPulser, but reverses backwards through the colors list as well."""
+
+    def getColors(self) -> list:
+        """Returns a list of the colors to be used during interpolation."""
+        colorList = list(self.colors)
+        secondColorList = list(self.colors)[-2::-1]  # skips the 'last' item, so [1, 2, 3, 4] -> [3, 2, 1]
+        return colorList + secondColorList

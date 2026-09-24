@@ -21,7 +21,6 @@ from toontown.ai.HolidayManagerAI import HolidayManagerAI
 from toontown.ai.DialogueManagerAI import DialogueManagerAI
 from toontown.modifiers.contentsync.ContentSyncManagerAI import ContentSyncManagerAI
 from toontown.ai.NewsManagerAI import NewsManagerAI
-from toontown.ai.QuestManagerAI import QuestManagerAI
 from toontown.coderedemption.TTCodeRedemptionMgrAI import TTCodeRedemptionMgrAI
 from toontown.ai import DistributedSillyMeterMgrAI, DistributedHydrantZeroMgrAI, DistributedMailboxZeroMgrAI, DistributedTrashcanZeroMgrAI
 from toontown.building.DistributedTrophyMgrAI import DistributedTrophyMgrAI
@@ -64,9 +63,11 @@ from toontown.pets.PetManagerAI import PetManagerAI
 from toontown.safezone.SafeZoneManagerAI import SafeZoneManagerAI
 from toontown.suit import SuitInvasionGlobals
 from toontown.suit.SuitInvasionManagerAI import SuitInvasionManagerAI
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toonbase import ToontownGlobals
 from toontown.tutorial.TutorialManagerAI import TutorialManagerAI
+from toontown.quest3.QuestManagerAI import QuestManagerAI as Quest3ManagerAI
+from toontown.quest3.kudos.KudosManagerAI import KudosManagerAI
 from toontown.instances.InstanceZoneManagerAI import InstanceZoneManagerAI
 from toontown.pets import DistributedPublicPetMgrAI
 
@@ -91,6 +92,8 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.lawOfficeMgr = None
         self.countryClubMgr = None
         self.boardofficeMgr = None
+        self.allowList = None
+        self.blockList = None
         self.instanceZoneManager = None
         self.startTime = startTime
         import pymongo
@@ -148,7 +151,6 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.tutorialManager.generateWithRequired(2)
         self.friendManager = FriendManagerAI(self)
         self.friendManager.generateWithRequired(2)
-        self.questManager = QuestManagerAI(self)
         self.contentSyncManager = ContentSyncManagerAI(self)
         self.banManager = BanManagerAI.BanManagerAI(self)
         self.achievementsManager = AchievementsManagerAI(self)
@@ -174,7 +176,10 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.trolleyHolidayMgr = TrolleyHolidayMgrAI(self, ToontownGlobals.TROLLEY_HOLIDAY)
         self.trolleyWeekendMgr = TrolleyWeekendMgrAI(self, ToontownGlobals.TROLLEY_WEEKEND)
         self.holidayManager = HolidayManagerAI(self)
+        self.clubMgr = simbase.air.generateGlobalObject(OTP_DO_ID_GLOBAL_CLUB_MANAGER, 'DistributedClubManager')
+        self.quest3Manager = Quest3ManagerAI(self)
 
+        self.kudosManager = KudosManagerAI(self)
 
         if self.wantFishing:
             self.fishManager = FishManagerAI(self)
@@ -204,7 +209,6 @@ class ToontownAIRepository(ToontownInternalRepository):
         # It is server-side only; the boss object itself is the distributed DO.
         self.instanceZoneManager = InstanceZoneManagerAI(self)
         self.chatAgent = simbase.air.generateGlobalObject(OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
-        self.clubManager = self.generateGlobalObject(OTP_DO_ID_TOONTOWN_CLUB_MANAGER, 'DistributedToonClub')
 
     def createSafeZones(self):
         NPCToons.generateZone2NpcDict()

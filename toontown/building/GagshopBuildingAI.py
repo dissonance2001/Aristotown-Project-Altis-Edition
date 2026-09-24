@@ -2,7 +2,7 @@ from toontown.building import DistributedDoorAI
 from toontown.building import DistributedGagshopInteriorAI
 from toontown.building import DoorTypes
 from pandac.PandaModules import *
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 
 class GagshopBuildingAI:
 

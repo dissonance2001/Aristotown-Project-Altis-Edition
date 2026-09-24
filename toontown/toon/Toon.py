@@ -936,6 +936,23 @@ class Toon(Avatar.Avatar, ToonHead):
         animStateList = self.animFSM.getStates()
         self.animFSM.enterInitialState()
 
+    def request(self, state, *args):
+        """Compatibility for Clash code that treats the toon as an FSM ('Neutral', ...).
+        This project drives toon animation through animFSM instead."""
+        fsm = getattr(self, 'animFSM', None)
+        if fsm is None or not state:
+            return
+        for name in (state, state[:1].lower() + state[1:]):
+            if fsm.getStateNamed(name):
+                fsm.request(name, list(args))
+                return
+        notify = getattr(self, 'notify', None)
+        if notify is not None:
+            notify.debug('request(%s): no such animation state' % state)
+
+    def setNPC(self, isNPC: bool) -> None:
+        self.isNPC = isNPC
+
     def setToonStatusEffect(self, name, modifier=1, turns=None, mode='setBoth'):
         # Dried Out + Hydrated becomes Energized instead.
         if name == 'driedOut' and self.hasToonStatusEffect('hydrated'):
@@ -5056,11 +5073,6 @@ class Toon(Avatar.Avatar, ToonHead):
         track.append(ActorInterval(self, 'teleport', duration=3.4))
         return track
 
-    def startQuestMap(self):
-        pass
-
-    def stopQuestMap(self):
-        pass
 
     def enterTeleportOut(self, animMultiplier = 1, ts = 0, callback = None, extraArgs = []):
         name = self.name

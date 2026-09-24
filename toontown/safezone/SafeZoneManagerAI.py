@@ -1,7 +1,6 @@
 from direct.directnotify.DirectNotifyGlobal import *
 from direct.distributed import DistributedObjectAI
 from toontown.toonbase import ToontownGlobals
-from toontown.toon import ToonHallCustomNPCs
 
 class SafeZoneManagerAI(DistributedObjectAI.DistributedObjectAI):
     notify = directNotify.newCategory('SafeZoneManagerAI')
@@ -13,15 +12,8 @@ class SafeZoneManagerAI(DistributedObjectAI.DistributedObjectAI):
 
     def generate(self):
         DistributedObjectAI.DistributedObjectAI.generate(self)
-        if not self.customTTCNPCs:
-            self.customTTCNPCs = ToonHallCustomNPCs.createTTCNPCs(
-                self.air,
-                ToontownGlobals.ToontownCentral
-            )
 
     def delete(self):
-        ToonHallCustomNPCs.deleteNPCs(self.customTTCNPCs)
-        self.customTTCNPCs = []
         DistributedObjectAI.DistributedObjectAI.delete(self)
 
     def enterSafeZone(self):

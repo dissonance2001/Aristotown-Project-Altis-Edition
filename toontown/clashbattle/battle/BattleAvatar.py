@@ -189,13 +189,29 @@ class BattleAvatar(AstronStruct, BattleListenerObject):
     """
     Distributed methods
     """
-    
-    def sendStatusEffects(self) -> None:
-        """Send the current status and visual effects applied onto the avatar
-        to the client.
-        """
-        if not getattr(self, "doId", None):
-            raise Exception("Called distributed method sendStatusEffects on an undistributed object!")
+
+    def sendStatusEffects(self):
+        if self.isDeleted() or not self.air:
+            return
+
+        # Debug – remove after you find the problem
+        print("sendStatusEffects on", self.__class__.__name__,
+              "dclass =", getattr(self, 'dclass', None))
+        if hasattr(self, 'dclass') and self.dclass:
+            field = self.dclass.getFieldByName('setRawStatusEffects')
+            print("  field =", field)
+
+        field = None
+        if hasattr(self, 'dclass') and self.dclass:
+            field = self.dclass.getFieldByName('setRawStatusEffects')
+
+        if field is None:
+            self.notify.warning(
+                "Cannot send setRawStatusEffects – field missing on %s (dclass=%s)" %
+                (self.__class__.__name__, getattr(self, 'dclass', None))
+            )
+            return
+
         self.sendUpdate("setRawStatusEffects", [*self.toStruct()])
     
     def setRawStatusEffects(self, statusEffectStructs, visualEffectStructs) -> None:

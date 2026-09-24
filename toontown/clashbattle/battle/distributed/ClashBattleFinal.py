@@ -6,7 +6,7 @@ from toontown.clashbattle.battle.distributed.ClashBattleBase import ClashBattleB
 from otp import *
 from toontown.clashsuit.suit.ClashSuitBase import ClashSuitBase
 
-from toontown.toon.DistributedToonBase import DistributedToonBase
+from toontown.toon.ClashDistributedToonBase import ClashDistributedToonBase
 
 
 class ClashBattleFinal(ClashBattleBase):

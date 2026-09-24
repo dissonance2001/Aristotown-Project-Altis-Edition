@@ -29,6 +29,7 @@ from otp.status import StatusDatabase/UD
 from otp.avatar import AvatarHandle
 from toontown.inventory import InventoryManager/AI
 from toontown.inventory.distributed import DistributedInventory/AI
+from toontown.safezone import DistributedChair/AI
 
 typedef uint8 bool;
 
@@ -300,6 +301,8 @@ dclass TalkPath_account {
 dclass AvatarHandle : TalkPath_whisper {
 };
 
+typedef uint32[] Modifier;
+
 dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
   string DcObjectType db;
   setName(string = "[Name not set]") required broadcast db airecv;
@@ -307,6 +310,7 @@ dclass DistributedAvatar : DistributedSmoothNode, TalkPath_whisper {
   friendsNotify(DoId avId, int8 status) ownrecv airecv;
   checkAvOnShard(DoId) clsend airecv;
   confirmAvOnShard(DoId avId, int8 isOnShard);
+  setRawModifiers(Modifier[] = []) required ownrecv broadcast ram;
 };
 
 struct FriendEntry {
@@ -584,6 +588,413 @@ dclass StatusDatabase : DistributedObject {
 dclass CallbackObject {
   callback(uint32, bool, uint8);
 };
+// We Import our Clash Specific Files first
+
+
+
+struct QuestHistory {
+  uint8 questSource;
+  uint64 chainId;
+};
+
+struct QuestId {
+  uint8 questSource;
+  uint64 chainId;
+  uint16 objectiveId;
+  uint16 subObjectiveId;
+};
+
+struct QuestReference {
+  QuestId questId;
+  uint32 progress[];
+};
+
+struct StatusEffect {
+  uint16 id;
+  int16 rounds;
+  int16 disabledRounds;
+  int64/100[] extraArgs;
+};
+
+struct VisualEffect {
+  uint16 id;
+  int64/100[] extraArgs;
+};
+
+struct ToonBattleExp {
+  int32 avId;
+  int16 originalExp[];
+  int16 earnedExp[];
+  QuestReference originalQuest[];
+  int32 originalMerits[];
+  int32 earnedMerits[];
+  uint32 parts[];
+};
+
+struct UpdatedQuest {
+  uint32 avId;
+  QuestReference questReference[];
+};
+
+
+// Battle structs
+
+struct AttackTarget {
+  uint32 avId;
+  bool landed;
+  int32 hpAdjust;
+  bool died;
+  bool revived;
+  int32 hpBonus;
+  int32 kbBonus;
+  int32 extraArgs[];
+};
+
+struct Attack {
+  uint8 attackIndex;
+  uint16 attackType;
+  uint32 invokerId;
+  AttackTarget targets[];
+
+  // Toon specific fields
+  int8 level;
+  int32 target;
+
+  // Suit specific fields
+  uint8[] taunt;
+
+  int32 extraArgs[];
+};
+
+struct VisualEffectRemoved {
+  uint32 avId;
+  uint8 id;
+};
+
+struct BattleMember {
+  uint32 avId;
+  uint8 state;
+  uint8 index;
+};
+
+
+from toontown.clashsuit.suit import ClashBoardbotBoss/AI
+from toontown.clashsuit.suit import ClashBossCog/AI
+from toontown.clashsuit.suit import ClashBossbotBoss/AI
+from toontown.clashsuit.suit import ClashCashbotBoss/AI
+from toontown.clashsuit.suit import ClashCashbotBossGoon/AI
+from toontown.clashsuit.suit import ClashFactorySuit/AI
+from toontown.clashsuit.suit import ClashGridGoon/AI
+from toontown.clashsuit.suit import ClashLawbotBoss/AI
+from toontown.clashsuit.suit import ClashLawbotBossSuit/AI
+from toontown.clashsuit.suit import ClashMintSuit/AI
+from toontown.clashsuit.suit import ClashSellbotBoss/AI
+from toontown.clashsuit.suit import ClashStageSuit/AI
+from toontown.clashsuit.suit import ClashSuit/AI
+from toontown.clashsuit.suit import ClashSuitBase/AI
+from toontown.clashsuit.suit import ClashSuitPlanner/AI
+from toontown.clashsuit.suit import DistributedHardmodeLawbotBoss/AI
+from toontown.clashsuit.suit import DistributedHardmodeLawbotBossSuit/AI
+from toontown.clashsuit.suit import DistributedHardmodeLawbotBossSuitAttack/AI
+from toontown.clashsuit.suit import DistributedLawbotBossDefenseSpecialist/AI
+from toontown.clashsuit.suit import DistributedLawbotBossSecurityCamera/AI
+from toontown.clashbattle.battle.distributed import ClashBattle/AI
+from toontown.clashbattle.battle.distributed import ClashBattleBase/AI
+from toontown.clashbattle.battle.distributed import ClashBattleBldg/AI
+from toontown.clashbattle.battle.distributed import ClashBattleDiners/AI
+from toontown.clashbattle.battle.distributed import ClashBattleFinal/AI
+from toontown.clashbattle.battle.distributed import ClashBattleWaiters/AI
+from toontown.clashbattle.battle.distributed import DistributedBattleFlyIn/AI
+from toontown.clashbattle.battle.distributed import DistributedBattleLitigators/AI
+from toontown.clashbattle.battle.distributed import DistributedBattlePainting/AI
+from toontown.clashbattle.battle.distributed import DistributedBattleVirtual/AI
+
+
+dclass ClashBossCog : DistributedNode {
+  setDNAString(blob) required broadcast db;
+  setToonIds(uint32[], uint32[], uint32[]) broadcast ram;
+  setBattleIds(uint8, uint32, uint32) broadcast ram;
+  setArenaSide(uint8) broadcast ram;
+  setBossChatFromIndex(uint8, uint8, uint8, uint32) broadcast;
+  setBossChat(string) broadcast;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  avatarNearEnter() airecv clsend;
+  avatarNearExit() airecv clsend;
+  toonDied(uint32) broadcast;
+  setBattleExperience(ToonBattleExp[], UpdatedQuest[]) required broadcast ram;
+  zapToon(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, int8/100, int8/100, uint8, int16) airecv clsend;
+  showZapToon(uint32, int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, uint8, int16) broadcast;
+  setAttackCode(uint8, uint32) broadcast;
+  setHealthTag(string) broadcast ram;
+  toonRemoved(uint32) broadcast;
+  // Unite stuff
+  setUniteRewardId(uint16[]) broadcast ram;
+  applyUniteReward() airecv clsend;
+  setBonusUnites(uint32 avId, uint8) broadcast ram;
+};
+
+dclass ClashBoardbotBoss : ClashBossCog {
+  setState(string) broadcast ram;
+  setBossDamage(uint16, uint8, int16) broadcast ram;
+  touchWitnessStand() airecv clsend;
+  hitBoss(uint8) airecv clsend;
+  healBoss(uint8) airecv clsend;
+  hitToon(uint32) airecv clsend;
+  hitDefensePan() airecv clsend;
+  hitProsecutionPan() airecv clsend;
+  hitChair(uint8, uint8) airecv clsend;
+  hitFlyingCogJuror(string) airecv clsend;
+  setLawyerIds(uint32[]) broadcast ram;
+  setTaunt(int8, int8) broadcast;
+  toonGotHealed(uint32) broadcast;
+  enteredBonusState() broadcast;
+  updateDamageDealt(uint32 avId, uint16) broadcast ram;
+  updateStunCount(uint32 avId) broadcast ram;
+};
+
+dclass ClashBossbotBoss : ClashBossCog {
+  setState(string) broadcast ram;
+  requestGetFood(int8, int8, uint32) airecv clsend;
+  toonGotFood(uint32, int8, int8, uint32) broadcast;
+  requestServeFood(int8, int8) airecv clsend;
+  toonServeFood(uint32, int8, int8) broadcast;
+  hitBoss(uint8) airecv clsend;
+  hitToon(uint32) airecv clsend;
+  ballHitBoss(uint8) airecv clsend;
+  setMaxHp(uint16) broadcast ram;
+  setBossDamage(uint16, uint8, int16) broadcast ram;
+  setSpeedDamage(uint16, uint8, int16) broadcast ram;
+  toonGotHealed(uint32) broadcast;
+  requestGetToonup(int8, int8, uint32) airecv clsend;
+  toonGotToonup(uint32, int8, int8, uint32) broadcast;
+  updateDamageDealt(uint32 avId, uint16) broadcast ram;
+  updateSpeedDamageDealt(uint32 avId, uint16) broadcast ram;
+  updateStunCount(uint32 avId) broadcast ram;
+  setNumPinkSlipsEarned(uint8);
+  doMoveAttack(uint8, int16/10, int16/10, int16) broadcast ram;
+  stopMove() broadcast;
+};
+
+dclass ClashCashbotBoss : ClashBossCog {
+  setState(string) broadcast ram;
+  setBossDamage(uint16) broadcast ram;
+  setMaxHp(uint16) broadcast ram;
+  updateDamageDealt(uint32 avId, uint16) broadcast ram;
+  updateStunCount(uint32 avId) broadcast ram;
+  updateGoonsStomped(uint32 avId) broadcast ram;
+  setNumCounterfeitsEarned(uint32, uint8) broadcast ram;
+};
+
+dclass ClashSuitBase : DistributedObject {
+  setRawModifiers(Modifier[] = []) required ownrecv broadcast ram;
+  denyBattle();
+  setDNAString(blob) required broadcast ram;
+  setLevelDist(int16, uint8) required broadcast ram;
+  setBrushOff(int16) broadcast;
+  setWaiter(uint8) broadcast ram;
+  setSkelecog(uint8) required broadcast ram;
+  setSkeleRevives(uint8) required broadcast ram;
+  setMaxSkeleRevives(uint8) required broadcast ram;
+  setMaxHp(uint64) required broadcast ram;
+  setHp(int64) required broadcast ram;
+  setElite(uint8) required broadcast ram;
+  setPersistent(bool) required broadcast ram;
+  setRawStatusEffects(StatusEffect statusEffect[], VisualEffect visualEffect[]) broadcast ram;
+  setAfterReviveDamage(int32[]) broadcast ram;
+  setStashed(bool) broadcast;
+};
+
+dclass ClashFactorySuit : ClashSuitBase {
+  setLevelDoId(uint32) required broadcast ram;
+  setCogId(uint32) required broadcast ram;
+  setReserve(uint8) required broadcast ram;
+  setLeader(bool) required broadcast ram;
+  requestBattle(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) airecv clsend;
+};
+
+dclass ClashLawbotBoss : ClashBossCog {
+  setState(string) broadcast ram;
+  setBossDamage(uint16, int8) broadcast ram;
+  hitBoss() airecv clsend;
+  sendLawyerId(uint32) broadcast ram;
+  sendDefenseSpecialistId(uint32) broadcast ram;
+  toonGotHealed(uint32) broadcast;
+  updateDamageDealt(uint32 avId, uint16) broadcast ram;
+  updateEvidence(uint32 avId, uint16) broadcast;
+  updateStunCount(uint32 avId) broadcast ram;
+  setMaxHp(uint16) broadcast ram;
+  createPaintingMovie(uint8) broadcast ram;
+  endCogRoundSpotlight(uint8) broadcast;
+  lawyerNearEnter(uint32) airecv clsend;
+  lawyerNearExit(uint32) airecv clsend;
+  stopMoveTask(int16/10, int16/10, int16/10, bool) broadcast ram;
+  setNumSuesEarned(uint32, uint8) broadcast ram;
+  makeEvidence(uint16, int16/10, int16/10, int16/10) broadcast ram;
+  deleteEvidence() broadcast;
+  pickupEvidence(uint32, uint16, int16) broadcast ram;
+  withdrawEvidence() airecv clsend;
+  doMoveAttack(uint32, int16, int16, int16/10, int16/10, int32/10) broadcast ram;
+  resetBossDamageMovie(uint8, uint8, int16, int16, int16/10, int16/10, int16/10) broadcast ram;
+  updateBossDamageMovie(uint8, uint8) broadcast ram;
+  createBossTrapMovie(uint8, bool) broadcast ram;
+  updateCogDestructionCount(uint32 avId, uint16) broadcast ram;
+  setRandomFallPosition(int16/10 x, int16/10 y, int16/10 h) broadcast ram;
+};
+
+dclass ClashLawbotBossSuit : ClashSuitBase {
+  setPosHpr(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) required broadcast ram;
+  doTravel(string, int16/10, int16/10, int16/10) broadcast;
+  doTrapBreak() broadcast;
+  avatarNearEnter() airecv clsend;
+  avatarNearExit() airecv clsend;
+  hitSuit(int32) airecv clsend;
+  setSuitDamage(uint16) required broadcast ram;
+  setSuitMaxDamage(uint16) required broadcast ram;
+  setVirtual(uint8) required broadcast ram;
+  setSkelecog(uint8) required broadcast ram;
+  setTrapIndex(int8) broadcast ram;
+};
+
+dclass ClashMintSuit : ClashFactorySuit {
+};
+
+dclass ClashSellbotBoss : ClashBossCog {
+  setCagedToonNpcId(uint32) required broadcast ram;
+  setDooberIds(uint32[]) broadcast ram;
+  setBossDamage(uint16, uint8, int16) broadcast ram;
+  setState(string) broadcast ram;
+  hitBoss(uint8) airecv clsend;
+  hitBossInsides() airecv clsend;
+  hitToon(uint32) airecv clsend;
+  finalPieSplat() airecv clsend;
+  touchCage() airecv clsend;
+  doStrafe(uint8, uint8) broadcast;
+  cagedToonBattleThree(uint16, uint32) broadcast;
+  toonPromoted(uint8(0-1));
+  updateDamageDealt(uint32 avId) broadcast ram;
+  updateStunCount(uint32 avId) broadcast ram;
+  setRewards(uint32[] = []);
+};
+
+dclass ClashStageSuit : ClashFactorySuit {
+};
+
+dclass ClashSuit : ClashSuitBase {
+  requestBattle(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) airecv clsend;
+  setSPDoId(uint32) required broadcast ram;
+  setPathEndpoints(uint16, uint16, uint16, uint16) required broadcast ram;
+  setPathPosition(uint16, int16) required broadcast ram;
+  setPathState(int8) required broadcast ram;
+  debugSuitPosition(int16/10, int16, int16/10, int16/10, int16) broadcast;
+};
+
+dclass ClashSuitPlanner : DistributedObject {
+  setZoneId(uint32) required broadcast ram;
+  suitListQuery() airecv clsend;
+  suitListResponse(string[]);
+  buildingListQuery() airecv clsend;
+  buildingListResponse(uint8[]);
+};
+
+dclass DistributedHardmodeLawbotBoss : ClashLawbotBoss {
+  createBossTrapMovie(uint8, bool, bool) broadcast ram;
+  setLitigationOrder(string []) broadcast ram;
+  updateLitigationMemberPosition(string name, uint8 battleSide) broadcast ram;
+};
+
+dclass DistributedHardmodeLawbotBossSuit : ClashLawbotBossSuit {
+};
+
+dclass DistributedHardmodeLawbotBossSuitAttack : DistributedHardmodeLawbotBossSuit {
+    beginDocket() broadcast;
+};
+
+dclass DistributedLawbotBossDefenseSpecialist : ClashSuitBase {
+  setPosHpr(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) required broadcast ram;
+  hitSuit(int32) airecv clsend;
+  setSuitDamage(uint16) required broadcast ram;
+  setSuitMaxDamage(uint16) required broadcast ram;
+};
+
+dclass DistributedLawbotBossSecurityCamera : DistributedNode {
+  trapFire() airecv clsend;
+  newPosition(int32, int32) broadcast;
+  setVelocity(int16) broadcast ram;
+  setAcceleration(int16/10) broadcast ram;
+  setTrackingDo(int32) broadcast ram;
+};
+
+dclass ClashBattleBase : DistributedObject {
+  setLevelDoId(uint32) required broadcast ram;
+  setBattleCellId(uint32) required broadcast ram;
+  setInteractivePropTrackBonus(int8) required broadcast ram;
+  setPosition(int16/10, int16/10, int16/10) required broadcast ram;
+  setZoneId(uint32) required broadcast ram;
+  setInitialSuitPos(int16/10, int16/10, int16/10) required broadcast ram;
+  setMembers(BattleMember suits[], string suitTraps, BattleMember toons[], int16 timestamp) required broadcast ram;
+  adjust(int16) broadcast;
+  setMovie(int8, uint32[], uint32[], Attack[], uint32 currRound) required broadcast ram;
+  setChosenToonAttacks(uint32[], int16[], int16[], int32[]) broadcast ram;
+  setLockIns(uint32[], bool[]) broadcast ram;
+  setBattleExperience(ToonBattleExp[], UpdatedQuest[]) required broadcast ram;
+  denyLocalToonJoin();
+  setBossBattle(uint8) required broadcast ram;
+  setState(string, int16) required broadcast ram;
+  setAfkToons(uint32[]) broadcast;
+  setTimescale(uint32/100) broadcast;
+  faceOffDone() airecv clsend;
+  toonRequestJoin(int16/10, int16/10, int16/10) airecv clsend;
+  toonRequestRun() airecv clsend;
+  toonRequestSurrender() airecv clsend;
+  toonDied() airecv clsend;
+  adjustDone() airecv clsend;
+  timeout() airecv clsend;
+  movieDone() airecv clsend;
+  rewardDone() airecv clsend;
+  joinDone(uint32, bool) airecv clsend;
+  requestAttack(int16, int8, int32, bool) airecv clsend;
+  requestLockIn(bool) airecv clsend;
+  requestCounterfeit(uint16, uint16) airecv clsend;
+  setSuitGameoverString(uint32 suitId, string) broadcast;
+  informVisualEffectsEnding(VisualEffectRemoved[]) broadcast ram;
+  uniteUsed(uint32 avId) broadcast;
+  beginInteractiveCutscene() broadcast ram;
+  setGagOrder(uint16[]) broadcast ram;
+  setNumSurrendered(uint8, uint8, uint32[]) broadcast ram;
+  toonUsedCounterfeit(uint32, uint8, uint8) broadcast;
+};
+
+dclass ClashBattle : ClashBattleBase {
+};
+
+dclass ClashBattleBldg : ClashBattleBase {
+};
+
+dclass ClashBattleFinal : ClashBattleBase {
+  setBossCogId(uint32) required broadcast ram;
+  setBattleNumber(uint8) required broadcast ram;
+  setBattleSide(uint8) required broadcast ram;
+};
+
+dclass ClashBattleDiners : ClashBattleFinal {
+};
+
+dclass ClashBattleWaiters : ClashBattleFinal {
+};
+
+dclass DistributedBattleFlyIn : ClashBattleFinal {
+};
+
+dclass DistributedBattleLitigators : ClashBattleFinal {
+};
+
+dclass DistributedBattlePainting : ClashBattleFinal {
+};
+
+dclass DistributedBattleVirtual : ClashBattleFinal {
+};
+
 
 from direct.distributed import DistributedObjectGlobal
 from toontown.ai import WelcomeValleyManager/AI
@@ -702,22 +1113,40 @@ from toontown.building import DistributedLightSwitch/AI
 from toontown.estate import DistributedHouseDoor/AI
 from toontown.coghq import DistributedCogHQDoor/AI
 from toontown.coghq import DistributedSellbotHQDoor/AI
-from toontown.toon import DistributedNPCToonBase/AI
-from toontown.toon import DistributedNPCToon/AI
-from toontown.toon import DistributedNPCHQOfficer/AI
-from toontown.toon import DistributedNPCSpecialQuestGiver/AI
-from toontown.toon import DistributedNPCFlippyInToonHall/AI
-from toontown.toon import DistributedNPCScientist/AI
-from toontown.toon import DistributedNPCClerk/AI
-from toontown.toon import DistributedNPCTailor/AI
-from toontown.toon import DistributedNPCBlocker/AI
-from toontown.toon import DistributedNPCFisherman/AI
-from toontown.toon import DistributedNPCRodClerk/AI
-from toontown.toon import DistributedNPCPartyPerson/AI
-from toontown.toon import DistributedNPCPetclerk/AI
-from toontown.toon import DistributedNPCKartClerk/AI
-from toontown.toon import DistributedNPCLoopyG/AI
-from toontown.toon import DistributedNPCInvisible/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCToonBase/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCToon/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCHQOfficer/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCFlippyInToonHall/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCClerk/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCGagAndGoClerk/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCTailor/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCFisherman/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCItemSeller/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCPetclerk/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCKartClerk/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCSecretary/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCValentines/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCWebster/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCFirework/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCElf/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCHQIntern/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCHQRanger/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCTrashCat/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCHalloweenPass/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCSnowman/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCElphabat/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCBumpy/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCLauren/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCGhastly/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCTurnkey/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCToonsmasSpirits/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCPlant/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCBubby/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCTumbles/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCRedNose/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCLowden/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCClubCreation/AI
+from toontown.toon.npc.NPCToonClasses/AI import DistributedNPCClubShop/AI
 from toontown.building import DistributedKnockKnockDoor/AI
 from toontown.building import DistributedElevator/AI
 from toontown.building import DistributedElevatorFSM/AI
@@ -740,6 +1169,8 @@ from toontown.building import DistributedCountErfitElevator/AI
 from toontown.building import DistributedCFOElevator/AI
 from toontown.building import DistributedCBMElevator/AI
 from toontown.building import DistributedCJElevator/AI
+from toontown.building import DistributedCLOElevator/AI
+from toontown.building import DistributedHardmodeCLOElevator/AI
 from toontown.building import DistributedCountErclaimElevator/AI
 from toontown.suit import DistributedPacesetterBoss/AI
 from toontown.suit import DistributedChainsawBoss/AI
@@ -928,6 +1359,7 @@ from toontown.ai.DistributedPhaseEventMgr/AI import DistributedPhaseEventMgr/AI
 from toontown.ai.DistributedHydrantZeroMgr/AI import DistributedHydrantZeroMgr/AI
 from toontown.ai.DistributedMailboxZeroMgr/AI import DistributedMailboxZeroMgr/AI
 from toontown.ai.DistributedTrashcanZeroMgr/AI import DistributedTrashcanZeroMgr/AI
+from toontown.club import DistributedClubManager/AI/UD
 from toontown.ai import DistributedSillyMeterMgr/AI
 from toontown.cogdominium import DistributedCogdoInterior/AI
 from toontown.cogdominium import DistributedCogdoBattleBldg/AI
@@ -945,7 +1377,6 @@ from toontown.cogdominium import DistCogdoCraneMoneyBag/AI
 from toontown.cogdominium import DistCogdoCraneCog/AI
 from toontown.weather import DistributedWeatherCycle/AI
 from toontown.weather import DistributedWeatherStorm/AI
-from toontown.club import DistributedToonClub/AI/UD
 from toontown.environment import DistributedDayTimeManager/AI
 from toontown.environment import DistributedRainManager/AI
 from toontown.environment import DistributedWeatherMGR/AI
@@ -1083,18 +1514,6 @@ dclass DistributedAnimatedProp : DistributedObject {
 
 typedef int16 pair16[2];
 
-struct StatusEffect {
-  uint16 id;
-  int16 rounds;
-  int16 disabledRounds;
-  int64/100[] extraArgs;
-};
-
-struct VisualEffect {
-  uint16 id;
-  int64/100[] extraArgs;
-};
-
 dclass ClashDistributedToonBase : DistributedAvatar {
   setDNAString(blob) required broadcast db;
   setAnimState(char [0-1024], int16/1000, int16) broadcast ram ownsend airecv;
@@ -1129,26 +1548,15 @@ struct Booster {
   uint32 startTimestamp;
 };
 
-struct QuestHistory {
-  uint8 questSource;
-  uint64 chainId;
-};
-
-struct QuestId {
-  uint8 questSource;
-  uint64 chainId;
-  uint16 objectiveId;
-  uint16 subObjectiveId;
-};
-
-struct QuestReference {
-  QuestId questId;
-  uint32 progress[];
-};
-
 struct Kudos {
   uint16 zoneId = 0;
   uint8 kudos = 0;
+};
+
+struct ClubTag {
+  uint32 clubId = 0;
+  string clubName = "";
+  int8 clubColor = 0;
 };
 
 dclass DistributedToon : DistributedPlayer {
@@ -1162,6 +1570,10 @@ dclass DistributedToon : DistributedPlayer {
   setMaxBankMoney(uint32 maxMoney = 150000) required broadcast ownrecv db;
   setMaxMoney(int16 = 40) required broadcast ownrecv db;
   setBankMoney(uint64 money = 0) required ownrecv db;
+  setQuestCarryLimit(uint8 = 1) required ownrecv db;
+  setRawQuestReferences(QuestReference[] = []) required broadcast ownrecv db;
+  setRawQuestHistory(QuestHistory[] = []) required broadcast ownrecv db;
+    setRawStatusEffects(StatusEffect statusEffect[], VisualEffect visualEffect[]) broadcast ram;
   setMaxHp(int16 = 15) required broadcast ownrecv db;
   setHp(int16 = 15) required broadcast ownrecv db;
   setUber(int16) required broadcast ownrecv db;
@@ -1221,6 +1633,8 @@ dclass DistributedToon : DistributedPlayer {
   setSCResistance(uint16, uint32 []) broadcast ownrecv;
   setSpeedChatStyleIndex(uint8 = 1) required ownsend broadcast db;
   setTrophyScore(uint16) broadcast ownrecv ram;
+  setLastOnline(uint32 timestamp = 0) required db;
+  setRawBoosters(Booster[] = []) required broadcast ownrecv db;
   setTeleportAccess(uint32[] = []) required ownrecv db;
   setScavengerHunt(uint32[] = []) required ownrecv db;
   checkTeleportAccess(uint16) airecv ownsend;
@@ -1247,14 +1661,6 @@ dclass DistributedToon : DistributedPlayer {
   setDisguisePageFlag(int8) ownrecv;
   setSosPageFlag(int8) ownrecv;
   setHouseId(uint32 = 0) required ownrecv db;
-  setQuests(uint32[] = []) required broadcast ownrecv db;
-  setQuestHistory(uint16[] = []) required broadcast ownrecv db;
-  setQuestCarryLimit(uint8 = 4) required ownrecv db;
-  requestDeleteQuest(uint32[]) ownsend airecv;
-  requestKudosBoard() ownsend airecv;
-  setKudosBoardOffers(uint32[]) ownrecv;
-  chooseKudosBoardQuest(uint32) ownsend airecv;
-  setKudosBoardResult(uint8) ownrecv;
   setCheesyEffect(int16 = 0, uint32 = 0, uint32 = 0) required broadcast ownrecv db;
   setCheesyEffects(int16[] = [0]) required broadcast ownrecv db;
   setGhostMode(uint8) broadcast ownrecv ram;
@@ -1276,6 +1682,9 @@ dclass DistributedToon : DistributedPlayer {
   promoteShovel(uint8) ownrecv;
   promoteWateringCan(uint8) ownrecv;
   reactivateWater() ownrecv;
+  setToonTipsSeen(uint16[]) required ownrecv db;
+  requestToonTip(uint16) airecv ownsend;
+  sendToonTip(uint16) ownrecv;
   presentPie(int16/10 x, int16/10 y, int16/10 z, int16/10 h, int32 timestamp) broadcast ownsend;
   tossPie(int16/10 x, int16/10 y, int16/10 z, int16/10 h, uint8 sequence, uint8 power, uint8 throwType, int32 timestamp) broadcast ownsend;
   pieSplat(int16/10, int16/10, int16/10, uint8, uint8, int32) broadcast ownsend;
@@ -1370,6 +1779,9 @@ dclass DistributedToon : DistributedPlayer {
   requestSkillReturn(uint8) ownsend airecv;
   requestRefundSpend(uint8) ownsend airecv;
   doRefundFailure() ownrecv;
+  etToonClubs(ClubTag[] = []) required broadcast ownrecv db airecv;
+  setClubBanned(uint8 = 0) ownrecv db;
+  setClubFields(string clubName = "", uint32 clubColor = 1000, bool force = 0) required broadcast ram;
   setCerts(string[] = []) required broadcast ownrecv db;
 
   // Kudos rewards
@@ -1719,6 +2131,19 @@ dclass DistributedCashbotBossGoon : DistributedCashbotBossObject {
   requestBattle(int16/10) airecv clsend;
   requestStunned(int16/10) airecv clsend;
   requestWalk() airecv clsend;
+  setVelocity(uint8/10) broadcast ram;
+  setHFov(uint8) broadcast ram;
+  setAttackRadius(uint8) broadcast ram;
+  setStrength(uint8) broadcast ram;
+  setGoonScale(uint8/50) broadcast ram;
+  setupGoon : setVelocity, setHFov, setAttackRadius, setStrength, setGoonScale;
+  setTarget(int16/10, int16/10, uint16%360/100, int16) broadcast ram;
+  destroyGoon() broadcast clsend airecv;
+};
+
+dclass ClashCashbotBossGoon : DistributedCashbotBossObject {
+  requestBattle(int16/10) airecv clsend;
+  requestStunned(int16/10) airecv clsend;
   setVelocity(uint8/10) broadcast ram;
   setHFov(uint8) broadcast ram;
   setAttackRadius(uint8) broadcast ram;
@@ -2772,56 +3197,41 @@ dclass DistributedSellbotHQDoor : DistributedCogHQDoor {
   informPlayer(uint8) broadcast ram;
 };
 
-dclass DistributedNPCToonBase : DistributedNode {
-  setName(string) required broadcast ram;
-  setDNAString(blob) required broadcast ram;
+dclass DistributedNPCToonBase : ClashDistributedToonBase {
   setPositionIndex(uint8) required broadcast ram;
-  setAnimState(string, int16/1000, int16) broadcast ram;
   setPageNumber(int16, int8, int16) broadcast ram clsend;
   avatarEnter() airecv clsend;
   freeAvatar();
+  setCanSpawn(bool) required broadcast ram;
 };
 
 dclass DistributedNPCToon : DistributedNPCToonBase {
-  setMovie(uint8, uint32, uint32, uint16[], int16) broadcast ram;
+  setNpcId(uint32) required broadcast ram;
+  setToonTag(string = "") broadcast airecv;
+  setMovie(uint8, uint32, uint32, uint32[], int16, QuestId questId[]) broadcast ram;
   setMovieDone() airecv clsend;
-  chooseQuest(uint16) airecv clsend;
-  chooseTrack(int8) airecv clsend;
+  chooseQuest(QuestId questId) airecv clsend;
+  cancelChooseQuest() airecv clsend;
 };
 
 dclass DistributedNPCHQOfficer : DistributedNPCToon {
 };
 
-dclass DistributedNPCSpecialQuestGiver : DistributedNPCToonBase {
-  setMovie(uint8, uint32, uint32, uint16[], int16) broadcast ram;
-  setMovieDone() airecv clsend;
-  chooseQuest(uint16) airecv clsend;
-  chooseTrack(int8) airecv clsend;
-};
-
 dclass DistributedNPCFlippyInToonHall : DistributedNPCToon {
 };
 
-dclass DistributedNPCScientist : DistributedNPCToonBase {
-  setChat(char [0-1024], uint8, uint32, uint8, uint8) ownsend broadcast;
+dclass DistributedNPCClerk : DistributedNPCToonBase {
+  setState(uint32, uint8) broadcast airecv clsend;
+  setInventory(blob, int64) airecv clsend;
 };
 
-dclass DistributedNPCClerk : DistributedNPCToonBase {
-  setMovie(uint8, uint32, uint32, int16) broadcast ram;
-  setInventory(blob, int16, uint8) airecv clsend;
+dclass DistributedNPCGagAndGoClerk : DistributedNPCClerk {
 };
 
 dclass DistributedNPCTailor : DistributedNPCToonBase {
-  // NOTE: replaced the old DNA-swap fields (setMovie/setDNA/setCustomerDNA)
-  // with Clash's generic NPC item-shop system.
-  requestItemPurchase(ShopItem shopItem) airecv clsend;
-  handleBuyResponse(uint8) ownrecv;
-  handleInteraction(uint8, uint8) broadcast;
-  toonInteracted(uint8) clsend airecv;
-};
-
-dclass DistributedNPCBlocker : DistributedNPCToonBase {
   setMovie(uint8, uint32, uint32, int16) broadcast ram;
+  setDNA(blob, int8, uint8) airecv clsend;
+  setCustomerDNA(uint32, blob) broadcast ram;
 };
 
 dclass DistributedNPCFisherman : DistributedNPCToonBase {
@@ -2829,23 +3239,16 @@ dclass DistributedNPCFisherman : DistributedNPCToonBase {
   completeSale(uint8) airecv clsend;
 };
 
-dclass DistributedNPCRodClerk : DistributedNPCToonBase {
-  setMovie(uint8, uint32, uint32, uint32[], int16) broadcast ram;
-  completeSale(uint8) airecv clsend;
-};
-
-dclass DistributedNPCPartyPerson : DistributedNPCToonBase {
-  setMovie(uint8, uint32, uint32, uint32[], int16) broadcast ram;
-  answer(uint8) airecv clsend;
+dclass DistributedNPCItemSeller : DistributedNPCToon {
+  requestItemPurchase(ShopItem shopItem) airecv clsend;
+  handleBuyResponse(uint8) ownrecv;
+  handleInteraction(uint8, uint8) broadcast;
+  toonInteracted(uint8) clsend airecv;
 };
 
 dclass DistributedNPCPetclerk : DistributedNPCToonBase {
   setMovie(uint8, uint32, uint32, uint32[], int16) broadcast ram;
-  setPetSeeds(uint32[]);
-  petAdopted(uint8, uint32) airecv clsend;
-  petReturned() airecv clsend;
-  fishSold() airecv clsend;
-  transactionDone() airecv clsend;
+  completeSale(uint8) airecv clsend;
 };
 
 dclass DistributedNPCKartClerk : DistributedNPCToonBase {
@@ -2855,10 +3258,98 @@ dclass DistributedNPCKartClerk : DistributedNPCToonBase {
   transactionDone() airecv clsend;
 };
 
-dclass DistributedNPCLoopyG : DistributedNPCToon {
+dclass DistributedNPCTrashCat : DistributedNPCToon {
 };
 
-dclass DistributedNPCInvisible : DistributedNPCToon{
+dclass DistributedNPCHalloweenPass : DistributedNPCToon {
+  checkForPrizes() airecv clsend;
+  checkForRewards() airecv clsend;
+  setHasItemsToClaim(uint8);
+  handleInteraction(uint32, uint8, uint8) broadcast;
+  toonInteracted(uint8) clsend airecv;
+};
+
+dclass DistributedNPCHQIntern : DistributedNPCToon {
+};
+
+dclass DistributedNPCHQRanger : DistributedNPCToon {
+};
+
+dclass DistributedNPCSecretary : DistributedNPCToon {
+};
+
+dclass DistributedNPCValentines : DistributedNPCToon {
+};
+
+dclass DistributedNPCWebster : DistributedNPCToon {
+};
+
+dclass DistributedNPCFirework : DistributedNPCToon {
+};
+
+dclass DistributedNPCElf : DistributedNPCToon {
+};
+
+dclass DistributedNPCSnowman : DistributedNPCToon {
+  snowballHit(uint8) airecv clsend;
+  snowballScale(uint16/100) broadcast ram;
+};
+
+dclass DistributedNPCGhastly : DistributedNPCToon {
+};
+
+dclass DistributedNPCTurnkey : DistributedNPCToon {
+};
+
+dclass DistributedNPCToonsmasSpirits : DistributedNPCToon {
+};
+
+dclass DistributedNPCPlant : DistributedNPCToon {
+  requestCheck(uint8 plant) airecv clsend;
+  requestCheckResponse(uint8 response);
+  requestCheckChatResponse(string response);
+};
+
+dclass DistributedNPCBubby : DistributedNPCToon {
+  requestCheck() airecv clsend;
+  requestCheckResponse(uint8 response);
+  requestCheckChatResponse(string response);
+};
+
+dclass DistributedNPCTumbles : DistributedNPCToon {
+};
+
+dclass DistributedNPCTutorial : DistributedNPCToon {
+    requestIntroTutorial() airecv clsend;
+    setTutorialZoneForce(uint32) airecv clsend;
+};
+
+dclass DistributedNPCRedNose : DistributedNPCToon {
+};
+
+dclass DistributedNPCLowden : DistributedNPCToon {
+  setBattleId(uint32 = 0) broadcast ram;
+  setExperience(uint32[] = []) broadcast;
+  setMaxHp(int16 = 15) broadcast ownrecv;
+  setHp(int16 = 15) broadcast ownrecv;
+  setTrackAccess(uint16[] = [0,0,0,0,1,0,1,0]) broadcast ownrecv;
+  setInventory(blob = [0*8, 0*8, 0*8, 0*8, 0*8, 0*8, 0*8, 0*8]) broadcast ownrecv;
+  sendToonTip(uint16) broadcast ownrecv;
+  setToonTipsSeen(uint16[]) ownrecv;
+  setStats(uint32[] = [0*29]) ownrecv;
+};
+
+dclass DistributedNPCElphabat : DistributedNPCToon {
+  requestItemPurchase(ShopItem shopItem) airecv clsend;
+  handleBuyResponse(uint8, uint32) ownrecv broadcast;
+  handleInteraction(uint32, uint8, uint8) broadcast;
+  toonInteracted(uint8) clsend airecv;
+};
+
+dclass DistributedNPCClubCreation : DistributedNPCToon {
+};
+
+dclass DistributedNPCClubShop : DistributedNPCToon {
 };
 
 dclass DistributedKnockKnockDoor : DistributedAnimatedProp {
@@ -2994,6 +3485,13 @@ dclass DistributedVPElevator : DistributedBossElevator {
 
 dclass DistributedCFOElevator : DistributedBossElevator {
 };
+
+dclass DistributedCLOElevator : DistributedBossElevator {
+};
+
+dclass DistributedHardmodeCLOElevator : DistributedBossElevator {
+};
+
 
 dclass DistributedCountErfitElevator : DistributedBossElevator {
 };
@@ -4356,6 +4854,7 @@ dclass DistributedMailManager : DistributedObject {
   setNumMailItems(uint32, uint32) airecv;
 };
 
+
 struct PotentialToon {
   uint32 avNum;
   string avName;
@@ -4368,6 +4867,8 @@ struct PotentialToon {
   uint16[] glasses;
   uint16[] backpack;
   uint16[] shoes;
+  uint8 nametagStyle;
+  ClubTag[] club;
 };
 
 dclass ClientServicesManager : DistributedObjectGlobal {
@@ -4540,51 +5041,6 @@ dclass DistributedWeatherStorm : DistributedObject {
   setDuration(int32) broadcast ram;
 };
 
-dclass DistributedToonClub : DistributedObjectGlobal {
-  requestState() clsend;
-  requestCreateClub(string(0-64), uint16, uint16, uint16, uint16, string(0-64)) clsend;
-  requestInvite(uint32, string(0-64)) clsend;
-  respondToInvite(uint32, uint8, string(0-64)) clsend;
-  requestLeave() clsend;
-  requestKick(uint32) clsend;
-  requestSetRank(uint32, uint8) clsend;
-  requestTransferOwner(uint32) clsend;
-  requestSetMotd(string(0-256)) clsend;
-  requestSetPermission(uint8, uint8, uint8) clsend;
-  requestUpdateIcon(uint16, uint16, uint16, uint16) clsend;
-  requestPurchaseItem(uint16) clsend;
-  requestStartTask(uint16) clsend;
-  requestRerollTask(uint8) clsend;
-  requestLogs(uint16) clsend;
-  sendClubChat(string(0-256)) clsend;
-  receiveState(string(0-65535));
-  receiveInvite(uint32, string(0-64), uint32, string(0-64));
-  receiveNotification(uint8, string(0-256));
-  receiveClubChat(uint32, string(0-64), string(0-256));
-  receiveLogs(string(0-65535));
-  reportProgressAI(uint32, string(0-32), uint32);
-  reportClubCoinsAI(uint32, uint32);
-  groupHeartbeat(string(0-64), uint32) clsend;
-  groupPrepareSuitTeleport(uint32, int8) airecv clsend;
-  groupRequestState() clsend;
-  groupRequestBrowse() clsend;
-  groupRequestCreate(string(0-64), string(0-96), uint32, uint8, uint8, string(0-64)) clsend;
-  groupRequestJoin(uint32, string(0-64)) clsend;
-  groupRequestLeave() clsend;
-  groupRequestDisband() clsend;
-  groupRequestKick(uint32) clsend;
-  groupRequestPublish(uint8) clsend;
-  groupRequestInvite(uint32, string(0-64)) clsend;
-  groupRespondToInvite(uint32, uint8, string(0-64)) clsend;
-  groupReceiveState(string(0-65535));
-  groupReceiveBrowse(string(0-65535));
-  groupReceiveInvite(uint32, uint32, string(0-64), string(0-64), string(0-96));
-  groupReceiveNotification(uint8, string(0-256));
-  groupRequestMassTeleport() clsend;
-  groupRequestMassTeleportReady(uint32) clsend;
-  groupReceiveMassTeleport(uint32, uint32, uint32);
-  groupReceiveMassTeleportStart(uint32);
-};
 
 dclass DistributedWeatherMGR : DistributedObject {
   start() broadcast ram;
@@ -4624,4 +5080,172 @@ dclass DistributedToonseltownMinigame : DistributedObject {
   playerTouchedFieldPresent(uint16) airecv clsend;
   playerTouchedTree() airecv clsend;
   playerHitCogWithSnowball(uint32) airecv clsend;
+};
+
+struct HouseRules {
+  string houseRule;
+  bool value;
+};
+
+dclass DistributedChair : DistributedNode {
+  setChairNumber(uint32 chairNumber) required broadcast ram;
+  setRadius(uint8 radius) required broadcast ram;
+  setHopOnPos(int16/10 x, int16/10 y, int16/10 z) required broadcast ram;
+  setHopOffPos(int16/10 x, int16/10 y, int16/10 z) required broadcast ram;
+  setWantOrbitCamera(bool flag) required broadcast ram;
+  setLockChair(bool flag) required broadcast ram;
+  setChairType(uint8) required broadcast ram;
+  setWantToono(bool) required broadcast ram;
+  setMusicType(uint8) required broadcast ram;
+  seatAvatar(uint32 avId) broadcast;
+  unseatAvatar(uint32 avId, bool animate) broadcast;
+  requestChairState() clsend airecv;
+  requestSeat() clsend airecv;
+  requestExit() clsend airecv;
+  rejectAvatar() broadcast;
+
+
+  // Picnic game specific fields
+  requestGame() clsend airecv;
+  requestSetHouseRules(HouseRules[]) clsend airecv;
+  setHouseRules(HouseRules[]) broadcast ram;
+  setOwner(uint32 avId, uint32 playerIds[]) broadcast ram;
+  toggleGame(bool flag) broadcast ram;
+};
+
+// All Club-Related Structs //
+struct ClubItemsOwned {
+  // Data struct for items that a club owns.
+  uint16[] clubIcons;
+  uint16[] clubBackgrounds;
+  uint16[] themeColors;
+  uint16[] backgroundColors;
+};
+struct ClubMemberOptions {
+  // A container class for all role-based club options.
+  bool purchaseClubTasks;
+  bool purchaseClubShopItems;
+  bool canMakeAnnouncements;
+  bool canUseClubShouts;
+  bool canUseClubChat;
+  bool canInviteToons;
+  bool canKickToons;
+  bool canUpdateMotd;
+};
+struct ClubOptions {
+  // A container class for club options.
+  bool blah;
+};
+struct ClubSettings {
+  // Container class for Club Settings.
+  ClubMemberOptions deputySettings;
+  ClubMemberOptions officerSettings;
+  ClubMemberOptions memberSettings;
+};
+struct ClubTask {
+  // A container class for club tasks.
+  uint32 chainId;
+  uint32[] taskProgress;
+  uint32 endTime;
+};
+struct ClubIcon {
+  // A container class for all club icon data.
+  uint16 iconId;
+  uint16 backgroundId;
+  uint16 clubCol;
+  uint16 bgCol;
+};
+struct ClubLog {
+  // A container class for all club log data.
+  string logType;
+  uint32 timestamp;
+  AstronDict data;
+};
+struct ClubToon {
+  // Container class for toon information in a club.
+  uint32 avId;
+  string toonName;
+  uint8 rankId;
+  uint32 joinTimestamp;
+  uint16 laff;
+  uint16 level;
+  uint8 online;
+};
+struct ClubInfraction {
+  // Container class for club infracts.
+  string infractionType;
+};
+typedef uint16 ClubItem;
+struct Club {
+  // Container class for a club.
+  uint32 clubId;        // 0
+  string clubName;      // 1
+  string requestedName; // 2
+  string nameStatus;     // 3
+  /////
+  ClubSettings clubSettings;    // 4
+  ClubIcon clubIcon;    // 5
+  string clubMOTD;      // 6
+  uint16 clubCapacity;  // 7
+  /////
+  int32 clubXp;        // 8
+  int32 clubCoins;     // 9
+  int64 jellybeans;    // 10
+  Booster[] boosters;   // 11
+  uint8 maxBoosters;    // 12
+  /////
+  ClubToon[] clubToons;   // 13
+  ClubItem[] itemsOwned;  // 14
+  /////
+  ClubTask[] clubTasks; // 15
+  uint32 logCount;  // 16
+  ClubInfraction[] infractions;  // 17
+};
+
+// End Club-Related Structs //
+
+dclass DistributedClubManager : DistributedObjectGlobal {
+  // Direct interaction with clubs methods.
+  requestCreateClubCL(string name, ClubIcon icon) clsend airecv;
+  requestCreateClubAI(uint32 avId, string clubName, string defaultName, ClubIcon clubIcon);
+  UD_finalizeCreation(uint32 avId); // Takes money from an av after they create a club successfully.
+  requestUpdateClubName(string name) clsend airecv;
+  requestLeaveClub(uint32, string);
+  requestAddClubCoins(uint32 avId, uint32 clubId, uint32/100 clubCoins);
+  requestAddJellybeansCL(uint32 clubId, uint32 jellybeans) clsend airecv;
+  requestAddJellybeansAI(uint32 avId, uint32 clubId, uint32 jellybeans);
+  requestPurchaseClubItem(ClubItem clubItem) clsend airecv;
+  requestOptionSet(uint8 roleId, uint8 permId, uint8 value) clsend airecv;
+  requestKickToon(uint32 clubId, uint32 avId) clsend airecv;
+  requestRankChange(uint32 clubId, uint32 avId, uint8 rankId) clsend airecv;
+  requestSelfLeaveClub(uint32 clubId) clsend airecv;
+  // Club invites.
+  inviteAvIdToClubCL(uint32 targetAvId, uint32 clubId) clsend airecv;       // initial invite sent
+  inviteAvIdToClubAI(uint32 inviterAvId, uint32 targetAvId, uint32 clubId); // invite finalization upon confirmation
+  respondToClubInviteCL(uint32 inviterAvId, uint32 clubId, uint8 result) clsend airecv;  // user response to invite
+  respondToClubInviteUD(uint32 inviterAvId, uint32 targetAvId, uint32 clubId, uint8 result);  // UD tells AIs if invite was successful or not
+  // Informs from AI/UD to client.
+  clubNotification(uint8 context, int32[]);
+  // Club update methods.
+  toontownClubUpdate(Club astronClub);     // UD's ToontownClubs updating DistributedClubManager.
+  dropLocalClub();                         // UD tells a client that they are no longer in a club.
+  setClubAvatarsOfClub(uint32 clubId);     // UD tells the AIs to set clubavs of a club.
+  AI_onClubDisband(uint32 clubId);         // UD tells AIs to flush club state.
+  AI_dropClubAvatars(uint32 avIds[]);      // UD tells AIs to drop the club state of avatars.
+  // Client requests.
+  requestNewMotd(uint32 clubId, string animalType, string motd) clsend airecv;
+  // Club Task Funnies
+  requestRerollTasks(uint32 clubId, uint16 taskIndex) clsend airecv;  // Client asks UD to reroll club tasks
+  updateQuestProgress(uint32 clubId, uint32 chainIds[], uint16 progress[]);  // AI tells UD about quest progress updates
+  broadcastClubScavenge(uint32 clubId, uint16 scavengeType, int64 extraArgs[]);  // UD tells AI to send out scavenge update
+  // Club Log Funnies
+  requestClubLogs(uint32 clubId, uint16 page) clsend airecv;  // A client requests club logs.
+  receiveClubLogs(ClubLog logs[]);  // A client receives club logs.
+  // Command requests on dev.
+  requestClubNameStatusChange(uint32, uint8);
+  // Avatar keepup.
+  requestAvatarSync(uint32 avId);  // UD asks the AI to re-sync an avatar.
+  sendClubCoinReport(uint32 clubId, uint32 coins); // UD tells the AIs about earned club coins.
+  UD_queryClub(uint32 avId, string clubDataEvent) clsend airecv;
+  queryClubResp(Club club[], string clubDataEvent);
 };

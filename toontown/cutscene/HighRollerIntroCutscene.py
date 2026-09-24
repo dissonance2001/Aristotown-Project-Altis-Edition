@@ -12,7 +12,7 @@ from direct.gui.DirectFrame import DirectFrame
 from direct.interval.IntervalGlobal import ActorInterval, Func, LerpPosInterval, Parallel, Sequence, SoundInterval, Wait
 from panda3d.core import Filename, NodePath, TransparencyAttrib, Vec3, VirtualFileSystem
 
-from toontown.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle.BattleProps import globalPropPool
 from toontown.cutscene.repository.CutsceneRuntime import buildCutscene
 from toontown.cutscene.ResolvedActorInterval import (
     ResolvedActorInterval, resolveControl)

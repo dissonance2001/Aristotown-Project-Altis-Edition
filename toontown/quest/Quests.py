@@ -4,7 +4,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.battle import SuitBattleGlobals
 from toontown.coghq import CogDisguiseGlobals
 import random
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 import copy, string
 from toontown.hood import ZoneUtil
 from direct.directnotify import DirectNotifyGlobal

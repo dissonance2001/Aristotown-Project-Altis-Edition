@@ -9,6 +9,7 @@ class DNASuitPoint(object):
     SIDE_DOOR_POINT = SIDEDOORPOINT = 2
     COGHQ_IN_POINT = COGHQINPOINT = 3
     COGHQ_OUT_POINT = COGHQOUTPOINT = 4
+    HIDDEN_STREET_POINT = HIDDENSTREETPOINT = 5
 
     def __init__(self, index, pointType, pos, landmarkBuildingIndex=-1):
         self.index = index

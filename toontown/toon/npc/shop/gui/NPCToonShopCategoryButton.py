@@ -20,7 +20,7 @@ from toontown.gui.GUIPositionGlobals import ScreenCorner
 from toontown.toon.gui import GuiBinGlobals
 
 from toontown.gui.GUIGlobals import GUI_TEXCARD_PREFIX, GUI_ICON_MODEL_PATH, BG_CIRCLE_1_COLOR_DEFAULT
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 
 from toontown.toon.npc.shop.NPCToonShopGlobals import NPCShopCategory, ShopCategoryToTitle
 

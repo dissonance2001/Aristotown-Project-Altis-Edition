@@ -1,4 +1,4 @@
-    import random
+import random
 from datetime import datetime
 import time
 
@@ -15,10 +15,10 @@ from toontown.chat.constants.ChatGlobals import CFSpeech, CFTimeout
 from toontown.nametag import Nametag, NametagGroup
 
 
-from prisma.enums import ClubNameStatus
+# from prisma.enums import ClubNameStatus
 from otp.avatar.DistributedAvatar import DistributedAvatar
-from toontown.battle import BattleProps, MovieUtil, SuitBattleGlobals
-from toontown.battle import BattleSounds
+from toontown.clashbattle.battle import BattleProps, MovieUtil, SuitBattleGlobals
+from toontown.clashbattle.battle import BattleSounds
 from toontown.chat.enums.ChatChannel import ChatChannel
 from toontown.chat.enums.ChatContentType import ChatContentType
 from toontown.chat.enums.ChatNpcPreset import ChatNpcPreset
@@ -149,7 +149,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
         if self.npc_toon.nameWordwrap:
             self.nametag.setNameWordwrap(self.npc_toon.nameWordwrap)
 
-        self.setAnimState("Neutral", 1.0)
+        self.setAnimState("neutral", 1.0)
 
     def allowedToTalk(self):
         return True
@@ -184,7 +184,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
             self.curQuestMovie = None
 
     def handleCollisionSphereEnter(self, collEntry):
-        base.cr.playGame.getPlace().request('Quest', self)
+        base.cr.playGame.getPlace().fsm.request('quest', [self])
         self.sendUpdate('avatarEnter', [])
         self.nametag3d.setDepthTest(0)
         self.nametag3d.setBin('fixed', 0)
@@ -223,7 +223,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
         base.localAvatar.lerpCameraFov(base.settings['fieldofview'], 1)
 
         def walk():
-            base.cr.playGame.getPlace().setState('Walk')
+            base.cr.playGame.getPlace().setState('walk')
             self.previousCameraPosHpr = []
 
         Sequence(Wait(time + .05), Func(walk)).start()
@@ -276,7 +276,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
                 if rejectString != '':
                     self.setChatAbsolute(rejectString, CFSpeech | CFTimeout)
                 try:
-                    base.cr.playGame.getPlace().setState('Walk')
+                    base.cr.playGame.getPlace().setState('walk')
                 except AttributeError:
                     self.notify.warning("NPC %s (%s) 'NoneType' object has no attribute 'setState'" % (av.getName(), avId))
             return
@@ -491,7 +491,12 @@ class DistributedNPCClerk(DistributedNPCToonBase):
             return
 
         self.d_setState(CLERK_GREETING)
-        base.cr.playGame.getPlace().request('Purchase')
+        place = base.cr.playGame.getPlace()
+        if place and hasattr(place, 'request'):
+            place.request('Purchase')
+        else:
+            # fallback – either ignore or open the purchase UI another way
+            self.notify.warning('Cannot request Purchase from %s' % type(place))
         camera.wrtReparentTo(render)
         camera.posQuatInterval(1, Vec3(-5, 9, self.getHeight() - 0.5), Vec3(-150, -2, 0), other=self, blendType='easeOut', name=self.uniqueName('lerpCamera')).start()
         taskMgr.doMethodLater(1.0, self.popupPurchaseGUI, self.uniqueName('popupPurchaseGUI'))
@@ -581,7 +586,7 @@ class DistributedNPCGagAndGoClerk(DistributedNPCClerk):
             return
 
         place = base.cr.playGame.getPlace()
-        if place and place.getState() == 'Walk':
+        if place and place.getState() == 'walk':
             base.musicMgr.crossfadeIntoMusic(base.cr.playGame.hood.loader.gagAndGoMusic_preloaded, duration=1, volume=1.0, musicCode=base.cr.playGame.hood.loader.gagAndGoMusic)
 
     def stopMusic(self, collEntry):
@@ -589,11 +594,11 @@ class DistributedNPCGagAndGoClerk(DistributedNPCClerk):
             return
 
         place = base.cr.playGame.getPlace()
-        if place and place.getState() == 'Walk':
+        if place and place.getState() == 'walk':
             base.musicMgr.crossfadeIntoMusic(base.cr.playGame.hood.loader.music_preloaded, duration=1, volume=0.8, musicCode=base.cr.playGame.hood.loader.music)
 
     def initToonState(self):
-        self.setAnimState('Neutral', 1.05, None, None)
+        self.setAnimState('neutral', 1.05, None, None)
         self.dropShadow.hide()
         npcOrigin = self.cr.playGame.hood.loader.geom.find('**/npc_gng_clerk_origin_%s;+s' % self.posIndex)
         if not npcOrigin.isEmpty():
@@ -612,7 +617,7 @@ class DistributedNPCGagAndGoClerk(DistributedNPCClerk):
 
     def handleCollisionSphereEnter(self, collEntry):
         place = base.cr.playGame.getPlace()
-        if place and place.getState() != 'Walk':
+        if place and place.getState() != 'walk':
             return
 
         super().handleCollisionSphereEnter(collEntry)
@@ -632,7 +637,6 @@ class DistributedNPCGagAndGoClerk(DistributedNPCClerk):
         self.freeAvatar()
         self.detectAvatars()
         self.d_setState(state)
-
 
 @NPCToonClass(npcType=NPCToonEnum.CLUB_CREATION)
 class DistributedNPCClubCreation(DistributedNPCToon):
@@ -838,6 +842,7 @@ class DistributedNPCClubShop(DistributedNPCToon):
         return self.clubContainer.localAvIsOwner()
 
 
+
 @NPCToonClass(npcType=NPCToonEnum.BUBBY)
 class DistributedNPCBubby(DistributedEmptyNPC):
     def __init__(self, cr):
@@ -941,7 +946,7 @@ class DistributedNPCElf(DistributedNPCToon):
                 key = l[2]
                 break
 
-        base.cr.playGame.getPlace().request('Quest', self)
+        base.cr.playGame.getPlace().fsm.request('quest', [self])
         self.sendUpdate('avatarEnter', [])
         self.nametag3d.setDepthTest(0)
         self.nametag3d.setBin('fixed', 0)
@@ -1121,7 +1126,7 @@ class DistributedNPCFisherman(DistributedNPCToonBase):
         DistributedNPCToonBase.announceGenerate(self)
 
     def initToonState(self):
-        self.setAnimState('Neutral', 1.05, None, None)
+        self.setAnimState('neutral', 1.05, None, None)
         npcOrigin = self.cr.playGame.hood.loader.geom.find('**/npc_fisherman_origin_%s;+s' % self.posIndex)
         if not npcOrigin.isEmpty():
             self.reparentTo(npcOrigin)
@@ -1260,7 +1265,7 @@ class DistributedNPCFlippyInToonHall(DistributedNPCToon):
         """
         if self.allowedToTalk():
             # Lock down the avatar for quest mode
-            base.cr.playGame.getPlace().request('Quest', self)
+            base.cr.playGame.getPlace().fsm.request('quest', [self])
             # Tell the server
             self.sendUpdate('avatarEnter', [])
             # make sure this NPCs chat balloon is visible above all others for the locekd down avatar
@@ -1380,7 +1385,7 @@ class DistributedNPCHalloweenPass(DistributedNPCToon):
     def runCleanup(self):
         del self.storeGui
         taskMgr.remove('PassClose')
-        base.cr.playGame.getPlace().setState('Walk')
+        base.cr.playGame.getPlace().setState('walk')
         self.sendUpdate('toonInteracted', [self.EXIT_INTERACT_CODE])
 
     # Called from AI, given avId that triggered this interaction, in which context, and which phrase
@@ -1596,7 +1601,7 @@ class DistributedNPCBumpy(DistributedNPCToon):
         Handle all required fields having been filled in.
         """
         DistributedNPCToon.announceGenerate(self)
-        self.request('Neutral')
+        self.request('neutral')
 
     def initPos(self):
         pass # thanks bizzy :pensive:
@@ -1663,7 +1668,7 @@ class DistributedNPCBumpy(DistributedNPCToon):
             Func(self.stashBodyCollisions),     # stash while moving
             self.posInterval(time, toPos),
             Func(self.unstashBodyCollisions),   # unstash when done moving
-            Func(self.request, "Neutral")
+            Func(self.request, "neutral")
         )
         self.movementMovie.start()
 
@@ -1709,7 +1714,7 @@ class DistributedNPCBumpy(DistributedNPCToon):
                     Wait(10)
                 )
             )
-        trapSequence.append(Func(self.request, "Neutral"))
+        trapSequence.append(Func(self.request, "neutral"))
         self.movementMovie = trapSequence
         self.movementMovie.start()
 
@@ -1725,7 +1730,7 @@ class DistributedNPCBumpy(DistributedNPCToon):
             self.posInterval(time, toPos),
             Func(self.unstashBodyCollisions),   # stash when done moving to idle
             Func(self.setHpr, toHpr),
-            Func(self.request, "Neutral")
+            Func(self.request, "neutral")
         )
         self.movementMovie.start()
 
@@ -2105,7 +2110,7 @@ class DistributedNPCSecretary(DistributedNPCToon):
         return 10.0
 
     def initToonState(self):
-        self.setAnimState('Neutral', 0.9, None, None)
+        self.setAnimState('neutral', 0.9, None, None)
         npcOrigin = base.cr.playGame.hood.loader.geom
         if not npcOrigin.isEmpty():
             self.reparentTo(npcOrigin)
@@ -2169,7 +2174,7 @@ class DistributedNPCSecretary(DistributedNPCToon):
         taskMgr.doMethodLater(0.65, self.attemptQuestWarning, 'attemptQuestWarning', extraArgs=[dialog], priority=0)
 
     def attemptQuestWarning(self, dialog):
-        if base.cr.playGame.getPlace() is not None and base.cr.playGame.getPlace().getState() == 'Walk':
+        if base.cr.playGame.getPlace() is not None and base.cr.playGame.getPlace().getState() == 'walk':
             self.questWarningBox = TTDialog.TTGlobalDialog(dialog, doneEvent='secretaryQuestAck', style=TTDialog.Acknowledge)
             self.questWarningBox.show()
             base.cr.playGame.getPlace().setState('Stopped')
@@ -2180,7 +2185,7 @@ class DistributedNPCSecretary(DistributedNPCToon):
     def __handleSecretaryQuestAck(self):
         self.questWarningBox.cleanup()
         self.questWarningBox = None
-        base.cr.playGame.getPlace().setState('Walk')
+        base.cr.playGame.getPlace().setState('walk')
 
     def createQuestIndicator(self):
         tipsGui = loader.loadModel('phase_3/models/gui/ttcc_tips')
@@ -2272,7 +2277,7 @@ class DistributedNPCSnowman(DistributedNPCToon):
             self.getPart('legs').hide()
             self.setH(-215)
             self.snowman = SnowmanSteve(self.getGeomNode())
-            self.snowman.snowmanFSM.request('Neutral')
+            self.snowman.snowmanFSM.request('neutral')
 
     def snowballScale(self, scaleAmt):
         if self.snowman:
@@ -2697,7 +2702,7 @@ class DistributedNPCTrashCat(DistributedNPCToon):
             return
 
         place = base.cr.playGame.getPlace()
-        if place and place.getState() == 'Walk':
+        if place and place.getState() == 'walk':
             base.musicMgr.crossfadeIntoMusic(self.trashMusic, duration=0.5, volume=1.0, musicCode=self.musicPath)
 
     def stopMusic(self, collEntry):
@@ -2705,7 +2710,7 @@ class DistributedNPCTrashCat(DistributedNPCToon):
             return
 
         place = base.cr.playGame.getPlace()
-        if place and place.getState() == 'Walk':
+        if place and place.getState() == 'walk':
             base.musicMgr.crossfadeIntoMusic(self.playgroundMusic, duration=0.5, volume=0.8, musicCode=base.cr.playGame.hood.loader.music)
 
     def initToonState(self):
@@ -2784,7 +2789,7 @@ class DistributedNPCTumbles(DistributedNPCToon):
                 self.hideNPCToon()
             elif self.zoneId == ToontownGlobals.DonaldsDock and (self.TumblesPoseIds[0] not in poseItemSubtypes or self.TumblesPoseIds[1] in poseItemSubtypes):
                 self.hideNPCToon()
-            elif self.zoneId == ToontownGlobals.OldeToontown and (self.TumblesPoseIds[1] not in poseItemSubtypes or self.TumblesPoseIds[2] in poseItemSubtypes):
+            elif self.zoneId == ToontownGlobals.YeOlde and (self.TumblesPoseIds[1] not in poseItemSubtypes or self.TumblesPoseIds[2] in poseItemSubtypes):
                 self.hideNPCToon()
             elif self.zoneId == ToontownGlobals.DaisyGardens and (self.TumblesPoseIds[2] not in poseItemSubtypes or self.TumblesPoseIds[3] in poseItemSubtypes):
                 self.hideNPCToon()
@@ -2817,7 +2822,7 @@ class DistributedNPCTumbles(DistributedNPCToon):
             self.startLookAround()
             self.showNametag2d()
             taskMgr.remove(self.uniqueName('lerpCamera'))
-            base.cr.playGame.getPlace().setState('Walk')
+            base.cr.playGame.getPlace().setState('walk')
             self.sendUpdate('setMovieDone', [])
             self.nametag3d.clearDepthTest()
             self.nametag3d.clearBin()
@@ -2854,7 +2859,7 @@ class DistributedNPCValentines(DistributedNPCToon):
     def initPos(self):
         self.setPos(116, -19.1, 0.82)
         self.setH(90)
-        # self.setNametagWithClub(self.npcType, 3)
+       # self.setNametagWithClub(self.npcType, 3)
 
 
 @NPCToonClass(npcType=NPCToonEnum.WEBSTER)

@@ -13,7 +13,7 @@ from toontown.building.DistributedPizzeriaInteriorAI import DistributedPizzeriaI
 from toontown.building.DistributedMajorPlayerInteriorAI import DistributedMajorPlayerInteriorAI
 from toontown.building.DistributedPaceLobbyInteriorAI import DistributedPaceLobbyInteriorAI
 from toontown.hood import ZoneUtil
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toonbase import ToontownGlobals
 if __debug__:
     import pdb

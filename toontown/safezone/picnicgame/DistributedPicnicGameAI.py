@@ -9,7 +9,7 @@ from direct.showbase.MessengerGlobal import messenger
 from direct.task.TaskManagerGlobal import taskMgr
 
 from otp.ai.AIBaseGlobal import simbase
-from toontown.groups.GroupEnums import GroupType
+#from toontown.groups.GroupEnums import GroupType
 from toontown.quest3.SpecialQuestZones import SpecialQuestZones
 from toontown.quest3.context.PicnicGameContext import PicnicGameContext
 from toontown.safezone.picnicgame.BoardGameGlobals import REWARD_TIME_LIMIT, REWARD_TURN_LIMIT
@@ -227,10 +227,10 @@ class DistributedPicnicGameAI(DistributedNodeAI, FSM):
     """
 
     def enterPrepareGame(self) -> None:
-        if self.players:
-            messenger.send('GroupManager-DisbandToonGroup', [
-                self.players[0], [GroupType.TOONO, GroupType.Chess, GroupType.Checkers]
-            ])
+      #  if self.players:
+       #     messenger.send('GroupManager-DisbandToonGroup', [
+        #        self.players[0], [GroupType.TOONO, GroupType.Chess, GroupType.Checkers]
+         #   ])
 
         taskMgr.doMethodLater(3, self.b_setState, self.uniqueName("requestPlaying"), extraArgs=["Playing"])
 

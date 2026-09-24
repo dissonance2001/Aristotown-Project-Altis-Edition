@@ -2,7 +2,7 @@ from pandac.PandaModules import *
 from toontown.shtiker import ShtikerPage
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer

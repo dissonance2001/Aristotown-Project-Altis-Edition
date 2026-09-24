@@ -183,7 +183,7 @@ class DistributedQuickElevatorEntity(BasicEntities.DistributedNodePathEntity, Di
                 if toon.isDisguised:
                     toon.suit.loop('neutral')
                 else:
-                    toon.setAnimState('Neutral', 1.0)
+                    toon.setAnimState('neutral', 1.0)
                 self.notify.debug('skipping board animation, since this was a transfer.')
                 self.boardedAvIds[avId] = index
                 return
@@ -194,7 +194,7 @@ class DistributedQuickElevatorEntity(BasicEntities.DistributedNodePathEntity, Di
                 animFunc = Func(toon.suit.loop, 'neutral')
             else:
                 toon.setAnimState('Run', 1.0)
-                animFunc = Func(toon.setAnimState, 'Neutral', 1.0)
+                animFunc = Func(toon.setAnimState, 'neutral', 1.0)
             toon.headsUp(self.getElevatorModel(), Point3(*self.getScaledPoint(index)))
             track = Sequence(LerpPosInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.75, Point3(*self.getScaledPoint(index)), other=self.getElevatorModel()), LerpHprInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.25, Point3(180, 0, 0), other=self.getElevatorModel()), animFunc, name=toon.uniqueName('fillElevator'), autoPause=1)
             track.start()
@@ -322,7 +322,7 @@ class DistributedQuickElevatorEntity(BasicEntities.DistributedNodePathEntity, Di
                 animFunc = Func(toon.suit.loop, 'neutral')
             else:
                 toon.setAnimState('Run', 1.0)
-                animFunc = Func(toon.setAnimState, 'Neutral', 1.0)
+                animFunc = Func(toon.setAnimState, 'neutral', 1.0)
             if self.offTrack[index]:
                 if self.offTrack[index].isPlaying():
                     self.offTrack[index].finish()

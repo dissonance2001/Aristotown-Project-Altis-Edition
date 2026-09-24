@@ -8,8 +8,8 @@ from direct.interval.IntervalGlobal import *
 from toontown.chat.constants.ChatGlobals import (CFThought, CFTimeout, CFSpeech, CFQuicktalker)
 from toontown.nametag import NametagGroup
 
-from toontown.avatar.DistributedAvatar import DistributedAvatar
-from toontown.battle import BattleGlobals
+from otp.avatar.DistributedAvatar import DistributedAvatar
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.chat.enums.ChatSpeedChatType import ChatSpeedChatType
 from toontown.chat.enums.ChatZoneModifier import ChatZoneModifier
 from toontown.chat.models.ChatMessage import ChatMessage
@@ -21,8 +21,8 @@ from toontown.inventory.enums.ItemEnums import ItemType, ChatStickersItemType, C
 from toontown.inventory.registry import ItemTypeRegistry
 from toontown.modifiers.ModifierEnums import ModifierType
 from toontown.stickers.sequences.StickerSequenceBase import StickerSequenceBase
-from toontown.battle.BattleAvatar import BattleAvatar
-#from toontown.club.ClubGlobals import ClubItemIndex, ClubMaxNameLength
+from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
+from toontown.club.ClubGlobals import ClubItemIndex, ClubMaxNameLength
 from toontown.distributed.DelayDeletable import DelayDeletable
 from toontown.toon import Experience, GagInventory
 from toontown.toon.OldLaffMeter import OldLaffMeter
@@ -43,8 +43,8 @@ class ClashDistributedToonBase(DistributedAvatar, DistributedSmoothNode, Toon, D
 
         self.animalEffect = 0
 
-       # self.clubName = ''
-       # self.clubColor = 1000
+        self.clubName = ''
+        self.clubColor = 1000
 
         # Sticker Animation
         self.stickerSequence: Optional[StickerSequenceBase] = None
@@ -100,6 +100,28 @@ class ClashDistributedToonBase(DistributedAvatar, DistributedSmoothNode, Toon, D
         # Force the right inheritance chain to be called
         return Toon.getDialogueArray(self, *args)
 
+    def request(self, name, *args):
+        fsm = self.animFSM
+
+        if isinstance(name, str) and name and name[0].isupper():
+            lower = name[0].lower() + name[1:]
+            try:
+                stateNames = [s.getName() for s in fsm.getStates()]
+            except Exception:
+                stateNames = list(getattr(fsm, 'stateDict', {}).keys())
+            if lower in stateNames:
+                name = lower
+
+        if not args:
+            return fsm.request(name)
+
+        # Already a single enterArgList
+        if len(args) == 1 and isinstance(args[0], (list, tuple)):
+            return fsm.request(name, list(args[0]))
+
+        # Fallback: pack everything into enterArgList
+        return fsm.request(name, list(args))
+
     ### setAnimState ###
 
     def b_setAnimState(self, animName, animMultiplier = 1.0, callback = None, extraArgs = []):
@@ -110,8 +132,8 @@ class ClashDistributedToonBase(DistributedAvatar, DistributedSmoothNode, Toon, D
         timestamp = globalClockDelta.getFrameNetworkTime()
         self.sendUpdate('setAnimState', [animName, animMultiplier, timestamp])
 
-    def setAnimState(self, animName, animMultiplier = 1.0, timestamp = None, animType = None, callback = None,
-                     extraArgs = []):
+    def setAnimState(self, animName, animMultiplier=1.0, timestamp=None, animType=None,
+                     callback=None, extraArgs=[]):
         if not animName or animName == 'None':
             return
 
@@ -121,13 +143,11 @@ class ClashDistributedToonBase(DistributedAvatar, DistributedSmoothNode, Toon, D
             ts = globalClockDelta.localElapsedTime(timestamp)
 
         if ConfigVariableBool('check-invalid-anims', True).getValue():
-            if animMultiplier > 1.0 and animName in ['Neutral']:
+            if animMultiplier > 1.0 and animName in ['neutral']:
                 animMultiplier = 1.0
 
-        self.request(
-            animName,
-            animMultiplier, ts, callback, extraArgs
-        )
+        # One list = enterArgList for ClassicFSM
+        self.request(animName, [animMultiplier, ts, callback, extraArgs])
     
     def setName(self, name):
         super().setName(name)
@@ -174,37 +194,37 @@ class ClashDistributedToonBase(DistributedAvatar, DistributedSmoothNode, Toon, D
         self.notify.debug(f"nametag name: {name}")
 
         # Now, set a tag name for underneath.
-      #  name += self.makeClubTag()
+        name += self.makeClubTag()
 
         self.nametag.setDisplayName(name)
 
-   # def makeClubTag(self) -> str:
-    #    if not self.clubName:
-     #       return ''
-     #   clubItem = ClubItemIndex.getItem(self.clubColor)
-     #   if clubItem is None:
-     #       return ''
-     #   clubColor = clubItem.getValue()
-     #   if not clubColor.canUpdate():
-     #       # Simple nametag color.
-     #       return f'\n\1TextShrink\1\1TextOnlyShadow\1\1ClubColor-{self.clubColor}\1{self.clubName}\2\2\2'
-     #   else:
-     #       # Gradient nametag color.
-     #       formattedClubName = ''
-     #       for index, letter in enumerate(self.clubName):
-     #           if letter == ' ':
-     #               # Since it is a space, we don't need a TPM for it.
-     #               formattedClubName += letter
-     #               continue
+    def makeClubTag(self) -> str:
+        if not self.clubName:
+            return ''
+        clubItem = ClubItemIndex.getItem(self.clubColor)
+        if clubItem is None:
+            return ''
+        clubColor = clubItem.getValue()
+        if not clubColor.canUpdate():
+            # Simple nametag color.
+            return f'\n\1TextShrink\1\1TextOnlyShadow\1\1ClubColor-{self.clubColor}\1{self.clubName}\2\2\2'
+        else:
+            # Gradient nametag color.
+            formattedClubName = ''
+            for index, letter in enumerate(self.clubName):
+                if letter == ' ':
+                    # Since it is a space, we don't need a TPM for it.
+                    formattedClubName += letter
+                    continue
 
                 # For each letter, we need to get the color that associates with
                 # a certain part of the TextProperty of this club color.
-     #           letterPercent = (index / (len(self.clubName) - 1))
-     #           colorIndex = round(letterPercent * (ClubMaxNameLength - 1))
-     #           formattedClubName += f'\1ClubColor-{self.clubColor}-{colorIndex}\1{letter}\2'
-#
-#            # Return our formatted club name.
-#            return f'\n\1TextShrink\1\1TextOnlyShadow\1{formattedClubName}\2\2'
+                letterPercent = (index / (len(self.clubName) - 1))
+                colorIndex = round(letterPercent * (ClubMaxNameLength - 1))
+                formattedClubName += f'\1ClubColor-{self.clubColor}-{colorIndex}\1{letter}\2'
+
+            # Return our formatted club name.
+            return f'\n\1TextShrink\1\1TextOnlyShadow\1{formattedClubName}\2\2'
 
     def setAnimalEffect(self, effect):
         self.changeAnimalEffect(effect)

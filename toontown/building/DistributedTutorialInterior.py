@@ -15,7 +15,6 @@ from toontown.char import Char
 from toontown.suit import SuitDNA
 from toontown.suit import Suit
 from toontown.quest import QuestParser
-from toontown.toon import DistributedNPCSpecialQuestGiver
 from toontown.toonbase import TTLocalizer
 from toontown.chat.ChatGlobals import CFSpeech
 
@@ -23,11 +22,7 @@ class DistributedTutorialInterior(DistributedObject.DistributedObject):
 
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
-
-        if not base.cr.doFindAllInstances(DistributedNPCSpecialQuestGiver.DistributedNPCSpecialQuestGiver):
-            self.acceptOnce('doneTutorialSetup', self.setup)
-        else:
-            self.setup()
+        self.setup()
 
     def disable(self):
         self.interior.removeNode()

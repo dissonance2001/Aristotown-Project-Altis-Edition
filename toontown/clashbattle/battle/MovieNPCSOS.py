@@ -10,7 +10,7 @@ from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 
 from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
 from toontown.inventory.registry.IOURegistry import IOURegistry, IOUItemDefinition
-from toontown.toon import NPCToons # Until NPCs are added we will use Reia's NPCToon port file
+from toontown.toon.npc import NPCToons # Until NPCs are added we will use Reia's NPCToon port file
 from toontown.toonbase import TTLocalizer
 from toontown.clashbattle.battle import BattleGlobals
 from toontown.utils.DirectNotifyCategory import getNotify

@@ -213,8 +213,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
             base.localAvatar.questPage.acceptOnscreenHooks()
         if hasattr(base.localAvatar, 'invPage') and base.localAvatar.invPage is not None:
             base.localAvatar.invPage.acceptOnscreenHooks()
-        if hasattr(base.localAvatar, 'questMap') and base.localAvatar.questMap is not None:
-            base.localAvatar.questMap.acceptOnscreenHooks()
+
         self.walkStateData.fsm.request('walking')
         self.enablePeriodTimer()
 
@@ -236,9 +235,6 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         if hasattr(base.localAvatar, 'invPage') and base.localAvatar.invPage is not None:
             base.localAvatar.invPage.ignoreOnscreenHooks()
             base.localAvatar.invPage.hideInventoryOnscreen()
-        if hasattr(base.localAvatar, 'questMap') and base.localAvatar.questMap is not None:
-            base.localAvatar.questMap.hide()
-            base.localAvatar.questMap.ignoreOnscreenHooks()
         return
 
     def handleWalkDone(self, doneStatus):
@@ -543,7 +539,6 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         if not door is None:
             door.readyToExit()
         base.localAvatar.obscureMoveFurnitureButton(1)
-        base.localAvatar.startQuestMap()
 
     def exitDoorIn(self):
         NametagGlobals.setWant2dNametags(True)
@@ -554,7 +549,6 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
 
     def exitDoorOut(self):
         base.localAvatar.obscureMoveFurnitureButton(-1)
-        base.localAvatar.stopQuestMap()
 
     def handleDoorDoneEvent(self, requestStatus):
         self.doneStatus = requestStatus
@@ -580,7 +574,6 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         self.accept('tunnelInMovieDone', self.__tunnelInMovieDone)
         base.localAvatar.reconsiderCheesyEffect()
         base.localAvatar.tunnelIn(tunnelOrigin)
-        base.localAvatar.startQuestMap()
 
     def __tunnelInMovieDone(self):
         self.ignore('tunnelInMovieDone')
@@ -607,7 +600,6 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
          'tunnelName': tunnelName}
         self.accept('tunnelOutMovieDone', self.__tunnelOutMovieDone)
         base.localAvatar.tunnelOut(tunnelOrigin)
-        base.localAvatar.stopQuestMap()
 
     def __tunnelOutMovieDone(self):
         self.ignore('tunnelOutMovieDone')
@@ -623,7 +615,6 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
 
     def exitTeleportOut(self):
         base.localAvatar.laffMeter.stop()
-        base.localAvatar.stopQuestMap()
         base.localAvatar.obscureMoveFurnitureButton(-1)
 
     def hookTeleportInDone(self):
@@ -744,7 +735,6 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         NametagGlobals.setWant2dNametags(False)
         if hasattr(base.localAvatar, 'laffMeter') and base.localAvatar.laffMeter is not None:
             base.localAvatar.laffMeter.start()
-        base.localAvatar.startQuestMap()
         base.localAvatar.reconsiderCheesyEffect()
         base.localAvatar.obscureMoveFurnitureButton(1)
         cogHQDoor = requestStatus.get('cogHQDoor', False)

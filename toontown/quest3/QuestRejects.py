@@ -310,11 +310,6 @@ def getNpcLocationDialog(fromNpcId, toNpcId):
 
 
 def chooseQuestDialogReject(npcId):
-    if base.wantChristmas:
-        if npcId in QuestsRejectDefinedWinter:
-            if not QuestsRejectDefinedWinter[npcId]:
-                return ''
-            return random.choice(QuestsRejectDefinedWinter[npcId])
     if npcId in QuestsRejectDefined:
         if not QuestsRejectDefined[npcId]:
             return ''

@@ -2,17 +2,17 @@ import random
 
 from direct.showbase.PythonUtil import lerp
 
-from toontown.battle import MovieUtil
-from toontown.battle.BattleProps import globalPropPool
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
-from toontown.battle.visuals.VisualEffectEnums import VisualEffectEnum
-from toontown.battle.BattleSounds import globalBattleSoundCache
+from toontown.clashbattle.battle import MovieUtil
+from toontown.clashbattle.battle.BattleProps import globalPropPool
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEnum
+from toontown.clashbattle.battle.BattleSounds import globalBattleSoundCache
 from toontown.cutscene import CutsceneLocalizer
 from toontown.cutscene.editor import CSEditorUtil
 from toontown.cutscene.repository.CutsceneKeyEnum import CutsceneKeyEnum
 from toontown.cutscene.repository.CutsceneLoader import cutsceneSetup, CutsceneLoader
 from toontown.cutscene.repository.CutsceneObjects import *
-from toontown.suit.SuitDNA import getSuitBodyType
+from toontown.clashsuit.suit.SuitDNA import getSuitBodyType
 from toontown.toonbase import TTLocalizer, ToontownGlobals
 
 
@@ -2751,7 +2751,7 @@ def __chainsawRevvedUpSetup(editor: bool, **kwargs) -> CutsceneLoader:
         toons, chainsaw, suits, battle, taunt = CSEditorUtil.getKwargs(
             kwargs, 'toons', 'chainsaw', 'suits', 'battle', 'taunt')
 
-    from toontown.suit.heads.classes.ChainsawAnimatedSuitHead import GlitchState
+    from toontown.clashsuit.suit.heads.classes.ChainsawAnimatedSuitHead import GlitchState
     headAnim = chainsaw.specialHead.actorInterval('revvedup')
 
     def playHeadAnim():
@@ -4521,7 +4521,7 @@ def __highrollerAceInTheHoleSetup(editor: bool, **kwargs) -> CutsceneLoader:
         return masterTrack
 
     def cleanup():
-        from toontown.battle.BattleBase import BattleBase
+        from toontown.clashbattle.battle.BattleBase import BattleBase
         existingSuits = getattr(battle, "activeSuits", [suit for suit in suits if suit])
         existingToons = getattr(battle, "activeToons", [toon for toon in toons if toon])
         suitPointList = BattleBase.suitPoints[len(existingSuits) - 1]

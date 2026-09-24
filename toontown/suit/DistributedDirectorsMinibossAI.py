@@ -15,7 +15,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon import GagInventoryBase
 from toontown.toonbase import TTLocalizer
 from toontown.battle import BattleBase
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.battle import BattleBase
 from toontown.building import SuitBuildingGlobals
 from toontown.suit import SuitDNA

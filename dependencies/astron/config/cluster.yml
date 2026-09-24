@@ -31,6 +31,11 @@ uberdogs:
       id: 4686
       anonymous: false
 
+
+    - class: DistributedClubManager
+      id: 4707
+      anonymous: false
+
     - class: PlayerFriendsManager
       id: 4687
       anonymous: false
@@ -55,9 +60,6 @@ uberdogs:
       id: 4695
       anonymous: false
 
-    - class: DistributedToonClub
-      id: 4720
-      anonymous: false
 
 roles:
     - type: clientagent

@@ -7,6 +7,9 @@ from sys import platform
 import sys
 import tempfile
 import time
+from ..gui.GUIPositionManager import GUIPositionManager
+from .GlobalCache import GlobalCache
+from .GlobalCacheData import GlobalCacheKey
 from .BaseTextProperties import initializeBaseTextProperties, initializeBaseTextGraphics
 from . import ToontownAsyncLoader
 from direct.directnotify import DirectNotifyGlobal
@@ -29,10 +32,10 @@ from toontown.nametag import NametagGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownAccess
 from toontown.toonbase import ToontownBattleGlobals
-from toontown.toonbase import ToontownTransitions
 from toontown.toontowngui import TTDialog
 from toontown.options import GraphicsOptions
-from toontown.audio.AltisAudio import AltisAudio
+from toontown.audio.ToontownAudio import ToontownAudio
+from toontown.audio.ToontownMusic import ToontownMusic
 from direct.interval.IntervalGlobal import Sequence, Func, Wait
 from direct.task.Task import Task
 from direct.gui.OnscreenText import OnscreenText
@@ -107,6 +110,10 @@ class ToonBase(OTPBase.OTPBase):
         self._fpsJustLoaded = False
         self._fpsZoneId = None
         taskMgr.add(self.updateFPS, "UpdateFPS")
+        self.guiPositionManager = GUIPositionManager()
+
+        self.globalCache = GlobalCache()
+        self.globalCache.loadFromKey(GlobalCacheKey.Global)
 
         # Next, separate the resolutions by their ratio:
         self.resDict = {}
@@ -176,8 +183,9 @@ class ToonBase(OTPBase.OTPBase):
         self.win.setSort(sort)
         self.graphicsEngine.renderFrame()
         self.graphicsEngine.renderFrame()
-        
-        self.audioMgr = AltisAudio()
+
+        self.audioMgr = ToontownAudio(self)  # Audio Effects manager
+        self.musicMgr = ToontownMusic()  # Music Manager
         
         self.disableShowbaseMouse()
         self.addCullBins()
@@ -381,8 +389,6 @@ class ToonBase(OTPBase.OTPBase):
         initializeBaseTextProperties()
         initializeBaseTextGraphics()
 
-        del self.transitions
-        self.transitions = ToontownTransitions.ToontownTransitions(self.loader)
         
         self.wantCustomControls = settings.get('want-Custom-Controls', False)
 
@@ -704,7 +710,7 @@ class ToonBase(OTPBase.OTPBase):
         self.marginManager = MarginManager()
         self.margins = self.aspect2d.attachNewNode(
             self.marginManager, DirectGuiGlobals.MIDGROUND_SORT_INDEX + 1)
-        
+
         self.leftCells = [
             self.marginManager.addCell(0.1, -0.6, self.a2dTopLeft, 1),
             self.marginManager.addCell(0.1, -1.0, self.a2dTopLeft, 2),
@@ -923,7 +929,6 @@ class ToonBase(OTPBase.OTPBase):
         if avatar:
             invPage = getattr(avatar, 'invPage', None)
             questPage = getattr(avatar, 'questPage', None)
-            questMap = getattr(avatar, 'questMap', None)
             orbitalCamera = getattr(avatar, 'orbitalCamera', None)
             if invPage:
                 for eventName in (oldInventoryOn, oldInventoryOff):
@@ -933,10 +938,6 @@ class ToonBase(OTPBase.OTPBase):
                 for eventName in (oldQuestsOn, oldQuestsOff):
                     if eventName:
                         questPage.ignore(eventName)
-            if questMap:
-                for eventName in (oldMap, oldMapOn, oldMapOff):
-                    if eventName:
-                        questMap.ignore(eventName)
             if orbitalCamera and oldCamera:
                 orbitalCamera.ignore(oldCamera)
 
@@ -967,11 +968,6 @@ class ToonBase(OTPBase.OTPBase):
             if questPage:
                 try:
                     questPage.acceptOnscreenHooks()
-                except:
-                    pass
-            if questMap:
-                try:
-                    questMap.acceptOnscreenHooks()
                 except:
                     pass
             if orbitalCamera:

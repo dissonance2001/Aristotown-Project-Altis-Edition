@@ -19,11 +19,11 @@ from toontown.clashbattle.battle.distributed import DistributedBattlePaintingAI
 from toontown.clashbattle.battle.distributed import DistributedBattleVirtualAI
 from toontown.clashbattle.battle import SuitBattleGlobals
 from toontown.building import ClashSuitBuildingGlobals
-from toontown.coghq.lawbothq import DistributedLawbotBossGavelAI
-from toontown.coghq.lawbothq import DistributedLawbotBossTrapAI
-from toontown.coghq.lawbothq import DistributedLawbotBossTreasureAI
-from toontown.coghq.lawbothq import DistributedLawbotCannonAI
-from toontown.groups.GroupEnums import GroupType, Options
+from toontown.coghq import DistributedLawbotBossGavelAI
+from toontown.coghq import DistributedLawbotBossTrapAI
+from toontown.coghq import DistributedLawbotBossTreasureAI
+from toontown.coghq import DistributedLawbotCannonAI
+#from toontown.groups.GroupEnums import GroupType, Options
 from toontown.instances import DistributedCutsceneSkipButtonAI
 from toontown.quest3.context.CogBossContext import LawbotBossContext
 from toontown.safezone.ChairConstants import ChairTypeEnum, MusicTypeEnum
@@ -38,9 +38,8 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toon.gui.ToonTipGlobals import TTE
 
 
-@DirectNotifyCategory()
 class ClashLawbotBossAI(ClashBossCogAI.ClashBossCogAI, FSM.FSM):
-    groupType = GroupType.CLO
+   # groupType = GroupType.CLO
     WANT_TOONO = False
     ChairPositions = {
         (Vec3(-12.2595, 238.828, -66.576), Vec3(90, 0, 0)),
@@ -1549,13 +1548,13 @@ class ClashLawbotBossAI(ClashBossCogAI.ClashBossCogAI, FSM.FSM):
         if lawyerLevel <= 3:
             styleList = [ToontownGlobals.ToontownCentral,
                          ToontownGlobals.DonaldsDock,
-                         ToontownGlobals.OldeToontown,
+                         ToontownGlobals.YeOlde,
                          ToontownGlobals.GolfZone,
                          ToontownGlobals.GoofySpeedway,
                          ToontownGlobals.DaisyGardens]
         elif lawyerLevel <= 5:
             styleList = [ToontownGlobals.DonaldsDock,
-                         ToontownGlobals.OldeToontown,
+                         ToontownGlobals.YeOlde,
                          ToontownGlobals.GolfZone,
                          ToontownGlobals.GoofySpeedway,
                          ToontownGlobals.DaisyGardens,

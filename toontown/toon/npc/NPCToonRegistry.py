@@ -13,6 +13,7 @@ from toontown.toon import ToonDNA
 #from toontown.toon.npc import NPCToonLocalizer (usless import?)
 from toontown.toon.npc.NPCToonConstants import NPCToonEnum, NPCToonID
 from toontown.toonbase import TTLocalizer
+from toontown.toonbase import RealmGlobals
 
 
 class NPCToon:
@@ -54,11 +55,12 @@ class NPCToon:
     def __str__(self) -> str:
         return f"NPCToon - {self.name} (Zone: {self.zoneId})"
 
+
+
     def getToonDNA(self) -> ToonDNA.ToonDNA:
         dna = ToonDNA.ToonDNA()
         dna.newToonFromProperties(self.head, self.torso, self.legs, 'f', self.armColor, self.gloveColor,
-                                  self.legColor, self.headColor, 0, 0, 0, 0, 0, 0, self.earColor, self.eyeColor,
-                                  self.eyelashes)
+                                  self.legColor, self.headColor, 0, 0, 0, 0, 0, 0)
         return dna
 
     def createNPC(self, npc, pos_index):
@@ -68,6 +70,7 @@ class NPCToon:
         npc.setMaxHp(15)
         npc.setPositionIndex(pos_index)
         npc.setCanSpawn(self.canSpawn())
+        npc.npcType = self.tag or ''
         npc.generateWithRequired(self.zoneId)
 
         # Configure inventory items
@@ -83,7 +86,7 @@ class NPCToon:
         if hasattr(npc, 'startAnimState'):
             npc.d_setAnimState(npc.startAnimState, 1.0)
         else:
-            npc.d_setAnimState('Neutral', 1.0)
+            npc.d_setAnimState('neutral', 1.0)
         return npc
 
     def createNPCLocal(self, toonClass=None, extraArgs=None, extraCallables=None):
@@ -123,7 +126,7 @@ class NPCToon:
             npc.setToonTag(npc.npcType)
         if self.nameWordwrap:
             npc.nametag.setNameWordwrap(self.nameWordwrap)
-        npc.request('Neutral')
+        npc.request('neutral')
         npc.setNPC(True)
         return npc
 
@@ -8736,23 +8739,6 @@ NPCToonDict: dict[NPCToonID, NPCToon] = {
         gloveColor=0, eyeColor=0, earColor=(0.627, 0.462, 0.254, 1.0),
         equippedItems=(ClothingTopItemType.Reindeer, ClothingBottomItemType.Shorts_Reindeer),
         npcType=NPCToonEnum.RED_NOSE,
-    ),
-    NPCToonID.DoeVinci: NPCToon(
-        zoneId=2513, name='Doe Vinci', head='xls', torso='ms', legs='m', eyelashes=1,
-        armColor=(1, 0.8431, 0, 1), legColor=(1, 0.8431, 0, 1), headColor=(1, 0.8431, 0, 1),
-        gloveColor=0, eyeColor=0, earColor=(1, 0.8431, 0, 1),
-        equippedItems=(
-            ClothingTopItemType.DoesShirt, ClothingBottomItemType.Skirt_Doe, HatItemType.Hat_Beanie_Doe_Yellow, NeckItemType.DoeBandana),
-        npcType=NPCToonEnum.CLUB_CREATION, pos=(-0.0291, -3.376, 1.0, 180),
-    ),
-    NPCToonID.BroVinci: NPCToon(
-        zoneId=2513, name='Bro Vinci', head='xss', torso='ms', legs='m', eyelashes=0,
-        armColor=(0.713726, 0.4, 0.2, 1), legColor=(0.713726, 0.4, 0.2, 1), headColor=(0.713726, 0.4, 0.2, 1),
-        gloveColor=0, eyeColor=0, earColor=(0.713726, 0.4, 0.2, 1),
-        equippedItems=(
-            ClothingTopItemType.BroVinci, ClothingBottomItemType.BroVinci, HatItemType.Hair_Brovinci, GlassesItemType.Glasses_Brovinci,
-            NeckItemType.Necklace_Brovinci),
-        npcType=NPCToonEnum.CLUB_SHOP, pos=(-0.0707, 3.2519, 1.0, -4.9358),
     ),
     NPCToonID.TutorialTom: NPCToon(
         zoneId=-1, name='Tutorial Tom', head='dls', torso='ms', legs='m', eyelashes=0,

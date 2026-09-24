@@ -1,6 +1,6 @@
 from toontown.clashsuit.suit.GoonGlobals import *
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.coghq.entities import DistributedCrushableEntityAI
+from toontown.coghq import DistributedCrushableEntityAI
 from toontown.clashsuit.suit import GoonPathData
 from direct.distributed import ClockDelta
 import random

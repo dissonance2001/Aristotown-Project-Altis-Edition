@@ -1,6 +1,7 @@
 from enum import IntEnum, auto
 from toontown.toonbase.TTLocalizerEnglishProperty import *
 from toontown.catalog import CatalogAccessoryItemGlobals
+from toontown.club.ClubEnums import *
 from toontown.clashbattle.battle.statuses import SEE
 from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from otp.otpbase import OTPLocalizer as OL
@@ -185,13 +186,50 @@ lToontownCentral = 'Toontown Central'
 lFunnyFarm = 'Funny Farms'
 lToonHQ = 'Toon HQ'
 lSellbotHQ = 'Sellbot HQ'
+lLawbot = 'Lawbot HQ'
+lCashbot = 'Cashbot HQ'
+lBossbot = 'Bossbot HQ'
+lBoardbot = 'Boardbot HQ'
 lGoofySpeedway = 'Roadster Raceway'
 lYeOlde = 'Ye Olde Toontown'
 lToonseltown = 'Toonseltown'
 lSkyClan = 'SkyClan'
+lEstate = 'Estate'
+lToonseltown = 'Toonseltown'
 lOutdoorZone = 'Acorn Acres'
 lGolfZone = 'Acorn Acres Minigames'
 lPartyHood = 'Party Grounds'
+lBuccaneerBoulevard = 'Buccaneer Boulevard'
+lSeaweedStreet = 'Seaweed Street'
+lLighthouseLane = 'Lighthouse Lane'
+lAnchorAvenue = 'Anchor Avenue'
+lSillyStreet = 'Silly Street'
+lLoopyLane = 'Loopy Lane'
+lPunchlinePlace = 'Punchline Place'
+lWackyWay = 'Wacky Way'
+lWalrusWay = 'Walrus Way'
+lSleetStreet = 'Sleet Street'
+lPolarPlace = 'Polar Place'
+lArcticAvenue = 'Arctic Avenue'
+lAltoAvenue = 'Alto Avenue'
+lBaritoneBoulevard = 'Baritone Boulevard'
+lTenorTerrace = 'Tenor Terrace'
+lSopranoStreet = 'Soprano Street'
+lPetuniaPlace = 'Petunia Place'
+lDaisyDrive = 'Daisy Drive'
+lTulipTerrace = 'Tulip Terrace'
+lSunflowerStreet = 'Sunflower Street'
+lAlmondAvenue = 'Almond Avenue'
+lPeanutPlace = 'Peanut Place'
+lWalnutWay = 'Walnut Way'
+lLegumeLane = 'Legume Lane'
+lKnightKnoll = 'Knight Knoll'
+lNobleNook = 'Noble Nook'
+lWizardWay = 'Wizard Way'
+lLullabyLane = 'Lullaby Lane'
+lPajamaPlace = 'Pajama Place'
+lTwilightTerrace = 'Twilight Terrace'
+lBoredbot = 'Boredbot HQ'
 GlobalStreetNames = {15000: ('to', 'on', 'Tutorial Terrace'),
  1000: ('to the', 'in the', 'Playground'),
  1100: ('to', 'on', 'Barnacle Boulevard'),
@@ -24602,3 +24640,348 @@ TownBattleLockIn = 'Lock In?'
 TownBattleLockedIn = 'Locked In!'
 TownBattleLock = 'LOCK'
 TownBattleUndo = 'UNDO'
+AvatarSuitPanelExecutive = '.exe'
+AvatarSuitPanelManager = '.mgr'
+AvatarSuitPanelVersion = 'Version '
+AvatarSuitPanelHP = 'HP'
+MeritHolidayStart = 'Welcome to Merit Monday!  All merit rewards have been increased by 25%!'
+MeritHolidayEnd = 'Merit Monday has concluded. See you next week!'
+NPCDefaultTag = 'Shopkeeper'
+ActivityHolidayStart = 'Welcome to Activi-Tuesday!  All golf, racing, trolley, and fishing experience has been increased by 25%!'
+ActivityHolidayEnd = "Activi-Tuesday has come to a close.  See you next week!"
+DialogSpecial = 'ooo'
+DialogIndifferent = '...'
+DialogExclamation = '!'
+DialogQuestion = '?'
+DialogLength1 = 6
+DialogLength2 = 12
+DialogLength3 = 20
+WealthyWednesdayStart = 'Welcome to Wealthy Wednesday! All Jellybean gains have been increased by 25%!'
+WealthyWednesdayEnd = 'Wealthy Wednesday has concluded. See you next week!'
+ClerkGreeting = 'Choose what you want to buy.'
+ClerkTimeout = 'Need more time to think?'
+ClerkGoodbye = 'See you later!'
+ClerkNeedBeans = 'You need to ride the Trolley to get some Jellybeans.'
+QuestPageToonTasks = 'ToonTasks'
+QuestPageDirectory = 'Sidetasks'
+QuestPageDailyTask = 'Daily Tasks'
+QuestPageKudos = 'Kudos Tasks'
+QuestPageDirectoryTitle = 'Sidetask Searcher'
+QuestPageSidequestInfo = 'Click on a sidetask for more information!'
+QuestPageSidequestLocked = 'You haven\'t unlocked this area\'s sidetasks yet!'
+QuestPageSidequestNoEvents = 'There are currently no Special Event sidetasks for you to pick up!'
+QuestPagePlaygrounds = ('', 'Toontown\nCentral', 'Barnacle\nBoatyard', 'Ye Olde\nToontowne', 'Daffodil\nGardens', 'Mezzo\nMelodyland', 'The\nBrrrgh', 'Acorn\nAcres', 'Drowsy\nDreamland', 'Lawbot\nHQ', 'Special\nEvents', 'All\nSidetasks')
+QuestPageChoose = 'Choose'
+ToonTipCategories = ('General', 'Levels', 'Tasks', 'Battle')
+ToonTipButtonText = 'Tip History'
+ChitChatZoneId2Name = {
+    0: 'unknown',
+    1000: lDonaldsDock,
+    1100: lDonaldsDock + ' streets',
+    1200: lDonaldsDock + ' streets',
+    1300: lDonaldsDock + ' streets',
+    1400: lDonaldsDock + ' streets',
+    2000: lToontownCentral,
+    2100: lToontownCentral + ' streets',
+    2200: lToontownCentral + ' streets',
+    2300: lToontownCentral + ' streets',
+    2400: lToontownCentral + ' streets',
+    3000: lTheBrrrgh,
+    3100: lTheBrrrgh + ' streets',
+    3200: lTheBrrrgh + ' streets',
+    3300: lTheBrrrgh + ' streets',
+    3400: lTheBrrrgh + ' streets',
+    4000: lMinniesMelodyland,
+    4100: lMinniesMelodyland + ' streets',
+    4200: lMinniesMelodyland + ' streets',
+    4300: lMinniesMelodyland + ' streets',
+    4400: lMinniesMelodyland + ' streets',
+    5000: lDaisyGardens,
+    5100: lDaisyGardens + ' streets',
+    5200: lDaisyGardens + ' streets',
+    5300: lDaisyGardens + ' streets',
+    5400: lDaisyGardens + ' streets',
+    6000: lOutdoorZone,
+    6100: lOutdoorZone + ' streets',
+    6200: lOutdoorZone + ' streets',
+    6300: lOutdoorZone + ' streets',
+    6400: lOutdoorZone + ' streets',
+    7000: lYeOlde,
+    7100: lYeOlde + ' streets',
+    7200: lYeOlde + ' streets',
+    7300: lYeOlde + ' streets',
+    8000: lGoofySpeedway,
+    9000: lDonaldsDreamland,
+    9100: lDonaldsDreamland + ' streets',
+    9200: lDonaldsDreamland + ' streets',
+    9300: lDonaldsDreamland + ' streets',
+    10000: lSellbotHQ,
+    10100: lSellbotHQ + ' extras',
+    10200: lSellbotHQ + ' extras',
+    10500: lSellbotHQ + ' extras',
+    11000: lCashbot,
+    11100: lCashbot + ' extras',
+    11500: lCashbot + ' extras',
+    11600: lCashbot + ' extras',
+    11700: lCashbot + ' extras',
+    12000: lLawbot,
+    12100: lLawbot + ' extras',
+    12200: lLawbot + ' extras',
+    12300: lLawbot + ' extras',
+    12400: lLawbot + ' extras',
+    12500: lLawbot + ' extras',
+    12600: lLawbot + ' extras',
+    13000: lBossbot,
+    13100: lBossbot + ' extras',
+    13200: lBossbot + ' extras',
+    13500: lBossbot + ' extras',
+    13600: lBossbot + ' extras',
+    13700: lBossbot + ' extras',
+    14000: lBoardbot,
+    16000: lEstate,
+    17000: lGolfZone,
+    18000: lToonseltown,
+}
+
+RichPresenceZone2Id = {
+    0: ('Waiting', 'Main Menu'),
+    1000: ('dd', lDonaldsDock),
+    1100: ('dd', lBuccaneerBoulevard),
+    1200: ('dd', lSeaweedStreet),
+    1300: ('dd', lLighthouseLane),
+    1400: ('dd', lAnchorAvenue),
+    2000: ('ttc', lToontownCentral),
+    2100: ('ttc', lSillyStreet),
+    2200: ('ttc', lLoopyLane),
+    2300: ('ttc', lPunchlinePlace),
+    2400: ('ttc', lWackyWay),
+    3000: ('tb', lTheBrrrgh),
+    3100: ('tb', lWalrusWay),
+    3200: ('tb', lSleetStreet),
+    3300: ('tb', lPolarPlace),
+    3400: ('tb', lArcticAvenue),
+    4000: ('mml', lMinniesMelodyland),
+    4100: ('mml', lAltoAvenue),
+    4200: ('mml', lBaritoneBoulevard),
+    4300: ('mml', lTenorTerrace),
+    4400: ('mml', lSopranoStreet),
+    5000: ('dg', lDaisyGardens),
+    5100: ('dg', lPetuniaPlace),
+    5200: ('dg', lDaisyDrive),
+    5300: ('dg', lTulipTerrace),
+    5400: ('dg', lSunflowerStreet),
+    6000: ('aa', lOutdoorZone),
+    6100: ('aa', lAlmondAvenue),
+    6200: ('aa', lPeanutPlace),
+    6300: ('aa', lWalnutWay),
+    6400: ('aa', lLegumeLane),
+    7000: ('yott', lYeOlde),
+    7100: ('yott', lKnightKnoll),
+    7200: ('yott', lNobleNook),
+    7300: ('yott', lWizardWay),
+    8000: ('gs', lGoofySpeedway),
+    9000: ('ddl', lDonaldsDreamland),
+    9100: ('ddl', lLullabyLane),
+    9200: ('ddl', lPajamaPlace),
+    9300: ('ddl', lTwilightTerrace),
+    10000: ('sbhq', lSellbotHQ),
+    10100: ('sbhq', 'Sellbot HQ Lobby'),
+    10200: ('sbhq', 'Sellbot HQ Factory Exterior'),
+    10500: ('sbhq', 'Sellbot Factory'),
+    11000: ('cbhq', lCashbot),
+    11100: ('cbhq', 'Cashbot HQ Lobby'),
+    11500: ('cbhq', 'Cashbot Coin Mint'),
+    11600: ('cbhq', 'Cashbot Dollar Mint'),
+    11700: ('cbhq', 'Cashbot Bullion Mint'),
+    12000: ('lbhq', lLawbot),
+    12100: ('lbhq', 'Legal Administration Foyer'),
+    12200: ('lbhq', "Lawfice Lobby"),
+    12300: ('lbhq', 'Legal Administration Lounge'),
+    12500: ('lbhq', 'Lawbot A Office'),
+    12600: ('lbhq', 'Lawbot B Office'),
+    12700: ('lbhq', 'Lawbot C Office'),
+    13000: ('bbhq', lBossbot),
+    13100: ('bbhq', 'Clubhouse Foyer'),
+    13200: ('bbhq', 'The Clubhouse'),
+    13500: ('bbhq', 'Silver Sprocket Course'),
+    13600: ('bbhq', 'Golden Gear Course'),
+    13700: ('bbhq', 'Diamond Dynamo Course'),
+    14000: ('bdhq', lBoredbot),
+    16000: ('estate', lEstate),
+    17000: ('golf', lGolfZone),
+}
+
+KudosBoardUnlocked = 'Kudos Board Unlocked!!'
+
+KudoRewardDescriptions = [
+    '+1 Playground Gag XP',
+    '15% Off Gags, +1 HQ Booster',
+    'Nameplate & Background',
+    'Profile Pose, +6 PG Heal',
+    '30% Off Gags, +1 HQ Booster',
+    '+1 Playground Gag XP',
+    'Nametag Font, +6 PG Heal',
+    '50% Off Gags, +1 HQ Booster',
+    '+1 Max Laff',
+    '+{} Gumballs',
+]
+
+def getKudosRewardFromRank(rank: int, zoneId: int):
+    # Transpose to index.
+    rank = rank - 2
+
+    # Get the string.
+    rewardStr = KudoRewardDescriptions[rank]
+
+    # Format for gumballs.
+    if rewardStr == KudoRewardDescriptions[-1]:
+        from toontown.quest3.kudos import KudosConstants
+        gumballAmount = KudosConstants.getKudosRankupGumballAmount(zoneId)
+        boosterMult = base.localAvatar.applyBoosters(BoosterItemType.Gumballs_Global, 1)
+        boosterStr = '' if boosterMult == 1.0 else f' \1TextSmaller\1\1deepGreen\1{CurrencyBonusPostfix.format(round(boosterMult))}\2\2'
+        rewardStr = rewardStr.format(math.ceil(KudosConstants.getKudosRankupGumballAmount(zoneId) * boosterMult)) + boosterStr
+
+    # Return our string.
+    return rewardStr
+BossBarDamage = 'Damage Dealt: %s'
+BossBarStuns = 'Stuns: %s'
+BossBarHealth = '%s/%s'
+BossBarGolf = 'Golf: %s'
+BossBarCogDestruction = 'Cog Destruction: %s'
+BossBarGoonsStomped = 'Goons Stomped: %s'
+BossCogHurtPhrases = {'s': ['Ouch!', 'Oof!', 'What a steal!', 'Right in the face!', 'Right in the other face!',
+                            'Is that imported blueberry?'],
+                      'm': ["This does not compute!", 'Right in the head! Why?', 'Stop it!', 'Ouch!', 'Oof!'],
+                      'c': ["I'll take a mulligan.", "I'm getting teed off!", 'Ouch!', 'Oof!']}
+BossCogTauntPhrases = {'s': {
+    4: ["We're sweeping the floor with this limited time offer!", "It's a clearance sale! All Toons must go!",
+        'This deal will knock your socks off!'],
+    0: ['Oh dear!', 'What a stunning turn of events!', 'What a stunning deal!'],
+    1: ['Buzz off!', 'Step away from the merchandise!', 'No touching!'],
+    2: ['And away you go!'],
+    3: ['And away you go!'],
+    5: ['Let me put my spin on this.', "You're gonna go nuts and bolts for this offer!",
+        "I'm showering you with praise!"],
+    7: ["Lemme toss this offer to you!", 'Buy one, get the rest free!', "Here's a sale 'geared' towards you!"],
+    6: ['Yikes! Back into the swing of things!', 'Sorry for the delay, now where were we?',
+        'Gonna take a lot more than a few pies to stop this sale!']},
+    'm': {0: ['Crashed by cash... unbelievable.',
+              'I suppose they are going to cash in on this opportunity...',
+              'I did not account for this.'],
+          1: ['According to my calculations, that will not work.',
+              "Don't touch me, I'm in 'mint' condition!", "I'm in my 'safe'-place."],
+          2: ["Step away, before I audit you!"],
+          3: ["Step away, before I audit you!"],
+          28: ['Cha-ching!', 'Budget this!', "This isn't legal tender!"],
+          6: ["Ugh, I'm going to have such a headache later.", "That's gonna hurt in the morning.",
+              'Time to recalculate my strategy.']},
+    'c': {19: ['Get off that table!', 'You ruined my banquet!', "You're grinding my gears, Toon!"],
+          17: ["Caddie, I'll need my driver!", 'Watch my form.', 'Swing!', 'Putter up, Toon.',
+               "Don't be such a 'puttz'."]},
+    'l': {
+        4: ["Enough of this incessant noise!"],
+        10: ["It looks like we could reinforce this committee.", "Let's add some corporate team members.",
+             "Watch out for my new corporate prosecutors!"],
+        21: ["There's a storm of legal trouble coming your way.", "You're stirring up a whirlwind of lawsuits, Toon."],
+        22: ["Consider this a restraining order, {}!", "Consider your proposal denied, {}!",
+             "{}, I sentence you to sadness!", "Order in the office, {}!"],
+        24: ["There's a storm of legal trouble coming your way.", "You're stirring up a whirlwind of lawsuits, Toon."],
+        25: ["There's a storm of legal trouble coming your way.", "You're stirring up a whirlwind of lawsuits, Toon."],
+        27: ["Consider this a restraining order, {}!", "Consider your proposal denied, {}!",
+             "{}, I sentence you to sadness!", "Order in the office, {}!"],
+    }
+}
+
+BossCogNameWithDept = '%(name)s\n%(dept)s'
+BossCogPromoteDoobers = 'You are hereby promoted to full-fledged %s.  Congratulations!'
+BossCogDoobersAway = {'s': 'Go!  And make that sale!'}
+BossCogWelcomeToons = 'Welcome, new Cogs!'
+BossCogPromoteToons = 'You are hereby promoted to full-fledged %s.  Congratu--'
+CagedToonInterruptBoss = 'Hey, Toons! Over here!'
+CagedToonRescueQuery = 'I take it you Toons are here to rescue me?'
+BossCogDiscoverToons = 'Huh?  Toons!  In disguise!'
+BossCogAttackToons = 'Attack!!'
+HardmodeLawbotBossIntro0 = 'Ah, there you are! Just in time too.'
+HardmodeLawbotBossIntro1 = 'Behind these doors is the big boss herself, the C.L.O. Right now, she is holding an important meeting.'
+HardmodeLawbotBossIntro2 = 'But who\'s to say we aren\'t going to crash it?'
+HardmodeLawbotBossIntro3 = 'Right. This time, however, I\'ve learned my lesson! No more running away!'
+HardmodeLawbotBossIntro4 = 'Lauren, you\'ll be scouting ahead. As for you bunch, let\'s get moving.'
+HardmodeLawbotBossIntro5 = 'Don\'t worry, I\'m keenly aware of my surroundings. Like an owl!'
+HardmodeLawbotBossIntro6 = 'There\'s... something behind me, isn\'t there?'
+HardmodeLawbotBossIntro7 = 'Ugh, these things. Looks like we\'ve been caught!'
+HardmodeLawbotBossIntro8 = 'Wait, where are they going?'
+HardmodeLawbotBossIntro9 = 'Quick, everyone! Get them before they alert anyone else of our presence!'
+HardmodeLawbotBossIntro10 = 'Lauren and I will attempt to disable the security!'
+HardmodeLawbotBossPrepareTwo0 = 'Done and done!'
+HardmodeLawbotBossPrepareTwo1 = 'The security system has been dealt with. However, we\'re not out of the woods yet.'
+HardmodeLawbotBossPrepareTwo2 = 'The C.L.O. likely knows we\'re here. Get into formation, we\'re going in!'
+HardmodeLawbotBossPrepareTwo3 = 'Well, speak of the Devil Ray...'
+HardmodeLawbotBossPrepareTwo4 = 'Don\'t back down, Lauren! Let\'s show her what we\'re made of!'
+HardmodeLawbotBossPrepareTwo5 = 'Right!'
+HardmodeLawbotBossPrepareTwo6 = 'You Toons have no decency! Do you realize how much that security system was worth?'
+HardmodeLawbotBossPrepareTwo7 = 'It\'s going to cost a fortune to restore it and I am NOT going to bother asking Chris for a loan.'
+HardmodeLawbotBossPrepareTwo8 = 'Are you bots just going to sit there while these Toons interrupt our meeting, or are you going to do your JOBS?'
+HardmodeLawbotBossPrepareTwo9 = 'Let\'s see if you all are more than just talk.'
+HardmodeLawbotBossPrepareTwo10 = 'Litigation Team, get rid of these Toons! Now!'
+HardmodeLawbotBossPrepareThree0 = 'Ahh, what a competent performance! Beyond competent!'
+HardmodeLawbotBossPrepareThree1 = 'Competent enough to lose against the Toons, that is!'
+HardmodeLawbotBossPrepareThree2 = 'Now I have to request repairs for both my employees and my security system!'
+HardmodeLawbotBossPrepareThree3 = 'I\'ve had it up to here with your antics, Toons.'
+HardmodeLawbotBossPrepareThree4 = 'Disturbing my meetings, raiding my Lawfices, harassing my secretary!'
+HardmodeLawbotBossPrepareThree5 = 'Oh, excellent! Sound Evidence! Lauren, you\'re aware of what we can use it for, right?'
+HardmodeLawbotBossPrepareThree6 = 'From what you told me, you can convert it into Sound Gags, right?'
+HardmodeLawbotBossPrepareThree7 = 'Exactly! Everyone, collect as much evidence as you can by hitting Cogs!'
+HardmodeLawbotBossPrepareThree8 = 'Then, Lauren and I will convert the Sound Evidence you collect into Sound Gags! Good luck!'
+HardmodeLawbotBossPrepareFour0 = 'You have to be joking.'
+HardmodeLawbotBossPrepareFour1 = 'We ARE Toons, after all!'
+HardmodeLawbotBossPrepareFour2 = 'Silence, bear!'
+HardmodeLawbotBossPrepareFour3 = 'Hmph. As a coworker of mine says...'
+HardmodeLawbotBossPrepareFour4 = 'When you need a job done right, you do it yourself.'
+HardmodeLawbotBossPrepareFour5 = 'Unlike him, I\'ve prepared for this situation. I\'ve made new improvements to this room.'
+HardmodeLawbotBossPrepareFour6 = 'In addition, I\'ve been creating new tactics with my Specialists to take you all down.'
+HardmodeLawbotBossPrepareFour7 = 'You can see clearly now why the Chairman hired me. I\'ve learned from my mistakes and improved from them.'
+HardmodeLawbotBossPrepareFour8 = 'That sounds... intimidating.'
+HardmodeLawbotBossPrepareFour9 = 'Don\'t worry, we\'ve got this! We are the Resistance after all!'
+HardmodeLawbotBossPrepareFour10 = 'The plan is the same as our past operations, but keep an eye out for anything new the C.L.O. may throw at us!'
+HardmodeLawbotBossPrepareFour11 = 'Now, let\'s take her down for good!'
+HardmodeLawbotBossVictory0 = "Ugh. I can see why my coworkers struggle again and again to defeat you."
+HardmodeLawbotBossVictory1 = "However, I have news for you, Toons. I am always five steps ahead."
+HardmodeLawbotBossVictory2 = 'Do you truly believe that you\'ve won? That you\'ve defeated me?'
+HardmodeLawbotBossVictory3 = 'Good try, Toons, but these new latches I installed can withstand any amount of weight put on them.'
+HardmodeLawbotBossVictory4 = "They will only open from the press of a single button."
+HardmodeLawbotBossVictory5 = "You mean this button?"
+HardmodeLawbotBossVictory6 = "Typical."
+LawbotBossHowToGetSound = 'Touch the evidence box to get Sound gags.'
+LawbotBossHowToUseSound = 'Press the %s key to use the sound\nat the lawyers or at the C.L.O.!'
+LawbotBossSoundMegaphoneTauntPhrases = ['You stink!', "I'm over here!", "Come and get me you bags of bolts!", "Hey tin-cans, bring it on!"]
+LawbotBossNeedMoreEvidence = 'You need to get more evidence!'
+LawbotBossBumpyAdvice = [
+    "Press the %(primary)s key to use your sound gag.",
+    "The power meter displays your sound's cooldown.",
+    "Stun the C.L.O. by destroying a lawyer nearby her!",
+    "Knock the C.L.O. back while she's stunned until she falls into one of the traps!",
+    "Press the %(secondary)s key to taunt and attract nearby Cogs!",
+    "Make sure to defend the traps! The Executives will attempt to break them.",
+    "If the C.L.O. is knocked back into a broken trap, the trap will not work."
+]
+LawbotBossLaurenAdvice = "Wait, what's this button doing on the ground?"
+LawbotBossLawyerTrapWarning = "An Executive is attempting\nto break one of the traps!"
+WitnessToonName = 'Bumpy Bumblebehr'
+LawyerToonName = 'Lauren Ordier'
+WitnessToonCongratulations1 = "You've done it! Justice was truly served in the end.\x07I can't repay you enough!\x07I've got an idea, though. I saw these in the storage room and figured these would be of help to you.\x07They're called 'Cease and Desists', or C&Ds for short.\x07They temporarily stun any Cog you use them on.\x07However, you must use a quarter of the Cog's level in amount in order to use it, so be careful!"
+WitnessToonCongratulations2 = "\x07Now let's get out of here before the Lawbots find out what happened and get the C.L.O. back in shape!"
+WitnessToonCeaseDesistReward = "\x07You have earned %s Cease and Desists."
+WitnessToonHPBoost = "\x07You've done a lot of work for the Resistance.\x07The Toon Council has decided to give you another Laff point. Congratulations!"
+WitnessToonLastPromotion = "\x07Wow, you've reached level %s on your Cog suit!\x07I'm pretty sure Cogs don't get promoted higher than that.\x07You can begin upgrading your executive Cog suit by fighting the Overclocked C.L.O.!"
+WitnessToonLastRevivePromotion = "\x07Wow, you've reached level %s on your executive Cog suit!\x07I'm pretty sure Cogs don't get promoted higher than that.\x07You can't upgrade your Cog suit anymore, but you can certainly keep working for the Resistance!"
+WitnessToonTeleportAccess = '\x07Well, would you look here!\x07Just like clockwork, the C.L.O. has awarded you, the "employee", GPS coordinates to Lawbot HQ!\x07I\'ll have Toon HQ convert these into teleport access, pronto!'
+WitnessToonMaxed = '\x07I see that you have a level %s Cog suit. Very impressive!\x07On behalf of the Toon Council, thank you for coming back to rescue more Toons!'
+WitnessToonHardmodeExecutiveSuit = "\x07Congratulations on receiving your Executive Lawbot disguise!\x07You can now begin to climb up the Executive Corporate Ladder!"
+ReportPanelClubTitle = 'Report Club'
+ReportPanelClubCategoryBody = 'You are about to report your own Club for inappropriate behavior. Club Reports are handled by the Moderation Team and are taken very seriously. Your report will be anonymous to the rest of your Club. Please choose the reason you are reporting:'
+ReportPanelCategoryToonClubName = 'Toon/Club Name'
+ReportPanelChatClub = "Club Chat"
+ReportToonClubName = 'bad-toon-club-name'
+FriendsListPanelClubMembers = 'ONLINE CLUB\nMEMBERS'
+DepartmentHolidayStart = 'Welcome to Tactical Thursday!  All department experience has been increased by 25%!'
+DepartmentHolidayEnd = "Tactical Thursday has come to a close.  See you next week!"

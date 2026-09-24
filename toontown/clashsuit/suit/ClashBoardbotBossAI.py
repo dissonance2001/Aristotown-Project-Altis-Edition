@@ -8,13 +8,13 @@ from direct.fsm import FSM
 from toontown.toonbase import ToontownGlobals
 from toontown.building import ClashSuitBuildingGlobals
 import random
-from toontown.groups.GroupEnums import GroupType
+#from toontown.groups.GroupEnums import GroupType
 
 
 @DirectNotifyCategory()
 class ClashBoardbotBossAI(ClashBossCogAI.ClashBossCogAI, FSM.FSM):
 
-    groupType = GroupType.COO
+    #groupType = GroupType.COO
     
     limitHitCount = 6
     hitCountDamage = 35

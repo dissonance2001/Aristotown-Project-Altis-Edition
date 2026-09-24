@@ -4,7 +4,7 @@ from toontown.clashsuit.suit.GoonGlobals import *
 from direct.fsm import FSM
 from direct.distributed import ClockDelta
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
-from toontown.coghq.entities import DistributedCrushableEntity
+from toontown.coghq import DistributedCrushableEntity
 from toontown.toonbase import ToontownGlobals
 from toontown.clashsuit.suit import Goon
 from direct.task.Task import Task

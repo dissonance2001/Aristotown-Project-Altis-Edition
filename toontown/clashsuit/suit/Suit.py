@@ -203,27 +203,27 @@ def loadDialog(suit):
 
         # try to load regular cog voice
         if hasUniqueDialogue:  # Search for custom voice files for this cog type first.
-            grunt = loader.loadSfxRaw(f'{filePrefix}_grunt.ogg')
-            murmur = loader.loadSfxRaw(f'{filePrefix}_murmur.ogg')
-            statement = loader.loadSfxRaw(f'{filePrefix}_statement.ogg')
-            question = loader.loadSfxRaw(f'{filePrefix}_question.ogg')
+            grunt = loader.loadSfx(f'{filePrefix}_grunt.ogg')
+            murmur = loader.loadSfx(f'{filePrefix}_murmur.ogg')
+            statement = loader.loadSfx(f'{filePrefix}_statement.ogg')
+            question = loader.loadSfx(f'{filePrefix}_question.ogg')
         else:
-            grunt = loader.loadSfxRaw(f'phase_3.5/audio/dial/COG_VO_grunt{ext}')
-            murmur = loader.loadSfxRaw(f'phase_3.5/audio/dial/COG_VO_murmur{ext}')
-            statement = loader.loadSfxRaw(f'phase_3.5/audio/dial/COG_VO_statement{ext}')
-            question = loader.loadSfxRaw(f'phase_3.5/audio/dial/COG_VO_question_1{ext}')
+            grunt = loader.loadSfx(f'phase_3.5/audio/dial/COG_VO_grunt{ext}')
+            murmur = loader.loadSfx(f'phase_3.5/audio/dial/COG_VO_murmur{ext}')
+            statement = loader.loadSfx(f'phase_3.5/audio/dial/COG_VO_statement{ext}')
+            question = loader.loadSfx(f'phase_3.5/audio/dial/COG_VO_question_1{ext}')
 
         # try to load skelecog cog voice
         if hasUniqueSkelDialogue:  # Search for skelecog voices if possible
-            skelGrunt = loader.loadSfxRaw(f'{filePrefix}_grunt_skel.ogg')
-            skelMurmur = loader.loadSfxRaw(f'{filePrefix}_murmur_skel.ogg')
-            skelStatement = loader.loadSfxRaw(f'{filePrefix}_statement_skel.ogg')
-            skelQuestion = loader.loadSfxRaw(f'{filePrefix}_question_skel.ogg')
+            skelGrunt = loader.loadSfx(f'{filePrefix}_grunt_skel.ogg')
+            skelMurmur = loader.loadSfx(f'{filePrefix}_murmur_skel.ogg')
+            skelStatement = loader.loadSfx(f'{filePrefix}_statement_skel.ogg')
+            skelQuestion = loader.loadSfx(f'{filePrefix}_question_skel.ogg')
         else:
-            skelGrunt = loader.loadSfxRaw(f'phase_5/audio/dial/COG_VO_grunt_skel{ext}')
-            skelMurmur = loader.loadSfxRaw(f'phase_5/audio/dial/COG_VO_murmur_skel{ext}')
-            skelStatement = loader.loadSfxRaw(f'phase_5/audio/dial/COG_VO_statement_skel{ext}')
-            skelQuestion = loader.loadSfxRaw(f'phase_5/audio/dial/COG_VO_question_skel{ext}')
+            skelGrunt = loader.loadSfx(f'phase_5/audio/dial/COG_VO_grunt_skel{ext}')
+            skelMurmur = loader.loadSfx(f'phase_5/audio/dial/COG_VO_murmur_skel{ext}')
+            skelStatement = loader.loadSfx(f'phase_5/audio/dial/COG_VO_statement_skel{ext}')
+            skelQuestion = loader.loadSfx(f'phase_5/audio/dial/COG_VO_question_skel{ext}')
 
         # try to load death sound
         if hasUniqueDeath:
@@ -308,10 +308,7 @@ class Suit(Avatar.Avatar):
 
         Avatar.Avatar.__init__(self)
         self.setFont(ToontownGlobals.getSuitFont())
-        self.nametag.setSpeechFont(ToontownGlobals.getSuitFont())
-        self.setPlayerType(NametagGroup.CCSuit)
-        for tag in self.nametag.nametags:
-            tag.setChatWordwrap(10.0)
+        self.setPlayerType(NametagGlobals.CCSuit)
         self.setPickable(1)
         self.leftHand = None
         self.rightHand = None
@@ -328,7 +325,6 @@ class Suit(Avatar.Avatar):
         self.fired = False  # Used to track if the suit is unemployed via MovieFire or other battle movie
         self.headless = False
         self.crushed = False
-        self.nametag.setNameWordwrap(8.0)
         self.isLured = False
         self.isSoaked = False
         self.isUntouchable = False
@@ -409,6 +405,10 @@ class Suit(Avatar.Avatar):
         self.initializeDropShadow()
         self.initializeNametag3d()
         self.setShaderAuto()
+        nameInfo = self.createNameInfo()  # already exists in Suit.py
+        self.setName(nameInfo)
+        self.setDisplayName(nameInfo)
+        assert self.style.dept in ('g', 'c', 'l', 'm', 's'), f"Bad dept: {self.style.dept}"
 
     def generateSuit(self):
         """
@@ -457,14 +457,12 @@ class Suit(Avatar.Avatar):
 
             self.setHeight(SuitGlobals.suitProperties[dna.name][SuitGlobals.HEIGHT_INDEX])
 
-        self.setName(SuitBattleGlobals.SuitAttributes[dna.name]['name'])
+        baseName = SuitBattleGlobals.SuitAttributes[dna.name]['name']
+        self._name = baseName
+        self.setName(baseName)
         self.getGeomNode().setScale(self.scale)
         self.generateCorporateMedallion()
 
-    def initializeNametag3d(self):
-        super().initializeNametag3d()
-        # Set nametag wordwrap based on the specific suit
-        self.nametag.setNameWordwrap(SuitNameWordwraps.get(self.style.name, 8.0))
 
     def generateBody(self):
         """
@@ -830,11 +828,11 @@ class Suit(Avatar.Avatar):
                 type = 'statement'
         return type
 
-    def setChatAbsolute(self, chatString, chatFlags, dialogue=None, interrupt=1, wantBalloonAnim=True, wantHeadAnim=True, wantSound=True):
-        Avatar.Avatar.setChatAbsolute(self, chatString, chatFlags, dialogue, interrupt, wantBalloonAnim, wantSound=wantSound)
+    def setChatAbsolute(self, chatString, chatFlags, dialogue=None, interrupt=1, wantHeadAnim=True, wantSound=True):
+        Avatar.Avatar.setChatAbsolute(self, chatString, chatFlags, dialogue, interrupt, wantSound=wantSound)
         senderId = 0 if not hasattr(self, 'doId') else self.doId
-        if base.cr:
-            base.cr.chatManager.receiveChatMessage(ChatChannel.NPC, ChatNpcPreset.Cog, ChatContentType.Text, chatString, senderId, self.getName())
+      #  if base.cr:
+       #     base.cr.chatManager.receiveChatMessage(ChatChannel.NPC, ChatNpcPreset.Cog, ChatContentType.Text, chatString, senderId, self.getName())
 
         if self.specialHead and wantHeadAnim:
             type = self.getDialogTypeName(chatString)

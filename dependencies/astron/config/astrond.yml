@@ -47,16 +47,16 @@ uberdogs:
       id: 4683
       anonymous: false
 
+    - class: DistributedClubManager
+      id: 4707
+      anonymous: false
+
     - class: DistributedMailManager
       id: 4690
       anonymous: false
 
     - class: TTCodeRedemptionMgr
       id: 4695
-      anonymous: false
-
-    - class: DistributedToonClub
-      id: 4720
       anonymous: false
 
 roles:

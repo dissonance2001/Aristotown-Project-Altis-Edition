@@ -33,7 +33,6 @@ from toontown.chat.WhisperPopup import *
 from toontown.estate import GardenGlobals
 from toontown.nametag.NametagGlobals import *
 from toontown.parties import PartyGlobals
-from toontown.quest import QuestMap
 from toontown.quest import QuestParser
 from toontown.quest import Quests
 from toontown.shtiker import AchievementsPage
@@ -146,6 +145,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.__piePowerMeterSequence = None
         self.__pieButtonType = None
         self.__pieButtonCount = None
+        self.uniteTimerActive = False
+        self.unitesDisabled = {'realtime': False, 'battle': False}
         self.tossPieStart = None
         self.__presentingPie = 0
         self.__pieSequence = 0
@@ -198,7 +199,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.acceptingNonFriendWhispers = True
         self.physControls.event.addAgainPattern('again%in')
         self.oldPos = None
-        self.questMap = None
         self.streamerMode = None
         self.chatLog = None
         self.prevToonIdx = 0
@@ -555,8 +555,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         if self.touchControls:
             self.touchControls.destroy()
             del self.touchControls
-        self.questMap.destroy()
-        self.questMap = None
         if hasattr(self, 'purchaseButton'):
             self.purchaseButton.destroy()
             del self.purchaseButton
@@ -726,9 +724,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.touchControls.start()
         else:
             self.touchControls = None
-        
-        self.questMap = QuestMap.QuestMap(self)
-        self.questMap.stop()
+
         if not base.cr.isPaid():
             guiButton = loader.loadModel('phase_3/models/gui/quit_button')
             self.purchaseButton = DirectButton(parent=aspect2d, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=0.9, text=TTLocalizer.OptionsPagePurchase, text_scale=0.05, text_pos=(0, -0.01), textMayChange=0, pos=(0.885, 0, -0.94), sortOrder=100, command=self.__handlePurchase)
@@ -894,6 +890,11 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 return 1
 
         return 0
+
+    def stopSprintFovSeq(self) -> None:
+        if hasattr(self, "sprintFovSeq"):
+            self.sprintFovSeq.pause()
+            del self.sprintFovSeq
 
     def startChat(self):
         if not self.tutorialAck:
@@ -2448,13 +2449,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     def doTeleportResponse(self, fromAvatar, toAvatar, avId, available, shardId, hoodId, zoneId, sendToId):
         self.d_teleportResponse(avId, available, shardId, hoodId, zoneId, sendToId)
 
-    def startQuestMap(self):
-        if self.questMap:
-            self.questMap.start()
-
-    def stopQuestMap(self):
-        if self.questMap:
-            self.questMap.stop()
 
     def setAchievements(self, achievements):
         if self.canEarnAchievements:

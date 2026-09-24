@@ -1,44 +1,37 @@
-from otp.ai.AIBaseGlobal import *
-from pandac.PandaModules import *
-from toontown.toon import DistributedToonAI
-from direct.fsm import ClassicFSM
-from direct.fsm import State
-from direct.distributed import ClockDelta
-from toontown.toonbase import ToontownGlobals
-from toontown.toon import NPCToons
-from direct.task import Task
-from toontown.quest import Quests
+from toontown.toon.ClashDistributedToonBaseAI  import ClashDistributedToonBaseAI
+from typing import TYPE_CHECKING
 
-class DistributedNPCToonBaseAI(DistributedToonAI.DistributedToonAI):
+if TYPE_CHECKING:
+    from toontown.ai.ToontownAIRepository import ToontownAIRepository
 
-    def __init__(self, air, npcId, questCallback = None):
-        DistributedToonAI.DistributedToonAI.__init__(self, air)
-        self.air = air
+
+class DistributedNPCToonBaseAI(ClashDistributedToonBaseAI):
+
+    def __init__(self, air, npcId, questCallback=None, canSpawn=True):
+        super().__init__(air)
+        self.air = air  # type: ToontownAIRepository
         self.npcId = npcId
+        # busy will be replaced with the toon this npc is talking to
         self.busy = 0
         self.questCallback = questCallback
+        # Does this NPC give out quests?
         self.givesQuests = 1
+        self.canSpawn = canSpawn
 
     def delete(self):
         taskMgr.remove(self.uniqueName('clearMovie'))
-        DistributedToonAI.DistributedToonAI.delete(self)
-
-    def _doPlayerEnter(self):
-        pass
-
-    def _doPlayerExit(self):
-        pass
-
-    def _announceArrival(self):
-        pass
-
-    def isPlayerControlled(self):
-        return False
+        ClashDistributedToonBaseAI.delete(self)
 
     def getHq(self):
+        """
+        Override if you should be considered an HQ Toon
+        """
         return 0
 
     def getTailor(self):
+        """
+        Override if you should be considered a Tailor
+        """
         return 0
 
     def getGivesQuests(self):
@@ -53,7 +46,14 @@ class DistributedNPCToonBaseAI(DistributedToonAI.DistributedToonAI):
     def getNpcId(self):
         return self.npcId
 
+    def setNpcTag(self, tag):
+        self.sendUpdate('setTag', [tag])
+
     def freeAvatar(self, avId):
+        # Free this avatar, probably because he requested interaction while
+        # I was busy. This can happen when two avatars request interaction
+        # at the same time. The AI will accept the first, sending a setMovie,
+        # and free the second
         self.sendUpdateToAvatarId(avId, 'freeAvatar', [])
 
     def setPositionIndex(self, posIndex):
@@ -61,3 +61,9 @@ class DistributedNPCToonBaseAI(DistributedToonAI.DistributedToonAI):
 
     def getPositionIndex(self):
         return self.posIndex
+
+    def setCanSpawn(self, canSpawn):
+        self.canSpawn = canSpawn
+
+    def getCanSpawn(self):
+        return self.canSpawn

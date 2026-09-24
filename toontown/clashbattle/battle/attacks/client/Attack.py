@@ -20,7 +20,7 @@ from toontown.clashbattle.battle.visuals.VisualEffectEnums import VisualEffectEn
 from toontown.clashbattle.battle import BattleGlobals
 from toontown.hood import ZoneUtil
 from toontown.clashsuit.suit.ClashSuitBase import ClashSuitBase
-from toontown.toon.DistributedToonBase import DistributedToonBase
+from toontown.toon.ClashDistributedToonBase import ClashDistributedToonBase
 from toontown.toonbase import TTLocalizer
 from toontown.utils.AstronStruct import AstronStruct
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
@@ -142,7 +142,7 @@ class Attack(AstronStruct, DirectObject):
 
     @staticmethod
     def isToon(target: BattleAvatar) -> bool:
-        return isinstance(target, DistributedToonBase)
+        return isinstance(target, ClashDistributedToonBase)
 
     @staticmethod
     def isSuit(target: BattleAvatar) -> bool:

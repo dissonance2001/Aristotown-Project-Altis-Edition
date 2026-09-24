@@ -22,10 +22,10 @@ from toontown.cutscene.AltisCutsceneCompat import (
 )
 from toontown.cutscene.repository.CutsceneRuntime import buildCutscene
 from toontown.cutscene.sequences import GeneralSequence, SuitSequence
-from toontown.battle import BattleProps
+from toontown.clashbattle.battle import BattleProps
 from toontown.distributed import DelayDelete
-from toontown.suit import Suit
-from toontown.suit import SuitDNA
+from toontown.clashsuit.suit import Suit
+from toontown.clashsuit.suit import SuitDNA
 
 
 CUTSCENE_PATH = (

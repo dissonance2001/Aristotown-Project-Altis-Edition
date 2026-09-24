@@ -50,7 +50,7 @@ class PicnicBasket(StateData, FSM):
             style = TTDialog.Acknowledge
         )
         self.noTrolleyBox.show()
-        base.localAvatar.b_setAnimState('Neutral', 1)
+        base.localAvatar.b_setAnimState('neutral', 1)
         self.accept('noTrolleyAck', self.__handleNoTrolleyAck)
 
     def exitTrolleyHFA(self):

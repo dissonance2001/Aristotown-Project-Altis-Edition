@@ -35,7 +35,7 @@ class BattlePlace(Place.Place):
         self.ignore('enterBattle')
 
     def enterWaitForBattle(self):
-        base.localAvatar.b_setAnimState('Neutral', 1)
+        base.localAvatar.b_setAnimState('neutral', 1)
 
     def exitWaitForBattle(self):
         pass
@@ -74,7 +74,7 @@ class BattlePlace(Place.Place):
 
         self.enterTownBattle(event)
         # Make sure the toon's anim state gets reset
-        base.localAvatar.b_setAnimState('Neutral', 1)
+        base.localAvatar.b_setAnimState('neutral', 1)
         # A query for a teleport location might come along while we're
         # in battle, which is acceptable.  We should handle it, so
         # friends can teleport to us to help us out.
@@ -112,7 +112,7 @@ class BattlePlace(Place.Place):
 
     def handleFallDownDone(self):
         # Put place back in walk state after squish is done
-        base.cr.playGame.getPlace().setState('Walk')
+        base.cr.playGame.getPlace().setState('walk')
 
     def exitFallDown(self):
         base.cr.gameGui.laffMeter.stop()

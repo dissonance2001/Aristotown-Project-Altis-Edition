@@ -4,7 +4,7 @@ from pandac.PandaModules import *
 from toontown.toonbase.ToontownBattleGlobals import *
 from direct.task.Timer import *
 from direct.directnotify import DirectNotifyGlobal
-from toontown.toon import NPCToons
+from toontown.toon.npc import NPCToons
 from toontown.toon import IOURegistry
 from toontown.toonbase import TTLocalizer
 

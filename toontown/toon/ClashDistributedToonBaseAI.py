@@ -10,7 +10,7 @@ from toontown.clashbattle.battle.BattleAvatar import BattleAvatar
 from toontown.inventory.base.InventoryItem import InventoryItem
 from toontown.inventory.enums.ItemEnums import ItemType
 from toontown.inventory.registry.ItemTypeRegistry import ItemTypeRegistry
-from toontown.battle import BattleGlobals
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.modifiers.ModifiableDOAI import ModifiableDOAI
 from toontown.modifiers.ModifierEnums import HP_MODIFIERS, ModifierType
 from toontown.toon.Experience import Experience

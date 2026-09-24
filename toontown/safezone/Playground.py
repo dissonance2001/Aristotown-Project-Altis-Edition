@@ -11,8 +11,11 @@ from direct.fsm import StateData
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.task import Task
+from toontown.quest3.base import QuestGlobals
 from toontown.toon import DeathForceAcknowledge
 from toontown.toon import HealthForceAcknowledge
+from toontown.toon.npc import NPCToons
+from toontown.toon.gui.ScaledToonHeadFrame import MiniScaledToonHeadFrame
 from toontown.tutorial import TutorialForceAcknowledge
 from toontown.toon import NPCForceAcknowledge
 from toontown.trolley import Trolley
@@ -160,7 +163,12 @@ class Playground(BattlePlace.BattlePlace):
                         self.enterTeleportIn,
                         self.exitTeleportIn, [
                             'walk',
-                            'popup']),
+                            'popup',
+                            'Movie']),
+            State.State('Movie',
+                        self.enterMovie,
+                        self.exitMovie, [
+                            'walk']),
             State.State('popup',
                         self.enterPopup,
                         self.exitPopup, [
@@ -335,6 +343,29 @@ class Playground(BattlePlace.BattlePlace):
         TTDialog.cleanupDialog('globalDialog')
         self.ignoreAll()
         BattlePlace.BattlePlace.unload(self)
+
+    def enterMovie(self, teleportIn=0):
+        base.localAvatar.b_setAnimState('Neutral', 1.0)
+        base.localAvatar.setTeleportAvailable(0)
+        self.ignore('teleportQuery')
+        base.localAvatar.startSleepWatch(self.__handleFallingAsleepMovie)
+        NametagGlobals.setMasterArrowsOn(0)
+        self.fsm.request('walk')
+     #   if QuestGlobals.isInTutorial(base.localAvatar) and self.loader.hood.id == ToontownGlobals.ToontownCentral:
+      #      self.playPlaygroundTut()
+     #   else:
+      #      # Safety net: if we somehow entered Movie without a tutorial to run, bail back to walk
+       #     self.fsm.request('walk')
+
+    def exitMovie(self):
+        base.localAvatar.stopSleepWatch()
+        self.accept('teleportQuery', self.handleTeleportQuery)
+        base.localAvatar.setTeleportAvailable(1)
+        NametagGlobals.setMasterArrowsOn(1)
+
+    def __handleFallingAsleepMovie(self, task):
+        messenger.send('wakeup')
+        return Task.done
 
     def showTreasurePoints(self, points):
         self.hideDebugPointText()
@@ -541,71 +572,40 @@ class Playground(BattlePlace.BattlePlace):
             self.deathAckBox = None
 
     def _placeTeleportInPostZoneComplete(self, requestStatus):
-        imgScale = 0.25
+        # see if someone else is already showing a dialog
         if self.dialog:
             x, y, z, h, p, r = base.cr.hoodMgr.getPlaygroundCenterFromId(self.loader.hood.id)
-        elif base.localAvatar.hp < 1:
+
+        # See if we're sad
+        elif base.localAvatar.getHp() < 1:
             requestStatus['nextState'] = 'popup'
             x, y, z, h, p, r = base.cr.hoodMgr.getPlaygroundCenterFromId(self.loader.hood.id)
             self.accept('deathAck', self.__handleDeathAck, extraArgs=[requestStatus])
             self.deathAckBox = DeathForceAcknowledge.DeathForceAcknowledge(doneEvent='deathAck')
-        elif base.localAvatar.hp > 0 and (Quests.avatarHasTrolleyQuest(base.localAvatar) or Quests.avatarHasFirstCogQuest(base.localAvatar) or Quests.avatarHasFriendQuest(base.localAvatar) or Quests.avatarHasPhoneQuest(base.localAvatar) and Quests.avatarHasCompletedPhoneQuest(base.localAvatar)) and self.loader.hood.id == ToontownGlobals.ToontownCentral:
-            requestStatus['nextState'] = 'popup'
-            imageModel = loader.loadModel('phase_4/models/gui/tfa_images')
-            if base.localAvatar.quests[0][0] == Quests.TROLLEY_QUEST_ID:
-                if not Quests.avatarHasCompletedTrolleyQuest(base.localAvatar):
-                    x, y, z, h, p, r = base.cr.hoodMgr.getDropPoint(base.cr.hoodMgr.ToontownCentralInitialDropPoints)
-                    msg = TTLocalizer.NPCForceAcknowledgeMessage3
-                    imgNodePath = imageModel.find('**/trolley-dialog-image')
-                    imgPos = (0, 0, 0.04)
-                    imgScale = 0.5
-                else:
-                    x, y, z, h, p, r = base.cr.hoodMgr.getDropPoint(base.cr.hoodMgr.ToontownCentralHQDropPoints)
-                    msg = TTLocalizer.NPCForceAcknowledgeMessage4
-                    imgNodePath = imageModel.find('**/hq-dialog-image')
-                    imgPos = (0, 0, -0.02)
-                    imgScale = 0.5
-            elif base.localAvatar.quests[0][0] == Quests.FIRST_COG_QUEST_ID:
-                if not Quests.avatarHasCompletedFirstCogQuest(base.localAvatar):
-                    x, y, z, h, p, r = base.cr.hoodMgr.getDropPoint(base.cr.hoodMgr.ToontownCentralTunnelDropPoints)
-                    msg = TTLocalizer.NPCForceAcknowledgeMessage5
-                    imgNodePath = imageModel.find('**/tunnelSignA')
-                    imgPos = (0, 0, 0.04)
-                    imgScale = 0.5
-                else:
-                    x, y, z, h, p, r = base.cr.hoodMgr.getDropPoint(base.cr.hoodMgr.ToontownCentralHQDropPoints)
-                    msg = TTLocalizer.NPCForceAcknowledgeMessage6
-                    imgNodePath = imageModel.find('**/hq-dialog-image')
-                    imgPos = (0, 0, 0.05)
-                    imgScale = 0.5
-            elif base.localAvatar.quests[0][0] == Quests.FRIEND_QUEST_ID:
-                if not Quests.avatarHasCompletedFriendQuest(base.localAvatar):
-                    x, y, z, h, p, r = base.cr.hoodMgr.getDropPoint(base.cr.hoodMgr.ToontownCentralInitialDropPoints)
-                    msg = TTLocalizer.NPCForceAcknowledgeMessage7
-                    gui = loader.loadModel('phase_3.5/models/gui/friendslist_gui')
-                    imgNodePath = gui.find('**/FriendsBox_Closed')
-                    imgPos = (0, 0, 0.04)
-                    imgScale = 1.0
-                    gui.removeNode()
-                else:
-                    x, y, z, h, p, r = base.cr.hoodMgr.getDropPoint(base.cr.hoodMgr.ToontownCentralHQDropPoints)
-                    msg = TTLocalizer.NPCForceAcknowledgeMessage8
-                    imgNodePath = imageModel.find('**/hq-dialog-image')
-                    imgPos = (0, 0, 0.05)
-                    imgScale = 0.5
-            elif base.localAvatar.quests[0][0] == Quests.PHONE_QUEST_ID:
-                if Quests.avatarHasCompletedPhoneQuest(base.localAvatar):
-                    x, y, z, h, p, r = base.cr.hoodMgr.getDropPoint(base.cr.hoodMgr.ToontownCentralHQDropPoints)
-                    msg = TTLocalizer.NPCForceAcknowledgeMessage9
-                    imgNodePath = imageModel.find('**/hq-dialog-image')
-                    imgPos = (0, 0, 0.05)
-                    imgScale = 0.5
-            self.dialog = TTDialog.TTDialog(text=msg, command=self.__cleanupDialog, style=TTDialog.Acknowledge)
-            imgLabel = DirectLabel.DirectLabel(parent=self.dialog, relief=None, pos=imgPos, scale=TTLocalizer.PimgLabel, image=imgNodePath, image_scale=imgScale)
-            imageModel.removeNode()
+
+            # re-enable unites after getting back from battle if we don't have a timer already
+            if not base.localAvatar.uniteTimerActive:
+                base.localAvatar.unitesDisabled['realtime'] = False
+                messenger.send(TTSCUniteStateChangedEvent)
+
+        # Check to see if the toon has a tier zero quest
+        elif QuestGlobals.isInTutorial(base.localAvatar) and self.loader.hood.id == ToontownGlobals.ToontownCentral:
+            # camera sweep.
+            requestStatus['nextState'] = 'Movie'
+            x, y, z, h, p, r = base.cr.hoodMgr.getDropPoint(base.cr.hoodMgr.ToontownCentralInitialDropPoints)
+
         else:
+            # ...this toon has completed their Flippy quest.
+            # Choose a random location within the safezone to drop you.
+            # We do this even if we plan to be teleporting to a toon,
+            # because the gotoToon option may fail if the toon has moved on.
             requestStatus['nextState'] = 'walk'
             x, y, z, h, p, r = base.cr.hoodMgr.getPlaygroundCenterFromId(self.loader.hood.id)
+
+        # toon may not be parented to hidden at this point, if say the boat or piano on-floor event has detected an
+        # intersection (which seems to occur when Toon who lost a connection in battle re-enters in melodyland).
+        # In that case, it would be parented to the moving platform, and for that case the coords below are wrong,
+        # so before doing a setPos, reparent to hidden.
         base.localAvatar.detachNode()
         base.localAvatar.setPosHpr(render, x, y, z, h, p, r)
         BattlePlace.BattlePlace._placeTeleportInPostZoneComplete(self, requestStatus)
@@ -725,3 +725,77 @@ class Playground(BattlePlace.BattlePlace):
 
     def enterZone(self, zoneId):
         pass
+
+
+    def playPlaygroundTut(self):
+        # func so can be executed mid Seq
+        def getInitPos():
+            self.initPos = base.camera.getPos() + (0, 0, base.localAvatar.getClampedAvatarHeight())
+            self.initHpr = base.camera.getHpr()
+
+        self.loadTutorialHead() # load outside Seq
+        self.initPos = (0,0,0)
+        self.initHpr = (0,0,0)
+
+        track1 = Sequence(
+            Func(base.localAvatar.stopUpdateSmartCamera),
+            Func(base.localAvatar.loop, 'neutral'),
+            Func(base.localAvatar.stopChat),
+            Func(base.localAvatar.expBar.hide),
+            Wait(2),
+            Func(getInitPos),
+            LerpPosInterval(base.camera, duration=2, pos=(0, -22, 2), blendType="easeInOut" ), # zoom out
+            Func(base.camera.wrtReparentTo, render),
+            Func(self.tutorialFrame.show),
+            Func(self.flippyHead.setLocalPageChat, "Say, I heard you graduated training! Con-grad-ulations!\x07Welcome to Toontown Central, let me show you around some of the most important landmarks."),
+            Func(self.acceptOnce, 'doneChatPage', lambda event: track2.start())
+        )
+
+        track2 = Sequence(
+            LerpPosHprInterval(base.camera, duration=3, pos=(-1.4, -5, 21), hpr=(225, 0,0), blendType="easeInOut"),
+            Func(self.flippyHead.setLocalPageChat, "This is a Toon Headquarters, or Toon HQ. Outposts like these are set up all over Toontown!\x07Each one has HQ Officers inside to help Toons. This one happens to be where some of our best Resistance Rangers are stationed, like Lord Lowden Clear!\x07You'll visit the Rangers soon, so let's move on."),
+            Func(self.acceptOnce, 'doneChatPage', lambda event: track3.start())
+        )
+
+        track3 = Sequence(
+            LerpPosHprInterval(base.camera, duration=3, pos=(-57, -20.5, 15), hpr=(180, 0,0), blendType="easeInOut"),
+            Func(self.flippyHead.setLocalPageChat, "Here's Toontown Central's Gag Shop! You can buy Gags inside, but that requires Jellybeans!\x07You can earn Jellybeans through battles, completing quests, fishing, playing table games, and trolley games!\x07Speaking of which..."),
+            Func(self.acceptOnce, 'doneChatPage', lambda event: track4.start())
+        )
+
+        track4 = Sequence(
+            LerpHprInterval(base.camera, duration=2, hpr=(150,0,0), blendType="easeInOut"),
+            Func(self.flippyHead.setLocalPageChat, "The trolley! Hop on with some Toons or by yourself to play some Toontastic minigames while earning Jellybeans!\x07Now, I think those are the most important playground buildings...\x07Oh yes! How could I forget!"),
+            Func(self.acceptOnce, 'doneChatPage', lambda event: track5.start())
+        )
+
+        track5 = Sequence(
+            LerpHprInterval(base.camera, duration=2, hpr=(123,0,0), blendType="easeInOut"),
+            Func(self.flippyHead.setLocalPageChat, "I'm here in Toon Hall! Please, come inside so I can give you a proper Toontown welcome!"),
+            Func(self.acceptOnce, 'doneChatPage', lambda event: (print('track5 doneChatPage fired'), backToPlayer()))
+        )
+
+        # function so Seq isnt determined at start
+        def backToPlayer():
+            track = Sequence(
+                Func(base.camera.wrtReparentTo, base.localAvatar),
+                LerpPosHprInterval(base.camera, duration=2, pos=self.initPos, hpr=self.initHpr, blendType="easeInOut"),
+                Func(self.flippyHead.delete),
+                Func(self.tutorialFrame.destroy),
+                Wait(1),
+                Func(self.fsm.request, 'walk'),
+                Func(base.localAvatar.startUpdateSmartCamera),
+                Func(base.localAvatar.controlManager.enable),
+                Func(base.localAvatar.startChat),
+                Func(base.localAvatar.expBar.show)
+            )
+            track.start()
+
+        track1.start()
+
+    def loadTutorialHead(self):
+        self.flippyHead = NPCToons.createLocalNPC(2001)
+        self.tutorialFrame = MiniScaledToonHeadFrame(self.flippyHead, wantLookAround=False)
+        self.tutorialFrame.reparentTo(base.a2dBottomLeft)
+        self.tutorialFrame.setPos(0.2, 0, 0.3)
+        self.tutorialFrame.hide()

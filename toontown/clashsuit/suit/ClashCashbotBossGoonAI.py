@@ -3,7 +3,7 @@ from direct.task.TaskManagerGlobal import *
 from direct.distributed.ClockDelta import *
 from toontown.clashsuit.suit import GoonGlobals
 from direct.task.Task import Task
-from toontown.coghq.cashbothq import DistributedCashbotBossObjectAI
+from toontown.coghq import DistributedCashbotBossObjectAI
 from direct.showbase import PythonUtil
 from toontown.clashsuit.suit import ClashGoonAI
 from toontown.toonbase import ToontownGlobals

@@ -5,7 +5,7 @@ from collections import OrderedDict
 from panda3d.core import ConfigVariableList
 from toontown.nametag import NametagGroup
 
-from toontown.battle.attacks.base.AttackEnum import AttackEnum
+from toontown.clashbattle.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.hood import ZoneUtil
 from toontown.toon import ToonDNA
 from toontown.toon.npc import NPCToonRegistry
