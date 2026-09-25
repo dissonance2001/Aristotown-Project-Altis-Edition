@@ -136,7 +136,7 @@ def _showSuitHpStringCompat(suit, text, duration=0.85, scale=1.0):
     # Current Clash accepts an optional color argument here; Altis's older
     # DistributedSuitBase.showHpString only accepts text/duration/scale.
     try:
-        suit.showHpString(text, duration, scale)
+        suit.showHpString(text, duration, scale, color=(0.871, 0.827, 1.0, 1.0))
         return
     except:
         pass

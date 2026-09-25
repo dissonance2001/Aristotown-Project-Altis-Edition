@@ -1053,8 +1053,8 @@ def getToonTakeDamageTrack(attack: dict, toon, died, dmg, delay: float, damageAn
     indicatorTrack: Sequence = Sequence(Wait(delay + showDamageExtraTime))
     if dmg > 0:
         indicatorTrack.append(Func(__doDamage, toon, dmg, died, extraText=text))
-    # elif hpTextType is not None:
-    #     indicatorTrack.append(Func(toon.showHpString, text, 0.85, 0.7, color))
+    elif hpTextType is not None:
+        indicatorTrack.append(Func(toon.showHpString, text, 0.85, 0.7, color))
     indicatorTrack.append(Func(toon.checkCogDeath, suit))
     toonTrack.append(Func(toon.loop, 'neutral'))
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack)

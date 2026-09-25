@@ -303,7 +303,7 @@ class DistributedToonseltownMinigame(DistributedObject.DistributedObject):
     def showWarningText(self):
         try:
             try:
-                base.localAvatar.showHpString(TTLocalizer.TsMinigameCogsSpawn, duration=2, color=(1, 0, 0, 1))
+                base.localAvatar.showHpString(TTLocalizer.TsMinigameCogsSpawn, duration=2)
             except TypeError:
                 base.localAvatar.showHpString(TTLocalizer.TsMinigameCogsSpawn, duration=2, scale=0.4)
                 hpText = getattr(base.localAvatar, 'hpText', None)

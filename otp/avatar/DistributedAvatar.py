@@ -608,7 +608,7 @@ class DistributedAvatar(DistributedActor, Avatar, ModifiableDO):
 
 
 
-    def showHpString(self, text, duration = 0.85, scale = 1):
+    def showHpString(self, text, duration: float = 0.85, scale: float = 1.0, color = (1.0, 0.0, 0.0, 1.0)):
         if self.HpTextEnabled and not self.ghostMode:
             if self.hpTextInterval:
                 self.hpTextInterval.finish()
@@ -620,9 +620,7 @@ class DistributedAvatar(DistributedActor, Avatar, ModifiableDO):
             self.HpTextGenerator.setText(text)
             self.HpTextGenerator.clearShadow()
             self.HpTextGenerator.setAlign(TextNode.ACenter)
-            r = a = 1.0
-            g = b = 0.0
-            self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+            self.HpTextGenerator.setTextColor(*color)
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
@@ -680,30 +678,6 @@ class DistributedAvatar(DistributedActor, Avatar, ModifiableDO):
             self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'),Wait(1.5), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
             self.hpTextInterval.start()
 
-
-    def showHpStringMissed(self, text, duration = 0.85, scale = 1):
-        if self.HpTextEnabled and not self.ghostMode:
-            if self.hpTextInterval:
-                self.hpTextInterval.finish()
-                self.hpTextInterval = None
-            if self.hpTextInterval2:
-                self.hpTextInterval2.finish()
-                self.hpTextInterval2 = None
-            self.HpTextGenerator.setFont(OTPGlobals.getSignFont())
-            self.HpTextGenerator.setText(text)
-            self.HpTextGenerator.clearShadow()
-            self.HpTextGenerator.setAlign(TextNode.ACenter)
-            r = a = 1.0
-            g = b = 0.0
-            self.HpTextGenerator.setTextColor(1, 0, 0, 1)
-            self.hpTextNode = self.HpTextGenerator.generate()
-            self.hpText = self.attachNewNode(self.hpTextNode)
-            self.hpText.setScale(scale)
-            self.hpText.setBillboardPointEye()
-            self.hpText.setBin('fixed', 99)
-            self.hpText.setPos(0, 0, self.height / 2)
-            self.hpTextInterval = Sequence(self.hpText.posInterval(1.0, Point3(0, 0, self.height + 1.5), blendType='easeOut'),Wait(1.5), LerpColorScaleInterval(self.hpText, .25, Vec4(0, 0, 0, 0)), Func(self.hideHpText))
-            self.hpTextInterval.start()
 
     def hideHpText(self):
         try:

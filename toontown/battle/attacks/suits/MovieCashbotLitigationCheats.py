@@ -205,7 +205,7 @@ def doOverextendedLeverage(attack):
     suitAnimTrack = Sequence(Parallel(ActorInterval(suit, 'quick-jump', duration=1.3)),
                              ActorInterval(suit, 'slip-forward'), Func(suit.setNeutralAnimationDrop))
     cameraTrack = Wait(5.0)
-    notifyTracks.append(Func(suit.showHpString, "+10% Vulnerable!"))
+    notifyTracks.append(Func(suit.showHpString, "+10% Vulnerable!", color=(0.871, 0.827, 1.0, 1.0)))
     notifyTracks.append(Parallel(soundTrack2, suitTrack, suitAnimTrack, cameraTrack))
     return Sequence(notifyTracks)
 
@@ -462,7 +462,7 @@ def doCompensation(attack):
             Parallel(
                 Parallel(SoundInterval(globalBattleSoundCache.getSound('LB_toonup.ogg'), node=targetSuit), Sequence(ActorInterval(targetSuit, 'effort', startTime=targetSuit.getDuration('effort'), endTime=max(0, targetSuit.getDuration('effort') - 1.0), playRate=-1.0),
                                                            ActorInterval(targetSuit, 'effort', startTime=max(0, targetSuit.getDuration('effort') - 1.0))),
-                                                  Func(targetSuit.showHpString, "+5% Damage!"), Func(targetSuit.setSuitStatusEffect, 'lureResist', modifier=1), 
+                                                  Func(targetSuit.showHpString, "+5% Damage!", color=(0.871, 0.827, 1.0, 1.0)), Func(targetSuit.setSuitStatusEffect, 'lureResist', modifier=1), 
                                                   Func(targetSuit.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier')), Func(targetSuit.setNeutralAnimationDrop),
             )
         )

@@ -713,7 +713,7 @@ def __ScapegoatAbsorb1(suitIndex, suits, hp, battle):
     if len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and not suits[suitIndex].dna.name == 'hroller':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", color=(0.871, 0.827, 1.0, 1.0), openEnded=0))
         value = hp
         updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(hp * 0.425))
         suitTrack.append(showDamage)
@@ -724,7 +724,7 @@ def __ScapegoatAbsorb1(suitIndex, suits, hp, battle):
     elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'nothing':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", color=(0.871, 0.827, 1.0, 1.0), openEnded=0))
         value = hp
         updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(hp * 0.115))
         suitTrack.append(showDamage)
@@ -742,7 +742,7 @@ def __ScapegoatAbsorb2(suitIndex, suits, hp, battle):
         suitTrack = Sequence()
         showDamage = Sequence(
             Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.425), openEnded=0, attackTrack=SQUIRT_TRACK),
-            Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+            Func(suits[suitIndex].showHpString, "ABSORBED!", color=(0.871, 0.827, 1.0, 1.0), openEnded=0))
         value = hp
         updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(hp * 0.425))
         suitTrack.append(showDamage)
@@ -753,7 +753,7 @@ def __ScapegoatAbsorb2(suitIndex, suits, hp, battle):
     elif len(suits) > suitIndex >= 0 and suits[suitIndex].isShielding and suits[suitIndex].dna.name == 'nothing':
         revives = suits[suitIndex].getSkeleRevives()
         suitTrack = Sequence()
-        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", openEnded=0))
+        showDamage = Sequence(Func(suits[suitIndex].showHpTextAbsorb, -int(hp * 0.115), openEnded=0, attackTrack=SQUIRT_TRACK), Func(suits[suitIndex].showHpString, "ABSORBED!", color=(0.871, 0.827, 1.0, 1.0), openEnded=0))
         value = hp
         updateHealthBar = Func(suits[suitIndex].updateHealthBar, int(hp * 0.115))
         suitTrack.append(showDamage)

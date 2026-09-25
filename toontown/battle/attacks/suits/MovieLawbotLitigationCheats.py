@@ -1306,7 +1306,7 @@ def doLegalBindings2(attack):
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
         tubeTracks.append(Func(battle.movie.clearRestoreHips))
-        notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "LEGALLY BOUND!", 10)))
+        notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "LEGALLY BOUND!", 10, color=(0.871, 0.827, 1.0, 1.0))))
         allTubeTracks.append(tubeTracks)
         toonTracks.append(Sequence(Wait(2.4), Func(toon.setToonStatusEffect, 'bound', turns=3), ActorInterval(toon, 'struggle')))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.4, node=suit)
@@ -1366,7 +1366,7 @@ def doLegalBindings(attack):
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
         tubeTracks.append(Func(battle.movie.clearRestoreHips))
-        notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "LEGALLY BOUND!", 10)))
+        notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "LEGALLY BOUND!", 10, color=(0.871, 0.827, 1.0, 1.0))))
         allTubeTracks.append(tubeTracks)
         toonTracks.append(Sequence(Wait(2.4), Func(toon.setToonStatusEffect, 'bound', turns=3), ActorInterval(toon, 'struggle')))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.4, node=suit)
@@ -1710,7 +1710,7 @@ def doCaseInsurancePlanInsurance2(attack):
 
         targetTrack.append(Func(battle.unSueSuit, targetSuit))
 
-        targetTrack.append(Func(targetSuit.showHpString, "+5% Damage!"))
+        targetTrack.append(Func(targetSuit.showHpString, "+5% Damage!", color=(0.871, 0.827, 1.0, 1.0)))
         targetTrack.append(Func(targetSuit.updateHealthBar, 0))
         targetTrack.append(Func(targetSuit.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier'))
 
@@ -1785,11 +1785,11 @@ def doCaseInsurancePlanSkelecogInsurance2(attack):
             if s.dna.name == 'lgator':
                 currentBossHealth = s.currHP
         if currentBossHealth >= 1:
-            suitTrack.append(Func(target.showHpString, "+10% Damage!"))
+            suitTrack.append(Func(target.showHpString, "+10% Damage!", color=(0.871, 0.827, 1.0, 1.0)))
             suitTrack.append(Func(target.updateHealthBar, 0))
             suitTrack.append(Parallel(Func(target.makeDamageUp), Func(target.checkDamageUp, + 10)))
         else:
-            suitTrack.append(Func(target.showHpString, "+5% Damage!"))
+            suitTrack.append(Func(target.showHpString, "+5% Damage!", color=(0.871, 0.827, 1.0, 1.0)))
             suitTrack.append(Func(target.updateHealthBar, 0))
             suitTrack.append(Parallel(Func(target.makeDamageUp), Func(target.checkDamageUp, + 5)))
 

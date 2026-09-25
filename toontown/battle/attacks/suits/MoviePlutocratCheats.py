@@ -169,7 +169,7 @@ def _showHpString(suit, text):
     except:
         pass
     try:
-        suit.showHpString(text, 0.85, 0.7)
+        suit.showHpString(text, 0.85, 0.7, color=(0.871, 0.827, 1.0, 1.0))
     except:
         try:
             suit.showHpTextNew(0, text=text, colorCode=1)
@@ -778,7 +778,7 @@ def doShatter(attack):
                         Wait(2.0),
                         Func(target.hideHpText),
                         Func(target.showHpString,
-                             'BUBBLE BURST!', 0.85, 0.7)),
+                             'BUBBLE BURST!', 0.85, 0.7, color=(0.871, 0.827, 1.0, 1.0))),
                     MovieUtil.createKapowExplosionTrack(
                         battle, explosionPoint=explosionPoint))
             except:
@@ -786,7 +786,7 @@ def doShatter(attack):
                     Wait(2.0),
                     Func(target.hideHpText),
                     Func(target.showHpString,
-                         'BUBBLE BURST!', 0.85, 0.7))
+                         'BUBBLE BURST!', 0.85, 0.7, color=(0.871, 0.827, 1.0, 1.0)))
             hitTrack = Parallel(hitTrack, burstTrack)
         damageTracks.append(hitTrack)
     if source:

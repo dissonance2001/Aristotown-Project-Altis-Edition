@@ -268,7 +268,7 @@ def doBookkeepingDamageUp(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('suit_promotion_sfx.ogg'), node=suit))
     makeImmune = Sequence(Func(suit.clearSuitStatusEffect, 'closedSession'), Func(suit.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'))
-    managerHealTrack = Sequence(Wait(1), Func(suit.showHpString, "+10% Damage!"))
+    managerHealTrack = Sequence(Wait(1), Func(suit.showHpString, "+10% Damage!", color=(0.871, 0.827, 1.0, 1.0)))
     return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doExplodingDocument(attack):
@@ -1403,7 +1403,7 @@ def doHeadRoller(attack, ind):
                                                                                           "Ouch.",
                                                                                           CFSpeech | CFTimeout),
                          Wait(1.0), MovieUtil.createSuitHeadlessDeathTrack(targetSuit, battle))
-    hpTrack = Sequence(Wait(3.25), Func(targetSuit.checkHeadRoller, manager, battle), Func(manager.makeDamageUp), Func(manager.checkDamageUp, + 5), Wait(3.0), Func(manager.showHpString, "+5% Damage!"))
+    hpTrack = Sequence(Wait(3.25), Func(targetSuit.checkHeadRoller, manager, battle), Func(manager.makeDamageUp), Func(manager.checkDamageUp, + 5), Wait(3.0), Func(manager.showHpString, "+5% Damage!", color=(0.871, 0.827, 1.0, 1.0)))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=3.25, node=manager)
     soundTrack = Sequence(SoundInterval(globalBattleSoundCache.getSound('SA_bash.ogg'), node=manager))
     return Parallel(managerTrack, soundTrack2, hpTrack, suitTrack, soundTrack)
@@ -1532,7 +1532,7 @@ def doGhostMentality(attack):
     if targetSuit.isVirtual:
         targetTrack = Sequence(
             Wait(effectDelay),
-            Func(targetSuit.showHpString, "+50% Damage!"),
+            Func(targetSuit.showHpString, "+50% Damage!", color=(0.871, 0.827, 1.0, 1.0)),
             Func(targetSuit.setSuitStatusEffect, 'damageUp', modifier=50, mode='refreshModifier')
         )
     else:
@@ -1558,7 +1558,7 @@ def doAmbassadorPhase2(attack):
     suitTrackAnim.append(Func(theSuit.makeAmbassadorPhase3))
     suitTrackAnim.append(Func(theSuit.setNeutralAnimationDrop))
     suitTrackAnim.append(Sequence(Parallel(Func(theSuit.updateHealthBar, 0), getSuitAnimTrack(attack),
-                                  Func(theSuit.showHpString, "+50% Damage!")),
+                                  Func(theSuit.showHpString, "+50% Damage!", color=(0.871, 0.827, 1.0, 1.0))),
                                   Func(theSuit.setNeutralAnimationDrop)))
     suitTrackAnim.append(Wait(3))
     return Parallel(suitTrackAnim, soundTrack3)
@@ -1865,7 +1865,7 @@ def doAmbassadorDamageUpDesperation(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0, node=suit)
     makeImmune = Func(suit.makeDamageUp)
-    managerHealTrack = Sequence(Wait(2), Func(suit.showHpTextCheat, + 250), Func(suit.showHpString, "1.25x DMG MULTIPLIER!"), Func(suit.setHealthForMe, + 250), Func(suit.updateHealthBar, 0))
+    managerHealTrack = Sequence(Wait(2), Func(suit.showHpTextCheat, + 250), Func(suit.showHpString, "1.25x DMG MULTIPLIER!", color=(0.871, 0.827, 1.0, 1.0)), Func(suit.setHealthForMe, + 250), Func(suit.updateHealthBar, 0))
     return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doAmbassadorDamageUp(attack):
@@ -1879,7 +1879,7 @@ def doAmbassadorDamageUp(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     soundTrack = getSoundTrack('LB_toonup.ogg', delay=2.0)
     makeImmune =  Parallel(Func(theSuit.makeDamageUp), Func(theSuit.checkDamageUp, + (5 * len(destroyedSuits))))
-    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextCheat, + (100 * len(destroyedSuits))), Func(theSuit.showHpString, "+%s" % (5 * len(destroyedSuits)) + "%" + " Damage!"), Func(theSuit.setHealthForMe, + (100 * len(destroyedSuits))), Func(theSuit.updateHealthBar, 0), Wait(3.0))
+    managerHealTrack = Sequence(Wait(2), Func(theSuit.showHpTextCheat, + (100 * len(destroyedSuits))), Func(theSuit.showHpString, "+%s" % (5 * len(destroyedSuits)) + "%" + " Damage!", color=(0.871, 0.827, 1.0, 1.0)), Func(theSuit.setHealthForMe, + (100 * len(destroyedSuits))), Func(theSuit.updateHealthBar, 0), Wait(3.0))
     return Parallel(suitTrack, soundTrack, managerHealTrack, makeImmune)
 
 def doDamageUp1(attack):

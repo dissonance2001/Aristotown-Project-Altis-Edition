@@ -5217,7 +5217,7 @@ def doAggrandize(attack, ind):
     suitTrack = Sequence(getSuitAnimTrack(attack))
     selfDamageTrack = Sequence(Wait(1.0), Parallel(dustCloudHideIval, ActorInterval(targetSuit, 'slip-forward', startTime=2.43),
                                                    Func(targetSuit.makeIntoCTSManager),
-                                                   Func(targetSuit.showHpString, "PROMOTION!"), Func(targetSuit.setMaxHP, 1000), Func(targetSuit.setManager, 1), Func(targetSuit.makeShielding),
+                                                   Func(targetSuit.showHpString, "PROMOTION!", color=(0.871, 0.827, 1.0, 1.0)), Func(targetSuit.setMaxHP, 1000), Func(targetSuit.setManager, 1), Func(targetSuit.makeShielding),
                                                    Func(targetSuit.updateHealthBar, 0)),
                                Func(targetSuit.setNeutralAnimation), Func(battle.unSueSuit, targetSuit))
     soundTrack2 = getSoundTrack('LB_toonup.ogg', delay=1.0)

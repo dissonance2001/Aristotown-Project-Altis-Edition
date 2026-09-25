@@ -1272,7 +1272,7 @@ def createSuitReviveRedd(suit, battle):
                               "EN GARDE!",
                               CFSpeech | CFTimeout))
         suitTrack.append(ActorInterval(suit, 'come-on'))
-        suitTrack.append(Func(suit.showHpString, '+1 ATTACK!'))
+        suitTrack.append(Func(suit.showHpString, '+1 ATTACK!', color=(0.871, 0.827, 1.0, 1.0)))
         suitTrack.append(Func(suit.setSuitStatusEffect, 'extraAttacks', modifier=1, mode='refreshModifier'))
         suitTrack.append(Func(suit.setNeutralAnimation))
         suitTrack.append(Wait(2.0))
@@ -1295,7 +1295,7 @@ def createPromotionTrackPressurizer(suit, battle):
     suitTrack.append(Func(suit.setCog, True))
     suitTrack.append(Func(suit.show))
     suitTrack.append(Wait(3.0))
-    suitTrack.append(Func(suit.showHpString, 'VIRTUALIZED!', 2))
+    suitTrack.append(Func(suit.showHpString, 'VIRTUALIZED!', 2, color=(0.871, 0.827, 1.0, 1.0)))
     deathSound = base.loader.loadSfx('phase_3.5/audio/sfx/ENC_cogfall_apart_%s.ogg' % random.randint(1, 6))
     deathSoundTrack = Sequence(SoundInterval(deathSound, volume=0.32))
     BattleParticles.loadParticles()
@@ -1328,7 +1328,7 @@ def createGhostMentalityTrack(suit, battle):
     suitTrack.append(Func(suit.setVirtual, True, True))
     suitTrack.append(Func(suit.setCog, True))
     suitTrack.append(Func(suit.show))
-    suitTrack.append(Func(suit.showHpString, '+100% Damage', 2))
+    suitTrack.append(Func(suit.showHpString, '+100% Damage', 2, color=(0.871, 0.827, 1.0, 1.0)))
     suitTrack.append(Func(suit.updateHealthBar, 0))
     suitTrack.append(Func(suit.setSuitStatusEffect, 'extraAttacks', modifier=1, mode='refreshModifier'))
     suitTrack.append(Func(suit.setSuitStatusEffect, 'damageUp', modifier=100, mode='refreshModifier'))
@@ -1635,7 +1635,7 @@ def createSuitReviveTrackVirtual(suit, battle):
                               "En garde, Toons! Show me this 'power' you claim to have.",
                               CFSpeech | CFTimeout))
         suitTrack.append(ActorInterval(suit, 'taunt'))
-        suitTrack.append(Func(suit.showHpString, '+1 ATTACK!'))
+        suitTrack.append(Func(suit.showHpString, '+1 ATTACK!', color=(0.871, 0.827, 1.0, 1.0)))
         suitTrack.append(Func(suit.setNeutralAnimation))
         suitTrack.append(Func(suit.makeExtraAttacks, suit.getExtraAttacks() + 1))
         suitTrack.append(Wait(2.0))
@@ -2431,7 +2431,7 @@ def createDesperationTrack(suit):
                                            'DESPERATION!',
                                            2), Func(theSuit.showHpStringLureManager2,
                                            '1.4x Dmg Multiplier'), Func(theSuit.showHpString,
-                                           '+1 Round Lure Resistance'))
+                                           '+1 Round Lure Resistance', color=(0.871, 0.827, 1.0, 1.0)))
     cameraTrack = Sequence(MovieCamera.motionShot(0.0, 10.0, 15.0, -180, -30.0, 0.0, 0, suit), Wait(2.0))
     talkTrack = Sequence(Wait(2.0), Func(theSuit.setChatAbsolute,
                               "Hmmm.",
@@ -3038,8 +3038,8 @@ def startSparksIval(tntProp):
     return Func(sparks.start, tip)
 
 
-def indicateMissed(actor, duration = 1.1, scale = 0.7):
-    actor.showHpStringMissed(TTLocalizer.AttackMissed, duration=duration, scale=scale)
+def indicateMissed(actor, duration: float = 1.1, scale: float = 0.7) -> None:
+    actor.showHpString(TTLocalizer.AttackMissed, duration=duration, scale=scale)
 
 
 def createKapowExplosionTrack(parent, explosionPoint = None, scale = 1.0):

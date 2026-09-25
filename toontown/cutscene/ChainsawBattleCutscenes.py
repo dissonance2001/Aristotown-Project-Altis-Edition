@@ -559,7 +559,7 @@ class ChainsawBattleCutsceneSetup(object):
             for suit in values:
                 if suit:
                     try:
-                        suit.showHpString('CHAIN LINKED!', color=(1, 1, 1, 1))
+                        suit.showHpString('CHAIN LINKED!', color=(1.0, 1.0, 1.0, 1.0))
                     except:
                         try:
                             suit.showHpTextNew(0, text='CHAIN LINKED!', colorCode=1)

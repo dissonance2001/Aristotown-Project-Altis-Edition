@@ -257,7 +257,7 @@ def doFloodTheMarket(attack):
     particleEffect = BattleParticles.createParticleEffect(file='floodTheMarket2')
     waterfallEffect = BattleParticles.createParticleEffect(file='floodTheMarketWaterfall2')
     value = int(attack['target'][0]['hp'] / 2)
-    suitTrack = Parallel(Func(suit.showHpString, "+%s%% Damage!" % int(value)), getSuitAnimTrackAttack(attack))
+    suitTrack = Parallel(Func(suit.showHpString, "+%s%% Damage!" % int(value), color=(0.871, 0.827, 1.0, 1.0)), getSuitAnimTrackAttack(attack))
     suitTrack.append(Parallel(Func(suit.setSuitStatusEffect, 'damageUp', modifier=int(value), mode='refreshModifier')))
     partTrack: Sequence = getPartTrack(particleEffect, 1.0, 3.4, (particleEffect, suit, 0), softStop=-2.0)
     waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.8, 3.4, (waterfallEffect, suit, 0), softStop=-2.0)
@@ -1056,7 +1056,7 @@ def doPromotion(attack, ind):
                 Func(targetSuit.setNeutralAnimation)
             ),
             Func(targetSuit.makeIntoCTSManager),
-            Func(targetSuit.showHpString, "PROMOTION!"),
+            Func(targetSuit.showHpString, "PROMOTION!", color=(0.871, 0.827, 1.0, 1.0)),
             Func(targetSuit.setMaxHP, 1250),
             Func(targetSuit.makeShadow),
             Func(targetSuit.setManager, 1),
@@ -2175,7 +2175,7 @@ def doNoStrikeClause(attack):
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
         tubeTracks.append(Func(battle.movie.clearRestoreHips))
-        notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "NO DEFENSE!", 10)))
+        notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "NO DEFENSE!", 10, color=(0.871, 0.827, 1.0, 1.0))))
         allTubeTracks.append(tubeTracks)
         toonTracks.append(Sequence(Wait(2.4), ActorInterval(toon, 'struggle')))
         toonTracks.append(Parallel(Func(toon.makeNoDodge), Func(toon.addNoDodgeRounds, 3)))
@@ -2737,7 +2737,7 @@ def doContractEnforcementHealing(attack):
             targetTrack = Sequence(
                 Wait(1.0),
                 Parallel(
-                    Func(targetSuit.showHpString, '+5% Defense!'),
+                    Func(targetSuit.showHpString, '+5% Defense!', color=(0.871, 0.827, 1.0, 1.0)),
                     Func(targetSuit.setSuitStatusEffect, 'shielding', modifier=5, mode='refreshModifier')
                 ),
                 Func(targetSuit.setNeutralAnimationDrop)
@@ -2751,7 +2751,7 @@ def doContractEnforcementHealing(attack):
                         ActorInterval(targetSuit, 'effort', startTime=targetSuit.getDuration('effort'), endTime=max(0, targetSuit.getDuration('effort') - 1.0), playRate=-1.0),
                         ActorInterval(targetSuit, 'effort', startTime=max(0, targetSuit.getDuration('effort') - 1.0))
                     ),
-                    Func(targetSuit.showHpString, '+5% Defense!'),
+                    Func(targetSuit.showHpString, '+5% Defense!', color=(0.871, 0.827, 1.0, 1.0)),
                     Func(targetSuit.setSuitStatusEffect, 'shielding', modifier=5, mode='refreshModifier')
                 ),
                 Func(targetSuit.setNeutralAnimationDrop)
@@ -3596,7 +3596,7 @@ def doOvermodulated(attack, ind):
             Func(targetSuit.setDizzy, 0),
             __createSuitResetPosTrackOvermodulated(targetSuit, battle),
             Func(targetSuit.clearSuitStatusEffect, 'lured'),
-            Func(targetSuit.showHpString, "+1 ATTACK!"),
+            Func(targetSuit.showHpString, "+1 ATTACK!", color=(0.871, 0.827, 1.0, 1.0)),
             Func(targetSuit.setSuitStatusEffect, 'extraAttacks', modifier=1, mode='refreshModifier')
         ),
         Func(targetSuit.setNeutralAnimationDrop)

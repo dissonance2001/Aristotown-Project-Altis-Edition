@@ -1423,7 +1423,7 @@ def doWrappedInTheFilm(attack):
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
         tubeTracks.append(Func(battle.movie.clearRestoreHips))
-        notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "WRAPPED!", 10)))
+        notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "WRAPPED!", 10, color=(0.871, 0.827, 1.0, 1.0))))
         allTubeTracks.append(tubeTracks)
         toonTracks.append(Sequence(Wait(2.4), Func(toon.setToonStatusEffect, 'wrapped', turns=3), ActorInterval(toon, 'struggle')))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.4, node=suit)
@@ -2491,7 +2491,7 @@ def doRisingStarsSacrifice(attack):
         Wait(2),
         LerpColorScaleInterval(targetSuit, 2, (1, 1, 1, 1)),
         Wait(1.1),
-        Func(targetSuit.showHpString, '+50% Damage')
+        Func(targetSuit.showHpString, '+50% Damage', color=(0.871, 0.827, 1.0, 1.0))
     )
 
     animTrack = Sequence(

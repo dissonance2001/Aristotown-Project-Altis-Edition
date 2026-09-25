@@ -1180,7 +1180,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.healInterval = Parallel(Func(self.showHpTextNew, 125, text="REWIND!", colorCode=1),
                                              Func(self.setHealthForMe, 125), Func(self.updateHealthBar, 0)).start()
         else:
-            self.healInterval = Sequence(Parallel(Func(self.showHpString, "+10% Damage!"), Func(self.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'))).start()
+            self.healInterval = Sequence(Parallel(Func(self.showHpString, "+10% Damage!", color=(0.871, 0.827, 1.0, 1.0)), Func(self.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'))).start()
 
     def checkRefinementPowerhouse(self):
         if self.healInterval:
@@ -3337,12 +3337,12 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         hpBeforeThisCall = projectedCurrentHP
 
         if self.dna.name == 'hustle':
-            showDamage = Sequence(Parallel(Func(self.showHpString, "+5% Defense!"),
+            showDamage = Sequence(Parallel(Func(self.showHpString, "+5% Defense!", color=(0.871, 0.827, 1.0, 1.0)),
                                                   Func(self.setSuitStatusEffect, 'shielding', modifier=5, mode='refreshModifier')), Func(self.setNeutralAnimationDrop))
         else:
             showDamage = Sequence(Parallel(Sequence(ActorInterval(self, 'effort', startTime=self.getDuration('effort'), endTime=max(0, self.getDuration('effort') - 1.0), playRate=-1.0),
                                                            ActorInterval(self, 'effort', startTime=max(0, self.getDuration('effort') - 1.0))),
-                                                  Func(self.showHpString, "+5% Defense!"), 
+                                                  Func(self.showHpString, "+5% Defense!", color=(0.871, 0.827, 1.0, 1.0)), 
                                                   Func(self.setSuitStatusEffect, 'shielding', modifier=5, mode='refreshModifier')), Func(self.setNeutralAnimationDrop))
         if hpBeforeThisCall < self.maxHP:
             suitTrack.append(showDamage)
@@ -3372,7 +3372,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         showDamage = Sequence(Parallel(Sequence(ActorInterval(self, 'effort', startTime=self.getDuration('effort'), endTime=max(0, self.getDuration('effort') - 1.0), playRate=-1.0),
                                                            ActorInterval(self, 'effort', startTime=max(0, self.getDuration('effort') - 1.0))),
-                                                  Func(self.showHpString, "+5% Damage!"), Func(self.setSuitStatusEffect, 'lureResist', modifier=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier')), Func(self.setNeutralAnimationDrop))
+                                                  Func(self.showHpString, "+5% Damage!", color=(0.871, 0.827, 1.0, 1.0)), Func(self.setSuitStatusEffect, 'lureResist', modifier=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier')), Func(self.setNeutralAnimationDrop))
         if hpBeforeThisCall < self.maxHP and not self.dna.name == 'racket':
             suitTrack.append(showDamage)
         return suitTrack
@@ -3401,7 +3401,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
         showDamage = Sequence(Parallel(Sequence(ActorInterval(self, 'effort', startTime=self.getDuration('effort'), endTime=max(0, self.getDuration('effort') - 1.0), playRate=-1.0),
                                                            ActorInterval(self, 'effort', startTime=max(0, self.getDuration('effort') - 1.0))),
-                                                  Func(self.showHpString, "+5% Damage!"), Func(self.setSuitStatusEffect, 'lureResist', modifier=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier')), Func(self.setNeutralAnimationDrop))
+                                                  Func(self.showHpString, "+5% Damage!", color=(0.871, 0.827, 1.0, 1.0)), Func(self.setSuitStatusEffect, 'lureResist', modifier=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier')), Func(self.setNeutralAnimationDrop))
         suitTrack.append(showDamage)
         return suitTrack
     
@@ -3411,7 +3411,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.healInterval.finish()
             self.healInterval = None
         if not self.currHP <= 0 and not self.getManager():
-            self.healInterval = Sequence(Parallel(Func(self.showHpString, "+10% Damage!"), Func(self.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'))).start()
+            self.healInterval = Sequence(Parallel(Func(self.showHpString, "+10% Damage!", color=(0.871, 0.827, 1.0, 1.0)), Func(self.setSuitStatusEffect, 'damageUp', modifier=10, mode='refreshModifier'))).start()
         else:
             pass
 
@@ -3421,7 +3421,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.healInterval.finish()
             self.healInterval = None
         if self.currHP < self.maxHP and not self.currHP <= 0 and not self.dna.name == 'hustle':
-            self.healInterval = Sequence(Func(self.showHpString, "+5% Damage!"), Func(self.setSuitStatusEffect, 'lureResist', modifier=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier')).start()
+            self.healInterval = Sequence(Func(self.showHpString, "+5% Damage!", color=(0.871, 0.827, 1.0, 1.0)), Func(self.setSuitStatusEffect, 'lureResist', modifier=1), Func(self.setSuitStatusEffect, 'damageUp', modifier=5, mode='refreshModifier')).start()
         else:
             pass
 
@@ -3430,7 +3430,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.healInterval.finish()
             self.healInterval = None
         if self.currHP < self.maxHP and not self.currHP <= 0:
-            self.healInterval = Sequence(Parallel(ActorInterval(self, 'mob-mentality'), Func(self.showHpString, "+15% Damage!"), Func(self.makeDamageUp), Func(self.makeLureResist), Func(self.checkDamageUp, + 15)), Func(self.setNeutralAnimation)).start()
+            self.healInterval = Sequence(Parallel(ActorInterval(self, 'mob-mentality'), Func(self.showHpString, "+15% Damage!", color=(0.871, 0.827, 1.0, 1.0)), Func(self.makeDamageUp), Func(self.makeLureResist), Func(self.checkDamageUp, + 15)), Func(self.setNeutralAnimation)).start()
         else:
             pass
 
@@ -6634,7 +6634,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextInterval.start()
 
 
-    def showHpString(self, text, duration = 0.85, scale = 1):
+    def showHpString(self, text, duration: float = 0.85, scale: float = 1.0, color = (1.0, 0.0, 0.0, 1.0)):
         if self.isEmpty():
             return
         if self.HpTextEnabled and not self.ghostMode:
@@ -6648,9 +6648,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             self.HpTextGenerator.setText(text)
             self.HpTextGenerator.clearShadow()
             self.HpTextGenerator.setAlign(TextNode.ACenter)
-            r = a = 1.0
-            g = b = 0.0
-            self.HpTextGenerator.setTextColor(0.871, 0.827, 1, 1)
+            self.HpTextGenerator.setTextColor(*color)
             self.hpTextNode = self.HpTextGenerator.generate()
             self.hpText = self.attachNewNode(self.hpTextNode)
             self.hpText.setScale(scale)
