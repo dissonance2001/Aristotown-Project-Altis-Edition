@@ -345,6 +345,14 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
             if logEvent:
                 self.air.writeServerEvent('suspicious', avId, 'got %s jellybeans playing minigame %s in zone %s' % (score, self.minigameId, self.getSafezoneId()))
             scoreList.append(score)
+            # Trolley activity XP: jellybeans x 15, using this same
+            # already-multiplier-adjusted (playground scoreMult + jellybean
+            # holiday) score, matching every player who gets a scoreList
+            # entry regardless of whether this ends up going through the
+            # regular or metagame purchase manager below.
+            av = self.air.doId2do.get(avId)
+            if av:
+                av.addActivityExp(score * 15, ToontownGlobals.ACTIVITY_TROLLEY)
 
         self.requestDelete()
         if self.metagameRound > -1:

@@ -40,7 +40,8 @@ class ActivityExperienceBar(DirectFrame):
             geom=self.barGeom,
             pos=(0.0, 0.0, -0.95),
             geom_scale=(0.3, 0.25, 0.1),
-            geom_color=self.color
+            geom_color=self.color,
+            sortOrder=500
         )
         self.expBar = DirectWaitBar(
             parent=self.bgBar,
@@ -51,7 +52,7 @@ class ActivityExperienceBar(DirectFrame):
             borderWidth=(0.01, 0.01),
             scale=0.25,
             range=1,
-            sortOrder=50,
+            sortOrder=501,
             frameColor=(0.5, 0.5, 0.5, 0.5),
             barColor=(0.0, 1.0, 0.0, 0.5),
             text='0/1',

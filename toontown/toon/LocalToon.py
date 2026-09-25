@@ -1014,6 +1014,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             return
         if self.expBar:
             self.expBar.hide()
+        self.activityExpBar.start()
         self.activityExpBar.setActivity(activity, show=True)
 
     def _stopActivityExperience(self):

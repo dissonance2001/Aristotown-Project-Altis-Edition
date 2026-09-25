@@ -278,7 +278,6 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
             self.av.setAnimState('neutral', 1.0)
             self.createCastTrack()
         if wasLocalToon and not self.localToonFishing:
-            messenger.send('activityStop')
             self.__hideCastGui()
             if base.wantBingo:
                 self.pond.setLocalToonSpot()
@@ -1071,6 +1070,7 @@ class DistributedFishingSpot(DistributedObject.DistributedObject):
 
     def enterLeaving(self):
         if self.localToonFishing:
+            messenger.send('activityStop')
             self.__hideCastGui()
             if base.wantBingo:
                 self.pond.cleanupBingoMgr()

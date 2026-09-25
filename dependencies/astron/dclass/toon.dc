@@ -1194,8 +1194,8 @@ dclass DistributedToon : DistributedPlayer {
   setFishingRod(uint8 = 0) required broadcast ownrecv db;
   // Activity leveling (fishing/golfing/racing/trolley): index order matches
   // ToontownGlobals.ACTIVITY_FISHING/ACTIVITY_GOLFING/ACTIVITY_RACING/ACTIVITY_TROLLEY.
-  setActivityLevels(uint8[] = [0, 0, 0, 0]) ownrecv db;
-  setActivityExp(uint32[] = [0, 0, 0, 0]) ownrecv db;
+  setActivityLevels(uint8[] = [0, 0, 0, 0]) required ownrecv db;
+  setActivityExp(uint32[] = [0, 0, 0, 0]) required ownrecv db;
   setFishingRods(uint8[] = [0]) required broadcast ownrecv db;
   setFishingTrophies(uint8[] = []) required ownrecv db;
   setFlowerCollection(uint8[] = [], uint8[] = []) required ownrecv db;

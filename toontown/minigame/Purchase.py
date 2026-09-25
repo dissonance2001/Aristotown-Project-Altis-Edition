@@ -210,8 +210,9 @@ class Purchase(PurchaseBase):
         del self.sidewalkR
         self.door.removeNode()
         del self.door
-        self.collisionFloor.removeNode()
-        del self.collisionFloor
+        if hasattr(self, 'collisionFloor'):
+            self.collisionFloor.removeNode()
+            del self.collisionFloor
         del self.countSound
         del self.celebrateSound
         self.convertingVotesToBeansLabel.removeNode()
@@ -288,7 +289,8 @@ class Purchase(PurchaseBase):
          -1.75,
          -5.0)
         self.toons = []
-        self._activityExpShown = False
+        self._activityExpShown = True
+        messenger.send('activityStart', [ToontownGlobals.ACTIVITY_TROLLEY])
         self.toonsKeep = []
         self.counters = []
         self.totalCounters = []
@@ -501,9 +503,6 @@ class Purchase(PurchaseBase):
         return Task.cont
 
     def countDown(self):
-        if not self._activityExpShown:
-            self._activityExpShown = True
-            messenger.send('activityStart', [ToontownGlobals.ACTIVITY_TROLLEY])
         totalDelay = 0
         for total in self.totalCounters:
             total.startAmount = total.count
@@ -611,6 +610,8 @@ class Purchase(PurchaseBase):
         self.sidewalkL.reparentTo(hidden)
         self.sidewalkR.reparentTo(hidden)
         self.door.reparentTo(hidden)
+        self.collisionFloor.removeNode()
+        del self.collisionFloor
         self.title.reparentTo(self.frame)
         self.convertingVotesToBeansLabel.hide()
         self.rewardDoubledJellybeanLabel.hide()
