@@ -3913,44 +3913,74 @@ def doBrainStorm(attack):
     return Parallel(suitTrack, toonTracks, cloudPropTracks, soundTrack)
 
 
-def doBuzzWord(attack):
+def doBuzzWord(attack: dict) -> MetaInterval:
     suit = attack['suit']
-    target = attack['target']
-    toon = target[0]['toon']
     battle = attack['battle']
+    targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
-    particleEffects = []
     texturesList = ['buzzwords-crash',
      'buzzwords-inc',
      'buzzwords-main',
      'buzzwords-over',
      'buzzwords-syn']
-    for i in range(0, 5):
-        effect = BattleParticles.createParticleEffect('BuzzWord')
-        if random.random() > 0.5:
-            BattleParticles.setEffectTexture(effect, texturesList[i], color=Vec4(1, 0.94, 0.02, 1))
-        else:
-            BattleParticles.setEffectTexture(effect, texturesList[i], color=Vec4(0, 0, 0, 1))
-        particleEffects.append(effect)
+    partDelay: float = 3.6
+    partDuration: float = 3.3
+    damageDelay: float = 4.5
+    dodgeDelay: float = 3.8
+    suitTrack: Sequence = getSuitTrack(attack)
+    particleTracks: tuple[Sequence, ...] = ()
+    for t in targets:
+        toon = t['toon']
+        particleEffects = ()
+        for i in range(0, 5):
+            effect = BattleParticles.createParticleEffect('BuzzWord')
+            if random.random() < 0.5:
+                BattleParticles.setEffectTexture(effect, texturesList[i], color=Vec4(1.0, 0.94, 0.02, 1.0))
+            else:
+                BattleParticles.setEffectTexture(effect, texturesList[i], color=Vec4(0.0, 0.0, 0.0, 1.0))
+            particleEffects += (effect,)
 
-    suitType = getSuitBodyType(attack['suitName'])
-    partDelay = 2.25
-    partDuration = 2.5
-    damageDelay = 2.5
-    dodgeDelay = 2.0
-    suitName = suit.getStyleName()
-    for effect in particleEffects:
-        effect.setPos(0, 2.8, suit.getHeight() - 2.5)
-        effect.setHpr(0, -20, 0)
+        if suit.dna.name in ('m', 'sh'):
+            for effect in particleEffects:
+                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -20.0, 0.0)
 
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    particleTracks = []
-    for effect in particleEffects:
-        particleTracks.append(getPartTrack(effect, partDelay, partDuration, (effect, suit, 0), softStop=-1.0))
+        elif suit.dna.name == 'dt':
+            for effect in particleEffects:
+                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 1.6, 0.0, -10.0, 0.0)
 
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, damageAnimNames=['cringe'], splicedDodgeAnims=[['duck', dodgeDelay, 1.4]], showMissedExtraTime=dodgeDelay + 0.5)
-    soundTrack = getSoundTrack('SA_buzz_word.ogg', delay=2.0, node=suit)
-    return Parallel(suitTrack, toonTrack, soundTrack, *particleTracks)
+        elif suit.dna.name == 'mm':
+            for effect in particleEffects:
+                effect.setPos(0.0, 0.8, suit.getHeight() - 0.25)
+
+        elif suit.dna.name == 'prethink':
+            for effect in particleEffects:
+                effect.setPos(0.0, 2.1, suit.getHeight() - 1.8)
+        
+        elif suit.dna.name == 'nn':
+            for effect in particleEffects:
+                effect.setPos(0.0, 2.5, suit.getHeight() - 1.1)
+        
+        elif suit.dna.name == 'stenog':
+            for effect in particleEffects:
+                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
+
+        particleNode = battle.attachNewNode('particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+        particleTracks = ()
+        for i in range(len(particleEffects) - 1):
+            effect = particleEffects[i]
+            particleTracks += (getPartTrack(effect, partDelay, partDuration, (effect, particleNode, 0), softStop=-1.0),)
+
+        effect = particleEffects[-1]
+        particleTracks += (Sequence(
+            getPartTrack(effect, partDelay, partDuration, (effect, particleNode, 0), softStop=-1.0),
+            Func(particleNode.removeNode)
+        ),)
+
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['cringe'], splicedDodgeAnims=[['duck', dodgeDelay, 1.4]], showMissedExtraTime=dodgeDelay + 0.5)
+    soundTrack: Sequence = getSoundTrack('SA_buzz_word.ogg', delay=3.9, node=suit)
+    return Parallel(suitTrack, toonTracks, soundTrack, *particleTracks)
 
 
 def doDemotion(attack: dict) -> MetaInterval:
