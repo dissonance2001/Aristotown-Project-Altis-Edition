@@ -349,6 +349,8 @@ class HoodMgr(DirectObject.DirectObject):
     def addLinkTunnelHooks(self, hoodPart, nodeList, currentZoneId):
         tunnelOriginList = []
         for i in nodeList:
+            if i.isEmpty():
+                continue
             linkTunnelNPC = i.findAllMatches('**/linktunnel*')
             for p in range(linkTunnelNPC.getNumPaths()):
                 linkTunnel = linkTunnelNPC.getPath(p)
