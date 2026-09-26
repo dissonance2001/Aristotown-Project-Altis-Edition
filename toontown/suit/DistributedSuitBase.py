@@ -3811,7 +3811,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     headLoopDuration /
                     adjustedSuitDuration
                 )
-                if not self.dna.name in ['erfit', 'erclaim'] and not SuitDNA.getSuitBodyType(self.dna.name) in ['b', 'c']:
+                if self.dna.name in ('hroller', 'hrollers', 'hroller2', 'hho', 'fmaker', 'choreo', 'cinema') and not SuitDNA.getSuitBodyType(self.dna.name) in ['b', 'c']:
                     headPart.setPlayRate(
                         (headRate * 2),
                         headAnim

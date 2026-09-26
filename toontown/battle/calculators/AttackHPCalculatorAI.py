@@ -2161,13 +2161,12 @@ class AttackHPCalculatorAI(object):
                     result *= (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))
                 if theSuit.getDamageMultiplier() > 1:
                     result *= theSuit.getDamageMultiplier()
-                attack[SUIT_HP_COL][targetIndex] = result
-                attack[SUIT_HP_COL][targetIndex] = result
+                attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
                 continue
             elif atkType['name'] == 'DirectorBudgetExpansion': # Collect Call Calculator
                 self.calculator.directorMultiplier += (20 * self.deadSuits)
                 result = self.calculator.directorMultiplier
-                attack[SUIT_HP_COL][targetIndex] = result
+                attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
                 continue
             elif atkType['name'] == 'WiretapperCollectCall2': # Collect Call Calculator
                 self.setSuitCondition(theSuit.doId, 'calculatingcalculator', 1, 1, 'setBoth')
@@ -2183,7 +2182,7 @@ class AttackHPCalculatorAI(object):
                     result *= (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))
                 if theSuit.getDamageMultiplier() > 1:
                     result *= theSuit.getDamageMultiplier()
-                attack[SUIT_HP_COL][targetIndex] = result
+                attack[SUIT_HP_COL][targetIndex] = math.ceil(result)
                 continue
             elif attackName == 'DividendPeckingOrder':
                 self.setSuitCondition(theSuit.doId, 'scabbardcalculator', 0, 0, 'setBoth')

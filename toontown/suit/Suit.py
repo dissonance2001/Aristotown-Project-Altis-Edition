@@ -7046,8 +7046,25 @@ class Suit(Avatar.Avatar):
         self.headParts = []
         self.generateHeadLitigator('litigator-nf', animated=True)
         texture = loader.loadTexture('phase_11/maps/ttcc_ene_litigator.png')
+        from panda3d.core import TextureAttrib
+
         for headPart in self.headParts:
-            headPart.setTexture(texture, 1)
+            
+            gn_path = headPart.find("**/+GeomNode")
+
+            if not gn_path.isEmpty():
+                geomNode = gn_path.node()
+
+                for i in range(geomNode.getNumGeoms()):
+                    state = geomNode.getGeomState(i)
+                    tex_attr = state.getAttrib(TextureAttrib)
+
+                    if tex_attr:
+                        for stage in tex_attr.getOnStages():
+                            current_tex = tex_attr.getOnTexture(stage)
+                            if current_tex and "ttcc_ene_litigator" in current_tex.getFilename().getBasename():
+                                new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                geomNode.setGeomState(i, new_state)
 
     def makeDryLitigator(self, elite=False):
         anims = self.generateAnimDict()
@@ -7056,8 +7073,25 @@ class Suit(Avatar.Avatar):
         self.headParts = []
         self.generateHeadLitigator('litigator', animated=True)
         texture = loader.loadTexture('phase_11/maps/ttcc_ene_litigator.png')
+        from panda3d.core import TextureAttrib
+
         for headPart in self.headParts:
-            headPart.setTexture(texture, 1)
+            
+            gn_path = headPart.find("**/+GeomNode")
+
+            if not gn_path.isEmpty():
+                geomNode = gn_path.node()
+
+                for i in range(geomNode.getNumGeoms()):
+                    state = geomNode.getGeomState(i)
+                    tex_attr = state.getAttrib(TextureAttrib)
+
+                    if tex_attr:
+                        for stage in tex_attr.getOnStages():
+                            current_tex = tex_attr.getOnTexture(stage)
+                            if current_tex and "ttcc_ene_litigator" in current_tex.getFilename().getBasename():
+                                new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                geomNode.setGeomState(i, new_state)
 
     def makeWetTreasurer(self, elite=False):
         anims = self.generateAnimDict()
@@ -7066,8 +7100,25 @@ class Suit(Avatar.Avatar):
         self.headParts = []
         self.generateHeadLitigator('litigator-nf', animated=True)
         texture = loader.loadTexture('phase_11/maps/ttcc_ene_treasurer.png')
+        from panda3d.core import TextureAttrib
+
         for headPart in self.headParts:
-            headPart.setTexture(texture, 1)
+            
+            gn_path = headPart.find("**/+GeomNode")
+
+            if not gn_path.isEmpty():
+                geomNode = gn_path.node()
+
+                for i in range(geomNode.getNumGeoms()):
+                    state = geomNode.getGeomState(i)
+                    tex_attr = state.getAttrib(TextureAttrib)
+
+                    if tex_attr:
+                        for stage in tex_attr.getOnStages():
+                            current_tex = tex_attr.getOnTexture(stage)
+                            if current_tex and "ttcc_ene_litigator" in current_tex.getFilename().getBasename():
+                                new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                geomNode.setGeomState(i, new_state)
 
     def makeDryTreasurer(self, elite=False):
         anims = self.generateAnimDict()
@@ -7076,8 +7127,25 @@ class Suit(Avatar.Avatar):
         self.headParts = []
         self.generateHeadLitigator('litigator', animated=True)
         texture = loader.loadTexture('phase_11/maps/ttcc_ene_treasurer.png')
+        from panda3d.core import TextureAttrib
+
         for headPart in self.headParts:
-            headPart.setTexture(texture, 1)
+            
+            gn_path = headPart.find("**/+GeomNode")
+
+            if not gn_path.isEmpty():
+                geomNode = gn_path.node()
+
+                for i in range(geomNode.getNumGeoms()):
+                    state = geomNode.getGeomState(i)
+                    tex_attr = state.getAttrib(TextureAttrib)
+
+                    if tex_attr:
+                        for stage in tex_attr.getOnStages():
+                            current_tex = tex_attr.getOnTexture(stage)
+                            if current_tex and "ttcc_ene_litigator" in current_tex.getFilename().getBasename():
+                                new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                geomNode.setGeomState(i, new_state)
 
     def makeChainsawOverride(self, elite=False):
         anims = self.generateAnimDict()

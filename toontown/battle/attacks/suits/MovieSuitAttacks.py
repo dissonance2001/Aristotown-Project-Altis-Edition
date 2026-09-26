@@ -8318,11 +8318,11 @@ def doJargon(attack: dict) -> MetaInterval:
     battle = attack['battle']
     targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
-    damageDelay: float = 3.8
-    dodgeDelay: float = 1.9
-    partDelay: float = 3.5
-    partInterval: float = 0.6
-    suitTrack: Sequence = getSuitTrack(attack)
+    damageDelay: float = 1.0
+    dodgeDelay: float = 0.9
+    partDelay: float = 0.25
+    partInterval: float = 1.0
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.5)
     partTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
@@ -8345,11 +8345,11 @@ def doJargon(attack: dict) -> MetaInterval:
             particleNode.setZ(particleNode.getZ() + 4.0)
             particleNode.setP(particleNode.getP() - 23.0)
 
-        partTrack = getPartTrack(particleEffect, partDelay + partInterval * 0.0, 2.0, (particleEffect, particleNode, 0), softStop=-1.0)
-        partTrack2 = getPartTrack(particleEffect2, partDelay + partInterval * 1.0, 2.0, (particleEffect2, particleNode, 0), softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, partDelay + partInterval * 2.0, 2.0, (particleEffect3, particleNode, 0), softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, partDelay + partInterval * 0.0, 3.0, [particleEffect, particleNode, 0], softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, partDelay + partInterval * 1.0, 3.0, [particleEffect2, particleNode, 0], softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, partDelay + partInterval * 2.0, 3.0, [particleEffect3, particleNode, 0], softStop=-1.0)
         partTrack4 = Sequence(
-            getPartTrack(particleEffect4, partDelay + partInterval * 3.0, 1.5, (particleEffect4, particleNode, 0), softStop=-1.0),
+            getPartTrack(particleEffect4, partDelay + partInterval * 3.0, 2.0, [particleEffect4, particleNode, 0], softStop=-1.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack, partTrack2, partTrack3, partTrack4)
@@ -8358,7 +8358,7 @@ def doJargon(attack: dict) -> MetaInterval:
      ['conked', 0.01, 1.5]]
     dodgeAnims: list[list] = [['duck']]
     toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.6, showDamageExtraTime=0.3, damageAnimPlayRate=1.1, dodgeAnimPlayRate=1.3)
-    soundTrack: Sequence = getSoundTrack('SA_jargon.ogg', delay=3.4, node=suit)
+    soundTrack: Sequence = getSoundTrack('SA_jargon.ogg', delay=1.5, node=suit)
     return Parallel(suitTrack, toonTracks, soundTrack, *partTracks)
 
 def doOverload(attack):
@@ -8390,7 +8390,7 @@ def doMumboJumbo(attack: dict) -> MetaInterval:
     battle = attack['battle']
     targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
-    suitTrack: Sequence = getSuitTrack(attack)
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.5)
     partTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
@@ -8409,9 +8409,9 @@ def doMumboJumbo(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
         particleNode.setBin('fixed', 1)
-        partTrack = getPartTrack(particleEffect, 3.3, 3.0, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, 1.5, 2.0, [particleEffect, particleNode, 0], softStop=-1.0)
         partTrack2 = Sequence(
-            getPartTrack(particleEffect2, 3.3, 3.0, (particleEffect2, particleNode, 0), softStop=-1.0),
+            getPartTrack(particleEffect2, 1.5, 2.0, [particleEffect2, particleNode, 0], softStop=-1.0),
             Func(particleNode.removeNode)
         )
 
@@ -8422,15 +8422,15 @@ def doMumboJumbo(attack: dict) -> MetaInterval:
             particleNode.setZ(particleNode.getZ() + 4.1)
             particleNode.setP(particleNode.getP() - 25.0)
 
-        partTrack3 = getPartTrack(particleEffect3, 4.1, 2.7, (particleEffect3, toon, 0), softStop=-1.0)
-        partTrack4 = getPartTrack(particleEffect4, 4.1, 2.7, (particleEffect4, toon, 0), softStop=-1.0)
-        partTrack5 = getPartTrack(particleEffect5, 4.1, 2.7, (particleEffect5, toon, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, 1.5, 2.7, [particleEffect3, toon, 0], softStop=-1.0)
+        partTrack4 = getPartTrack(particleEffect4, 1.5, 2.7, [particleEffect4, toon, 0], softStop=-1.0)
+        partTrack5 = getPartTrack(particleEffect5, 1.5, 2.7, [particleEffect5, toon, 0], softStop=-1.0)
         partTracks += (partTrack, partTrack2)
         if dmg > 0:
             partTracks += (partTrack3, partTrack4, partTrack5)
 
-    toonTracks: Parallel = getToonTracks(attack, 3.7, ['cringe'], 3.15, ['sidestep'], dodgeAnimPlayRate=1.22)
-    soundTrack: Sequence = getSoundTrack('SA_mumbo_jumbo.ogg', delay=3.3, node=suit)
+    toonTracks: Parallel = getToonTracks(attack, 1.5, ['cringe'], 1.6, ['sidestep'], dodgeAnimPlayRate=1.22)
+    soundTrack: Sequence = getSoundTrack('SA_mumbo_jumbo.ogg', delay=1.5, node=suit)
     return Parallel(suitTrack, toonTracks, soundTrack, *partTracks)
 
 
@@ -8679,11 +8679,11 @@ def doLegalese(attack: dict) -> MetaInterval:
     battle = attack['battle']
     targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
-    partDelay: float = 3.5
-    partDuration: float = 1.5
-    damageDelay: float = 4.0
-    dodgeDelay: float = 2.7
-    suitTrack: Sequence = getSuitTrack(attack)
+    partDelay: float = 0.5
+    partDuration: float = 1.75
+    damageDelay: float = 1.0
+    dodgeDelay: float = 0.8
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.5)
     sprayTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
@@ -8709,12 +8709,12 @@ def doLegalese(attack: dict) -> MetaInterval:
             sprayNode.setZ(sprayNode.getZ() + 3.0)
             sprayNode.setP(sprayNode.getP() - 10.0)
 
-        sprayTrack1 = getPartTrack(sprayEffect1, partDelay, partDuration, (sprayEffect1, suit, 0), softStop=-0.5)
-        sprayTrack2 = getPartTrack(sprayEffect2, partDelay + 0.4, partDuration, (sprayEffect2, suit, 0), softStop=-0.5)
-        sprayTrack3 = getPartTrack(sprayEffect3, partDelay + 0.8, partDuration, (sprayEffect3, suit, 0), softStop=-0.5)
-        sprayTrack4 = getPartTrack(sprayEffect4, partDelay + 1.2, partDuration, (sprayEffect4, suit, 0), softStop=-0.5)
+        sprayTrack1 = getPartTrack(sprayEffect1, partDelay, partDuration, [sprayEffect1, suit, 0], softStop=-0.5)
+        sprayTrack2 = getPartTrack(sprayEffect2, partDelay + 0.4, partDuration, [sprayEffect2, suit, 0], softStop=-0.5)
+        sprayTrack3 = getPartTrack(sprayEffect3, partDelay + 0.8, partDuration, [sprayEffect3, suit, 0], softStop=-0.5)
+        sprayTrack4 = getPartTrack(sprayEffect4, partDelay + 1.2, partDuration, [sprayEffect4, suit, 0], softStop=-0.5)
         sprayTrack5 = Sequence(
-            getPartTrack(sprayEffect6, partDelay + 1.6, partDuration, (sprayEffect5, suit, 0), softStop=-0.5),
+            getPartTrack(sprayEffect6, partDelay + 1.6, partDuration, [sprayEffect5, suit, 0], softStop=-0.5),
             Func(sprayNode.removeNode)
         )
         sprayTracks += (sprayTrack1, sprayTrack2, sprayTrack3, sprayTrack4, sprayTrack5)
@@ -8722,7 +8722,7 @@ def doLegalese(attack: dict) -> MetaInterval:
     damageAnims: list[list] = [['cringe', 1e-05, 0.3, 0.8],
      ['cringe', 1e-05, 0.3]]
     toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], showMissedExtraTime=0.8, dodgeAnimPlayRate=1.1)
-    soundTrack: Sequence = getSoundTrack('SA_jargon.ogg', delay=3.4, node=suit)
+    soundTrack: Sequence = getSoundTrack('SA_jargon.ogg', delay=1.0, node=suit)
     return Parallel(suitTrack, toonTracks, soundTrack, *sprayTracks)
 
 

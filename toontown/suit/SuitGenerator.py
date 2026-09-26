@@ -412,8 +412,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('bottom_feeder', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_bottom_feeder.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_bottom_feeder" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(4.81)
         elif dna.name == 'b':
             self.scale = 4.375 / bSize
@@ -421,8 +438,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('bloodsucker', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_bloodsucker.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_bloodsucker" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(6.17)
         elif dna.name == 'bsd':
             self.scale = 4.0 / cSize
@@ -436,8 +470,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('pettifogger', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_pettifogger.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_pettifogger" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(6.17)
         elif dna.name == 'dt':
             self.scale = 4.25 / aSize
@@ -445,8 +496,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('doubletalker', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_doubletalker.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_doubletalker" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(5.63)
         elif dna.name == 'dcr':
             self.scale = 4.0 / aSize
@@ -460,9 +528,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('conveyancer', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_conveyancer.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
-            self.generateHead2('conveyancer_belt')
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_conveyancer" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(6.25)
         elif dna.name == 'ac':
             self.scale = 4.35 / bSize
@@ -470,8 +554,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('ambulance_chaser', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_ambulance_chaser.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_ambulance_chaser" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(6.39)
         elif dna.name == 'nn':
             self.scale = 4.5 / cSize
@@ -479,8 +580,25 @@ class SuitGenerator(object):
             self.generateFemaleBody()
             self.generateHead3('needlenose', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_needlenose.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_needlenose" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(5.41)
         elif dna.name == 'bs':
             self.scale = 5.05 / bSize
@@ -488,8 +606,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('backstabber', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_backstabber.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_backstabber" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(6.95)
         elif dna.name == 'dcw':
             self.scale = 5.05 / aSize
@@ -515,8 +650,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('advocate', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_advocate.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_advocate" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(6.56)
         elif dna.name == 'sd':
             self.scale = 5.65 / bSize
@@ -524,8 +676,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('spin_doctor', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_spin_doctor.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_spin_doctor" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(7.9)
         elif dna.name == 'surg':
             self.scale = 5.65 / bSize
@@ -551,8 +720,25 @@ class SuitGenerator(object):
             self.generateFemaleBody()
             self.generateHead3('shyster', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_shyster.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_shyster" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(6.95)
         elif dna.name == 'le':
             self.scale = 6.5 / aSize
@@ -560,8 +746,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('legal_eagle', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_legal_eagle.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_legal_eagle" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(7.45)
         elif dna.name == 'br':
             self.scale = 6.75 / aSize
@@ -569,8 +772,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('barrister', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_barrister.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_barrister" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(7.75)
         elif dna.name == 'magi':
             self.scale = 6.75 / aSize
@@ -584,8 +804,25 @@ class SuitGenerator(object):
             self.generateBody()
             self.generateHead3('bigwig', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_big_wig.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_big_wig" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(8.69)
         elif dna.name == 'bf2':
             self.scale = 4.0 / cSize
@@ -703,8 +940,25 @@ class SuitGenerator(object):
             self.makeExecutive()
             self.generateHead3('judy', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_judy.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_judy" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(5.41)
         elif dna.name == 'mouthp':
             self.scale = 4.77 / bSize
@@ -786,8 +1040,25 @@ class SuitGenerator(object):
             self.makeExecutive()
             self.generateHead3('scapegoat', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_scapegoat.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_scapegoat" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(7.5)
             #self.makeShielding()
             self.setSuitStatusEffect('rageBuilding')
@@ -799,8 +1070,25 @@ class SuitGenerator(object):
             self.makeLitigationManager()
             self.generateHead3('casemanager', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_casemanager.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_casemanager" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(8.25)
            # self.setTransparency(1)
         elif dna.name == 'stenog':
@@ -811,8 +1099,28 @@ class SuitGenerator(object):
             self.makeLitigationManager()
             self.generateHead3('stenographer', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_stenographer.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_stenographer" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
+            # texture = loader.loadTexture('phase_11/maps/ttcc_ene_stenographer.png')
+            # for headPart in self.headParts:
+            #     headPart.setTexture(texture, 1)
             self.setHeight(10.0)
           #  self.setTransparency(1)
         elif dna.name == 'lgator':
@@ -823,8 +1131,25 @@ class SuitGenerator(object):
             self.makeLitigationManager()
             self.generateHead3('litigator', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_litigator.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_litigator" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
            # self.setTransparency(1)
             self.setHeight(9.25)
 
@@ -1067,8 +1392,25 @@ class SuitGenerator(object):
             self.makeLitigationManager()
             self.generateHead3('litigator', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_treasurer.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_litigator" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
           #  self.setTransparency(1)
             self.setHeight(9.4)
         elif dna.name == 'charon':
@@ -1118,6 +1460,26 @@ class SuitGenerator(object):
             self.generateCounterFitBody()
             self.makeCountErfit()
             self.generateHead3('counterfit', animated=True)
+            texture = loader.loadTexture('phase_10/maps/ttcc_ene_counterfit.png')
+            from panda3d.core import TextureAttrib
+
+            for headPart in self.headParts:
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_counterfit" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(10.25)
         elif dna.name == 'hrollers':
             self.scale = 7.1 / aSize
@@ -1699,8 +2061,28 @@ class SuitGenerator(object):
             self.makeExecutive()
             self.generateHead3('stenographer', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_stenographer_boardbot.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_stenographer" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
+            # texture = loader.loadTexture('phase_11/maps/ttcc_ene_stenographer_boardbot.png')
+            # for headPart in self.headParts:
+            #     headPart.setTexture(texture, 1)
             self.setHeight(10.1)
             # self.makeVulnerable()
             # self.setVulnerability(125)
@@ -1712,8 +2094,27 @@ class SuitGenerator(object):
             self.makeExecutive()
             self.generateHead3('stenographer', animated=True)
             texture = loader.loadTexture('phase_11/maps/ttcc_ene_stenographer_boardbot_phantom.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_stenographer" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
+            for headPart in self.headParts:
+                # headPart.setTexture(texture, 1)
                 headPart.setColor((1, 1, 1, 1))
             self.setHeight(10.1)
             self.setColor((0, 0, 0, 1))
