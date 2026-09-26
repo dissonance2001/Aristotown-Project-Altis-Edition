@@ -29,7 +29,7 @@ class JellybeanPriceTag(ShopPriceTag):
         return 'Jellybeans'
 
     def getAvatarOwnedAmount(self, av):
-        return av.getMoney()
+        return av.getTotalMoney()
 
     @staticmethod
     def getCostTypeOwnedDisplayGui(parent, amount=None):
