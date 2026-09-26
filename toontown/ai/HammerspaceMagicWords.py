@@ -32,31 +32,56 @@ MAX_LISTED_MATCHES = 10
 
 def _findItemsByName(searchText: str):
     """
-    Returns a list of (itemSubtype, name) tuples whose item name contains
-    searchText (case-insensitive, partial match), sorted so that exact and
-    prefix matches come first.
+    Returns a list of (itemSubtype, name) tuples matching the human-readable
+    item name, Clash-style enum name, or numeric item ID.
     """
     searchText = searchText.lower().strip()
     matches = []
+    seen = set()
     for itemType, subtypeDict in ItemTypeRegistry.items():
         for itemSubtype, itemDef in subtypeDict.items():
             try:
                 name = itemDef.getName()
             except Exception:
                 continue
-            if name and searchText in name.lower():
-                matches.append((itemSubtype, name))
+            enumName = getattr(itemSubtype, 'name', str(itemSubtype))
+            enumValue = str(getattr(itemSubtype, 'value', itemSubtype))
+            terms = (
+                name.lower() if name else '',
+                enumName.lower(),
+                enumValue.lower(),
+            )
+            if not any(searchText in term for term in terms if term):
+                continue
+
+            key = itemSubtype
+            if key in seen:
+                continue
+            seen.add(key)
+            matches.append((itemSubtype, name, enumName, enumValue))
 
     def sortKey(entry):
-        name = entry[1].lower()
-        if name == searchText:
-            return (0, name)
-        if name.startswith(searchText):
-            return (1, name)
-        return (2, name)
+        name = (entry[1] or '').lower()
+        enumName = entry[2].lower()
+        enumValue = entry[3].lower()
+        terms = (name, enumName, enumValue)
+        if searchText in terms:
+            exactRank = 0
+        else:
+            exactRank = 1
+        prefixMatches = [term for term in terms if term.startswith(searchText) and term]
+        if prefixMatches:
+            prefixRank = 0
+            prefixLength = min(len(term) for term in prefixMatches)
+        else:
+            prefixRank = 1
+            prefixLength = 0
+        positions = [term.find(searchText) for term in terms if term and searchText in term]
+        position = min(positions) if positions else 999999
+        return (exactRank, prefixRank, prefixLength, position, name or enumName)
 
     matches.sort(key=sortKey)
-    return matches
+    return [(itemSubtype, name) for itemSubtype, name, _, _ in matches]
 
 
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[str, str])

@@ -548,6 +548,11 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.acceptingNonFriendWhispers = acceptingNonFriendWhispers[str(self.doId)]
 
     def disable(self):
+        if hasattr(self, 'scavengeConditionUIManager'):
+            self.scavengeConditionUIManager.cleanup()
+            del self.scavengeConditionUIManager
+            if hasattr(base.cr, 'scavengeConditionUIManager'):
+                del base.cr.scavengeConditionUIManager
         self.stopUpdateSmartCamera()
         self.laffMeter.destroy()
         del self.laffMeter
@@ -761,7 +766,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.streamerMode = StreamerMode.StreamerMode()
         self.streamerMode.start()
         self.chatLog = ChatLog.ChatLog()
-        # Clash creates the panel with the normal game interface, but its
+        from toontown.gui import ScavengeConditionUIManager
+        self.scavengeConditionUIManager = ScavengeConditionUIManager.ScavengeConditionUIManager()
+        base.cr.scavengeConditionUIManager = self.scavengeConditionUIManager
         # visibility is controlled by refreshOnscreenButtons.
         from toontown.notifications.NotificationManager import getNotificationManager
         self.notificationManager = getNotificationManager(self)

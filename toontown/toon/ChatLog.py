@@ -8,6 +8,7 @@ from pandac.PandaModules import TextNode, Vec4, Point3, CullBinManager, Keyboard
 from toontown.toonbase import ToontownGlobals
 from toontown.stickers import StickerMenu
 from toontown.toon.AltisCommandShortcuts import getCommandShortcuts
+from toontown.inventory.registry.ItemTypeRegistry import ItemTypeRegistry
 
 
 class ChatLog(DirectFrame, DirectObject):
@@ -460,6 +461,15 @@ class ChatLog(DirectFrame, DirectObject):
 
     def _makeCommandShortcuts(self):
         self.commandShortcuts = getCommandShortcuts(getattr(base, 'localAvatar', None))
+        if not any(command.get('name') == 'hammerspace' for command in self.commandShortcuts):
+            self.commandShortcuts.append({
+                'name': 'hammerspace',
+                'usage': '<give|find|giveall> [quantity] [item name]',
+                'description': 'Hammerspace debug tools.',
+                'aliases': (),
+                'access': 0,
+                'targetMode': 'none',
+            })
         self._commandLookup = {}
         for command in self.commandShortcuts:
             for invokeWord in (command['name'],) + tuple(command.get('aliases', ())):
@@ -518,6 +528,8 @@ class ChatLog(DirectFrame, DirectObject):
         )
 
         self.commandSelectionFrame = DirectFrame(parent=self.commandFrame, relief=None)
+        self.commandSelectionFrame.bind('wheel_up', self._commandSelectionWheel, [-1])
+        self.commandSelectionFrame.bind('wheel_down', self._commandSelectionWheel, [1])
         self.commandRows = []
         for visibleIndex, zPos in enumerate((0.058, -0.058)):
             row = DirectButton(
@@ -762,6 +774,79 @@ class ChatLog(DirectFrame, DirectObject):
             return oldPrefix
         return None
 
+    def _getHammerspaceItemSuggestions(self, enteredText):
+        enteredText = enteredText.strip().lower()
+        choices = []
+        seen = set()
+        for _, subtypeDict in ItemTypeRegistry.items():
+            for itemSubtype, itemDef in subtypeDict.items():
+                if itemSubtype in seen:
+                    continue
+                seen.add(itemSubtype)
+                try:
+                    displayName = itemDef.getName() or ''
+                except Exception:
+                    displayName = ''
+                enumName = getattr(itemSubtype, 'name', str(itemSubtype))
+                choices.append({
+                    'kind': 'item',
+                    'name': enumName,
+                    'value': displayName,
+                    'description': '%s  |  ID: %s' % (displayName or enumName, getattr(itemSubtype, 'value', itemSubtype)),
+                    'searchTerms': (enumName.lower(), displayName.lower(), str(getattr(itemSubtype, 'value', itemSubtype)).lower()),
+                    'itemSubtype': itemSubtype,
+                })
+
+        if not enteredText:
+            choices.sort(key=lambda choice: choice['name'].lower())
+            return choices
+
+        strong = []
+        weak = []
+        for choice in choices:
+            terms = choice['searchTerms']
+            if any(searchTerm.startswith(enteredText) for searchTerm in terms if searchTerm):
+                strong.append(choice)
+            elif any(enteredText in searchTerm for searchTerm in terms if searchTerm):
+                weak.append(choice)
+        strong.sort(key=lambda choice: choice['name'].lower())
+        weak.sort(key=lambda choice: choice['name'].lower())
+        return strong + weak
+
+    def _updateHammerspaceItemSuggestions(self, commandPrefix, invokeWord, remainder):
+        parts = remainder.lstrip().split(None, 1)
+        if not parts or parts[0].lower() != 'give':
+            return False
+
+        searchText = parts[1] if len(parts) > 1 else ''
+        quantityText = ''
+        if searchText:
+            searchParts = searchText.split(None, 1)
+            possibleQuantity = searchParts[0]
+            possibleSearch = searchParts[1] if len(searchParts) > 1 else ''
+            if possibleQuantity.isdigit() and possibleSearch:
+                quantityText = possibleQuantity
+                searchText = possibleSearch
+            elif possibleQuantity.isdigit() and not possibleSearch:
+                quantityText = possibleQuantity
+                searchText = ''
+
+        choices = self._getHammerspaceItemSuggestions(searchText)
+        self._commandMode = 'selection'
+        self._commandSelectionKind = 'item'
+        self._commandMatches = choices
+        self._commandSelectionIndex = 0 if choices else -1
+        self._commandVisibleStart = 0
+        self._commandInvokeWord = invokeWord
+        self._commandTargetBase = commandPrefix + invokeWord + ' give' + ((' ' + quantityText) if quantityText else '') + ' '
+        if not choices:
+            self._showEmptyCommandInformation(text=commandPrefix + invokeWord + ' give ' + searchText, hint='No matching hammerspace items were found.')
+            return True
+        self.commandInformationFrame.hide()
+        self.commandSelectionFrame.show()
+        self._refreshCommandRows()
+        return True
+
     def _updateCommandShortcuts(self, text):
         commandPrefix = self._getCommandPrefix(text)
         if (not self._entryFocused or commandPrefix is None or
@@ -783,6 +868,8 @@ class ChatLog(DirectFrame, DirectObject):
         exact = self._commandLookup.get(commandWord)
 
         if exact is not None:
+            if exact.get('name') == 'hammerspace' and self._updateHammerspaceItemSuggestions(commandPrefix, commandMatch.group(1), entered[commandMatch.end():]):
+                return
             self._commandExact = exact
             self._commandSelectionKind = 'command'
             self._commandTargetBase = ''
@@ -946,6 +1033,15 @@ class ChatLog(DirectFrame, DirectObject):
             self._commandSelectionIndex = absoluteIndex
             self._refreshCommandRows()
 
+    def _commandSelectionWheel(self, direction, event=None):
+        if self._commandMode != 'selection' or not self._commandMatches:
+            return
+        self._commandSelectionIndex = max(0, min(
+            len(self._commandMatches) - 1,
+            self._commandSelectionIndex + direction
+        ))
+        self._refreshCommandRows()
+
     def _chooseVisibleCommand(self, visibleIndex):
         if self._commandMode != 'selection':
             return
@@ -974,10 +1070,12 @@ class ChatLog(DirectFrame, DirectObject):
         if item is None:
             return
 
-        if self._commandSelectionKind == 'target' or item.get('kind') == 'target':
+        if self._commandSelectionKind == 'item' or item.get('kind') == 'item':
+            newText = self._commandTargetBase + item['name'] + ' '
+        elif self._commandSelectionKind == 'target' or item.get('kind') == 'target':
             newText = self._commandTargetBase + self._formatCommandTargetName(item['name']) + ' '
         else:
-            newText = self._commandPrefix + item['name'] + ' '
+            newText = self._commandPrefix + item.get('value', item['name']) + ' '
         self.entry.set(newText)
         self.entry.setCursorPosition(len(newText))
         self._entryChanged(None)

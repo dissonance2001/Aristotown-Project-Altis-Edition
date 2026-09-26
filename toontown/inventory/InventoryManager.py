@@ -6,9 +6,11 @@ from direct.distributed.DistributedObject import DistributedObject
 from toontown.inventory.base.Inventory import Inventory
 from toontown.inventory.base.InventoryDelta import InventoryDelta
 from toontown.inventory.base.InventoryExceptions import InventoryActionFailure
+from toontown.inventory.enums.InventoryEnums import InventoryAction
 from toontown.inventory.base.InventoryItem import InventoryItem
 from toontown.inventory.enums import ItemEnums
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
+from toontown.gui.game.condition.ConditionGlobals import AddTimedReleaseMsg
 
 
 @DirectNotifyCategory()
@@ -58,6 +60,8 @@ class InventoryManager(DistributedObject):
                 return
             else:
                 messenger.send('inventoryDelta', [delta])
+                if delta.getAction() == InventoryAction.ADD:
+                    messenger.send(AddTimedReleaseMsg, [delta.item, 10.0])
                 messenger.send(InventoryDelta.getItemDeltaEvent(delta.item.getItemType()), [delta])
 
         # Do a hash check.

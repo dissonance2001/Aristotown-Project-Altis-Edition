@@ -513,10 +513,7 @@ class TTDialog(ScaledDialog):
     def show(self):
         if self['fadeScreen']:
             self._fadedScreen = True
-            if self['fadeTime'] is not None:
-                base.transitions.fadeScreen(alpha=self['fadeScreen'], t=self['fadeTime'])
-            else:
-                base.transitions.fadeScreen(alpha=self['fadeScreen'])
+            base.transitions.fadeScreen(alpha=self['fadeScreen'])
         self.setBin('sorted-gui-popup', GuiBinGlobals.TTDialogBin)
         NodePath.show(self)
 

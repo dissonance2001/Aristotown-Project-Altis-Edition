@@ -703,16 +703,50 @@ class ToonBase(OTPBase.OTPBase):
             self.marginManager.addCell(0.1, -1.4, self.a2dTopLeft, 3)
         ]
         self.bottomCells = [
+            self.marginManager.addCell(-0.8, 0.2, self.a2dBottomCenter, 7),
+            self.marginManager.addCell(-0.4, 0.2, self.a2dBottomCenter, 8),
+            self.marginManager.addCell(0.0, 0.2, self.a2dBottomCenter, 9),
+            self.marginManager.addCell(0.4, 0.2, self.a2dBottomCenter, 10),
+            self.marginManager.addCell(0.8, 0.2, self.a2dBottomCenter, 11)
         ]
         self.rightCells = [
             self.marginManager.addCell(-0.1, -0.6, self.a2dTopRight, 4),
             self.marginManager.addCell(-0.1, -1.0, self.a2dTopRight, 5),
             self.marginManager.addCell(-0.1, -1.4, self.a2dTopRight, 6)
         ]
+        # Per-cell flag tracking for flagScreenCells/unflagScreenCells below --
+        # a cell stays active only while nothing has flagged it unavailable.
+        self.screenCellFlags = {}
+        for cell in self.leftCells + self.bottomCells + self.rightCells:
+            self.screenCellFlags[cell] = set()
 
     def setCellsActive(self, cells, active):
         for cell in cells:
             cell.setActive(active)
+        self.marginManager.reorganize()
+
+    def flagScreenCells(self, flag, screenCellList):
+        """
+        Flags a list of margin cells so they're unavailable while `flag` is
+        set on them (e.g. so the NPC shop GUI doesn't compete with a tip
+        balloon for the same corner of the screen). Ported from Clash's
+        ScreenCellFlag system, adapted to this codebase's MarginCell/
+        MarginManager (setActive/reorganize) instead of Clash's grid-based
+        MarginManager (which isn't available here).
+        """
+        for cell in screenCellList:
+            self.screenCellFlags.setdefault(cell, set()).add(flag)
+        self._updateMarginManagerCells()
+
+    def unflagScreenCells(self, flag, screenCellList):
+        for cell in screenCellList:
+            if cell in self.screenCellFlags:
+                self.screenCellFlags[cell].discard(flag)
+        self._updateMarginManagerCells()
+
+    def _updateMarginManagerCells(self):
+        for cell, flags in self.screenCellFlags.items():
+            cell.setActive(len(flags) == 0)
         self.marginManager.reorganize()
 
     def cleanupDownloadWatcher(self):

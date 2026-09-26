@@ -161,6 +161,8 @@ class ActivityExperienceBar(DirectFrame):
     def start(self):
         if not self.av:
             return
+        self.expArray = self._fixArray(self.av.getActivityExp())
+        self.levelArray = self._fixArray(self.av.getActivityLevels())
         self.accept(self.av.uniqueName('activityExpChange'), self._handleExpChange)
         self.accept(self.av.uniqueName('activityLevelChange'), self._handleLevelChange)
 

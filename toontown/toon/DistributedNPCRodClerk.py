@@ -86,7 +86,9 @@ class DistributedNPCRodClerk(DistributedNPCToonBase):
     def handleBuyResponse(self, code):
         if self.storeGui:
             self.setChatAbsolute(TTLocalizer.NPCStoreResponses[code], CFSpeech | CFTimeout)
-            self.cr.chatManager.sendSystemMessageLocally(TTLocalizer.NPCStoreResponses[code], senderName=self.getName())
+            chatLog = getattr(base.localAvatar, 'chatLog', None)
+            if chatLog:
+                chatLog.addToLog('%s: %s' % (self.getName(), TTLocalizer.NPCStoreResponses[code]), category=chatLog.TAB_NPC)
             self.storeGui.updatePage()
 
     # Called from AI, given avId that triggered this interaction, in which context, and which phrase

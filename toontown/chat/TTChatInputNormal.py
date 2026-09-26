@@ -3,6 +3,7 @@ from pandac.PandaModules import *
 from otp.chat import ChatInputNormal
 from otp.otpbase import OTPLocalizer
 from otp.otpbase import OTPGlobals
+from toontown.chat.HammerspaceItemSuggestions import HammerspaceItemSuggestions
 
 class TTChatInputNormal(ChatInputNormal.ChatInputNormal):
 
@@ -21,19 +22,24 @@ class TTChatInputNormal(ChatInputNormal.ChatInputNormal):
         self.chatEntry = DirectEntry(parent=self.chatFrame, relief=None, scale=0.05, pos=(-0.2, 0, 0.11), entryFont=OTPGlobals.getInterfaceFont(), width=8.6, numLines=3, cursorKeys=0, backgroundFocus=0, command=self.sendChat)
         self.chatEntry.bind(DGG.OVERFLOW, self.chatOverflow)
         self.chatEntry.bind(DGG.TYPE, self.typeCallback)
+        self.hammerspaceItemSuggestions = HammerspaceItemSuggestions(self.chatFrame)
+        self.accept('sentRegularChat', self.hammerspaceItemSuggestions.hide)
 
     def delete(self):
         self.chatEntry.destroy()
         self.chatButton.destroy()
         self.cancelButton.destroy()
+        self.hammerspaceItemSuggestions.destroy()
+        self.ignore('sentRegularChat')
         ChatInputNormal.ChatInputNormal.delete(self)
         loader.unloadModel('phase_3.5/models/gui/chat_input_gui')
 
     def typeCallback(self, extraArgs):
         if localAvatar.chatMgr.chatInputWhiteList and localAvatar.chatMgr.chatInputWhiteList.isActive():
+            self.hammerspaceItemSuggestions.hide()
             return
-        else:
-            messenger.send('enterNormalChat')
+        self.hammerspaceItemSuggestions.update(self.chatEntry.get(plain=True))
+        messenger.send('enterNormalChat')
 
     def checkForOverRide(self):
         return False

@@ -8,6 +8,7 @@ from pandac.PandaModules import *
 from otp.otpbase import OTPLocalizer
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
+from toontown.chat.HammerspaceItemSuggestions import HammerspaceItemSuggestions
 
 class TTChatInputWhiteList(ChatInputWhiteListFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('TTChatInputWhiteList')
@@ -52,6 +53,8 @@ class TTChatInputWhiteList(ChatInputWhiteListFrame):
          0.05), text=OTPLocalizer.ChatInputNormalWhisper, text_scale=0.04, text_fg=Vec4(0, 0, 0, 1), text_wordwrap=9.5, textMayChange=1)
         self.chatEntry.bind(DGG.OVERFLOW, self.chatOverflow)
         self.chatEntry.bind(DGG.TYPE, self.typeCallback)
+        self.hammerspaceItemSuggestions = HammerspaceItemSuggestions(self.chatFrame)
+        self.accept('sentRegularChat', self.hammerspaceItemSuggestions.hide)
         self.trueFriendChat = 0
         if base.config.GetBool('whisper-to-nearby-true-friends', 1):
             self.accept(self.TFToggleKey, self.shiftPressed)
@@ -82,6 +85,7 @@ class TTChatInputWhiteList(ChatInputWhiteListFrame):
             if self.typeGrabbed:
                 return
             self.applyFilter(extraArgs)
+            self.hammerspaceItemSuggestions.update(self.chatEntry.get(plain=True))
             if localAvatar.chatMgr.chatInputWhiteList.isActive():
                 return
             else:
@@ -92,6 +96,7 @@ class TTChatInputWhiteList(ChatInputWhiteListFrame):
 
     def destroy(self):
         self.chatEntry.destroy()
+        self.hammerspaceItemSuggestions.destroy()
         self.chatFrame.destroy()
         self.ignoreAll()
         ChatInputWhiteListFrame.destroy(self)
