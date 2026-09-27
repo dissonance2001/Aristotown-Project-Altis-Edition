@@ -2135,7 +2135,7 @@ class TownBattleToonPanel(DirectFrame):
             )
 
             damageText2 = self.getColoredText(
-                '-%s%%' % avatar.getToonStatusModifier('wiretapped'),
+                '%s%%' % avatar.getToonStatusModifier('wiretapped'),
                 'negativeText',
                 (1, 0, 0, 1),
                 ToontownGlobals.getInterfaceFont()
