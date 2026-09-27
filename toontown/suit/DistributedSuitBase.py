@@ -5781,12 +5781,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         return nameInfo
 
     def showHpTextNew(self, number, text=None, bonus=0, scale=1, attackTrack=-1, colorCode=0):
-        if number > 0:
-            self.addPendingQueuedHealing(number)
-        elif number < 0:
-            self.addPendingQueuedDamage(number)
-        else:
-            pass
         if self.HpTextEnabled and not self.ghostMode:
             if self.hpText:
                 self.hideHpText()
@@ -5884,12 +5878,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             #self.hpTextInterval2.start()
 
     def showHpText(self, number, bonus = 0, scale = 1, attackTrack = -1):
-        if number > 0:
-            self.addPendingQueuedHealing(number)
-        elif number < 0:
-            self.addPendingQueuedDamage(number)
-        else:
-            pass
         if self.HpTextEnabled and not self.ghostMode:
             if number != 0:
                 if self.hpText:
@@ -5962,12 +5950,6 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                 self.hpTextInterval.start()
 
     def showHpText2(self, number, bonus = 0, scale = 1, attackTrack = -1):
-        if number > 0:
-            self.addPendingQueuedHealing(number)
-        elif number < 0:
-            self.addPendingQueuedDamage(number)
-        else:
-            pass
         if self.HpTextEnabled and not self.ghostMode:
             if number != 0:
                 if self.hpText:
