@@ -881,7 +881,7 @@ class BossbotLitigationCalculatorAI:
             # Gag Ban Retaliations & DOT
             if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
                 if self.suitHasCondition(suitId, 'filingcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueuedPreToon(suitId)
+                    attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'filingcalculator') and self.__suitCanAttack(suitId):
