@@ -864,7 +864,7 @@ def doBrokenConnection(attack):
     suitTrack = Sequence(getSuitAnimTrack(attack))
     suitTrack.append(Wait(3.0))
     makeImmune = Parallel(Func(suit.setSuitStatusEffect, 'brokenConnection', modifier=30, turns=3))
-    selfDamageTrack = Func(suit.showHpText, "CONNECTION DROPPED!", 2, openEnded=0)
+    selfDamageTrack = Func(suit.showHpTextNew, 0, text="CONNECTION DROPPED!", colorCode=4)
     for headPart in suit.animatedHeadParts:
         makeImmune.append(Func(suit.setupHeadFreakout, headPart))
         makeImmune.append(Func(suit.startHeadFreakout))
