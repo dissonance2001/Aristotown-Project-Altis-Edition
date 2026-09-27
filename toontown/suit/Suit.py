@@ -6254,7 +6254,8 @@ class Suit(Avatar.Avatar):
             from math import pi, cos, sin
 
             self.vulnerability = max(1, num)
-            totalKnives = (self.vulnerability / 5)
+            totalKnives = max(1, self.vulnerability // 5)
+
 
             radius = 1.5
             height = self.height
