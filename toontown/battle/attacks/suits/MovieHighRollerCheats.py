@@ -1927,43 +1927,33 @@ def getSplicedAnimsTrack(anims, actor = None):
 
     return track
 
-def doRolled(attack):
+def doRolled(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
     BattleParticles.loadParticles() # We need to be able to change the color of the particle effects.
-    damageDelay = 1.7
-    # We want to handle the particle effect differently from Spin since we will be customizing these particle effects.
-    sprayEffects = []
-    for t in targets:
-        sprayEffect = BattleParticles.createParticleEffect(file='spinSpray')
-        BattleParticles.setEffectTexture(sprayEffect, 'snow-particle', color=Vec4(random.random(), random.random(), random.random(), 1))
-        sprayEffects.append(sprayEffect)
-
-    suitTrack = Sequence(getSuitAnimTrackAttack(attack))
-    sprayTracks = getPartTracks(attack, sprayEffects, 1.0, 3.9, 0, softStop=-2)
-    spinTracks1 = Parallel()
-    spinTracks2 = Parallel()
-    spinTracks3 = Parallel()
+    suitTrack: Sequence = getSuitAnimTrackAttack(attack)
+    sprayTracks: tuple[Sequence, ...] = ()
+    spinTracks: tuple[Sequence, ...] = ()
     damageAnims = []
-    damageAnims.append(['duck',
-     0.01,
-     0.01,
-     1.1])
+    damageAnims.append(['duck', 0.01, 0.01, 1.1])
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
-    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['sidestep'], showDamageExtraTime=2.1, showMissedExtraTime=1.0)
-    soundTracks = Parallel()
-    toonSpinTracks = Parallel()
+    damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.0, startTime=2.26))
+    toonTracks: Parallel = Parallel()
+    soundTracks: tuple[Sequence, ...] = ()
+    toonSpinTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        damageDelay = 1.7 + (random.random() * 0.2)
+        sprayEffect = BattleParticles.createParticleEffect(file='spinSpray')
         spinEffect1 = BattleParticles.createParticleEffect(file='spinEffect')
         spinEffect2 = BattleParticles.createParticleEffect(file='spinEffect')
         spinEffect3 = BattleParticles.createParticleEffect(file='spinEffect')
-        BattleParticles.setEffectTexture(spinEffect1, 'snow-particle', color=Vec4(random.random(), random.random(), random.random(), 1))
-        BattleParticles.setEffectTexture(spinEffect2, 'snow-particle', color=Vec4(random.random(), random.random(), random.random(), 1))
-        BattleParticles.setEffectTexture(spinEffect3, 'snow-particle', color=Vec4(random.random(), random.random(), random.random(), 1))
+        BattleParticles.setEffectTexture(sprayEffect, 'snow-particle', color=Vec4(random.random(), random.random(), random.random(), 1.0))
+        BattleParticles.setEffectTexture(spinEffect1, 'snow-particle', color=Vec4(random.random(), random.random(), random.random(), 1.0))
+        BattleParticles.setEffectTexture(spinEffect2, 'snow-particle', color=Vec4(random.random(), random.random(), random.random(), 1.0))
+        BattleParticles.setEffectTexture(spinEffect3, 'snow-particle', color=Vec4(random.random(), random.random(), random.random(), 1.0))
         spinEffect1.reparentTo(toon)
         spinEffect2.reparentTo(toon)
         spinEffect3.reparentTo(toon)
@@ -1971,25 +1961,44 @@ def doRolled(attack):
         height2 = toon.getHeight() * (random.random() * 0.2 + 0.4)
         height3 = toon.getHeight() * (random.random() * 0.2 + 0.1)
         spinEffect1.setPos(0.8, -0.7, height1)
-        spinEffect1.setHpr(0, 0, -random.random() * 10 - 85)
-        spinEffect1.setHpr(spinEffect1, 0, 50, 0)
+        spinEffect1.setHpr(0.0, 0.0, -random.random() * 10.0 - 85.0)
+        spinEffect1.setHpr(spinEffect1, 0.0, 50.0, 0.0)
         spinEffect2.setPos(0.8, -0.7, height2)
-        spinEffect2.setHpr(0, 0, -random.random() * 10 - 85)
-        spinEffect2.setHpr(spinEffect2, 0, 50, 0)
+        spinEffect2.setHpr(0.0, 0.0, -random.random() * 10.0 - 85.0)
+        spinEffect2.setHpr(spinEffect2, 0.0, 50.0, 0.0)
         spinEffect3.setPos(0.8, -0.7, height3)
-        spinEffect3.setHpr(0, 0, -random.random() * 10 - 85)
-        spinEffect3.setHpr(spinEffect3, 0, 50, 0)
+        spinEffect3.setHpr(0.0, 0.0, -random.random() * 10.0 - 85.0)
+        spinEffect3.setHpr(spinEffect3, 0.0, 50.0, 0.0)
         spinEffect1.wrtReparentTo(battle)
         spinEffect2.wrtReparentTo(battle)
         spinEffect3.wrtReparentTo(battle)
+        particleNode = battle.attachNewNode('rolled-particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+        sprayTrack = Sequence(
+            getPartTrack(sprayEffect, 1.0, 3.9, (sprayEffect, particleNode, 0), softStop=-2.0),
+            Func(particleNode.removeNode)
+        )
+        spinTrack1 = getPartTrack(spinEffect1, 2.1, 5.75, (spinEffect1, battle, 0), softStop=-2.0)
+        spinTrack2 = getPartTrack(spinEffect2, 2.1, 5.75, (spinEffect2, battle, 0), softStop=-2.0)
+        spinTrack3 = getPartTrack(spinEffect3, 2.1, 5.75, (spinEffect3, battle, 0), softStop=-2.0)
+        sprayTracks += (sprayTrack,)
+        toonTracks.append(getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['sidestep'], showDamageExtraTime=2.1, showMissedExtraTime=1.0, dodgeAnimPlayRate=1.2, target=t))
         if dmg > 0:
-            spinTracks1.append(getPartTrack(spinEffect1, 1.5, 5.9, (spinEffect1, battle, 0), softStop=-2.0))
-            spinTracks2.append(getPartTrack(spinEffect2, 1.5, 5.9, (spinEffect2, battle, 0), softStop=-2.0))
-            spinTracks3.append(getPartTrack(spinEffect3, 1.5, 5.9, (spinEffect3, battle, 0), softStop=-2.0))
-            soundTracks.append(getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=2.0, node=suit))
-            toonSpinTracks.append(Sequence(Wait(damageDelay + 0.9), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)), LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)), LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)), LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)), LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)), LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5)))
+            spinTracks += (spinTrack1, spinTrack2, spinTrack3)
+            soundTracks += (getSoundTrack('tt_s_ara_cfg_toonInWhirlwind.ogg', delay=damageDelay + 0.9, node=suit),)
+            toonSpinTracks += (Sequence(
+                Wait(damageDelay + 0.9),
+                LerpHprInterval(toon, 0.65, Point3(-10.0, 0.0, 0.0)),
+                LerpHprInterval(toon, 0.45, Point3(-30.0, 0.0, 0.0)),
+                LerpHprInterval(toon, 0.15, Point3(-60.0, 0.0, 0.0)),
+                LerpHprInterval(toon, 0.65, Point3(-700.0, 0.0, 0.0)),
+                LerpHprInterval(toon, 0.95, Point3(-1310.0, 0.0, 0.0)),
+                LerpHprInterval(toon, 0.35, toon.getHpr()),
+                Wait(0.45)
+            ),)
 
-    return Parallel(suitTrack, sprayTracks, toonTracks, toonSpinTracks, spinTracks1, spinTracks2, spinTracks3, soundTracks)
+    return Parallel(suitTrack, *sprayTracks, toonTracks, *toonSpinTracks, *spinTracks, *soundTracks)
 
 def doBust(attack):
     suit = attack['suit']

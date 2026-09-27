@@ -927,7 +927,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'SongAndDance':
         camTrack.append(defaultCamera(openShotDuration=4.0))
     elif name == 'Spin':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == 'StumpSpeech':
         camTrack.append(defaultCamera())
     elif name == 'Synergy':
@@ -2217,7 +2217,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HighRollerConduction':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'HighRollerRolled':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == 'HighRollerRaisingTheAnte':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, 3.7))
         camTrack.append(moveShot(-21.0, 8.0, 8.0, -120, 0, 0, 0.5))
