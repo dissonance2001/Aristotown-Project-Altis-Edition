@@ -3309,7 +3309,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Prestige Polish', 
-                                   tooltipDescription="This Cog has been polished! For the duration they have this effect, they will be entire immune to %s and %s Gags, and will deal and take %s less damage." % (gagText, gagText2, damageText),
+                                   tooltipDescription="This Cog has been polished! For the duration they have this effect, they are entirely immune to %s and %s Gags, and will deal and take %s less damage." % (gagText, gagText2, damageText),
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 

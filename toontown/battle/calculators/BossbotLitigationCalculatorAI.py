@@ -155,25 +155,6 @@ class BossbotLitigationCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
             # Gag Ban Retaliations & DOT
             if self.battle.activeSuits[i].dna.name == 'ambass':
-                if self.suitHasCondition(suitId, 'refinementcalculator') and not self.suitHasCondition(suitId, 'headroller2calculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'refinementcalculator') and not self.suitHasCondition(suitId, 'headroller2calculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'AmbassadorRefinement', # Refinement
-                     'animName': 'snap',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP,
-                            'targetType': 'suit',
-
-                            'allowSelfTarget': True,
-                            'targetSelf': False,
-                        'excludeManagers': False})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'headroller2calculator') and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and self.battle.activeSuits[
                     i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
@@ -292,6 +273,25 @@ class BossbotLitigationCalculatorAI:
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'ambass':  # ambassador
+                if self.suitHasCondition(suitId, 'refinementcalculator') and not self.suitHasCondition(suitId, 'headroller2calculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getAbilityQueued(suitId)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'refinementcalculator') and not self.suitHasCondition(suitId, 'headroller2calculator') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'AmbassadorRefinement', # Refinement
+                     'animName': 'snap',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                            'targetType': 'suit',
+
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                        'excludeManagers': False})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'advancementcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
@@ -304,7 +304,7 @@ class BossbotLitigationCalculatorAI:
                         'hp': 0,
                         'acc': 100,
                         'freq': 0,
-                        'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'group': SuitBattleGlobals.ATK_TGT_DOUBLE,
                         'targetType': 'suit',
                         'allowSelfTarget': False,
                         'targetSelf': False,

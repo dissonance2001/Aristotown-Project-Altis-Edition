@@ -702,13 +702,8 @@ class ToonBase(OTPBase.OTPBase):
             self.marginManager.addCell(0.1, -1.0, self.a2dTopLeft, 2),
             self.marginManager.addCell(0.1, -1.4, self.a2dTopLeft, 3)
         ]
-        self.bottomCells = [
-            self.marginManager.addCell(-0.8, 0.2, self.a2dBottomCenter, 7),
-            self.marginManager.addCell(-0.4, 0.2, self.a2dBottomCenter, 8),
-            self.marginManager.addCell(0.0, 0.2, self.a2dBottomCenter, 9),
-            self.marginManager.addCell(0.4, 0.2, self.a2dBottomCenter, 10),
-            self.marginManager.addCell(0.8, 0.2, self.a2dBottomCenter, 11)
-        ]
+        self.bottomCells = []
+
         self.rightCells = [
             self.marginManager.addCell(-0.1, -0.6, self.a2dTopRight, 4),
             self.marginManager.addCell(-0.1, -1.0, self.a2dTopRight, 5),
@@ -717,7 +712,7 @@ class ToonBase(OTPBase.OTPBase):
         # Per-cell flag tracking for flagScreenCells/unflagScreenCells below --
         # a cell stays active only while nothing has flagged it unavailable.
         self.screenCellFlags = {}
-        for cell in self.leftCells + self.bottomCells + self.rightCells:
+        for cell in self.leftCells + self.rightCells:
             self.screenCellFlags[cell] = set()
 
     def setCellsActive(self, cells, active):

@@ -1680,7 +1680,25 @@ class Suit(Avatar.Avatar):
                 headModel.setH(180)
             elif headType == 'shyster' and self.style.name == 'ang':
                 textureGlass = loader.loadTexture('phase_11/maps/ttcc_ene_angelinvestor.png')
-                headModel.setTexture(textureGlass, 1)
+                from panda3d.core import TextureAttrib
+
+                for headPart in self.animatedHeadParts:
+                    
+                    gn_path = headPart.find("**/+GeomNode")
+
+                    if not gn_path.isEmpty():
+                        geomNode = gn_path.node()
+
+                        for i in range(geomNode.getNumGeoms()):
+                            state = geomNode.getGeomState(i)
+                            tex_attr = state.getAttrib(TextureAttrib)
+
+                            if tex_attr:
+                                for stage in tex_attr.getOnStages():
+                                    current_tex = tex_attr.getOnTexture(stage)
+                                    if current_tex and "ttcc_ene_shyster" in current_tex.getFilename().getBasename():
+                                        new_state = state.setAttrib(tex_attr.addOnStage(stage, textureGlass))
+                                        geomNode.setGeomState(i, new_state)
             elif headType == 'firestarter' and self.style.name == 'safesupervis':
                 textureFire = loader.loadTexture('phase_12/maps/ttcc_ene_firestarter_fire_2.png')
                 headModel.find('**/fire0').setTexture(textureFire, 1)
