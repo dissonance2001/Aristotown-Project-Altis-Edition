@@ -722,6 +722,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
 
     if name == 'AcidRain':
         camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name in ('Aftershock', 'Quake'):
+        quake = 1
+        camTrack.append(suitCameraShakeShot(attackDuration, 1.0, quake=quake))
     elif name in ('Audit', 'Calculate', 'Tabulate'):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Bash':
@@ -893,13 +896,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=(46.0/24.0) / playRate))
     elif name == 'PowerTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'Quake':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
-                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
-    elif name == 'Aftershock':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5),
-                                 Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
-                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
     elif name == 'RazzleDazzle':
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == 'RedTape':
@@ -921,9 +917,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'TestSchmooze':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Shake':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5),
-                                 Func(taskMgr.add, shake_camera_tremor, 'camera_shake'), Wait(attackDuration - 2.0),
-                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+        camTrack.append(suitCameraShakeShot(attackDuration, 0.5))
     elif name == 'Inject':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Shred':
@@ -941,9 +935,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'TickingTimeBomb':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Tremor':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5),
-                                 Func(taskMgr.add, shake_camera_tremor, 'camera_shake'), Wait(attackDuration - 2.0),
-                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+        camTrack.append(suitCameraShakeShot(attackDuration, 0.25))
     elif name == 'Withdrawal':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'WriteOff':
@@ -3527,39 +3519,63 @@ def suitWakeUpShot(avatar, duration):
     return heldShot(10, -5, 10, 65, -30, 0, duration, 'suitWakeUpShot')
 
 
-def suitCameraShakeShot(avatar, duration, shakeIntensity, quake = 0):
+def suitCameraShakeShot(duration, shakeIntensity: float, quake = 0, extraDelay: float = 0.0):
     track = Sequence(name='suitShakeCameraShot')
+    shakeDelay: float
+    numShakes: int
+    postShakeDelay: float
     if quake == 1:
-        shakeDelay = 1.1
+        shakeDelay = 1.375
         numShakes = 4
+        postShakeDelay = 0.75
     else:
-        shakeDelay = 0.3
+        shakeDelay = 0.525
         numShakes = 5
-    postShakeDelay = 0.5
-    shakeTime = (duration - shakeDelay - postShakeDelay) / numShakes
-    shakeDuration = shakeTime * (1.0 / numShakes)
-    shakeWaitInterval = shakeTime * ((numShakes - 1.0) / numShakes)
+        postShakeDelay = 0.5
+    shakeDuration = (duration - shakeDelay - postShakeDelay - extraDelay) / numShakes
 
-    def shakeCameraTrack(intensity, shakeWaitInterval = shakeWaitInterval, quake = quake, shakeDuration = shakeDuration, numShakes = numShakes):
-        vertShakeTrack = Sequence(Wait(shakeWaitInterval), Func(camera.setZ, camera.getZ() + intensity / 8), Wait(shakeDuration / 8), Func(camera.setZ, camera.getZ() - intensity), Wait(shakeDuration / 8), Func(camera.setZ, camera.getZ() + intensity / 8))
-        horizShakeTrack = Sequence(Wait(shakeWaitInterval - shakeDuration / 4), Func(camera.setY, camera.getY() + intensity / 8), Wait(shakeDuration / 8), Func(camera.setY, camera.getY() - intensity / 8), Wait(shakeDuration / 8), Func(camera.setY, camera.getY() + intensity / 8), Wait(shakeDuration / 8), Func(camera.lookAt, Point3(0, 0, 0)))
-        shakeTrack = Sequence()
-        for i in range(0, numShakes):
-            if quake == 0:
-                shakeTrack.append(vertShakeTrack)
-            else:
-                shakeTrack.append(Parallel(vertShakeTrack, horizShakeTrack))
+    def shakeCameraTrack(shakeIntensity: float, perShakeDuration, numShakes: int = 4, shakeRate: float = 60.0):
+        shakeTrack = Sequence(name='miniShakeCameraShot')
 
+        # calculate how quick we move each random shake in each stomp
+        playRate = 1.0 / shakeRate
+        # determine how many mini-shakes per stomp
+        miniShakeAmt = int(perShakeDuration / playRate)
+
+        for shakeNo in range(numShakes):
+            # determine each mini-shake in each stomp with shakeDuration / play rate
+            # shakeTrack.append(Func(print, f'shakeIntensity={shakeIntensity}, perShakeDuration={perShakeDuration}, numShakes={numShakes}, shakeRate={shakeRate}, miniShakeAmt={miniShakeAmt}'))
+            for playIter in range(miniShakeAmt):
+                randY = (random.random() * 2.0) - 1.0
+                randZ = (random.random() * 2.0) - 1.0
+                # set x & z with a displacement that depends on 'how long' we've been shaking the screen for
+                displacement = (1 - (playIter / miniShakeAmt)) * shakeIntensity
+                # clamp ranges within [-1.0, 1.0) for camera.lookAt()
+                randY = min(max(randY * displacement, -1.0), 1.0)
+                randZ = min(max(randZ * displacement, -1.0), 1.0)
+                # shakeTrack.append(Func(print, f'playIter {playIter}, x={randY}, z={randZ}, displacement={displacement}'))
+                shakeTrack.append(Func(camera.lookAt, 0.0, randY, randZ))
+                # make sure the camera waits for this mini-shake to finish before going to the next mini-shake
+                shakeTrack.append(Wait(playRate))
+
+            # reset to pos(0.0, 0.0, 0.0) after each stomp
+            shakeTrack.append(Func(camera.lookAt, 0.0, 0.0, 0.0))
+
+        # return the shake sequence that we have thus calculated with dark magicks
         return shakeTrack
 
-    x = 10 + random.random() * 3
+    # Allow a reasonable degree of randomness in the camera's positioning
+    x = 13.0 + random.random() * 3.0
     if random.random() > 0.5:
         x = -x
-    z = 7 + random.random() * 3
-    track.append(Func(camera.setPos, x, 0, z))
-    track.append(Func(camera.lookAt, Point3(0, 0, 0)))
-    track.append(Wait(shakeDelay))
-    track.append(shakeCameraTrack(shakeIntensity))
+    z = 12.0 + random.random() * 3.0
+    # Let the camera display the toons
+    track.append(Func(camera.setPos, x, -5.0, z))
+
+    # Point the camera at the center of the battle, to shoot all the actors
+    track.append(Func(camera.lookAt, Point3(0.0, 0.0, 0.0)))
+    track.append(Wait(shakeDelay + extraDelay))
+    track.append(shakeCameraTrack(shakeIntensity, shakeDuration, numShakes=numShakes))
     track.append(Wait(postShakeDelay))
     return track
 

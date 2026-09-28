@@ -354,7 +354,7 @@ def doSuitAttack(attack):
     suit = attack['suit']
     if name == 'AcidRain':
         suitTrack = doAcidRain(attack)
-    elif name == 'Aftershock':
+    elif name in ('Aftershock', 'Quake'):
         suitTrack = doQuake(attack)
     elif name == 'Audit':
         suitTrack = doAudit(attack)
@@ -540,8 +540,6 @@ def doSuitAttack(attack):
         suitTrack = doPowerTie(attack)
     elif name == 'PowerTrip':
         suitTrack = doPowerTrip(attack)
-    elif name == 'Quake':
-        suitTrack = doQuake(attack)
     elif name == 'RazzleDazzle':
         suitTrack = doRazzleDazzle(attack)
     elif name == 'RedTape':
@@ -6012,33 +6010,33 @@ def doTickingTimeBomb(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, bombTracks, *explosionTracks, *colorTracks, toonTracks, soundTrack)
 
 
-def doQuake(attack):
+def doQuake(attack: dict) -> MetaInterval:
     suit = attack['suit']
-    suitTrack = getSuitAnimTrack(attack)
-    damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
+    suitTrack: Sequence = getSuitAnimTrack(attack)
+    damageAnims = [['slip-forward'], {AAK.Anim: 'slip-backward', AAK.PlayRate: 1.25}]
     dodgeAnims = [['jump'], ['jump', 0.01], ['jump', 0.01]]
-    soundTrack = getSoundTrack('SA_quake.ogg', node=suit)
-    toonTracks = getToonTracks(attack, damageDelay=1.8, splicedDamageAnims=damageAnims, dodgeDelay=1.1, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
-    return Parallel(suitTrack, toonTracks, soundTrack)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=1.7, splicedDamageAnims=damageAnims, dodgeDelay=1.1, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
+    soundTrack: Sequence = getSoundTrack('SA_quake.ogg', delay=0.0, node=suit, volume=0.9)
+    return Parallel(suitTrack, soundTrack, toonTracks)
 
-def doTremor(attack):
+def doTremor(attack: dict) -> MetaInterval:
     suit = attack['suit']
-    suitTrack = getSuitAnimTrack(attack)
+    suitTrack: Sequence = getSuitAnimTrack(attack)
     damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
     dodgeAnims = [['jump'], ['jump', 0.01]]
-    toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
-    soundTrack = getSoundTrack('SA_tremor.ogg', delay=0.9, node=suit)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
+    soundTrack: Sequence = getSoundTrack('SA_tremor.ogg', delay=0.9, node=suit)
     return Parallel(suitTrack, soundTrack, toonTracks)
 
 
-def doShake(attack):
+def doShake(attack: dict) -> MetaInterval:
     suit = attack['suit']
-    suitTrack = getSuitAnimTrack(attack)
+    suitTrack: Sequence = getSuitAnimTrack(attack)
     damageAnims = [['slip-forward'], ['slip-forward', 0.01]]
     dodgeAnims = [['jump'], ['jump', 0.01]]
-    soundTrack = getSoundTrack('SA_shake.ogg', delay=0, node=suit)
-    toonTracks = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
-    return Parallel(suitTrack, toonTracks, soundTrack)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=1.1, splicedDamageAnims=damageAnims, dodgeDelay=0.7, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=2.8, showDamageExtraTime=1.1)
+    soundTrack: Sequence = getSoundTrack('SA_shake.ogg', delay=0.0, node=suit)
+    return Parallel(suitTrack, soundTrack, toonTracks)
 
 def doBash(attack):
     suit = attack['suit']
