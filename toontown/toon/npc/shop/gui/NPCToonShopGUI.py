@@ -43,7 +43,6 @@ from toontown.toon.npc.shop import NPCToonShopGlobals
 from toontown.toon.npc.shop.gui.NPCToonShopCategoryButton import NPCToonShopCategoryButton
 from toontown.toonbase import ToontownTimer
 from toontown.gui.GenericCloseButton import GenericCloseButton
-from toontown.toonbase.MarginManagerCell import ScreenCellFlag
 
 
 class NPCToonShopGUI(TilingScaledFrame, Bounds):
@@ -132,7 +131,6 @@ class NPCToonShopGUI(TilingScaledFrame, Bounds):
             self.keepAliveTaskName = self.uniqueName('keepAlive')
             self.__startKeepAlive()
 
-            base.flagScreenCells(ScreenCellFlag.npcShop, [base.bottomCells[2], base.bottomCells[3]])
 
     def __create(self):
         self.anchor_left = CornerAnchor(parent=self, corner=ScreenCorner.LEFT_MIDDLE)
@@ -384,7 +382,6 @@ class NPCToonShopGUI(TilingScaledFrame, Bounds):
             self.timer.stop()
             self.timer.destroy()
             self.timer = None
-        base.unflagScreenCells(ScreenCellFlag.npcShop, [base.bottomCells[2], base.bottomCells[3]])
         self.__endKeepAlive()
         self.ignoreAll()
         self.npc.doExit()
