@@ -5056,22 +5056,22 @@ def doEvilEye(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, *eyePropTracks, *soundTracks)
 
 
-def doPlayHardball(attack):
+def doPlayHardball(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    suitType = getSuitBodyType(attack['suitName'])
-    suitDelay = 1.3
-    damageDelay = 2.25
-    dodgeDelay = 1.86
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    ballPosPoints = [Point3(-0.25, 0.03, -0.31), VBase3(-1.152, 86.581, -76.784)]
-    propTracks = Parallel()
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
+    suitDelay: float = 1.79 / playRate
+    damageDelay: float = 3.46 / playRate
+    dodgeDelay: float = 2.56 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    ballPosPoints = [Point3(-0.24, -0.13, -0.21), VBase3(-1.152, 86.581, -76.784)]
+    propTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         ball = globalPropPool.getProp('baseball')
-        propTrack = Sequence(getPropAppearTrack(ball, suit.getRightHand(), ballPosPoints, 0.5, Point3(7, 7, 7), scaleUpTime=0.25))
+        propTrack = Sequence(getPropAppearTrack(ball, suit.getRightHand(), ballPosPoints, 0.8 / playRate, Point3(5.0, 5.0, 5.0), scaleUpTime=0.5 / playRate))
         propTrack.append(Wait(suitDelay))
         propTrack.append(Func(battle.movie.needRestoreRenderProp, ball))
         propTrack.append(Func(ball.wrtReparentTo, battle))
@@ -5081,35 +5081,34 @@ def doPlayHardball(attack):
         z = toonPos.getZ()
         z = z + 0.2
         if dmg > 0:
-            propTrack.append(LerpPosInterval(ball, 0.25, __toonFacePoint(toon, parent=battle)))
-            propTrack.append(LerpPosInterval(ball, 0.5, Point3(x, y + 3, z)))
-            propTrack.append(LerpPosInterval(ball, 0.4, Point3(x, y + 5, z + 2)))
-            propTrack.append(LerpPosInterval(ball, 0.3, Point3(x, y + 6, z)))
-            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 7, z + 1)))
-            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 8, z)))
-            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 8.5, z + 0.6)))
-            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y + 9, z + 0.2)))
+            propTrack.append(LerpPosInterval(ball, 0.5 / playRate, __toonFacePoint(toon, parent=battle)))
+            propTrack.append(LerpPosInterval(ball, 0.5 / playRate, Point3(x, y + 3.0, z)))
+            propTrack.append(LerpPosInterval(ball, 0.4 / playRate, Point3(x, y + 5.0, z + 2.0)))
+            propTrack.append(LerpPosInterval(ball, 0.3 / playRate, Point3(x, y + 6.0, z)))
+            propTrack.append(LerpPosInterval(ball, 0.1 / playRate, Point3(x, y + 7.0, z + 1.0)))
+            propTrack.append(LerpPosInterval(ball, 0.1 / playRate, Point3(x, y + 8.0, z)))
+            propTrack.append(LerpPosInterval(ball, 0.1 / playRate, Point3(x, y + 8.5, z + 0.6)))
+            propTrack.append(LerpPosInterval(ball, 0.1 / playRate, Point3(x, y + 9.0, z + 0.2)))
         else:
-            propTrack.append(LerpPosInterval(ball, 0.25, Point3(x, y + 2, z)))
-            propTrack.append(LerpPosInterval(ball, 0.4, Point3(x, y - 1, z + 2)))
-            propTrack.append(LerpPosInterval(ball, 0.3, Point3(x, y - 3, z)))
-            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 4, z + 1)))
-            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 5, z)))
-            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 5.5, z + 0.6)))
-            propTrack.append(LerpPosInterval(ball, 0.1, Point3(x, y - 6, z + 0.2)))
-        propTrack.append(Wait(0.4))
-        propTrack.append(LerpScaleInterval(ball, 0.3, MovieUtil.PNT3_NEARZERO))
+            propTrack.append(LerpPosInterval(ball, 0.5 / playRate, Point3(x, y + 2.0, z)))
+            propTrack.append(LerpPosInterval(ball, 0.4 / playRate, Point3(x, y - 1.0, z + 2.0)))
+            propTrack.append(LerpPosInterval(ball, 0.3 / playRate, Point3(x, y - 3.0, z)))
+            propTrack.append(LerpPosInterval(ball, 0.1 / playRate, Point3(x, y - 4.0, z + 1.0)))
+            propTrack.append(LerpPosInterval(ball, 0.1 / playRate, Point3(x, y - 5.0, z)))
+            propTrack.append(LerpPosInterval(ball, 0.1 / playRate, Point3(x, y - 5.5, z + 0.6)))
+            propTrack.append(LerpPosInterval(ball, 0.1 / playRate, Point3(x, y - 6.0, z + 0.2)))
+        propTrack.append(Wait(0.4 / playRate))
+        propTrack.append(LerpScaleInterval(ball, 0.3 / playRate, MovieUtil.PNT3_NEARZERO))
         propTrack.append(Func(MovieUtil.removeProp, ball))
         propTrack.append(Func(battle.movie.clearRenderProp, ball))
-        propTracks.append(propTrack)
+        propTracks += (propTrack,)
 
-    damageAnims = [['conked',
-      damageDelay,
-      0.01,
-      0.5], ['slip-backward', 0.01, 0.7]]
-    toonTracks = getToonTracks(attack, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showDamageExtraTime=3.9)
-    soundTrack = getSoundTrack('SA_hardball%s.ogg' % ('_impact_only' if hitAtleastOneToon(targets) else ''), delay=1.8, node=suit)
-    return Parallel(suitTrack, toonTracks, propTracks, soundTrack)
+    damageAnims = [['conked', damageDelay, 0.01, 0.5],
+     ['slip-backward', 0.01, 0.7]]
+    toonTracks: Parallel = getToonTracks(attack, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showDamageExtraTime=3.9, dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('SA_hardball_impact_only.ogg', delay=2.8 / playRate, node=suit, playRate=1.05) if hitAtleastOneToon(targets) else getSoundTrack('SA_hardball.ogg', delay=3.1 / playRate, node=suit)
+    return Parallel(suitTrack, toonTracks, *propTracks, soundTrack)
+
 
 def doPowerTie(attack):
     suit = attack['suit']

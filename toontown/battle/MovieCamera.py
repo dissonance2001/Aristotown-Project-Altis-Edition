@@ -891,9 +891,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PinkSlip':
         camTrack.append(defaultCamera(openShotDuration=2.8 / playRate))
     elif name == 'PlayHardball':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=(70.0 / 24.0) / playRate))
     elif name == 'PoundKey':
-        camTrack.append(defaultCamera(openShotDuration=(46.0/24.0) / playRate))
+        camTrack.append(defaultCamera(openShotDuration=(46.0 / 24.0) / playRate))
     elif name == 'PowerTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'RazzleDazzle':
