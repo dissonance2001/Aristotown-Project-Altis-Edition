@@ -593,6 +593,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     groupStatus = attack['group']
     target = attack['target']
     targetDicts = attack['target']
+    playRate: float = attack['playRate']
     deadToons = []
 
     for targetDict in targetDicts:
@@ -768,7 +769,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ElectrostaticEnergy':
         camTrack.append(defaultCamera(openShotDuration=1.75))
     elif name == 'Bite':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=2.8 / 1.5))
     elif name == 'BounceCheck':
         if groupStatus == ATK_TGT_GROUP:
             camTrack.append(defaultCamera())
@@ -806,9 +807,9 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'EvictionNotice':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvilEye':
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera(openShotDuration=2.7 / playRate))
     elif name == 'DoubleCross':
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera(openShotDuration=2.5)) # Double Cross movie's play rate is not flexible.  TODO: Make it flexible.
     elif name == 'Forecast':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'MysteriousDisappearance':
@@ -854,25 +855,25 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'MoneyTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'HangUp':
-        camTrack.append(defaultCamera(openShotDuration=66.0/24.0))
+        camTrack.append(defaultCamera(openShotDuration=(66.0/24.0) / playRate))
     elif name == 'HeadShrink':
         camTrack.append(defaultCamera(openShotDuration=1.3))
     elif name == 'HotAir':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Jargon':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=3.5 / playRate))
     elif name == 'Legalese':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'LawBook':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=3.0 / playRate))
+    elif name in ('LawBook', 'Novel', 'ThrowBook'):
+        camTrack.append(defaultCamera(openShotDuration=2.9 / playRate))
     elif name == 'Liquidate':
         camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'MarketCrash':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name in ('MarketCrash', 'Newspaper'):
+        camTrack.append(defaultCamera(openShotDuration=2.7 / playRate))
     elif name == 'MoneyTalks':
         camTrack.append(defaultCamera())
     elif name == 'MumboJumbo':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=3.0 / playRate))
     elif name == 'ParadigmShift':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'PeckingOrder':
@@ -882,11 +883,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'StolenScene':
         camTrack.append(allGroupLowShot(suit, attackDuration, battle))
     elif name == 'PinkSlip':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=2.8 / playRate))
     elif name == 'PlayHardball':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'PoundKey':
-        camTrack.append(defaultCamera(openShotDuration=46.0/24.0))
+        camTrack.append(defaultCamera(openShotDuration=(46.0/24.0) / playRate))
     elif name == 'PowerTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Quake':
@@ -899,13 +900,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RazzleDazzle':
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == 'RedTape':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=(70.0 / 24.0) / playRate))
     elif name == 'ReOrg':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'RestrainingOrder':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Rolodex':
-        camTrack.append(defaultCamera())
+        camTrack.append(defaultCamera(openShotDuration=3.5 / playRate))
     elif name == 'RubberStamp':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'RubOut':
@@ -933,12 +934,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Synergy':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Golf':
-        camTrack.append(defaultCamera(openShotDuration=3.0))
-    elif name == 'ThrowBook':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
-    elif name == 'Novel':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
-    elif name == 'Newspaper':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'TickingTimeBomb':
         camTrack.append(defaultCamera(openShotDuration=2.0))

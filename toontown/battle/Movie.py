@@ -45,6 +45,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownBattleGlobals import *
 from toontown.toontowngui import TTDialog
 from toontown.nametag import NametagGlobals
+from toontown.toonbase.ToontownBattleGlobals import ATTACK_PLAY_RATES
 
 camPos = Point3(14, 0, 10)
 camHpr = Vec3(89, -30, 0)
@@ -1633,6 +1634,7 @@ class Movie(DirectObject.DirectObject):
                 adict['battle'] = self.battle
                 adict['playByPlayText'] = self.playByPlayText
                 adict['taunt'] = sa[SUIT_TAUNT_COL]
+                adict['playRate'] = ATTACK_PLAY_RATES.get(adict['name'], 1.0)
 
 
                 phaseByName = {
