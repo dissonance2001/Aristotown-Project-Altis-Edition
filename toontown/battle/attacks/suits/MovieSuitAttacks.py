@@ -469,10 +469,7 @@ def doSuitAttack(attack):
         else:
             suitTrack = doFingerWag(attack)
     elif name == 'Fired':
-        if suit.dna.name == 'safesupervis':
-            suitTrack = doFiredPressurizer(attack)
-        else:
-            suitTrack = doFired(attack)
+        suitTrack = doFired(attack)
     elif name == 'FountainPen':
         suitTrack = doFountainPen(attack)
     elif name == 'FreezeAssets':
@@ -503,10 +500,7 @@ def doSuitAttack(attack):
     elif name == 'HeadShrink':
         suitTrack = doHeadShrink(attack)
     elif name == 'HotAir':
-        if suit.dna.name == 'safesupervis':
-            suitTrack = doHotAirPressurizer(attack)
-        else:
-            suitTrack = doHotAir(attack)
+        suitTrack = doHotAir(attack)
     elif name == 'Jargon':
         suitTrack = doJargon(attack)
     elif name == 'Legalese':
@@ -5426,13 +5420,18 @@ def doHotAir(attack: dict) -> MetaInterval:
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        sprayEffect = BattleParticles.createParticleEffect('HotAir')
-        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
-        flameEffect = BattleParticles.createParticleEffect('FiredFlame')
+        if suit.dna.name == 'safesupervis':
+           sprayEffect = BattleParticles.createParticleEffect('HotAirPressurizer')
+           baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+           flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
+        else:
+            sprayEffect = BattleParticles.createParticleEffect('HotAir')
+            baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
+            flameEffect = BattleParticles.createParticleEffect('FiredFlame')
+            BattleParticles.setEffectTexture(sprayEffect, 'fire')
+            BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
+            BattleParticles.setEffectTexture(flameEffect, 'fire')
         flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-        BattleParticles.setEffectTexture(sprayEffect, 'fire')
-        BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
-        BattleParticles.setEffectTexture(flameEffect, 'fire')
         BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1.0))
         sprayNode = battle.attachNewNode('spray-node')
         sprayNode.setPos(battle.getActorPosHpr(suit)[0])
@@ -6654,74 +6653,12 @@ def doWatercooler(attack):
     return Parallel(suitTrack, toonTracks, propTrack, sprayTracks, soundTrack, splashTracks)
 
 
-def doFired(attack):
+def doFired(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    baseFlameTracks = Parallel()
-    flameTracks = Parallel()
-    flecksTracks = Parallel()
-    baseFlameSmallTracks = Parallel()
-    flameSmallTracks = Parallel()
-    flecksSmallTracks = Parallel()
-    colorTracks = Parallel()
-    damageAnims = []
-    damageAnims.append(['cringe',
-                        0.01,
-                        0.7,
-                        0.62])
-    damageAnims.append(['slip-forward',
-                        1e-05,
-                        0.4,
-                        1.2])
-    damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.8, startTime=1.2))
-    toonTracks = getToonTracks(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_hot_air.ogg', delay=1.0, node=suit)
-    for t in targets:
-        toon = t['toon']
-        dmg = t['hp']
-        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
-        flameEffect = BattleParticles.createParticleEffect('FiredFlame')
-        flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-        BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
-        BattleParticles.setEffectTexture(flameEffect, 'fire')
-        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
-        baseFlameSmall = BattleParticles.createParticleEffect(file='firedBaseFlame')
-        flameSmall = BattleParticles.createParticleEffect('FiredFlame')
-        flecksSmall = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-        BattleParticles.setEffectTexture(baseFlameSmall, 'fire')
-        BattleParticles.setEffectTexture(flameSmall, 'fire')
-        BattleParticles.setEffectTexture(flecksSmall, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
-        baseFlameSmall.setScale(0.7)
-        flameSmall.setScale(0.7)
-        flecksSmall.setScale(0.7)
-        baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, (baseFlameEffect, toon, 0), softStop=-1.0)
-        flameTrack = getPartTrack(flameEffect, 1.0, 3.9, (flameEffect, toon, 0), softStop=-1.0)
-        flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, (flecksEffect, toon, 0), softStop=-1.0)
-        baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 2.9, (baseFlameSmall, toon, 0), softStop=-1.0)
-        flameSmallTrack = getPartTrack(flameSmall, 1.0, 2.9, (flameSmall, toon, 0), softStop=-1.0)
-        flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, (flecksSmall, toon, 0), softStop=-1.0)
-        if dmg > 0:
-            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
-            baseFlameTracks.append(baseFlameTrack)
-            flameTracks.append(flameTrack)
-            flecksTracks.append(flecksTrack)
-            colorTracks.append(colorTrack)
-        else:
-            baseFlameTracks.append(baseFlameSmallTrack)
-            flameTracks.append(flameSmallTrack)
-            flecksTracks.append(flecksSmallTrack)
-
-    return Parallel(suitTrack, baseFlameTracks, flameTracks, flecksTracks, toonTracks, colorTracks, soundTrack)
-
-def doFiredPressurizer(attack):
-    suit = attack['suit']
-    battle = attack['battle']
-    targets = attack['target']
-    BattleParticles.loadParticles()
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+    suitTrack = getSuitTrack(attack, playRate=1.25)
     baseFlameTracks = Parallel()
     flameTracks = Parallel()
     flecksTracks = Parallel()
@@ -6744,12 +6681,22 @@ def doFiredPressurizer(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
-        flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
+        if suit.dna.name == 'safesupervis':
+            baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+            flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
+            baseFlameSmall = BattleParticles.createParticleEffect(file='firedBaseFlame2')
+            flameSmall = BattleParticles.createParticleEffect('FiredFlame2')
+        else:
+            baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
+            flameEffect = BattleParticles.createParticleEffect('FiredFlame')
+            BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
+            BattleParticles.setEffectTexture(flameEffect, 'fire')
+            baseFlameSmall = BattleParticles.createParticleEffect(file='firedBaseFlame')
+            flameSmall = BattleParticles.createParticleEffect('FiredFlame')
+            BattleParticles.setEffectTexture(baseFlameSmall, 'fire')
+            BattleParticles.setEffectTexture(flameSmall, 'fire')
         flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
         BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
-        baseFlameSmall = BattleParticles.createParticleEffect(file='firedBaseFlame2')
-        flameSmall = BattleParticles.createParticleEffect('FiredFlame2')
         flecksSmall = BattleParticles.createParticleEffect('SpriteFiredFlecks')
         BattleParticles.setEffectTexture(flecksSmall, 'roll-o-dex', color=Vec4(0.8, 0.8, 0.8, 1))
         baseFlameSmall.setScale(0.7)
@@ -6773,56 +6720,6 @@ def doFiredPressurizer(attack):
             flecksTracks.append(flecksSmallTrack)
 
     return Parallel(suitTrack, baseFlameTracks, flameTracks, flecksTracks, toonTracks, *colorTracks, soundTrack)
-
-
-def doHotAirPressurizer(attack: dict) -> MetaInterval:
-    suit = attack['suit']
-    battle = attack['battle']
-    targets: list[dict] = attack['target']
-    playRate: float = attack['playRate']
-    BattleParticles.loadParticles()
-    sprayDelay: float = 0.9 / playRate
-    flameDelay: float = 2.9 / 1.4
-    flameDuration: float = 4.4 / playRate
-    flecksDelay: float = flameDelay + (0.8 / playRate)
-    flecksDuration: float = flameDuration - (2.0 / playRate)
-    damageDelay: float = 2.5 / playRate
-    dodgeDelay: float = 1.5 / playRate
-    suitTrack: Sequence = getSuitTrack(attack, playRate=1.4)
-    sprayTracks: tuple[Sequence, ...] = ()
-    flameTracks: tuple[Sequence, ...] = ()
-    colorTracks: tuple[Sequence, ...] = ()
-    for t in targets:
-        toon = t['toon']
-        dmg = t['hp']
-        sprayEffect = BattleParticles.createParticleEffect('HotAirPressurizer')
-        baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
-        flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
-        flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1.0))
-        sprayNode = battle.attachNewNode('spray-node')
-        sprayNode.setPos(battle.getActorPosHpr(suit)[0])
-        sprayNode.headsUp(toon)
-        sprayTrack = Sequence(
-            getPartTrack(sprayEffect, sprayDelay, 3.5 / playRate, (sprayEffect, suit, 0), softStop=-1.5),
-            Func(sprayNode.removeNode)
-        )
-        baseFlameTrack = getPartTrack(baseFlameEffect, flameDelay, flameDuration, (baseFlameEffect, toon, 0), softStop=-1.0)
-        flameTrack = getPartTrack(flameEffect, flameDelay, flameDuration, (flameEffect, toon, 0), softStop=-1.0)
-        flecksTrack = getPartTrack(flecksEffect, flecksDelay, flecksDuration, (flecksEffect, toon, 0), softStop=-1.0)
-        sprayTracks += (sprayTrack,)
-        if dmg > 0:
-            colorTrack = getColorTrack(battle, toon, 3.0 / playRate, 'all', 2.6 / playRate, Vec4(0.0, 0.0, 0.0, 1.0))
-            flameTracks += (baseFlameTrack, flameTrack, flecksTrack)
-            colorTracks += (colorTrack,)
-
-    damageAnims = []
-    damageAnims.append(['cringe', 0.01, 0.7, 0.62])
-    damageAnims.append(['slip-forward', 0.01, 0.4, 1.2])
-    damageAnims.append(['slip-forward', 0.01, 1.0])
-    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], damageAnimPlayRate=1.2, dodgeAnimPlayRate=1.2)
-    soundTrack: Sequence = getSoundTrack('SA_hot_air.ogg', delay=0.85 / playRate, node=suit)
-    return Parallel(suitTrack, toonTracks, *sprayTracks, soundTrack, *flameTracks, *colorTracks)
 
 
 def doAudit(attack: dict) -> MetaInterval:
