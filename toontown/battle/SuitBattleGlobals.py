@@ -5,6 +5,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
 from otp.otpbase import OTPLocalizer
 from toontown.toonbase import TTLocalizer
+from typing import Union, Optional
 notify = DirectNotifyGlobal.directNotify.newCategory('SuitBattleGlobals')
 debugAttackSequence = {}
 
@@ -574,7 +575,7 @@ class SuitAttack:
     In this manner, we can have somewhat more organized attacks and more freedom with how we handle them.
     '''
     
-    def __init__(self, name, hp, acc, freq, groupStatus = None, effect = None):
+    def __init__(self, name: str, /, *, hp: tuple[int, ...], acc: tuple[int, ...], freq: tuple[int, ...], groupStatus: Optional[int] = None, effect: Optional[StatusEffects.StatusEffect] = None) -> None:
         '''
         Instantiate the Cog's attack data.
 
@@ -584,14 +585,14 @@ class SuitAttack:
             acc (tuple): A tuple of Cog accuracies.
             freq (tuple): A tuple of Cog frequencies.
             groupStatus (Targeting|int): An optional parameter that determines if there is a specific targeting that should be performed.  If nothing is given, check for the default targeting from SuitAttacks.
-            effect (StatusEffect|None): Some attacks, like the Powerhouse's Burn and Count Erfit's Wring Out, will add status effects to Toons.  Preferably, we wish to use the new status effect system.
+            effect (StatusEffect|None): Some attacks, like the Powerhouse's Power Surge and Count Erfit's Wring Out, will add status effects to Toons.  Preferably, we wish to use the new status effect system.
         '''
-        self.name = name
-        self.hp = hp
-        self.acc = acc
-        self.freq = freq
-        self.groupStatus = groupStatus
-        self.effect = effect
+        self.name: str = name
+        self.hp: tuple[int, ...] = hp
+        self.acc: tuple[int, ...] = acc
+        self.freq: tuple[int, ...] = freq
+        self.groupStatus: Union[int, None] = groupStatus
+        self.effect: Union[StatusEffects.StatusEffect, None] = effect
 
 SuitAttributes = {'f': {'name': 'Flunky', # cog name
        'singularname': 'a Flunky', # cogs singular name, for tasks
