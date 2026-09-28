@@ -89,12 +89,12 @@ def __makeCancelledNodePath():
     tn.setAlign(TextNode.ACenter)
     tntop = hidden.attachNewNode('CancelledTop')
     tnpath = tntop.attachNewNode(tn)
-    tnpath.setPosHpr(0, 0, 0, 90, 0, 0)
-    tnpath.setScale(1)
-    tnpath.setColor(0.7, 0, 0, 1)
+    tnpath.setPosHpr(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    tnpath.setScale(1.0)
+    tnpath.setColor(0.7, 0.0, 0.0, 1.0)
     tnpathback = tnpath.instanceUnderNode(tntop, 'backside')
-    tnpathback.setPosHpr(0, 0, 0, 180, 0, 0)
-    tnpath.setScale(1)
+    tnpathback.setPosHpr(0.0, 0.0, 0.0, 180.0, 0.0, 0.0)
+    tnpath.setScale(1.0)
     return tntop
 
 
@@ -3332,36 +3332,53 @@ def doWriteOff(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, padPropTrack, pencilPropTrack, soundTrack)
 
 
-def doRubberStamp(attack):
+def doRubberStamp(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    toon = target[0]['toon']
-    suitTrack = getSuitTrack(attack)
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
     stamp = globalPropPool.getProp('cc_m_prp_bat_rubberStamp')
     pad = globalPropPool.getProp('cc_m_prp_bat_rubberStamp_pad')
     cancelled = __makeCancelledNodePath()
-    suitType = getSuitBodyType(attack['suitName'])
-    suitType = getSuitBodyType(attack['suitName'])
+    suitType = getSuitBodyType(suit.style.name)
     if suitType == 'a':
-        padPosPoints = [Point3(-0.75, 0, -0.125), VBase3(90, 0, 180)]
-    if suitType == 'b':
-        padPosPoints = [Point3(-0.75, 0, -0.125), VBase3(90, 0, 180)]
-    if suitType == 'c':
-        padPosPoints = [Point3(-0.25, 0.25, -0.125), VBase3(90, 0, 180)]
-    stampPosPoints = [Point3(-0.08219178082191902, -0.7397260273972606, -0.125), VBase3(90, 0, 90)]
-    padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 1e-06, 3.2)
-    missPoint = lambda cancelled = cancelled, toon = toon: __toonMissPoint(cancelled, toon)
-    propTrack = Sequence(Func(__showProp, stamp, suit.getRightHand(), stampPosPoints[0], stampPosPoints[1]), LerpScaleInterval(stamp, 0.5, Point3(1.2, 1.2, 1.2)), Wait(2.6), Func(battle.movie.needRestoreRenderProp, cancelled), Func(cancelled.reparentTo, render), Func(cancelled.setScale, 0.6), Func(cancelled.setPosHpr, stamp, 0.81, -1.11, -0.16, 0, 0, 90), Func(cancelled.setP, 0), Func(cancelled.setR, 0))
-    propTrack.append(getPropThrowTrack(attack, cancelled, [__toonFacePoint(toon)], [missPoint]))
-    propTrack.append(Func(MovieUtil.removeProp, cancelled))
-    propTrack.append(Func(battle.movie.clearRenderProp, cancelled))
-    propTrack.append(Wait(0.3))
-    propTrack.append(LerpScaleInterval(stamp, 0.5, MovieUtil.PNT3_NEARZERO))
+        padPosPoints = [Point3(-0.7541, 0.267, -0.13), VBase3(-77.0589, 180.0, -3.292)]
+    else:
+        padPosPoints = [Point3(-0.1005, -0.1506, -0.0466), VBase3(-13.3334, 180.0, -14.7299)]
+    stampPosPoints = [Point3(-0.0772, -0.7336, -0.0534), VBase3(270.0, -28.585, 270.0)]
+    padPropTrack: Sequence = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 1e-06, 3.3, scaleDownTime=0.2)
+    propTrack: Sequence = Sequence(
+        Func(__showProp, stamp, suit.getRightHand(), stampPosPoints[0], stampPosPoints[1]),
+        LerpScaleInterval(stamp, 0.5 / playRate, Point3(1.2, 1.2, 1.2)),
+        Wait(2.6 / playRate)
+    )
+    cancelledTracks: Parallel = Parallel()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        cancelled = __makeCancelledNodePath()
+        missPoint = lambda cancelled = cancelled, toon = toon: __toonMissPoint(cancelled, toon)
+        cancelledTrack = Sequence(
+            Func(battle.movie.needRestoreRenderProp, cancelled),
+            Func(cancelled.reparentTo, render),
+            Func(cancelled.setScale, 0.6),
+            Func(cancelled.setPosHpr, stamp, 0.0, -0.2, -0.16, 0.0, 0.0, 90.0),
+            Func(cancelled.setP, 0.0),
+            Func(cancelled.setR, 0.0),
+            getPropThrowTrack(attack, cancelled, [__toonFacePoint(toon)], [missPoint], hitDuration=0.3 / playRate, missDuration=0.3 / playRate, lookAt=toon, target=t),
+            Func(MovieUtil.removeProp, cancelled),
+            Func(battle.movie.clearRenderProp, cancelled)
+        )
+        cancelledTracks.append(cancelledTrack)
+
+    propTrack.append(cancelledTracks)
+    propTrack.append(Wait(0.2 / playRate))
+    propTrack.append(LerpScaleInterval(stamp, 0.5 / playRate, MovieUtil.PNT3_NEARZERO))
     propTrack.append(Func(MovieUtil.removeProp, stamp))
-    toonTrack = getToonTrack(attack, 3.4, ['conked'], 1.9, ['sidestep'])
-    soundTrack = getSoundTrack('SA_rubber_stamp.ogg', delay=0.5, node=suit)
-    return Parallel(suitTrack, toonTrack, propTrack, padPropTrack, soundTrack)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=3.28 / playRate, splicedDamageAnims=[['cringe']], dodgeDelay=1.7 / playRate, dodgeAnimNames=['sidestep'], dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('SA_rubber_stamp.ogg', delay=0.6 / playRate, duration=0.0 if hitAtleastOneToon(targets) > 0 else 2.3, node=suit)
+    return Parallel(suitTrack, toonTracks, propTrack, padPropTrack, soundTrack)
 
 
 def doRazzleDazzle(attack):
@@ -3707,33 +3724,58 @@ def doMoneyTrip(attack):
 
 
 
-def doTeeOff(attack):
+def doTeeOff(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     club = globalPropPool.getProp('golf-club')
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    clubPosPoints = [Point3(0.2, 3.3, -0.5), VBase3(0.0, 45.0, 270.0)]
-    clubPropTrack = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.25, 3.0, Point3(1.1, 1.1, 1.1))
-    suitName = attack['suitName']
-    ballPosPoints = [Point3(5.1, 4.0, 0.1)]
-    ballPropTracks = Parallel()
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    HitDelay: float = 3.75
+    ToonHitDelay: float = 4.35
+    ToonDodgeDelay: float = 1.4
+    BallXMult: float = 1.56
+    BallYMult: float = 0.753
+    clubPosPoints = [Point3(0.2724, 3.4425, 0.5446), VBase3(-1.3617, 60.5138, -84.6605)]
+    clubPropTrack: Sequence = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.7 / playRate, (HitDelay + 1.3) / playRate, Point3(1.0, 1.0, 1.0), scaleUpTime=0.15 / playRate, scaleDownTime=0.15 / playRate)
+    if suit.dna.name == 'ym':
+        ballPosPoints = [Point3(2.25*BallXMult, 2.25*BallYMult, 0.1)]
+    elif suit.dna.name == 'autocad':
+        ballPosPoints = [Point3(2.35*BallXMult, 2.35*BallYMult, 0.1)]
+    elif suit.dna.name == 'm':
+        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+    elif suit.dna.name in ('std', 'std2', 'mh', 'mh2'):
+        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+    elif suit.dna.name == 'rb':
+        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+    elif suit.dna.name == 'tbc':
+        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+    elif suit.dna.name == 'mg':
+        ballPosPoints = [Point3(4.1*BallXMult, 4.1*BallYMult, 0.1)]
+    elif suit.dna.name == 'hho':
+        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+    elif suit.dna.name == 'clubpres':
+        ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
+    else:
+        ballPosPoints = [Point3(2.1, 0.0, 0.1)]
+    ballPropTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         ball = globalPropPool.getProp('golf-ball')
-        ballPropTrack = Sequence(getPropAppearTrack(ball, suit, ballPosPoints, 1.25, Point3(1.75, 1.75, 1.75)),
-                                 Func(battle.movie.needRestoreRenderProp, ball), Func(ball.wrtReparentTo, render),
-                                 Wait(1.125))
+        ballPropTrack = Sequence(
+            getPropAppearTrack(ball, suit, ballPosPoints, 1.7 / playRate, Point3(1.5, 1.5, 1.5)),
+            Func(battle.movie.needRestoreRenderProp, ball),
+            Func(ball.wrtReparentTo, render),
+            Wait((HitDelay - 1.95) / playRate)
+        )
         missPoint = lambda ball=ball, toon=toon: __toonMissPoint(ball, toon)
-        ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], .1, target=t))
+        ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], hitDuration=0.3 / playRate, missDuration=0.5 / playRate, target=t))
         ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
-        ballPropTracks.append(ballPropTrack)
+        ballPropTracks += (ballPropTrack,)
 
-    dodgeDelay = suitTrack.getDuration()
-    toonTracks = getToonTracks(attack, 3, ['slip-backward'], 1.5, ['duck'],
-                               showMissedExtraTime=1.7)
-    soundTrack = getSoundTrack('SA_tee_off.ogg', delay=2.5, node=suit)
-    return Parallel(suitTrack, toonTracks, clubPropTrack, ballPropTracks, soundTrack)
+    toonTracks: Parallel = getToonTracks(attack, ToonHitDelay / playRate, ['slip-backward'], ToonDodgeDelay / playRate, ['duck'], showMissedExtraTime=1.7, damageAnimPlayRate=1.1, dodgeAnimPlayRate=1.1)
+    soundTrack: Sequence = getSoundTrack('SA_tee_off.ogg', delay=HitDelay / playRate, node=suit)
+    return Parallel(suitTrack, toonTracks, clubPropTrack, *ballPropTracks, soundTrack)
 
 def doTeeOffGroup(attack):
     suit = attack['suit']
@@ -5049,7 +5091,7 @@ def doEvilEye(attack: dict) -> MetaInterval:
                 )
             )
         eyeMoveTrack = lerpInterval
-        eyeRollTrack = LerpHprInterval(eye, moveDuration, Point3(0.0, 0.0, -180.0))
+        eyeRollTrack = LerpHprInterval(eye, useMoveDuration, Point3(0.0, 0.0, -180.0))
         eyePropTrack = Sequence(
             eyeAppearTrack,
             Parallel(eyeMoveTrack, eyeRollTrack),

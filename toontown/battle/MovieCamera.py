@@ -797,7 +797,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         else:
             camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
     elif name in ('Crunch', 'MudSling'):
-        camTrack.append(defaultCamera())
+        if groupStatus == ATK_TGT_GROUP:
+            camTrack.append(defaultCamera())
+        else:
+            camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
     elif name == 'Demotion':
         camTrack.append(defaultCamera(openShotDuration=1.7))
     elif name == 'DoubleTalk':
@@ -908,7 +911,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Rolodex':
         camTrack.append(defaultCamera(openShotDuration=3.5 / playRate))
     elif name == 'RubberStamp':
-        camTrack.append(defaultCamera(openShotDuration=3.0))
+        camTrack.append(defaultCamera(openShotDuration=(52.0 / 24.0) / playRate))
     elif name == 'RubOut':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Sacked':
@@ -934,7 +937,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Synergy':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Golf':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=2.9))
     elif name == 'TickingTimeBomb':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Tremor':
