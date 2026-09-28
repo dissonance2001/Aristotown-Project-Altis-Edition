@@ -3172,7 +3172,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     else:
         camTrack.append(defaultCamera())
     pbpText = attack['playByPlayText']
-    displayName = TTLocalizer.SuitAttackNames[attack['name']]
+    displayName = TTLocalizer.SuitAttackNames.get(attack['name'], '')
     currentHp = attack['currentHp']
     maxHp = attack['maxHp']
 
