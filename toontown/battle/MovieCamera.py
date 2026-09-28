@@ -865,7 +865,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'HeadShrink':
         camTrack.append(defaultCamera(openShotDuration=1.3))
     elif name == 'HotAir':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=2.0 / playRate))
     elif name == 'Jargon':
         camTrack.append(defaultCamera(openShotDuration=3.5 / playRate))
     elif name == 'Legalese':

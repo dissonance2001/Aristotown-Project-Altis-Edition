@@ -5406,65 +5406,71 @@ def doFreezeAssets(attack):
     return Parallel(suitTrack, toonTracks, cloudPropTracks, soundTrack)
 
 
-def doHotAir(attack):
+def doHotAir(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     BattleParticles.loadParticles()
-    sprayEffects = []
-    for t in targets:
-        sprayEffect = BattleParticles.createParticleEffect('HotAir')
-        #BattleParticles.setEffectTexture(sprayEffect, 'fire')
-        sprayEffects.append(sprayEffect)
-
-    sprayDelay = 0.25
-    flameDelay = 2.0
-    flameDuration = 3.5
-    flecksDelay = flameDelay + 0.8
-    flecksDuration = flameDuration - 0.8
-    damageDelay = 2.0
-    dodgeDelay = 1.0
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    sprayTracks = getPartTracks(attack, sprayEffects, sprayDelay, 3.5, 0, softStop=-2)
-    baseFlameTracks = Parallel()
-    flameTracks = Parallel()
-    flecksTracks = Parallel()
-    colorTracks = Parallel()
-    damageAnims = []
-    damageAnims.append(['cringe',
-                        0.01,
-                        0.7,
-                        0.62])
-    damageAnims.append(['slip-forward',
-                        0.01,
-                        0.4,
-                        1.2])
-    damageAnims.append(['slip-forward', 0.01, 1.0])
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=1.0, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_hot_air.ogg', delay=0.5, node=suit)
+    sprayDelay: float = 0.9 / playRate
+    flameDelay: float = 2.9 / 1.4
+    flameDuration: float = 4.4 / playRate
+    flecksDelay: float = flameDelay + (0.8 / playRate)
+    flecksDuration: float = flameDuration - (2.0 / playRate)
+    damageDelay: float = 2.5 / playRate
+    dodgeDelay: float = 1.5 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.4)
+    sprayTracks: tuple[Sequence, ...] = ()
+    flameTracks: tuple[Sequence, ...] = ()
+    colorTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        sprayEffect = BattleParticles.createParticleEffect('HotAir')
         baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame')
         flameEffect = BattleParticles.createParticleEffect('FiredFlame')
         flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
+        BattleParticles.setEffectTexture(sprayEffect, 'fire')
         BattleParticles.setEffectTexture(baseFlameEffect, 'fire')
         BattleParticles.setEffectTexture(flameEffect, 'fire')
-        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
+        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1.0))
+        sprayNode = battle.attachNewNode('spray-node')
+        sprayNode.setPos(battle.getActorPosHpr(suit)[0])
+        sprayNode.headsUp(toon)
+        sprayTrack = Sequence(
+            getPartTrack(sprayEffect, sprayDelay, 3.5 / playRate, (sprayEffect, suit, 0), softStop=-1.5),
+            Func(sprayNode.removeNode)
+        )
         baseFlameTrack = getPartTrack(baseFlameEffect, flameDelay, flameDuration, (baseFlameEffect, toon, 0), softStop=-1.0)
         flameTrack = getPartTrack(flameEffect, flameDelay, flameDuration, (flameEffect, toon, 0), softStop=-1.0)
         flecksTrack = getPartTrack(flecksEffect, flecksDelay, flecksDuration, (flecksEffect, toon, 0), softStop=-1.0)
-        if dmg > 0:
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
-            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
-            baseFlameTracks.append(baseFlameTrack)
-            flameTracks.append(flameTrack)
-            flecksTracks.append(flecksTrack)
-            colorTracks.append(colorTrack)
 
-    return Parallel(suitTrack, toonTracks, sprayTracks, soundTrack, baseFlameTracks, flameTracks, flecksTracks, colorTracks)
+        if suit.dna.name == 'foreman':
+            sprayNode.setY(sprayNode.getY() - 1.0)
+            sprayNode.setZ(sprayNode.getZ() + 2.0)
+        elif suit.dna.name == 'fires':
+            sprayNode.setY(sprayNode.getY() - 1.0)
+            sprayNode.setZ(sprayNode.getZ() + 1.0)
+        elif suit.dna.name == 'whunter':
+            sprayNode.setY(sprayNode.getY() - 0.8)
+            sprayNode.setZ(sprayNode.getZ() + 1.5)
+        elif suit.dna.name == 'mplayer':
+            sprayNode.setY(sprayNode.getY() - 1.0)
+            sprayNode.setZ(sprayNode.getZ() + 1.6)
+
+        sprayTracks += (sprayTrack,)
+        if dmg > 0:
+            colorTrack = getColorTrack(battle, toon, 3.0 / playRate, 'all', 2.6 / playRate, Vec4(0.0, 0.0, 0.0, 1.0))
+            flameTracks += (baseFlameTrack, flameTrack, flecksTrack)
+            colorTracks += (colorTrack,)
+
+    damageAnims = []
+    damageAnims.append(['cringe', 0.01, 0.7, 0.62])
+    damageAnims.append(['slip-forward', 0.01, 0.4, 1.2])
+    damageAnims.append(['slip-forward', 0.01, 1.0])
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], damageAnimPlayRate=1.2, dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('SA_hot_air.ogg', delay=0.85 / playRate, node=suit)
+    return Parallel(suitTrack, toonTracks, *sprayTracks, soundTrack, *flameTracks, *colorTracks)
 
 def doRecordBreaker(attack):
     suit = attack['suit']
@@ -6768,60 +6774,55 @@ def doFiredPressurizer(attack):
 
     return Parallel(suitTrack, baseFlameTracks, flameTracks, flecksTracks, toonTracks, *colorTracks, soundTrack)
 
-def doHotAirPressurizer(attack):
+
+def doHotAirPressurizer(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     BattleParticles.loadParticles()
-    sprayEffects = []
-    for t in targets:
-        sprayEffect = BattleParticles.createParticleEffect('HotAirPressurizer')
-        #BattleParticles.setEffectTexture(sprayEffect, 'fire')
-        sprayEffects.append(sprayEffect)
-
-    sprayDelay = 0.25
-    flameDelay = 2.0
-    flameDuration = 3.5
-    flecksDelay = flameDelay + 0.8
-    flecksDuration = flameDuration - 0.8
-    damageDelay = 2.0
-    dodgeDelay = 1.0
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    sprayTracks = getPartTracks(attack, sprayEffects, sprayDelay, 3.5, 0, softStop=-2)
-    baseFlameTracks = Parallel()
-    flameTracks = Parallel()
-    flecksTracks = Parallel()
+    sprayDelay: float = 0.9 / playRate
+    flameDelay: float = 2.9 / 1.4
+    flameDuration: float = 4.4 / playRate
+    flecksDelay: float = flameDelay + (0.8 / playRate)
+    flecksDuration: float = flameDuration - (2.0 / playRate)
+    damageDelay: float = 2.5 / playRate
+    dodgeDelay: float = 1.5 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.4)
+    sprayTracks: tuple[Sequence, ...] = ()
+    flameTracks: tuple[Sequence, ...] = ()
     colorTracks: tuple[Sequence, ...] = ()
-    damageAnims = []
-    damageAnims.append(['cringe',
-                        0.01,
-                        0.7,
-                        0.62])
-    damageAnims.append(['slip-forward',
-                        0.01,
-                        0.4,
-                        1.2])
-    damageAnims.append(['slip-forward', 0.01, 1.0])
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=1.0, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_hot_air.ogg', delay=0.5, node=suit)
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        sprayEffect = BattleParticles.createParticleEffect('HotAirPressurizer')
         baseFlameEffect = BattleParticles.createParticleEffect(file='firedBaseFlame2')
         flameEffect = BattleParticles.createParticleEffect('FiredFlame2')
         flecksEffect = BattleParticles.createParticleEffect('SpriteFiredFlecks')
-        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1))
+        BattleParticles.setEffectTexture(flecksEffect, 'roll-o-dex', color=Vec4(0.95, 0.95, 0.0, 1.0))
+        sprayNode = battle.attachNewNode('spray-node')
+        sprayNode.setPos(battle.getActorPosHpr(suit)[0])
+        sprayNode.headsUp(toon)
+        sprayTrack = Sequence(
+            getPartTrack(sprayEffect, sprayDelay, 3.5 / playRate, (sprayEffect, suit, 0), softStop=-1.5),
+            Func(sprayNode.removeNode)
+        )
         baseFlameTrack = getPartTrack(baseFlameEffect, flameDelay, flameDuration, (baseFlameEffect, toon, 0), softStop=-1.0)
         flameTrack = getPartTrack(flameEffect, flameDelay, flameDuration, (flameEffect, toon, 0), softStop=-1.0)
         flecksTrack = getPartTrack(flecksEffect, flecksDelay, flecksDuration, (flecksEffect, toon, 0), softStop=-1.0)
+        sprayTracks += (sprayTrack,)
         if dmg > 0:
-            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
-            baseFlameTracks.append(baseFlameTrack)
-            flameTracks.append(flameTrack)
-            flecksTracks.append(flecksTrack)
+            colorTrack = getColorTrack(battle, toon, 3.0 / playRate, 'all', 2.6 / playRate, Vec4(0.0, 0.0, 0.0, 1.0))
+            flameTracks += (baseFlameTrack, flameTrack, flecksTrack)
             colorTracks += (colorTrack,)
 
-    return Parallel(suitTrack, toonTracks, sprayTracks, soundTrack, baseFlameTracks, flameTracks, flecksTracks, *colorTracks)
+    damageAnims = []
+    damageAnims.append(['cringe', 0.01, 0.7, 0.62])
+    damageAnims.append(['slip-forward', 0.01, 0.4, 1.2])
+    damageAnims.append(['slip-forward', 0.01, 1.0])
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], damageAnimPlayRate=1.2, dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('SA_hot_air.ogg', delay=0.85 / playRate, node=suit)
+    return Parallel(suitTrack, toonTracks, *sprayTracks, soundTrack, *flameTracks, *colorTracks)
 
 
 def doAudit(attack: dict) -> MetaInterval:
