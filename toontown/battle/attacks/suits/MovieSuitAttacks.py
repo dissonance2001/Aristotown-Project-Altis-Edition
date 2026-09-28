@@ -2683,107 +2683,57 @@ def doSongAndDance(attack):
     return Parallel(suitTrack, toonTracks, soundTrack)
 
 
-def doFillWithLead(attack):
+def doFillWithLead(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     pencil = globalPropPool.getProp('pencil')
     sharpener = globalPropPool.getProp('sharpener')
     BattleParticles.loadParticles()
-    sprayEffects = []
-    for t in targets:
-        sprayEffect = BattleParticles.createParticleEffect(file='fillWithLeadSpray')
-        BattleParticles.setEffectTexture(sprayEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
-        sprayEffects.append(sprayEffect)
-
-    suitTrack = getSuitTrack(attack)
-    sprayTracks = getPartTracks(attack, sprayEffects, 2.5, 1.9, 0)
+    suitTrack: Sequence = getSuitTrack(attack)
+    sprayTracks: tuple[Sequence, ...] = ()
     pencilPosPoints = [Point3(-0.29, -0.33, -0.13), VBase3(160.565, -11.653, -169.244)]
-    pencilPropTrack = getPropTrack(pencil, suit.getRightHand(), pencilPosPoints, 0.7, 3.2, scaleUpTime=0.2)
+    pencilPropTrack: Sequence = getPropTrack(pencil, suit.getRightHand(), pencilPosPoints, 0.3 / playRate, 3.5 / playRate, scaleUpTime=0.2 / playRate, scaleDownTime=0.5 / playRate)
     sharpenerPosPoints = [Point3(0.0, 0.0, -0.03), MovieUtil.PNT3_ZERO]
-    sharpenerPropTrack = getPropTrack(sharpener, suit.getLeftHand(), sharpenerPosPoints, 1.3, 2.3, scaleUpPoint=MovieUtil.PNT3_ONE)
-    damageAnims = []
-    damageAnims.append(['conked',
-     suitTrack.getDuration() - 1.5,
-     1e-05,
-     1.4])
-    damageAnims.append(['conked',
-     1e-05,
-     0.7,
-     0.7])
-    damageAnims.append(['conked',
-     1e-05,
-     0.7,
-     0.7])
-    damageAnims.append(['conked', 1e-05, 1.4])
-    toonTracks = getToonTracks(attack, splicedDamageAnims=damageAnims, dodgeDelay=suitTrack.getDuration() - 3.1, dodgeAnimNames=['sidestep'], showDamageExtraTime=4.5, showMissedExtraTime=1.6)
-    headTracks = Parallel()
-    torsoTracks = Parallel()
-    legsTracks = Parallel()
-    colorTracks = Parallel()
-    partDelay = 3.5
-    partIvalDelay = 0.7
-    partDuration = 2.0
-
-    def colorParts(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
-
-        return track
-
-    def resetParts(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.clearColorScale))
-
-        return track
-
+    sharpenerPropTrack: Sequence = getPropTrack(sharpener, suit.getLeftHand(), sharpenerPosPoints, 0.9 / playRate, 2.8 / playRate, scaleUpPoint=MovieUtil.PNT3_ONE, scaleUpTime=0.5 / playRate, scaleDownTime=0.5 / playRate)
+    damageAnims = [['cringe', 0.01]]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=3.7 / playRate, splicedDamageAnims=damageAnims, dodgeDelay=(suitTrack.getDuration() - 2.55) / playRate, dodgeAnimNames=['sidestep'], showDamageExtraTime=0.5, showMissedExtraTime=0.2 / playRate, dodgeAnimPlayRate=1.2)
+    partDelay: float = 3.5 / playRate
+    partIvalDelay: float = 0.7 / playRate
+    partDuration: float = 1.0 / playRate
+    torsoTracks: tuple[Sequence, ...] = ()
+    colorTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        headSmotherEffect = BattleParticles.createParticleEffect(file='fillWithLeadSmother')
+        sprayEffect = BattleParticles.createParticleEffect(file='fillWithLeadSpray')
         torsoSmotherEffect = BattleParticles.createParticleEffect(file='fillWithLeadSmother')
-        legsSmotherEffect = BattleParticles.createParticleEffect(file='fillWithLeadSmother')
-        BattleParticles.setEffectTexture(headSmotherEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
-        BattleParticles.setEffectTexture(torsoSmotherEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
-        BattleParticles.setEffectTexture(legsSmotherEffect, 'roll-o-dex', color=Vec4(0, 0, 0, 1))
+        BattleParticles.setEffectTexture(sprayEffect, 'roll-o-dex', color=Vec4(0.0, 0.0, 0.0, 1.0))
+        BattleParticles.setEffectTexture(torsoSmotherEffect, 'roll-o-dex', color=Vec4(0.0, 0.0, 0.0, 1.0))
+        particleNode = battle.attachNewNode('particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+        sprayTrack = Sequence(
+            getPartTrack(sprayEffect, 3.05 / playRate, 1.9 / playRate, (sprayEffect, particleNode, 0)),
+            Func(particleNode.removeNode)
+        )
         animal = toon.style.getAnimal()
         bodyScale = ToontownGlobals.toonBodyScales[animal]
-        headEffectHeight = __toonFacePoint(toon).getZ()
         legsHeight = ToontownGlobals.legHeightDict[toon.style.legs] * bodyScale
-        torsoEffectHeight = ToontownGlobals.torsoHeightDict[toon.style.torso] * bodyScale / 2 + legsHeight
-        legsEffectHeight = legsHeight / 2
-        effectX = headSmotherEffect.getX()
-        effectY = headSmotherEffect.getY()
-        headSmotherEffect.setPos(effectX, effectY - 1.5, headEffectHeight)
-        torsoSmotherEffect.setPos(effectX, effectY - 1, torsoEffectHeight)
-        legsSmotherEffect.setPos(effectX, effectY - 0.6, legsEffectHeight)
+        torsoEffectHeight = ToontownGlobals.torsoHeightDict[toon.style.torso] * bodyScale / 2.0 + legsHeight
+        effectX = torsoSmotherEffect.getX()
+        effectY = torsoSmotherEffect.getY()
+        torsoSmotherEffect.setPos(effectX, effectY - 1.0, torsoEffectHeight)
+        torsoTrack = getPartTrack(torsoSmotherEffect, partDelay + partIvalDelay, partDuration + 1.0, (torsoSmotherEffect, toon, 0), softStop=-1.0)
+        sprayTracks += (sprayTrack,)
         if dmg > 0:
-            headTracks.append(getPartTrack(headSmotherEffect, partDelay, partDuration, (headSmotherEffect, toon, 0), softStop=-1.0))
-            torsoTracks.append(getPartTrack(torsoSmotherEffect, partDelay + partIvalDelay, partDuration, (torsoSmotherEffect, toon, 0), softStop=-1.0))
-            legsTracks.append(getPartTrack(legsSmotherEffect, partDelay + partIvalDelay * 2, partDuration, (legsSmotherEffect, toon, 0), softStop=-1.0))
-            colorTrack = Sequence()
-            headParts = toon.getHeadParts()
-            torsoParts = toon.getTorsoParts()
-            legsParts = toon.getLegsParts()
-            colorTrack.append(Wait(partDelay + 0.2))
-            colorTrack.append(Func(battle.movie.needRestoreColor))
-            colorTrack.append(colorParts(headParts))
-            colorTrack.append(Wait(partIvalDelay))
-            colorTrack.append(colorParts(torsoParts))
-            colorTrack.append(Wait(partIvalDelay))
-            colorTrack.append(colorParts(legsParts))
-            colorTrack.append(Wait(2.5))
-            colorTrack.append(resetParts(headParts))
-            colorTrack.append(resetParts(torsoParts))
-            colorTrack.append(resetParts(legsParts))
-            colorTrack.append(Func(battle.movie.clearRestoreColor))
-            colorTracks.append(colorTrack)
+            colorTrack = getColorTrack(battle, toon, partDelay + 0.2, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
+            torsoTracks += (torsoTrack,)
+            colorTracks += (colorTrack,)
 
-    return Parallel(suitTrack, pencilPropTrack, sharpenerPropTrack, sprayTracks, headTracks, torsoTracks, legsTracks, colorTracks, toonTracks)
+    return Parallel(suitTrack, pencilPropTrack, sharpenerPropTrack, *sprayTracks, *torsoTracks, *colorTracks, toonTracks)
+
 
 def doBeguile(attack):
     suit = attack['suit']

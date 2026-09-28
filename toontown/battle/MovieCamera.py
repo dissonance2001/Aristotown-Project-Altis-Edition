@@ -831,7 +831,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Filibuster':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'FillWithLead':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=3.3 / playRate))
     elif name == 'FingerWag':
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == 'Fired':
