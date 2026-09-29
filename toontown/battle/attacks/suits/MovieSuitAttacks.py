@@ -7412,50 +7412,49 @@ def doChomp(attack: dict) -> MetaInterval:
         return Parallel(suitTrack, toonTracks, *propTracks)
 
 
-def doInject(attack):
+def doInject(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
     laptop = globalPropPool.getProp('laptop')
     card = globalPropPool.getProp('ttht_m_ene_techbotLaptop')
     card.setScale(1.5)
     BattleParticles.loadParticles()
-    particleEffects = []
-    particleEffects2 = []
-    particleEffects3 = []
-    particleEffects4 = []
-    particleEffects5 = []
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.25)
+    partTracks: tuple[Sequence, ...] = ()
     for t in targets:
+        toon = t['toon']
         particleEffect = BattleParticles.createParticleEffect('Calculate')
-        BattleParticles.setEffectTexture(particleEffect, 'audit-one', color=Vec4(0, 1, 0.004, 1))
+        BattleParticles.setEffectTexture(particleEffect, 'audit-one', color=Vec4(0.0, 1.0, 0.004, 1.0))
         particleEffect2 = BattleParticles.createParticleEffect('Calculate')
-        BattleParticles.setEffectTexture(particleEffect2, 'audit-two', color=Vec4(0, 1, 0.004, 1))
+        BattleParticles.setEffectTexture(particleEffect2, 'audit-two', color=Vec4(0.0, 1.0, 0.004, 1.0))
         particleEffect3 = BattleParticles.createParticleEffect('Calculate')
-        BattleParticles.setEffectTexture(particleEffect3, 'audit-three', color=Vec4(0, 1, 0.004, 1))
+        BattleParticles.setEffectTexture(particleEffect3, 'audit-three', color=Vec4(0.0, 1.0, 0.004, 1.0))
         particleEffect4 = BattleParticles.createParticleEffect('Calculate')
-        BattleParticles.setEffectTexture(particleEffect4, 'audit-four', color=Vec4(0, 1, 0.004, 1))
+        BattleParticles.setEffectTexture(particleEffect4, 'audit-four', color=Vec4(0.0, 1.0, 0.004, 1.0))
         particleEffect5 = BattleParticles.createParticleEffect('Calculate')
-        BattleParticles.setEffectTexture(particleEffect5, 'audit-mult', color=Vec4(0, 1, 0.004, 1))
-        particleEffects.append(particleEffect)
-        particleEffects2.append(particleEffect2)
-        particleEffects3.append(particleEffect3)
-        particleEffects4.append(particleEffect4)
-        particleEffects5.append(particleEffect5)
+        BattleParticles.setEffectTexture(particleEffect5, 'audit-mult', color=Vec4(0.0, 1.0, 0.004, 1.0))
+        particleNode = battle.attachNewNode('audit-particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+        particleNode.setBin('fixed', 1)
+        partTrack = getPartTrack(particleEffect, 1.0, 2.5, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, 1.1, 2.5, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, 1.2, 2.6, (particleEffect3, particleNode, 0), softStop=-1.0)
+        partTrack4 = getPartTrack(particleEffect4, 1.3, 2.7, (particleEffect4, particleNode, 0), softStop=-1.0)
+        partTrack5 = Sequence(
+            getPartTrack(particleEffect5, 1.4, 2.8, (particleEffect5, particleNode, 0), softStop=-1.0),
+            Func(particleNode.removeNode)
+        )
+        partTracks += (partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
 
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    partTracks = getPartTracks(attack, particleEffects, 1.0, 2.5, 0, softStop=-1)
-    partTracks2 = getPartTracks(attack, particleEffects2, 1.1, 2.5, 0, softStop=-1)
-    partTracks3 = getPartTracks(attack, particleEffects3, 1.2, 2.6, 0, softStop=-1)
-    partTracks4 = getPartTracks(attack, particleEffects4, 1.3, 2.7, 0, softStop=-1)
-    partTracks5 = getPartTracks(attack, particleEffects5, 1.4, 2.8, 0, softStop=-1)
     laptopPosPoints = [Point3(-1.172214182344426, 0.7380607814761255, -.35), VBase3(30, 0, 180)]
-    laptopDuration = 2.8
+    laptopDuration: float = 2.8
     scaleUpPoint = Point3(1.5, 1.5, 1.5)
     damageAnims = []
     damageAnims.append(['conked'])
-    soundTrack = getSoundTrack('SA_keyPunch.ogg', node=suit)
-    propTrackNew = Parallel()
-    propTrackNew = Sequence(
+    soundTrack: Sequence = getSoundTrack('SA_keyPunch.ogg', node=suit)
+    propTrackNew: Sequence = Sequence(
         Func(__showProp, card, suit.getLeftHand(), *laptopPosPoints),
         ActorInterval(card, 'ttht_m_ene_techbotLaptop', playRate=1.5),
         Func(MovieUtil.removeProp, card)
@@ -7464,8 +7463,8 @@ def doInject(attack):
                                          #     anim=True, animStartTime=0.5, animDuration=2.5,
                                           #    propName='ttht_m_ene_techbotLaptop'))
     #calcPropTrack = getPropTrack(laptop, suit.getLeftHand(), laptopPosPoints, 1e-06, laptopDuration, scaleUpPoint=scaleUpPoint, anim=False, propName='laptop', animStartTime=0.0, animDuration=0.0)
-    toonTracks = getToonTracks(attack, 1.5, splicedDamageAnims=damageAnims, dodgeDelay=1.5, dodgeAnimNames=['sidestep'])
-    return Parallel(suitTrack, toonTracks, soundTrack, propTrackNew, partTracks, partTracks2, partTracks3, partTracks4, partTracks5)
+    toonTracks: Parallel = getToonTracks(attack, 1.5, splicedDamageAnims=damageAnims, dodgeDelay=1.5, dodgeAnimNames=['sidestep'])
+    return Parallel(suitTrack, toonTracks, soundTrack, propTrackNew, *partTracks)
 
 def doEvictionNotice(attack):
     suit = attack['suit']
