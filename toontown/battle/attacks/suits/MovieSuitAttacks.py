@@ -2641,7 +2641,7 @@ def doPoundKey(attack: dict) -> MetaInterval:
             particleNode.setP(particleNode.getP() - 5.0)
 
         partTrack = Sequence(
-            getPartTrack(particleEffect, 1.6 / playRate, 2.55 / playRate, (particleEffect, particleNode, 0), softStop=-2.0),
+            getPartTrack(particleEffect, 1.6 / playRate, (2.55 / playRate) + 1.0, (particleEffect, particleNode, 0), softStop=-2.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack,)
@@ -6748,12 +6748,12 @@ def doAudit(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
         particleNode.setBin('fixed', 1)
-        partTrack = getPartTrack(particleEffect, 1.4 / playRate, 1.9 / playRate, (particleEffect, particleNode, 0), softStop=-1.0)
-        partTrack2 = getPartTrack(particleEffect2, 1.5 / playRate, 2.0/ playRate, (particleEffect2, particleNode, 0), softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, 1.6 / playRate, 2.1/ playRate, (particleEffect3, particleNode, 0), softStop=-1.0)
-        partTrack4 = getPartTrack(particleEffect4, 1.7 / playRate, 2.2/ playRate, (particleEffect4, particleNode, 0), softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, 1.4 / playRate, (1.9 / playRate) + 1.0, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, 1.5 / playRate, (2.0/ playRate) + 1.0, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, 1.6 / playRate, (2.1/ playRate) + 1.0, (particleEffect3, particleNode, 0), softStop=-1.0)
+        partTrack4 = getPartTrack(particleEffect4, 1.7 / playRate, (2.2/ playRate) + 1.0, (particleEffect4, particleNode, 0), softStop=-1.0)
         partTrack5 = Sequence(
-            getPartTrack(particleEffect5, 1.8 / playRate, 2.3 / playRate, (particleEffect5, particleNode, 0), softStop=-1.0),
+            getPartTrack(particleEffect5, 1.8 / playRate, (2.3 / playRate) + 1.0, (particleEffect5, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
@@ -6802,12 +6802,12 @@ def doCalculate(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
         particleNode.setBin('fixed', 1)
-        partTrack = getPartTrack(particleEffect, 1.4 / playRate, 1.9 / playRate, (particleEffect, particleNode, 0), softStop=-1.0)
-        partTrack2 = getPartTrack(particleEffect2, 1.5 / playRate, 2.0 / playRate, (particleEffect2, particleNode, 0), softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, 1.6 / playRate, 2.1 / playRate, (particleEffect3, particleNode, 0), softStop=-1.0)
-        partTrack4 = getPartTrack(particleEffect4, 1.7 / playRate, 2.2 / playRate, (particleEffect4, particleNode, 0), softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, 1.4 / playRate, (1.9 / playRate) + 1.0, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, 1.5 / playRate, (2.0 / playRate) + 1.0, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, 1.6 / playRate, (2.1 / playRate) + 1.0, (particleEffect3, particleNode, 0), softStop=-1.0)
+        partTrack4 = getPartTrack(particleEffect4, 1.7 / playRate, (2.2 / playRate) + 1.0, (particleEffect4, particleNode, 0), softStop=-1.0)
         partTrack5 = Sequence(
-            getPartTrack(particleEffect5, 1.8 / playRate, 2.3 / playRate, (particleEffect5, particleNode, 0), softStop=-1.0),
+            getPartTrack(particleEffect5, 1.8 / playRate, (2.3 / playRate) + 1.0, (particleEffect5, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
@@ -6857,12 +6857,12 @@ def doTabulate(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
         particleNode.setBin('fixed', 1)
-        partTrack = getPartTrack(particleEffect, 1.4 / playRate, 1.9 / playRate, (particleEffect, particleNode, 0), softStop=-1.0)
-        partTrack2 = getPartTrack(particleEffect2, 1.5 / playRate, 2.0 / playRate, (particleEffect2, particleNode, 0), softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, 1.6 / playRate, 2.1 / playRate, (particleEffect3, particleNode, 0), softStop=-1.0)
-        partTrack4 = getPartTrack(particleEffect4, 1.7 / playRate, 2.2 / playRate, (particleEffect4, particleNode, 0), softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, 1.4 / playRate, (1.9 / playRate) + 1.0, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, 1.5 / playRate, (2.0 / playRate) + 1.0, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, 1.6 / playRate, (2.1 / playRate) + 1.0, (particleEffect3, particleNode, 0), softStop=-1.0)
+        partTrack4 = getPartTrack(particleEffect4, 1.7 / playRate, (2.2 / playRate) + 1.0, (particleEffect4, particleNode, 0), softStop=-1.0)
         partTrack5 = Sequence(
-            getPartTrack(particleEffect5, 1.8 / playRate, 2.3 / playRate, (particleEffect5, particleNode, 0), softStop=-1.0),
+            getPartTrack(particleEffect5, 1.8 / playRate, (2.3 / playRate) + 1.0, (particleEffect5, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack, partTrack2, partTrack3, partTrack4, partTrack5)
