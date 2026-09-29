@@ -829,7 +829,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'SandTrap':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Filibuster':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=3.0 / playRate))
     elif name == 'FillWithLead':
         camTrack.append(defaultCamera(openShotDuration=3.3 / playRate))
     elif name == 'FingerWag':
@@ -912,10 +912,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Sacked':
         camTrack.append(defaultCamera(openShotDuration=2.0))
-    elif name == 'Schmooze':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'TestSchmooze':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+    elif name in ('Schmooze', 'TestSchmooze'):
+        camTrack.append(defaultCamera(openShotDuration=3.0 / playRate))
     elif name == 'Shake':
         camTrack.append(suitCameraShakeShot(attackDuration, 0.5))
     elif name == 'Inject':

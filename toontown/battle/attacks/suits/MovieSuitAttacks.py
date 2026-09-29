@@ -550,9 +550,7 @@ def doSuitAttack(attack):
         suitTrack = doRubOut(attack)
     elif name == 'Sacked':
         suitTrack = doSacked(attack)
-    elif name == 'Schmooze':
-        suitTrack = doSchmooze(attack)
-    elif name == 'TestSchmooze':
+    elif name in ('Schmooze', 'TestSchmooze'):
         suitTrack = doSchmooze(attack)
     elif name == 'Shake':
         suitTrack = doShake(attack)
@@ -5801,117 +5799,112 @@ def doCigarSmokeOLD(attack):
         multiTrackList.append(colorTrack)
     return multiTrackList
 
-def doFilibuster(attack):
+
+def doFilibuster(attack: dict) -> MetaInterval:
     suit = attack['suit']
-    targets = attack['target']
-    dmg = targets[0]['hp']
     battle = attack['battle']
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     BattleParticles.loadParticles()
-    sprayEffects = []
-    sprayEffects2 = []
-    sprayEffects3 = []
-    sprayEffects4 = []
+    partDelay: float = 3.3 / playRate
+    partDuration: float = 1.8 / playRate
+    damageDelay: float = 3.7 / playRate
+    dodgeDelay: float = 2.6 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    sprayTracks: tuple[Sequence, ...] = ()
     for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
         sprayEffect = BattleParticles.createParticleEffect(file='filibusterSpray')
         sprayEffect2 = BattleParticles.createParticleEffect(file='filibusterSpray')
         sprayEffect3 = BattleParticles.createParticleEffect(file='filibusterSpray')
         sprayEffect4 = BattleParticles.createParticleEffect(file='filibusterSpray')
-        color = Vec4(0.4, 0, 0, 1)
+        color = Vec4(0.4, 0.0, 0.0, 1.0)
         BattleParticles.setEffectTexture(sprayEffect, 'filibuster-cut', color=color)
         BattleParticles.setEffectTexture(sprayEffect2, 'filibuster-fiscal', color=color)
         BattleParticles.setEffectTexture(sprayEffect3, 'filibuster-impeach', color=color)
         BattleParticles.setEffectTexture(sprayEffect4, 'filibuster-inc', color=color)
-        sprayEffects.append(sprayEffect)
-        sprayEffects2.append(sprayEffect2)
-        sprayEffects3.append(sprayEffect3)
-        sprayEffects4.append(sprayEffect4)
+        sprayNode = battle.attachNewNode('filibuster-spray-node')
+        sprayNode.setPos(battle.getActorPosHpr(suit)[0])
+        sprayNode.headsUp(toon)
+        sprayNode.setBin('fixed', 1)
+        sprayTrack = getPartTrack(sprayEffect, partDelay, partDuration, (sprayEffect, sprayNode, 0))
+        sprayTrack2 = getPartTrack(sprayEffect2, partDelay + 0.4, partDuration, (sprayEffect2, sprayNode, 0))
+        sprayTrack3 = getPartTrack(sprayEffect3, partDelay + 0.8, partDuration, (sprayEffect3, sprayNode, 0))
+        sprayTrack4 = getPartTrack(sprayEffect4, partDelay + 1.2, partDuration, (sprayEffect4, sprayNode, 0))
+        if suit.dna.name == 'stenog':
+            sprayNode.setZ(suit.getHeight() - 2.5)
+            sprayNode.setP(-45.0)
 
-    partDelay = 0.5
-    partDuration = 2.15
-    damageDelay = 1.25
-    dodgeDelay = 0.7
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    sprayTracks = getPartTracks(attack, sprayEffects, partDelay, partDuration, 0, softStop=-1.0)
-    sprayTracks2 = getPartTracks(attack, sprayEffects2, partDelay + 0.5, partDuration, 0, softStop=-1.0)
-    sprayTracks3 = getPartTracks(attack, sprayEffects3, partDelay + 1.0, partDuration, 0, softStop=-1.0)
-    # How many of the fourth Filibuster word we need will depend on the Toons that get hit.  Therefore, we will have to manually recreate this rather than use the method.
-    sprayTracks4 = Parallel()
-    origHpr = battle.getActorPosHpr(suit)[1]
-    for i in range(len(targets)):
-        tgt = targets[i]
-        toon = tgt['toon']
-        if tgt['hp'] > 0:
-            sprayEffects4[i].reparentTo(suit)
-            suit.headsUp(battle, toon.getPos(battle))
-            sprayEffects4[i].wrtReparentTo(battle)
-            sprayTracks4.append(getPartTrack(sprayEffects4[i], partDelay + 1.5, partDuration, (sprayEffects4[i], battle, 0)))
+        sprayTracks += (sprayTrack, sprayTrack2)
+        # Depending on whether or not the attack hits, we need to determine after which particle effect the spray node is deleted.  If we just leave the sequence on sprayTrack4, if the attack misses, the particle node will not get cleaned up.
+        if dmg > 0:
+            sprayTracks += (
+                sprayTrack3,
+                Sequence(
+                    sprayTrack4,
+                    Func(sprayNode.removeNode)
+                )
+            )
+        else:
+            sprayTracks += (Sequence(
+                sprayTrack3,
+                Func(sprayNode.removeNode)
+            ),)
 
-    suit.setHpr(battle, origHpr)
-    damageAnims = []
-    for i in range(0, 3):
-        damageAnims.append(['cringe',
-         1e-05,
-         0.3,
-         0.5])
-
-    damageAnims.append(['cringe', 1e-05, 0.5])
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_filibuster.ogg', delay=0.1, node=suit)
-    return Parallel(suitTrack, toonTracks, soundTrack, sprayTracks, sprayTracks2, sprayTracks3, sprayTracks4)
+    damageAnims = [['cringe', 1e-05, 0.3, 0.8],
+     ['cringe', 1e-05, 0.3, 2.0]]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
+    soundTrack: Sequence = getSoundTrack('SA_filibuster.ogg', delay=3.3 / playRate, duration=3.0, node=suit)
+    return Parallel(suitTrack, toonTracks, soundTrack, *sprayTracks)
 
 
-def doSchmooze(attack):
+def doSchmooze(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     BattleParticles.loadParticles()
-    upperEffects = []
-    lowerEffects = []
-    textureNames = ['schmooze-genius',
-                    'schmooze-viz',
+    textureNames: tuple[str, ...] = ('schmooze-genius',
+     'schmooze-viz',
      'schmooze-instant',
-     'schmooze-master',
-                    'schmooze-genius',
-     'schmooze-viz']
-    for i in range(0, 6):
-        upperEffect = BattleParticles.createParticleEffect(file='schmoozeUpperSpray')
-        lowerEffect = BattleParticles.createParticleEffect(file='schmoozeLowerSpray')
-        BattleParticles.setEffectTexture(upperEffect, textureNames[i], color=Vec4(0, 0, 1, 1))
-        BattleParticles.setEffectTexture(lowerEffect, textureNames[i], color=Vec4(0, 0, 1, 1))
-        upperEffects.append(upperEffect)
-        lowerEffects.append(lowerEffect)
+     'schmooze-master')
+    partDelay: float = 2.75 / playRate
+    damageDelay: float = 3.1 / playRate
+    dodgeDelay: float = 1.9 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    partTracks: tuple[Parallel, ...] = ()
+    for t in targets:
+        toon = t['toon']
+        upperEffects = ()
+        lowerEffects = ()
+        particleNode = battle.attachNewNode('schmoozeParticleNode')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+        particleNode.setBin('fixed', 1)
 
-    suitType = getSuitBodyType(attack['suitName'])
-    partDelay = 0.3
-    damageDelay = partDelay + 0.4
-    dodgeDelay = 0.4
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    upperPartTracks = Parallel()
-    lowerPartTracks = Parallel()
-    for i in range(0, 6):
-        upperPartTracks.append(getPartTrack(upperEffects[i], partDelay + i * 0.35, 1.25, (upperEffects[i], suit, 0)))
-        lowerPartTracks.append(getPartTrack(lowerEffects[i], partDelay + i * 0.35 + 0.7, 1.25, (lowerEffects[i], suit, 0)))
+        for i in range(2):
+            upperEffect = BattleParticles.createParticleEffect(file='schmoozeUpperSpray')
+            lowerEffect = BattleParticles.createParticleEffect(file='schmoozeLowerSpray')
+            BattleParticles.setEffectTexture(upperEffect, textureNames[i], color=Vec4(0.0, 0.0, 1.0, 1.0))
+            BattleParticles.setEffectTexture(lowerEffect, textureNames[i + 2], color=Vec4(0.0, 0.0, 1.0, 1.0))
+            upperEffects += (upperEffect,)
+            lowerEffects += (lowerEffect,)
 
-    damageAnims = []
-    for i in range(0, 3):
-        damageAnims.append(['conked',
-         0.01,
-         0.3,
-         0.51])
+        upperPartTracks = Parallel()
+        lowerPartTracks = Parallel()
+        for i in range(2):
+            upperPartTracks.append(getPartTrack(upperEffects[i], partDelay + (((i * 0.65) + 0.2) / playRate), 2.0 / playRate, (upperEffects[i], particleNode, 0), softStop=-1.0))
+            lowerPartTracks.append(getPartTrack(lowerEffects[i], partDelay + (((i * 0.65) + 0.2) / playRate), 2.0 / playRate, (lowerEffects[i], particleNode, 0), softStop=-1.0))
 
-    damageAnims.append(['conked', 0.01, 0.3])
-    dodgeAnims = []
-    dodgeAnims.append(['duck',
-     0.01,
-     0.2,
-     2.7])
-    dodgeAnims.append(['duck',
-     0.01,
-     1.22,
-     1.28])
-    dodgeAnims.append(['duck', 0.01, 3.16])
-    soundTrack = getSoundTrack('SA_schmooze.ogg', delay=damageDelay, node=suit)
-    toonTrack = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.9, showDamageExtraTime=1.1)
-    return Parallel(suitTrack, toonTrack, upperPartTracks, lowerPartTracks, soundTrack)
+        lowerPartTracks.append(Sequence(Wait(5.7), Func(particleNode.removeNode)))
+        partTracks += (upperPartTracks, lowerPartTracks)
+
+    damageAnims = [['conked', 0.01, 0.3, 0.71],
+     ['conked', 0.01, 0.3]]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], showMissedExtraTime=1.9, showDamageExtraTime=1.1, damageAnimPlayRate=1.3, dodgeAnimPlayRate=1.05)
+    soundTrack: Sequence = getSoundTrack('SA_schmooze.ogg', delay=2.8 / playRate, node=suit, playRate=1.05)
+    return Parallel(suitTrack, toonTracks, soundTrack, *partTracks)
 
 
 def doTickingTimeBomb(attack: dict) -> MetaInterval:
