@@ -14184,8 +14184,11 @@ GenderShopGirlButtonText = 'Girl'
 BodyShopHead = 'Head'
 BodyShopBody = 'Body'
 BodyShopLegs = 'Legs'
+BodyShopEyelashes = 'Eyelashes'
 ColorShopToon = 'Toon Color'
 ColorShopHead = 'Head'
+ColorShopEar = 'Ears'
+ColorShopEye = 'Eyes'
 ColorShopBody = 'Body'
 ColorShopLegs = 'Legs'
 ColorShopParts = 'Multi Color'
@@ -14203,6 +14206,12 @@ ClothesShopBottomsStyle = 'Bottoms Style'
 ClothesShopBottomsColor = 'Bottoms Color'
 PromptTutorial = "Congratulations!!\nYou are Toontown's newest citizen!\n\nWould you like to continue to the Toontorial or teleport directly to Toontown Central?"
 MakeAToonSkipTutorial = 'Skip Toontorial'
+PromptBadGags = ['\1TextTitle\1Warning!!\2\n\nYou are about to choose two support gag tracks.\nYou will be \1TextRed\1ENTIRELY UNABLE\2 to attack until you gain another gag track.\n\nYou will have to rely on other Toons at your early levels until you can acquire your first new gag track.\n\nOnly click next if \1TextRed\1YOU ARE SURE\2 you want to start with two support tracks.',
+                 '\1TextTitle\1Warning!!\2\n\nYou are about to choose Zap without Squirt.\nZap \1TextRed\1WILL NOT WORK\2 without the help of Squirt.\n\nYou will have to rely on other Toons to use Squirt for you until you can acquire your first new gag track.\n\nOnly click next if \1TextRed\1YOU ARE SURE\2 you want to start with Zap and without Squirt.',
+                 '\1TextTitle\1Warning!!\2\n\nYou are about to choose Trap without Lure.\nTrap will be \1TextRed\1ENTIRELY USELESS\2 without the help of Lure.\n\nYou will have to rely on other Toons to use Lure for you until you can acquire your first new gag track.\n\nOnly click next if \1TextRed\1YOU ARE SURE\2 you want to start with Trap and without Lure.',
+                 ]
+PromptBadGagsYes = "Looks good to me!"
+PromptBadGagsNo = "I've changed my mind!"
 MakeAToonEnterTutorial = 'Enter Toontorial'
 MakeAToonDone = 'Done'
 MakeAToonCancel = lCancel
@@ -14274,6 +14283,7 @@ PleaseTypeName = 'Please type your name:'
 AllNewNames = 'All new names must be\napproved by the Toon Council.'
 NameMessages = 'Be creative, and remember:\nno NPC names, please.'
 NameShopNameRejected = 'The name you\nsubmitted has\nbeen rejected.'
+NameShopNameSubmissionLocked = 'Type-a-name has been disabled on your account.'
 NameShopNameAccepted = 'Congratulations!\nThe name you\nsubmitted has\nbeen accepted!'
 NoPunctuation = "You can't use punctuation marks in your name!"
 PeriodOnlyAfterLetter = 'You can use a period in your name, but only after a letter.'

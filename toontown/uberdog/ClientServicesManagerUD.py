@@ -351,7 +351,7 @@ class LoginAccountFSM(OperationFSM):
 class CreateAvatarFSM(OperationFSM):
     notify = directNotify.newCategory('CreateAvatarFSM')
 
-    def enterStart(self, dna, index, uber, tracks, pg):
+    def enterStart(self, dna, index, uber, tracks, pg, skipTutorial = 0):
         # Basic sanity-checking:
         if index >= 6:
             self.demand('Kill', 'Invalid index specified!')
@@ -365,6 +365,7 @@ class CreateAvatarFSM(OperationFSM):
         self.dna = dna
         self.uber = uber
         self.pg = pg
+        self.skipTutorial = skipTutorial
         self.trackAccess = [0,0,0,0,1,1,0,0]
         if pg ==1:
            self.trackAccess[tracks[0]] = 1
@@ -419,8 +420,12 @@ class CreateAvatarFSM(OperationFSM):
             'setUber': (self.uber,)
         }
 
-        if self.pg > 0:
-            if self.pg == 1:
+        # skipTutorial lets a toon bypass the tutorial without picking a
+        # starting playground (pg would otherwise be 0); fall back to the
+        # pg == 1 (Toontown Central) starting stats in that case.
+        effectivePg = self.pg if self.pg > 0 else (1 if self.skipTutorial else 0)
+        if effectivePg > 0:
+            if effectivePg == 1:
                 maxMoney = 50
                 maxCarry = 25
                 startingHood = 1000
@@ -433,7 +438,7 @@ class CreateAvatarFSM(OperationFSM):
                     hp = 25
                 experience = [600, 800]
 
-            elif self.pg == 2:
+            elif effectivePg == 2:
                 maxMoney = 60
                 maxCarry = 30
                 startingHood = 5000
@@ -1075,8 +1080,8 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         motd = '[SHOULD NOT SEE]'
         self.sendUpdateToAccountId(acc, 'setMOTD', [motd])
 
-    def createAvatar(self, dna, index, uber, tracks, pg):
-        self.runAccountFSM(CreateAvatarFSM, dna, index, uber, tracks, pg)
+    def createAvatar(self, dna, index, uber, tracks, pg, skipTutorial = 0):
+        self.runAccountFSM(CreateAvatarFSM, dna, index, uber, tracks, pg, skipTutorial)
 
     def deleteAvatar(self, avId):
         self.runAccountFSM(DeleteAvatarFSM, avId)

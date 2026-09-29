@@ -1,6 +1,7 @@
 from direct.actor import Actor
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
+from toontown.toon import ToonDNA
 import string
 import random
 from pandac.PandaModules import *
@@ -928,9 +929,17 @@ class ToonHead(Actor.Actor):
                 (animalType == "kangaroo") or
                 (animalType == "armadillo")):
             parts = self.findAllMatches('**/ear?-*')
-            parts.setColor(style.getHeadColor())
+            parts.setColor(style.getEarColor())
             dogears = self.findAllMatches('**/ear*')
-            dogears.setColor(style.getHeadColor())
+            dogears.setColor(style.getEarColor())
+        try:
+            eyeColor = ToonDNA.eyeColorsList[style.getEyeColor()]
+        except Exception:
+            eyeColor = ToonDNA.eyeColorsList[0]
+        if self.__lpupil:
+            self.__lpupil.setColorScale(eyeColor)
+        if self.__rpupil:
+            self.__rpupil.setColorScale(eyeColor)
 
     def __fixEyes(self, style, forGui = 0):
         mode = -3
@@ -1109,7 +1118,8 @@ class ToonHead(Actor.Actor):
         return reachedTarget
 
     def setupEyelashes(self, style):
-        if style.getGender() == 'm':
+        lashIndex = style.getEyelashes()
+        if lashIndex <= 0 or lashIndex >= len(ToonDNA.toonEyelashNames):
             if self.__eyelashOpen:
                 self.__eyelashOpen.removeNode()
                 self.__eyelashOpen = None
@@ -1123,19 +1133,29 @@ class ToonHead(Actor.Actor):
                 self.__eyelashClosed.removeNode()
             animal = style.head[0]
             model = loader.loadModel('phase_3' + EyelashDict[animal])
-            if self.hasLOD():
-                head = self.getPart('head', '1000')
-            else:
-                head = self.getPart('head', 'lodRoot')
+            # Eyelashes are a close-up facial detail, so (matching the rest of
+            # this file, e.g. __fixHeadLongLong) they're only added to the
+            # highest-detail LOD.
+            head = self.getPart('head', '1000')
+            if head is None:
+                head = self.getPart('head', self.getLODNames()[0])
             length = style.head[1]
             if length == 'l':
-                openString = 'teardrop-long'
-                closedString = 'teardrop-closed-long'
+                openSuffix = '-long'
+                closedSuffix = '-closed-long'
             else:
-                openString = 'teardrop-short'
-                closedString = 'teardrop-closed-short'
-            self.__eyelashOpen = model.find('**/' + openString).copyTo(head)
-            self.__eyelashClosed = model.find('**/' + closedString).copyTo(head)
+                openSuffix = '-short'
+                closedSuffix = '-closed-short'
+            styleString = ToonDNA.toonEyelashNames[lashIndex]
+            openNode = model.find('**/' + styleString + openSuffix)
+            closedNode = model.find('**/' + styleString + closedSuffix)
+            if openNode.isEmpty() or closedNode.isEmpty():
+                # Lash style isn't in this model's assets; 'teardrop' is the
+                # style every Altis lash model is known to contain.
+                openNode = model.find('**/teardrop' + openSuffix)
+                closedNode = model.find('**/teardrop' + closedSuffix)
+            self.__eyelashOpen = openNode.copyTo(head)
+            self.__eyelashClosed = closedNode.copyTo(head)
             model.removeNode()
         return
 

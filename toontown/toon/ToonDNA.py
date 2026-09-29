@@ -2194,6 +2194,20 @@ for index in MakeAToonGirlBottoms:
     else:
         notify.error('Invalid flag')
 
+def getBottomType(gender, botTex):
+    # Altis keeps boy shorts and girl bottoms in separate tables, so whether a
+    # bottom is SHORTS or SKIRT depends on gender (boys only have shorts).
+    if gender == 'm':
+        return SHORTS
+    return GirlBottoms[botTex][1]
+
+# 11 selectable eyelash presets (the value doubles as its own index).
+toonEyelashTypes = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+toonEyelashNames = ('none', 'classic', 'cateye', 'curleye', 'curly', 'double', 'glamorous', 'lower', 'reversed', 'simple', 'teardrop')
+# Altis females always rendered the 'teardrop' lash before lash styles existed, so
+# DNA without an explicit lash value keeps that look.
+LEGACY_FEMALE_EYELASHES = 10
+
 def getRandomTop(gender, tailorId = MAKE_A_TOON, generator = None):
     if generator == None:
         generator = random
@@ -2604,6 +2618,80 @@ defaultGirlColorList = [0,
  64]
 
 defaultColorList = allColorsList
+
+eyeColorsList = [
+    (0.0, 0.0, 0.0, 1.0), # Black
+    (0.933594, 0.265625, 0.28125, 1.0), # Red
+    (0.640625, 0.355469, 0.269531, 1.0), # Brown
+    (0.091406, 0.4625, 0.673438, 1.0), # Blue
+    (0.082352, 0.38823, 0.0, 1.0), # Hazel
+    (1.0, 1.0, 1.0, 1.0),
+    (0.96875, 0.691406, 0.699219, 1.0),
+    (0.933594, 0.265625, 0.28125, 1.0),
+    (0.863281, 0.40625, 0.417969, 1.0),
+    (0.710938, 0.234375, 0.4375, 1.0),
+    (0.570312, 0.449219, 0.164062, 1.0),
+    (0.640625, 0.355469, 0.269531, 1.0),
+    (0.996094, 0.695312, 0.511719, 1.0),
+    (0.832031, 0.5, 0.296875, 1.0),
+    (0.992188, 0.480469, 0.167969, 1.0),
+    (0.996094, 0.898438, 0.320312, 1.0),
+    (0.996094, 0.957031, 0.597656, 1.0),
+    (0.855469, 0.933594, 0.492188, 1.0),
+    (0.550781, 0.824219, 0.324219, 1.0),
+    (0.242188, 0.742188, 0.515625, 1.0),
+    (0.304688, 0.96875, 0.402344, 1.0),
+    (0.433594, 0.90625, 0.835938, 1.0),
+    (0.347656, 0.820312, 0.953125, 1.0),
+    (0.191406, 0.5625, 0.773438, 1.0),
+    (0.558594, 0.589844, 0.875, 1.0),
+    (0.285156, 0.328125, 0.726562, 1.0),
+    (0.460938, 0.378906, 0.824219, 1.0),
+    (0.546875, 0.28125, 0.75, 1.0),
+    (0.726562, 0.472656, 0.859375, 1.0),
+    (0.898438, 0.617188, 0.90625, 1.0),
+    (0.7, 0.7, 0.8, 1.0),
+    (0.3, 0.3, 0.35, 1.0),
+    (0.891, 0.439, 0.698, 1.0),
+    (0.741, 0.873, 0.957, 1.0),
+    (0.641, 0.857, 0.673, 1.0),
+    (0.039, 0.862, 0.654, 1.0),
+    (0.196, 0.725, 0.714, 1.0),
+    (0.984, 0.537, 0.396, 1.0),
+    (0.968, 0.749, 0.349, 1.0),
+    (0.658, 0.175, 0.258, 1.0),
+    (0.411, 0.644, 0.282, 1.0),
+    (0.325, 0.407, 0.601, 1.0),
+    (0.235, 0.573, 0.984, 1.0),
+    (0.0, 0.635294, 0.258823, 1.0),
+    (0.674509, 0.925490, 1.0, 1.0),
+    (0.988235, 0.894117, 0.745098, 1.0),
+    (0.749019, 1.0, 0.847058, 1.0),
+    (0.470588, 0.443137, 0.447058, 1.0),
+    (0.996078, 0.254901, 0.392156, 1.0),
+    (0.811764, 0.709803, 0.231372, 1.0),
+    (0.749019, 0.756862, 0.760784, 1.0),
+    (1.0, 0.639215, 0.262745, 1.0),
+    (0.0, 0.403921, 0.647058, 1.0),
+    (0.862745, 0.078431, 0.235294, 1.0),
+    (0.0, 0.635294, 0.513725, 1.0),
+    (0.803921, 0.498039, 0.196078, 1.0),
+    (0.70, 0.52, 0.75, 1.0),
+    (1.0, 0, 1.0, 1.0),
+    (0.5764, 0.4392, 0.8588, 1.0),
+    (1.0, 1.0, 0.94117, 1.0),
+    (0.9333, 0.8235, 0.9333, 1.0),
+    (0.0, 1.0, 0.4980, 1.0),
+    (0.8549, 0.6470, 0.1254, 1.0),
+    (1.0, 0.59607, 0.0705, 1.0),
+    (0.8039, 0.6862, 0.5843, 1.0),
+    (0.2196, 0.5568, 0.5568, 1.0),
+    (0.7764, 0.4431, 0.4431, 1.0),
+    (0.8901, 0.8117, 0.3411, 1.0),
+    (0.4117, 0.4117, 0.4117, 1.0),
+    (1.0, 0.8431, 0.0, 1.0),
+    (0.9333, 0.7882, 0.0, 1.0)
+]
 HatModels = [
     None,
     'phase_4/models/accessories/tt_m_chr_avt_acc_hat_baseball',
@@ -4617,6 +4705,12 @@ def isValidAccessory(itemIdx, textureIdx, colorIdx, which):
 
 
 class ToonDNA(AvatarDNA.AvatarDNA):
+    # Species whose ears take their own color (mirrors the list ToonHead already uses).
+    AnimalsWithColoredEars = (
+        'dog', 'cat', 'rabbit', 'bear', 'horse', 'mouse', 'pig', 'beaver', 'fox', 'bat', 'raccoon', 'kangaroo',
+        'koala', 'armadillo'
+    )
+
 
     def __init__(self, str = None, type = None, dna = None, r = None, b = None, g = None):
         if str != None:
@@ -4692,9 +4786,12 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             self.gloveColor = self.checkIsDefaultColor(self.gloveColor)
             self.legColor = self.checkIsDefaultColor(self.legColor)
             self.headColor = self.checkIsDefaultColor(self.headColor)
-            for colors in (self.armColor, self.gloveColor, self.legColor, self.headColor):
+            self.earColor = self.checkIsDefaultColor(getattr(self, 'earColor', self.headColor))
+            for colors in (self.armColor, self.gloveColor, self.legColor, self.headColor, self.earColor):
                 for color in colors[:-1]:
                     dg.addFloat64(color)
+            dg.addUint8(getattr(self, 'eyeColor', 0))
+            dg.addUint8(getattr(self, 'eyelashes', 0))
         elif self.type == 'u':
             notify.error('undefined avatar')
         else:
@@ -4721,9 +4818,15 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             gender = 'm'
         else:
             gender = 'f'
-        # Current float-color Toon DNA is 107 bytes in the legacy format and
-        # 110 bytes when its three clothing texture IDs are widened to Uint16.
-        useExtendedClothing = len(string) == 110
+        # Fixed total lengths identify the format. The original (pre-eye-color)
+        # format is 107 bytes legacy / 110 bytes extended-clothing. Adding
+        # earColor+eyeColor+eyelashes appends 26 bytes (3 float64 + 2 uint8),
+        # giving 133 / 136 for DNA saved after that feature was added. Strings
+        # of any other length fall back to the legacy/no-eye-data reading, so
+        # old saved toons continue to parse unchanged.
+        EYE_DATA_SIZE = 26
+        useExtendedClothing = len(string) in (110, 110 + EYE_DATA_SIZE)
+        hasEyeData = len(string) in (107 + EYE_DATA_SIZE, 110 + EYE_DATA_SIZE)
         if useExtendedClothing:
             topTex = dgi.getUint16()
             topTexColor = dgi.getUint8()
@@ -4742,6 +4845,14 @@ class ToonDNA(AvatarDNA.AvatarDNA):
         gloveColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
         legColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
         headColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
+        if hasEyeData:
+            earColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
+            eyeColor = dgi.getUint8()
+            eyelashes = dgi.getUint8()
+            if not self.checkColor(earColor):
+                return False
+            if not self.checkEyeColor(eyeColor):
+                return False
         if topTex >= len(Shirts):
             return False
         if topTexColor >= len(ClothesColors):
@@ -4775,6 +4886,9 @@ class ToonDNA(AvatarDNA.AvatarDNA):
         hsv = colorsys.rgb_to_hsv(color[0], color[1], color[2])
         return 0.1 <= hsv[1] <= 0.9 and 0.2 <= hsv[2] <= 0.9
 
+    def checkEyeColor(self, color):
+        return 0 <= color < len(eyeColorsList)
+
     def makeFromNetString(self, string):
         dg = PyDatagram(string)
         dgi = PyDatagramIterator(dg)
@@ -4792,8 +4906,11 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             else:
                 self.gender = 'f'
             # Read both the original 8-bit clothing format and the extended
-            # format produced when any texture ID is above 255.
-            useExtendedClothing = len(string) == 110
+            # format produced when any texture ID is above 255. See
+            # isValidNetString for how these fixed lengths were chosen.
+            EYE_DATA_SIZE = 26
+            useExtendedClothing = len(string) in (110, 110 + EYE_DATA_SIZE)
+            hasEyeData = len(string) in (107 + EYE_DATA_SIZE, 110 + EYE_DATA_SIZE)
             if useExtendedClothing:
                 self.topTex = dgi.getUint16()
                 self.topTexColor = dgi.getUint8()
@@ -4824,6 +4941,17 @@ class ToonDNA(AvatarDNA.AvatarDNA):
                 self.gloveColor = allColorsList[self.gloveColor]
                 self.legColor = allColorsList[self.legColor]
                 self.headColor = allColorsList[self.headColor]
+                hasEyeData = False
+            if hasEyeData:
+                self.earColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
+                self.eyeColor = dgi.getUint8()
+                self.eyelashes = dgi.getUint8()
+            else:
+                # Old saved DNA predating eye color/eyelashes: default ear color
+                # to match the head, and leave eyes/eyelashes at their defaults.
+                self.earColor = self.headColor
+                self.eyeColor = 0
+                self.eyelashes = LEGACY_FEMALE_EYELASHES if self.gender == 'f' else 0
                 
         else:
             notify.error('unknown avatar type: ', self.type)
@@ -4838,6 +4966,9 @@ class ToonDNA(AvatarDNA.AvatarDNA):
         self.gloveColor = 0
         self.legColor = color
         self.headColor = color
+        self.earColor = color
+        self.eyeColor = 0
+        self.eyelashes = 0
 
     def newToon(self, dna, color = None):
         if len(dna) == 4:
@@ -4858,6 +4989,9 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             self.armColor = color
             self.legColor = color
             self.headColor = color
+            self.earColor = color
+            self.eyeColor = 0
+            self.eyelashes = 0
             self.gloveColor = 0
         else:
             notify.error("tuple must be in format ('%s', '%s', '%s', '%s')")
@@ -4868,7 +5002,7 @@ class ToonDNA(AvatarDNA.AvatarDNA):
         else:
             return color
 
-    def newToonFromProperties(self, head, torso, legs, gender, armColor, gloveColor, legColor, headColor, topTexture, topTextureColor, sleeveTexture, sleeveTextureColor, bottomTexture, bottomTextureColor):
+    def newToonFromProperties(self, head, torso, legs, gender, armColor, gloveColor, legColor, headColor, topTexture, topTextureColor, sleeveTexture, sleeveTextureColor, bottomTexture, bottomTextureColor, earColor = None, eyeColor = None, eyelashes = None):
         self.type = 't'
         self.head = head
         self.torso = torso
@@ -4878,6 +5012,12 @@ class ToonDNA(AvatarDNA.AvatarDNA):
         self.gloveColor = self.checkIsDefaultColor(gloveColor)
         self.legColor = self.checkIsDefaultColor(legColor)
         self.headColor = self.checkIsDefaultColor(headColor)
+        self.earColor = self.checkIsDefaultColor(earColor) if earColor else self.headColor
+        self.eyeColor = eyeColor if eyeColor is not None else 0
+        if eyelashes is not None:
+            self.eyelashes = eyelashes
+        else:
+            self.eyelashes = LEGACY_FEMALE_EYELASHES if gender == 'f' else 0
         self.topTex = topTexture
         self.topTexColor = topTextureColor
         self.sleeveTex = sleeveTexture
@@ -4885,7 +5025,7 @@ class ToonDNA(AvatarDNA.AvatarDNA):
         self.botTex = bottomTexture
         self.botTexColor = bottomTextureColor
 
-    def updateToonProperties(self, head = None, torso = None, legs = None, gender = None, armColor = None, gloveColor = None, legColor = None, headColor = None, topTexture = None, topTextureColor = None, sleeveTexture = None, sleeveTextureColor = None, bottomTexture = None, bottomTextureColor = None, shirt = None, bottom = None):
+    def updateToonProperties(self, head = None, torso = None, legs = None, gender = None, armColor = None, gloveColor = None, legColor = None, headColor = None, topTexture = None, topTextureColor = None, sleeveTexture = None, sleeveTextureColor = None, bottomTexture = None, bottomTextureColor = None, shirt = None, bottom = None, earColor = None, eyeColor = None, eyelashes = None):
         if head:
             self.head = head
         if torso:
@@ -4902,6 +5042,12 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             self.legColor = self.checkIsDefaultColor(legColor)
         if headColor:
             self.headColor = self.checkIsDefaultColor(headColor)
+        if earColor:
+            self.earColor = self.checkIsDefaultColor(earColor)
+        if eyeColor is not None:
+            self.eyeColor = eyeColor
+        if eyelashes is not None:
+            self.eyelashes = eyelashes
         if topTexture:
             self.topTex = topTexture
         if topTextureColor:
@@ -4939,11 +5085,13 @@ class ToonDNA(AvatarDNA.AvatarDNA):
          'l',
          'l'])
         self.gender = gender
+        self.eyelashes = LEGACY_FEMALE_EYELASHES if self.gender == 'f' else 0
         if not npc:
             if stage == MAKE_A_TOON:
                 animalIndicesToUse = allToonHeadAnimalIndicesTrial
                 animal = generator.choice(animalIndicesToUse)
                 self.head = toonHeadTypes[animal]
+                self.eyelashes = 0
             else:
                 self.head = generator.choice(toonHeadTypes)
         else:
@@ -4962,6 +5110,7 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             self.armColor = color
             self.legColor = color
             self.headColor = color
+            self.earColor = color
         else:
             self.torso = generator.choice(toonTorsoTypes[:6])
             self.topTex = top
@@ -4978,6 +5127,8 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             self.armColor = color
             self.legColor = color
             self.headColor = color
+            self.earColor = color
+        self.eyeColor = 0
         self.gloveColor = self.checkIsDefaultColor(0)
 
     def asTuple(self):
@@ -4994,7 +5145,10 @@ class ToonDNA(AvatarDNA.AvatarDNA):
          self.sleeveTex,
          self.sleeveTexColor,
          self.botTex,
-         self.botTexColor)
+         self.botTexColor,
+         getattr(self, 'earColor', self.headColor),
+         getattr(self, 'eyeColor', 0),
+         getattr(self, 'eyelashes', 0))
 
     def getType(self):
 
@@ -5111,6 +5265,15 @@ class ToonDNA(AvatarDNA.AvatarDNA):
     def getGloveColor(self):
         return self.gloveColor
 
+    def getEarColor(self):
+        return getattr(self, 'earColor', self.headColor)
+
+    def getEyeColor(self):
+        return getattr(self, 'eyeColor', 0)
+
+    def getEyelashes(self):
+        return getattr(self, 'eyelashes', 0)
+
     def getBlackColor(self):
         try:
             return allColorsList[26]
@@ -5120,19 +5283,30 @@ class ToonDNA(AvatarDNA.AvatarDNA):
     def getWhiteColor(self):
         return allColorsList[0]
 
-    def setTemporary(self, newHead, newArmColor, newLegColor, newHeadColor):
+    def setTemporary(self, newHead, newArmColor, newLegColor, newHeadColor, newEarColor = None, newEyeColor = None, newEyelashes = None):
+        if not newEarColor:
+            newEarColor = newHeadColor
+        if newEyeColor is None:
+            newEyeColor = self.getEyeColor()
         if not self.cache and self.getArmColor != newArmColor:
             self.cache = (self.head,
              self.armColor,
              self.legColor,
-             self.headColor)
-            self.updateToonProperties(head=newHead, armColor=newArmColor, legColor=newLegColor, headColor=newHeadColor)
+             self.headColor,
+             self.getEarColor(),
+             self.getEyeColor(),
+             self.getEyelashes())
+            self.updateToonProperties(head=newHead, armColor=newArmColor, legColor=newLegColor, headColor=newHeadColor,
+             earColor=newEarColor, eyeColor=newEyeColor, eyelashes=newEyelashes)
 
     def restoreTemporary(self, oldStyle):
         cache = ()
         if oldStyle:
             cache = oldStyle.cache
         if cache:
-            self.updateToonProperties(head=cache[0], armColor=cache[1], legColor=cache[2], headColor=cache[3])
+            self.updateToonProperties(head=cache[0], armColor=cache[1], legColor=cache[2], headColor=cache[3],
+             earColor=cache[4] if len(cache) > 4 else None,
+             eyeColor=cache[5] if len(cache) > 5 else None,
+             eyelashes=cache[6] if len(cache) > 6 else None)
             if oldStyle:
                 oldStyle.cache = ()

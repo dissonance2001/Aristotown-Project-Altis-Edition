@@ -1,4 +1,4 @@
-from toontown.makeatoon import ClothesGUI
+from toontown.makeatoon import LegacyClothesGUI as ClothesGUI
 from toontown.toon import ToonDNA
 
 class TailorClothesGUI(ClothesGUI.ClothesGUI):

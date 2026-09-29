@@ -1,7 +1,7 @@
 from toontown.toonbase.ToonPythonUtil import Functor
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
-from toontown.makeatoon import ClothesGUI
+from toontown.makeatoon import LegacyClothesGUI as ClothesGUI
 from toontown.estate import ClosetGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals

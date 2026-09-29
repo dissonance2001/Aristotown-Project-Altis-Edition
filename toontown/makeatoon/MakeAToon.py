@@ -1,39 +1,39 @@
 from direct.actor.Actor import Actor
-from direct.directnotify import DirectNotifyGlobal
-from direct.fsm import ClassicFSM, State
+from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.fsm import StateData
 from direct.gui.DirectGui import *
 from direct.interval.IntervalGlobal import *
 from direct.task import Task
-from pandac.PandaModules import *
+from panda3d.core import *
 import random
+import builtins
 from toontown.makeatoon import BodyShop
 from toontown.makeatoon import ColorShop
-from toontown.makeatoon import GenderShop
+from toontown.makeatoon import StartShop
 from toontown.makeatoon import StatusShop
 from .MakeAToonGlobals import *
 from toontown.makeatoon import MakeClothesGUI
 from toontown.makeatoon import NameShop
-from otp.avatar import Avatar
-from toontown.char import Char
-from toontown.char import CharDNA
-from toontown.chat.ChatGlobals import *
-from toontown.distributed.ToontownMsgTypes import *
-from toontown.toon import LocalToon
+from otp import *
 from toontown.toon import Toon
 from toontown.toon import ToonDNA
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
-from toontown.toontowngui import TTDialog
+from toontown.gui.TTGui import ScalingButton
+from toontown.toonbase.ToontownGlobals import toonBodyScales
 from decimal import Decimal
 
+from ..utils.DirectNotifyCategory import DirectNotifyCategory
+from toontown.toon.ToonDNA import ClothesColors
+from toontown.chat.constants.ChatGlobals import CFSpeech, CFTimeout
 
+CAM_ZOOM_DUR = 0.2
+
+
+@DirectNotifyCategory()
 class MakeAToon(StateData.StateData):
-    notify = DirectNotifyGlobal.directNotify.newCategory('MakeAToon')
-
-    def __init__(self, parentFSM, avList, doneEvent, index, isPaid):
-        self.isPaid = isPaid
+    def __init__(self, parentFSM, avList, doneEvent, index):
         StateData.StateData.__init__(self, doneEvent)
         self.phase = 3
         self.names = ['',
@@ -51,38 +51,42 @@ class MakeAToon(StateData.StateData):
         self.slide = 0
         self.nameList = []
         self.warp = 0
+        self.zoomRatio = 1
         for av in avList:
             if av.position == index:
                 self.warp = 1
                 self.namelessPotAv = av
             self.nameList.append(av.name)
 
-        self.fsm = ClassicFSM.ClassicFSM('MakeAToon', [State.State('Init', self.enterInit, self.exitInit, ['GenderShop', 'NameShop']),
-         State.State('GenderShop', self.enterGenderShop, self.exitGenderShop, ['BodyShop']),
-         State.State('BodyShop', self.enterBodyShop, self.exitBodyShop, ['GenderShop', 'ColorShop']),
+        self.fsm = ClassicFSM.ClassicFSM('MakeAToon', [
+         State.State('Init', self.enterInit, self.exitInit, ['BodyShop', 'NameShop']),
+         State.State('BodyShop', self.enterBodyShop, self.exitBodyShop, ['ColorShop']),
          State.State('ColorShop', self.enterColorShop, self.exitColorShop, ['BodyShop', 'ClothesShop']),
          State.State('ClothesShop', self.enterClothesShop, self.exitClothesShop, ['ColorShop', 'StatusShop']),
          State.State('StatusShop', self.enterStatusShop, self.exitStatusShop, ['ClothesShop', 'NameShop']),
-         State.State('NameShop', self.enterNameShop, self.exitNameShop, ['StatusShop']),
+         State.State('NameShop', self.enterNameShop, self.exitNameShop, ['StatusShop', 'StartShop']),
+         State.State('StartShop', self.enterStartShop, self.exitStartShop, ['NameShop']),
          State.State('Done', self.enterDone, self.exitDone, [])], 'Init', 'Done')
         self.parentFSM = parentFSM
         self.parentFSM.getStateNamed('createAvatar').addChild(self.fsm)
-        self.gs = GenderShop.GenderShop(self, 'GenderShop-done')
-        self.bs = BodyShop.BodyShop('BodyShop-done')
+        self.bs = BodyShop.BodyShop(self, 'BodyShop-done')
         self.cos = ColorShop.ColorShop('ColorShop-done')
         self.cls = MakeClothesGUI.MakeClothesGUI('ClothesShop-done')
+        self.ns = NameShop.NameShop(self, 'NameShop-done', avList, index)
+        self.sts = StartShop.StartShop('StartShop-done', avList, index)
         self.ss = StatusShop.StatusShop('StatusShop-done')
-        self.ns = NameShop.NameShop(self, 'NameShop-done', avList, index, self.isPaid)
-        self.shop = GENDERSHOP
+
+        self.shop = BODYSHOP
         self.shopsVisited = []
         if self.warp:
             self.shopsVisited = [GENDERSHOP,
              BODYSHOP,
              COLORSHOP,
              CLOTHESSHOP,
-             STATUSSHOP]
-        self.music = None
+             STATUSSHOP,
+             STARTSHOP]
         self.soundBack = None
+        self.music = None
         self.fsm.enterInitialState()
         self.hprDelta = -1
         self.dropIval = None
@@ -92,15 +96,17 @@ class MakeAToon(StateData.StateData):
         self.focusInIval = None
         self.toon = None
         self.defaultH = 180
+        self.canZoom = False
         self.lastRot = self.defaultH
         self.toonRotateSlider = None
+        self.zoomSeq = None
 
     def getToon(self):
         return self.toon
 
     def enter(self):
-        self.notify.debug('Starting Make A Toon.')
-        if base.config.GetBool('want-qa-regression', 0):
+        self.notify.info('Starting Make A Toon.')
+        if ConfigVariableBool('want-qa-regression', False).getValue():
             self.notify.info('QA-REGRESSION: MAKEATOON: Starting Make A Toon')
         base.camLens.setMinFov(ToontownGlobals.MakeAToonCameraFov/(4./3.))
         base.playMusic(self.music, looping=1, volume=self.musicVolume)
@@ -116,20 +122,82 @@ class MakeAToon(StateData.StateData):
         self.guiTopBar.show()
         self.guiBottomBar.show()
         self.guiCancelButton.show()
+        self.accept('wheel_up', self.cameraZoomIn)
+        self.accept('wheel_down', self.cameraZoomOut)
         if self.warp:
             self.progressing = 0
             self.guiLastButton.hide()
             self.fsm.request('NameShop')
         else:
-            self.fsm.request('GenderShop')
+            self.fsm.request('BodyShop')
 
     def exit(self):
-        base.camLens.setMinFov(settings['fieldofview']/(4./3.))
+        if self.zoomSeq:
+            self.zoomSeq.finish()
+            self.zoomSeq = None
+        base.camLens.setMinFov(builtins.settings['fieldofview']/(4./3.))
         self.guiTopBar.hide()
         self.guiBottomBar.hide()
-        self.music.stop()
+        if self.music:
+            self.music.stop()
         self.fsm.request('Done')
         self.room.reparentTo(hidden)
+        self.ignore('wheel_up')
+        self.ignore('wheel_down')
+
+    def heightZoomRatio(self, height):
+        toon = self.getToon()
+        if toon:
+            speciesName = ToonDNA.getSpeciesName(toon.style.head)
+        else:
+            speciesName = 'cat'  # Average body height
+        return height * (toonBodyScales[speciesName] - (self.zoomRatio))
+
+    def moveCamera(self):
+        toon = self.getToon()
+        if self.zoomSeq:
+            self.zoomSeq.pause()
+
+        self.zoomSeq = Parallel()
+        b = 'easeInOut'
+        if toon:
+            height = toon.getHeight()
+            camVal = max(2.15 + self.heightZoomRatio(height), 2.15)
+            self.zoomSeq.append(LerpFunctionInterval(camera.setZ, fromData=camera.getZ(), toData=camVal, duration=CAM_ZOOM_DUR, blendType=b))
+            if self.spotlightActor:
+                spotlightVal = max(self.heightZoomRatio(height), 0)
+                self.zoomSeq.append(LerpFunctionInterval(self.spotlightActor.setZ, fromData=self.spotlightActor.getZ(), toData=spotlightVal, duration=CAM_ZOOM_DUR, blendType=b))
+        camLensVal = (ToontownGlobals.MakeAToonCameraFov/(4./3.)) * self.zoomRatio
+        self.zoomSeq.append(LerpFunctionInterval(base.camLens.setMinFov, fromData=base.camLens.getMinFov(), toData=camLensVal, duration=CAM_ZOOM_DUR, blendType=b))
+        self.zoomSeq.start()
+
+    def cameraZoomIn(self):
+        if self.canZoom:
+            self.zoomRatio -= 0.1
+            if self.zoomRatio < 0.5:
+                self.zoomRatio = 0.5
+            self.moveCamera()
+
+    def cameraZoomOut(self):
+        if self.canZoom:
+            self.zoomRatio += 0.1
+            if self.zoomRatio > 1:
+                self.zoomRatio = 1
+            self.moveCamera()
+
+    def cameraReset(self):
+        if self.zoomSeq:
+            self.zoomSeq.pause()
+
+        zoomDuration = CAM_ZOOM_DUR * 2.5
+        b = 'easeInOut'
+        self.zoomSeq = Parallel()
+        camLensVal = (ToontownGlobals.MakeAToonCameraFov/(4./3.))
+        self.zoomSeq.append(LerpFunctionInterval(base.camLens.setMinFov, fromData=base.camLens.getMinFov(), toData=camLensVal, duration=zoomDuration, blendType=b))
+        self.zoomSeq.append(LerpFunctionInterval(camera.setZ, fromData=camera.getZ(), toData=2.15, duration=zoomDuration, blendType=b))
+        if self.spotlightActor:
+            self.zoomSeq.append(LerpFunctionInterval(self.spotlightActor.setZ, fromData=self.spotlightActor.getZ(), toData=0, duration=zoomDuration, blendType=b))
+        self.zoomSeq.start()
 
     def load(self):
         gui = loader.loadModel('phase_3/models/gui/tt_m_gui_mat_mainGui')
@@ -156,48 +224,59 @@ class MakeAToon(StateData.StateData):
         rotateUp.flattenStrong()
         rotateDown = gui.find('**/tt_t_gui_mat_arrowRotateDown')
         rotateDown.flattenStrong()
-        self.guiTopBar = DirectFrame(relief=None, text=TTLocalizer.CreateYourToon, text_font=ToontownGlobals.getSignFont(), text_fg=(0.0, 0.65, 0.35, 1), text_scale=0.18, text_pos=(0, -0.03), pos=(0, 0, 0.86))
+        self.guiTopBar = DirectFrame(relief=None, text=TTLocalizer.CreateYourToon, text_font=ToontownGlobals.getSignFont(),
+            text_fg=(0.0, 0.65, 0.35, 1), text_scale=0.18, text_pos=(0, -0.03), pos=(0, 0, 0.86))
         self.guiTopBar.hide()
         self.guiBottomBar = DirectFrame(relief=None, image_scale=(1.25, 1, 1), pos=(0.01, 0, -0.86))
         self.guiBottomBar.hide()
-        self.guiCheckButton = DirectButton(parent=self.guiBottomBar, relief=None, image=(guiAcceptUp,
-         guiAcceptDown,
-         guiAcceptUp,
-         guiAcceptDown), image_scale=halfButtonScale, image1_scale=halfButtonHoverScale, image2_scale=halfButtonHoverScale, pos=(1.165, 0, -0.018), command=self.__handleNext, text=('', TTLocalizer.MakeAToonDone, TTLocalizer.MakeAToonDone), text_font=ToontownGlobals.getInterfaceFont(), text_scale=0.08, text_align=TextNode.ARight, text_pos=(0.075, 0.13), text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1))
+        self.guiCheckButton = ScalingButton(parent=self.guiBottomBar, relief=None, image=(guiAcceptUp,
+            guiAcceptDown,
+            guiAcceptUp,
+            guiAcceptDown), image_scale=halfButtonScale, image1_scale=halfButtonScale, image2_scale=halfButtonScale,
+            pos=(1.165, 0, -0.018), command=self.__handleNext, text=('', TTLocalizer.MakeAToonDone, TTLocalizer.MakeAToonDone, ''),
+            text_font=ToontownGlobals.getInterfaceFont(), text_scale=0.08, text_align=TextNode.ARight, text_pos=(0.075, 0.13),
+            text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1))
         self.guiCheckButton.setPos(-0.13, 0, 0.13)
         self.guiCheckButton.reparentTo(base.a2dBottomRight)
+        self.guiCheckButton['state'] = DGG.NORMAL
         self.guiCheckButton.hide()
-        self.guiCancelButton = DirectButton(parent=self.guiBottomBar, relief=None, image=(guiCancelUp,
-         guiCancelDown,
-         guiCancelUp,
-         guiCancelDown), image_scale=halfButtonScale, image1_scale=halfButtonHoverScale, image2_scale=halfButtonHoverScale, pos=(-1.179, 0, -0.011), command=self.__handleCancel, text=('', TTLocalizer.MakeAToonCancel, TTLocalizer.MakeAToonCancel), text_font=ToontownGlobals.getInterfaceFont(), text_scale=TTLocalizer.MATguiCancelButton, text_pos=(0, 0.115), text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1))
-        self.guiCancelButton.setPos(0.13,0,0.13)
+        self.guiCancelButton = ScalingButton(parent=self.guiBottomBar, relief=None, image=(guiCancelUp,
+            guiCancelDown,
+            guiCancelUp,
+            guiCancelDown), image_scale=halfButtonScale, image1_scale=halfButtonScale, image2_scale=halfButtonScale,
+            pos=(-1.179, 0, -0.011), command=self.__handleCancel, text=('', TTLocalizer.MakeAToonCancel, TTLocalizer.MakeAToonCancel),
+            text_font=ToontownGlobals.getInterfaceFont(), text_scale=TTLocalizer.MATguiCancelButton, text_pos=(0, 0.115),
+            text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1))
+        self.guiCancelButton.setPos(0.13, 0, 0.13)
         self.guiCancelButton.reparentTo(base.a2dBottomLeft)
         self.guiCancelButton.hide()
-        self.guiNextButton = DirectButton(parent=self.guiBottomBar, relief=None, image=(guiNextUp,
-         guiNextDown,
-         guiNextUp,
-         guiNextDisabled), image_scale=(0.3, 0.3, 0.3), image1_scale=(0.35, 0.35, 0.35), image2_scale=(0.35, 0.35, 0.35), pos=(1.165, 0, -0.018), command=self.__handleNext, text=('',
-         TTLocalizer.MakeAToonNext,
-         TTLocalizer.MakeAToonNext,
-         ''), text_font=ToontownGlobals.getInterfaceFont(), text_scale=TTLocalizer.MATguiNextButton, text_pos=(0, 0.115), text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1))
+        self.guiNextButton = ScalingButton(parent=self.guiBottomBar, relief=None, image=(guiNextUp,
+            guiNextDown,
+            guiNextUp,
+            guiNextDisabled), image_scale=(0.3, 0.3, 0.3), image1_scale=(0.3, 0.3, 0.3), image2_scale=(0.3, 0.3, 0.3), pos=(1.165, 0, -0.018), command=self.__handleNext, text=('',
+            TTLocalizer.MakeAToonNext,
+            TTLocalizer.MakeAToonNext,
+            ''), text_font=ToontownGlobals.getInterfaceFont(), text_scale=TTLocalizer.MATguiNextButton, text_pos=(0, 0.115), text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1))
         self.guiNextButton.setPos(-0.13, 0, 0.13)
         self.guiNextButton.reparentTo(base.a2dBottomRight)
         self.guiNextButton.hide()
-        self.guiLastButton = DirectButton(parent=self.guiBottomBar, relief=None, image=(guiNextUp,
-         guiNextDown,
-         guiNextUp,
-         guiNextDown), image3_color=Vec4(0.5, 0.5, 0.5, 0.75), image_scale=(-0.3, 0.3, 0.3), image1_scale=(-0.35, 0.35, 0.35), image2_scale=(-0.35, 0.35, 0.35), pos=(0.825, 0, -0.018), command=self.__handleLast, text=('',
-         TTLocalizer.MakeAToonLast,
-         TTLocalizer.MakeAToonLast,
-         ''), text_font=ToontownGlobals.getInterfaceFont(), text_scale=0.08, text_pos=(0, 0.115), text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1))
+        self.guiLastButton = ScalingButton(parent=self.guiBottomBar, relief=None, image=(guiNextUp,
+            guiNextDown,
+            guiNextUp,
+            guiNextDown), image3_color=Vec4(0.5, 0.5, 0.5, 0.75), image_scale=(-0.3, 0.3, 0.3), image1_scale=(-0.3, 0.3, 0.3),
+            image2_scale=(-0.3, 0.3, 0.3), pos=(0.825, 0, -0.018), command=self.__handleLast, text=('',
+            TTLocalizer.MakeAToonLast,
+            TTLocalizer.MakeAToonLast,
+            ''), text_font=ToontownGlobals.getInterfaceFont(), text_scale=0.08, text_pos=(0, 0.115), text_fg=(1, 1, 1, 1),
+            text_shadow=(0, 0, 0, 1))
         self.guiLastButton.setPos(-0.37, 0, 0.13)
         self.guiLastButton.reparentTo(base.a2dBottomRight)
         self.guiLastButton.hide()
         self.rotateLeftButton = DirectButton(parent=self.guiBottomBar, relief=None, image=(rotateUp,
-         rotateDown,
-         rotateUp,
-         rotateDown), image_scale=(-0.4, 0.4, 0.4), image1_scale=(-0.5, 0.5, 0.5), image2_scale=(-0.5, 0.5, 0.5), pos=(-0.355, 0, 0.36))
+            rotateDown,
+            rotateUp,
+            rotateDown), image_scale=(-0.4, 0.4, 0.4), image1_scale=(-0.5, 0.5, 0.5), image2_scale=(-0.5, 0.5, 0.5),
+            pos=(-0.355, 0, 0.36))
         self.rotateLeftButton.flattenMedium()
         self.rotateLeftButton.reparentTo(base.a2dBottomCenter)
         self.rotateLeftButton.hide()
@@ -218,6 +297,9 @@ class MakeAToon(StateData.StateData):
         self.roomDropActor.loadAnims({'drop': 'phase_3/models/makeatoon/roomAnim_roomDrop'})
         self.roomDropActor.reparentTo(render)
         self.roomDropActor.setBlend(frameBlend = base.wantSmoothAnims)
+        # Set this here to stop the camera from trying to cull the actor when close up.
+        self.roomDropActor.node().setBounds(OmniBoundingVolume())
+        self.roomDropActor.node().setFinal(True)
         self.dropJoint = self.roomDropActor.find('**/droppingJoint')
         self.roomSquishActor = Actor()
         self.roomSquishActor.loadModel('phase_3/models/makeatoon/roomAnim_model')
@@ -243,37 +325,41 @@ class MakeAToon(StateData.StateData):
         self.eee = ee
         self.room = loader.loadModel('phase_3/models/makeatoon/tt_m_ara_mat_room')
         self.room.flattenMedium()
-        self.room2 = loader.loadModel('phase_3/models/makeatoon/tt_m_ara_mat_room')
-        self.room2.flattenMedium()
-        self.genderWalls = self.room.find('**/genderWalls')
-        self.genderWalls.flattenStrong()
-        self.genderProps = self.room.find('**/genderProps')
-        self.genderProps.flattenStrong()
+
         self.bodyWalls = self.room.find('**/bodyWalls')
         self.bodyWalls.flattenStrong()
         self.bodyProps = self.room.find('**/bodyProps')
         self.bodyProps.flattenStrong()
+
         self.colorWalls = self.room.find('**/colorWalls')
         self.colorWalls.flattenStrong()
         self.colorProps = self.room.find('**/colorProps')
         self.colorProps.flattenStrong()
+
         self.clothesWalls = self.room.find('**/clothWalls')
-        self.clothesWalls.flattenMedium()
+        self.clothesWalls.flattenStrong()
         self.clothesProps = self.room.find('**/clothProps')
-        self.clothesProps.flattenMedium()
-        self.statusWalls = self.room2.find('**/colorWalls')
-        self.statusWalls.setColor(0,0,0.8,1)
+        self.clothesProps.flattenStrong()
+
+        # GenderShop is no longer a step in this flow, so its room nodes are
+        # otherwise unused; StatusShop (Altis-specific) borrows them rather
+        # than contest StartShop's claim on the statusWalls/statusProps nodes.
+        self.statusWalls = self.room.find('**/genderWalls')
+        self.statusWalls.flattenStrong()
         self.statusProps = self.room.find('**/genderProps')
+        self.statusProps.flattenStrong()
+
+        self.startWalls = self.room.find('**/statusWalls')
+        self.startProps = self.room.find('**/statusProps')
+
         self.nameWalls = self.room.find('**/nameWalls')
         self.nameWalls.flattenStrong()
         self.nameProps = self.room.find('**/nameProps')
         self.nameProps.flattenStrong()
-        self.background = self.room.find('**/background')
-        self.background.flattenStrong()
-        self.background.reparentTo(render)
+
         self.floor = self.room.find('**/floor')
-        self.floor.flattenStrong()
         self.floor.reparentTo(render)
+
         self.spotlight = self.room.find('**/spotlight')
         self.spotlight.reparentTo(self.spotlightJoint)
         self.spotlight.setColor(1, 1, 1, 0.3)
@@ -296,19 +382,19 @@ class MakeAToon(StateData.StateData):
             self.dna.makeFromNetString(self.namelessPotAv.dna)
             self.toon = Toon.Toon()
             self.toon.setDNA(self.dna)
-            self.toon.useLOD(1000)
             self.toon.setNameVisible(0)
             self.toon.startBlink()
             self.toon.startLookAround()
-        self.gs.load()
+        # self.gs.load()
         self.bs.load()
         self.cos.load()
         self.cls.load()
+        self.sts.load()
         self.ss.load()
         self.ns.load()
         self.music = base.loader.loadMusic('phase_3/audio/bgm/create_a_toon.ogg')
-        self.musicVolume = base.config.GetFloat('makeatoon-music-volume', 1)
-        self.sfxVolume = base.config.GetFloat('makeatoon-sfx-volume', 1)
+        self.musicVolume = ConfigVariableDouble('makeatoon-music-volume', 1).getValue()
+        self.sfxVolume = ConfigVariableInt('makeatoon-sfx-volume', 1).getValue()
         self.soundBack = base.loader.loadSfx('phase_3/audio/sfx/GUI_create_toon_back.ogg')
         self.crashSounds = list(map(base.loader.loadSfx, ['phase_3/audio/sfx/tt_s_ara_mat_crash_boing.ogg',
                                               'phase_3/audio/sfx/tt_s_ara_mat_crash_glassBoing.ogg',
@@ -321,16 +407,21 @@ class MakeAToon(StateData.StateData):
         if self.toon:
             self.toon.stopBlink()
             self.toon.stopLookAroundNow()
-        self.gs.unload()
+        # self.gs.unload()
+        if self.music:
+            self.music.stop()
+            self.music = None
         self.bs.unload()
         self.cos.unload()
         self.cls.unload()
+        self.sts.unload()
         self.ss.unload()
         self.ns.unload()
-        del self.gs
+        # del self.gs
         del self.bs
         del self.cos
         del self.cls
+        del self.sts
         del self.ss
         del self.ns
         self.guiTopBar.destroy()
@@ -355,7 +446,6 @@ class MakeAToon(StateData.StateData):
         del self.names
         del self.dnastring
         del self.nameList
-        del self.music
         del self.soundBack
         del self.dna
         if self.toon:
@@ -368,39 +458,24 @@ class MakeAToon(StateData.StateData):
         self.cleanupFocusOutIval()
         self.room.removeNode()
         del self.room
-        self.room2.removeNode()
-        del self.room2
-        self.genderWalls.removeNode()
-        self.genderProps.removeNode()
-        del self.genderWalls
-        del self.genderProps
-        self.bodyWalls.removeNode()
-        self.bodyProps.removeNode()
+        # self.room.removeNode() above already recursively destroyed everything
+        # found under it (bodyWalls/bodyProps .. smoke are all self.room.find()
+        # results) -- calling removeNode() on them again operates on an
+        # already-destroyed node and crashes, so just drop the references.
         del self.bodyWalls
         del self.bodyProps
-        self.colorWalls.removeNode()
-        self.colorProps.removeNode()
         del self.colorWalls
         del self.colorProps
-        self.clothesWalls.removeNode()
-        self.clothesProps.removeNode()
         del self.clothesWalls
         del self.clothesProps
-        self.statusWalls.removeNode()
-        self.statusProps.removeNode()
         del self.statusWalls
         del self.statusProps
-        self.nameWalls.removeNode()
-        self.nameProps.removeNode()
+        del self.startWalls
+        del self.startProps
         del self.nameWalls
         del self.nameProps
-        self.background.removeNode()
-        del self.background
-        self.floor.removeNode()
         del self.floor
-        self.spotlight.removeNode()
         del self.spotlight
-        self.smoke.removeNode()
         del self.smoke
         while len(self.crashSounds):
             del self.crashSounds[0]
@@ -417,21 +492,6 @@ class MakeAToon(StateData.StateData):
     def getDNA(self):
         return self.dnastring
 
-    def __handleBodyShop(self):
-        self.fsm.request('BodyShop')
-
-    def __handleClothesShop(self):
-        self.fsm.request('ClothesShop')
-
-    def __handleColorShop(self):
-        self.fsm.request('ColorShop')
-		
-    def __handleStatusShop(self):
-        self.fsm.request('StatusShop')
-
-    def __handleNameShop(self):
-        self.fsm.request('NameShop')
-
     def __handleCancel(self):
         self.doneStatus = 'cancel'
         self.shopsVisited = []
@@ -440,31 +500,44 @@ class MakeAToon(StateData.StateData):
     def toggleSlide(self):
         self.slide = 1 - self.slide
 
+    def resetZoom(self):
+        self.cameraReset()
+        self.zoomRatio = 1
+
     def goToNextShop(self):
         self.progressing = 1
-        if self.shop == GENDERSHOP:
-            self.fsm.request('BodyShop')
-        elif self.shop == BODYSHOP:
+        self.canZoom = False
+
+        if self.shop == BODYSHOP:
             self.fsm.request('ColorShop')
         elif self.shop == COLORSHOP:
             self.fsm.request('ClothesShop')
         elif self.shop == CLOTHESSHOP:
             self.fsm.request('StatusShop')
-        else:
+        elif self.shop == STATUSSHOP:
+            self.resetZoom()
             self.fsm.request('NameShop')
+        elif self.shop == NAMESHOP:
+            self.fsm.request('StartShop')
+        else:
+            self.notify.warning("goToNextShop: No shop found?")
 
     def goToLastShop(self):
         self.progressing = 0
-        if self.shop == BODYSHOP:
-            self.fsm.request('GenderShop')
-        elif self.shop == COLORSHOP:
+        self.canZoom = False
+
+        if self.shop == COLORSHOP:
             self.fsm.request('BodyShop')
         elif self.shop == CLOTHESSHOP:
             self.fsm.request('ColorShop')
         elif self.shop == STATUSSHOP:
             self.fsm.request('ClothesShop')
-        else:
+        elif self.shop == NAMESHOP:
             self.fsm.request('StatusShop')
+        elif self.shop == STARTSHOP:
+            self.fsm.request('NameShop')
+        else:
+            self.notify.warning("goToLastShop: No shop found?")
 
     def charSez(self, char, statement, dialogue = None):
         import pdb
@@ -477,56 +550,26 @@ class MakeAToon(StateData.StateData):
     def exitInit(self):
         pass
 
-    def enterGenderShop(self):
-        self.shop = GENDERSHOP
-        if GENDERSHOP not in self.shopsVisited:
-            self.shopsVisited.append(GENDERSHOP)
-            self.genderWalls.reparentTo(self.squishJoint)
-            self.genderProps.reparentTo(self.propJoint)
-            self.roomSquishActor.pose('squish', 0)
-            self.guiNextButton['state'] = DGG.DISABLED
-        else:
-            self.dropRoom(self.genderWalls, self.genderProps)
-        self.guiTopBar['text'] = TTLocalizer.CreateYourToonTitle
-        self.guiTopBar['text_fg'] = (1, 0.92, 0.2, 1)
-        self.guiTopBar['text_scale'] = TTLocalizer.MATenterGenderShop
-        base.transitions.fadeIn()
-        self.accept('GenderShop-done', self.__handleGenderShopDone)
-        self.gs.enter()
-        self.guiNextButton.show()
-        self.gs.showButtons()
-        if self.toonRotateSlider:
-            self.toonRotateSlider.hide()
-
-    def exitGenderShop(self):
-        self.squishRoom(self.genderWalls)
-        self.squishProp(self.genderProps)
-        self.gs.exit()
-        self.ignore('GenderShop-done')
-
-    def __handleGenderShopDone(self):
-        self.guiNextButton.hide()
-        self.gs.hideButtons()
-        self.goToNextShop()
-
     def bodyShopOpening(self):
         self.bs.showButtons()
         self.guiNextButton.show()
-        self.guiLastButton.show()
+        self.guiLastButton.hide()
         self.toonRotateSlider.show()
 
     def enterBodyShop(self):
         guiButton = loader.loadModel('phase_3/models/gui/quit_button')
-        self.toon.show()
         self.shop = BODYSHOP
+        self.canZoom = True
         self.guiTopBar['text'] = TTLocalizer.ShapeYourToonTitle
         self.guiTopBar['text_fg'] = (0.0, 0.98, 0.5, 1)
         self.guiTopBar['text_scale'] = TTLocalizer.MATenterBodyShop
         self.accept('BodyShop-done', self.__handleBodyShopDone)
-        self.dropRoom(self.bodyWalls, self.bodyProps)
-        self.bs.enter(self.toon, self.shopsVisited)
         if BODYSHOP not in self.shopsVisited:
+            self.createRandomToon()
             self.shopsVisited.append(BODYSHOP)
+            self.bodyWalls.reparentTo(self.squishJoint)
+            self.bodyProps.reparentTo(self.propJoint)
+
             if not self.toonRotateSlider:
                 self.toonRotateSlider = DirectSlider(parent = self.guiBottomBar, thumb_geom=(guiButton.find('**/QuitBtn_UP')), frameSize = (-0.8, 0.8, 0.1, -0.1), thumb_relief=None, thumb_geom_scale=1, text = 'Rotate', text_fg = (1, 1, 1, 1), text_style = 3, text_scale = 0.18, text_pos = (0.8, -0.04), text_align = TextNode.ALeft, scale = 1, value = 0, range = (-180, 180), command = self.rotateToonSlider)
                 self.toonRotateSlider.setPos(-0.1, 0, -0.07)
@@ -534,9 +577,15 @@ class MakeAToon(StateData.StateData):
                 self.toonRotateSliderRotationText = OnscreenText("0.0", scale=.1, pos=(0, .1), fg=(1, 1, 1, 1), style = 3)
                 self.toonRotateSliderRotationText.reparentTo(self.toonRotateSlider.thumb)
                 self.toonRotateSlider['extraArgs'] = [self.toonRotateSlider]
+        else:
+            self.dropRoom(self.bodyWalls, self.bodyProps)
+
+        self.bs.enter(self.toon, self.shopsVisited)
+        self.toon.show()
         self.bodyShopOpening()
 
     def exitBodyShop(self):
+        self.canZoom = False
         self.squishRoom(self.bodyWalls)
         self.squishProp(self.bodyProps)
         self.bs.exit()
@@ -560,6 +609,7 @@ class MakeAToon(StateData.StateData):
 
     def enterColorShop(self):
         self.shop = COLORSHOP
+        self.canZoom = True
         self.guiTopBar['text'] = TTLocalizer.PaintYourToonTitle
         self.guiTopBar['text_fg'] = (0, 1, 1, 1)
         self.guiTopBar['text_scale'] = TTLocalizer.MATenterColorShop
@@ -572,6 +622,7 @@ class MakeAToon(StateData.StateData):
             self.shopsVisited.append(COLORSHOP)
 
     def exitColorShop(self):
+        self.canZoom = False
         self.squishRoom(self.colorWalls)
         self.squishProp(self.colorProps)
         self.cos.exit()
@@ -595,6 +646,7 @@ class MakeAToon(StateData.StateData):
 
     def enterClothesShop(self):
         self.shop = CLOTHESSHOP
+        self.canZoom = True
         self.guiTopBar['text'] = TTLocalizer.PickClothesTitle
         self.guiTopBar['text_fg'] = (1, 0.92, 0.2, 1)
         self.guiTopBar['text_scale'] = TTLocalizer.MATenterClothesShop
@@ -610,6 +662,7 @@ class MakeAToon(StateData.StateData):
             self.shopsVisited.append(CLOTHESSHOP)
 
     def exitClothesShop(self):
+        self.canZoom = False
         self.squishRoom(self.clothesWalls)
         self.squishProp(self.clothesProps)
         self.cls.exit()
@@ -624,15 +677,16 @@ class MakeAToon(StateData.StateData):
         else:
             self.cls.hideButtons()
             self.goToLastShop()
-			
+
     def statusShopOpening(self):
         self.guiNextButton.show()
         self.guiLastButton.show()
         self.ss.showButtons()
         self.toonRotateSlider.show()
-		
+
     def enterStatusShop(self):
         self.shop = STATUSSHOP
+        self.canZoom = True
         self.guiTopBar['text'] = TTLocalizer.PickStatusTitle
         self.guiTopBar['text_fg'] = (1, 0.92, 0.2, 1)
         self.guiTopBar['text_scale'] = TTLocalizer.MATenterClothesShop
@@ -648,11 +702,12 @@ class MakeAToon(StateData.StateData):
             self.shopsVisited.append(STATUSSHOP)
 
     def exitStatusShop(self):
+        self.canZoom = False
         self.squishRoom(self.statusWalls)
         self.squishProp(self.statusProps)
         self.ss.exit()
         self.ignore('StatusShop-done')
-		
+
     def __handleStatusShopDone(self):
         self.guiNextButton.hide()
         self.guiLastButton.hide()
@@ -663,16 +718,63 @@ class MakeAToon(StateData.StateData):
             self.ss.hideButtons()
             self.goToLastShop()
 
-    def nameShopOpening(self, task):
+    def startShopOpening(self):
         self.guiCheckButton.show()
+        self.guiLastButton.show()
+        self.sts.showButtons()
+        self.toonRotateSlider.show()
+
+    def enterStartShop(self):
+        self.shop = STARTSHOP
+        self.guiTopBar['text'] = TTLocalizer.PickStartTitle[2]
+        self.guiTopBar['text_fg'] = (1, 0.92, 0.2, 1)
+        self.guiTopBar['text_scale'] = TTLocalizer.MATenterClothesShop
+        self.accept('StartShop-done', self.__handleStartShopDone)
+        self.accept('updateTopBar', self.updateTopBar)
+        self.dropRoom(self.startWalls, self.startProps)
+        self.toon.setScale(self.toonScale)
+        self.toon.setPos(self.toonPosition)
+        if not self.progressing:
+            self.toon.setHpr(self.toonHpr)
+        self.startShopOpening()
+        self.sts.enter(self.toon)
+        if STARTSHOP not in self.shopsVisited:
+            self.shopsVisited.append(STARTSHOP)
+
+    def exitStartShop(self):
+        self.guiNextButton['state'] = DGG.NORMAL
+        self.squishRoom(self.startWalls)
+        self.squishProp(self.startProps)
+        self.sts.exit()
+        self.ignore('StartShop-done')
+        self.ignore('updateTopBar')
+
+    def __handleStartShopDone(self):
+        self.guiNextButton.hide()
+        self.guiLastButton.hide()
+        if self.sts.doneStatus == 'done':
+            self.notify.debug("created")
+            self.doneStatus = 'created'
+            base.transitions.fadeOut(finishIval=EventInterval(self.doneEvent))
+        elif self.sts.doneStatus == 'last':
+            self.sts.hideButtons()
+            self.goToLastShop()
+        else:
+            self.notify.warning(f"__handleStartShopDone: unknown done status: {self.sts.doneStatus}")
+
+    def nameShopOpening(self):
+        # self.guiCheckButton.show()
+        self.guiNextButton.show()
         self.guiLastButton.show()
         if self.warp:
             self.guiLastButton.hide()
         if NAMESHOP not in self.shopsVisited:
             self.shopsVisited.append(NAMESHOP)
-        return Task.done
 
     def enterNameShop(self):
+        pianoBase = self.nameProps.find("**/name_prop_piano_base")
+        if not pianoBase.isEmpty():
+            pianoBase.setColorScale(random.choice(ClothesColors))
         self.shop = NAMESHOP
         self.guiTopBar['text'] = TTLocalizer.NameToonTitle
         self.guiTopBar['text_fg'] = (0.0, 0.98, 0.5, 1)
@@ -684,14 +786,11 @@ class MakeAToon(StateData.StateData):
         self.toon.setH(120)
         if self.toonRotateSlider:
             self.toonRotateSlider.hide()
-        if self.progressing:
-            waittime = self.leftTime
-        else:
-            waittime = 0.2
         self.ns.enter(self.toon, self.nameList, self.warp)
-        taskMgr.doMethodLater(waittime, self.nameShopOpening, 'nameShopOpeningTask')
+        self.nameShopOpening()
 
     def exitNameShop(self):
+        self.notify.debug("exitNameShop")
         self.squishRoom(self.nameWalls)
         self.squishProp(self.nameProps)
         self.spotlight.setPos(1.18, -1.27, 0.41)
@@ -703,19 +802,24 @@ class MakeAToon(StateData.StateData):
         self.ns.rejectName(TTLocalizer.RejectNameText)
 
     def __handleNameShopDone(self):
-        if base.config.GetBool('want-qa-regression', 0):
-            self.notify.info('QA-REGRESSION: MAKEATOON: Creating A Toon')
+        self.guiNextButton.hide()
         self.guiLastButton.hide()
-        self.guiCheckButton.hide()
-        if self.ns.getDoneStatus() == 'last':
+
+        if self.ns.doneStatus == 'next':
+            self.ns.hideAll()
+            self.goToNextShop()
+        elif self.ns.getDoneStatus() == 'last':
             self.ns.hideAll()
             self.goToLastShop()
         elif self.ns.getDoneStatus() == 'paynow':
+            self.notify.debug("paynow?")
             self.doneStatus = 'paynow'
             base.transitions.fadeOut(finishIval=EventInterval(self.doneEvent))
         else:
+            self.notify.debug("created")
             self.doneStatus = 'created'
             base.transitions.fadeOut(finishIval=EventInterval(self.doneEvent))
+
 
     def __handleNext(self):
         messenger.send('next')
@@ -723,14 +827,19 @@ class MakeAToon(StateData.StateData):
     def __handleLast(self):
         messenger.send('last')
 
-    def __handleSkipTutorial(self):
-        messenger.send('skipTutorial')
-
     def enterDone(self):
+        base.discord.applyPreset('loading_game')
         pass
 
     def exitDone(self):
         pass
+
+    def updateTopBar(self, choicesRemaining): #Updates the text at the top of the screen during PAG/StartShop and changes nextButton state
+        self.guiTopBar['text'] = TTLocalizer.PickStartTitle[choicesRemaining]
+        if choicesRemaining == 0:
+            self.guiCheckButton['state'] = DGG.NORMAL
+        else:
+            self.guiCheckButton['state'] = DGG.DISABLED
 
     def create3DGui(self):
         self.proto = loader.loadModel('phase_3/models/makeatoon/tt_m_ara_mat_protoMachine')
@@ -862,7 +971,7 @@ class MakeAToon(StateData.StateData):
 
     def stopToonRotateRightTask(self, event):
         taskMgr.remove('rotateToonRightTask')
-        
+
     def rotateToonSlider(self, slider):
         value = slider['value']
         self.lastRot = value + self.defaultH
@@ -874,3 +983,24 @@ class MakeAToon(StateData.StateData):
     def rotateToon(self):
         hpr = self.toon.getHpr()
         self.toon.setHpr(self.lastRot, hpr[1], hpr[2])
+
+    def createRandomToon(self):
+        if self.toon:
+            self.toon.stopBlink()
+            self.toon.stopLookAroundNow()
+            self.toon.delete()
+        self.dna = ToonDNA.ToonDNA()
+        self.dna.newToonRandom(gender='f', stage=1)
+        self.toon = Toon.Toon()
+        self.toon.setDNA(self.dna)
+        self.toon.setNameVisible(0)
+        self.toon.startBlink()
+        self.toon.startLookAround()
+        self.toon.reparentTo(render)
+        self.toon.setPos(self.toonPosition)
+        self.toon.setHpr(self.toonHpr)
+        self.toon.setScale(self.toonScale)
+        self.toon.loop('neutral')
+        self.setNextButtonState(DGG.NORMAL)
+        self.setToon(self.toon)
+        messenger.send('MAT-newToonCreated')
