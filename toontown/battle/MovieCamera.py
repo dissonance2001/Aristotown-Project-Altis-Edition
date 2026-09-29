@@ -787,7 +787,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'EvictionNotice':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Chomp':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=2.8 / 1.5))
     elif name == 'Watercooler':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'CigarSmoke':

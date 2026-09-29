@@ -7220,23 +7220,24 @@ def doMarketCrash(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, *propTracks, soundTrack)
 
 
-def doBite(attack):
+def doBite(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    propDelay = 0.25
-    propScaleUpTime = 0.25
-    suitDelay = 1.45
-    throwDelay = propDelay + propScaleUpTime + suitDelay
-    throwDuration = 0.25
-    suitTrack = getSuitTrack(attack)
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
-    propTracks = Parallel()
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
+    propDelay: float = 0.8 / playRate
+    propScaleUpTime: float = 0.1 / playRate
+    suitDelay: float = 2.05 / playRate
+    throwDelay: float = propDelay + propScaleUpTime + suitDelay
+    throwDuration: float = 0.4 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    posPoints = [Point3(-0.3, 0.1, 0.0), VBase3(4.465, -3.563, 180.0)]
+    propTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         teeth = globalPropPool.getProp('teeth')
-        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(3, 3, 3), scaleUpTime=propScaleUpTime))
+        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(3.0, 3.0, 3.0), scaleUpTime=propScaleUpTime))
         teethAppearTrack.append(Wait(suitDelay))
         teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
         teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
@@ -7252,10 +7253,35 @@ def doBite(attack):
             teethAppearTrack.append(Wait(0.2))
             teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 0.2, toonHeight * 0.9)))
             teethAppearTrack.append(Wait(0.4))
-            scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(teeth, throwDuration, Point3(8, 8, 8)), Wait(0.9), LerpScaleInterval(teeth, 0.2, Point3(14, 14, 14)), Wait(1.2), LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO))
-            hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.2), LerpHprInterval(teeth, 0.4, Point3(180, -35, 0), startHpr=Point3(180, 0, 0)), Wait(0.1), LerpHprInterval(teeth, 0.1, Point3(180, -75, 0), startHpr=Point3(180, -35, 0)))
-            animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'teeth', duration=throwDuration), ActorInterval(teeth, 'teeth', duration=0.3), Func(teeth.pose, 'teeth', 1), Wait(0.7), ActorInterval(teeth, 'teeth', duration=0.9))
-            propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(MovieUtil.removeProp, teeth), Func(battle.movie.clearRenderProp, teeth))
+            scaleTrack = Sequence(
+                Wait(throwDelay),
+                LerpScaleInterval(teeth, throwDuration, Point3(8.0, 8.0, 8.0)),
+                Wait(0.9),
+                LerpScaleInterval(teeth, 0.2, Point3(14.0, 14.0, 14.0)),
+                Wait(1.2),
+                LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO)
+            )
+            hprTrack = Sequence(
+                Wait(throwDelay),
+                LerpHprInterval(teeth, 0.3, Point3(180.0, 0.0, 0.0)),
+                Wait(0.2),
+                LerpHprInterval(teeth, 0.4, Point3(180.0, -35.0, 0.0), startHpr=Point3(180.0, 0.0, 0.0)),
+                Wait(0.4),
+                LerpHprInterval(teeth, 0.1, Point3(180.0, -75.0, 0.0), startHpr=Point3(180.0, -35.0, 0.0))
+            )
+            animTrack = Sequence(
+                Wait(throwDelay),
+                ActorInterval(teeth, 'teeth', duration=throwDuration),
+                ActorInterval(teeth, 'teeth', duration=0.3),
+                Func(teeth.pose, 'teeth', 1),
+                Wait(0.7),
+                ActorInterval(teeth, 'teeth', duration=0.9)
+            )
+            propTrack = Sequence(
+                Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack),
+                Func(MovieUtil.removeProp, teeth),
+                Func(battle.movie.clearRenderProp, teeth)
+            )
         else:
             flyPoint = __toonFacePoint(toon, parent=battle)
             flyPoint.setY(flyPoint.getY() - 7.1)
@@ -7263,75 +7289,86 @@ def doBite(attack):
             teethAppearTrack.append(Func(MovieUtil.removeProp, teeth))
             teethAppearTrack.append(Func(battle.movie.clearRenderProp, teeth))
             propTrack = teethAppearTrack
-        propTracks.append(propTrack)
+        propTracks += (propTrack,)
 
-    damageAnims = [['cringe',
-      0.01,
-      0.7,
-      1.2], ['conked',
-      0.01,
-      0.2,
-      2.1], ['conked', 0.01, 3.2]]
-    dodgeAnims = [['cringe',
-      0.01,
-      0.7,
-      0.2], ['duck', 0.01, 1.6]]
-    toonTracks = getToonTracks(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.7, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.4)
-    soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    return Parallel(suitTrack, toonTracks, soundTrack, propTracks)
+    damageAnims = [['cringe', 0.01, 0.7, 1.2],
+     ['conked', 0.01, 0.2, 2.1],
+     ['conked', 0.01, 3.2]]
+    dodgeAnims = [['cringe', 0.01, 0.7, 0.2],
+     ['duck', 0.01, 1.6]]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.8, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.4, damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
+    if hitAtleastOneToon(targets):
+        soundTrack: Sequence = getSoundTrack('SA_bite.ogg', delay=throwDelay, node=suit, playRate=1.05)
+        return Parallel(suitTrack, toonTracks, soundTrack, *propTracks)
+    else:
+        return Parallel(suitTrack, toonTracks, *propTracks)
 
 
-def doChomp(attack):
+def doChomp(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    propDelay = 0.25
-    propScaleUpTime = 0.25
-    suitDelay = 1.55
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
+    propDelay: float = 0.8 / playRate
+    propScaleUpTime: float = 0.1 / playRate
+    suitDelay: float = 2.05 / playRate
     throwDelay = propDelay + propScaleUpTime + suitDelay
-    throwDuration = 0.25
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
-    propTracks = Parallel()
+    throwDuration = 0.4 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    posPoints = [Point3(-0.3, 0.1, 0.0), VBase3(4.465, -3.563, 180.0)]
+    propTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         teeth = globalPropPool.getProp('teeth')
-        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(3, 3, 3),
-                                                       scaleUpTime=propScaleUpTime))
+        teethAppearTrack = Sequence(getPropAppearTrack(teeth, suit.getRightHand(), posPoints, propDelay, Point3(3.0, 3.0, 3.0), scaleUpTime=propScaleUpTime))
         teethAppearTrack.append(Wait(suitDelay))
         teethAppearTrack.append(Func(battle.movie.needRestoreRenderProp, teeth))
         teethAppearTrack.append(Func(teeth.wrtReparentTo, battle))
+        x = toon.getX(battle)
+        y = toon.getY(battle)
+        z = toon.getZ(battle)
         if dmg > 0:
-            x = toon.getX(battle)
-            y = toon.getY(battle)
-            z = toon.getZ(battle)
             toonHeight = z + toon.getHeight()
             flyPoint = Point3(x, y + 2.7, toonHeight * 0.7)
             teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
             teethAppearTrack.append(LerpPosInterval(teeth, 0.4, pos=Point3(x, y + 3.2, toonHeight * 0.7)))
             teethAppearTrack.append(LerpPosInterval(teeth, 0.3, pos=Point3(x, y + 4.7, toonHeight * 0.5)))
             teethAppearTrack.append(Wait(0.2))
-            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y, toonHeight + 3)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y, toonHeight + 3.0)))
             teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 1.2, toonHeight * 0.7)))
-            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y - 0.7, toonHeight * 0.4)))
+            teethAppearTrack.append(LerpPosInterval(teeth, 0.1, pos=Point3(x, y + 0.3, toonHeight * 0.4)))
             teethAppearTrack.append(Wait(0.4))
-            scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(teeth, throwDuration, Point3(6, 6, 6)), Wait(0.9),
-                                  LerpScaleInterval(teeth, 0.2, Point3(10, 10, 10)), Wait(1.2),
-                                  LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO))
-            hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.2),
-                                LerpHprInterval(teeth, 0.4, Point3(180, -35, 0), startHpr=Point3(180, 0, 0)), Wait(0.1),
-                                LerpHprInterval(teeth, 0.1, Point3(0, -35, 0), startHpr=Point3(180, -35, 0)))
-            animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'teeth', duration=throwDuration),
-                                 ActorInterval(teeth, 'teeth', duration=0.3),
-                                 Func(teeth.pose, 'teeth', 1), Wait(0.7),
-                                 ActorInterval(teeth, 'teeth', duration=0.9))
-            propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack),
-                                 Func(MovieUtil.removeProp, teeth), Func(battle.movie.clearRenderProp, teeth))
+            scaleTrack = Sequence(
+                Wait(throwDelay),
+                LerpScaleInterval(teeth, throwDuration, Point3(6.0, 6.0, 6.0)),
+                Wait(0.9),
+                LerpScaleInterval(teeth, 0.2, Point3(10.0, 10.0, 10.0)),
+                Wait(1.2),
+                LerpScaleInterval(teeth, 0.3, MovieUtil.PNT3_NEARZERO)
+            )
+            hprTrack = Sequence(
+                Wait(throwDelay),
+                LerpHprInterval(teeth, 0.3, Point3(180.0, 0.0, 0.0)),
+                Wait(0.2),
+                LerpHprInterval(teeth, 0.4, Point3(180.0, -35.0, 0.0), startHpr=Point3(180.0, 0.0, 0.0)),
+                Wait(0.2),
+                LerpHprInterval(teeth, 0.1, Point3(0.0, -35.0, 0.0), startHpr=Point3(180.0, -35.0, 0.0))
+            )
+            animTrack = Sequence(
+                Wait(throwDelay),
+                ActorInterval(teeth, 'teeth', duration=throwDuration),
+                ActorInterval(teeth, 'teeth', duration=0.3),
+                Func(teeth.pose, 'teeth', 1),
+                Wait(0.7),
+                ActorInterval(teeth, 'teeth', duration=0.9)
+            )
+            propTrack = Sequence(
+                Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack),
+                Func(MovieUtil.removeProp, teeth),
+                Func(battle.movie.clearRenderProp, teeth)
+            )
         else:
-            x = toon.getX(battle)
-            y = toon.getY(battle)
-            z = toon.getZ(battle)
             z = z + 0.2
             flyPoint = Point3(x, y - 2.1, z)
             teethAppearTrack.append(LerpPosInterval(teeth, throwDuration, pos=flyPoint))
@@ -7345,54 +7382,34 @@ def doChomp(attack):
             teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.4, y - 1.9, z)))
             teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.7, y - 2.1, z + 0.4)))
             teethAppearTrack.append(LerpPosInterval(teeth, 0.2, pos=Point3(x - 0.8, y - 2.3, z)))
-            teethAppearTrack.append(LerpScaleInterval(teeth, 0.6, MovieUtil.PNT3_NEARZERO))
-            hprTrack = Sequence(Wait(throwDelay), LerpHprInterval(teeth, 0.3, Point3(180, 0, 0)), Wait(0.5),
-                                LerpHprInterval(teeth, 0.4, Point3(80, 0, 0), startHpr=Point3(180, 0, 0)),
-                                LerpHprInterval(teeth, 0.8, Point3(-10, 0, 0), startHpr=Point3(80, 0, 0)))
+            teethAppearTrack.append(LerpScaleInterval(teeth, 0.35, MovieUtil.PNT3_NEARZERO))
+            hprTrack = Sequence(
+                Wait(throwDelay),
+                LerpHprInterval(teeth, 0.3, Point3(180.0, 0.0, 0.0)),
+                Wait(0.2),
+                LerpHprInterval(teeth, 0.3, Point3(80.0, 0.0, 0.0), startHpr=Point3(180.0, 0.0, 0.0)),
+                LerpHprInterval(teeth, 0.6, Point3(-10.0, 0.0, 0.0), startHpr=Point3(80.0, 0.0, 0.0))
+            )
             animTrack = Sequence(Wait(throwDelay), ActorInterval(teeth, 'teeth', duration=3.6))
-            propTrack = Sequence(Parallel(teethAppearTrack, hprTrack, animTrack), Func(MovieUtil.removeProp, teeth),
-                                 Func(battle.movie.clearRenderProp, teeth))
-        propTracks.append(propTrack)
+            propTrack = Sequence(
+                Parallel(teethAppearTrack, hprTrack, animTrack),
+                Func(MovieUtil.removeProp, teeth),
+                Func(battle.movie.clearRenderProp, teeth)
+            )
+        propTracks += (propTrack,)
 
-    damageAnims = [['cringe',
-                    0.01,
-                    0.7,
-                    1.2],
-                   ['spit',
-                    0.01,
-                    2.95,
-                    1.47],
-                   ['spit',
-                    0.01,
-                    4.42,
-                    0.07],
-                   ['spit',
-                    0.08,
-                    4.49,
-                    -0.07],
-                   ['spit',
-                    0.08,
-                    4.42,
-                    0.07],
-                   ['spit',
-                    0.08,
-                    4.49,
-                    -0.07],
-                   ['spit',
-                    0.08,
-                    4.42,
-                    0.07],
-                   ['spit',
-                    0.08,
-                    4.49,
-                    -0.07],
-                   ['spit', 0.01, 4.42]]
+    damageAnims = [["cringe", 0.01, 0.7, 1.2],
+     ["spit", 0.01, 2.95, 1.47],
+     ["spit", 0.01, 4.42, 0.07],
+     ["spit", 0.08, 4.49, -0.07],
+     ["spit", 0.01, 4.42]]
     dodgeAnims = [['jump', 0.01, 0.01]]
-    toonTracks = getToonTracks(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
-                               splicedDodgeAnims=dodgeAnims, showDamageExtraTime=1.4)
-    soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    return Parallel(suitTrack, toonTracks, soundTrack, propTracks)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.7, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=1.4)
+    if hitAtleastOneToon(targets):
+        soundTrack: Sequence = getSoundTrack('SA_bite.ogg', delay=throwDelay, node=suit)
+        return Parallel(suitTrack, toonTracks, soundTrack, *propTracks)
+    else:
+        return Parallel(suitTrack, toonTracks, *propTracks)
 
 
 def doInject(attack):
