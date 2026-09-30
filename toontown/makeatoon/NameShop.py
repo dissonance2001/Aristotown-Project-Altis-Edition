@@ -1,44 +1,32 @@
-from panda3d.core import *
-from panda3d.direct import *
+from toontown.toon.gui import GuiBinGlobals
 from toontown.toonbase.ToontownGlobals import *
-from direct.task.TaskManagerGlobal import *
 from direct.gui.DirectGui import *
 from panda3d.core import *
-from panda3d.direct import *
-from toontown.distributed.ToontownMsgTypes import *
-from direct.directnotify import DirectNotifyGlobal
 from direct.gui import OnscreenText
-from otp.avatar import Avatar
-from otp.chat import ChatManager
 from direct.fsm import StateData
-from direct.fsm import ClassicFSM, State
+from direct.fsm import ClassicFSM
 from direct.fsm import State
-from toontown.toontowngui import TTDialog
-import re
+from toontown.gui import TTDialog
 from toontown.toonbase import TTLocalizer
 from toontown.makeatoon import NameGenerator
-import random
-from otp.distributed import PotentialAvatar
-from otp.namepanel import NameCheck
-from toontown.toontowngui import TeaserPanel
-from direct.distributed.PyDatagram import PyDatagram
-from direct.showbase import PythonUtil
-from toontown.toon import NPCToons
-from direct.task import Task
 from toontown.makeatoon.TTPickANamePattern import TTPickANamePattern
-from pandac.PandaModules import TextEncoder
-from toontown.toontowngui import FeatureComingSoonDialog
+from otp.distributed import PotentialAvatar
+from toontown.namepanel import NameCheck
+from direct.showbase import PythonUtil
+from panda3d.core import TextEncoder
+
+from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
+
 MAX_NAME_WIDTH = TTLocalizer.NSmaxNameWidth
 ServerDialogTimeout = 3.0
 
-class NameShop(StateData.StateData):
-    notify = DirectNotifyGlobal.directNotify.newCategory('NameShop')
 
-    def __init__(self, makeAToon, doneEvent, avList, index, isPaid):
+@DirectNotifyCategory()
+class NameShop(StateData.StateData):
+    def __init__(self, makeAToon, doneEvent, avList, index):
         StateData.StateData.__init__(self, doneEvent)
         self.wantTypeAName = True
         self.makeAToon = makeAToon
-        self.isPaid = isPaid
         self.avList = avList
         self.index = index
         self.shopsVisited = []
@@ -76,29 +64,26 @@ class NameShop(StateData.StateData):
          0]
         self.dummyReturn = 2
         self.nameAction = 0
+        self.nameSubmissionLockedDialog = None
         self.pickANameGUIElements = []
         self.typeANameGUIElements = []
         self.textRolloverColor = Vec4(1, 1, 0, 1)
         self.textDownColor = Vec4(0.5, 0.9, 1, 1)
         self.textDisabledColor = Vec4(0.4, 0.8, 0.4, 1)
-        self.fsm = ClassicFSM.ClassicFSM('NameShop', [State.State('Init', self.enterInit, self.exitInit, ['PayState']),
-         State.State('PayState', self.enterPayState, self.exitPayState, ['PickAName']),
-         State.State('PickAName', self.enterPickANameState, self.exitPickANameState, ['TypeAName', 'Done']),
-         State.State('TypeAName', self.enterTypeANameState, self.exitTypeANameState, ['PickAName',
-          'Approval',
-          'Accepted',
-          'Rejected']),
+        self.fsm = ClassicFSM.ClassicFSM('NameShop', [
+         State.State('PickAName', self.enterPickANameState, self.exitPickANameState, ['TypeAName', 'Done', 'Accepted', 'Rejected']),
+         State.State('TypeAName', self.enterTypeANameState, self.exitTypeANameState, ['PickAName', 'Approval', 'Accepted', 'Rejected']),
          State.State('Approval', self.enterApprovalState, self.exitApprovalState, ['PickAName', 'ApprovalAccepted']),
          State.State('ApprovalAccepted', self.enterApprovalAcceptedState, self.exitApprovalAcceptedState, ['Done']),
          State.State('Accepted', self.enterAcceptedState, self.exitAcceptedState, ['Done']),
          State.State('Rejected', self.enterRejectedState, self.exitRejectedState, ['TypeAName']),
-         State.State('Done', self.enterDone, self.exitDone, ['Init'])], 'Init', 'Done')
+         State.State('Done', self.enterDone, self.exitDone, ['PickAName'])
+         ], 'PickAName', 'Done')
+
         self.parentFSM = makeAToon.fsm
         self.parentFSM.getStateNamed('NameShop').addChild(self.fsm)
         self.nameGen = NameGenerator.NameGenerator()
         self.fsm.enterInitialState()
-        self.requestingSkipTutorial = False
-        return
 
     def makeLabel(self, te, index, others):
         alig = others[0]
@@ -134,7 +119,7 @@ class NameShop(StateData.StateData):
                 if g.position == self.index:
                     self.avId = g.id
 
-        if toon == None:
+        if toon is None:
             return
         else:
             self.toon = toon
@@ -148,16 +133,16 @@ class NameShop(StateData.StateData):
         if not self.addedGenderSpecific or self.oldBoy != self.boy:
             self.oldBoy = self.boy
             self.listsLoaded = 0
-            self.allTitles = [' '] + [' '] + self.nameGen.boyTitles * self.boy + self.nameGen.girlTitles * self.girl + self.nameGen.neutralTitles
+            self.allTitles = [' '] + [' '] + self.nameGen.genderedTitles + self.nameGen.neutralTitles
             self.allTitles.sort()
             self.allTitles += [' '] + [' ']
-            self.allFirsts = [' '] + [' '] + self.nameGen.boyFirsts * self.boy + self.nameGen.girlFirsts * self.girl + self.nameGen.neutralFirsts
+            self.allFirsts = [' '] + [' '] + self.nameGen.genderedFirsts + self.nameGen.neutralFirsts
             self.allFirsts.sort()
             self.allFirsts += [' '] + [' ']
             try:
                 k = self.allFirsts.index('Von')
                 self.allFirsts[k] = 'von'
-            except:
+            except Exception:
                 print("NameShop: Couldn't find von")
 
             if not self.addedGenderSpecific:
@@ -218,19 +203,12 @@ class NameShop(StateData.StateData):
         self.acceptOnce('last', self.__handleBackward)
         self.acceptOnce('skipTutorial', self.__handleSkipTutorial)
         self.__listsChanged()
-        self.fsm.request('PayState')
-        return
-
-    def __overflowNameInput(self):
-        self.rejectName(TTLocalizer.NameTooLong)
 
     def exit(self):
         self.notify.debug('exit')
         if self.isLoaded == 0:
             return None
-        self.ignore('next')
-        self.ignore('last')
-        self.ignore('skipTutorial')
+        self.ignoreAll()
         self.hideAll()
         return None
 
@@ -337,11 +315,9 @@ class NameShop(StateData.StateData):
     def firstToggle(self, value):
         self.firstActive = self.firstCheck['indicatorValue']
         if self.chastise == 2:
-            messenger.send('NameShop-mickeyChange', [[TTLocalizer.ApprovalForName1, TTLocalizer.ApprovalForName2]])
             self.chastise = 0
         if not self.firstActive and not self.lastActive:
             self.firstActive = 1
-            messenger.send('NameShop-mickeyChange', [[TTLocalizer.MustHaveAFirstOrLast1, TTLocalizer.MustHaveAFirstOrLast2]])
             self.chastise = 1
         self.__listsChanged()
         if self.firstActive:
@@ -351,11 +327,9 @@ class NameShop(StateData.StateData):
     def lastToggle(self, value):
         self.lastActive = self.lastCheck['indicatorValue']
         if self.chastise == 1:
-            messenger.send('NameShop-mickeyChange', [[TTLocalizer.ApprovalForName1, TTLocalizer.ApprovalForName2]])
             self.chastise = 0
         if not self.firstActive and not self.lastActive:
             self.lastActive = 1
-            messenger.send('NameShop-mickeyChange', [[TTLocalizer.MustHaveAFirstOrLast1, TTLocalizer.MustHaveAFirstOrLast2]])
             self.chastise = 2
         self.__listsChanged()
         if self.lastActive:
@@ -418,8 +392,6 @@ class NameShop(StateData.StateData):
          self.squareDown,
          self.squareHover,
          self.squareUp), image_scale=(1, 1.1, 0.9), pos=(0.0033, 0, -.38833), scale=(1.2, 1, 1.2), text=TTLocalizer.TypeANameButton, text_scale=TTLocalizer.NStypeANameButton, text_pos=TTLocalizer.NStypeANameButtonPos, command=self.__typeAName)
-        if base.cr.productName in ['DE', 'BR']:
-            self.typeANameButton.hide()
         self.pickANameGUIElements.append(self.typeANameButton)
         self.nameResult = DirectLabel(parent=aspect2d, relief=None, scale=TTLocalizer.NSnameResult, pos=(0.005, 0, 0.585), text=' \n ', text_scale=0.8, text_align=TextNode.ACenter, text_wordwrap=MAX_NAME_WIDTH)
         self.pickANameGUIElements.append(self.nameResult)
@@ -449,18 +421,23 @@ class NameShop(StateData.StateData):
         nameBalloon.removeNode()
         imageList = (guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR'))
         buttonImage = [imageList, imageList]
-        buttonText = [TTLocalizer.NameShopPay, TTLocalizer.NameShopPlay]
-        self.payDialog = DirectDialog(dialogName='paystate', topPad=0, fadeScreen=0.2, pos=(0, 0.1, 0.1), button_relief=None, text_align=TextNode.ACenter, text=TTLocalizer.NameShopOnlyPaid, buttonTextList=buttonText, buttonImageList=buttonImage, image_color=GlobalDialogColor, buttonValueList=[1, 0], command=self.payAction)
-        self.payDialog.buttonList[0].setPos(0, 0, -.27)
-        self.payDialog.buttonList[1].setPos(0, 0, -.4)
-        self.payDialog.buttonList[0]['image_scale'] = (1.2, 1, 1.1)
-        self.payDialog.buttonList[1]['image_scale'] = (1.2, 1, 1.1)
-        self.payDialog['image_scale'] = (0.8, 1, 0.77)
-        self.payDialog.buttonList[0]['text_pos'] = (0, -.02)
-        self.payDialog.buttonList[1]['text_pos'] = (0, -.02)
-        self.payDialog.hide()
         buttonText = [TTLocalizer.NameShopContinueSubmission, TTLocalizer.NameShopChooseAnother]
-        self.approvalDialog = DirectDialog(dialogName='approvalstate', topPad=0, fadeScreen=0.2, pos=(0, 0.1, 0.1), button_relief=None, image_color=GlobalDialogColor, text_align=TextNode.ACenter, text=TTLocalizer.NameShopToonCouncil, buttonTextList=buttonText, buttonImageList=buttonImage, buttonValueList=[1, 0], command=self.approvalAction)
+        self.approvalDialog = DirectDialog(
+            parent=aspect2d,
+            sortOrder=DGG.NO_FADE_SORT_INDEX,
+            dialogName='approvalstate',
+            topPad=0,
+            fadeScreen=0,
+            pos=(0, 0.1, 0.1),
+            button_relief=None,
+            image_color=GlobalDialogColor,
+            text_align=TextNode.ACenter,
+            text=TTLocalizer.NameShopToonCouncil,
+            buttonTextList=buttonText,
+            buttonImageList=buttonImage,
+            buttonValueList=[1, 0],
+            command=self.approvalAction
+        )
         self.approvalDialog.buttonList[0].setPos(0, 0, -.3)
         self.approvalDialog.buttonList[1].setPos(0, 0, -.43)
         self.approvalDialog['image_scale'] = (0.8, 1, 0.77)
@@ -476,26 +453,23 @@ class NameShop(StateData.StateData):
         self.isLoaded = 1
 
     def ubershow(self, guiObjectsToShow):
-        self.notify.debug('ubershow %s' % str(guiObjectsToShow))
+        # self.notify.debug('ubershow %s' % str(guiObjectsToShow))
         for x in guiObjectsToShow:
             try:
                 x.show()
-            except:
+            except Exception:
                 print('NameShop: Tried to show already removed object')
-
-        if base.cr.productName in ['DE', 'BR']:
-            self.typeANameButton.hide()
 
     def hideAll(self):
         self.uberhide(self.pickANameGUIElements)
         self.uberhide(self.typeANameGUIElements)
 
     def uberhide(self, guiObjectsToHide):
-        self.notify.debug('uberhide %s' % str(guiObjectsToHide))
+        # self.notify.debug('uberhide %s' % str(guiObjectsToHide))
         for x in guiObjectsToHide:
             try:
                 x.hide()
-            except:
+            except Exception:
                 print('NameShop: Tried to hide already removed object')
 
     def uberdestroy(self, guiObjectsToDestroy):
@@ -504,7 +478,7 @@ class NameShop(StateData.StateData):
             try:
                 x.destroy()
                 del x
-            except:
+            except Exception:
                 print('NameShop: Tried to destroy already removed object')
 
     def getNameIndices(self):
@@ -525,9 +499,9 @@ class NameShop(StateData.StateData):
         self.uberdestroy(self.pickANameGUIElements)
         self.uberdestroy(self.typeANameGUIElements)
         del self.toon
-        self.payDialog.cleanup()
+        # self.payDialog.cleanup()
         self.approvalDialog.cleanup()
-        del self.payDialog
+        # del self.payDialog
         del self.approvalDialog
         self.parentFSM.getStateNamed('NameShop').removeChild(self.fsm)
         del self.parentFSM
@@ -536,49 +510,36 @@ class NameShop(StateData.StateData):
         self.isLoaded = 0
         self.makeAToon = None
 
-
-    def _checkNpcNames(self, name):
-        def match(npcName, name=name):
-            # TextEncoder.upper requires encoded strings
-            name = TextEncoder().encodeWtext(name)
-            name = name.strip()
-            return (TextEncoder.upper(npcName) == TextEncoder.upper(name.decode()))
-
-        for npcId in list(NPCToons.NPCToonDict.keys()):
-            npcName = NPCToons.NPCToonDict[npcId][1]
-            if match(npcName):
-                self.notify.info('name matches NPC name "%s"' % npcName)
-                return TTLocalizer.NCGeneric
-
     def nameIsValid(self, name):
         self.notify.debug('nameIsValid')
         if name in self.usedNames:
             return TTLocalizer.ToonAlreadyExists % name
-        problem = NameCheck.checkName(name, [self._checkNpcNames], font=self.nameEntry.getFont())
-        if problem:
-            return problem
-        return None
+        return NameCheck.checkName(name)
 
-    def setShopsVisited(self, list):
-        self.shopsVisited = list
+    def setShopsVisited(self, shopList):
+        self.shopsVisited = shopList
 
     def __handleDone(self):
+        self.notify.debug("__handleDone")
         if self.fsm.getCurrentState().getName() == 'TypeAName':
             self.__typedAName()
         else:
-            self.__isFirstTime()
+            self.checkNamePattern(justCheck=True)
+
+    def __handleForward(self):
+        self.notify.debug("__handleForward")
+        self.doneStatus = 'next'
+        messenger.send(self.doneEvent)
 
     def __handleSkipTutorial(self):
-        self.__createAvatar(skipTutorial=True)
+        self.notify.debug('__handleSkipTutorial')
+        self.__createAvatar(skipTutorial=1)
 
     def __handleBackward(self):
         self.doneStatus = 'last'
         messenger.send(self.doneEvent)
 
-    def __handleChastised(self):
-        self.chastiseDialog.cleanup()
-
-    def __createAvatar(self, skipTutorial = False, *args):
+    def __createAvatar(self, skipTutorial=0):
         self.notify.debug('__createAvatar')
         if self.fsm.getCurrentState().getName() == 'TypeAName':
             self.__typedAName()
@@ -589,17 +550,13 @@ class NameShop(StateData.StateData):
             self.rejectName(TTLocalizer.EmptyNameError)
         else:
             rejectReason = self.nameIsValid(self.names[0])
-            if rejectReason != None:
+            if rejectReason is not None:
                 self.rejectName(rejectReason)
-            else:
-                self.checkNamePattern()
-        return
 
     def acceptName(self):
         self.notify.debug('acceptName')
         self.toon.setName(self.names[0])
         self.doneStatus = 'done'
-        self.storeSkipTutorialRequest()
         messenger.send(self.doneEvent)
 
     def rejectName(self, str):
@@ -610,6 +567,7 @@ class NameShop(StateData.StateData):
         self.acceptOnce('rejectDone', self.__handleReject)
 
     def __handleReject(self):
+        self.notify.debug("__handleReject")
         self.rejectDialog.cleanup()
         self.nameEntry['focus'] = 1
         self.typeANameButton.show()
@@ -649,7 +607,7 @@ class NameShop(StateData.StateData):
 
     def __randomName(self):
         self.notify.debug('Finding random name')
-        uberReturn = self.nameGen.randomNameMoreinfo(self.boy, self.girl)
+        uberReturn = self.nameGen.randomNameMoreinfo()
         flags = uberReturn[:3]
         names = uberReturn[3:7]
         fullName = uberReturn[-1]
@@ -671,7 +629,7 @@ class NameShop(StateData.StateData):
             self.titleIndex = self.allTitles.index(uberReturn[3])
             self.nameIndices[0] = self.nameGen.returnUniqueID(uberReturn[3], 0)
             self.nameFlags[0] = 1
-        except:
+        except Exception:
             print('NameShop : Should have found title, uh oh!')
             print(uberReturn)
 
@@ -679,7 +637,7 @@ class NameShop(StateData.StateData):
             self.firstIndex = self.allFirsts.index(uberReturn[4])
             self.nameIndices[1] = self.nameGen.returnUniqueID(uberReturn[4], 1)
             self.nameFlags[1] = 1
-        except:
+        except Exception:
             print('NameShop : Should have found first name, uh oh!')
             print(uberReturn)
 
@@ -692,7 +650,7 @@ class NameShop(StateData.StateData):
                 self.nameFlags[3] = 1
             else:
                 self.nameFlags[3] = 0
-        except:
+        except Exception:
             print('NameShop : Some part of last name not found, uh oh!')
             print(uberReturn)
 
@@ -703,7 +661,7 @@ class NameShop(StateData.StateData):
     def findTempName(self):
         try:
             colorstring = TTLocalizer.NumToColor[self.toon.style.headColor]
-        except:
+        except Exception:
             colorstring = "Colorful"
         animaltype = TTLocalizer.AnimalToSpecies[self.toon.style.getAnimal()]
         tempname = colorstring + ' ' + animaltype
@@ -712,34 +670,6 @@ class NameShop(StateData.StateData):
         self.names[0] = tempname
         tempname = '"' + tempname + '"'
         return tempname
-
-    def enterInit(self):
-        self.notify.debug('enterInit')
-
-    def exitInit(self):
-        pass
-
-    def enterPayState(self):
-        self.notify.debug('enterPayState')
-        if base.cr.allowFreeNames() or self.isPaid:
-            self.fsm.request('PickAName')
-        else:
-            tempname = self.findTempName()
-            self.payDialog['text'] = TTLocalizer.NameShopOnlyPaid + tempname
-            self.payDialog.show()
-
-    def exitPayState(self):
-        pass
-
-    def payAction(self, value):
-        self.notify.debug('payAction')
-        self.payDialog.hide()
-        if value:
-            self.doneStatus = 'paynow'
-            messenger.send(self.doneEvent)
-        else:
-            self.nameAction = 0
-            self.__createAvatar()
 
     def enterPickANameState(self):
         self.notify.debug('enterPickANameState')
@@ -759,37 +689,39 @@ class NameShop(StateData.StateData):
         self.nameEntry['focus'] = 1
 
     def __typeAName(self):
-        if not self.wantTypeAName:
-            FeatureComingSoonDialog.FeatureComingSoonDialog(text="That feature is \1textShadow\1coming soon\2! Sorry about that!")
-        
+        if getattr(base.cr, '_isNameSubmissionLocked', False):
+            self.nameSubmissionLockedDialog = TTDialog.TTGlobalDialog(
+                doneEvent='nameSubmissionLockedDialogDone',
+                message=TTLocalizer.NameShopNameSubmissionLocked,
+                style=TTDialog.Acknowledge, text_wordwrap=20
+            )
+            self.nameSubmissionLockedDialog.show()
+            self.acceptOnce('nameSubmissionLockedDialogDone', self._handleNameSubmissionLockedDialogDone)
+            return
+
+        if self.fsm.getCurrentState().getName() == 'TypeAName':
+            self.typeANameButton['text'] = TTLocalizer.TypeANameButton
+            self.typeANameButton.wrtReparentTo(self.namePanel, sort=2)
+            self.fsm.request('PickAName')
         else:
-            if base.cr.productName in ['JP',
-             'DE',
-             'BR',
-             'FR']:
-                if base.restrictTrialers:
-                    if not base.cr.isPaid():
-                        dialog = TeaserPanel.TeaserPanel(pageName='typeAName')
-                        return
-            if self.fsm.getCurrentState().getName() == 'TypeAName':
-                self.typeANameButton['text'] = TTLocalizer.TypeANameButton
-                self.typeANameButton.wrtReparentTo(self.namePanel, sort=2)
-                self.fsm.request('PickAName')
-            else:
-                self.typeANameButton['text'] = TTLocalizer.PickANameButton
-                self.typeANameButton.wrtReparentTo(aspect2d, sort=2)
-                self.typeANameButton.show()
-                self.fsm.request('TypeAName')
+            self.typeANameButton['text'] = TTLocalizer.PickANameButton
+            self.typeANameButton.wrtReparentTo(aspect2d, sort=2)
+            self.typeANameButton.show()
+            self.fsm.request('TypeAName')
+
+    def _handleNameSubmissionLockedDialogDone(self):
+        self.nameSubmissionLockedDialog.cleanup()
+        self.nameSubmissionLockedDialog = None
 
     def __typedAName(self, *args):
+        self.toon.typedName = True
         self.notify.debug('__typedAName')
         self.nameEntry['focus'] = 0
         name = self.nameEntry.get()
-        name = TextEncoder().decodeText(name.encode())
+        name = TextEncoder().decodeText(name.encode('utf-8'))
         name = name.strip()
         name = TextEncoder().encodeWtext(name)
-
-        self.nameEntry.enterText(name.decode())
+        self.nameEntry.enterText(name.decode('utf-8'))
         problem = self.nameIsValid(self.nameEntry.get())
         if problem:
             self.rejectName(problem)
@@ -802,9 +734,12 @@ class NameShop(StateData.StateData):
 
     def enterApprovalState(self):
         self.notify.debug('enterApprovalState')
+        base.transitions.noTransitions()
+        self.toon.potName = [self.nameEntry.get(), '', '', ''] #name, wantname, approvedname, rejectedname
         tempname = self.findTempName()
         self.approvalDialog['text'] = TTLocalizer.NameShopToonCouncil + tempname
         self.approvalDialog.show()
+        self.approvalDialog.setBin('sorted-gui-popup', GuiBinGlobals.TTDialogBin)
 
     def approvalAction(self, value):
         self.notify.debug('approvalAction')
@@ -812,7 +747,7 @@ class NameShop(StateData.StateData):
         if value:
             self.nameAction = 2
             if not self.makeAToon.warp:
-                self.__isFirstTime()
+                self.__handleForward()
             else:
                 self.serverCreateAvatar()
         else:
@@ -820,12 +755,13 @@ class NameShop(StateData.StateData):
             self.fsm.request('PickAName')
 
     def exitApprovalState(self):
-        pass
+        self.notify.debug("exitApprovalState")
+        self.approvalDialog.hide()
+        self.acceptOnce('next', self.__handleDone)
 
     def enterApprovalAcceptedState(self):
         self.notify.debug('enterApprovalAcceptedState')
         self.doneStatus = 'done'
-        self.storeSkipTutorialRequest()
         messenger.send(self.doneEvent)
 
     def exitApprovalAcceptedState(self):
@@ -840,7 +776,6 @@ class NameShop(StateData.StateData):
     def __handleAccepted(self):
         self.acceptedDialog.cleanup()
         self.doneStatus = 'done'
-        self.storeSkipTutorialRequest()
         messenger.send(self.doneEvent)
 
     def exitAcceptedState(self):
@@ -866,15 +801,16 @@ class NameShop(StateData.StateData):
     def exitDone(self):
         return None
 
-    def nameShopHandler(self, msgType, di):
-        self.notify.debug('nameShopHandler')
-        if msgType == CLIENT_CREATE_AVATAR_RESP:
-            self.handleCreateAvatarResponseMsg(di)
-        return None
-
-    def checkNamePattern(self):
+    def checkNamePattern(self, justCheck=False):
         self.notify.debug('checkNamePattern')
-        base.cr.csm.sendSetNamePattern(self.avId,
+        self.toon.typedName = False
+
+        if justCheck:
+            avId = 0
+        else:
+            avId = self.avId
+
+        base.cr.csm.sendSetNamePattern(avId,
                                        self.nameIndices[0], self.nameFlags[0],
                                        self.nameIndices[1], self.nameFlags[1],
                                        self.nameIndices[2], self.nameFlags[2],
@@ -885,24 +821,44 @@ class NameShop(StateData.StateData):
     def handleSetNamePatternResp(self, avId, status):
         self.notify.debug('handleSetNamePatternResp')
         self.cleanupWaitForServer()
-        if avId != self.avId:
+        if avId and avId != self.avId:
             self.notify.debug("doid's don't match up!")
             self.rejectName(TTLocalizer.NameError)
+        if avId == 0:
+            if status == 1:
+                self.notify.debug('name processed once on the server successfully')
+                self.toon.potName = self.names
+                # set these here since the name doesn't actually get set here, it gets set by StartShop
+                self.toon.nameIndices = self.nameIndices
+                self.toon.nameFlags = self.nameFlags
+                # compared to type-a-name, skip over the "Approval" state here and go straight to approval action
+                self.approvalAction(True)
+            elif status == 0:
+                self.notify.debug('name check rejected')
+                self.fsm.request('PickAName')
+                self.rejectName(TTLocalizer.NameError)
+            else:
+                self.notify.debug('typed name response did not contain any return fields')
+                self.rejectName(TTLocalizer.NameError)
+            return
+
         if status == 1:
             style = self.toon.getStyle()
             avDNA = style.makeNetString()
             self.notify.debug('pattern name accepted')
             newPotAv = PotentialAvatar.PotentialAvatar(avId, self.names, avDNA, self.index, 0)
-            self.avList.append(newPotAv)
-            self.doneStatus = 'done'
-            self.storeSkipTutorialRequest()
-            messenger.send(self.doneEvent)
+            if not self.newwarp:
+                self.avList.append(newPotAv)
+            self.fsm.request('Accepted')
+        elif status == 0:
+            self.notify.debug('pattern name rejected with associated avId - should never get here for pick-a-name')
+            self.fsm.request('Rejected')
         else:
             self.notify.debug('name pattern rejected')
             self.rejectName(TTLocalizer.NameError)
-        return None
 
     def _submitTypeANameAsPickAName(self):
+        # TODO: Bringing this in for the revert, but it is untested
         pnp = TTPickANamePattern(self.nameEntry.get(), self.toon.style.gender)
         if pnp.hasNamePattern():
             pattern = pnp.getNamePattern()
@@ -922,25 +878,26 @@ class NameShop(StateData.StateData):
         return False
 
     def checkNameTyped(self, justCheck = False):
-        self.notify.debug('checkNameTyped')
-        if self._submitTypeANameAsPickAName():
-            return
+        self.notify.debug(f'checkNameTyped {justCheck} {self.nameEntry.get()}')
+        # if self._submitTypeANameAsPickAName():
+        #     return
         if justCheck:
             avId = 0
         else:
             avId = self.avId
+
         base.cr.csm.sendSetNameTyped(avId, self.nameEntry.get(), self.handleSetNameTypedResp)
         self.waitForServer()
 
     def handleSetNameTypedResp(self, avId, status):
-        self.notify.debug('handleSetNameTypedResp')
+        self.notify.debug('handleSetNameTypedResp - this is good')
         self.cleanupWaitForServer()
         if avId and avId != self.avId:
             self.notify.debug("doid's don't match up!")
             self.rejectName(TTLocalizer.NameError)
         if avId == 0:
             if status == 1:
-                self.notify.debug('name check pending')
+                self.notify.debug('name check pending - this is good')
                 self.fsm.request('Approval')
             elif status == 0:
                 self.notify.debug('name check rejected')
@@ -965,110 +922,77 @@ class NameShop(StateData.StateData):
                 self.notify.debug("name typed accepted but didn't fill any return fields")
                 self.rejectName(TTLocalizer.NameError)
 
-    def serverCreateAvatar(self, skipTutorial = False):
+    def serverCreateAvatar(self, skipTutorial = 0):
         self.notify.debug('serverCreateAvatar')
         style = self.toon.getStyle()
         self.newDNA = style.makeNetString()
-        self.requestingSkipTutorial = skipTutorial
         if not self.avExists or self.avExists and self.avId == 'deleteMe':
-            trackChoices = [self.toon.choiceAlpha, self.toon.choiceBeta]
+            trackChoices = [self.toon.choiceAlpha, self.toon.choiceBeta]  # default of throw and squirt
             startingPg = self.toon.startingPg
-            base.cr.csm.sendCreateAvatar(style, '', self.index, self.toon.uberType, trackChoices, startingPg)
-            self.accept('nameShopCreateAvatarDone', self.handleCreateAvatarResponse)
+            base.cr.csm.sendCreateAvatar(style, '', self.index, self.toon.uberType, trackChoices, startingPg, skipTutorial)
+            self.accept('makeAToonCreateAvatarDone', self.handleCreateAvatarResponse)
         else:
-            self.checkNameTyped()
+            if self.toon.typedName:
+                self.checkNameTyped()
+            else:
+                self.checkNamePattern()
         self.notify.debug('Ending Make A Toon: %s' % self.toon.style)
 
     def handleCreateAvatarResponse(self, avId):
         self.notify.debug('handleCreateAvatarResponse')
-        self.notify.debug('avatar with default name accepted')
         self.avId = avId
         self.avExists = 1
-        self.logAvatarCreation()
         if self.nameAction == 0:
             self.toon.setName(self.names[0])
             newPotAv = PotentialAvatar.PotentialAvatar(self.avId, self.names, self.newDNA, self.index, 1)
             self.avList.append(newPotAv)
             self.doneStatus = 'done'
-            self.storeSkipTutorialRequest()
             messenger.send(self.doneEvent)
-        elif self.nameAction == 1:
-            self.checkNamePattern()
         elif self.nameAction == 2:
-            self.checkNameTyped()
+            if self.toon.typedName:
+                self.checkNameTyped()
+            else:
+                self.checkNamePattern()
         else:
-            self.notify.debug('avatar invalid nameAction')
             self.rejectName(TTLocalizer.NameError)
 
     def waitForServer(self):
-        self.waitForServerDialog = TTDialog.TTDialog(text=TTLocalizer.WaitingForNameSubmission, style=TTDialog.NoButtons)
+        self.notify.debug("waitForServer")
+        self.waitForServerDialog = TTDialog.TTDialog(text=TTLocalizer.WaitingForNameSubmission, style=TTDialog.NoButtons, fadeScreen=0)
         self.waitForServerDialog.show()
 
     def cleanupWaitForServer(self):
-        if self.waitForServerDialog != None:
+        self.notify.debug("cleanupWaitForServer")
+        if self.waitForServerDialog is not None:
             self.waitForServerDialog.cleanup()
             self.waitForServerDialog = None
-        return
-
-    def printTypeANameInfo(self, str):
-        sourceFilename, lineNumber, functionName = PythonUtil.stackEntryInfo(1)
-        self.notify.debug('========================================\n%s : %s :  %s' % (sourceFilename, lineNumber, functionName))
-        self.notify.debug(str)
-        curPos = self.typeANameButton.getPos()
-        self.notify.debug('Pos = %.2f %.2f %.2f' % (curPos[0], curPos[1], curPos[2]))
-        parent = self.typeANameButton.getParent()
-        parentPos = parent.getPos()
-        self.notify.debug('Parent = %s' % parent)
-        self.notify.debug('ParentPos = %.2f %.2f %.2f' % (parentPos[0], parentPos[1], parentPos[2]))
-
-    def storeSkipTutorialRequest(self):
-        base.cr.skipTutorialRequest = self.requestingSkipTutorial
 
     def __isFirstTime(self):
-        if not self.makeAToon.nameList or self.makeAToon.warp or self.toon.startingPg > 0:
+        if (not self.makeAToon.nameList or self.makeAToon.warp or self.toon.startingPg > 0):
             self.__createAvatar()
         else:
             self.promptTutorial()
 
     def promptTutorial(self):
-        self.promptTutorialDialog = TTDialog.TTDialog(parent=aspect2dp, text=TTLocalizer.PromptTutorial, text_scale=0.06, text_align=TextNode.ACenter, text_wordwrap=22, command=self.__openTutorialDialog, fadeScreen=0.5, style=TTDialog.TwoChoice, buttonTextList=[TTLocalizer.MakeAToonEnterTutorial, TTLocalizer.MakeAToonSkipTutorial], button_text_scale=0.06, buttonPadSF=5.5, sortOrder=NO_FADE_SORT_INDEX)
+        self.notify.debug("promptTutorial")
+        self.promptTutorialDialog = TTDialog.TTDialog(parent=aspect2dp,
+            text=TTLocalizer.PromptTutorial, text_scale=0.06, text_align=TextNode.ACenter,
+            text_wordwrap=22, command=self.__openTutorialDialog, fadeScreen=0.5,
+            style=TTDialog.TwoChoice, buttonTextList=[TTLocalizer.MakeAToonEnterTutorial, TTLocalizer.MakeAToonSkipTutorial],
+            button_text_scale=0.06, buttonPadSF=5.5, sortOrder=NO_FADE_SORT_INDEX)
+
         self.promptTutorialDialog.show()
 
     def __openTutorialDialog(self, choice = 0):
         if choice == 1:
             self.notify.debug('enterTutorial')
-            if base.config.GetBool('want-qa-regression', 0):
+            if ConfigVariableBool('want-qa-regression', False).getValue():
                 self.notify.info('QA-REGRESSION: ENTERTUTORIAL: Enter Tutorial')
             self.__createAvatar()
         else:
             self.notify.debug('skipTutorial')
-            if base.config.GetBool('want-qa-regression', 0):
+            if ConfigVariableBool('want-qa-regression', False).getValue():
                 self.notify.info('QA-REGRESSION: SKIPTUTORIAL: Skip Tutorial')
-            self.__handleSkipTutorial()
+            self.__handleForward()
         self.promptTutorialDialog.destroy()
 
-    def logAvatarCreation(self):
-        dislId = 0
-        try:
-            dislId = launcher.getValue('GAME_DISL_ID')
-        except:
-            pass
-
-        if not dislId:
-            self.notify.warning('No dislId, using 0')
-            dislId = 0
-        gameSource = '0'
-        try:
-            gameSource = launcher.getValue('GAME_SOURCE')
-        except:
-            pass
-
-        if not gameSource:
-            gameSource = '0'
-        else:
-            self.notify.info('got GAME_SOURCE=%s' % gameSource)
-        if self.avId > 0:
-            base.cr.centralLogger.writeClientEvent('createAvatar %s-%s-%s' % (self.avId, dislId, gameSource))
-            self.notify.debug('createAvatar %s-%s-%s' % (self.avId, dislId, gameSource))
-        else:
-            self.notify.warning('logAvatarCreation got self.avId =%s' % self.avId)
