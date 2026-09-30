@@ -4165,8 +4165,9 @@ def doDownsize(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
-    damageDelay: float = 2.3
-    suitTrack: Sequence = getSuitTrack(attack)
+    playRate: float = attack['playRate']
+    damageDelay: float = 2.3 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
     partTracks: tuple[Sequence, ...] = ()
     shrinkTracks: tuple[Sequence, ...] = ()
     for t in targets:
@@ -4181,17 +4182,17 @@ def doDownsize(attack: dict) -> MetaInterval:
         sprayNode.setPos(battle.getActorPosHpr(suit)[0])
         sprayNode.headsUp(toon)
         sprayTrack = Sequence(
-            getPartTrack(sprayEffect, 1.0, 2.28, (sprayEffect, sprayNode, 0), softStop=-1.0),
+            getPartTrack(sprayEffect, 1.0 / playRate, 2.28, (sprayEffect, sprayNode, 0), softStop=-1.0),
             Func(sprayNode.removeNode)
         )
-        cloudTrack = getPartTrack(cloudEffect, 2.1, 1.9, (cloudEffect, toon, 0), softStop=-1.0)
+        cloudTrack = getPartTrack(cloudEffect, 2.1 / playRate, 1.9, (cloudEffect, toon, 0), softStop=-1.0)
         partTracks += (sprayTrack,)
         if dmg > 0:
             initialScale = toon.getScale()
             downScale = Vec3(0.4, 0.4, 0.4)
             shrinkTimeMod = 0.7
             shrinkTrack = Sequence(
-                Wait(damageDelay + 0.5),
+                Wait(damageDelay + (0.5 / playRate)),
                 Func(battle.movie.needRestoreToonScale),
                 LerpScaleInterval(toon, 1.0 * shrinkTimeMod, downScale * 1.05),
                 LerpScaleInterval(toon, 0.1 * shrinkTimeMod, downScale * 0.95),
@@ -4207,7 +4208,7 @@ def doDownsize(attack: dict) -> MetaInterval:
 
     damageAnims: list[list] = [['lose', 0.5, 2.17, 1.7],
      ['sidestep-right', 0.01, 2.97, 1.49]]
-    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.6, dodgeAnimNames=['sidestep'])
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.6 / playRate, dodgeAnimNames=['sidestep'])
     if hitAtleastOneToon(targets):
         soundTrack = Track(
             (damageDelay, getSoundTrack('SA_head_shrink_only.ogg', delay=0.0, duration=2.1, node=suit)),
