@@ -367,9 +367,14 @@ class CreateAvatarFSM(OperationFSM):
         self.pg = pg
         self.skipTutorial = skipTutorial
         self.trackAccess = [0,0,0,0,1,1,0,0]
-        if pg ==1:
-           self.trackAccess[tracks[0]] = 1
-        elif pg ==2:
+        if self.skipTutorial and tracks and any(t is not None for t in tracks):
+            self.trackAccess = [0,0,0,0,0,0,0,0]
+            for track in tracks:
+                if track is not None and 0 <= track < 8:
+                    self.trackAccess[track] = 1
+        elif pg == 1:
+            self.trackAccess[tracks[0]] = 1
+        elif pg == 2:
             for track in tracks:
                 self.trackAccess[track] = 1
 
@@ -470,10 +475,11 @@ class CreateAvatarFSM(OperationFSM):
             toonFields['setZonesVisited'] = (prevZones + [startingHood],)
             toonFields['setTeleportAccess'] = (prevZones,)
             toonFields['setQuestCarryLimit'] = (questLimit,)
-            toonFields['setRewardHistory'] = (questTier, [])
             toonFields['setHp'] = (hp,)
             toonFields['setMaxHp'] = (hp,)
             toonFields['setTutorialAck'] = (1,)
+        else:
+            toonFields['setTutorialAck'] = (0,)
 
         self.csm.air.dbInterface.createObject(
             self.csm.air.dbId,
@@ -681,7 +687,7 @@ class SetNameTypedFSM(AvatarOperationFSM):
             self.demand('RetrieveAccount')
             return
 
-        # Hmm, self.avId was 0. Okay, let's just cut to the judging:
+        # self.avId was 0. Let's  skip to judging:
         self.demand('JudgeName')
 
     def enterRetrieveAvatar(self):
@@ -733,7 +739,12 @@ class SetNamePatternFSM(AvatarOperationFSM):
         self.avId = avId
         self.pattern = pattern
 
-        self.demand('RetrieveAccount')
+        if self.avId:
+            self.demand('RetrieveAccount')
+            return
+
+        # self.avId was 0. Cut to setting/validating the name:
+        self.demand('SetName')
 
     def enterRetrieveAvatar(self):
         if self.avId and self.avId not in self.avList:
@@ -770,15 +781,22 @@ class SetNamePatternFSM(AvatarOperationFSM):
             parts.remove('')
         name = ' '.join(parts)
 
-        self.csm.air.dbInterface.updateObject(
-            self.csm.air.dbId,
-            self.avId,
-            self.csm.air.dclassesByName['DistributedToonUD'],
-            {'WishNameState': ('',),
-             'WishName': ('',),
-             'setName': (name,)})
+        if not name:
+            self.csm.sendUpdateToAccountId(self.target, 'setNamePatternResp', [self.avId, 0])
+            self.demand('Off')
+            return
 
-        self.csm.air.writeServerEvent('avatarNamed', self.avId, name)
+        if self.avId:
+            self.csm.air.dbInterface.updateObject(
+                self.csm.air.dbId,
+                self.avId,
+                self.csm.air.dclassesByName['DistributedToonUD'],
+                {'WishNameState': ('',),
+                 'WishName': ('',),
+                 'setName': (name,)})
+
+            self.csm.air.writeServerEvent('avatarNamed', self.avId, name)
+
         self.csm.sendUpdateToAccountId(self.target, 'setNamePatternResp', [self.avId, 1])
         self.demand('Off')
 

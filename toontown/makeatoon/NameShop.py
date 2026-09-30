@@ -422,7 +422,22 @@ class NameShop(StateData.StateData):
         imageList = (guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR'))
         buttonImage = [imageList, imageList]
         buttonText = [TTLocalizer.NameShopContinueSubmission, TTLocalizer.NameShopChooseAnother]
-        self.approvalDialog = DirectDialog(dialogName='approvalstate', topPad=0, fadeScreen=0.2, pos=(0, 0.1, 0.1), button_relief=None, image_color=GlobalDialogColor, text_align=TextNode.ACenter, text=TTLocalizer.NameShopToonCouncil, buttonTextList=buttonText, buttonImageList=buttonImage, buttonValueList=[1, 0], command=self.approvalAction)
+        self.approvalDialog = DirectDialog(
+            parent=aspect2d,
+            sortOrder=DGG.NO_FADE_SORT_INDEX,
+            dialogName='approvalstate',
+            topPad=0,
+            fadeScreen=0,
+            pos=(0, 0.1, 0.1),
+            button_relief=None,
+            image_color=GlobalDialogColor,
+            text_align=TextNode.ACenter,
+            text=TTLocalizer.NameShopToonCouncil,
+            buttonTextList=buttonText,
+            buttonImageList=buttonImage,
+            buttonValueList=[1, 0],
+            command=self.approvalAction
+        )
         self.approvalDialog.buttonList[0].setPos(0, 0, -.3)
         self.approvalDialog.buttonList[1].setPos(0, 0, -.43)
         self.approvalDialog['image_scale'] = (0.8, 1, 0.77)
@@ -719,6 +734,7 @@ class NameShop(StateData.StateData):
 
     def enterApprovalState(self):
         self.notify.debug('enterApprovalState')
+        base.transitions.noTransitions()
         self.toon.potName = [self.nameEntry.get(), '', '', ''] #name, wantname, approvedname, rejectedname
         tempname = self.findTempName()
         self.approvalDialog['text'] = TTLocalizer.NameShopToonCouncil + tempname
@@ -731,7 +747,7 @@ class NameShop(StateData.StateData):
         if value:
             self.nameAction = 2
             if not self.makeAToon.warp:
-                self.__isFirstTime()
+                self.__handleForward()
             else:
                 self.serverCreateAvatar()
         else:
@@ -740,6 +756,7 @@ class NameShop(StateData.StateData):
 
     def exitApprovalState(self):
         self.notify.debug("exitApprovalState")
+        self.approvalDialog.hide()
         self.acceptOnce('next', self.__handleDone)
 
     def enterApprovalAcceptedState(self):
@@ -941,7 +958,7 @@ class NameShop(StateData.StateData):
 
     def waitForServer(self):
         self.notify.debug("waitForServer")
-        self.waitForServerDialog = TTDialog.TTDialog(text=TTLocalizer.WaitingForNameSubmission, style=TTDialog.NoButtons)
+        self.waitForServerDialog = TTDialog.TTDialog(text=TTLocalizer.WaitingForNameSubmission, style=TTDialog.NoButtons, fadeScreen=0)
         self.waitForServerDialog.show()
 
     def cleanupWaitForServer(self):

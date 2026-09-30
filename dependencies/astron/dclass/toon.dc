@@ -1118,7 +1118,7 @@ dclass DistributedToon : DistributedPlayer {
   setHoodsVisited(uint32[] = [ 2700 ]) required ownrecv db;
   setInterface(blob = []) required ownrecv db;
   setLastHood(uint32 = 0) required ownrecv broadcast db;
-  setTutorialAck(uint8) required ownrecv db;
+  setTutorialAck(uint8 = 0) required ownrecv db;
   // Hammerspace stuff (replaces legacy clothes/accessory list fields)
   requestEquipItems(InventoryItem items[]) ownsend airecv;
   requestUnequipItems(InventoryItem items[]) ownsend airecv;

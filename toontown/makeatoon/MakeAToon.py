@@ -342,15 +342,14 @@ class MakeAToon(StateData.StateData):
         self.clothesProps.flattenStrong()
 
         # GenderShop is no longer a step in this flow, so its room nodes are
-        # otherwise unused; StatusShop (Altis-specific) borrows them rather
-        # than contest StartShop's claim on the statusWalls/statusProps nodes.
+        # otherwise unused; StatusShop and StartShop borrow them.
         self.statusWalls = self.room.find('**/genderWalls')
         self.statusWalls.flattenStrong()
         self.statusProps = self.room.find('**/genderProps')
         self.statusProps.flattenStrong()
 
-        self.startWalls = self.room.find('**/statusWalls')
-        self.startProps = self.room.find('**/statusProps')
+        self.startWalls = self.statusWalls
+        self.startProps = self.statusProps
 
         self.nameWalls = self.room.find('**/nameWalls')
         self.nameWalls.flattenStrong()
@@ -872,11 +871,12 @@ class MakeAToon(StateData.StateData):
         self.notify.debug('Mouse 1 Up')
 
     def squishRoom(self, room):
-        if self.roomSquishIval and self.roomSquishIval.isPlaying():
-            self.roomSquishIval.finish()
-        squishDuration = self.roomSquishActor.getDuration('squish')
-        self.roomSquishIval = Sequence(Func(self.roomSquishActor.play, 'squish'), Wait(squishDuration), Func(room.hide))
-        self.roomSquishIval.start()
+        if not room.isEmpty():
+            if self.roomSquishIval and self.roomSquishIval.isPlaying():
+                self.roomSquishIval.finish()
+            squishDuration = self.roomSquishActor.getDuration('squish')
+            self.roomSquishIval = Sequence(Func(self.roomSquishActor.play, 'squish'), Wait(squishDuration), Func(room.hide))
+            self.roomSquishIval.start()
 
     def squishProp(self, prop):
         if not prop.isEmpty():
@@ -892,15 +892,20 @@ class MakeAToon(StateData.StateData):
             if not props.isEmpty():
                 props.reparentTo(self.propJoint)
 
+        def wallReparentTo(walls):
+            if not walls.isEmpty():
+                walls.reparentTo(self.squishJoint)
+
         if self.dropIval and self.dropIval.isPlaying():
             self.dropIval.finish()
-        walls.reparentTo(self.dropJoint)
-        walls.show()
+        if not walls.isEmpty():
+            walls.reparentTo(self.dropJoint)
+            walls.show()
         if not props.isEmpty():
             props.reparentTo(self.dropJoint)
             props.show()
         dropDuration = self.roomDropActor.getDuration('drop')
-        self.dropIval = Parallel(Sequence(Func(self.roomDropActor.play, 'drop'), Wait(dropDuration), Func(walls.reparentTo, self.squishJoint), Func(propReparentTo, props), Func(self.propSquishActor.pose, 'propSquish', 0), Func(self.roomSquishActor.pose, 'squish', 0)), Sequence(Wait(0.25), Func(self.smoke.show), Func(self.smoke.node().play), LerpColorScaleInterval(self.smoke, 0.5, Vec4(1, 1, 1, 0), startColorScale=Vec4(1, 1, 1, 1)), Func(self.smoke.hide)), Func(self.spotlightActor.play, 'spotlightShake'), Func(self.playRandomCrashSound))
+        self.dropIval = Parallel(Sequence(Func(self.roomDropActor.play, 'drop'), Wait(dropDuration), Func(wallReparentTo, walls), Func(propReparentTo, props), Func(self.propSquishActor.pose, 'propSquish', 0), Func(self.roomSquishActor.pose, 'squish', 0)), Sequence(Wait(0.25), Func(self.smoke.show), Func(self.smoke.node().play), LerpColorScaleInterval(self.smoke, 0.5, Vec4(1, 1, 1, 0), startColorScale=Vec4(1, 1, 1, 1)), Func(self.smoke.hide)), Func(self.spotlightActor.play, 'spotlightShake'), Func(self.playRandomCrashSound))
         self.dropIval.start()
 
     def startFocusOutIval(self):
