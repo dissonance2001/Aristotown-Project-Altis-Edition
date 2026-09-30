@@ -16,6 +16,7 @@ class ColorShop(StateData.StateData):
         StateData.StateData.__init__(self, doneEvent)
         self.toon = None
         self.colorAll = 1
+        self.eyeMode = 'both'
 
     def getGenderColorList(self, dna):
         return ToonDNA.defaultColorList
@@ -45,7 +46,8 @@ class ColorShop(StateData.StateData):
                 self.earChoice = colorList.index(self.dna.earColor)
             except:
                 self.earChoice = 1
-            self.eyeChoice = 1
+            self.leftEyeChoice, self.rightEyeChoice = ToonDNA.decodeEyeColors(self.dna.eyeColor)
+            self.eyeChoice = self.leftEyeChoice
             try:
                 self.armChoice = colorList.index(self.dna.armColor)
             except:
@@ -174,6 +176,27 @@ class ColorShop(StateData.StateData):
                                         image_scale = halfButtonInvertScale, image1_scale = halfButtonInvertHoverScale,
                                         image2_scale = halfButtonInvertHoverScale, pos = (0.2, 0, 0),
                                         command = self.__swapEyeColor, extraArgs = [1])
+        self.eyeModeFrame = DirectFrame(parent = self.headFrame, image = shuffleFrame,
+                                          image_scale = halfButtonInvertScale, relief = None, pos = (-0.48, 0, -0.125),
+                                          hpr = (0, 0, 2), scale = 0.9, frameColor = (1, 1, 1, 1),
+                                          text = '', text_scale = 0.0625, text_pos = (-0.001, -0.015),
+                                          text_fg = (1, 1, 1, 1))
+        self.eyeModeLButton = DirectButton(parent = self.eyeModeFrame, relief = None, image = shuffleImage,
+                                           image_scale = halfButtonScale, image1_scale = halfButtonHoverScale,
+                                           image2_scale = halfButtonHoverScale, pos = (-0.2, 0, 0),
+                                           command = self.__cycleEyeMode, extraArgs = [-1])
+        self.eyeModeRButton = DirectButton(parent = self.eyeModeFrame, relief = None, image = shuffleImage,
+                                           image_scale = halfButtonInvertScale, image1_scale = halfButtonInvertHoverScale,
+                                           image2_scale = halfButtonInvertHoverScale, pos = (0.2, 0, 0),
+                                           command = self.__cycleEyeMode, extraArgs = [1])
+        self.eyeModeButton = DirectButton(parent = self.eyeModeFrame, relief = None,
+                                          frameColor = (0, 0, 0, 0),
+                                          text = 'Both Eyes', text_scale = 0.05,
+                                          text_fg = (1, 1, 1, 1), text_shadow = (0, 0, 0, 1),
+                                          text_font = ToontownGlobals.getInterfaceFont(),
+                                          frameSize = (-0.14, 0.14, -0.06, 0.06),
+                                          pos = (0, 0, 0),
+                                          command = self.__cycleEyeMode, extraArgs = [1])
         self.earFrame = DirectFrame(parent = self.parentFrame, image = shuffleFrame,
                                      image_scale = halfButtonInvertScale, relief = None, pos = (0, 0, -0.3),
                                      hpr = (0, 0, 2), scale = 0.9, frameColor = (1, 1, 1, 1),
@@ -255,6 +278,7 @@ class ColorShop(StateData.StateData):
         self.pickerFrame.destroy()
         self.toonFrame.destroy()
         self.headFrame.destroy()
+        self.eyeModeFrame.destroy()
         self.earFrame.destroy()
         self.bodyFrame.destroy()
         self.legsFrame.destroy()
@@ -377,12 +401,34 @@ class ColorShop(StateData.StateData):
         self.dna.earColor = newColor
         self.toon.swapToonColor(self.dna)
         
+    def __cycleEyeMode(self, offset = 1):
+        modes = ('both', 'left', 'right')
+        index = modes.index(self.eyeMode)
+        self.eyeMode = modes[(index + offset) % len(modes)]
+        if self.eyeMode == 'left':
+            self.eyeModeButton['text'] = 'Left Eye'
+            self.eyeChoice = self.leftEyeChoice
+        elif self.eyeMode == 'right':
+            self.eyeModeButton['text'] = 'Right Eye'
+            self.eyeChoice = self.rightEyeChoice
+        else:
+            self.eyeModeButton['text'] = 'Both Eyes'
+            self.eyeChoice = self.leftEyeChoice
+        self.__updateScrollButtons(self.eyeChoice, len(self.getEyeColorList()), self.eyeLButton, self.eyeRButton)
+
     def __swapEyeColor(self, offset):
         colorList = self.getEyeColorList()
         length = len(colorList)
         self.eyeChoice = (self.eyeChoice + offset) % length
+        if self.eyeMode == 'left':
+            self.leftEyeChoice = self.eyeChoice
+        elif self.eyeMode == 'right':
+            self.rightEyeChoice = self.eyeChoice
+        else:
+            self.leftEyeChoice = self.eyeChoice
+            self.rightEyeChoice = self.eyeChoice
         self.__updateScrollButtons(self.eyeChoice, length, self.eyeLButton, self.eyeRButton)
-        self.dna.eyeColor = self.eyeChoice
+        self.dna.eyeColor = ToonDNA.encodeEyeColors(self.leftEyeChoice, self.rightEyeChoice)
         self.toon.swapToonColor(self.dna)
 
     def __swapArmColor(self, offset):

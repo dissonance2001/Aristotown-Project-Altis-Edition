@@ -3366,7 +3366,7 @@ dclass DistributedPet : DistributedSmoothNode {
   setBodyTexture(int8(0-6)) required broadcast db;
   setColor(int8(0-25)) required broadcast db;
   setColorScale(int8(0-8)) required broadcast db;
-  setEyeColor(int8(0-5)) required broadcast db;
+  setEyeColor(int16(0-5111)) required broadcast db;
   setGender(int8(0-1)) required broadcast db;
   setLastSeenTimestamp(uint32) required broadcast db;
   setBoredom(uint16/1000(0-1)) required broadcast db;
@@ -4300,7 +4300,7 @@ dclass ClientServicesManager : DistributedObjectGlobal {
   requestAvatars() clsend;
   setAvatars(PotentialToon[]);
 
-  createAvatar(blob dna, uint8 index, uint8 uber, uint16[], uint8 pg, uint8 skipTutorial) clsend;
+  createAvatar(blob dna, uint8 index, uint8 uber, uint16[], uint8 pg) clsend;
   createAvatarResp(uint32 avId);
 
   setNameTyped(uint32 avId, string name) clsend;

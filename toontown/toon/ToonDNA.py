@@ -2692,6 +2692,24 @@ eyeColorsList = [
     (1.0, 0.8431, 0.0, 1.0),
     (0.9333, 0.7882, 0.0, 1.0)
 ]
+
+EYE_COLOR_COUNT = len(eyeColorsList)
+
+def encodeEyeColors(leftEyeColor, rightEyeColor):
+    if not 0 <= leftEyeColor < EYE_COLOR_COUNT or not 0 <= rightEyeColor < EYE_COLOR_COUNT:
+        return 0
+    if leftEyeColor == rightEyeColor:
+        return leftEyeColor
+    return EYE_COLOR_COUNT + leftEyeColor * EYE_COLOR_COUNT + rightEyeColor
+
+def decodeEyeColors(eyeColor):
+    if 0 <= eyeColor < EYE_COLOR_COUNT:
+        return eyeColor, eyeColor
+    packed = eyeColor - EYE_COLOR_COUNT
+    if 0 <= packed < EYE_COLOR_COUNT * EYE_COLOR_COUNT:
+        return divmod(packed, EYE_COLOR_COUNT)
+    return 0, 0
+
 HatModels = [
     None,
     'phase_4/models/accessories/tt_m_chr_avt_acc_hat_baseball',
@@ -4790,7 +4808,7 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             for colors in (self.armColor, self.gloveColor, self.legColor, self.headColor, self.earColor):
                 for color in colors[:-1]:
                     dg.addFloat64(color)
-            dg.addUint8(getattr(self, 'eyeColor', 0))
+            dg.addUint16(getattr(self, 'eyeColor', 0))
             dg.addUint8(getattr(self, 'eyelashes', 0))
         elif self.type == 'u':
             notify.error('undefined avatar')
@@ -4824,9 +4842,9 @@ class ToonDNA(AvatarDNA.AvatarDNA):
         # giving 133 / 136 for DNA saved after that feature was added. Strings
         # of any other length fall back to the legacy/no-eye-data reading, so
         # old saved toons continue to parse unchanged.
-        EYE_DATA_SIZE = 26
-        useExtendedClothing = len(string) in (110, 110 + EYE_DATA_SIZE)
-        hasEyeData = len(string) in (107 + EYE_DATA_SIZE, 110 + EYE_DATA_SIZE)
+        EYE_DATA_SIZE = 27
+        useExtendedClothing = len(string) in (110, 136, 137)
+        hasEyeData = len(string) in (133, 134, 136, 137)
         if useExtendedClothing:
             topTex = dgi.getUint16()
             topTexColor = dgi.getUint8()
@@ -4847,7 +4865,7 @@ class ToonDNA(AvatarDNA.AvatarDNA):
         headColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
         if hasEyeData:
             earColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
-            eyeColor = dgi.getUint8()
+            eyeColor = dgi.getUint16() if len(string) in (134, 137) else dgi.getUint8()
             eyelashes = dgi.getUint8()
             if not self.checkColor(earColor):
                 return False
@@ -4887,7 +4905,7 @@ class ToonDNA(AvatarDNA.AvatarDNA):
         return 0.1 <= hsv[1] <= 0.9 and 0.2 <= hsv[2] <= 0.9
 
     def checkEyeColor(self, color):
-        return 0 <= color < len(eyeColorsList)
+        return 0 <= color < EYE_COLOR_COUNT + EYE_COLOR_COUNT * EYE_COLOR_COUNT
 
     def makeFromNetString(self, string):
         dg = PyDatagram(string)
@@ -4908,9 +4926,9 @@ class ToonDNA(AvatarDNA.AvatarDNA):
             # Read both the original 8-bit clothing format and the extended
             # format produced when any texture ID is above 255. See
             # isValidNetString for how these fixed lengths were chosen.
-            EYE_DATA_SIZE = 26
-            useExtendedClothing = len(string) in (110, 110 + EYE_DATA_SIZE)
-            hasEyeData = len(string) in (107 + EYE_DATA_SIZE, 110 + EYE_DATA_SIZE)
+            EYE_DATA_SIZE = 27
+            useExtendedClothing = len(string) in (110, 136, 137)
+            hasEyeData = len(string) in (133, 134, 136, 137)
             if useExtendedClothing:
                 self.topTex = dgi.getUint16()
                 self.topTexColor = dgi.getUint8()
@@ -4944,7 +4962,7 @@ class ToonDNA(AvatarDNA.AvatarDNA):
                 hasEyeData = False
             if hasEyeData:
                 self.earColor = (dgi.getFloat64(), dgi.getFloat64(), dgi.getFloat64(), 1.0)
-                self.eyeColor = dgi.getUint8()
+                self.eyeColor = dgi.getUint16() if len(string) in (134, 137) else dgi.getUint8()
                 self.eyelashes = dgi.getUint8()
             else:
                 # Old saved DNA predating eye color/eyelashes: default ear color

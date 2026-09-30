@@ -933,13 +933,16 @@ class ToonHead(Actor.Actor):
             dogears = self.findAllMatches('**/ear*')
             dogears.setColor(style.getEarColor())
         try:
-            eyeColor = ToonDNA.eyeColorsList[style.getEyeColor()]
+            leftEyeColor, rightEyeColor = ToonDNA.decodeEyeColors(style.getEyeColor())
+            leftEyeColor = ToonDNA.eyeColorsList[leftEyeColor]
+            rightEyeColor = ToonDNA.eyeColorsList[rightEyeColor]
         except Exception:
-            eyeColor = ToonDNA.eyeColorsList[0]
+            leftEyeColor = ToonDNA.eyeColorsList[0]
+            rightEyeColor = ToonDNA.eyeColorsList[0]
         if self.__lpupil:
-            self.__lpupil.setColorScale(eyeColor)
+            self.__lpupil.setColorScale(leftEyeColor)
         if self.__rpupil:
-            self.__rpupil.setColorScale(eyeColor)
+            self.__rpupil.setColorScale(rightEyeColor)
 
     def __fixEyes(self, style, forGui = 0):
         mode = -3
