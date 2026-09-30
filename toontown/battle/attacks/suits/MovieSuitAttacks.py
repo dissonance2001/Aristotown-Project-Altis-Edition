@@ -4900,7 +4900,7 @@ def doRolodex(attack: dict) -> MetaInterval:
     battle = attack['battle']
     targets: list[dict] = attack['target']
     playRate: float = attack['playRate']
-    suitTrack = getSuitAnimTrack(attack, playRate=playRate)
+    suitTrack: Sequence = getSuitAnimTrack(attack, playRate=playRate)
     rollodex = globalPropPool.getProp('rollodex')
     part2Delay: float
     part2Duration: float = 1.9
@@ -4930,36 +4930,32 @@ def doRolodex(attack: dict) -> MetaInterval:
         part3Delay = 3.2
         damageDelay = 3.5
         dodgeDelay = 2.5
-    propTrack = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.6 / playRate, scaleUpPoint=propScale, scaleUpTime=0.5 / playRate, scaleDownTime=0.5 / playRate)
+    propTrack: Sequence = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.6 / playRate, scaleUpPoint=propScale, scaleUpTime=0.5 / playRate, scaleDownTime=0.5 / playRate)
     partTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         particleEffect2 = BattleParticles.createParticleEffect(file='rollodexWaterfall')
         particleEffect3 = BattleParticles.createParticleEffect(file='rollodexStream')
 
-        particleNode = suit.attachNewNode('rolodex-particle-node')
-        headsUp = Sequence(Func(particleNode.headsUp, toon))
+        particleNode = battle.attachNewNode('rolodex-particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
 
         if suit.style.name == 'hh':
-            headsUp.append(Func(particleNode.setZ, 2.0))
-            headsUp.append(Func(particleNode.setP, -12.0))
+            particleNode.setZ(2.0)
+            particleNode.setP(-12.0)
         elif suit.style.name in ('caseman', 'chainsaw'):
-            headsUp.append(Func(particleNode.setZ, 2.9))
-            headsUp.append(Func(particleNode.setP, -17.0))
+            particleNode.setZ(2.9)
+            particleNode.setP(-17.0)
         partTrack2 = getPartTrack(particleEffect2, part2Delay / playRate, part2Duration / playRate, (particleEffect2, particleNode, 0), softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, part3Delay / playRate, part3Duration / playRate, (particleEffect3, particleNode, 0), softStop=-1.0)
-        particleTrack = Sequence(
-            headsUp,
-            Parallel(
-                partTrack2,
-                partTrack3
-            ),
+        partTrack3 = Sequence(
+            getPartTrack(particleEffect3, part3Delay / playRate, part3Duration / playRate, (particleEffect3, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
-        partTracks += (particleTrack,)
+        partTracks += (partTrack2, partTrack3)
 
-    toonTracks = getToonTracks(attack, damageDelay / playRate, ['cringe'], dodgeDelay / playRate, ['sidestep'], dodgeAnimPlayRate=1.2)
-    soundTrack = getSoundTrack('SA_rolodex.ogg', delay=2.8 / playRate, node=suit)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay / playRate, ['cringe'], dodgeDelay / playRate, ['sidestep'], dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('SA_rolodex.ogg', delay=2.8 / playRate, node=suit)
     return Parallel(suitTrack, toonTracks, propTrack, soundTrack, *partTracks)
 
 
