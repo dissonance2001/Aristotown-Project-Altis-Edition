@@ -3,15 +3,15 @@ import math
 from . import TTLocalizer
 MAX_TOON_CAPACITY = 4
 MAX_SUIT_CAPACITY = 6
-BattleCamFaceOffFov = 40.0
+BattleCamFaceOffFov = 30.0
 BattleCamFaceOffPos = Point3(0, -10, 4)
-BattleCamDefaultPos1 = Point3(0, -8.6, 18.5)
+BattleCamDefaultPos1 = Point3(0, -8.6, 16.5)
 BattleCamDefaultHpr1 = Vec3(0, 0, 0)
 BattleCamDefaultPos2 = Point3(0, -11, 22.5)
-BattleCamDefaultHpr2 = Vec3(0, -60, 0)
-BattleCamDefaultFov = 100
-BattleCamMenuFov = 70.0
-BattleCamMenuFov2 = 85.0
+BattleCamDefaultHpr2 = Vec3(0, -61, 0)
+BattleCamDefaultFov = 80.0
+BattleCamMenuFov = 65.0
+BattleCamMenuFov2 = 65.0
 BattleCamJoinPos = Point3(0, -12, 13)
 BattleCamJoinHpr = Vec3(0, -45, 0)
 SkipMovie = 0
