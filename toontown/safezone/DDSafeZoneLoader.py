@@ -1,5 +1,6 @@
 from toontown.safezone import SafeZoneLoader
 from toontown.safezone import DDPlayground
+from toontown.toonbase import ToontownGlobals
 
 class DDSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
 
@@ -10,6 +11,7 @@ class DDSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         self.activityMusicFile = 'phase_6/audio/bgm/DD_SZ_activity.ogg'
         self.dnaFile = 'phase_6/dna/donalds_dock_sz.pdna'
         self.safeZoneStorageDNAFile = 'phase_6/dna/storage_DD_sz.pdna'
+        self.snowPile = None
 
     def load(self):
         SafeZoneLoader.SafeZoneLoader.load(self)
@@ -36,8 +38,43 @@ class DDSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
         self.foghornSound = base.loader.loadSfx('phase_5/audio/sfx/SZ_DD_foghorn.ogg')
         self.bellSound = base.loader.loadSfx('phase_6/audio/sfx/SZ_DD_shipbell.ogg')
         self.waterSound = base.loader.loadSfx('phase_6/audio/sfx/SZ_DD_waterlap.ogg')
+        self.setupEnvironment()
+
+    def setupEnvironment(self):
+        winter = False
+        landParts = [
+            'large_land_grass',
+            'large_land_ext_shore',
+            'large_land_shore',
+            'small_land_grass',
+            'water',
+            'water_extended',
+        ]
+        if base.cr.newsManager and base.cr.newsManager.isHolidayRunning(ToontownGlobals.CHRISTMAS):
+            winter = True
+            snowPileModel = loader.loadModel('phase_8/models/props/snow_pile_full')
+            self.snowPile = snowPileModel.find('**/prop_snow_pile_full')
+            self.snowPile.reparentTo(self.geom)
+            self.snowPile.setPos(-24.306, 3.824, 5)
+            self.snowPile.setH(270)
+            self.snowPile.setScale(2.4)
+            self.geom.find('**/top_surface_frozen_geom').setBin('transparent', 0)
+            self.geom.find('**/bottom_surface_frozen_geom').setBin('transparent', 0)
+            self.geom.find('**/side_surface_frozen_geom').setBin('transparent', 0)
+
+        for part in landParts:
+            if not winter:
+                part += '_frozen'
+            self.geom.find('**/%s' % part).stash()
+
+    def cleanupEnvironment(self):
+        if base.cr.newsManager and base.cr.newsManager.isHolidayRunning(ToontownGlobals.CHRISTMAS):
+            if self.snowPile:
+                self.snowPile.removeNode()
+                self.snowPile = None
 
     def unload(self):
+        self.cleanupEnvironment()
         SafeZoneLoader.SafeZoneLoader.unload(self)
         del self.seagullSound
         del self.underwaterSound

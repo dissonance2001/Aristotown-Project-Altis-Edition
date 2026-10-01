@@ -92,6 +92,9 @@ class DDPlayground(Playground.Playground):
         if self.toonSubmerged == 1:
             return
         base.playSfx(self.loader.submergeSound)
+        if self.fsm.getCurrentState().getName() == 'teleportOut':
+            taskMgr.remove('dd-check-toon-underwater')
+            return
         if base.config.GetBool('disable-flying-glitch') == 0:
             self.fsm.request('walk')
         self.walkStateData.fsm.request('swimming', [self.loader.swimSound])
@@ -101,6 +104,8 @@ class DDPlayground(Playground.Playground):
 
     def __emergeToon(self):
         if self.toonSubmerged == 0:
+            return
+        if self.fsm.getCurrentState().getName() == 'teleportOut':
             return
         self.walkStateData.fsm.request('walking')
         self.toonSubmerged = 0
@@ -118,9 +123,14 @@ class DDPlayground(Playground.Playground):
         Playground.Playground.enterTeleportIn(self, requestStatus)
 
     def teleportInDone(self):
-        self.toonSubmerged = -1
-        taskMgr.add(self.__checkToonUnderwater, 'dd-check-toon-underwater')
+        self.activateSubmergeTask()
         Playground.Playground.teleportInDone(self)
+
+    def activateSubmergeTask(self):
+        self.cameraSubmerged = 0
+        self.toonSubmerged = 0
+        taskMgr.add(self.__checkCameraUnderwater, 'dd-check-cam-underwater')
+        taskMgr.add(self.__checkToonUnderwater, 'dd-check-toon-underwater')
 
     def enterOff(self):
         return None

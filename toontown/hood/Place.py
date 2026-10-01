@@ -639,7 +639,6 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         except:
             return
 
-        Place.teleportInDone = lambda self: self.hookTeleportInDone()
         hoodId = request[0]
         if len(request) >= 2:
             zoneId = request[1]
