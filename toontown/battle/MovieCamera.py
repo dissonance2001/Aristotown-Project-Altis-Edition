@@ -845,7 +845,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ReArrange':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'ShortSqueeze':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
+        camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
     elif name == 'BlueChip':
         camTrack.append(defaultCamera(openShotDuration=3.0))
     elif name == 'RecordBreaker':

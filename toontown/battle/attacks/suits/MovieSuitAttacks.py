@@ -7842,71 +7842,118 @@ def doFallingKnife(attack):
     soundTrack = getSoundTrack('SA_falling_knife.ogg', node=suit)
     return Parallel(suitTrack, knifeTracks, sparkTracks, toonTracks, soundTrack)
 
-def doShortSqueeze(attack):
+def doShortSqueeze(attack: dict) -> MetaInterval:
+    suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    damageDelay = 1.0
-    suitTrack = getSuitTrack(attack)
-    damageAnims = [['struggle', 0.01, 0.01, 1.0],
-     ['slip-backward', 0.01, 0.01]]
-    shakeTracks = Parallel()
-    squeezeTracks = Parallel()
-    coinTracks = Parallel()
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.5, dodgeAnimNames=['sidestep'], showDamageExtraTime=1.1)
-    soundTracks = Parallel()
+    targets: list[dict] = attack['target']
+
+    damageDelay: float = 1.07
+    dodgeDelay: float = 0.4
+    particleDelay: float = 0.9
+    stretchDelay: float = 1.07
+
+    suitTrack: Sequence = getSuitTrack(attack)
+
+    damageAnims = [
+        {AAK.Anim: 'struggle', AAK.StartTime: 1.0, AAK.Duration: 1.0},
+        {AAK.Anim: 'slip-backward'},
+    ]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], dodgeAnimPlayRate=1.2, showDamageExtraTime=1.0)
+    toonStretchTracks = ()
+    partTracks = ()
     for t in targets:
-        dmg = t['hp']
         toon = t['toon']
+        dmg = t['hp']
+        toonPos = toon.getPos()
+        upPos = Vec3(toonPos[0], toonPos[1], toonPos[2] + 3.5)
+        downPos = Vec3(toonPos[0], toonPos[1], toonPos[2] + 0.5)
+
         if dmg > 0:
-            x = toon.getX(); y = toon.getY(); z = toon.getZ()
-            groundPoint = Point3(x, y, z)
-            moveTime = 0.15
-            shakeTrack = Sequence(Wait(damageDelay))
-            for i in range(0, 5):
-                shakeTrack.append(LerpPosInterval(toon, moveTime, Point3(x, y, z + 3)))
-                shakeTrack.append(LerpPosInterval(toon, moveTime, Point3(x, y, z + 1.5)))
+            particleNode = battle.attachNewNode('short-squeeze-particle-node')
+            particleNode.setPos(battle.getActorPosHpr(toon)[0])
+            particleNode.setZ(toon.getHeight() / 2.0)
+            crushEffect = BattleParticles.createParticleEffect(file='shortSqueezeCrush')
+            crushEffect.setDepthWrite(0)
+            crushEffect.setDepthTest(0)
+            crushEffect.setTwoSided(1)
 
-            shakeTrack.append(LerpPosInterval(toon, 0.15, groundPoint))
-            shakeTracks.append(shakeTrack)
-            initialScale = toon.getScale()
-            xScale, yScale, zScale = initialScale
-            squeezeTrack = Sequence(
-                Wait(damageDelay),
-                Func(battle.movie.needRestoreToonScale),
-                LerpScaleInterval(toon, 0.1, Vec3(xScale * 0.6, yScale * 0.46, zScale * 1.2)),
-                Wait(1.1),
-                LerpScaleInterval(toon, 0.2, Vec3(xScale * 1.2, yScale * 1.2, zScale * 0.8)),
-                LerpScaleInterval(toon, 0.2, initialScale),
-                Func(battle.movie.clearRestoreToonScale)
+            sprayEffect = BattleParticles.createParticleEffect(file='shortSqueezeSpray')
+            coinTypes = ('bronze', 'silver', 'gold')
+            for i in range(3):
+                coin = loader.loadModel(f'phase_3.5/models/props/cc_m_prp_gen_coin_{coinTypes[i]}')
+                coin.setHpr(random.random() * 360.0, random.random() * 360.0, random.random() * 360.0)
+                coin = coin.copyTo(NodePath('coin-holder'))
+                p = sprayEffect.getParticlesNamed(f'particles-{i + 1}')
+                p.renderer.setGeomNode(coin.node())
+
+            partTrack = Sequence(
+                Parallel(
+                    getPartTrack(
+                        crushEffect, particleDelay, 1.2, [crushEffect, particleNode, 0], softStop=-1.0
+                    ),
+                    getPartTrack(
+                        sprayEffect, particleDelay + 0.2, 2.6, [sprayEffect, particleNode, 0], softStop=-1.4
+                    ),
+                ),
+
+                Func(particleNode.removeNode),
             )
-            squeezeTracks.append(squeezeTrack)
-            coinTrack = Parallel()
-            coinTypes = ['bronze', 'silver', 'gold']
-            for i in range(0, 20):
-                coin = loader.loadModel('phase_3.5/models/props/cc_m_prp_gen_coin_' + random.choice(coinTypes) + '.bam')
-                pnt = toon.getPos(toon); pnt.setZ(pnt[2] + toon.shoulderHeight - 0.2); startPos = Point3(pnt)
-                xOffset = random.random() * 5
-                if random.choice([False, True]):
-                    xOffset *= -1
-                yOffset = random.random() * 5
-                if random.choice([False, True]):
-                    yOffset *= -1
-                landPos = toon.getPos(battle)
-                landPos.setX(landPos.getX() + xOffset); landPos.setY(landPos.getY() + yOffset)
-                coinTrack.append(Sequence(
-                    Wait(damageDelay + 0.1 * i),
-                    Func(__showProp, coin, toon, startPos, VBase3(random.randint(0, 359), random.randint(0, 359), random.randint(0, 359)), Point3(1.0)),
-                    getThrowTrack(coin, landPos, 1.0, battle),
-                    Func(coin.removeNode)
-                ))
 
-            coinTracks.append(coinTrack)
-            soundTracks.append(Track(
-                (1.0, SoundInterval(globalBattleSoundCache.getSound('SA_short_squeeze.ogg'), node=toon)),
-                (2.4, SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=toon))
-            ))
+            stretchParts = toon.headParts + toon.legsParts + toon.torsoParts
 
-    return Parallel(suitTrack, shakeTracks, squeezeTracks, coinTracks, toonTracks, soundTracks)
+            finalHeadPartsScale = 1.0
+            if toon.cheesyEffect == ToontownGlobals.CEBigHead:
+                finalHeadPartsScale = 2.5
+            elif toon.cheesyEffect == ToontownGlobals.CESmallHead:
+                finalHeadPartsScale = 0.5
+
+            finalLegPartsScale = 1.0
+            if toon.cheesyEffect == ToontownGlobals.CEBigLegs:
+                finalLegPartsScale = 1.4
+            elif toon.cheesyEffect == ToontownGlobals.CESmallLegs:
+               finalLegPartsScale = 0.6
+
+            finalTorsoPartsScale = 1.0 / finalLegPartsScale
+
+            toonStretchTrack = Sequence(
+                Wait(stretchDelay),
+                Parallel(
+                    *[LerpScaleInterval(part, 0.2, (0.75, 0.75, 1.3), blendType='easeIn') for part in stretchParts],
+                    Sequence(
+                        *[Sequence(
+                            LerpPosInterval(toon, 0.19 if i == 3 else 0.13, upPos),
+                            LerpPosInterval(toon, 0.19 if i == 3 else 0.13, downPos),
+                        ) for i in range(4)],
+                    ),
+                ),
+                Parallel(
+                    LerpPosInterval(toon, 0.06, toonPos, blendType='easeIn'),
+                    Sequence(
+                        Parallel(
+                            *[LerpScaleInterval(part, 0.15, finalHeadPartsScale*1.3, blendType='easeOut') for part in toon.headParts],
+                            *[LerpScaleInterval(part, 0.15, finalLegPartsScale*1.3, blendType='easeOut') for part in toon.legsParts],
+                            *[LerpScaleInterval(part, 0.15, finalTorsoPartsScale*1.3, blendType='easeOut') for part in toon.torsoParts],
+                        ),
+                        Parallel(
+                            *[LerpScaleInterval(part, 0.4, finalHeadPartsScale, blendType='easeIn') for part in toon.headParts],
+                            *[LerpScaleInterval(part, 0.4, finalLegPartsScale, blendType='easeIn') for part in toon.legsParts],
+                            *[LerpScaleInterval(part, 0.4, finalTorsoPartsScale, blendType='easeIn') for part in toon.torsoParts],
+                        ),
+                    ),
+                ),
+            )
+
+            toonStretchTracks += (toonStretchTrack,)
+            partTracks += (partTrack,)
+
+    if hitAtleastOneToon(targets):
+        soundTrack: Track = Track(
+            (damageDelay, SoundInterval(globalBattleSoundCache.getSound('SA_short_squeeze.ogg'), node=suit)),
+            (damageDelay + 1.2, SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg')))
+        )
+        return Parallel(suitTrack, toonTracks, *toonStretchTracks, *partTracks, soundTrack)
+    else:
+        return Parallel(suitTrack, toonTracks, *toonStretchTracks, *partTracks)
 
 def doBlueChip(attack):
     suit = attack['suit']
