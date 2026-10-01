@@ -919,7 +919,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Inject':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Shred':
-        camTrack.append(defaultCamera(openShotDuration=3.5))
+        camTrack.append(defaultCamera(openShotDuration=(80.0 / 24.0) / playRate))
     elif name == 'SongAndDance':
         camTrack.append(defaultCamera(openShotDuration=4.0))
     elif name == 'Spin':

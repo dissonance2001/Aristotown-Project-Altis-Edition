@@ -2650,21 +2650,44 @@ def doPoundKey(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, propTrack, *partTracks)
 
 
-def doShred(attack):
+def doShred(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     paper = globalPropPool.getProp('shredder-paper')
     shredder = globalPropPool.getProp('shredder')
-    particleEffect = BattleParticles.createParticleEffect('Shred')
-    suitTrack = getSuitTrack(attack)
-    partTrack: Sequence = getPartTrack(particleEffect, 3.5, 3.9, (particleEffect, suit, 0), softStop=-2.0)
-    paperPosPoints = [Point3(0.59, -0.31, 0.81), VBase3(79.224, 32.576, -179.449)]
-    paperPropTrack = getPropTrack(paper, suit.getRightHand(), paperPosPoints, 2.4, 1e-05, scaleUpTime=0.2, anim=True, propName='shredder-paper', animDuration=1.5, animStartTime=2.8)
-    shredderPosPoints = [Point3(0, 0, -0.5), VBase3(-90.0, -53.77, -0.0)]
-    shredderPropTrack = getPropTrack(shredder, suit.getLeftHand(), shredderPosPoints, 1.0, 3.0, scaleUpPoint=Point3(4.81, 4.81, 4.81))
-    toonTrack = getToonTrack(attack, suitTrack.getDuration() - 1.1, ['conked'], suitTrack.getDuration() - 3.1, ['sidestep'])
-    soundTrack = getSoundTrack('SA_shred.ogg', delay=3.4, node=suit)
-    return Parallel(suitTrack, paperPropTrack, shredderPropTrack, partTrack, toonTrack, soundTrack)
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    partTracks: tuple[Sequence, ...] = ()
+    for t in targets:
+        toon = t['toon']
+        particleEffect = BattleParticles.createParticleEffect('Shred')
+        particleNode = battle.attachNewNode('shred-particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+        particleNode.setBin('fixed', 1)
+        partTrack = Sequence(
+            getPartTrack(particleEffect, 3.4 / playRate, (2.9 / playRate) + 1.5, (particleEffect, particleNode, 0), softStop=-2.8),
+            Func(particleNode.removeNode)
+        )
+        partTracks += (partTrack,)
+
+    paperPosPoints = [Point3(0.4, 0.11, 0.81), VBase3(79.224, 32.576, 179.449)]
+    paperPropTrack: Parallel = Parallel(
+        getPropTrack(paper, suit.getRightHand(), paperPosPoints, 2.2 / playRate, 1e-08, scaleUpTime=0.2 / playRate, anim=True, propName='shredder-paper', animDuration=2.5 / playRate, animStartTime=2.1 / playRate),
+        Sequence(
+            Wait(3.55 / playRate),
+            Parallel(
+                LerpScaleInterval(paper, 0.9, 0.01),
+                LerpPosInterval(paper, 0.9, (-0.5, 0.11, 0.21))
+            )
+        )
+    )
+    shredderPosPoints = [Point3(0.1089, 0.2976, -0.0314), VBase3(91.5032, -180.0, 1.64)]
+    shredderPropTrack: Sequence = getPropTrack(shredder, suit.getLeftHand(), shredderPosPoints, 0.7 / playRate, 3.3 / playRate, scaleUpPoint=Point3(1.1476, 1.4, 1.0656), scaleUpTime=0.5 / playRate, scaleDownTime=0.5 / playRate)
+    toonTracks: Parallel = getToonTracks(attack, suitTrack.getDuration() - (1.5 / playRate), ['cringe'], suitTrack.getDuration() - (3.1 / playRate), ['duck'], damageAnimPlayRate=1.3, dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('SA_shred.ogg', delay=3.4 / playRate, node=suit)
+    return Parallel(suitTrack, paperPropTrack, shredderPropTrack, *partTracks, toonTracks, soundTrack)
 
 
 def doSongAndDance(attack):
