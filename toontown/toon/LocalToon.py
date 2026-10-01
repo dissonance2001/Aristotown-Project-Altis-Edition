@@ -69,7 +69,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.toontowngui import NewsPageButtonManager
 from toontown.friends.FriendHandle import FriendHandle
-from direct.controls import ControlManager
+from toontown.avatar import ToontownControlManager
 from toontown.camera.OrbitalCamera import OrbitalCamera
 
 WantNewsPage = base.config.GetBool('want-news-page', ToontownGlobals.DefaultWantNewsPageSetting)
@@ -99,6 +99,23 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         chatMgr = ToontownChatManager.ToontownChatManager(cr, self)
         talkAssistant = TTTalkAssistant.TTTalkAssistant()
         LocalAvatar.LocalAvatar.__init__(self, cr, chatMgr, talkAssistant, passMessagesThrough=True)
+        if not hasattr(base, 'wantExtraMovement'):
+            base.wantExtraMovement = False
+        if not hasattr(base, 'wantTalkKey'):
+            base.wantTalkKey = True
+        oldControlManager = self.controlManager
+        oldControls = oldControlManager.controls
+        oldCurrentControls = oldControlManager.currentControls
+        oldCurrentControlsName = oldControlManager.currentControlsName
+        oldControlManager.disable()
+        for token in oldControlManager.inputStateTokens:
+            token.release()
+        oldControlManager.inputStateTokens = []
+        self.controlManager = ToontownControlManager.ToontownControlManager(False)
+        self.controlManager.controls = oldControls
+        self.controlManager.currentControls = oldCurrentControls
+        self.controlManager.currentControlsName = oldCurrentControlsName
+        self.controlManager.enable()
         self.movementSounds = {}
         for movement in ('run', 'walk'):
             for footstepCode in ('regular', 'snow'):
