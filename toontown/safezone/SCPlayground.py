@@ -25,14 +25,13 @@ class SCPlayground(Playground.Playground):
         Playground.Playground.enter(self, requestStatus)
         self.nextWindTime = 0
         taskMgr.add(self.__windTask, 'sc-wind')
-        self.loader.hood.setWhiteFog()
+        self.fog.attachFog([render, self.loader.hood.sky])
         self.state = 0
 
     def exit(self):
         taskMgr.remove('sc-wind')
         taskMgr.remove('lerp-snow')
         Playground.Playground.exit(self)
-        self.loader.hood.setNoFog()
 
     def __windTask(self, task):
         now = globalClock.getFrameTime()

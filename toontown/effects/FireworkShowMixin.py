@@ -9,11 +9,14 @@ from toontown.effects import Fireworks
 from toontown.effects import FireworkShows
 from toontown.effects.FireworkGlobals import skyTransitionDuration, preShowPauseDuration, postShowPauseDuration, preNormalMusicPauseDuration
 from toontown.effects.FireworkShow import FireworkShow
+from toontown.shader import FogGlobals
+from toontown.shader.ToontownFog import ToontownFog
 
 class FireworkShowMixin:
     notify = DirectNotifyGlobal.directNotify.newCategory('FireworkShowMixin')
 
     def __init__(self, restorePlaygroundMusic = True, startDelay = 0.0):
+        self.fog = None
         self.currentShow = None
         self.restorePlaygroundMusic = restorePlaygroundMusic
         self.startDelay = startDelay
@@ -107,6 +110,7 @@ class FireworkShowMixin:
 
         self.showMusic = loader.loadMusic(musicFile)
         self.showMusic.setVolume(1)
+        self.fog = ToontownFog(FogGlobals.WhiteFogAttrs, name='FireworkShow_Fog')
 
         def __lightDecorationOn__():
             place = base.cr.playGame.getPlace()
@@ -255,18 +259,16 @@ class FireworkShowMixin:
     def __checkDDFog(self):
         from toontown.hood import DDHood
         if isinstance(self.getHood(), DDHood.DDHood):
-            self.getHood().whiteFogColor = Vec4(0.2, 0.2, 0.2, 1)
             if hasattr(base.cr.playGame.getPlace(), 'cameraSubmerged'):
                 if not base.cr.playGame.getPlace().cameraSubmerged:
-                    self.getHood().setWhiteFog()
+                    self.fog.attachFog([render, self.getSky()])
 
     def __restoreDDFog(self):
         from toontown.hood import DDHood
         if isinstance(self.getHood(), DDHood.DDHood):
-            self.getHood().whiteFogColor = Vec4(0.8, 0.8, 0.8, 1)
             if hasattr(base.cr.playGame.getPlace(), 'cameraSubmerged'):
                 if not base.cr.playGame.getPlace().cameraSubmerged:
-                    self.getHood().setWhiteFog()
+                    self.fog.detachFog([render, self.getSky()])
 
     def __checkStreetValidity(self):
         if hasattr(base.cr.playGame, 'getPlace') and base.cr.playGame.getPlace() and hasattr(base.cr.playGame.getPlace(), 'loader') and base.cr.playGame.getPlace().loader and hasattr(base.cr.playGame.getPlace().loader, 'geom') and base.cr.playGame.getPlace().loader.geom:

@@ -9,6 +9,8 @@ from toontown.racing import RaceGlobals
 from direct.fsm import State
 from toontown.safezone import GolfKart
 from direct.task.Task import Task
+from toontown.shader import FogGlobals
+from toontown.shader.ToontownFog import ToontownFog
 
 class OZPlayground(Playground.Playground):
     waterLevel = -3.1
@@ -19,6 +21,7 @@ class OZPlayground(Playground.Playground):
         self.parentFSM = parentFSM
         self.cameraSubmerged = -1
         self.toonSubmerged = -1
+        self.fogUW = ToontownFog(FogGlobals.UnderwaterFogAttrs, 'OZPlayground_UWFog')
 
     def load(self):
         Playground.Playground.load(self)
@@ -28,12 +31,14 @@ class OZPlayground(Playground.Playground):
 
     def enter(self, requestStatus):
         Playground.Playground.enter(self, requestStatus)
+        self.fog.attachFog([render, self.loader.hood.sky])
 
     def exit(self):
         Playground.Playground.exit(self)
         taskMgr.remove('oz-check-toon-underwater')
         taskMgr.remove('oz-check-cam-underwater')
-        self.loader.hood.setNoFog()
+        self.fogUW.removeFog()
+        self.fogUW = None
         if hasattr(self.loader, 'underwaterSound'):
             self.loader.underwaterSound.stop()
 
@@ -85,7 +90,8 @@ class OZPlayground(Playground.Playground):
     def __submergeCamera(self):
         if self.cameraSubmerged == 1:
             return
-        self.loader.hood.setUnderwaterFog()
+        self.fog.detachFog([render, self.loader.hood.sky])
+        self.fogUW.attachFog([render, self.loader.hood.sky])
         base.playSfx(self.loader.underwaterSound, looping=1, volume=0.8)
         self.cameraSubmerged = 1
         self.walkStateData.setSwimSoundAudible(1)
@@ -93,7 +99,8 @@ class OZPlayground(Playground.Playground):
     def __emergeCamera(self):
         if self.cameraSubmerged == 0:
             return
-        self.loader.hood.setNoFog()
+        self.fogUW.detachFog([render, self.loader.hood.sky])
+        self.fog.attachFog([render, self.loader.hood.sky])
         self.loader.underwaterSound.stop()
         self.cameraSubmerged = 0
         self.walkStateData.setSwimSoundAudible(0)

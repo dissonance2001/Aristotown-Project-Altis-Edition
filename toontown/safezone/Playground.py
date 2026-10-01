@@ -312,6 +312,10 @@ class Playground(BattlePlace.BattlePlace):
         self.loader.hood.stopSky()
         self.loader.music.stop()
 
+        if self.fog is not None:
+            self.fog.removeFog()
+            self.fog = None
+
     def load(self):
         BattlePlace.BattlePlace.load(self)
         self.parentFSM.getStateNamed('playground').addChild(self.fsm)
@@ -335,10 +339,6 @@ class Playground(BattlePlace.BattlePlace):
         for i in range(len(points)):
             p = points[i]
             self.showDebugPointText(str(i), p)
-
-            # Remove Fog
-            self.fog.removeFog()
-            self.fog = None
 
     def showDropPoints(self, points):
         self.hideDebugPointText()

@@ -151,7 +151,7 @@ class InventoryManagerAI(DistributedObjectAI):
         # Split up this call into segments.
         baseInventory = inventory.makeItemless().toStruct()
         itemList = inventory.getItems()
-        segmentCount = (len(itemList) // self.ITEM_SEGMENT_LENGTH) + 1
+        segmentCount = max(1, (len(itemList) + self.ITEM_SEGMENT_LENGTH - 1) // self.ITEM_SEGMENT_LENGTH)
         for segment in range(segmentCount):
             itemSublist = itemList[self.ITEM_SEGMENT_LENGTH * segment:self.ITEM_SEGMENT_LENGTH * (segment + 1)]
             self.sendUpdateToAvatarId(avId, 'setAvatarInventory', [

@@ -329,7 +329,7 @@ class Inventory(AstronStruct):
     Inventory Actions
     """
 
-    def addItem(self, item: Union[InventoryItem, IntEnum], quantity: int = 1) -> bool:
+    def addItem(self, item: Union[InventoryItem, IntEnum], quantity: int = 1, equipOnAdd: bool = True) -> bool:
         """
         Adds an item to the inventory.
         NOTE -- THIS CAN MODIFY (ITEM) BY STRIPPING ITS ATTRIBUTES !!
@@ -338,10 +338,10 @@ class Inventory(AstronStruct):
             item = InventoryItem.fromSubtype(item, quantity=quantity)
         if self.canAddItem(item):
             self._addDelta(InventoryAction.ADD, item=item.copy())
-            overflow = self._performAddItem(item)
+            overflow = self._performAddItem(item, equipOnAdd=equipOnAdd)
             while overflow:
                 if self.canAddItem(overflow):
-                    overflow = self._performAddItem(overflow)
+                    overflow = self._performAddItem(overflow, equipOnAdd=equipOnAdd)
                 else:
                     break
             return True
@@ -423,7 +423,7 @@ class Inventory(AstronStruct):
     Inventory Performance
     """
 
-    def _performAddItem(self, item: InventoryItem) -> Optional[InventoryItem]:
+    def _performAddItem(self, item: InventoryItem, equipOnAdd: bool = True) -> Optional[InventoryItem]:
         # Strip inventory attributes.
         item.stripAttributes()
 
@@ -457,7 +457,7 @@ class Inventory(AstronStruct):
         self._onInventoryUpdate()
 
         # In addition, request an equip if need be.
-        if item.getInventoryItemBehavior().getForceEquipOnAdd():
+        if equipOnAdd and item.getInventoryItemBehavior().getForceEquipOnAdd():
             self.equipItem(item)
         return None
 

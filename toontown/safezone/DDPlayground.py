@@ -5,6 +5,8 @@ import random
 from direct.fsm import ClassicFSM, State
 from direct.actor import Actor
 from toontown.toonbase import ToontownGlobals
+from toontown.shader import FogGlobals
+from toontown.shader.ToontownFog import ToontownFog
 from direct.directnotify import DirectNotifyGlobal
 from toontown.hood import Place
 
@@ -14,6 +16,7 @@ class DDPlayground(Playground.Playground):
     def __init__(self, loader, parentFSM, doneEvent):
         Playground.Playground.__init__(self, loader, parentFSM, doneEvent)
         self.cameraSubmerged = -1
+        self.fogUW = ToontownFog(FogGlobals.UnderwaterFogAttrs, 'DDPlayground_UWFog')
         self.toonSubmerged = -1
         self.activityFsm = ClassicFSM.ClassicFSM('Activity', [State.State('off', self.enterOff, self.exitOff, ['OnBoat']), State.State('OnBoat', self.enterOnBoat, self.exitOnBoat, ['off'])], 'off', 'off')
         self.activityFsm.enterInitialState()
@@ -28,15 +31,16 @@ class DDPlayground(Playground.Playground):
     def enter(self, requestStatus):
         self.nextSeagullTime = 0
         taskMgr.add(self.__seagulls, 'dd-seagulls')
-        self.loader.hood.setWhiteFog()
         Playground.Playground.enter(self, requestStatus)
+        self.fog.attachFog([render, self.loader.hood.sky])
 
     def exit(self):
         Playground.Playground.exit(self)
         taskMgr.remove('dd-check-toon-underwater')
         taskMgr.remove('dd-check-cam-underwater')
         taskMgr.remove('dd-seagulls')
-        self.loader.hood.setNoFog()
+        self.fogUW.removeFog()
+        self.fogUW = None
 
     def enterStart(self):
         self.cameraSubmerged = 0
@@ -71,7 +75,8 @@ class DDPlayground(Playground.Playground):
     def __submergeCamera(self):
         if self.cameraSubmerged == 1:
             return
-        self.loader.hood.setUnderwaterFog()
+        self.fog.detachFog([render, self.loader.hood.sky])
+        self.fogUW.attachFog([render, self.loader.hood.sky])
         base.playSfx(self.loader.underwaterSound, looping=1, volume=0.8)
         self.loader.seagullSound.stop()
         taskMgr.remove('dd-seagulls')
@@ -81,7 +86,8 @@ class DDPlayground(Playground.Playground):
     def __emergeCamera(self):
         if self.cameraSubmerged == 0:
             return
-        self.loader.hood.setWhiteFog()
+        self.fogUW.detachFog([render, self.loader.hood.sky])
+        self.fog.attachFog([render, self.loader.hood.sky])
         self.loader.underwaterSound.stop()
         self.nextSeagullTime = random.random() * 8.0
         taskMgr.add(self.__seagulls, 'dd-seagulls')
@@ -92,9 +98,6 @@ class DDPlayground(Playground.Playground):
         if self.toonSubmerged == 1:
             return
         base.playSfx(self.loader.submergeSound)
-        if self.fsm.getCurrentState().getName() == 'teleportOut':
-            taskMgr.remove('dd-check-toon-underwater')
-            return
         if base.config.GetBool('disable-flying-glitch') == 0:
             self.fsm.request('walk')
         self.walkStateData.fsm.request('swimming', [self.loader.swimSound])
@@ -104,8 +107,6 @@ class DDPlayground(Playground.Playground):
 
     def __emergeToon(self):
         if self.toonSubmerged == 0:
-            return
-        if self.fsm.getCurrentState().getName() == 'teleportOut':
             return
         self.walkStateData.fsm.request('walking')
         self.toonSubmerged = 0
@@ -123,14 +124,9 @@ class DDPlayground(Playground.Playground):
         Playground.Playground.enterTeleportIn(self, requestStatus)
 
     def teleportInDone(self):
-        self.activateSubmergeTask()
-        Playground.Playground.teleportInDone(self)
-
-    def activateSubmergeTask(self):
-        self.cameraSubmerged = 0
-        self.toonSubmerged = 0
-        taskMgr.add(self.__checkCameraUnderwater, 'dd-check-cam-underwater')
+        self.toonSubmerged = -1
         taskMgr.add(self.__checkToonUnderwater, 'dd-check-toon-underwater')
+        Playground.Playground.teleportInDone(self)
 
     def enterOff(self):
         return None

@@ -639,6 +639,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         except:
             return
 
+        Place.teleportInDone = lambda self: self.hookTeleportInDone()
         hoodId = request[0]
         if len(request) >= 2:
             zoneId = request[1]
@@ -814,6 +815,14 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
         if hasattr(self, 'fsm'):
             teleportNotify.debug('teleportInDone: %s' % self.nextState)
             self.fsm.request(self.nextState, [1])
+            if self.nextState == 'walk':
+                try:
+                    base.localAvatar.enableAvatarControls()
+                except Exception:
+                    pass
+            orbitalCamera = getattr(base.localAvatar, 'orbitalCamera', None)
+            if orbitalCamera is not None:
+                orbitalCamera.handleTeleportComplete()
 
     def exitTeleportIn(self):
         self.removeSetZoneCompleteCallback(self._tiToken)

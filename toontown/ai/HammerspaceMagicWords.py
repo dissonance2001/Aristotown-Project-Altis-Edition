@@ -151,7 +151,7 @@ def hammerspace(subcommand, rest=''):
                         item.getItemDefinition()
                     except Exception:
                         continue
-                    if inventory.addItem(item, quantity=quantity):
+                    if inventory.addItem(item, quantity=quantity, equipOnAdd=False):
                         given += 1
         finally:
             inventory._deltaCallbacks = savedCallbacks

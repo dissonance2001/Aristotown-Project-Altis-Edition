@@ -20,6 +20,8 @@ from toontown.estate import HouseGlobals
 from toontown.toonbase import TTLocalizer
 from direct.interval.IntervalGlobal import *
 from toontown.nametag import NametagGlobals
+from toontown.shader import FogGlobals
+from toontown.shader.ToontownFog import ToontownFog
 
 visualizeZones = base.config.GetBool('visualize-zones', 0)
 
@@ -99,6 +101,7 @@ class Street(BattlePlace.BattlePlace):
         self.elevatorDoneEvent = 'elevatorDone'
         self.halloweenLights = []
         self.zone = 0
+        self.fog = None
 
     def enter(self, requestStatus, visibilityFlag = 1, arrowsOn = 1):
         teleportDebug(requestStatus, 'Street.enter(%s)' % (requestStatus,))
@@ -113,6 +116,8 @@ class Street(BattlePlace.BattlePlace):
         self._telemLimiter = TLGatherAllAvs('Street', RotationLimitToH)
         NametagGlobals.setWant2dNametags(arrowsOn)
         self.zone = ZoneUtil.getBranchZone(requestStatus['zoneId'])
+
+        self.handleFog()
 
         def __lightDecorationOn__():
             geom = base.cr.playGame.getPlace().loader.geom
@@ -160,7 +165,17 @@ class Street(BattlePlace.BattlePlace):
         self.loader.hood.stopSky()
         self.loader.music.stop()
         base.localAvatar.setGeom(render)
+
+        if self.fog is not None:
+            self.fog.removeFog()
+            self.fog = None
         base.localAvatar.setOnLevelGround(0)
+
+    def handleFog(self):
+        assert self.fog is None
+        hoodId = ZoneUtil.getHoodId(self.zone)
+        self.fog = ToontownFog(FogGlobals.zoneId2FogAttrs.get(hoodId), 'Street Fog-%s' % self.zone)
+        self.fog.attachFog([render])
 
     def load(self):
         BattlePlace.BattlePlace.load(self)
