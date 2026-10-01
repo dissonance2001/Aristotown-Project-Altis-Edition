@@ -842,8 +842,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.75))
     elif name == 'GlowerPower':
         camTrack.append(defaultCamera(openShotDuration=0.75))
-    elif name == 'ReArrange':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'ShortSqueeze':
         camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
     elif name == 'BlueChip':
@@ -898,10 +896,10 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'RazzleDazzle':
         camTrack.append(defaultCamera(openShotDuration=2.2))
+    elif name in ('ReArrange', 'ReOrg'):
+        camTrack.append(defaultCamera(openShotDuration=1.1))
     elif name == 'RedTape':
         camTrack.append(defaultCamera(openShotDuration=(70.0 / 24.0) / playRate))
-    elif name == 'ReOrg':
-        camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'RestrainingOrder':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Rolodex':

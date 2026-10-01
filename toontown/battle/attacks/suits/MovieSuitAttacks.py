@@ -477,8 +477,6 @@ def doSuitAttack(attack):
         suitTrack = doFreezeAssets(attack)
     elif name == 'GlowerPower':
         suitTrack = doGlowerPower(attack)
-    elif name == 'ReArrange':
-        suitTrack = doReOrg(attack)
     elif name == 'ShortSqueeze':
         suitTrack = doShortSqueeze(attack)
     elif name == 'BlueChip':
@@ -537,10 +535,10 @@ def doSuitAttack(attack):
         suitTrack = doPowerTrip(attack)
     elif name == 'RazzleDazzle':
         suitTrack = doRazzleDazzle(attack)
+    elif name in ('ReArrange', 'ReOrg'):
+        suitTrack = doReOrg(attack)
     elif name == 'RedTape':
         suitTrack = doRedTape(attack)
-    elif name == 'ReOrg':
-        suitTrack = doReOrg(attack)
     elif name == 'RestrainingOrder':
         suitTrack = doRestrainingOrder(attack)
     elif name == 'Rolodex':
@@ -4359,72 +4357,101 @@ def doPinkSlip(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, *propTracks, soundTrack)
 
 
-def doReOrg(attack):
+def doReOrg(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    damageDelay = 1.2
-    attackDelay = 1.2
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    partTracks = Parallel()
-    allHeadTracks = Parallel()
-    allChestTracks = Parallel()
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
+    damageDelay: float = 1.0
+    attackDelay: float = 1.5 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    partTracks: tuple[Sequence, ...] = ()
+    allHeadTracks: Parallel = Parallel()
+    allChestTracks: Parallel = Parallel()
     BattleParticles.loadParticles()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        sprayEffects = BattleParticles.createParticleEffect('ReOrgSprayNew')
-        BattleParticles.setEffectTexture(sprayEffects, 'snow-particle',
-                                         color=Vec4(1, 0, 0, 1))
-        partTrack = getPartTrack(sprayEffects, 0.5, 3.0, (sprayEffects, toon, 0), softStop=-1.0)
-        partTracks.append(partTrack)
+        sprayEffects = BattleParticles.createParticleEffect(file='reorgSpray')
+        BattleParticles.setEffectTexture(sprayEffects, 'snow-particle', color=Vec4(1.0, 0.0, 0.0, 1.0))
+        particleNode = battle.attachNewNode('reorg-particle-node')
+        particleNode.setPos(battle.getActorPosHpr(suit)[0])
+        particleNode.headsUp(toon)
+
+        if suit.dna.name in ('foreman', 'dold'):
+            particleNode.setZ(particleNode.getZ() + 3.0)
+            particleNode.setP(particleNode.getP() - 15.0)
+        elif suit.dna.name in ('hh', 'dola'):
+            particleNode.setZ(particleNode.getZ() + 1.0)
+            particleNode.setP(particleNode.getP() - 5.0)
+
+        partTrack = Sequence(
+            getPartTrack(sprayEffects, 1.0 / playRate, 2.9 / playRate, (sprayEffects, particleNode, 0), softStop=-1.0),
+            Func(particleNode.removeNode)
+        )
+        partTracks += (partTrack,)
         if dmg > 0:
+            tPPR = 1.3
             headParts = toon.getHeadParts()
             print('***********headParts pos=', headParts[0].getPos())
             print('***********headParts hpr=', headParts[0].getHpr())
             headTracks = Parallel()
-            for partNum in range(0, headParts.getNumPaths()):
-                part = headParts.getPath(partNum)
+            for part in headParts:
                 x = part.getX()
                 y = part.getY()
                 z = part.getZ()
                 h = part.getH()
                 p = part.getP()
                 r = part.getR()
-                headTracks.append(Sequence(Wait(attackDelay), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x + 0.4, y, z - 0.03)), LerpPosInterval(part, 0.1, Point3(x - 0.2, y, z - 0.04)), LerpPosInterval(part, 0.25, Point3(x, y, z + 2.2)), LerpHprInterval(part, 0.25, VBase3(360, 0, 180)), LerpPosInterval(part, 0.25, Point3(x, y, z + 3.1)), LerpPosInterval(part, 0.1, Point3(x, y, z + 0.3)), Wait(0.1), LerpHprInterval(part, 0.35, VBase3(-745, 0, 180), startHpr=VBase3(0, 0, 180)), LerpHprInterval(part, 0.5, VBase3(25, 0, 180), startHpr=VBase3(0, 0, 180)), LerpPosInterval(part, 0.15, Point3(x, y, z + 1)), LerpHprInterval(part, 0.3, VBase3(h, p, r)), Wait(0.2), LerpPosInterval(part, 0.1, Point3(x, y, z), blendType='easeInOut'), Wait(0.1)))
+                headTracks.append(Sequence(
+                    Wait(attackDelay),
+                    LerpPosInterval(part, 0.1 / tPPR, Point3(x - 0.2, y, z - 0.03)),
+                    LerpPosInterval(part, 0.1 / tPPR, Point3(x + 0.4, y, z - 0.03)),
+                    LerpPosInterval(part, 0.1 / tPPR, Point3(x - 0.4, y, z - 0.03)),
+                    LerpPosInterval(part, 0.1 / tPPR, Point3(x + 0.4, y, z - 0.03)),
+                    LerpPosInterval(part, 0.1 / tPPR, Point3(x - 0.2, y, z - 0.04)),
+                    LerpPosInterval(part, 0.25 / tPPR, Point3(x, y, z + 2.2)),
+                    LerpHprInterval(part, 0.4 / tPPR, VBase3(360.0, 0.0, 180.0)),
+                    LerpPosInterval(part, 0.3 / tPPR, Point3(x, y, z + 3.1)),
+                    LerpPosInterval(part, 0.15 / tPPR, Point3(x, y, z + 0.3)),
+                    Wait(0.15 / tPPR),
+                    LerpHprInterval(part, 0.6 / tPPR, VBase3(-745.0, 0.0, 180.0), startHpr=VBase3(0.0, 0.0, 180.0)),
+                    LerpHprInterval(part, 0.8 / tPPR, VBase3(25, 0, 180), startHpr=VBase3(0.0, 0.0, 180.0)),
+                    LerpPosInterval(part, 0.15 / tPPR, Point3(x, y, z + 1.0)),
+                    LerpHprInterval(part, 0.3 / tPPR, VBase3(h, p, r)),
+                    Wait(0.2 / tPPR),
+                    LerpPosInterval(part, 0.1 / tPPR, Point3(x, y, z)),
+                    Wait(0.9 / tPPR),
+                ))
             
             allHeadTracks.append(headTracks)
 
-            def getChestTrack(part, attackDelay = attackDelay):
+            def getChestTrack(part, attackDelay: float = attackDelay) -> Sequence:
                 origScale = part.getScale()
-                return Sequence(Wait(attackDelay), LerpHprInterval(part, 1.1, VBase3(180, 0, 0)), Wait(1.1), LerpHprInterval(part, 1.1, part.getHpr()))
+                return Sequence(
+                    Wait(attackDelay),
+                    LerpHprInterval(part, 1.1/tPPR, VBase3(180, 0, 0)),
+                    Wait(1.1/tPPR),
+                    LerpHprInterval(part, 1.1/tPPR, part.getHpr())
+                )
 
             chestTracks = Parallel()
             arms = toon.findAllMatches('**/arms')
             sleeves = toon.findAllMatches('**/sleeves')
             hands = toon.findAllMatches('**/hands')
             print('*************arms hpr=', arms[0].getHpr())
-            for partNum in range(0, arms.getNumPaths()):
-                chestTracks.append(getChestTrack(arms.getPath(partNum)))
-                chestTracks.append(getChestTrack(sleeves.getPath(partNum)))
-                chestTracks.append(getChestTrack(hands.getPath(partNum)))
+            for part in arms + sleeves + hands:
+                chestTracks.append(getChestTrack(part))
             
             allChestTracks.append(chestTracks)
 
-    damageAnims = [['neutral',
-      0.01,
-      0.01,
-      0.5], ['juggle',
-      0.01,
-      0.01,
-      1.48], ['think', 0.01, 2.28]]
+    damageAnims = [['neutral', 0.01, 0.01, 0.5],
+     ['juggle', 0.01, 0.01, 1.48],
+     ['think', 0.01, 2.28]]
     dodgeAnims = []
-    dodgeAnims.append(['think',
-     0.01,
-     0,
-     0.6])
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.01, dodgeAnimNames=['duck'], showDamageExtraTime=2.1, showMissedExtraTime=2.0)
-    return Parallel(suitTrack, partTracks, toonTracks, allHeadTracks, allChestTracks)
+    dodgeAnims.append(['think', 0.01, 0.0, 0.6])
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.01, dodgeAnimNames=['duck'], showDamageExtraTime=2.1, showMissedExtraTime=2.0)
+    return Parallel(suitTrack, *partTracks, toonTracks, allHeadTracks, allChestTracks)
 
 def doSacked(attack):
     suit = attack['suit']
