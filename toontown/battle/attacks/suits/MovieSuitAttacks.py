@@ -7955,30 +7955,32 @@ def doShortSqueeze(attack: dict) -> MetaInterval:
     else:
         return Parallel(suitTrack, toonTracks, *toonStretchTracks, *partTracks)
 
-def doBlueChip(attack):
+def doBlueChip(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    tauntIndex = attack['taunt']
-    dmg = target[0]['hp']
-    toon = attack['target'][0]['toon']
+    targets: list[dict] = attack['target']
 
-    chip = globalPropPool.getProp("chip_blue")
-    firstHoldPosPoints = [Point3(-0.0012, 0.5083, -0.1271), Point3(-100, 0, 0)]
-    grabPosPoints = [Point3(-0.2336, -0.0272, -0.0817), Point3(76.7974, -95.719, 0)]
+    chips = [] # Keep a list here so that we can delete the chips later.
+    firstHoldPosPoints = [Point3(-0.0012, 0.5083, -0.1271), Point3(-100.0, 0.0, 0.0)]
+    grabPosPoints = [Point3(-0.2336, -0.0272, -0.0817), Point3(76.7974, -95.719, 0.0)]
 
-    damageDelay = 3.1
-    dodgeDelay = 2.2
+    damageDelay: float = 3.1
+    dodgeDelay: float = 2.2
 
-    suitTrack = getSuitTrack(attack)
-
-    landPos = toon.getPos(render)
-    landPos.setZ(landPos.getZ() + 0.25)
-    landUpPos = toon.getPos(render)
-    landUpPos.setZ(landUpPos.getZ() + 0.8)
+    suitTrack: Sequence = getSuitTrack(attack)
 
     invokerScale = suit.getScale()
-    if getSuitBodyType(attack['suitName']) == 'a':
+    scaleFactor: float
+    startX: float
+    startY: float
+    endX: float
+    endY: float
+    startZ: float
+    endZ: float
+    chipHandScale: float
+    chipGrabScale: float
+    chipFlipMult: float
+    if getSuitBodyType(suit.dna.name) == 'a':
         scaleFactor = 1.19636963  # Head honcho scale
         startX, startY = 2.9, 4.2
         endX, endY = 0.7, 5.1
@@ -7997,79 +7999,75 @@ def doBlueChip(attack):
         chipGrabScale = 0.8
         chipFlipMult = 5.0
 
-    propTrack = Sequence(
-        getPropAppearTrack(
-            chip,
-            suit.getRightHand(),
-            firstHoldPosPoints,
-            0.2,
-            Point3(chipHandScale),
-            scaleUpTime=0.25,
-        ),
-    )
-
     chipHandPosRenderStart = Point3(startX * (invokerScale[0] / scaleFactor),
                                     startY * (invokerScale[0] / scaleFactor),
                                     startZ * (invokerScale[0] / scaleFactor))
     chipHandPosRenderEnd = Point3(endX * (invokerScale[0] / scaleFactor),
-                                    endY * (invokerScale[0] / scaleFactor),
-                                    endZ * (invokerScale[0] / scaleFactor))
+                                  endY * (invokerScale[0] / scaleFactor),
+                                  endZ * (invokerScale[0] / scaleFactor))
 
-    propFlyTrack = Sequence(
-        Wait(1.05),
-        Func(chip.wrtReparentTo, suit),
-        Parallel(
-            ProjectileInterval(chip, startPos=chipHandPosRenderStart, endPos=chipHandPosRenderEnd, duration=0.5, gravityMult=chipFlipMult),
-            LerpHprInterval(chip, 0.5, (90, -360, 0), startHpr=(0, 90, 0)),
-        ),
-        Func(chip.wrtReparentTo, suit.getRightHand()),
-        Func(chip.setPosHpr, Point3(-0.2336, -0.0272, -0.0817), Point3(76.7974, -95.719, 0)),
-        Func(chip.setScale, chipGrabScale),
-        Wait(0.7),
-        Func(chip.wrtReparentTo, render),
-        Parallel(
-            ProjectileInterval(chip, endPos=landPos, duration=0.95, gravityMult=2.15),
-            LerpHprInterval(chip, 0.95, (0, 450, 0), startHpr=(0, 90, 0)),
-            Sequence(
-                Wait(0.25),
-                LerpScaleInterval(chip, 0.65, 6.5),
-            ),
-        ),
-        Parallel(
-            LerpHprInterval(chip, 0.15, (20, 441, 0)),
-            LerpPosInterval(chip, 0.15, landUpPos, blendType='easeOut'),
-        ),
-        Parallel(
-            LerpHprInterval(chip, 0.225, (40, 450, 0)),
-            LerpPosInterval(chip, 0.225, landPos, blendType='easeIn'),
-        ),
-        LerpHprInterval(chip, 0.3, (60, 450, 0)),
-        LerpHprInterval(chip, 0.3, (70, 450, 0), blendType='easeOut'),
-        Wait(0.1),
-        LerpScaleInterval(chip, 0.35, 0.01, blendType='easeIn'),
-        Func(chip.hide),
-    )
+    propTracks: tuple[Sequence, ...] = ()
+    toonReactTracks: tuple[Sequence, ...] = ()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
 
-    toonTrack = getToonTrack(attack, 3.3, ['squish'], 2.0, ['sidestep'])
-    soundTrack2 = getSoundTrack('toon_decompress.ogg', node=suit)
-    toonReactTrack = Sequence(Wait(3.05), Func(toon.playDialogueForString, "!"), Func(toon.enterFlattened), Wait(1.0), Parallel(ActorInterval(toon, 'jump'), soundTrack2, Func(toon.loop, 'neutral'),   Sequence(Wait(0.5), Func(toon.exitFlattened))))
-    soundTrack = getSoundTrack(
-        "SA_blue_chip.ogg", delay=0, node=suit
-    )
-    if dmg > 0:
-        return Sequence(
+        chip = globalPropPool.getProp('chip_blue')
+        chips.append(chip)
+
+        landPos = toon.getPos(render)
+        landPos.setZ(landPos.getZ() + 0.25)
+        landUpPos = toon.getPos(render)
+        landUpPos.setZ(landUpPos.getZ() + 0.8)
+
+        propTrack = Sequence(
+            getPropAppearTrack(chip, suit.getRightHand(), firstHoldPosPoints, 0.2, Point3(chipHandScale), scaleUpTime=0.25),
+            Wait(0.6),
+            Func(chip.wrtReparentTo, suit),
             Parallel(
-                suitTrack, toonTrack, toonReactTrack, soundTrack, propTrack, propFlyTrack,
+                ProjectileInterval(chip, startPos=chipHandPosRenderStart, endPos=chipHandPosRenderEnd, duration=0.5, gravityMult=chipFlipMult),
+                LerpHprInterval(chip, 0.5, (90.0, -360.0, 0.0), startHpr=(0.0, 90.0, 0.0)),
             ),
-            Func(MovieUtil.removeProp, chip),
-        )
-    else:
-        return Sequence(
-                Parallel(
-                    suitTrack, toonTrack, soundTrack, propTrack, propFlyTrack,
+            Func(chip.wrtReparentTo, suit.getRightHand()),
+            Func(chip.setPosHpr, Point3(-0.2336, -0.0272, -0.0817), Point3(76.7974, -95.719, 0.0)),
+            Func(chip.setScale, chipGrabScale),
+            Wait(0.7),
+            Func(chip.wrtReparentTo, render),
+            Parallel(
+                ProjectileInterval(chip, endPos=landPos, duration=0.95, gravityMult=2.15),
+                LerpHprInterval(chip, 0.95, (0.0, 450.0, 0.0), startHpr=(0.0, 90.0, 0.0)),
+                Sequence(
+                    Wait(0.25),
+                    LerpScaleInterval(chip, 0.65, 6.5),
                 ),
-                Func(MovieUtil.removeProp, chip),
+            ),
+            Parallel(
+                LerpHprInterval(chip, 0.15, (20.0, 441.0, 0.0)),
+                LerpPosInterval(chip, 0.15, landUpPos, blendType='easeOut'),
+            ),
+            Parallel(
+                LerpHprInterval(chip, 0.225, (40.0, 450.0, 0.0)),
+                LerpPosInterval(chip, 0.225, landPos, blendType='easeIn'),
+            ),
+            LerpHprInterval(chip, 0.3, (60.0, 450.0, 0.0)),
+            LerpHprInterval(chip, 0.3, (70.0, 450.0, 0.0), blendType='easeOut'),
+            Wait(0.1),
+            LerpScaleInterval(chip, 0.35, 0.01, blendType='easeIn'),
+            Func(chip.hide),
+        )
+        propTracks += (propTrack,)
+        if dmg > 0:
+            toonReactTrack = Sequence(
+                Wait(damageDelay),
+                Func(toon.setAnimState, 'Squish'),
+                Func(toon.playDialogueForString, "!"),
+                Wait(2.5)
             )
+            toonReactTracks += (toonReactTrack,)
+
+    toonTracks: Parallel = getToonTracks(attack, damageDelay, [], dodgeDelay, ['sidestep'], dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('SA_blue_chip.ogg', delay=0.0, node=suit)
+    return Sequence(Parallel(suitTrack, toonTracks, *toonReactTracks, soundTrack, *propTracks), Func(MovieUtil.removeProps, chips))
 
 
 def doBlueChipOLD(attack):
