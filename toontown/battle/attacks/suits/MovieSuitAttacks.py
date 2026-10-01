@@ -2690,12 +2690,12 @@ def doShred(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, paperPropTrack, shredderPropTrack, *partTracks, toonTracks, soundTrack)
 
 
-def doSongAndDance(attack):
+def doSongAndDance(attack: dict) -> MetaInterval:
     suit = attack['suit']
-    battle = attack['battle']
-    suitTrack = getSuitAnimTrack(attack)
-    toonTracks = getToonTracks(attack, 4.1, ['cringe'], 4.223, ['applause'])
-    soundTrack = getSoundTrack('AA_heal_happydance.ogg', delay=.01, node=suit)
+    damageDelay: float = 4.2
+    suitTrack: Sequence = getSuitAnimTrack(attack)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay, ['cringe'], damageDelay, ['applause'], damageAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('AA_heal_happydance.ogg', node=suit)
     return Parallel(suitTrack, toonTracks, soundTrack)
 
 
