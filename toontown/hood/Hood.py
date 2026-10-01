@@ -15,8 +15,29 @@ from toontown.toonbase import TTLocalizer
 from toontown.toon.Toon import teleportDebug
 from toontown.dna.DNAParser import *
 from toontown.hood import SkyUtil
+from toontown.toonbase.GlobalCacheData import GlobalCacheKey
 
 class Hood(StateData.StateData):
+    HoodToCacheKey = {
+        ToontownCentral: GlobalCacheKey.TTC,
+        DonaldsDock: GlobalCacheKey.BB,
+        YeOlde: GlobalCacheKey.YOTT,
+        DaisyGardens: GlobalCacheKey.DG,
+        MinniesMelodyland: GlobalCacheKey.MML,
+        TheBrrrgh: GlobalCacheKey.TB,
+        OutdoorZone: GlobalCacheKey.OZ,
+        DonaldsDreamland: GlobalCacheKey.DDL,
+        GolfZone: GlobalCacheKey.GZ,
+        GoofySpeedway: GlobalCacheKey.GS,
+        Toonseltown: GlobalCacheKey.TS,
+        SkyClan: GlobalCacheKey.SC,
+        MyEstate: GlobalCacheKey.Estate,
+        SellbotHQ: GlobalCacheKey.SBHQ,
+        CashbotHQ: GlobalCacheKey.CBHQ,
+        LawbotHQ: GlobalCacheKey.LBHQ,
+        BossbotHQ: GlobalCacheKey.BBHQ,
+        BoardbotHQ: GlobalCacheKey.BDHQ,
+    }
     notify = DirectNotifyGlobal.directNotify.newCategory('Hood')
 
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):
@@ -106,6 +127,7 @@ class Hood(StateData.StateData):
         base.localAvatar.stopChat()
 
     def load(self):
+        base.globalCache.swapToKey(self.HoodToCacheKey.get(self.hoodId, GlobalCacheKey.TTC))
         files = []
         if self.storageDNAFile:
             files.append(self.storageDNAFile)

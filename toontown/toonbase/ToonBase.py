@@ -18,6 +18,8 @@ from direct.task import *
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownLoader
+from toontown.toonbase.GlobalCache import GlobalCache
+from toontown.toonbase.GlobalCacheData import GlobalCacheKey
 from otp.otpbase import OTPBase
 from otp.otpbase import OTPGlobals
 from otp.otpbase import OTPLauncherGlobals
@@ -235,6 +237,9 @@ class ToonBase(OTPBase.OTPBase):
         
         __builtins__['NO_FADE_SORT_INDEX'] = 4000
         oldLoader.destroy()
+
+        self.globalCache = GlobalCache()
+        self.globalCache.loadFromKey(GlobalCacheKey.Global)
 
         # Needed by the hammerspace inventory GUI for item hover tooltips.
         # NOTE: this must be created after addCullBins() (so the

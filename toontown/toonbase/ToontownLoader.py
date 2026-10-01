@@ -72,7 +72,7 @@ class ToontownLoader(nLoader.Loader):
                     base.cr.considerHeartbeat()
 
     def loadModel(self, *args, **kw):
-        ret = nLoader.Loader.loadModel(self, *args, **kw)
+        ret = base.globalCache.getModel(*args, **kw)
 
         modelName = ''
         if args:
