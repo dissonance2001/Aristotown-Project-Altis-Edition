@@ -3235,12 +3235,17 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setPinkSlips(self, pinkSlips):
         self.pinkSlips = pinkSlips
+        messenger.send(self.uniqueName('pinkSlipsChange'), [self.pinkSlips])
     
     def getCeaseAndDesists(self):
         if hasattr(self, 'ceaseAndDesists'):
             return self.ceaseAndDesists
         else:
             return 0
+
+    def setCeaseAndDesists(self, ceaseAndDesists):
+        self.ceaseAndDesists = ceaseAndDesists
+        messenger.send(self.uniqueName('ceaseAndDesistsChange'), [self.ceaseAndDesists])
 
     def getCeaseDesists(self):
         for rewardModifier in self.getModifiersOfType(*REWARD_MODIFIERS):

@@ -84,6 +84,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.numSurrendered = 0
         self.maxSurrendered = 0
         self.activateMode = 'book'
+        self.accept(self.toon.uniqueName('pinkSlipsChange'), self.__updateBattleSpecialButtons)
+        self.accept(self.toon.uniqueName('ceaseAndDesistsChange'), self.__updateBattleSpecialButtons)
         self.load()
         self.hide()
         return
@@ -1951,6 +1953,33 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             else:
                 self.surrenderVoteFlag.hide()
 
+    def __updateBattleSpecialButtons(self, *args):
+        if self.activateMode != 'battle':
+            return
+
+        if not hasattr(self, 'fireButton') or not hasattr(self, 'sueButton'):
+            return
+
+        self.updateTotalPropsText()
+
+        if ('noFires' not in base.localAvatar.battleConditions and
+                localAvatar.getPinkSlips() > 0 and
+                not localAvatar.cooldown):
+            self.fireButton['state'] = DGG.NORMAL
+            self.fireButton['image_color'] = Vec4(1, 1, 1, 1)
+        else:
+            self.fireButton['state'] = DGG.DISABLED
+            self.fireButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
+
+        if ('noSues' not in base.localAvatar.battleConditions and
+                localAvatar.getCeaseAndDesists() > 0 and
+                not localAvatar.cooldown):
+            self.sueButton['state'] = DGG.NORMAL
+            self.sueButton['image_color'] = Vec4(1, 1, 1, 1)
+        else:
+            self.sueButton['state'] = DGG.DISABLED
+            self.sueButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
+
     def battleActivateButtons(self):
         self.__applyBattleDetailLayout()
         self.applyDisplayTrackOrder()
@@ -2007,17 +2036,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             else:
                 self.sueButton['state'] = DGG.DISABLED
                                                                                                                     
-        if not 'noSues' in base.localAvatar.battleConditions:
-            self.sueButton['state'] = DGG.NORMAL
-        if not 'noFires' in base.localAvatar.battleConditions:
-            self.fireButton['state'] = DGG.NORMAL
-        if not 'noSOS' in base.localAvatar.battleConditions:
+        self.__updateBattleSpecialButtons()
+        if 'noSOS' not in base.localAvatar.battleConditions and not localAvatar.cooldown:
             self.sosButton['state'] = DGG.NORMAL
-        if 'noFires' in base.localAvatar.battleConditions or localAvatar.cooldown:
-            self.fireButton['state'] = DGG.DISABLED
-        if 'noSues' in base.localAvatar.battleConditions or localAvatar.cooldown:
-            self.sueButton['state'] = DGG.DISABLED
-        if 'noSOS' in base.localAvatar.battleConditions or localAvatar.cooldown:
+        else:
             self.sosButton['state'] = DGG.DISABLED
         if settings.get('show-cog-levels', True):
             self.levelsButton['text'] = TTLocalizer.InventoryLevelsHide

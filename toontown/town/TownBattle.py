@@ -18,6 +18,7 @@ from toontown.town import TownBattleCogPanel
 from toontown.toontowngui import TTDialog
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import BattleBase
+import math
 from toontown.toon import IOURegistry
 from toontown.toonbase import ToontownTimer
 from toontown.toonbase import ToonPythonUtil as PythonUtil
@@ -717,6 +718,7 @@ class TownBattle(StateData.StateData):
         for cog in cogs:
             maxSuitLevel = max(maxSuitLevel, cog.getActualLevel())
             self.cogFireCosts[cogFireCostIndex] = 1
+            self.cogSueCosts[cogFireCostIndex] = int(math.ceil(cog.getActualLevel() / 4.0))
             cogFireCostIndex += 1
 
         creditLevel = maxSuitLevel

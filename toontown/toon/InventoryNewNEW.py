@@ -1094,11 +1094,25 @@ class InventoryNewNEW(InventoryBase.InventoryBase, DirectFrame):
             self.runButton.hide()
             self.sosButton.hide()
             self.passButton.hide()
-            self.fireButton.hide()
-            self.sueButton.hide()
+            self.fireButton.show()
+            self.sueButton.show()
             self.surrenderButton.hide()
             self.surrenderVoteFlag.hide()
             self.levelsButton.hide()
+
+            if localAvatar.getPinkSlips():
+                self.fireButton['state'] = DGG.NORMAL
+                self.fireButton['image_color'] = Vec4(0, 0.6, 1, 1)
+            else:
+                self.fireButton['state'] = DGG.DISABLED
+                self.fireButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
+
+            if localAvatar.getCeaseAndDesists():
+                self.sueButton['state'] = DGG.NORMAL
+                self.sueButton['image_color'] = Vec4(0, 0.6, 1, 1)
+            else:
+                self.sueButton['state'] = DGG.DISABLED
+                self.sueButton['image_color'] = Vec4(0.4, 0.4, 0.4, 1)
         else:
             self.runButton.show()
             self.sosButton.show()
