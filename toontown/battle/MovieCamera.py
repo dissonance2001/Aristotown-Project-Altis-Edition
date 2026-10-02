@@ -3260,7 +3260,10 @@ def focusShot(x, y, z, duration, target, other = None, splitFocusPoint = None, n
     if splitFocusPoint:
         track.append(Func(focusCameraBetweenPoints, target, splitFocusPoint))
     else:
-        track.append(Func(camera.lookAt, target))
+        def lookAtTarget():
+            camera.lookAt(target() if callable(target) else target)
+
+        track.append(Func(lookAtTarget))
     track.append(Wait(duration))
     return track
 
@@ -3460,7 +3463,7 @@ def moveCameraOnly(x, y, z, duration, other=None,
 
 
 def allGroupShot(avatar, duration):
-    return heldShot(10, 0, 10, 79, -30, 0, duration, 'allGroupShot')
+    return heldShot(10, 0, 10, 89, -30, 0, duration, "allGroupShot")
 
 
 def allGroupLowShot2(avatar, duration):
@@ -3470,11 +3473,41 @@ def allGroupLowShot2(avatar, duration):
 
 
 def allGroupLowShot(avatar, duration, battle):
-    numSuits = len(battle.activeSuits)
-    if numSuits > 5:
-        return heldShot(20.0, -15.0, 10.0, 45, -20, 0, duration, 'allGroupLowShot')
+
+    def getWidth(s):
+        if s is None or s.getGeomNode() is None:
+            return 0
+        width = (
+            s.getGeomNode().getScale()[0]
+        )
+        # Enforce a minimum width.
+        return max(width, 4)
+
+    if battle.activeSuits:
+        # Get the width of each suit in the actor list.
+        width = [getWidth(s) for s in battle.activeSuits]
+
+        # Calculate the total sum of the suit widths.
+        widthSum = sum(width)
+
+        # Get the ratio of the maximum suit width allowed to the
+        # width sum.
+        widthRatio = max(widthSum / 18, 1)
+
+        # If the ratio wasn't capped, it can be applied to the
+        # width sum.
+        if widthRatio > 1:
+            widthSum -= (10 * widthRatio) - 10
+        x = max(min(15 * (widthSum / 20), 20), 15)
+        y = -len(battle.activeSuits)
+        h = 90 - (len(battle.activeSuits) * 3)
+        p = max([suit.getHeight() + 1 for suit in battle.activeSuits]) / 2
     else:
-        return heldShot(17, -5, 5, 69, 0, 0, duration, 'allGroupLowShot')
+        x = 15
+        y = 3
+        h = 90
+        p = 0
+    return heldShot(x, y, 3, h, p, 0, duration, "allGroupLowShot")
 
 
 def allGroupLowDiagonalShot(avatar, duration):
@@ -3759,27 +3792,35 @@ def randomGroupAttackCam(suit, targets, battle, attackDuration, openShotDuration
     return Sequence(openShot, closeShot)
 
 
-def randomActorShot(actor, battle, duration, actorType, groupShot = 0):
+def randomActorShot(actor, battle, duration, actorType, groupShot=0):
     height = actor.getHeight()
-    centralPoint, origHpr = battle.getActorPosHpr(actor)
-    centralPoint.setZ(centralPoint.getZ() + height * 0.75)
-    if actorType == 'suit':
-        x = 4 + random.random() * 1.5
-        y = -2 - random.random() * 2
-        z = height * 0.5 + random.random() * height * .75
+
+    def getCentralPoint():
+        centralPoint = actor.getPos(battle)
+        centralPoint.setZ(centralPoint.getZ() + height * 0.75)
+        return centralPoint
+
+    def getRandom():
+        return random.random()
+
+    if actorType == "suit":
+        x = 4 + getRandom() * 8
+        y = -2 - getRandom() * 4
+        z = height * 0.5 + getRandom() * height * 1.5
         if groupShot == 1:
             y = -4
             z = height * 0.5
     else:
-        x = 4 + random.random() * 1.5
-        y = -2 - random.random() * 2
-        z = height + random.random() * height * .75
+        x = 2 + getRandom() * 8
+        y = -2 + getRandom() * 3
+        z = height + getRandom() * height * 1.5
         if groupShot == 1:
             y = y + 3
             z = height * 0.5
-    if MovieUtil.shotDirection == 'left':
+    if MovieUtil.shotDirection == "left":
         x = -x
-    return focusShot(x, y, z, duration, centralPoint)
+
+    return focusShot(x, y, z, duration, getCentralPoint)
 
 def randomActorShotFallingKnife(actor, battle, duration, actorType, groupShot = 0):
     height = actor.getHeight()
