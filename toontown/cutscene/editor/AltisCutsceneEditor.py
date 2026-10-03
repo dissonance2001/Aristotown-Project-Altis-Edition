@@ -906,8 +906,11 @@ class AltisCutsceneEditor(DirectObject):
                 return suitType
         matches = []
         for suitType in SuitDNA.suitHeadTypes:
-            data = SuitBattleGlobals.SuitAttributes.get(suitType, {})
-            name = str(data.get('name', '')).strip()
+            data = SuitBattleGlobals.SuitAttributes.get(suitType)
+            if isinstance(data, SuitBattleGlobals.SuitAttributesClass):
+                name = data.name.strip()
+            else:
+                name = str('').strip()
             if name.lower() == value:
                 return suitType
             if value and value in name.lower():

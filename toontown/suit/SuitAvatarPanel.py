@@ -299,9 +299,9 @@ class SuitAvatarPanel(AvatarPanel.AvatarPanel, DirectObject.DirectObject):
             elif self.avatar.getActualLevel() == 29:
                 self.name = 'Extortionist Factory Foreman'
             else:
-                self.name = SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name']
+                self.name = SuitBattleGlobals.SuitAttributes[avatar.dna.name].name
         else:
-            self.name = SuitBattleGlobals.SuitAttributes[avatar.dna.name]['name']
+            self.name = SuitBattleGlobals.SuitAttributes[avatar.dna.name].name
         self.nameLabel = DirectLabel(parent=self.frame, pos=(0, 0, 0.36), relief=None,
                                      text=self.name,
                                      text_font=avatar.getFont(), text_pos=(0, 0),

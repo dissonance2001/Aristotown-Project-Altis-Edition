@@ -12,7 +12,7 @@ def _resolveSuitName(value):
     if value in SuitBattleGlobals.SuitAttributes:
         return value
     for suitName, attributes in list(SuitBattleGlobals.SuitAttributes.items()):
-        if attributes.get('name', '').lower() == value:
+        if attributes.name.lower() == value:
             return suitName
     return None
 
@@ -43,7 +43,7 @@ def clashInvasion(suitName, mega=0, v2=0, skelecog=0, waiter=0):
     flags = IFV2 if v2 else IFSkelecog if skelecog else IFWaiter if waiter else 0
     invasionType = INVASION_TYPE_MEGA if mega else INVASION_TYPE_NORMAL
     if simbase.air.suitInvasionManager.startInvasionByName(suitName, flags, invasionType):
-        return 'Started a %s invasion.' % SuitBattleGlobals.SuitAttributes[suitName]['name']
+        return 'Started a %s invasion.' % SuitBattleGlobals.SuitAttributes[suitName].name
     return 'Could not start the invasion.'
 
 
@@ -76,7 +76,7 @@ def clashBuilding(suitName):
         return 'That Cog cannot take over a building.'
     result = spellbook.getTarget().doBuildingTakeover(SuitDNA.suitHeadTypes.index(suitName))
     if result and result[0] == 'success':
-        return 'Spawned a %s building.' % SuitBattleGlobals.SuitAttributes[suitName]['name']
+        return 'Spawned a %s building.' % SuitBattleGlobals.SuitAttributes[suitName].name
     return 'Could not spawn a Cog building here.'
 
 

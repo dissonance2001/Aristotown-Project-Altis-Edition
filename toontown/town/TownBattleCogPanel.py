@@ -998,7 +998,7 @@ class TownBattleCogPanel(DirectFrame):
     def _getCogInformationModifiers(self):
         modifiers = []
         attributes = SuitBattleGlobals.SuitAttributes[self.cog.dna.name]
-        hpType = attributes.get('hp', 'normal')
+        hpType = attributes.hp if attributes.hp != None else 'normal'
 
         if hpType == 'operations':
             modifiers.append({

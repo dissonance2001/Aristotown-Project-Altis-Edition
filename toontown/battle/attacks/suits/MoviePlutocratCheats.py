@@ -551,7 +551,7 @@ def doTribute(attack):
             Func(attack['battle'].unlureSuit, kerberos),
             Func(attack['battle'].unlureSuit, target),
             PlutocratCutscenes.makeTribute(boss, kerberos, target, attack['battle']))
-        targetName = SuitBattleGlobals.SuitAttributes[target.dna.name]['name']
+        targetName = SuitBattleGlobals.SuitAttributes[target.dna.name].name
     else:
         action = Sequence(
             Func(attack['battle'].unlureSuit, kerberos),

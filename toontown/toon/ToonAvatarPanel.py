@@ -775,7 +775,7 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
             return None
 
         try:
-            suitName = SuitBattleGlobals.SuitAttributes[cogIdentifier]['name']
+            suitName = SuitBattleGlobals.SuitAttributes[cogIdentifier].name
         except:
             suitName = cogIdentifier
 

@@ -846,7 +846,7 @@ class BattleCalculatorAI:
         else:
             boost = 0
         suitAttr = SuitBattleGlobals.SuitAttributes.get(suit.dna.name)
-        suitDef = SuitBattleGlobals.calculateDefense(suitAttr['level'], suit.getLevel(), boost = boost)
+        suitDef = SuitBattleGlobals.calculateDefense(suitAttr.level, suit.getLevel(), boost=boost)
         return -suitDef
 
     def __isValidZapChainTarget(self, suit):
@@ -5101,7 +5101,7 @@ class BattleCalculatorAI:
         return 0
 
     def __calcSuitAtkType(self, theSuit):
-        attacks = SuitBattleGlobals.SuitAttributes[theSuit.dna.name]['attacks']
+        attacks = SuitBattleGlobals.SuitAttributes[theSuit.dna.name].attacks
         atk = SuitBattleGlobals.pickSuitAttack(attacks, theSuit.getLevel())
         if theSuit.dna.name == 'videog':
             x = self.TurnsElapsed
@@ -5828,7 +5828,7 @@ class BattleCalculatorAI:
         #     self.notify.warning('We did not find a Suit with ID %s.' % suitId)
         #     return False
         atkAcc = atkType['acc']
-        # suitAcc = SuitBattleGlobals.SuitAttributes[theSuit.dna.name]['acc'][theSuit.getLevel()]
+        # suitAcc = SuitBattleGlobals.SuitAttributes[theSuit.dna.name].acc[theSuit.getLevel()]
         suitAcc = 0 # suitAcc does absolutely nothing.  It was supposedly intended to alter the attack accuracy by using the average of the attack and Cog's accuracy, but that is likely obtrusive.  I'm keeping the variable anyway because of what is printed.
         acc = atkAcc
         randChoice = random.randint(0, 99)
@@ -6237,7 +6237,7 @@ class BattleCalculatorAI:
             self.notify.warning('No SuitAttributes for %s' % suitName)
             return 0
 
-        hp = attributes.get('hp', ())
+        hp = attributes.hp if attributes.hp != None else ()
         if not hp:
             self.notify.warning('No hp tuple for %s' % suitName)
             return 0
@@ -6261,7 +6261,7 @@ class BattleCalculatorAI:
             self.notify.warning('No SuitAttributes for %s' % suitName)
             return
 
-        hp = attrs.get('hp', ())
+        hp = attrs.hp if attrs.hp != None else ()
         self.notify.warning('%s hp pool length: %s' % (suitName, len(hp)))
         self.notify.warning('%s valid internal levels: 0-%s' % (suitName, len(hp) - 1))
         self.notify.warning('%s hp values: %s' % (suitName, hp))

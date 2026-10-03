@@ -1024,7 +1024,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 if newCogSuitLevel != ToontownGlobals.MaxCogSuitLevel:
                     suitIndex = SuitDNA.suitsPerDept * deptIndex + cogTypes[deptIndex]
                     cogTypeStr = SuitDNA.suitHeadTypes[suitIndex]
-                    cogName = SuitBattleGlobals.SuitAttributes[cogTypeStr]['name']
+                    cogName = SuitBattleGlobals.SuitAttributes[cogTypeStr].name
                     speech += TTLocalizer.BossbotRTSuitPromotion % cogName
         else:
             speech += TTLocalizer.BossbotRTMaxed % (ToontownGlobals.MaxCogSuitLevel + 1)

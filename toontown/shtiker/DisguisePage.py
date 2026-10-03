@@ -163,7 +163,7 @@ class DisguisePage(ShtikerPage.ShtikerPage):
         else:
             self.progressTitle = self.meritTitle
         self.progressTitle.show()
-        self.cogName['text'] = SuitBattleGlobals.SuitAttributes[cog]['name']
+        self.cogName['text'] = SuitBattleGlobals.SuitAttributes[cog].name
         cogLevel = base.localAvatar.cogLevels[index]
         if base.localAvatar.cogReviveLevels[self.activeTab] > -1:
             cogLevel = base.localAvatar.cogReviveLevels[self.activeTab]

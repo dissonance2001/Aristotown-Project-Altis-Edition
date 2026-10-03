@@ -2590,7 +2590,7 @@ class SuitGenerator(object):
             self.makeExecutive()
             self.generateHead2('sellbotBoss-head-zero')
             self.setHeight(9.05)
-        self.setName(SuitBattleGlobals.SuitAttributes[dna.name]['name'])
+        self.setName(SuitBattleGlobals.SuitAttributes[dna.name].name)
         self.getGeomNode().setScale(self.scale)
         if not self.isSkeleton and not self.isVirtual:
             self.generateHealthBar()

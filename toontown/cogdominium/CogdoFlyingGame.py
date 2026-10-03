@@ -357,7 +357,7 @@ class CogdoFlyingGame(DirectObject):
         self.guiMgr.setMemoCount(0)
         self.distGame.d_sendRequestAction(Globals.AI.GameActions.RanOutOfTimePenalty, 0)
         if self.invSuit:
-            self.guiMgr.setMessage(TTLocalizer.CogdoFlyingGameTakingMemosInvasion % SuitBattleGlobals.SuitAttributes[self.invSuit]['pluralname'])
+            self.guiMgr.setMessage(TTLocalizer.CogdoFlyingGameTakingMemosInvasion % SuitBattleGlobals.SuitAttributes[self.invSuit].pluralname)
         else:
             self.guiMgr.setMessage(TTLocalizer.CogdoFlyingGameTakingMemos)
 
@@ -377,7 +377,7 @@ class CogdoFlyingGame(DirectObject):
     def handleLocalPlayerTargetedByEagle(self):
         if not self.localPlayer.isInvulnerable() and not self._hints['targettedByEagle']:
             if self.invSuit:
-                self.guiMgr.setMessage(TTLocalizer.CogdoFlyingGameInvasionTargeting % SuitBattleGlobals.SuitAttributes[self.invSuit]['name'])
+                self.guiMgr.setMessage(TTLocalizer.CogdoFlyingGameInvasionTargeting % SuitBattleGlobals.SuitAttributes[self.invSuit].name)
             else:
                 self.guiMgr.setMessage(TTLocalizer.CogdoFlyingGameLegalEagleTargeting)
             self._hints['targettedByEagle'] = True
@@ -385,7 +385,7 @@ class CogdoFlyingGame(DirectObject):
     def handleLocalPlayerAttackedByEagle(self):
         if not self.localPlayer.isInvulnerable():
             if self.invSuit:
-                self.guiMgr.setMessage(TTLocalizer.CogdoFlyingGameInvasionAttacking % SuitBattleGlobals.SuitAttributes[self.invSuit]['name'])
+                self.guiMgr.setMessage(TTLocalizer.CogdoFlyingGameInvasionAttacking % SuitBattleGlobals.SuitAttributes[self.invSuit].name)
             else:
                 self.guiMgr.setMessage(TTLocalizer.CogdoFlyingGameLegalEagleAttacking)
 

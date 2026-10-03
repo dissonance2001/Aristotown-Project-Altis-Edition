@@ -515,11 +515,11 @@ class CogQuest(LocationBasedQuest):
             if cogType == Any:
                 return TTLocalizer.Cog
             else:
-                return SuitBattleGlobals.SuitAttributes[cogType]['singularname']
+                return SuitBattleGlobals.SuitAttributes[cogType].singularname
         elif cogType == Any:
             return TTLocalizer.Cogs
         else:
-            return SuitBattleGlobals.SuitAttributes[cogType]['pluralname']
+            return SuitBattleGlobals.SuitAttributes[cogType].pluralname
 
     def getObjectiveStrings(self):
         cogName = self.getCogNameString()
@@ -2182,7 +2182,7 @@ class RecoverItemQuest(LocationBasedQuest):
         elif holder == AnyFish:
             holderName = TTLocalizer.AFish
         elif holderType == 'type':
-            holderName = SuitBattleGlobals.SuitAttributes[holder]['pluralname']
+            holderName = SuitBattleGlobals.SuitAttributes[holder].pluralname
         elif holderType == 'level':
             holderName = TTLocalizer.QuestsRecoverItemQuestHolderString % {'level': TTLocalizer.Level,
              'holder': holder,
@@ -2248,7 +2248,7 @@ class RecoverItemQuest(LocationBasedQuest):
         elif holder == AnyFish:
             holderName = TTLocalizer.TheFish
         elif holderType == 'type':
-            holderName = SuitBattleGlobals.SuitAttributes[holder]['pluralname']
+            holderName = SuitBattleGlobals.SuitAttributes[holder].pluralname
         elif holderType == 'level':
             holderName = TTLocalizer.QuestsRecoverItemQuestHolderString % {'level': TTLocalizer.Level,
              'holder': holder,

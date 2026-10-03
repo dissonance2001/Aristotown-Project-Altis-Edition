@@ -300,7 +300,7 @@ class SuitInvasionManagerAI(DirectObject):
         if self.invading:
             if self.suitDeptIndex is not None:
                 if self.suitTypeIndex is not None:
-                    type = SuitBattleGlobals.SuitAttributes[self.getSuitName()]['name']
+                    type = SuitBattleGlobals.SuitAttributes[self.getSuitName()].name
                 else:
                     type = SuitDNA.getDeptFullname(self.getSuitName())
             else:

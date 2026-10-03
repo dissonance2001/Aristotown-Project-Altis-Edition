@@ -764,13 +764,13 @@ class SuitPage(ShtikerPage.ShtikerPage):
         if not attrs:
             return ('?', '?')
 
-        relLevel = attrs.get('level', None)
+        relLevel = attrs.level
 
         if relLevel is None:
             return ('?', '?')
 
         try:
-            if isinstance(relLevel, tuple) or isinstance(relLevel, list):
+            if isinstance(relLevel, (tuple, list)):
                 low = SuitBattleGlobals.getActualFromRelativeLevel(relLevel[0])
                 high = SuitBattleGlobals.getActualFromRelativeLevel(relLevel[-1])
                 return (low, high)
@@ -809,15 +809,27 @@ class SuitPage(ShtikerPage.ShtikerPage):
             {}
         )
 
-        name = attrs.get('name', suitName)
-        levelText = self.getCogLevelText(suitName)
+        if isinstance(attrs, SuitBattleGlobals.SuitAttributesClass):
+            name = attrs.name
+            levelText = self.getCogLevelText(suitName)
 
-        text = '%s\n%s' % (
-            name,
-            levelText
-        )
+            text = '%s\n%s' % (
+                name,
+                levelText
+            )
 
-        attacks = attrs.get('attacks', ())
+            attacks = attrs.attacks
+
+        else:
+            name = attrs.get('name', suitName)
+            levelText = self.getCogLevelText(suitName)
+
+            text = '%s\n%s' % (
+                name,
+                levelText
+            )
+
+            attacks = attrs.get('attacks', ())
 
         if attacks:
             attackNames = []
@@ -897,7 +909,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         if attrs is None:
             return "???"
 
-        fullName = attrs.get('name', suitName)
+        fullName = attrs.name
 
         if suitName in CogNameAbbreviations:
             if abbreviate:
@@ -1409,7 +1421,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         if suitName in SECRETARY_SUITS:
             return 'Secretary'
 
-        hpType = attrs.get('hp', 'normal')
+        hpType = attrs.hp if attrs.hp != None else 'normal'
 
         if isinstance(hpType, str):
             hpType = hpType.lower()
@@ -1442,7 +1454,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
         if suitName in CONTRACTOR_SUITS:
             return 'Contractor'
 
-        hpType = attrs.get('hp', 'normal')
+        hpType = attrs.hp if attrs.hp != None else 'normal'
 
         if isinstance(hpType, str):
             hpType = hpType.lower()
@@ -1457,7 +1469,7 @@ class SuitPage(ShtikerPage.ShtikerPage):
 
     def updateCogBio(self, suitName):
         attrs = SuitBattleGlobals.SuitAttributes.get(suitName, {})
-        attacks = attrs.get('attacks', ())
+        attacks = attrs.attacks
 
         minimumLevel = SuitBattleGlobals.getSuitMinLevel(
             suitName
@@ -1690,9 +1702,9 @@ class SuitPage(ShtikerPage.ShtikerPage):
     def getCogHoverText(self, suitName):
         attrs = SuitBattleGlobals.SuitAttributes.get(suitName, {})
 
-        name = attrs.get('name', suitName)
+        name = attrs.name
         levelText = self.getCogLevelText(suitName)
-        attacks = attrs.get('attacks', [])
+        attacks = attrs.attacks
 
         text = 'Suit Name: %s\n\n' % name
         text += '%s\n\n' % levelText

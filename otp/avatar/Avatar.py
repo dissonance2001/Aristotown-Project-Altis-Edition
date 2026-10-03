@@ -289,7 +289,7 @@ class Avatar(Actor, ShadowCaster):
                     toonName = self.getAvIdName()
 
                 suitType = self.suit.style.name
-                suitName = SuitBattleGlobals.SuitAttributes[suitType]['name']
+                suitName = SuitBattleGlobals.SuitAttributes[suitType].name
                 suitDept = SuitDNA.suitDepts.index(
                     SuitDNA.getSuitDept(suitType)
                 )

@@ -1279,7 +1279,10 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI, SuitPlan
             if not data:
                 continue
 
-            suitTier = data.get('level', 0) + 1
+            if data.level != None:
+                suitTier = data.level + 1
+            else:
+                suitTier = 1
 
             if suitTier == tier:
                 choices.append(suitName)
@@ -1381,10 +1384,10 @@ def spawnCog(name, level=None, revives=0, skelecog=0, waiter=0):
         return "Could not spawn %s in current zone, cog is not spawnable." % name
 
     attributes = SuitBattleGlobals.SuitAttributes[name]
-    suitFullName = attributes['name']
+    suitFullName = attributes.name
 
     if level is None:
-        level = attributes['level'] + 1
+        level = attributes.level + 1
 
     av = spellbook.getInvoker()
     zoneId = av.getLocation()[1]
@@ -1395,7 +1398,7 @@ def spawnCog(name, level=None, revives=0, skelecog=0, waiter=0):
 
     pointmap = list(sp.streetPointList)
     
-    if name in SuitBattleGlobals.SpecialCogDict and level != attributes['level'] + 1 and not name in ['hrollers', 'clerk', 'clubpres', 'foreman', 'supervis']:
+    if name in SuitBattleGlobals.SpecialCogDict and level != (attributes.level if isinstance(attributes, SuitBattleGlobals.SuitAttributesClass) else attributes['level']) + 1 and not name in ['hrollers', 'clerk', 'clubpres', 'foreman', 'supervis']:
         return "Could not spawn %s in the current zone; level out of range." % suitFullName
 
     if revives > 2:

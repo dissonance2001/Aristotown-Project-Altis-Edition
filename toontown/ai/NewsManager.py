@@ -75,8 +75,8 @@ class NewsManager(DistributedObject.DistributedObject):
             suitName = SuitDNA.getDeptFullname(suitType)
             suitNamePlural = SuitDNA.getDeptFullnameP(suitType)
         except:
-            suitName = SuitBattleGlobals.SuitAttributes[suitType]['name']
-            suitNamePlural = SuitBattleGlobals.SuitAttributes[suitType]['pluralname']
+            suitName = SuitBattleGlobals.SuitAttributes[suitType].name
+            suitNamePlural = SuitBattleGlobals.SuitAttributes[suitType].pluralname
 
 
         messages = []

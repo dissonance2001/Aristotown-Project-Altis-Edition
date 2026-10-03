@@ -1793,7 +1793,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         cogTypeStr = SuitDNA.suitHeadTypes[self.cogTypes[dept]]
         lastCog = self.cogTypes[dept] >= 7
         if not lastCog:
-            maxLevel = SuitBattleGlobals.SuitAttributes[cogTypeStr]['level']
+            maxLevel = SuitBattleGlobals.SuitAttributes[cogTypeStr].level
         else:
             maxLevel = ToontownGlobals.MaxCogSuitLevel
         if newLevel > maxLevel:
@@ -1802,7 +1802,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 self.d_setCogTypes(self.cogTypes)
                 self.cogMerits[dept] = CogDisguiseGlobals.MeritsPerLevel[SuitDNA.suitHeadTypes.index(cogTypeStr)][4]
                 self.d_setCogMerits(self.cogMerits)
-                self.cogReviveLevels[dept] = SuitBattleGlobals.SuitAttributes[cogTypeStr]['level']
+                self.cogReviveLevels[dept] = SuitBattleGlobals.SuitAttributes[cogTypeStr].level
                 self.d_setCogReviveLevels(self.cogReviveLevels)
         else:
             self.cogReviveLevels[dept] += 1
@@ -1825,7 +1825,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         deptIndex = SuitDNA.suitDepts.index(dept)
         cogType = self.cogTypes[deptIndex]
         cogTypeStr = SuitDNA.suitHeadTypes[cogType]
-        lowestCogLevel = SuitBattleGlobals.SuitAttributes[cogTypeStr]['level']
+        lowestCogLevel = SuitBattleGlobals.SuitAttributes[cogTypeStr].level
         multiple = 5 * cogType
         additional = self.cogLevels[deptIndex] - lowestCogLevel
         numPromotions = multiple + additional
@@ -6690,7 +6690,7 @@ def suit(command, suitName="hho", isMega = 0, flags = 0):
     if suitName not in SuitDNA.suitHeadTypes and command != 'deptinvasion':
         return 'Invalid suit name: ' + suitName
     if command != 'deptinvasion':
-        suitFullName = SuitBattleGlobals.SuitAttributes[suitName]['name']
+        suitFullName = SuitBattleGlobals.SuitAttributes[suitName].name
     if command == 'spawn':
         returnCode = invoker.doSummonSingleCog(SuitDNA.suitHeadTypes.index(suitName))
         if returnCode[0] == 'success':
