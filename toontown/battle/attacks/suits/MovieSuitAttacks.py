@@ -8047,7 +8047,7 @@ def doBlueChip(attack: dict) -> MetaInterval:
         toon = t['toon']
         dmg = t['hp']
 
-        chip = globalPropPool.getProp('chip_blue')
+        chip = globalPropPool.getProp('blue_chip')
         chips.append(chip)
 
         landPos = toon.getPos(render)

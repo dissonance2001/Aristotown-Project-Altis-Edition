@@ -1663,7 +1663,7 @@ def doThrowRetaliation(attack):
     dmg = target[0]['hp']
     toon = attack['target'][0]['toon']
 
-    chip = globalPropPool.getProp("chip_blue")
+    chip = globalPropPool.getProp("blue_chip")
     firstHoldPosPoints = [Point3(-0.0012, 0.5083, -0.1271), Point3(-100, 0, 0)]
     grabPosPoints = [Point3(-0.2336, -0.0272, -0.0817), Point3(76.7974, -95.719, 0)]
 
