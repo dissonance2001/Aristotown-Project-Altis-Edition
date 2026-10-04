@@ -479,7 +479,7 @@ def doSuitAttack(attack):
         suitTrack = doGlowerPower(attack)
     elif name == 'ShortSqueeze':
         suitTrack = doShortSqueeze(attack)
-    elif name == 'BlueChip':
+    elif name in ('BlueChip', 'CoinToss'):
         suitTrack = doBlueChip(attack)
     elif name == 'FallingKnife':
         suitTrack = doFallingKnife(attack)
@@ -8047,7 +8047,14 @@ def doBlueChip(attack: dict) -> MetaInterval:
         toon = t['toon']
         dmg = t['hp']
 
-        chip = globalPropPool.getProp('blue_chip')
+        if attack['name'] == 'BlueChip': # Keep Blue Chip as Blue Chip.
+            chip = globalPropPool.getProp('blue_chip')
+        elif suit.dna.name == 'pp': # Exclusively pennies for the Penny Pincher.
+            chip = globalPropPool.getProp('coin_bronze')
+        elif suit.dna.name in ('qc', 'nb'): # Exclusively quarters or nickels for the Quarter Catcher and Nickel Nabber respectively.
+            chip = globalPropPool.getProp('coin_silver')
+        else: # Random coin.
+            chip = globalPropPool.getProp(random.choice(('coin_bronze', 'coin_silver', 'coin_gold')))
         chips.append(chip)
 
         landPos = toon.getPos(render)
