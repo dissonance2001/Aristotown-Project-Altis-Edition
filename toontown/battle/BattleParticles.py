@@ -3,6 +3,7 @@ from direct.particles.ParticleEffect import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import AppRunnerGlobal
 from toontown.battle import ParticleDefs
+from typing import Union
 
 notify = DirectNotifyGlobal.directNotify.newCategory('BattleParticles')
 TutorialParticleEffects = ('gearExplosionBig.ptf', 'gearExplosionSmall.ptf', 'gearExplosion.ptf')
@@ -10,12 +11,12 @@ ParticleNames = ('quash', 'nickelDimeWaterfall', 'nickelDime', 'audit-div', 'aud
 particleModel = None
 particleSearchPath = None
 
-def loadParticles():
+def loadParticles() -> None:
     global particleModel
     if particleModel == None:
         particleModel = loader.loadModel('phase_3.5/models/props/suit-particles')
 
-def unloadParticles():
+def unloadParticles() -> None:
     global particleModel
     if particleModel != None:
         particleModel.removeNode()
@@ -33,7 +34,7 @@ def getParticle(name):
     
     return None
 
-def loadParticleFile(name):
+def loadParticleFile(name) -> ParticleEffect:
     assert name.endswith('.ptf')
     name = name[:-4] # Strip .ptf
     particleFunc = ParticleDefs.ParticleTable[name]
@@ -42,7 +43,7 @@ def loadParticleFile(name):
     particleFunc(effect)
     return effect
 
-def createParticleEffect(name = None, file = None, numParticles = None, color = None):
+def createParticleEffect(name = None, file = None, numParticles = None, color = None) -> Union[ParticleEffect, None]:
     if not name:
         fileName = file + '.ptf'
         return loadParticleFile(fileName)
@@ -209,7 +210,7 @@ def createParticleEffect(name = None, file = None, numParticles = None, color = 
     return None
 
 
-def setEffectTexture(effect, name, color = None):
+def setEffectTexture(effect: ParticleEffect, name, color = None) -> None:
     particles = effect.getParticlesNamed('particles-1')
     np = getParticle(name)
     if color:
@@ -217,7 +218,8 @@ def setEffectTexture(effect, name, color = None):
     particles.renderer.setFromNode(np)
 
 
-def __makeGearExplosion(numParticles = None, style = 'Normal'):
+def __makeGearExplosion(numParticles = None, style = 'Normal') -> ParticleEffect:
+    effect: ParticleEffect
     if style == 'Normal':
         effect = loadParticleFile('gearExplosion.ptf')
     elif style == 'Big':
@@ -230,8 +232,8 @@ def __makeGearExplosion(numParticles = None, style = 'Normal'):
     return effect
 
 
-def __makeRubOut(color = None):
-    effect = loadParticleFile('demotionUnFreeze.ptf')
+def __makeRubOut(color = None) -> ParticleEffect:
+    effect: ParticleEffect = loadParticleFile('demotionUnFreeze.ptf')
     loadParticles()
     setEffectTexture(effect, 'snow-particle')
     particles = effect.getParticlesNamed('particles-1')
@@ -246,60 +248,60 @@ def __makeRubOut(color = None):
     return effect
 
 
-def __makeShiftLift():
-    effect = loadParticleFile('pixieDrop.ptf')
+def __makeShiftLift() -> ParticleEffect:
+    effect: ParticleEffect = loadParticleFile('pixieDrop.ptf')
     particles = effect.getParticlesNamed('particles-1')
-    particles.renderer.setCenterColor(Vec4(1, 1, 0, 0.9))
-    particles.renderer.setEdgeColor(Vec4(1, 1, 0, 0.6))
+    particles.renderer.setCenterColor(Vec4(1.0, 1.0, 0.0, 0.9))
+    particles.renderer.setEdgeColor(Vec4(1.0, 1.0, 0.0, 0.6))
     particles.emitter.setRadius(0.01)
-    effect.setHpr(0, 180, 0)
-    effect.setPos(0, 0, 0)
+    effect.setHpr(0.0, 180.0, 0.0)
+    effect.setPos(0.0, 0.0, 0.0)
     return effect
 
-def __makeInsuranceLift():
-    effect = loadParticleFile('pixieDrop.ptf')
+def __makeInsuranceLift() -> ParticleEffect:
+    effect: ParticleEffect = loadParticleFile('pixieDrop.ptf')
     particles = effect.getParticlesNamed('particles-1')
-    particles.renderer.setCenterColor(Vec4(0, 1, 0.078, 0.9))
-    particles.renderer.setEdgeColor(Vec4(0, 1, 0.078, 0.6))
+    particles.renderer.setCenterColor(Vec4(0.0, 1.0, 0.078, 0.9))
+    particles.renderer.setEdgeColor(Vec4(0.0, 1.0, 0.078, 0.6))
     particles.emitter.setRadius(0.01)
-    effect.setHpr(0, 180, 0)
-    effect.setPos(0, 0, 0)
+    effect.setHpr(0.0, 180.0, 0.0)
+    effect.setPos(0.0, 0.0, 0.0)
     return effect
 
-def __makeSyphonLift():
-    effect = loadParticleFile('pixieDrop.ptf')
+def __makeSyphonLift() -> ParticleEffect:
+    effect: ParticleEffect = loadParticleFile('pixieDrop.ptf')
     particles = effect.getParticlesNamed('particles-1')
-    particles.renderer.setCenterColor(Vec4(1, 0, 0, 0.9))
-    particles.renderer.setEdgeColor(Vec4(1, 0, 0, 0.6))
+    particles.renderer.setCenterColor(Vec4(1.0, 0.0, 0.0, 0.9))
+    particles.renderer.setEdgeColor(Vec4(1.0, 0.0, 0.0, 0.6))
     particles.emitter.setRadius(0.01)
-    effect.setHpr(0, 180, 0)
-    effect.setPos(0, 0, 0)
-    return effect
-
-
-def __makePoisonLift():
-    effect = loadParticleFile('pixieDrop.ptf')
-    particles = effect.getParticlesNamed('particles-1')
-    particles.renderer.setCenterColor(Vec4(0, 1, 0, 1))
-    particles.renderer.setEdgeColor(Vec4(0, 1, 0, 1))
-    particles.emitter.setRadius(0.01)
-    effect.setHpr(0, 180, 0)
-    effect.setPos(0, 0, 0)
+    effect.setHpr(0.0, 180.0, 0.0)
+    effect.setPos(0.0, 0.0, 0.0)
     return effect
 
 
-def __makeSprayLift():
-    effect = loadParticleFile('pixieDrop.ptf')
+def __makePoisonLift() -> ParticleEffect:
+    effect: ParticleEffect = loadParticleFile('pixieDrop.ptf')
     particles = effect.getParticlesNamed('particles-1')
-    particles.renderer.setCenterColor(Vec4(0.5, 1, 1, 1))
-    particles.renderer.setEdgeColor(Vec4(0.5, 1, 1, 1))
+    particles.renderer.setCenterColor(Vec4(0.0, 1.0, 0.0, 1.0))
+    particles.renderer.setEdgeColor(Vec4(0.0, 1.0, 0.0, 1.0))
     particles.emitter.setRadius(0.01)
-    effect.setHpr(0, 180, 0)
-    effect.setPos(0, 0, 0)
+    effect.setHpr(0.0, 180.0, 0.0)
+    effect.setPos(0.0, 0.0, 0.0)
     return effect
 
 
-def cleanupSystem(effect, duration=3.0, instant=False):
+def __makeSprayLift() -> ParticleEffect:
+    effect: ParticleEffect = loadParticleFile('pixieDrop.ptf')
+    particles = effect.getParticlesNamed('particles-1')
+    particles.renderer.setCenterColor(Vec4(0.5, 1.0, 1.0, 1.0))
+    particles.renderer.setEdgeColor(Vec4(0.5, 1.0, 1.0, 1.0))
+    particles.emitter.setRadius(0.01)
+    effect.setHpr(0.0, 180.0, 0.0)
+    effect.setPos(0.0, 0.0, 0.0)
+    return effect
+
+
+def cleanupSystem(effect: ParticleEffect, duration: float = 3.0, instant: bool = False) -> None:
     """
     Cleans up a particle system cleanly.
     """

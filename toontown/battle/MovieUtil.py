@@ -2566,7 +2566,7 @@ def shortCircuitTrack(suit, battle=None):
         Func(ashPile.detachNode)
     )
 
-    finalTrack = Sequence(suitTrack, Func(BattleParticles.cleanupSystem, ashEffect, 2), Wait(1.2), Parallel(hideAshPile, Func(suit.hide)))
+    finalTrack = Sequence(suitTrack, Func(BattleParticles.cleanupSystem, ashEffect, 2.0), Wait(1.2), Parallel(hideAshPile, Func(suit.hide)))
     deathHolderTrack.append(finalTrack)
     return deathHolderTrack
 
