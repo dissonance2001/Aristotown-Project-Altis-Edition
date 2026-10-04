@@ -3217,7 +3217,7 @@ def doFingerWag(attack):
             particleEffect.setHpr(-90.0, -60.0, 180.0)
         elif suit.dna.name == "p":
             particleEffect.setPos(0.167, 1.4, 3.6)
-        elif suit.dna.name == "pp":
+        elif suit.dna.name in ('pp', 'qc', 'nb'):
             particleEffect.setPos(0.167, 1.0, 4.1)
         elif suit.dna.name == "pf":
             particleEffect.setPos(0.167, 1.4, 4.65)
