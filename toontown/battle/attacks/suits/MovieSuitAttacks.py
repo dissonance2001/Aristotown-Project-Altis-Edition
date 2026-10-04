@@ -5639,7 +5639,7 @@ def doPennyPinch(attack):
     target = attack['target']
     dmg = target[0]['hp']
     coinTypes = ['bronze', 'silver', 'gold']
-    bill = loader.loadModel('phase_3.5/models/props/cc_m_prp_gen_coin_' + random.choice(coinTypes) + '.bam')
+    bill = globalPropPool.getProp('coin_' + random.choice(coinTypes))
     suitTrack = getSuitTrack(attack)
     billPosPoints = [Point3(-0.3039073806078143, 0.30390738060781786, -0.390738060781473), VBase3(-91.17221418234442, -50.79594790159189, 0)]
     billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.25, 1.0, scaleUpPoint=Point3(1.25, 1.25, 1.25))
