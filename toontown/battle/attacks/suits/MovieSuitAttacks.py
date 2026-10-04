@@ -6671,26 +6671,15 @@ def doFired(attack: dict) -> MetaInterval:
     battle = attack['battle']
     targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
-    suitTrack = getSuitTrack(attack, playRate=1.25)
-    baseFlameTracks = Parallel()
-    flameTracks = Parallel()
-    flecksTracks = Parallel()
-    baseFlameSmallTracks = Parallel()
-    flameSmallTracks = Parallel()
-    flecksSmallTracks = Parallel()
+    suitTrack: Sequence = getSuitTrack(attack)
+    flameTracks: tuple[Sequence, ...] = ()
     colorTracks: tuple[Sequence, ...] = ()
     damageAnims = []
-    damageAnims.append(['cringe',
-                        0.01,
-                        0.7,
-                        0.62])
-    damageAnims.append(['slip-forward',
-                        1e-05,
-                        0.4,
-                        1.2])
+    damageAnims.append(['cringe', 0.01, 0.7, 0.62])
+    damageAnims.append(['slip-forward', 1e-05, 0.4, 1.2])
     damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.8, startTime=1.2))
-    toonTracks = getToonTracks(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_hot_air.ogg', delay=1.0, node=suit)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep'])
+    soundTrack: Sequence = getSoundTrack('SA_hot_air.ogg', delay=1.0, node=suit)
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -6715,24 +6704,20 @@ def doFired(attack: dict) -> MetaInterval:
         baseFlameSmall.setScale(0.7)
         flameSmall.setScale(0.7)
         flecksSmall.setScale(0.7)
-        baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 3.9, (baseFlameEffect, toon, 0), softStop=-1.0)
-        flameTrack = getPartTrack(flameEffect, 1.0, 3.9, (flameEffect, toon, 0), softStop=-1.0)
+        baseFlameTrack = getPartTrack(baseFlameEffect, 1.0, 2.9, (baseFlameEffect, toon, 0), softStop=-1.0)
+        flameTrack = getPartTrack(flameEffect, 1.0, 2.9, (flameEffect, toon, 0), softStop=-1.0)
         flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, (flecksEffect, toon, 0), softStop=-1.0)
         baseFlameSmallTrack = getPartTrack(baseFlameSmall, 1.0, 2.9, (baseFlameSmall, toon, 0), softStop=-1.0)
         flameSmallTrack = getPartTrack(flameSmall, 1.0, 2.9, (flameSmall, toon, 0), softStop=-1.0)
         flecksSmallTrack = getPartTrack(flecksSmall, 1.8, 2.1, (flecksSmall, toon, 0), softStop=-1.0)
         if dmg > 0:
-            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
-            baseFlameTracks.append(baseFlameTrack)
-            flameTracks.append(flameTrack)
-            flecksTracks.append(flecksTrack)
+            colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.8, Vec4(0.0, 0.0, 0.0, 1.0))
+            flameTracks += (baseFlameTrack, flameTrack, flecksTrack)
             colorTracks += (colorTrack,)
         else:
-            baseFlameTracks.append(baseFlameSmallTrack)
-            flameTracks.append(flameSmallTrack)
-            flecksTracks.append(flecksSmallTrack)
+            flameTracks += (baseFlameSmallTrack, flameSmallTrack, flecksSmallTrack)
 
-    return Parallel(suitTrack, baseFlameTracks, flameTracks, flecksTracks, toonTracks, *colorTracks, soundTrack)
+    return Parallel(suitTrack, *flameTracks, toonTracks, *colorTracks, soundTrack)
 
 
 def doAudit(attack: dict) -> MetaInterval:

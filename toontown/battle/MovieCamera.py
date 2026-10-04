@@ -835,7 +835,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'FingerWag':
         camTrack.append(defaultCamera(openShotDuration=2.2))
     elif name == 'Fired':
-        camTrack.append(defaultCamera(openShotDuration=0.5))
+        camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'FountainPen':
         camTrack.append(defaultCamera(openShotDuration=1.75))
     elif name == 'FreezeAssets':
