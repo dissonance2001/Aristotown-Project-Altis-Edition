@@ -8220,7 +8220,7 @@ def doThrowBook(attack: dict) -> MetaInterval:
      ['slip-forward', 0.01, 0.6, 0.85],
      ['slip-forward', 0.01, 1.51]]
     toonTracks: Parallel = getToonTracks(attack, damageDelay=4.35 / playRate, splicedDamageAnims=damageAnims, dodgeDelay=2.4 / playRate, dodgeAnimNames=['sidestep'], showDamageExtraTime=0.4, showMissedExtraTime=1.3, damageAnimPlayRate=1.25, dodgeAnimPlayRate=1.2)
-    soundTrack = getSoundTrack('SA_throw_book.ogg', delay=0.4, node=suit)
+    soundTrack: Sequence = getSoundTrack('SA_throw_book.ogg', delay=0.4, node=suit)
     return Parallel(suitTrack, toonTracks, soundTrack, *propTracks)
 
 def doCloudStorage(attack):
