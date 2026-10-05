@@ -4818,8 +4818,9 @@ def doHeadShrink(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
-    damageDelay: float = 2.1
-    dodgeDelay: float = 1.4
+    playRate: float = attack['playRate']
+    damageDelay: float = 2.1 / playRate
+    dodgeDelay: float = 1.4 / playRate
     suitTrack: Sequence = getSuitTrack(attack)
     partTracks: tuple[Sequence, ...] = ()
     shrinkTracks: tuple[Sequence, ...] = ()
@@ -4833,7 +4834,7 @@ def doHeadShrink(attack: dict) -> MetaInterval:
         sprayNode.setPos(battle.getActorPosHpr(suit)[0])
         sprayNode.headsUp(toon)
         sprayTrack = Sequence(
-            getPartTrack(shrinkSpray, 0.3, 1.4, (shrinkSpray, sprayNode, 0), softStop=-1.0),
+            getPartTrack(shrinkSpray, 0.3 / playRate, (1.4 / playRate) + 1.0, (shrinkSpray, sprayNode, 0), softStop=-1.0),
             Func(sprayNode.removeNode)
         )
         shrinkCloud.reparentTo(battle)
@@ -4856,19 +4857,19 @@ def doHeadShrink(attack: dict) -> MetaInterval:
          Point3(x, y, z)]
         circleTrack = Sequence()
         for point in cloudPoints:
-            circleTrack.append(LerpPosInterval(shrinkCloud, 0.14, point, other=battle))
+            circleTrack.append(LerpPosInterval(shrinkCloud, 0.14 / playRate, point, other=battle))
 
         cloudTrack = Sequence()
-        cloudTrack.append(Wait(1.42))
+        cloudTrack.append(Wait(1.42 / playRate))
         cloudTrack.append(Func(battle.movie.needRestoreParticleEffect, shrinkCloud))
         cloudTrack.append(Func(shrinkCloud.start, battle))
         cloudTrack.append(circleTrack)
         cloudTrack.append(circleTrack)
-        cloudTrack.append(LerpFunctionInterval(shrinkCloud.setAlphaScale, fromData=1, toData=0, duration=0.7))
+        cloudTrack.append(LerpFunctionInterval(shrinkCloud.setAlphaScale, fromData=1, toData=0, duration=0.7 / playRate))
         cloudTrack.append(Func(shrinkCloud.cleanup))
         cloudTrack.append(Func(battle.movie.clearRestoreParticleEffect, shrinkCloud))
-        shrinkDelay = 0.8
-        shrinkDuration = 1.1
+        shrinkDelay = 0.8 / playRate
+        shrinkDuration = 1.1 / playRate
         shrinkTrack = Sequence()
         if dmg > 0:
             headParts = toon.getHeadParts()
@@ -4885,21 +4886,21 @@ def doHeadShrink(attack: dict) -> MetaInterval:
 
             shrinkTrack.append(Func(battle.movie.needRestoreHeadScale))
             shrinkTrack.append(scaleHeadParallel(0.6, shrinkDuration))
-            shrinkTrack.append(Wait(0.3))
-            shrinkTrack.append(scaleHeadParallel(initialScale * 3.2, 0.4))
-            shrinkTrack.append(scaleHeadParallel(initialScale * 0.7, 0.4))
-            shrinkTrack.append(scaleHeadParallel(initialScale * 2.5, 0.3))
-            shrinkTrack.append(scaleHeadParallel(initialScale * 0.8, 0.3))
-            shrinkTrack.append(scaleHeadParallel(initialScale * 1.9, 0.2))
-            shrinkTrack.append(scaleHeadParallel(initialScale * 0.85, 0.2))
-            shrinkTrack.append(scaleHeadParallel(initialScale * 1.7, 0.15))
-            shrinkTrack.append(scaleHeadParallel(initialScale * 0.9, 0.15))
-            shrinkTrack.append(scaleHeadParallel(initialScale * 1.3, 0.1))
-            shrinkTrack.append(scaleHeadParallel(initialScale, 0.1))
+            shrinkTrack.append(Wait(0.3 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 3.2, 0.4 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 0.7, 0.4 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 2.5, 0.3 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 0.8, 0.3 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 1.9, 0.2 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 0.85, 0.2 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 1.7, 0.15 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 0.9, 0.15 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale * 1.3, 0.1 / playRate))
+            shrinkTrack.append(scaleHeadParallel(initialScale, 0.1 / playRate))
             shrinkTrack.append(Func(battle.movie.clearRestoreHeadScale))
-            shrinkTrack.append(Wait(0.7))
+            shrinkTrack.append(Wait(0.7 / playRate))
             shrinkTracks += (shrinkTrack,)
-        dropTrack = getPartTrack(shrinkDrop, 1.5, 2.5, (shrinkDrop, toon, 0), softStop=-1.0)
+        dropTrack = getPartTrack(shrinkDrop, 1.5 / playRate, (2.5 / playRate) + 1.0, (shrinkDrop, toon, 0), softStop=-1.0)
         partTracks += (sprayTrack, cloudTrack, dropTrack)
 
     damageAnims = []
@@ -4910,8 +4911,8 @@ def doHeadShrink(attack: dict) -> MetaInterval:
     toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], dodgeAnimPlayRate=1.2)
     if hitAtleastOneToon(targets):
         soundTrack: Parallel = Parallel(
-            getSoundTrack('SA_head_shrink_only.ogg', delay=2.1, node=suit),
-            getSoundTrack('SA_head_grow_back_only.ogg', delay=4.0, node=suit, playRate=1.05)
+            getSoundTrack('SA_head_shrink_only.ogg', delay=2.1 / playRate, node=suit),
+            getSoundTrack('SA_head_grow_back_only.ogg', delay=4.0 / playRate, node=suit, playRate=1.05)
         )
         return Parallel(suitTrack, *partTracks, toonTracks, *shrinkTracks, soundTrack)
     else:
