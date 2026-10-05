@@ -4017,8 +4017,8 @@ def doDemotion(attack: dict) -> MetaInterval:
             getPartTrack(sprayEffect, 0.7, 2.1, (sprayEffect, sprayNode, 0), softStop=-1.0),
             Func(sprayNode.removeNode)
         )
-        partTrack2 = getPartTrack(freezeEffect, 1.4, 3.6, (freezeEffect, toon, 0), softStop=-1.0)
-        partTrack3 = getPartTrack(unFreezeEffect, 4.65, 0.5, (unFreezeEffect, toon, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(freezeEffect, 1.4, 4.6, (freezeEffect, toon, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(unFreezeEffect, 4.65, 1.5, (unFreezeEffect, toon, 0), softStop=-1.0)
         partTracks += (partTrack,)
         if dmg > 0:
             partTracks += (partTrack2, partTrack3)
