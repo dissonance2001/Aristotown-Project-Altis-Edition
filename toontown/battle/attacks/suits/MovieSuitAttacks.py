@@ -4084,102 +4084,100 @@ def doDataBreach(attack):
 def doCanned(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    target: list[dict] = attack['target']
+    targets: list[dict] = attack['target']
     playRate: float = attack['playRate']
-    toon = target[0]['toon']
-    dmg = target[0]['hp']
-    hips = toon.getHipsParts()
-    propDelay: float = 0.8 / playRate
     suitDelay: float = 1.83 / playRate
     dodgeDelay: float = 2.1 / playRate
     throwDuration: float = 1.5 / playRate
-    can = globalPropPool.getProp('can')
-    dust = globalPropPool.getProp('dust')
-    dust.setBillboardPointWorld(2)
-    scale: float = 18.0
-    torso = toon.style.torso
-    torso = torso[0]
-    if torso == 's':
-        scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 1.9975)
-    elif torso == 'm':
-        scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 1.7975)
-    elif torso == 'l':
-        scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 2.31)
     canHpr = VBase3(-173.47, -0.42, 162.09)
     suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    canTracks: tuple[Sequence, ...] = ()
     posPoints = [Point3(-0.1, -0.1, 0.02), VBase3(-10.584, 11.945, -161.684)]
-    throwTrack: Sequence = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, propDelay, Point3(6.0, 6.0, 6.0), scaleUpTime=0.5 / playRate))
-    propDelay = propDelay + (0.5 / playRate)
-    throwTrack.append(Wait(suitDelay))
-    hitPoint = toon.getPos(battle)
-    hitPoint.setX(hitPoint.getX() + 1.1)
-    hitPoint.setY(hitPoint.getY() - (0.5 if dmg > 0 else 1.4))
-    hitPoint.setZ(hitPoint.getZ() + toon.height + 1.1)
-    throwTrack.append(Func(battle.movie.needRestoreRenderProp, can))
-    throwTrack.append(getThrowTrack(can, hitPoint, duration=throwDuration, parent=battle))
-    scaleTrack: Sequence
-    hprTrack: Sequence
-    soundTrack: Union[Track, Sequence]
-    dustTrack: Sequence
-    if dmg > 0:
-        throwTrack.append(Func(battle.movie.needRestoreHips))
-        throwTrack.append(Func(can.wrtReparentTo, hips[0]))
-        throwTrack.append(Wait(2.4 / playRate))
-        throwTrack.append(Func(battle.movie.clearRestoreHips))
-        scaleTrack = Sequence(
-            Wait(propDelay + suitDelay),
-            LerpScaleInterval(can, throwDuration, scaleUpPoint),
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        hips = toon.getHipsParts()
+        propDelay = 0.8 / playRate
+        can = globalPropPool.getProp('can')
+        dust = globalPropPool.getProp('dust')
+        dust.setBillboardPointWorld(2)
+        scale = 18.0
+        torso = toon.style.torso
+        torso = torso[0]
+        if torso == 's':
+            scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 1.9975)
+        elif torso == 'm':
+            scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 1.7975)
+        elif torso == 'l':
+            scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 2.31)
+        throwTrack: Sequence = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, propDelay, Point3(6.0, 6.0, 6.0), scaleUpTime=0.5 / playRate))
+        propDelay = propDelay + (0.5 / playRate)
+        throwTrack.append(Wait(suitDelay))
+        hitPoint = toon.getPos(battle)
+        hitPoint.setX(hitPoint.getX() + 1.1)
+        hitPoint.setY(hitPoint.getY() - (0.5 if dmg > 0 else 1.4))
+        hitPoint.setZ(hitPoint.getZ() + toon.height + 1.1)
+        throwTrack.append(Func(battle.movie.needRestoreRenderProp, can))
+        throwTrack.append(getThrowTrack(can, hitPoint, duration=throwDuration, parent=battle))
+        if dmg > 0:
+            throwTrack.append(Func(battle.movie.needRestoreHips))
+            throwTrack.append(Func(can.wrtReparentTo, hips[0]))
+            throwTrack.append(Wait(2.4 / playRate))
+            throwTrack.append(Func(battle.movie.clearRestoreHips))
+            scaleTrack = Sequence(
+                Wait(propDelay + suitDelay),
+                LerpScaleInterval(can, throwDuration, scaleUpPoint),
+            )
+            hprTrack = Sequence(
+                Wait(propDelay + suitDelay),
+                LerpHprInterval(can, throwDuration, canHpr)
+            )
+            dustTrack = Sequence(
+                Wait(4.45 / playRate),
+                Func(dust.reparentTo, toon),
+                ActorInterval(dust, 'dust'),
+                Func(dust.cleanup)
+            )
+        else:
+            land = toon.getPos(battle)
+            land = Point3(land.getX() + 1.1, land.getY() - 2.9, land.getZ() + 0.7)
+            bouncePoint1 = Point3(land.getX(), land.getY() - 1.0, land.getZ() + 2.5)
+            bouncePoint2 = Point3(land.getX(), land.getY() - 1.7, land.getZ() - 0.2)
+            bouncePoint3 = Point3(land.getX(), land.getY() - 2.5, land.getZ() + 1.5)
+            bouncePoint4 = Point3(land.getX(), land.getY() - 3.1, land.getZ() + 0.3)
+            throwTrack.append(LerpPosInterval(can, 0.4, land))
+            throwTrack.append(LerpPosInterval(can, 0.4, bouncePoint1))
+            throwTrack.append(LerpPosInterval(can, 0.3, bouncePoint2))
+            throwTrack.append(LerpPosInterval(can, 0.3, bouncePoint3))
+            throwTrack.append(LerpPosInterval(can, 0.3, bouncePoint4))
+            throwTrack.append(Wait(0.7 / playRate))
+            throwTrack.append(LerpScaleInterval(can, 0.25, MovieUtil.PNT3_NEARZERO))
+            scaleTrack = Sequence(
+                Wait(propDelay + suitDelay),
+                LerpScaleInterval(can, throwDuration, Point3(11.0, 11.0, 11.0)),
+            )
+            hprTrack = Sequence(
+                Wait(propDelay + suitDelay),
+                LerpHprInterval(can, throwDuration, canHpr),
+                Wait(0.4 / playRate),
+                LerpHprInterval(can, 0.4, Point3(83.27, 19.52, -177.92)),
+                LerpHprInterval(can, 0.3, Point3(95.24, -72.09, 88.65)),
+                LerpHprInterval(can, 0.2, Point3(-96.34, -2.63, 179.89))
+            )
+            dustTrack = Sequence()
+        canTrack: Sequence = Sequence(
+            Parallel(throwTrack, scaleTrack, hprTrack),
+            Func(MovieUtil.removeProp, can),
+            Func(battle.movie.clearRenderProp, can)
         )
-        hprTrack = Sequence(
-            Wait(propDelay + suitDelay),
-            LerpHprInterval(can, throwDuration, canHpr)
-        )
-        soundTrack = Track(
-            (2.6 / playRate, SoundInterval(globalBattleSoundCache.getSound('SA_canned_tossup_only.ogg'), node=suit)),
-            (4.45 / playRate, SoundInterval(globalBattleSoundCache.getSound('SA_canned_impact_only.ogg'), node=suit))
-        )
-        dustTrack = Sequence(
-            Wait(4.45 / playRate),
-            Func(dust.reparentTo, toon),
-            ActorInterval(dust, 'dust'),
-            Func(dust.cleanup)
-        )
-    else:
-        land = toon.getPos(battle)
-        land = Point3(land.getX() + 1.1, land.getY() - 2.9, land.getZ() + 0.7)
-        bouncePoint1 = Point3(land.getX(), land.getY() - 1.0, land.getZ() + 2.5)
-        bouncePoint2 = Point3(land.getX(), land.getY() - 1.7, land.getZ() - 0.2)
-        bouncePoint3 = Point3(land.getX(), land.getY() - 2.5, land.getZ() + 1.5)
-        bouncePoint4 = Point3(land.getX(), land.getY() - 3.1, land.getZ() + 0.3)
-        throwTrack.append(LerpPosInterval(can, 0.4, land))
-        throwTrack.append(LerpPosInterval(can, 0.4, bouncePoint1))
-        throwTrack.append(LerpPosInterval(can, 0.3, bouncePoint2))
-        throwTrack.append(LerpPosInterval(can, 0.3, bouncePoint3))
-        throwTrack.append(LerpPosInterval(can, 0.3, bouncePoint4))
-        throwTrack.append(Wait(0.7 / playRate))
-        throwTrack.append(LerpScaleInterval(can, 0.25, MovieUtil.PNT3_NEARZERO))
-        scaleTrack = Sequence(
-            Wait(propDelay + suitDelay),
-            LerpScaleInterval(can, throwDuration, Point3(11.0, 11.0, 11.0)),
-        )
-        hprTrack = Sequence(
-            Wait(propDelay + suitDelay),
-            LerpHprInterval(can, throwDuration, canHpr),
-            Wait(0.4 / playRate),
-            LerpHprInterval(can, 0.4, Point3(83.27, 19.52, -177.92)),
-            LerpHprInterval(can, 0.3, Point3(95.24, -72.09, 88.65)),
-            LerpHprInterval(can, 0.2, Point3(-96.34, -2.63, 179.89))
-        )
-        soundTrack = getSoundTrack('SA_canned_tossup_only.ogg', delay=2.6 / playRate, node=suit)
-        dustTrack = Sequence()
-    canTrack: Sequence = Sequence(
-        Parallel(throwTrack, scaleTrack, hprTrack),
-        Func(MovieUtil.removeProp, can),
-        Func(battle.movie.clearRenderProp, can)
-    )
+        canTracks += (canTrack, dustTrack)
+
     damageAnims = [['slip-backward', 0.01, 0.45]]
-    toonTrack = getToonTrack(attack, damageDelay=propDelay + suitDelay + throwDuration, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], showDamageExtraTime=0.3, showMissedExtraTime=1.1)
-    return Parallel(suitTrack, toonTrack, canTrack, soundTrack, dustTrack)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=propDelay + suitDelay + throwDuration, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['duck'], showDamageExtraTime=0.3, showMissedExtraTime=1.1)
+    soundTrack: Track = Track((2.6 / playRate, SoundInterval(globalBattleSoundCache.getSound('SA_canned_tossup_only.ogg'), node=suit)))
+    if hitAtleastOneToon(targets):
+        soundTrack.append((4.45 / playRate, SoundInterval(globalBattleSoundCache.getSound('SA_canned_impact_only.ogg'), node=suit)))
+    return Parallel(suitTrack, toonTracks, *canTracks, soundTrack)
 
 
 def doDownsize(attack: dict) -> MetaInterval:
