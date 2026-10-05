@@ -2749,10 +2749,10 @@ def doFillWithLead(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, pencilPropTrack, sharpenerPropTrack, *sprayTracks, *torsoTracks, *colorTracks, toonTracks)
 
 
-def doBeguile(attack):
+def doBeguile(attack: dict) -> MetaInterval:
     suit = attack['suit']
-    targets = attack['target']
-    if base.config.GetBool('want-new-cogs', False):
+    targets: list[dict] = attack['target']
+    if ConfigVariableBool('want-new-cogs', False).getValue():
         head = suit.find('**/to_head')
         if head.isEmpty():
             head = suit.find('**/joint_head')
@@ -2761,22 +2761,23 @@ def doBeguile(attack):
     sparkle = globalPropPool.getProp('smile')
     suitSplicedAnims = [['glower', 0.01, 0.01, 1.5],
      ['glower', 2.0, 1.51]]
-    suitTrack = Sequence(getSuitAnimTrack(attack))
-    if suit.dna.name == 'videog':
-        sparklePosPoints = [Point3(-0.1, 0.25, -1.5), VBase3(360, 0, 0)]
+    suitTrack: Sequence = getSuitAnimTrack(attack)
+    if suit.dna.name in ('bcaster', 'videog'):
+        sparklePosPoints = [Point3(-0.1, 0.25, -1.5), VBase3(360.0, 0.0, 0.0)]
     elif suit.dna.name == 'hustle':
-        sparklePosPoints = [Point3(-0.05, 0.65, -1.5), VBase3(335, 0, 0)]
+        sparklePosPoints = [Point3(-0.05, 0.65, -1.5), VBase3(335.0, 0.0, 0.0)]
     else:
-        sparklePosPoints = [Point3(-0.1, 0.35, -1.5), VBase3(335, 0, 0)]
-    sparklePropTrack = Sequence(Wait(1.0))
+        sparklePosPoints = [Point3(-0.1, 0.35, -1.5), VBase3(335.0, 0.0, 0.0)]
+    sparklePropTrack: Sequence = Sequence(Wait(1.0))
     sparklePropTrack.append(Func(__showProp, sparkle, head, sparklePosPoints[0], sparklePosPoints[1]))
     sparklePropTrack.append(Func(sparkle.find('**/scale_joint_sign').hide))
     sparklePropTrack.append(ActorInterval(sparkle, 'smile', startFrame=39))
     sparklePropTrack.append(Func(MovieUtil.removeProp, sparkle))
     dodgeAnims = [['duck', 1e-06, 0.8]]
-    toonTracks = getToonTracks(attack, damageDelay=2.1, damageAnimNames=['cringe'], dodgeDelay=1.7, splicedDodgeAnims=dodgeAnims)
-    soundTrack = getSoundTrack('ttr_s_ene_bat_beguile%s.ogg' % ('' if hitAtleastOneToon(targets) else 'Miss'), node=suit)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=2.1, damageAnimNames=['cringe'], dodgeDelay=1.7, splicedDodgeAnims=dodgeAnims)
+    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_beguile{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", node=suit)
     return Parallel(suitTrack, sparklePropTrack, toonTracks, soundTrack)
+
 
 def doHostileTakeover(attack):
     suit = attack['suit']
