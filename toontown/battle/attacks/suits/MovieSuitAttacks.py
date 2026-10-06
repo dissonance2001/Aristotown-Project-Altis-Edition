@@ -8955,58 +8955,65 @@ def doLegalese(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, soundTrack, *sprayTracks)
 
 
-def doPeckingOrder(attack):
+def doPeckingOrder(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    throwDuration = 3.03
-    throwDelay = 2
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    numBirds = random.randint(10, 20)
-    birdTracks = Parallel()
-    propDelay = 1.5
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
+    throwDelay: float = 3.2 / playRate
+    damageDelay: float = 4.2 / playRate
+    dodgeDelay: float = 2.8 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    birdTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        numBirds = random.randint(4, 7)
         for i in range(0, numBirds):
             next = globalPropPool.getProp('bird')
-            #next.setScale(0.01)
-            #next.reparentTo(suit.getRightHand())
-          #  next.setPos(random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3)
-            toonPos = toon.getPos(battle)
-
+            next.setScale(0.01)
+            next.reparentTo(suit.getRightHand())
+            next.setPos(
+                random.random() * 0.6 - 0.3,
+                random.random() * 0.6 - 0.3,
+                random.random() * 0.6 - 0.3,
+            )
             if dmg > 0:
                 hitPoint = Point3(
-                    toonPos[0] + (random.random() * 1.5 - 0.75),
-                    toonPos[1] + (random.random() * 1.0 - 0.5),
-                    toonPos[2] + toon.getHeight() * 0.5 + (random.random() * 1.0 - 0.5)
+                    toon.getX(battle) + lerp(-2.5, 2.5, random.random()),
+                    random.random() * 2.0 - 1.0 - 6.0,
+                    random.random() * 3.0 - 1.5 + toon.getHeight() - 0.9,
                 )
             else:
                 hitPoint = Point3(
-                    toonPos[0] + (random.random() * 3.0 - 1.5),
-                    toonPos[1] - 3.0 + (random.random() * 2.0 - 1.0),
-                    toonPos[2] + toon.getHeight() * 0.5 + (random.random() * 2.0 - 1.0)
+                    toon.getX(battle) + (random.random() * 2.0 - 1.0),
+                    random.random() * 4.0 - 2.0 - 15.0,
+                    random.random() * 4.0 - 2.0 + 2.2,
                 )
-            birdTrack = Sequence(Wait(throwDelay), Func(next.setScale, 0.01), Func(next.reparentTo, suit.getRightHand()),
-                                 Func(next.setPos, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3, random.random() * 0.6 - 0.3), Func(battle.movie.needRestoreRenderProp, next),
-                                 Func(next.wrtReparentTo, battle), Func(next.setHpr, Point3(90, 20, 0)),
-                                 LerpPosInterval(next, 0.5, hitPoint))
-            scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(next, 0.5, Point3(9, 9, 9)), LerpScaleInterval(next, .5, Point3(0, 0, 0)))
-            birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(MovieUtil.removeProp, next)))
-    damageAnims = []
-    damageAnims.append(['cringe',
-                        0.01,
-                        0.14,
-                        0.21])
-    damageAnims.append(['cringe',
-                        0.01,
-                        0.14,
-                        0.13])
-    damageAnims.append(['cringe', 0.01, 0.43])
-    toonTrack = getToonTracks(attack, damageDelay=2.5, splicedDamageAnims=damageAnims, dodgeDelay=0.75,
-                              dodgeAnimNames=['duck'], showMissedExtraTime=1.1)
-    soundTrack = getSoundTrack('tt_s_ara_cfg_eagleCry.ogg', delay=2, node=suit)
-    return Parallel(suitTrack, toonTrack, soundTrack, birdTracks)
+            birdTrack = Sequence(
+                Wait(throwDelay),
+                Func(battle.movie.needRestoreRenderProp, next),
+                Func(next.wrtReparentTo, battle),
+                Func(next.setHpr, Point3(90.0, 20.0, 0.0)),
+                LerpPosInterval(next, 1.1 / playRate, hitPoint),
+            )
+            scaleTrack = Sequence(
+                Wait(throwDelay),
+                LerpScaleInterval(next, 0.15 / playRate, Point3(9.0, 9.0, 9.0))
+            )
+            removeProp = Sequence(
+                Wait(damageDelay),
+                LerpScaleInterval(next, 0.6 / playRate, 0.01, blendType='easeIn'),
+                Func(MovieUtil.removeProp, next),
+            )
+            birdTracks += (birdTrack, scaleTrack, removeProp)
+
+    damageAnims = [['cringe', 0.01, 0.14, 0.21],
+     ['cringe', 0.01, 0.14, 0.13],
+     ['cringe', 0.01, 0.43]]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showMissedExtraTime=1.1, dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('tt_s_ara_cfg_eagleCry.ogg', delay=2.95 / playRate, node=suit)
+    return Parallel(suitTrack, toonTracks, *birdTracks, soundTrack)
 
 
 def doStumpSpeech(attack: dict) -> MetaInterval:

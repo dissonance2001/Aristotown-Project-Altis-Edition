@@ -881,7 +881,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ParadigmShift':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'PeckingOrder':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=2.8 / playRate))
     elif name == 'PickPocket':
         camTrack.append(allGroupLowShot(suit, attackDuration, battle))
     elif name == 'StolenScene':
