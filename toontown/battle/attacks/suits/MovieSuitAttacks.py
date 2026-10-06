@@ -397,8 +397,6 @@ def doSuitAttack(attack):
         suitTrack = doCloudStorage(attack)
     elif name == 'DoubleCross':
         suitTrack = doDoubleCross(attack)
-    elif name == 'Forecast':
-        suitTrack = doBrainStorm(attack)
     elif name == 'GoldDust':
         suitTrack = doGoldDust(attack)
     elif name == 'GoldRush':
@@ -418,7 +416,7 @@ def doSuitAttack(attack):
             suitTrack = doBite(attack)
     elif name == 'BounceCheck':
         suitTrack = doBounceCheck(attack)
-    elif name == 'BrainStorm':
+    elif name in ('BrainStorm', 'Forecast'):
         suitTrack = doBrainStorm(attack)
     elif name == 'BuzzWord':
         suitTrack = doBuzzWord(attack)
@@ -506,12 +504,14 @@ def doSuitAttack(attack):
         suitTrack = doLegalese(attack)
     elif name == 'Liquidate':
         suitTrack = doLiquidate(attack)
-    elif name == 'MarketCrash':
+    elif name in ('MarketCrash', 'Newspaper'):
         suitTrack = doMarketCrash(attack)
     elif name == 'MoneyTalks':
         suitTrack = doMoneyTalks(attack)
     elif name == 'MumboJumbo':
         suitTrack = doMumboJumbo(attack)
+    elif name in ('Novel', 'ThrowBook'):
+        suitTrack = doThrowBook(attack)
     elif name == 'ParadigmShift':
         if suit.isAngry:
             suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doParadigmShift(attack))
@@ -567,12 +567,6 @@ def doSuitAttack(attack):
         suitTrack = doTabulate(attack)
     elif name == 'TeeOff':
         suitTrack = doTeeOff(attack)
-    elif name == 'ThrowBook':
-        suitTrack = doThrowBook(attack)
-    elif name == 'Novel':
-        suitTrack = doThrowBook(attack)
-    elif name == 'Newspaper':
-        suitTrack = doMarketCrash(attack)
     elif name == 'TickingTimeBomb':
         suitTrack = doTickingTimeBomb(attack)
     elif name == 'Tremor':
