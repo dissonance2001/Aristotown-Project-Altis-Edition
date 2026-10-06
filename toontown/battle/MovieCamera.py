@@ -909,7 +909,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'RubOut':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Sacked':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=2.9 / playRate))
     elif name in ('Schmooze', 'TestSchmooze'):
         camTrack.append(defaultCamera(openShotDuration=3.0 / playRate))
     elif name == 'Shake':

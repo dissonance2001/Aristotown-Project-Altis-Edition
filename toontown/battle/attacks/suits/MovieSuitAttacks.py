@@ -4599,75 +4599,91 @@ def doReOrg(attack: dict) -> MetaInterval:
     toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.01, dodgeAnimNames=['duck'], showDamageExtraTime=2.1, showMissedExtraTime=2.0)
     return Parallel(suitTrack, *partTracks, toonTracks, allHeadTracks, allChestTracks)
 
-def doSacked(attack):
+def doSacked(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    target = attack['target']
-    dmg = target[0]['hp']
-    toon = target[0]['toon']
-    hips = toon.getHipsParts()
-    propDelay = 0.45
-    suitDelay = 1.43
-    throwDuration = 0.5
-    sack = globalPropPool.getProp('sandbag')
-    initialScale = Point3(0.5, 0.5, 0.5)
-    scaleUpPoint = Point3(0.5, 0.5, 0.5) * 4.0
-    sackHpr = VBase3(0, 0, 0)
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
-    posPoints = [Point3(-0.35, 0, 0), VBase3(0, 180, 0)]
-    sackAppearTrack = Sequence(getPropAppearTrack(sack, suit.getRightHand(), posPoints, propDelay, initialScale, scaleUpTime=0.25))
-    propDelay = propDelay + 0.2
-    sackAppearTrack.append(Wait(suitDelay))
-    hitPoint = toon.getPos(battle)
-    if dmg > 0:
-        hitPoint.setY(hitPoint.getY() + 0.9)
-    else:
-        hitPoint.setZ(hitPoint.getZ() - 0.2)
-    sackAppearTrack.append(Func(battle.movie.needRestoreRenderProp, sack))
-    sackAppearTrack.append(getThrowTrack(sack, hitPoint, duration=throwDuration, parent=battle, gravity=-200))
-    explodePosPoints = [Point3(0, 0, 0), MovieUtil.PNT3_ZERO]
-    if dmg > 0:
-        sack2 = MovieUtil.copyProp(sack)
-        splatName = 'dust'
-        splat = globalPropPool.getProp('dust')
-        explode = globalPropPool.getProp('dust')
-        explode.setTwoSided(True)
-        explode.setBillboardPointWorld(2)
-        explodeTrack = Sequence()
-        explodeTrack.append(
-            getPropAppearTrack(explode, toon, explodePosPoints, 0, Point3(3, 3, 3), scaleUpTime=0))
-        explodeTrack.append(Sequence(ActorInterval(explode, splatName), Func(explode.detachNode)))
-        hips1 = hips.getPath(2)
-        hips2 = hips.getPath(1)
-        sack2.hide()
-        sack2.reparentTo(battle)
-        sack2.setPos(Point3(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ()))
-        sack2.setScale(scaleUpPoint)
-        sack2.setHpr(sackHpr)
-        sackAppearTrack.append(Func(battle.movie.needRestoreHips))
-        sackAppearTrack.append(Func(sack.wrtReparentTo, hips1))
-        sackAppearTrack.append(Func(sack2.show))
-        sackAppearTrack.append(Func(sack2.wrtReparentTo, hips2))
-        sackAppearTrack.append(Func(MovieUtil.removeProp, sack2))
-        sackAppearTrack.append(Func(MovieUtil.removeProp, sack))
-        soundTrack = getSoundTrack('LB_evidence_miss.ogg', node=suit)
-        sackAppearTrack.append(Parallel(explodeTrack, soundTrack))
-        sackAppearTrack.append(Wait(2.4))
-        sackAppearTrack.append(Func(battle.movie.clearRestoreHips))
-        scaleTrack = Sequence(Wait(propDelay + suitDelay), LerpScaleInterval(sack, throwDuration, scaleUpPoint), Wait(1.8), LerpScaleInterval(sack, 0.3, MovieUtil.PNT3_NEARZERO))
-        hprTrack = Sequence(Wait(propDelay + suitDelay), LerpHprInterval(sack, throwDuration, sackHpr))
-        sackTrack = Sequence(Parallel(sackAppearTrack, scaleTrack, hprTrack), Func(MovieUtil.removeProp, sack), Func(battle.movie.clearRenderProp, sack))
-    else:
-        sackAppearTrack.append(Wait(1.1))
-        sackAppearTrack.append(LerpScaleInterval(sack, 0.3, MovieUtil.PNT3_NEARZERO))
-        sackTrack = Sequence(sackAppearTrack, Func(MovieUtil.removeProp, sack), Func(battle.movie.clearRenderProp, sack))
-    damageAnims = [['struggle',
-      0.01,
-      0.01,
-      0.7], ['slip-backward', 0.01, 0.45]]
-    soundTrack = getSoundTrack('SA_sacked.ogg', node=suit)
-    toonTrack = getToonTrack(attack, damageDelay=propDelay + suitDelay + throwDuration, splicedDamageAnims=damageAnims, dodgeDelay=1.0, dodgeAnimNames=['sidestep'], showDamageExtraTime=0.8, showMissedExtraTime=0.8)
-    return Parallel(suitTrack, toonTrack, soundTrack, sackTrack)
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
+    suitDelay: float = 47.0 / 24.0 / playRate
+    throwDuration: float = 0.7 / playRate
+    initialScale = Point3(0.4, 0.4, 0.4)
+    scaleUpPoint = Point3(1.2, 1.2, 1.2) * 2.0
+    sackHpr = VBase3(0.0, 45.0, 0.0)
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    posPoints = [Point3(-0.3, 0.0, 0.0), VBase3(-60.0, 0.0, 180.0)]
+    sackTracks: tuple[Sequence, ...] = ()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        hips = toon.getHipsParts()
+        propDelay = 0.85 / playRate
+
+        dust = globalPropPool.getProp('dust')
+        dust.setBillboardPointWorld(2)
+
+        sack = globalPropPool.getProp('sandbag')
+        sackAppearTrack = Sequence(getPropAppearTrack(sack, suit.getRightHand(), posPoints, propDelay, initialScale, scaleUpTime=0.2 / playRate))
+        propDelay = propDelay + (0.2 / playRate)
+        sackAppearTrack.append(Wait(suitDelay))
+        hitPoint = toon.getPos(battle)
+        if dmg > 0:
+            hitPoint.setX(hitPoint.getX() + 1.0)
+            hitPoint.setY(hitPoint.getY() + 0.9)
+            hitPoint.setZ(hitPoint.getZ() + (toon.height / 2.0))
+        else:
+            hitPoint.setZ(hitPoint.getZ() - 0.2)
+        sackAppearTrack.append(Func(battle.movie.needRestoreRenderProp, sack))
+        sackAppearTrack.append(getThrowTrack(sack, hitPoint, duration=throwDuration, parent=battle))
+        if dmg > 0:
+            sackAppearTrack.append(Func(battle.movie.needRestoreHips))
+            sackAppearTrack.append(Func(sack.wrtReparentTo, hips[0]))
+            sackAppearTrack.append(Wait(2.4 / playRate))
+            sackAppearTrack.append(Func(battle.movie.clearRestoreHips))
+            scaleTrack = Sequence(
+                Wait(propDelay + suitDelay),
+                LerpScaleInterval(sack, throwDuration, scaleUpPoint),
+                Wait(1.8 / playRate),
+                LerpScaleInterval(sack, 0.3 / playRate, MovieUtil.PNT3_NEARZERO),
+            )
+            hprTrack = Sequence(
+                Wait(propDelay + suitDelay),
+                LerpHprInterval(sack, throwDuration, sackHpr),
+            )
+            sackTrack = Sequence(
+                Parallel(sackAppearTrack, scaleTrack, hprTrack),
+                Func(MovieUtil.removeProp, sack),
+                Func(battle.movie.clearRenderProp, sack),
+            )
+            dustTrack = Sequence(
+                Wait(propDelay + suitDelay + throwDuration),
+                Func(dust.reparentTo, toon),
+                ActorInterval(dust, 'dust'),
+                Func(dust.cleanup),
+            )
+        else:
+            missPoint1 = Vec3(hitPoint[0], hitPoint[1] - 2.5, hitPoint[2])
+            missPoint2 = Vec3(hitPoint[0], hitPoint[1] - 3.3, hitPoint[2])
+            sackHprTrack = Sequence(
+                Wait(propDelay + suitDelay),
+                LerpHprInterval(sack, throwDuration, (0.0, 0.0, 0.0), blendType='easeIn')
+            )
+            sackTrack = Sequence(
+                Parallel(sackAppearTrack, sackHprTrack),
+                ProjectileInterval(sack, duration=0.7, endPos=missPoint1),
+                ProjectileInterval(sack, duration=0.4, endPos=missPoint2),
+                Wait(0.4),
+                LerpScaleInterval(sack, 0.3 / playRate, MovieUtil.PNT3_NEARZERO),
+                Func(MovieUtil.removeProp, sack),
+                Func(battle.movie.clearRenderProp, sack),
+            )
+            dustTrack = Sequence()
+        sackTracks += (sackTrack, dustTrack)
+
+    damageAnims = [['struggle', 0.01, 0.01, 0.7],
+     ['slip-backward', 0.01, 0.45]]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=propDelay + suitDelay + throwDuration, splicedDamageAnims=damageAnims, dodgeDelay=3.0 / playRate, dodgeAnimNames=['sidestep'], showDamageExtraTime=1.8, showMissedExtraTime=0.8, damageAnimPlayRate=1.2, dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('AA_drop_sandbag.ogg', delay=propDelay + suitDelay + throwDuration, node=suit)
+    return Parallel(suitTrack, toonTracks, soundTrack, *sackTracks)
 
 
 def doGlowerPower(attack):
