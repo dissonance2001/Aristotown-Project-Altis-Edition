@@ -3383,20 +3383,21 @@ def doWriteOff(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     pad = globalPropPool.getProp('pad')
     pencil = globalPropPool.getProp('pencil')
     BattleParticles.loadParticles()
-    suitTrack: Sequence = getSuitTrack(attack)
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
     padPosPoints = [Point3(-0.2704, 1.2162, -0.1285), VBase3(1.4371, -8.5398, -180.7844)]
-    padPropTrack: Sequence = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5, 2.57, Point3(1.89, 1.89, 1.89), scaleUpTime=0.25, scaleDownTime=0.25)
+    padPropTrack: Sequence = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5 / playRate, 2.57 / playRate, Point3(1.89, 1.89, 1.89), scaleUpTime=0.25 / playRate, scaleDownTime=0.25 / playRate)
     pencilPosPoints = [Point3(-0.57, 1.08, 0.08), VBase3(21.045, 12.702, -176.374)]
     extraArgsForShowProp = [pencil, suit.getRightHand()]
     extraArgsForShowProp.extend(pencilPosPoints)
     pencilPropTrack: Sequence = Sequence(
-        Wait(0.5),
+        Wait(0.5 / playRate),
         Func(__showProp, *extraArgsForShowProp),
-        LerpScaleInterval(pencil, 0.25, Point3(1.5, 1.5, 1.5), startScale=Point3(0.01)),
-        Wait(2.25)
+        LerpScaleInterval(pencil, 0.25 / playRate, Point3(1.5, 1.5, 1.5), startScale=Point3(0.01)),
+        Wait(2.25 / playRate)
     )
     partTracks: Parallel = Parallel()
     for t in targets:
@@ -3411,18 +3412,22 @@ def doWriteOff(attack: dict) -> MetaInterval:
             Func(checkmark.setPosHpr, pencil, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
             Func(checkmark.setP, 0.0),
             Func(checkmark.setR, 0.0),
-            getPropThrowTrack(attack, checkmark, [__toonFacePoint(toon)], [missPoint], hitDuration=0.5, missDuration=0.5, target=t),
+            getPropThrowTrack(attack, checkmark, [__toonFacePoint(toon)], [missPoint], hitDuration=0.5 / playRate, missDuration=0.5 / playRate, target=t),
             Func(MovieUtil.removeProp, checkmark),
             Func(battle.movie.clearRenderProp, checkmark)
         )
         partTracks.append(partTrack)
 
     pencilPropTrack.append(partTracks)
-    pencilPropTrack.append(Wait(0.3))
-    pencilPropTrack.append(LerpScaleInterval(pencil, 0.25, MovieUtil.PNT3_NEARZERO))
+    pencilPropTrack.append(Wait(0.3 / playRate))
+    pencilPropTrack.append(LerpScaleInterval(pencil, 0.25 / playRate, MovieUtil.PNT3_NEARZERO))
     pencilPropTrack.append(Func(MovieUtil.removeProp, pencil))
-    toonTracks: Parallel = getToonTracks(attack, 3.4, ['slip-forward'], 2.4, ['sidestep'], damageAnimPlayRate=1.1, dodgeAnimPlayRate=1.2)
-    soundTrack: Sequence = Sequence(Wait(2.1), SoundInterval(globalBattleSoundCache.getSound('SA_writeoff_pen_only.ogg'), duration=0.9, node=suit), SoundInterval(globalBattleSoundCache.getSound('SA_writeoff_ding_only.ogg'), node=suit))
+    toonTracks: Parallel = getToonTracks(attack, 3.4 / playRate, ['slip-forward'], 2.4 / playRate, ['sidestep'], damageAnimPlayRate=1.1, dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = Sequence(
+        Wait(2.1 / playRate),
+        SoundInterval(globalBattleSoundCache.getSound('SA_writeoff_pen_only.ogg'), duration=0.9, node=suit),
+        SoundInterval(globalBattleSoundCache.getSound('SA_writeoff_ding_only.ogg'), node=suit)
+    )
     return Parallel(suitTrack, toonTracks, padPropTrack, pencilPropTrack, soundTrack)
 
 
