@@ -741,8 +741,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Quash':
         camTrack.append(defaultCamera(openShotDuration=1.0))
-    elif name == 'PennyPinch':
-        camTrack.append(allGroupLowShot(suit, attackDuration, battle))
     elif name == 'Disassemble':
         camTrack.append(defaultCamera(openShotDuration=1.75))
     elif name == 'DataCorruption':
@@ -778,21 +776,17 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack.append(defaultCamera())
         else:
             camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
-    elif name == 'BrainStorm':
+    elif name in ('BrainStorm', 'Forecast'):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'BuzzWord':
         camTrack.append(defaultCamera(openShotDuration=3.1))
     elif name == 'Canned':
         camTrack.append(defaultCamera(openShotDuration=2.9 / 1.3))
-    elif name == 'EvictionNotice':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'Chomp':
         camTrack.append(defaultCamera(openShotDuration=2.8 / 1.5))
     elif name == 'Watercooler':
         camTrack.append(defaultCamera(openShotDuration=3.0))
-    elif name == 'CigarSmoke':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
-    elif name == 'SmokeAndMirrors':
+    elif name in ('CigarSmoke', 'SmokeAndMirrors'):
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name in ('ClipOnTie', 'DoubleWindsor', 'HalfWindsor', 'PowerTie'):
         if groupStatus == ATK_TGT_GROUP:
@@ -810,14 +804,14 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Downsize':
         camTrack.append(defaultCamera(openShotDuration=1.8))
+    elif name in ('Embezzle', 'PennyPinch', 'PickPocket', 'StolenScene'):
+        camTrack.append(allGroupLowShot(suit, attackDuration, battle))
     elif name == 'EvictionNotice':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvilEye':
         camTrack.append(defaultCamera(openShotDuration=2.7 / playRate))
     elif name == 'DoubleCross':
         camTrack.append(defaultCamera(openShotDuration=2.5)) # Double Cross movie's play rate is not flexible.  TODO: Make it flexible.
-    elif name == 'Forecast':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'MysteriousDisappearance':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'GoldRush':
@@ -852,8 +846,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(Sequence(defaultCamera(attackDuration=3.0, openShotDuration=3.0), heldRelativeShot(target[0]['toon'], 2.5, 10, 1, 165, 25, 0, attackDuration - 3.0)))
     elif name == 'GuiltTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'Embezzle':
-        camTrack.append(allGroupLowShot(suit, attackDuration, battle))
     elif name == 'FloodTheMarket':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'MoneyTrip':
@@ -882,10 +874,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'PeckingOrder':
         camTrack.append(defaultCamera(openShotDuration=2.8 / playRate))
-    elif name == 'PickPocket':
-        camTrack.append(allGroupLowShot(suit, attackDuration, battle))
-    elif name == 'StolenScene':
-        camTrack.append(allGroupLowShot(suit, attackDuration, battle))
     elif name == 'PinkSlip':
         camTrack.append(defaultCamera(openShotDuration=2.8 / playRate))
     elif name == 'PlayHardball':
