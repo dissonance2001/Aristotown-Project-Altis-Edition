@@ -1758,12 +1758,9 @@ class Suit(Avatar.Avatar):
             elif self.style.name == 'sgoat':
                 headModel.setTwoSided(True)
             elif headType == 'clo':
-                headModel.setZ(0)
-                headModel.setY(.1)
-                headModel.setX(0)
                 headModel.setR(-90)
                 headModel.setH(90)
-                headModel.setScale(.4175)
+                headModel.setScale(.4)
             elif self.style.name == 'videog':
                 headModel.setY(-.2)
             elif self.style.name == 'bcaster':
@@ -2201,12 +2198,9 @@ class Suit(Avatar.Avatar):
                 headModel.setZ(-.05)
                 headModel.setY(-.3)
             elif headType == 'clo':
-                headModel.setZ(-.05)
-                headModel.setY(-.05)
-                headModel.setX(0)
                 headModel.setR(-90)
                 headModel.setH(90)
-                headModel.setScale(.325)
+                headModel.setScale(.4)
             elif headType == 'ceo':
                 headModel.setZ(-.1)
                 headModel.setY(-.1)

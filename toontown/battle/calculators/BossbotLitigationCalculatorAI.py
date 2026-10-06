@@ -42,6 +42,24 @@ class BossbotLitigationCalculatorAI:
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
+                if self.battle.findSuit(suitId).dna.name == 'bkeeper' and self.suitHasCondition(suitId, 'wiretapperHit2'):  # Sniper Factory Foreman
+                    if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'wiretapperHit2'):
+                        attack = self.__getLureRemoval(suitId)
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                    if self.battle.activeSuits[i].currHP > 0 and self.suitHasCondition(suitId, 'wiretapperHit2'):
+                        attack = self.__getCheatAttack(suitId, {'suitName': 'bkeeper',
+                                                                'name': 'BookkeeperPaperCutSoaked',
+                                                                'animName': 'sanction',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                                                                'freq': 0,
+                                                                'group': SuitBattleGlobals.ATK_TGT_DOUBLE,
+                                                                'excludeToonConditions': (
+                                                                    'contingencyMarked',
+                                                                         )})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'bookkeeping') and not self.suitHasCondition(suitId, 'sounded') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
@@ -110,22 +128,22 @@ class BossbotLitigationCalculatorAI:
                         }
                     ]
                 )
-            if self.battle.activeSuits[i].dna.name == 'bkeeper':
-                self.__appendToonConditionDamageAndRetaliation(
-                    condition='snapped',
-                    damage=0,
-                    damageMovie=None,
-                    retaliateAtTurns=[1],
-                    retaliations=[
-                        {
-                            'suitNames': ['bkeeper'],
-                            'movie': 'AmbassadorAdvancement2',
-                            'animName': 'sanction',
-                            'hp': 25,
-                            'queueCondition': 'papercutcalculator2',
-                        }
-                    ]
-                )
+            # if self.battle.activeSuits[i].dna.name == 'bkeeper':
+            #     self.__appendToonConditionDamageAndRetaliation(
+            #         condition='snapped',
+            #         damage=0,
+            #         damageMovie=None,
+            #         retaliateAtTurns=[1],
+            #         retaliations=[
+            #             {
+            #                 'suitNames': ['bkeeper'],
+            #                 'movie': 'AmbassadorAdvancement2',
+            #                 'animName': 'sanction',
+            #                 'hp': 25,
+            #                 'queueCondition': 'papercutcalculator2',
+            #             }
+            #         ]
+            #     )
                 # if self.TurnsElapsed % 1 == 0:
                 #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                 #                             'name': 'PowerhouseGroundbreakerRevert',  # Toons Reappearing From Groundbreaker
@@ -136,20 +154,6 @@ class BossbotLitigationCalculatorAI:
                 #                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                 #     if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'phouse' and not self.calculator.TurnsElapsed % 99 == 0 or self.suitHasCondition(suitId, 'beginning'):
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                            'name': 'PowerhouseToleranceBuilding',  # Suppression Revert
-                                            'animName': 'nothing',
-                                            'hp': 0,
-                                            'acc': 100,
-                                            'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-
-                        'targetType': 'suit',
-                        'applyDamage': False,
-                        'targetSelf': True,})
-                if attack[SUIT_ATK_COL]:
-                    self.battle.suitAttacks.append(attack)
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
@@ -304,7 +308,7 @@ class BossbotLitigationCalculatorAI:
                         'hp': 0,
                         'acc': 100,
                         'freq': 0,
-                        'group': SuitBattleGlobals.ATK_TGT_DOUBLE,
+                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE)),
                         'targetType': 'suit',
                         'allowSelfTarget': False,
                         'targetSelf': False,
@@ -351,11 +355,11 @@ class BossbotLitigationCalculatorAI:
                 if self.suitHasCondition(suitId, 'explodingcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'BookkeeperExplodingDocument', # Paper Rain
-                     'animName': 'throw-paper',
+                     'animName': 'glower',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                      'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                      'group': random.choice((SuitBattleGlobals.ATK_TGT_QUAD, SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE)),
                         'targetType': 'suit',
                         'allowSelfTarget': True,
                         'targetSelf': False,
@@ -795,6 +799,24 @@ class BossbotLitigationCalculatorAI:
                             self.battle.suitAttacks.append(attack)
                     else:
                         pass
+            if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
+                if self.suitHasCondition(suitId, 'papercutcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getAbilityQueued(suitId)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'papercutcalculator') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BookkeeperPaperCut', # Paper Cut
+                     'animName': 'sanction',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                                                'excludeToonConditions': (
+                                                                    'contingencyMarked',
+                                                                         )})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'wtapper':
                 if self.suitHasCondition(suitId, 'wiretappedcalculator') and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit'):
                     attack = self.__getLureRemoval(suitId)
@@ -887,7 +909,7 @@ class BossbotLitigationCalculatorAI:
                 if self.suitHasCondition(suitId, 'filingcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'BookkeeperMandatoryFiling', # Paper Rain
-                     'animName': 'glower',
+                     'animName': 'nothing',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
@@ -927,23 +949,25 @@ class BossbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'groundbreakercalculator') and self.__suitCanAttack(suitId):
-                    if self.battle.activeSuits[i].currHP <= 2000:
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'phouse',
-                                                'name': 'PowerhouseGroundbreaker',
-                                                'animName': 'quick-jump',
-                                                'hp': 0,
-                                                'acc': 100,
-                                                'freq': 0,
-                                                'group': SuitBattleGlobals.ATK_TGT_DOUBLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    else:
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'phouse',
+                    attack = self.__getCheatAttack(suitId, {'suitName': 'phouse',
                                                 'name': 'PowerhouseGroundbreaker',
                                                 'animName': 'quick-jump',
                                                 'hp': 0,
                                                 'acc': 100,
                                                 'freq': 0,
                                                 'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.battle.activeSuits[i].dna.name == 'phouse':
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                'name': 'PowerhouseToleranceBuilding',  # Suppression Revert
+                                                'animName': 'nothing',
+                                                'hp': 0,
+                                                'acc': 100,
+                                                'freq': 0,
+                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                            'targetType': 'suit',
+                            'applyDamage': False,
+                            'targetSelf': True,})
+                    self.battle.suitAttacks.append(attack)

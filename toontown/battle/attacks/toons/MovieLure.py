@@ -352,7 +352,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet = 1, n
                     if suit.hasSuitStatusEffect('sued'):
                         suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
                 tracks.append(suitTrack)
-                tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp))
+                tracks.append(lerpSuit(suit, suitDelay + 0.55 + shakeTotalDuration, suitMoveDuration, reachPos, battle, trapProp, blendType='easeInOut'))
         else:
             if not suit.isLured:
                 tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 2.75))
@@ -462,7 +462,7 @@ def __createHypnoGogglesMultiTrack(lure, npcs = []):
                     if suit.hasSuitStatusEffect('sued'):
                         suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
                 tracks.append(suitTrack)
-                tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
+                tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp, blendType='easeInOut'))
         else:
             if not suit.isLured:
                 tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 1.5))
@@ -1271,7 +1271,7 @@ def __createSlideshowMultiTrack(lure, npcs = []):
                     if suit.hasSuitStatusEffect('sued'):
                         suitTrack.append(Func(suit.setSuitStatusEffect, 'sued', modifier=1, turns=4))
                 tracks.append(suitTrack)
-                tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp))
+                tracks.append(lerpSuit(suit, suitDelay + 1.7, 0.7, reachPos, battle, trapProp, blendType='easeInOut'))
         else:
             if not suit.isLured:
                 tracks.append(MovieUtil.createSuitTeaseMultiTrack(suit, battle, 3.3))

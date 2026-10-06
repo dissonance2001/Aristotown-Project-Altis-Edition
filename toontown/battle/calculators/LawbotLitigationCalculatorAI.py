@@ -83,20 +83,6 @@ class LawbotLitigationCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
 
             # Gag Ban Retaliations & DOT
-            if self.battle.activeSuits[i].dna.name == 'sgoat' and not self.suitHasCondition(suitId, 'enraged'):
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                            'name': 'ScapegoatRageBuilding',  # Suppression Revert
-                                            'animName': 'nothing',
-                                            'hp': 0,
-                                            'acc': 100,
-                                            'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-
-                        'targetType': 'suit',
-                        'applyDamage': False,
-                        'targetSelf': True,})
-                if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'sgoat':
                 self.__appendToonConditionDamageAndRetaliation(
                     condition='hidden',
@@ -178,7 +164,7 @@ class LawbotLitigationCalculatorAI:
                         # self.battle.suitAttacks.append(attack)
             if not self.suitHasCondition(suitId, 'healfinished'):
                 attack = self.__getCheatAttack(suitId, {
-                    'suitName': '',
+                    'suitName': self.battle.activeSuits[i].dna.name,
                     'name': 'CaseManagerInsurance',
                     'animName': 'nothing',
                     'hp': 0,
@@ -216,7 +202,7 @@ class LawbotLitigationCalculatorAI:
                                                                     'hp': 0,
                         'acc': 100,
                         'freq': 0,
-                        'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_PENTA, SuitBattleGlobals.ATK_TGT_QUAD)),
                             'targetType': 'suit',
                             'allowSelfTarget': True,
                             'targetSelf': False,
@@ -232,7 +218,7 @@ class LawbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                         'freq': 0,
-                        'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_PENTA, SuitBattleGlobals.ATK_TGT_QUAD)),
                             'targetType': 'suit',
                             'allowSelfTarget': True,
                             'targetSelf': False,
@@ -257,7 +243,7 @@ class LawbotLitigationCalculatorAI:
                                                                     'hp': 0,
                         'acc': 100,
                         'freq': 0,
-                        'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_QUAD)),
                             'targetType': 'suit',
                             'allowSelfTarget': True,
                             'targetSelf': False,
@@ -273,7 +259,7 @@ class LawbotLitigationCalculatorAI:
                                                                 'hp': 0,
                                                                 'acc': 100,
                         'freq': 0,
-                        'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_QUAD)),
                             'targetType': 'suit',
                             'allowSelfTarget': True,
                             'targetSelf': False,
@@ -293,7 +279,7 @@ class LawbotLitigationCalculatorAI:
                                                             'hp': 0,
                                                             'acc': 100,
                                                             'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_TRIPLE,
+                                                            'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_QUAD)),
                             'targetType': 'suit',
                             'allowSelfTarget': True,
                             'targetSelf': False,
@@ -580,6 +566,19 @@ class LawbotLitigationCalculatorAI:
                      'freq': 0,
                      'group': SuitBattleGlobals.ATK_TGT_SINGLE,
                                         'targetType': 'none'})
+                    self.battle.suitAttacks.append(attack)
+                if self.battle.activeSuits[i].dna.name == 'sgoat' and not self.suitHasCondition(suitId, 'enraged'):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                'name': 'ScapegoatRageBuilding',  # Suppression Revert
+                                                'animName': 'nothing',
+                                                'hp': 0,
+                                                'acc': 100,
+                                                'freq': 0,
+                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                            'targetType': 'suit',
+                            'applyDamage': False,
+                            'targetSelf': True,})
                     self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'lgator':
                 if self.suitHasCondition(suitId, 'bashcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:

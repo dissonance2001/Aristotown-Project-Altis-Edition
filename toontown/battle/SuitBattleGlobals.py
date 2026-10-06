@@ -590,12 +590,14 @@ ATK_TGT_UNKNOWN = 1
 ATK_TGT_SINGLE = 2
 ATK_TGT_DOUBLE = 3
 ATK_TGT_TRIPLE = 4
-ATK_TGT_GROUP = 5
-ATK_TGT_FOREMAN = 6
-ATK_TGT_SUPERVISOR = 7
-ATK_TGT_ATTORNEY = 8
-ATK_TGT_PRESIDENT = 9
-ATK_TGT_CONFUSED = 10
+ATK_TGT_QUAD = 5
+ATK_TGT_PENTA = 6
+ATK_TGT_GROUP = 7
+ATK_TGT_FOREMAN = 8
+ATK_TGT_SUPERVISOR = 9
+ATK_TGT_ATTORNEY = 10
+ATK_TGT_PRESIDENT = 11
+ATK_TGT_CONFUSED = 12
 
 TARGET_TYPE_SHIFT = 4
 TARGET_GROUP_MASK = 0x0F
@@ -694,24 +696,27 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                            defense=(7, 7, 7, 7, 7, 7, 7, 7),
                            freq=(30, 35, 40, 45, 50, 55, 60, 65),
                            acc=(45, 50, 55, 60, 65, 70, 75, 80),
-                           attacks=(
-                               SuitAttack('RubberStamp',
-                                           hp=(2, 4, 6, 8, 10, 11, 12, 13),
-                                           acc=(75, 75, 75, 75, 75, 75, 75, 75),
-                                           freq=(35, 35, 35, 35, 35, 35, 35, 35)),
-                               SuitAttack('MoneyTrip',
-                                           hp=(4, 6, 8, 10, 12, 13, 14, 15),
-                                           acc=(50, 60, 70, 80, 90, 95, 95, 95),
-                                           freq=(5, 10, 15, 20, 25, 30, 35, 40)),
-                               SuitAttack('RazzleDazzle',
-                                           hp=(7, 9, 11, 13, 15, 16, 17, 18),
-                                           acc=(50, 50, 50, 50, 50, 50, 50, 50),
-                                           freq=(20, 25, 15, 10, 5, 5, 5, 5)),
-                               SuitAttack('Golf',
-                                           hp=(5, 7, 9, 11, 13, 14, 15, 16),
-                                           acc=(50, 60, 70, 80, 90, 95, 95, 95),
-                                           freq=(35, 35, 35, 35, 35, 35, 35, 35))
-                           )),
+                            attacks=(
+                                SuitAttack('RubberStamp',
+                                        hp=(2, 4, 6, 8, 10, 11, 12, 13),
+                                        acc=(75, 75, 75, 75, 75, 75, 75, 75),
+                                        freq=(35, 30, 35, 35, 35, 35, 35, 35)),
+
+                                SuitAttack('MoneyTrip',
+                                        hp=(4, 6, 8, 10, 12, 13, 14, 15),
+                                        acc=(50, 60, 70, 80, 90, 95, 95, 95),
+                                        freq=(10, 10, 15, 20, 25, 30, 35, 40)),
+
+                                SuitAttack('RazzleDazzle',
+                                        hp=(7, 9, 11, 13, 15, 16, 17, 18),
+                                        acc=(50, 50, 50, 50, 50, 50, 50, 50),
+                                        freq=(20, 25, 15, 10, 5, 5, 5, 5)),
+
+                                SuitAttack('Golf',
+                                        hp=(5, 7, 9, 11, 13, 14, 15, 16),
+                                        acc=(50, 60, 70, 80, 90, 95, 95, 95),
+                                        freq=(35, 35, 35, 35, 35, 30, 25, 20))
+                            )),
  'enf': SuitAttributesClass(name='Patronizer',
                             singularname='a Patronizer',
                             pluralname='Patronizers',
@@ -1158,7 +1163,7 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                 SuitAttack('GlowerPower',
                                            hp=(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52),
                                            acc=(55, 65, 70, 75, 80, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                                           freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+                                           freq=(15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15)),
                                 SuitAttack('FloodTheMarket',
                                            hp=(10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52),
                                            acc=(55, 65, 70, 75, 80, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90, 90),
@@ -1482,16 +1487,16 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                               acc=(95,),
                                               freq=(20,))
                                )),
- 'bkeeper': SuitAttributesClass(name='Commissioner',
-                                singularname='a Commissioner',
-                                pluralname='Commissioners',
+ 'bkeeper': SuitAttributesClass(name='Regulator',
+                                singularname='a Regulator',
+                                pluralname='Regulators',
                                 level=43,
                                 hp=(4775,),
                                 defense=(60,),
                                 freq=(0,),
                                 acc=(75,),
                                 attacks=(
-                                    SuitAttack('RestrainingOrder',
+                                    SuitAttack('ReOrg',
                                                hp=(40,),
                                                acc=(90,),
                                                freq=(15,)),
@@ -1499,15 +1504,15 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                                hp=(32,),
                                                acc=(85,),
                                                freq=(15,)),
-                                    SuitAttack('MarketCrash',
+                                    SuitAttack('Audit',
                                                hp=(42,),
                                                acc=(90,),
                                                freq=(20,)),
-                                    SuitAttack('FountainPen',
+                                    SuitAttack('RestrainingOrder',
                                                hp=(37,),
                                                acc=(80,),
                                                freq=(15,)),
-                                    SuitAttack('EvictionNotice',
+                                    SuitAttack('Jargon',
                                                hp=(38,),
                                                acc=(95,),
                                                freq=(15,)),
@@ -1529,7 +1534,7 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                                hp=(42,),
                                                acc=(90,),
                                                freq=(25,)),
-                                    SuitAttack('PoundKey',
+                                    SuitAttack('MoneyTalks',
                                                hp=(35,),
                                                acc=(90,),
                                                freq=(20,)),
@@ -2701,28 +2706,32 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                            defense=(7, 7, 7, 7, 7, 7, 7, 7),
                            freq=(30, 35, 40, 45, 50, 55, 60, 65),
                            acc=(45, 50, 55, 60, 65, 70, 75, 80),
-                           attacks=(
-                               SuitAttack('Fired',
-                                          hp=(3, 4, 5, 5, 6, 7, 8, 9),
-                                          acc=(75, 75, 75, 75, 75, 75, 75, 75),
-                                          freq=(75, 5, 5, 5, 5, 5, 5, 5)),
-                               SuitAttack('GlowerPower',
-                                          hp=(3, 4, 6, 9, 12, 13, 14, 15),
-                                          acc=(95, 95, 95, 95, 95, 95, 95, 95),
-                                          freq=(10, 15, 20, 25, 30, 35, 40, 45)),
-                               SuitAttack('FingerWag',
-                                          hp=(3, 3, 4, 4, 5, 6, 7, 8),
-                                          acc=(75, 75, 75, 75, 75, 75, 75, 75),
-                                          freq=(5, 70, 5, 5, 5, 5, 5, 5)),
-                               SuitAttack('FreezeAssets',
-                                          hp=(3, 4, 6, 9, 12, 13, 14, 15),
-                                          acc=(75, 75, 75, 75, 75, 75, 75, 75),
-                                          freq=(5, 5, 65, 5, 30, 30, 30, 30)),
-                               SuitAttack('BounceCheck',
-                                          hp=(5, 6, 9, 13, 18, 19, 20, 21),
-                                          acc=(75, 75, 75, 75, 75, 75, 75, 75),
-                                          freq=(5, 5, 5, 60, 30, 30, 30, 30))
-                           )),
+                            attacks=(
+                                SuitAttack('Fired',
+                                        hp=(3, 4, 5, 5, 6, 7, 8, 9),
+                                        acc=(75, 75, 75, 75, 75, 75, 75, 75),
+                                        freq=(75, 5, 5, 5, 5, 5, 5, 5)),
+
+                                SuitAttack('GlowerPower',
+                                        hp=(3, 4, 6, 9, 12, 13, 14, 15),
+                                        acc=(95, 95, 95, 95, 95, 95, 95, 95),
+                                        freq=(10, 15, 20, 25, 30, 35, 40, 45)),
+
+                                SuitAttack('FingerWag',
+                                        hp=(3, 3, 4, 4, 5, 6, 7, 8),
+                                        acc=(75, 75, 75, 75, 75, 75, 75, 75),
+                                        freq=(5, 70, 5, 5, 5, 5, 5, 5)),
+
+                                SuitAttack('FreezeAssets',
+                                        hp=(3, 4, 6, 9, 12, 13, 14, 15),
+                                        acc=(75, 75, 75, 75, 75, 75, 75, 75),
+                                        freq=(5, 5, 65, 5, 30, 30, 30, 30)),
+
+                                SuitAttack('BounceCheck',
+                                        hp=(5, 6, 9, 13, 18, 19, 20, 21),
+                                        acc=(75, 75, 75, 75, 75, 75, 75, 75),
+                                        freq=(5, 5, 5, 60, 30, 25, 20, 15))
+                            )),
  'trs': SuitAttributesClass(name='Cheapskate',
                             singularname='a Cheapskate',
                             pluralname='Cheapskates',
@@ -2902,7 +2911,11 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                SuitAttack('MarketCrash',
                                           hp=(8, 10, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
                                           acc=(60, 65, 70, 75, 80, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
-                                          freq=(45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45)),
+                                          freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)),
+                                SuitAttack('MoneyTalks',
+                                          hp=(8, 10, 12, 14, 16, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28),
+                                          acc=(60, 65, 70, 75, 80, 85, 90, 90, 90, 90, 90, 90, 90, 90, 90),
+                                          freq=(25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25)),
                                SuitAttack('PowerTie',
                                           hp=(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
                                           acc=(60, 65, 75, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95, 95),
@@ -4641,7 +4654,7 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                  SuitAttack('GuiltTrip',
                                             hp=(28,),
                                             acc=(95,),
-                                            freq=(15,)),
+                                            freq=(10,)),
                                  SuitAttack('DoubleTalk',
                                             hp=(36,),
                                             acc=(90,),
@@ -4671,7 +4684,7 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                 SuitAttack('GuiltTrip',
                                            hp=(34,),
                                            acc=(95,),
-                                           freq=(15,)),
+                                           freq=(10,)),
                                 SuitAttack('EvilEye',
                                            hp=(48,),
                                            acc=(95,),
@@ -5617,7 +5630,7 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                                hp=(40,),
                                                acc=(85,),
                                                freq=(15,)),
-                                    SuitAttack('Legalese',
+                                    SuitAttack('Jargon',
                                                hp=(34,),
                                                acc=(85,),
                                                freq=(10,)),
@@ -5690,7 +5703,7 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                   SuitAttack('BlueChip',
                                              hp=(35,),
                                              acc=(90,),
-                                             freq=(20,)),
+                                             freq=(15)),
                                   SuitAttack('BounceCheck',
                                              hp=(31,),
                                              acc=(95,),
@@ -5699,7 +5712,7 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                              hp=(40,),
                                              acc=(75,),
                                              freq=(15,)),
-                                  SuitAttack('MarketCrash',
+                                  SuitAttack('MoneyTalks',
                                              hp=(31,),
                                              acc=(85,),
                                              freq=(15,)),
@@ -5707,10 +5720,10 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                              hp=(36,),
                                              acc=(85,),
                                              freq=(20,)),
-                                  SuitAttack('PowerTie',
+                                  SuitAttack('CoinToss',
                                              hp=(28,),
                                              acc=(80,),
-                                             freq=(10,))
+                                             freq=(15,))
                               )),
  'ottoman': SuitAttributesClass(name='Chief Operating Officer',
                                 singularname='a Chief Operating Officer',

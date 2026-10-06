@@ -395,7 +395,7 @@ class SuitSpawnCalculatorAI:
 
                             if boss:
                                 maxSuits = 6
-                                maxSpawnPerTurn = 3
+                                maxSpawnPerTurn = 2
 
                                 # Count only living Cogs.
                                 aliveCount = sum(
@@ -489,7 +489,7 @@ class SuitSpawnCalculatorAI:
 
                             if boss:
                                 maxSuits = 6
-                                maxSpawnPerTurn = 3
+                                maxSpawnPerTurn = 2
 
                                 # Count only living Cogs.
                                 aliveCount = sum(
@@ -583,7 +583,7 @@ class SuitSpawnCalculatorAI:
 
                             if boss:
                                 maxSuits = 6
-                                maxSpawnPerTurn = 3
+                                maxSpawnPerTurn = 2
 
                                 # Count only living Cogs.
                                 aliveCount = sum(
@@ -677,7 +677,7 @@ class SuitSpawnCalculatorAI:
 
                             if boss:
                                 maxSuits = 6
-                                maxSpawnPerTurn = 3
+                                maxSpawnPerTurn = 2
 
                                 # Count only living Cogs.
                                 aliveCount = sum(

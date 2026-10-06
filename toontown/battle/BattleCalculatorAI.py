@@ -334,12 +334,12 @@ class BattleCalculatorAI:
             newTurns = 0  # the variable we will set the turns to
 
             # modifier APPENDED, turns SET, used to change a buff/debuff's timer, but keep its potency
-            if mode is 'refreshTurns':
+            if mode is 'refreshModifier':
                 newModifier = self.getToonConditionModifier(toonId, condition) + modifier
                 newTurns = turns
 
             # modifer SET, turns APPENDED, used to modify a buff/debuff's potency, but change its duration
-            if mode is 'refreshModifier':
+            if mode is 'refreshTurns':
                 newModifier = modifier
                 newTurns = self.getToonConditionTurns(toonId, condition) + turns
 
@@ -428,12 +428,12 @@ class BattleCalculatorAI:
             newTurns = 0  # the variable we will set the turns to
 
             # modifier APPENDED, turns SET, used to change a buff/debuff's timer, but keep its potency
-            if mode is 'refreshTurns':
+            if mode is 'refreshModifier':
                 newModifier = self.getSuitConditionModifier(suitId, condition) + modifier
                 newTurns = turns
 
             # modifer SET, turns APPENDED, used to modify a buff/debuff's potency, but change its duration
-            if mode is 'refreshModifier':
+            if mode is 'refreshTurns':
                 newModifier = modifier
                 newTurns = self.getSuitConditionTurns(suitId, condition) + turns
 
@@ -1093,6 +1093,8 @@ class BattleCalculatorAI:
                 if suit.dna.name == 'wtapper' and self.toonHasCondition(toon.doId, 'partnered'):
                     self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
                     self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
+                if suit.dna.name == 'bkeeper' and self.toonHasCondition(toon.doId, 'contingencyMarked'):
+                    self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
                 if suit.dna.name == 'director' and self.toonHasCondition(toon.doId, 'collectcalled'):
                     self.setSuitCondition(suit.doId, 'retaliationcalculator2', 0, 0, 'setBoth')
                     self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
@@ -1126,7 +1128,7 @@ class BattleCalculatorAI:
                 self.setToonCondition(toon.doId, 'usedTrap', 1, 3, 'setBoth')
                 damage = getTrapDamage(trapLvl, toon, suit)
                 self.setSuitCondition(suitId, 'dazed2', 1, 10, 'setBoth')
-                damage += self.getIOUFlatBoost(attackerId, TRAP)
+                # damage += self.getIOUFlatBoost(attackerId, TRAP)
                 if self.suitHasCondition(suitId, 'sued'):
                     self.setSuitCondition(suitId, 'sued', 1, 4, 'alternateBoth')
                 if self.suitHasCondition(suitId, 'lured'):
@@ -1260,6 +1262,8 @@ class BattleCalculatorAI:
                 if suit.dna.name == 'wtapper' and self.toonHasCondition(toon.doId, 'partnered'):
                     self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
                     self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
+                if suit.dna.name == 'bkeeper' and self.toonHasCondition(toon.doId, 'contingencyMarked'):
+                    self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
                 if suit.dna.name == 'director' and self.toonHasCondition(toon.doId, 'collectcalled'):
                     self.setSuitCondition(suit.doId, 'retaliationcalculator2', 0, 0, 'setBoth')
                     self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
@@ -1686,6 +1690,9 @@ class BattleCalculatorAI:
         if suit.dna.name == 'wtapper' and self.toonHasCondition(toon.doId, 'partnered'):
             self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
             self.setToonCondition(toon.doId, 'collectcalled', 0, 0, 'setBoth')
+
+        if suit.dna.name == 'bkeeper' and self.toonHasCondition(toon.doId, 'contingencyMarked'):
+            self.setSuitCondition(suit.doId, 'wiretapperHit2', 1, 1, 'setBoth')
 
         if suit.dna.name == 'director' and self.toonHasCondition(toon.doId, 'collectcalled'):
             self.setSuitCondition(suit.doId, 'retaliationcalculator2', 0, 0, 'setBoth')
@@ -2605,33 +2612,32 @@ class BattleCalculatorAI:
                         attackDamage = self.__suitTrapDamage(targetId)
                         trapCreatorId = self.__trapCreator(targetId)
                         damageOwnerId = trapCreatorId
+
                         if damageOwnerId <= 0:
                             damageOwnerId = toonId
 
-                        organicBonus = False
-                        if damageOwnerId > 0:
-                            organicBonus = self.__toonCheckGagBonus(damageOwnerId, TRAP, attackLevel)
-
                         if attackDamage > 0:
-                            attackDamage = self.applyToonGagDamageMultipliers(
-                                attackDamage,
-                                damageOwnerId,
-                                targetId,
-                                TRAP,
-                                attackLevel,
-                                organicBonus=organicBonus
-                            )
+                            # Toon-side multipliers were already calculated when
+                            # the Trap was placed. Do NOT apply them again here.
 
                             attackDamage = self.applyCogDamageInterceptors(
                                 attackDamage,
                                 damageOwnerId,
                                 theSuit,
                                 targetId,
-                                LURE
+                                TRAP
                             )
-                            trapInstakillDamage = self.instakillTraps.get(targetId, 0)
+
+                            trapInstakillDamage = self.instakillTraps.get(
+                                targetId,
+                                0
+                            )
+
                             if trapInstakillDamage:
-                                attackDamage = min(trapInstakillDamage, 32767)
+                                attackDamage = min(
+                                    trapInstakillDamage,
+                                    32767
+                                )
                         if trapCreatorId > 0:
                             self.notify.debug('Giving trap EXP to toon ' + str(trapCreatorId))
                             self.__addAttackExp(attack, track=TRAP, level=attackLevel, attackerId=trapCreatorId)
@@ -5369,6 +5375,18 @@ class BattleCalculatorAI:
         if group == SuitBattleGlobals.ATK_TGT_GROUP:
             targetCount = len(targetPool)
 
+        elif group == SuitBattleGlobals.ATK_TGT_PENTA:
+            targetCount = min(
+                5,
+                len(targetPool)
+            )
+
+        elif group == SuitBattleGlobals.ATK_TGT_QUAD:
+            targetCount = min(
+                4,
+                len(targetPool)
+            )
+
         elif group == SuitBattleGlobals.ATK_TGT_TRIPLE:
             targetCount = min(
                 3,
@@ -5689,6 +5707,12 @@ class BattleCalculatorAI:
 
         if group == SuitBattleGlobals.ATK_TGT_GROUP:
             targetCount = len(targetPool)
+
+        elif group == SuitBattleGlobals.ATK_TGT_PENTA:
+            targetCount = min(5, len(targetPool))
+
+        elif group == SuitBattleGlobals.ATK_TGT_QUAD:
+            targetCount = min(4, len(targetPool))
 
         elif group == SuitBattleGlobals.ATK_TGT_TRIPLE:
             targetCount = min(3, len(targetPool))

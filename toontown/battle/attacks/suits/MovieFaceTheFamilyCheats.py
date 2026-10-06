@@ -264,7 +264,7 @@ def doOverseer(attack):
     if heal > 0:
         notifyTrack = Sequence(
             Parallel(
-                Func(theSuit.showHpTextNew, heal, text="SYPHONED!", colorCode=1),
+                Func(theSuit.showHpTextNew, heal),
                 Func(theSuit.setHealthForMe, heal),
                 Func(theSuit.updateHealthBar, 0)
             )

@@ -234,7 +234,8 @@ def doPaperCutMulti(attack):
         origPos, origHpr = battle.getActorPosHpr(suit)
         partTrack = getPartTrack(particleEffect, .5, 3.5, (particleEffect, toon, 0), softStop=-2.0)
         toonTrack = getToonTracksCheat(attack, .5, ['cringe'], 3.4, ['struggle'])
-        notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg)))
+        notifyTrack = Sequence(Wait(.5), Func(toon.showHpTextNew, -int(dmg), text="-25% Damage!", colorCode=1))
+        notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'damageDown', modifier=25, turns=2, mode='keepHighest')))
         if dmg > 0:
             origH = suit.getH(battle)
 
@@ -260,7 +261,6 @@ def doPaperCutMulti(attack):
             partTracks.append(partTrack)
     suitTrack = Sequence(getSuitAnimTrack(attack))
     soundTrack = getSoundTrack('SA_shred.ogg', delay=.5, node=suit)
-    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2, node=suit)
     return Parallel(suitTrack, partTracks, moveTracks, notifyTracks, toonTrack, soundTrack)
 
 def doBookkeepingDamageUp(attack):
@@ -971,7 +971,19 @@ def doMandatoryFiling(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
-    suitTrack = Sequence(getSuitAnimTrackAttack(attack))
+    suitTrack2 = Sequence(
+        Parallel(
+            getSuitAnimTrack(attack),
+            ActorInterval(suit, 'hypnotized', endTime=1.0)
+        ),
+        Parallel(
+            Func(suit.enableBlend),
+            ActorInterval(suit, 'neutral', loop=1),
+            LerpAnimInterval(suit, duration=.75, startAnim='hypnotized', endAnim='neutral', startWeight=0.0, endWeight=1.0, blendType='easeInOut')
+        ),
+        Func(suit.disableBlend),
+        Func(suit.setNeutralAnimationDrop)
+    )
     propTracks = Parallel()
     toonTracks = Parallel()
     smokeTracks = Parallel()
@@ -1038,7 +1050,7 @@ def doMandatoryFiling(attack):
         toonTracks.append(toonTrack)
         smokeTracks.append(smokeTrack)
     toonDamageTrack = getToonTracksCheat(attack, 1.25, ['nothing'], 0, ['neutral'])
-    return Parallel(suitTrack, toonDamageTrack, smokeTracks, toonTracks, propTracks)
+    return Parallel(suitTrack2, toonDamageTrack, smokeTracks, toonTracks, propTracks)
 
 def doBusySignal(attack):
     suit = attack['suit']
@@ -1970,7 +1982,7 @@ def doTeeOff(attack):
         gearPoint = Point3(toonPos.getX(), toonPos.getY(), toonPos.getZ() + toon.height - 0.2)
         explosionTrack = Sequence()
         explosionTrack.append(Wait(3.0))
-        explosionTrack.append(MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=2))
+        explosionTrack.append(Parallel(Func(toon.setToonStatusEffect, 'hotShot', modifier=25, turns=3), MovieUtil.createKapowExplosionTrackAttack(battle, explosionPoint=gearPoint, scale=2)))
         ballPropTracks.append(explosionTrack)
         flameEffect = BattleParticles.createParticleEffect('FiredFlame')
         BattleParticles.setEffectTexture(flameEffect, 'fire')
@@ -1984,7 +1996,6 @@ def doTeeOff(attack):
         notifyTrack = Sequence(Wait(3.0), Func(toon.showHpTextNew,  - int(dmg), "VULNERABLE!", colorCode=1))
         notifyTracks.append(notifyTrack)
         notifyTracks.append(flameTrack)
-        notifyTracks.append(Parallel(Func(toon.setToonStatusEffect, 'hotShot', modifier=25, turns=3)))
         ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
         ballPropTracks.append(ballPropTrack)
 
@@ -3112,6 +3123,7 @@ def doLiquidateGROUP(attack):
 
 def doOverseer(attack):
     attacker = attack['suit']
+    suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
 
@@ -3130,7 +3142,7 @@ def doOverseer(attack):
         targetSuit = targetData['suit']
 
         targetTrack = Sequence(
-            Wait(4.0)
+            Wait(4.5)
         )
 
         if targetSuit.dna.name != 'bkeeper':
@@ -3138,7 +3150,7 @@ def doOverseer(attack):
                 Parallel(
                     Func(
                         targetSuit.setChatAbsolute,
-                        random.choice(OTPLocalizerEnglish.SuitHealingPhrases),
+                        random.choice(("I know what I'm doing!", "Is this really necessary?", "You're making me nervous.", "Could I get a little breathing room?")),
                         CFSpeech | CFTimeout
                     )
                 )
@@ -3160,14 +3172,43 @@ def doOverseer(attack):
     # =========================================================
     # ATTACKER ANIMATION
     # =========================================================
-    attackerTrack = Sequence(
-        getSuitAnimTrack(attack, playRate=1.5)
-    )
+    suitHoldStart: float = 1.06
+    suitHoldStop: float = 1.69
+    suitHoldDuration: float = suitHoldStop - suitHoldStart
+    eyeHoldDuration: float = 1.1
+    moveDuration: float = 1.1
+    suitSplicedAnims = []
+    suitSplicedAnims.append(['glower', 0.01, 0.01, suitHoldStart])
+    suitSplicedAnims.extend(getSplicedLerpAnims('glower', suitHoldDuration, 1.1, startTime=suitHoldStart))
+    suitSplicedAnims.append(['glower', 0.01, suitHoldStop])
+    attackerTrack: Sequence = getSuitTrack(attack, splicedAnims=suitSplicedAnims)
 
     # =========================================================
     # PAPER PROJECTILES
     # =========================================================
-    posPoints = [Point3(0.8, -1.75,-0.55), VBase3(40.584, -101.945, 18.316)]
+    eyePos = {
+        "cr": [Point3(-0.25, 4.85, 5.75), VBase3(-155.0, -20.0, 0.0)],
+        "tf": [Point3(-0.4, 3.85, 5.01), VBase3(-155.0, -20.0, 0.0)],
+        "shrp": [Point3(-0.4, 3.85, 5.01), VBase3(-155.0, -20.0, 0.0)],
+        "rng": [Point3(-0.3, 4.7, 5.3), VBase3(-155.0, -20.0, 0.0)],
+        "le": [Point3(-0.3, 4.7, 5.3), VBase3(-155.0, -20.0, 0.0)],
+        "le2": [Point3(-0.3, 4.7, 5.3), VBase3(-155.0, -20.0, 0.0)],
+        "bsht": [Point3(-0.3, 4.7, 5.3), VBase3(-155.0, -20.0, 0.0)],
+        "nsh": [Point3(-0.3, 4.7, 5.3), VBase3(-155.0, -20.0, 0.0)],
+        "dl": [Point3(-0.35, 4.0, 5.01), VBase3(-155.0, -20.0, 0.0)],
+        "txm": [Point3(-0.35, 4.0, 5.01), VBase3(-155.0, -20.0, 0.0)],
+        "br": [Point3(-0.4, 5.0, 5.5), VBase3(-155.0, -20.0, 0.0)],
+        "itn": [Point3(-0.4, 5.0, 6.0), VBase3(-155.0, -20.0, 0.0)],
+        "lgator": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
+        "ubuster": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
+        "wsi": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
+        "bkeeper": [Point3(-0.35, 5.5, 6.4), VBase3(-155.0, -20.0, 0.0)],
+    }
+
+    posPoints = eyePos.get(
+        suit.dna.name,
+        [Point3(-0.4, 3.65, 5.01), VBase3(-155.0, -20.0, 0.0)],
+    )
 
     for targetData in targets:
         if 'suit' not in targetData:
@@ -3175,21 +3216,17 @@ def doOverseer(attack):
 
         targetSuit = targetData['suit']
 
-        knife = globalPropPool.getProp('shredder-paper')
+        knife = globalPropPool.getProp('evil-eye')
 
         knifeTrack = Sequence(
-            getPropAppearTrack(
-                knife,
-                attacker.getRightHand(),
-                posPoints,
-                0.5,
-                VBase3(1, 1, 1),
-                scaleUpTime=0.5
-            ),
-
-            Wait(0.95),
-
-            Parallel(
+            Wait(suitHoldStart),
+            Func(__showProp, knife, suit, posPoints[0], posPoints[1]),
+            LerpScaleInterval(knife, suitHoldDuration, Point3(11.0, 11.0, 11.0)),
+            Wait(eyeHoldDuration * 0.3),
+            LerpHprInterval(knife, 0.02, Point3(205.0, 40.0, 0.0)),
+            Wait(eyeHoldDuration * 0.7),
+        
+        Parallel(
                 getThrowTrack(
                     knife,
                     (0, 0, targetSuit.getHeight() + 2.5),
@@ -3243,10 +3280,11 @@ def doOverseer(attack):
 
         knifeTracks.append(knifeTrack)
 
-    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.0, node=attacker)
-    soundTrack = getSoundTrack('LB_toonup.ogg', delay=4.0)
+    soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=2.5, node=attacker)
+    soundTrack = getSoundTrack('LB_toonup.ogg', delay=4.5)
+    soundTracks = getSoundTrack('SA_evil_eye.ogg', delay=1.3, node=suit)
 
-    return Parallel(
+    return Parallel(soundTracks, 
         attackerTrack,
         suitTracks,
         knifeTracks,

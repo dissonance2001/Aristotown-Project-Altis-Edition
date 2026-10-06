@@ -387,7 +387,7 @@ def getDialogueArray(suit):
     elif suit.style.name == 'phouse' and not suit.isSkeleton:
         return loadDialogArray(DerrickSkeleDialogArray, DerrickSkeleDialogFiles)
     elif suit.style.name == 'bkeeper' and not suit.isSkeleton:
-        return loadDialogArray(CaseManagerDialogArray, CaseManagerDialogFiles)
+        return loadDialogArray(CLODialogArray, CLODialogFiles)
     elif suit.style.name == 'wtapper' and not suit.isSkeleton:
         return loadDialogArray(StenographerDialogArray, StenographerDialogFiles)
     elif suit.style.name == 'djockey' and not suit.isSkeleton:

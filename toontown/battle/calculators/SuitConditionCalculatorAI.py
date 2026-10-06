@@ -158,7 +158,7 @@ class SuitConditionCalculatorAI:
                 if (x + 2) % 5 == 0:
                     self.setSuitCondition(suitId, 'burncalculator2', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
-                if (x + 1) % 3 == 0:
+                if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'explodingcalculator', 1, 9, 'setBoth')
                 if (x + 1) % 2 == 0:
                     self.setSuitCondition(suitId, 'filingcalculator', 1, 9, 'setBoth')

@@ -591,7 +591,7 @@ def doSnap2(attack, suit):
     suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.5))
     moveTracks = Parallel()
     notifyTracks = Parallel()
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.3, 0.1, 0.0), VBase3(4.465, -3.563, 180.0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -649,7 +649,7 @@ def doSnap2(attack, suit):
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
-    soundTrack = getSoundTrack('SA_bite.ogg', delay=2, node=suit)
+    soundTrack: Sequence = getSoundTrack('SA_bite.ogg', delay=throwDelay, node=suit, playRate=1.05)
     toonTracks = getToonTracksCheat(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
                                dodgeAnimNames=['neutral'], showDamageExtraTime=1.4)
     return Parallel(suitTrack, toonTracks, moveTracks, soundTrack, propTracks, notifyTracks)
@@ -665,7 +665,7 @@ def doSnapBindings(attack, suit):
     throwDuration = 0.25
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     notifyTracks = Parallel()
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.3, 0.1, 0.0), VBase3(4.465, -3.563, 180.0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -714,7 +714,7 @@ def doSnapBindings(attack, suit):
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
-    soundTrack = getSoundTrack('SA_bite.ogg', delay=2, node=suit)
+    soundTrack: Sequence = getSoundTrack('SA_bite.ogg', delay=throwDelay, node=suit, playRate=1.05)
     toonTracks = getToonTracksCheat(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
                                dodgeAnimNames=['neutral'], showDamageExtraTime=1.4)
     return Parallel(suitTrack, toonTracks, soundTrack, propTracks, notifyTracks)
@@ -730,7 +730,7 @@ def doSnapStenographer(attack, suit):
     throwDuration = 0.25
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     notifyTracks = Parallel()
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.3, 0.1, 0.0), VBase3(4.465, -3.563, 180.0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -779,7 +779,7 @@ def doSnapStenographer(attack, suit):
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
-    soundTrack = getSoundTrack('SA_bite.ogg', delay=2, node=suit)
+    soundTrack: Sequence = getSoundTrack('SA_bite.ogg', delay=throwDelay, node=suit, playRate=1.05)
     toonTracks = getToonTracksCheat(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
                                dodgeAnimNames=['neutral'], showDamageExtraTime=1.4)
     return Parallel(suitTrack, toonTracks, soundTrack, propTracks, notifyTracks)
@@ -795,7 +795,7 @@ def doSnap(attack, suit):
     throwDuration = 0.25
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     notifyTracks = Parallel()
-    posPoints = [Point3(-0.25, 0, 0), VBase3(90, 180, 0)]
+    posPoints = [Point3(-0.3, 0.1, 0.0), VBase3(4.465, -3.563, 180.0)]
     propTracks = Parallel()
     for t in targets:
         toon = t['toon']
@@ -844,7 +844,7 @@ def doSnap(attack, suit):
     battle = attack['battle']
     target = attack['target']
     toon = target[0]['toon']
-    soundTrack = getSoundTrack('SA_bite.ogg', delay=2, node=suit)
+    soundTrack: Sequence = getSoundTrack('SA_bite.ogg', delay=throwDelay, node=suit, playRate=1.05)
     toonTracks = getToonTracksCheat(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.75,
                                dodgeAnimNames=['neutral'], showDamageExtraTime=1.4)
     return Parallel(suitTrack, toonTracks, soundTrack, propTracks, notifyTracks)
@@ -1138,19 +1138,18 @@ def doGavelCourtRecord2(attack):
         gavel = globalPropPool.getProp('LB_gavel')
         dmg = t['hp']
         toonPos = toon.getPos(battle)
-        gavelPos = Point3(toonPos.getX(), -17.5, 0)
+        gavelPos = Point3(toonPos.getX(), -20, 0)
         propTrack = Sequence(Wait(2.0),
             getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
-                               scaleUpPoint=Point3(1), scaleUpTime=1.5),
-            LerpHprInterval(gavel, 0.5, VBase3(0, -90, 0)),
+                               scaleUpPoint=Point3(1.75), scaleUpTime=1.5),
+            LerpHprInterval(gavel, 0.5, VBase3(0, -80, 0)),
             Parallel(getSoundTrack('LB_gavel.ogg'), Sequence(
-                Wait(0.1),
-                LerpHprInterval(gavel, 0.5, VBase3(0, 0, 0)),
-                LerpScaleInterval(gavel, 1.5, MovieUtil.PNT3_ZERO), Func(gavel.removeNode)
+                Wait(1.0),
+                LerpScaleInterval(gavel, 0.5, MovieUtil.PNT3_ZERO), Func(gavel.removeNode)
             ))
         )
         toonTrack = Sequence(
-            Wait(4.0),
+            Wait(3.875),
             Parallel(
                 Func(toon.enterFlattened), Func(toon.playDialogueForString, "!"),
 
@@ -1173,7 +1172,7 @@ def doGavelCourtRecord2(attack):
         if dmg > 0:
             propTracks.append(propTrack)
             toonTracks.append(toonTrack)
-    toonDamageTrack = getToonTracksCheat(attack, 5.5, ['nothing'], 0, ['neutral'])
+    toonDamageTrack = getToonTracksCheat(attack, 3.875, ['nothing'], 0, ['neutral'])
     return Parallel(toonTracks, toonDamageTrack, suitTrack, propTracks)
 
 def doGavelCourtRecord(attack):

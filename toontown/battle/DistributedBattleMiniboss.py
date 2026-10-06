@@ -246,6 +246,106 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                     pass
         return None
 
+    def setupManagerFromChair(self, suit):
+        directorBoss = None
+        cloBoss = None
+        vpBoss = None
+        chairmanBoss = None
+
+        # Find the Directors boss object.
+        for obj in list(base.cr.doId2do.values()):
+            if isinstance(obj, DistributedDirectors):
+                directorBoss = obj
+                break
+
+        for obj in list(base.cr.doId2do.values()):
+            if isinstance(obj, DistributedBoardbotBoss):
+                chairmanBoss = obj
+                break
+
+        for obj in list(base.cr.doId2do.values()):
+            if isinstance(obj, DistributedSellbotBossMini):
+                vpBoss = obj
+                break
+
+        for obj in list(base.cr.doId2do.values()):
+            if isinstance(obj, DistributedLawbotBoss):
+                cloBoss = obj
+                break
+
+        # if directorBoss is None:
+        #     print('setupManagerFromChair: Could not find DistributedDirectors')
+        #     return False
+
+        # Find the fake intro version of this manager.
+        fakeSuit = None
+
+        if suit.dna.name == 'ambass':
+            fakeSuit = directorBoss.ambassador
+            directorBoss.hideAmbassador()
+        elif suit.dna.name == 'wtapper':
+            fakeSuit = directorBoss.wiretapper
+            directorBoss.hideWiretapper()
+        elif suit.dna.name == 'phouse':
+            fakeSuit = directorBoss.powerhouse
+            directorBoss.hidePowerhouse()
+        elif suit.dna.name == 'bkeeper':
+            fakeSuit = directorBoss.vaultmaster
+            directorBoss.hideVaultmaster()
+        elif suit.dna.name == 'lgator':
+            fakeSuit = cloBoss.litigator
+            cloBoss.hideLitigator()
+        elif suit.dna.name == 'stenog':
+            fakeSuit = cloBoss.stenographer
+            cloBoss.hideStenographer()
+        elif suit.dna.name == 'caseman':
+            fakeSuit = cloBoss.casemanager
+            cloBoss.hideCaseManager()
+        elif suit.dna.name == 'sgoat':
+            fakeSuit = cloBoss.scapegoat
+            cloBoss.hideScapegoat()
+        elif suit.dna.name == 'safesupervis':
+            fakeSuit = vpBoss.pressurizer
+            vpBoss.hidePressurizer()
+        elif suit.dna.name == 'ubuster':
+            fakeSuit = vpBoss.unionbuster
+            vpBoss.hideUnionBuster()
+        elif suit.dna.name == 'hustle':
+            fakeSuit = vpBoss.racketeer
+            vpBoss.hideRacketeer()
+        elif suit.dna.name == 'radiog':
+            fakeSuit = vpBoss.radiographer
+            vpBoss.hideRadiographer()
+        elif suit.dna.name == 'cdirector':
+            fakeSuit = chairmanBoss.contingency
+            chairmanBoss.hideContingency()
+        elif suit.dna.name == 'rkeeper':
+            fakeSuit = chairmanBoss.recordkeeper
+            chairmanBoss.hideRecordkeeper()
+        elif suit.dna.name == 'liquid':
+            fakeSuit = chairmanBoss.tollmaster
+            chairmanBoss.hideTollmaster()
+        elif suit.dna.name == 'dking':
+            fakeSuit = chairmanBoss.dividend
+            chairmanBoss.hideDividend()
+
+        if fakeSuit is None:
+            return False
+
+        # Put the REAL battle Cog directly over the fake intro Cog.
+        suit.reparentTo(render)
+        suit.setPos(render, fakeSuit.getPos(render))
+        suit.setHpr(render, fakeSuit.getHpr(render))
+
+        # Swap them.
+        fakeSuit.hide()
+        suit.show()
+
+        # Change parent to the battle WITHOUT changing its visual/world position.
+        suit.wrtReparentTo(self)
+
+        return True
+
     def createAdjustInterval(self, av, destPos, destHpr, toon=0, run=0):
         # Altis normally runs the pending-to-active Cog walk at 1x even while
         # Pacesetter has accelerated the rest of the battle.  Only scale Suit
@@ -284,76 +384,90 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         suitTracks = Parallel()
         delay = 0
         for suit in suits:
-            if suit.dna.name == 'cdirector':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedBoardbotBoss):
-                        obj.hideContingency()
-            if suit.dna.name == 'dking':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedBoardbotBoss):
-                        obj.hideDividend()
-            if suit.dna.name == 'rkeeper':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedBoardbotBoss):
-                        obj.hideRecordkeeper()
-            if suit.dna.name == 'liquid':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedBoardbotBoss):
-                        obj.hideTollmaster()
-            if suit.dna.name == 'ambass':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedDirectors):
-                        obj.hideAmbassador()
-            if suit.dna.name == 'wtapper':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedDirectors):
-                        obj.hideWiretapper()
-            if suit.dna.name == 'phouse':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedDirectors):
-                        obj.hidePowerhouse()
-            if suit.dna.name == 'bkeeper':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedDirectors):
-                        obj.hideVaultmaster()
-            if suit.dna.name == 'lgator':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedLawbotBoss):
-                        obj.hideLitigator()
-            if suit.dna.name == 'stenog':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedLawbotBoss):
-                        obj.hideStenographer()
-            if suit.dna.name == 'caseman':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedLawbotBoss):
-                        obj.hideCaseManager()
-            if suit.dna.name == 'sgoat':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedLawbotBoss):
-                        obj.hideScapegoat()
-            if suit.dna.name == 'safesupervis':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedSellbotBossMini):
-                        obj.hidePressurizer()
-            if suit.dna.name == 'ubuster':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedSellbotBossMini):
-                        obj.hideUnionBuster()
-            if suit.dna.name == 'hustle':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedSellbotBossMini):
-                        obj.hideRacketeer()
-            if suit.dna.name == 'radiog':
-                for obj in list(base.cr.doId2do.values()):
-                    if isinstance(obj, DistributedSellbotBossMini):
-                        obj.hideRadiographer()
+            # if suit.dna.name == 'cdirector':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedBoardbotBoss):
+            #             obj.hideContingency()
+            # if suit.dna.name == 'dking':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedBoardbotBoss):
+            #             obj.hideDividend()
+            # if suit.dna.name == 'rkeeper':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedBoardbotBoss):
+            #             obj.hideRecordkeeper()
+            # if suit.dna.name == 'liquid':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedBoardbotBoss):
+            #             obj.hideTollmaster()
+            # # if suit.dna.name == 'ambass':
+            # #     for obj in list(base.cr.doId2do.values()):
+            # #         if isinstance(obj, DistributedDirectors):
+            # #             obj.hideAmbassador()
+            # # if suit.dna.name == 'wtapper':
+            # #     for obj in list(base.cr.doId2do.values()):
+            # #         if isinstance(obj, DistributedDirectors):
+            # #             obj.hideWiretapper()
+            # # if suit.dna.name == 'phouse':
+            # #     for obj in list(base.cr.doId2do.values()):
+            # #         if isinstance(obj, DistributedDirectors):
+            # #             obj.hidePowerhouse()
+            # # if suit.dna.name == 'bkeeper':
+            # #     for obj in list(base.cr.doId2do.values()):
+            # #         if isinstance(obj, DistributedDirectors):
+            # #             obj.hideVaultmaster()
+            # if suit.dna.name == 'lgator':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedLawbotBoss):
+            #             obj.hideLitigator()
+            # if suit.dna.name == 'stenog':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedLawbotBoss):
+            #             obj.hideStenographer()
+            # if suit.dna.name == 'caseman':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedLawbotBoss):
+            #             obj.hideCaseManager()
+            # if suit.dna.name == 'sgoat':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedLawbotBoss):
+            #             obj.hideScapegoat()
+            # if suit.dna.name == 'safesupervis':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedSellbotBossMini):
+            #             obj.hidePressurizer()
+            # if suit.dna.name == 'ubuster':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedSellbotBossMini):
+            #             obj.hideUnionBuster()
+            # if suit.dna.name == 'hustle':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedSellbotBossMini):
+            #             obj.hideRacketeer()
+            # if suit.dna.name == 'radiog':
+            #     for obj in list(base.cr.doId2do.values()):
+            #         if isinstance(obj, DistributedSellbotBossMini):
+            #             obj.hideRadiographer()
             if suit.dna.name == 'hroller':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingHighRoller(suit, ts, name, callback)
             if suit.dna.name == 'hroller2':
                 suit.setPos(0, 0, 50)
                 return self.showSuitsFallingHighRollerPhase2(suit, ts, name, callback)
+            if suit.dna.name in (
+                'ambass', 'wtapper', 'phouse', 'bkeeper',
+                'stenog', 'lgator', 'sgoat', 'caseman',
+                'safesupervis', 'hustle', 'radiog', 'ubuster',
+                'cdirector', 'rkeeper', 'liquid', 'dking'
+            ):
+                suit.setState('Battle')
+
+                suitTrack = self.createManagerMoveIval(suit, delay)
+
+                suitTracks.append(suitTrack)
+
+                delay += 1.0
+                continue
             noFlySuits = []
             if suit.dna.name in ['psetter', 'dold', 'derrhand', 'dopa', 'videog']:
                 if self.bossCog == None:
@@ -1103,57 +1217,100 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         self.storeInterval(track, name)
         return
 
-    def createManagerMoveIval(self, suit):
-        dur = suit.getDuration('landing')
-        fr = suit.getFrameRate('landing')
-        landingDur = dur
-        totalDur = 7.3
-        animTimeInAir = totalDur - dur
-        flyingDur = animTimeInAir
-        impactLength = dur - animTimeInAir
+    def createManagerMoveIval(self, suit, delay=0.0):
         if suit in self.joiningSuits:
             i = self._getPendingPreviewIndex(suit)
-            destPos, h = self.suitPendingPointsSilhouettes[i]
+            destPos, h = self.suitPendingPoints[i]
             destHpr = VBase3(h, 0, 0)
         else:
             destPos, destHpr = self.getActorPosHpr(suit, self.suits)
-        suit.reparentTo(render)
-        if suit.dna.name == 'ambass':
-            suit.setPos(15, 352.25, 2.5)
-            taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
-            moveIval = Sequence(Func(suit.headsUp, self), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), Func(suit.pose, 'landing', 0),
-                                ProjectileInterval(suit, duration=flyingDur, startPos=(15, 355, 4.25), endPos=destPos, gravityMult=0.25), ActorInterval(suit, 'landing'))
-        elif suit.dna.name == 'wtapper':
-            suit.setPos(-15, 352.25, 2.5)
-            taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
-            moveIval = Sequence(Func(suit.headsUp, self), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), Func(suit.pose, 'landing', 0),
-                                ProjectileInterval(suit, duration=flyingDur, startPos=(-15, 355, 4.25), endPos=destPos, gravityMult=0.25), ActorInterval(suit, 'landing'))
-        elif suit.dna.name == 'phouse':
-            suit.setPos(30, 352.25, 2.5)
-            taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
-            moveIval = Sequence(Func(suit.headsUp, self), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), Func(suit.pose, 'landing', 0),
-                                ProjectileInterval(suit, duration=flyingDur, startPos=(30, 355, 4.25), endPos=destPos, gravityMult=0.25), ActorInterval(suit, 'landing'))
-        elif suit.dna.name == 'bkeeper':
-            suit.setPos(-30, 352.25, 2.5)
-            taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
-            moveIval = Sequence(Func(suit.headsUp, self), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), Func(suit.pose, 'landing', 0),
-                                ProjectileInterval(suit, duration=flyingDur, startPos=(-30, 355, 4.25), endPos=destPos, gravityMult=0.25), ActorInterval(suit, 'landing'))
-        else:
-            suit.setPos(0, 0, 0)
-            taunt = SuitBattleGlobals.getFaceoffTaunt(suit.getStyleName(), suit.doId)
-            moveIval = Sequence(Func(suit.headsUp, self), Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout), Func(suit.pose, 'landing', 0),
-                                ProjectileInterval(suit, duration=flyingDur, startPos=(-30, 355, 4.25), endPos=destPos, gravityMult=0.25), ActorInterval(suit, 'landing'))
-        suit.setHpr(180, 0, 0)
-        if suit.prop == None:
-            suit.prop = BattleProps.globalPropPool.getProp('propeller')
-        lastSpinFrame = 8
-        fr = suit.prop.getFrameRate('propeller')
-        spinTime = lastSpinFrame / fr
-        openTime = (lastSpinFrame + 1) / fr
-        suit.attachPropeller()
-        propTrack = Parallel(SoundInterval(suit.propInSound, duration=flyingDur, node=suit), Sequence(ActorInterval(suit.prop, 'propeller', constrainedLoop=1, duration=flyingDur + 1, startTime=0.0, endTime=spinTime), ActorInterval(suit.prop, 'propeller', duration=landingDur, startTime=openTime), Func(suit.detachPropeller)))
-        result = Parallel(moveIval, propTrack)
-        return result
+
+        flyingDur = 2.5
+
+        taunt = SuitBattleGlobals.getFaceoffTaunt(
+            suit.getStyleName(),
+            suit.doId
+        )
+
+        # We need somewhere to save the chair position once
+        # setupManagerFromChair() has actually happened.
+
+        if self.hasLocalToon():
+            if suit.dna.name in ['wtapper', 'ambass', 'bkeeper', 'phouse']:
+                camera.reparentTo(self)
+                camera.setPosHpr(0, -25, 35, 0, -25, 0)
+            if suit.dna.name in ['safesupervis', 'hustle', 'ubuster', 'radiog']:
+                camera.reparentTo(self)
+                camera.setPosHpr(0, 50, 25, 180, -10, 0)
+            if suit.dna.name in ['rkeeper', 'cdirector', 'liquid', 'dking']:
+                camera.reparentTo(self)
+                camera.setPosHpr(0, 30, 35, 180, -30, 0)
+            if suit.dna.name in ['stenog', 'lgator', 'sgoat', 'caseman']:
+                camera.reparentTo(self)
+                camera.setPosHpr(0, 20, 15, 180, 0, 0)
+
+        moveData = {}
+
+        def setupManager():
+            if not self.setupManagerFromChair(suit):
+                print(
+                    'createManagerMoveIval: failed setup for %s' %
+                    suit.dna.name
+                )
+                return
+
+            moveData['startPos'] = suit.getPos(self)
+
+        def startProjectile():
+            startPos = moveData.get('startPos')
+
+            if startPos is None:
+                return
+
+            ProjectileInterval(
+                suit,
+                duration=flyingDur,
+                startPos=startPos,
+                endPos=destPos,
+                gravityMult=0.25
+            ).start()
+
+            LerpHprInterval(suit, flyingDur, destHpr).start()
+
+        return Sequence(
+            # Each manager waits a different amount.
+            Wait(delay),
+
+            # NOW swap fake chair Cog -> real Cog.
+            Func(setupManager),
+
+            Func(suit.loop, 'neutral'),
+
+            Wait(1.0),
+
+            Func(
+                suit.setChatAbsolute,
+                taunt,
+                CFSpeech | CFTimeout
+            ),
+
+            Func(suit.headsUp, self, destPos),
+
+            Func(suit.pose, 'landing', 0),
+
+            Func(startProjectile),
+
+            Wait(flyingDur),
+
+            ActorInterval(
+                suit,
+                'landing'
+            ),
+
+            Func(suit.setHpr, destHpr),
+
+            Func(suit.loop, 'neutral')
+        )
 
     def enterWaitForInput(self, ts = 0):
         DistributedBattleFinal.DistributedBattleFinal.enterWaitForInput(self, ts)

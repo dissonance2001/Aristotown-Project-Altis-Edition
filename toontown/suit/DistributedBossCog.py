@@ -1597,8 +1597,6 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
 
     def __clickedNameTag(self, avatar):
         self.notify.debug('__clickedNameTag')
-        if not (self.state == 'BattleThree' or self.state == 'BattleFour'):
-            return
         if not self.allowClickedNameTag:
             return
         if self.cr:
@@ -1608,8 +1606,6 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
 
     def __handleFriendAvatar(self, avId, avName, avDisableName):
         self.notify.debug('__handleFriendAvatar')
-        if not (self.state == 'BattleThree' or self.state == 'BattleFour'):
-            return
         if not self.allowClickedNameTag:
             return
         if self.cr:
@@ -1619,8 +1615,6 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar, BossCog.BossCog):
 
     def __handleAvatarDetails(self, avId, avName, playerId = None):
         self.notify.debug('__handleAvatarDetails')
-        if not (self.state == 'BattleThree' or self.state == 'BattleFour'):
-            return
         if not self.allowClickedNameTag:
             return
         if self.cr:

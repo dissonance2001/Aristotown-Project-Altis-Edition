@@ -497,6 +497,7 @@ class BaseSuitAttackCalculatorAI:
                             'targetType': 'suit',
                             'allowSelfTarget': False,
                             'targetSelf': False,
+                     'excludeManagers': True,
                             'requiredConditions': ('lured',),
                             'excludeConditions': (),
                             'priorityConditions': (),
@@ -1044,21 +1045,6 @@ class BaseSuitAttackCalculatorAI:
                                                                 'group': SuitBattleGlobals.ATK_TGT_GROUP})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                if self.battle.findSuit(suitId).dna.name == 'bkeeper' and self.suitHasCondition(suitId, 'soakedcalculator'):  # Sniper Factory Foreman
-                    if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
-                        attack = self.__getLureRemoval(suitId)
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.battle.activeSuits[i].currHP > 0 and self.suitHasCondition(suitId, 'soakedcalculator'):
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'bkeeper',
-                                                                'name': 'BookkeeperPaperCutSoaked',
-                                                                'animName': 'sanction',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
                 if self.battle.findSuit(suitId).dna.name == 'clubpres' and self.suitHasCondition(suitId, 'soakedcalculator') and self.battle.activeSuits[i].getActualLevel() == 27:  # Sniper Factory Foreman
                     if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
                         attack = self.__getLureRemoval(suitId)
@@ -1172,21 +1158,21 @@ class BaseSuitAttackCalculatorAI:
                                                                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
                             if attack[SUIT_ATK_COL]:
                                 self.battle.suitAttacks.append(attack)
-                    if self.battle.findSuit(suitId).dna.name == 'bkeeper' and self.suitHasCondition(suitId, 'soakedcalculator'):  # Sniper Factory Foreman
-                        if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
-                            attack = self.__getLureRemoval(suitId)
-                            if attack[SUIT_ATK_COL]:
-                                self.battle.suitAttacks.append(attack)
-                        if self.battle.activeSuits[i].currHP > 0 and self.suitHasCondition(suitId, 'soakedcalculator'):
-                            attack = self.__getCheatAttack(suitId, {'suitName': 'bkeeper',
-                                                                    'name': 'BookkeeperPaperCutSoaked',
-                                                                    'animName': 'sanction',
-                                                                    'hp': 0,
-                                                                    'acc': 100,
-                                                                    'freq': 0,
-                                                                    'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                            if attack[SUIT_ATK_COL]:
-                                self.battle.suitAttacks.append(attack)
+                    # if self.battle.findSuit(suitId).dna.name == 'bkeeper' and self.suitHasCondition(suitId, 'soakedcalculator'):  # Sniper Factory Foreman
+                    #     if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
+                    #         attack = self.__getLureRemoval(suitId)
+                    #         if attack[SUIT_ATK_COL]:
+                    #             self.battle.suitAttacks.append(attack)
+                    #     if self.battle.activeSuits[i].currHP > 0 and self.suitHasCondition(suitId, 'soakedcalculator'):
+                    #         attack = self.__getCheatAttack(suitId, {'suitName': 'bkeeper',
+                    #                                                 'name': 'BookkeeperPaperCutSoaked',
+                    #                                                 'animName': 'sanction',
+                    #                                                 'hp': 0,
+                    #                                                 'acc': 100,
+                    #                                                 'freq': 0,
+                    #                                                 'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    #         if attack[SUIT_ATK_COL]:
+                    #             self.battle.suitAttacks.append(attack)
                     if self.battle.findSuit(suitId).dna.name == 'clubpres' and self.suitHasCondition(suitId, 'soakedcalculator') and self.battle.activeSuits[i].getActualLevel() == 27:  # Sniper Factory Foreman
                         if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
                             attack = self.__getLureRemoval(suitId)
@@ -1373,21 +1359,21 @@ class BaseSuitAttackCalculatorAI:
                                                                         'group': SuitBattleGlobals.ATK_TGT_GROUP})
                                 if attack[SUIT_ATK_COL]:
                                     self.battle.suitAttacks.append(attack)
-                        if self.battle.findSuit(suitId).dna.name == 'bkeeper' and self.suitHasCondition(suitId, 'soakedcalculator'):  # Sniper Factory Foreman
-                            if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
-                                attack = self.__getLureRemoval(suitId)
-                                if attack[SUIT_ATK_COL]:
-                                    self.battle.suitAttacks.append(attack)
-                            if self.battle.activeSuits[i].currHP > 0 and self.suitHasCondition(suitId, 'soakedcalculator'):
-                                attack = self.__getCheatAttack(suitId, {'suitName': 'bkeeper',
-                                                                        'name': 'BookkeeperPaperCutSoaked',
-                                                                        'animName': 'sanction',
-                                                                        'hp': 0,
-                                                                        'acc': 100,
-                                                                        'freq': 0,
-                                                                        'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                                if attack[SUIT_ATK_COL]:
-                                    self.battle.suitAttacks.append(attack)
+                        # if self.battle.findSuit(suitId).dna.name == 'bkeeper' and self.suitHasCondition(suitId, 'soakedcalculator'):  # Sniper Factory Foreman
+                        #     if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
+                        #         attack = self.__getLureRemoval(suitId)
+                        #         if attack[SUIT_ATK_COL]:
+                        #             self.battle.suitAttacks.append(attack)
+                        #     if self.battle.activeSuits[i].currHP > 0 and self.suitHasCondition(suitId, 'soakedcalculator'):
+                        #         attack = self.__getCheatAttack(suitId, {'suitName': 'bkeeper',
+                        #                                                 'name': 'BookkeeperPaperCutSoaked',
+                        #                                                 'animName': 'sanction',
+                        #                                                 'hp': 0,
+                        #                                                 'acc': 100,
+                        #                                                 'freq': 0,
+                        #                                                 'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                        #         if attack[SUIT_ATK_COL]:
+                        #             self.battle.suitAttacks.append(attack)
                         if self.battle.findSuit(suitId).dna.name == 'clubpres' and self.suitHasCondition(suitId, 'soakedcalculator') and self.battle.activeSuits[i].getActualLevel() == 27:  # Sniper Factory Foreman
                             if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
                                 attack = self.__getLureRemoval(suitId)
@@ -1768,21 +1754,21 @@ class BaseSuitAttackCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                     self.setSuitCondition(suitId, 'hottakecalculator2', 0, 0, 'setBoth')
-            if self.battle.activeSuits[i].dna.name == 'clubpres' and self.battle.activeSuits[i].getActualLevel() == 27:  # bookkeeper
-                if self.TurnsElapsed % 2 == 0 and self.suitHasCondition(suitId, 'unlureSuit') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getLureRemovalPreToon(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 2 == 0 and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'PresidentLiability', # Paper Cut
-                     'animName': 'sanction',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
+            # if self.battle.activeSuits[i].dna.name == 'clubpres' and self.battle.activeSuits[i].getActualLevel() == 27:  # bookkeeper
+            #     if self.TurnsElapsed % 2 == 0 and self.suitHasCondition(suitId, 'unlureSuit') and self.battle.activeSuits[i].currHP > 0:
+            #         attack = self.__getLureRemovalPreToon(suitId)
+            #         if attack[SUIT_ATK_COL]:
+            #             self.battle.suitAttacks.append(attack)
+            #     if self.TurnsElapsed % 2 == 0 and self.__suitCanAttack(suitId):
+            #         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #          'name': 'PresidentLiability', # Paper Cut
+            #          'animName': 'sanction',
+            #          'hp': 0,
+            #          'acc': 100,
+            #          'freq': 0,
+            #          'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #         if attack[SUIT_ATK_COL]:
+            #             self.battle.suitAttacks.append(attack)
                 # if (self.TurnsElapsed + 1) % 2 == 0 and self.suitHasCondition(suitId, 'unlureSuit') and self.battle.activeSuits[i].currHP > 0:
                 #     attack = self.__getLureRemovalPreToon(suitId)
                 #     if attack[SUIT_ATK_COL]:
@@ -1797,47 +1783,22 @@ class BaseSuitAttackCalculatorAI:
                 #      'group': SuitBattleGlobals.ATK_TGT_DOUBLE})
                 #     if attack[SUIT_ATK_COL]:
                 #         self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
-                if self.suitHasCondition(suitId, 'papercutcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueuedPreToon(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'papercutcalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'BookkeeperPaperCut', # Paper Cut
-                     'animName': 'sanction',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'bkeeper':
-                if self.suitHasCondition(suitId, 'papercutcalculator3') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'AmbassadorAdvancement3', # Paper Cut
-                     'animName': 'sanction',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
+            # if self.battle.activeSuits[i].dna.name == 'bkeeper':
+            #     if self.suitHasCondition(suitId, 'papercutcalculator3') and self.__suitCanAttack(suitId):
+            #         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #          'name': 'AmbassadorAdvancement3', # Paper Cut
+            #          'animName': 'sanction',
+            #          'hp': 0,
+            #          'acc': 100,
+            #          'freq': 0,
+            #          'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+            #         if attack[SUIT_ATK_COL]:
+            #             self.battle.suitAttacks.append(attack)
             if not self.suitHasCondition(suitId, 'dotfinished'):  # powerhouse
                 self.__appendToonConditionDamageAndRetaliation(
                     condition='zapped',
                     damage=25,
                     damageMovie='PowerhouseBurnDamage',
-                    retaliateAtTurns=[1],
-                    retaliations=[
-                        {
-                            'suitNames': ['bkeeper'],
-                            'movie': 'AmbassadorAdvancement3',
-                            'animName': 'sanction',
-                            'hp': 25,
-                            'queueCondition': 'papercutcalculator3',
-                        }
-                    ]
                 )
                 # if self.TurnsElapsed % 1 == 0 and self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'dotfinished'):
                 #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
@@ -2038,21 +1999,21 @@ class BaseSuitAttackCalculatorAI:
                                                                 'group': SuitBattleGlobals.ATK_TGT_GROUP})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                if self.battle.findSuit(suitId).dna.name == 'bkeeper' and self.suitHasCondition(suitId, 'soakedcalculator'):  # Sniper Factory Foreman
-                    if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
-                        attack = self.__getLureRemoval(suitId)
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    if self.battle.activeSuits[i].currHP > 0 and self.suitHasCondition(suitId, 'soakedcalculator'):
-                        attack = self.__getCheatAttack(suitId, {'suitName': 'bkeeper',
-                                                                'name': 'BookkeeperPaperCutSoaked',
-                                                                'animName': 'sanction',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
+                # if self.battle.findSuit(suitId).dna.name == 'bkeeper' and self.suitHasCondition(suitId, 'soakedcalculator'):  # Sniper Factory Foreman
+                #     if self.battle.activeSuits[i].currHP > 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'soakedcalculator'):
+                #         attack = self.__getLureRemoval(suitId)
+                #         if attack[SUIT_ATK_COL]:
+                #             self.battle.suitAttacks.append(attack)
+                #     if self.battle.activeSuits[i].currHP > 0 and self.suitHasCondition(suitId, 'soakedcalculator'):
+                #         attack = self.__getCheatAttack(suitId, {'suitName': 'bkeeper',
+                #                                                 'name': 'BookkeeperPaperCutSoaked',
+                #                                                 'animName': 'sanction',
+                #                                                 'hp': 0,
+                #                                                 'acc': 100,
+                #                                                 'freq': 0,
+                #                                                 'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                #         if attack[SUIT_ATK_COL]:
+                #             self.battle.suitAttacks.append(attack)
 
         # for i in range(len(self.battle.activeSuits)):
         #     suitId = self.battle.activeSuits[i].doId

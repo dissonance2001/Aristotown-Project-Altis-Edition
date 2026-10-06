@@ -2919,7 +2919,7 @@ class TownBattleCogPanel(DirectFrame):
             self._attachStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Closed Session', 
-                                   tooltipDescription="The Commissioner is currently focusing, he will severely punish the Toons who attack him in this mode! If left unattacked, he will gain a %s attack damage boost." % damageText, 
+                                   tooltipDescription="The Regulator is currently focusing, he will severely punish the Toons who attack him in this mode! If left unattacked, he will gain a %s attack damage boost." % damageText, 
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
             self._pulseStatusSlot(slot, fromColor=(1, 0, 0, 1), toColor=(1, 0.984, 0, 1))

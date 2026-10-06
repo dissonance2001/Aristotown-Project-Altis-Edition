@@ -372,13 +372,30 @@ class SuitGenerator(object):
             #self.setSuitStatusEffect('toleranceBuilding')
         elif dna.name == 'bkeeper':
             self.scale = 7.0 / aSize
-            self.handColor = VBase4(0.784, 0.745, 0.69, 1)
-            self.generateBody()
+            self.handColor = VBase4(0.749, 0.69, 0.62, 1)
+            self.generateFemaleBody()
             self.makeExecutive()
-            self.generateHead3('paperhands', animated=True)
-            texture = loader.loadTexture('phase_14/maps/cc_t_ene_stockbroker.png')
+            self.generateHead3('clo', animated=True)
+            texture = loader.loadTexture('phase_11/maps/ttcc_ene_clo_bossbot.png')
+            from panda3d.core import TextureAttrib
+
             for headPart in self.headParts:
-                headPart.setTexture(texture, 1)
+                
+                gn_path = headPart.find("**/+GeomNode")
+
+                if not gn_path.isEmpty():
+                    geomNode = gn_path.node()
+
+                    for i in range(geomNode.getNumGeoms()):
+                        state = geomNode.getGeomState(i)
+                        tex_attr = state.getAttrib(TextureAttrib)
+
+                        if tex_attr:
+                            for stage in tex_attr.getOnStages():
+                                current_tex = tex_attr.getOnTexture(stage)
+                                if current_tex and "ttcc_ene_clo" in current_tex.getFilename().getBasename():
+                                    new_state = state.setAttrib(tex_attr.addOnStage(stage, texture))
+                                    geomNode.setGeomState(i, new_state)
             self.setHeight(9.2)
            # self.setTransparency(1)
         elif dna.name == 'wtapper':

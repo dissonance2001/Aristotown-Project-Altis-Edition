@@ -122,15 +122,27 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
 
     def hidePressurizer(self):
         self.pressurizer.hide()
+        self.setChatAbsolute(random.choice(("Let's see how they perform under real pressure!",
+                                             "I think they're getting a little too comfortable, Pressurizer, turn up the heat on these Toons!",
+                                            "They haven't cracked yet, time to tighten the screws!")), CFSpeech | CFTimeout)
 
     def hideUnionBuster(self):
         self.unionbuster.hide()
+        self.setChatAbsolute(random.choice(("Union Buster! We have a labor problem, correct it!",
+                                             "I think it's time for a little downsizing, break up this little gathering for me, would ya?",
+                                            "Enough collective action, shut this down now!")), CFSpeech | CFTimeout)
 
     def hideRacketeer(self):
         self.racketeer.hide()
+        self.setChatAbsolute(random.choice(("These Toons are holding up my business!",
+                                             "We seem to have an obstruction, Traffic Manager, clear these Toons out.",
+                                            "Looks like we have some unauthorized traffic.")), CFSpeech | CFTimeout)
 
     def hideRadiographer(self):
         self.radiographer.hide()
+        self.setChatAbsolute(random.choice(("Let's take a closer look at our opposition.",
+                                             "Radiographer! Give these Toons a proper screening!",
+                                            "Something tells me they're not as tough as they look, let's see what's going on beneath the surface, shall we?")), CFSpeech | CFTimeout)
 
     def announceGenerate(self):
         global OneBossCog

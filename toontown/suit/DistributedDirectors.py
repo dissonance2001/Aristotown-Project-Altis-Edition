@@ -72,6 +72,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.lastZapLocalTime = 0
         self.numAttacks = 7
         self.tableIndex = 15
+        self.chandeliers = []
 
         self.ambassador = DistributedSuitBase.DistributedSuitBase(cr)
         suitDNA = SuitDNA.SuitDNA()
@@ -87,7 +88,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         suitDNA.newSuit('bkeeper')
         self.vaultmaster.setDNA(suitDNA)
         self.vaultmaster.setPickable(0)
-        self.vaultmaster.setDisplayName('Commissioner\nBossbot\nLevel 44.mgr')
+        self.vaultmaster.setDisplayName('Regulator\nBossbot\nLevel 44.mgr')
         self.vaultmaster.doId = 0
         self.vaultmaster.loop('sit-exec')
 
@@ -112,15 +113,27 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def hideAmbassador(self):
         self.ambassador.hide()
+        self.setChatAbsolute(random.choice(("Perhaps you can reach an understanding.",
+                                             "Our relationsnhip with these Toons needs improving.",
+                                            "It seems negotiations have broken down, remind them who they're dealing with!")), CFSpeech | CFTimeout)
 
     def hideVaultmaster(self):
         self.vaultmaster.hide()
+        self.setChatAbsolute(random.choice(("I believe we have a few violations that need addressing.",
+                                             "It's time for some regulatory action, enforce company policy!",
+                                            "I want these violations addressed immediately, bring this situation back under control!")), CFSpeech | CFTimeout)
 
     def hidePowerhouse(self):
         self.powerhouse.hide()
+        self.setChatAbsolute(random.choice(("I think it's time for a show of force.",
+                                             "They seem to think they have the upper hand, show them where the real power lies!",
+                                            "Time to demonstrate our market power.")), CFSpeech | CFTimeout)
 
     def hideWiretapper(self):
         self.wiretapper.hide()
+        self.setChatAbsolute(random.choice(("Let's uncover a few trade secrets.",
+                                             "I believe our guests are withholding information from us, I want every detail!",
+                                            "Their next move shouldn't remain private for long.")), CFSpeech | CFTimeout)
 
     def announceGenerate(self):
         global OneBossCog
@@ -240,15 +253,25 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.battleOneMusic3 = loader.loadMusic('phase_12/audio/bgm/encntr_penultimate_intro.ogg')
         self.explodeSfx = loader.loadSfx('phase_4/audio/sfx/firework_distance_02.ogg')
 
-        for i in range(14):
-            self.chandeliers = loader.loadModel('phase_14/models/props/ExecutiveChandelier')
-            chandelierLocator = self.geom.find('**/TableLocator_%i' % (i + 1))
+        self.chandeliers = []
+
+        for i in range(14):           
+            chandelier = loader.loadModel(
+                'phase_14/models/props/ExecutiveChandelier'
+            )
+
+            chandelierLocator = self.geom.find(
+                '**/TableLocator_%i' % (i + 1)
+            )
+
             if chandelierLocator.isEmpty():
-                self.chandeliers.reparentTo(render)
-                self.chandeliers.setPos(0, 75, 100)
+                chandelier.reparentTo(render)
+                chandelier.setPos(0, 75, 100)
             else:
-                self.chandeliers.reparentTo(chandelierLocator)
-                self.chandeliers.setZ(100)
+                chandelier.reparentTo(chandelierLocator)
+                chandelier.setPos(0, 0, 100)
+
+            self.chandeliers.append(chandelier)
 
     def unloadEnvironment(self):
         for belt in self.belts:
@@ -260,6 +283,12 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 spot.cleanup()
 
         self.golfSpots = {}
+        if hasattr(self, 'chandeliers'):
+            for chandelier in self.chandeliers:
+                if chandelier and not chandelier.isEmpty():
+                    chandelier.removeNode()
+
+            self.chandeliers = []
         self.geom.removeNode()
         del self.geom
         DistributedBossCog.DistributedBossCog.unloadEnvironment(self)
@@ -467,7 +496,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
                              Func(self.powerhouse.setChatAbsolute, "You're not built for this!", CFSpeech), Wait(3.0), Func(self.powerhouse.setChatAbsolute, "", CFSpeech)),
 
                          LerpPosInterval(camera, 2, getCamBossPosVaultmaster),
-                         Parallel(Func(self.setChatAbsolute, "Commissioner, when something becomes inefficient, it is removed. He decides what remains, and what is written off.", CFSpeech), Sequence(ActorInterval(self, 'Ff_speech'), Func(self.loop, 'Ff_neutral'))),
+                         Parallel(Func(self.setChatAbsolute, "Regulator, when something becomes inefficient, it is removed. He decides what remains, and what is written off.", CFSpeech), Sequence(ActorInterval(self, 'Ff_speech'), Func(self.loop, 'Ff_neutral'))),
                          Parallel(Func(self.vaultmaster.setChatAbsolute, "You are liabilities...", CFSpeech),
                                   Sequence(ActorInterval(self.vaultmaster, 'speak', playRate=1.5), Func(self.vaultmaster.loop, 'neutral'))),
                          Sequence(Func(self.vaultmaster.setChatAbsolute, "Unsecured. Uninsured.", CFSpeech), Wait(3.0), Func(self.vaultmaster.setChatAbsolute, "I will correct that.", CFSpeech),
@@ -653,11 +682,13 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.servingTimer.posInTopRightCorner()
         self.servingTimer.countdown(ToontownGlobals.BossbotBossServingDuration)
         base.playMusic(self.phaseTwoMusic, looping=1, volume=0.9)
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
+
         self.accept('clickedNametag', self.__clickedNameTag)
         self.accept('friendAvatar', self.__handleFriendAvatar)
         self.accept('avatarDetails', self.__handleAvatarDetails)
-        NametagGlobals.setWant2dNametags(False)
-        NametagGlobals.setWantActiveNametags(True)
 
     def exitBattleTwo(self):
         if self.servingTimer:

@@ -855,15 +855,27 @@ class DistributedBoardbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def hideContingency(self):
         self.contingency.hide()
+        self.setChatAbsolute(random.choice(("Let's introduce a few... unforseen circumstances.",
+                                             "Contingency Director, they've exceeded projections, adjust accordingly!",
+                                            "Every setback requires a backup plan.")), CFSpeech | CFTimeout)
 
     def hideDividend(self):
         self.dividend.hide()
+        self.setChatAbsolute(random.choice(("Let's see some returns on my investment!",
+                                             "These Toons are cutting into our margins. Take them down!",
+                                            "Business is booming, let's keep it that way!")), CFSpeech | CFTimeout)
 
     def hideRecordkeeper(self):
         self.recordkeeper.hide()
+        self.setChatAbsolute(random.choice(("Every mistake deserves to be remembered!",
+                                             "I believe we have some records to update, don't you agree?",
+                                            "Make sure none of this goes unrecorded!")), CFSpeech | CFTimeout)
 
     def hideTollmaster(self):
         self.tollmaster.hide()
+        self.setChatAbsolute(random.choice(("These Toons have gone far enough without paying, correct it!",
+                                             "Their free ride ends here.",
+                                            "They want passage? Make them pay for it, nobody gets through for free.")), CFSpeech | CFTimeout)
 
     def switchIntroMusic(self):
         self.promotionMusic.stop()

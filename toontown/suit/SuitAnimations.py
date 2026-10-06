@@ -28,7 +28,7 @@ SuitsCEOBattle = (('sit', 'sit'), ('sit-eat-in', 'sit-eat-in'), ('sit-eat-loop',
     # Bossbots
 f = (('throw-paper', 'throw-paper', 4), ('phone', 'phone', 4), ('shredder', 'shredder', 4))
 p = (('pencil-sharpener', 'pencil-sharpener', 4), ('pen-squirt', 'pen-squirt', 4), ('hold-eraser', 'hold-eraser', 4), ('finger-wag', 'finger-wag', 4), ('hold-pencil', 'hold-pencil', 4))
-psh = (('pencil-sharpener', 'pencil-sharpener', 4), ('pen-squirt', 'pen-squirt', 4), ('hold-eraser', 'hold-eraser', 4), ('finger-wag', 'finger-wag', 4), ('hold-pencil', 'hold-pencil', 4))
+psh = (('roll-o-dex', 'roll-o-dex', 4), ('pencil-sharpener', 'pencil-sharpener', 4), ('pen-squirt', 'pen-squirt', 4), ('hold-eraser', 'hold-eraser', 4), ('finger-wag', 'finger-wag', 4), ('hold-pencil', 'hold-pencil', 4))
 stg = (('finger-wag', 'finger-wag', 4), ('pen-squirt', 'fountain-pen', 4))
 ym = (('golf-club-swing', 'golf-club-swing', 4), ('rubber-stamp', 'rubber-stamp', 4), ('smile', 'smile', 4))
 enf =  (('roll-o-dex', 'roll-o-dex', 4), ('effort', 'effort', 4), ('smile', 'smile', 4))
@@ -187,7 +187,7 @@ fires = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4), (
 fbed = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4))
 chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 phouse = (('cease', 'cease', 4), ('sparkplug', 'sparkplug', 4), ('snap', 'snap2', 4), ('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4), ('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
-bkeeper = (('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
+bkeeper = (('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction3', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
 wtapper = (('cease', 'cease3', 4), ('throttletwo', 'throttletwo', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('roll-o-dex', 'roll-o-dex', 4))
 ambass = (('frustrated', 'frustrated', 4), ('neutral-override', 'neutral-override', 4), ('snap-override', 'snap-override', 4), ('defense', 'defense', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('snap', 'snap2', 4))
 

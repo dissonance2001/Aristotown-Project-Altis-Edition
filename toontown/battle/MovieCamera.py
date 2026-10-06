@@ -875,7 +875,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name in ('MarketCrash', 'Newspaper'):
         camTrack.append(defaultCamera(openShotDuration=2.7 / playRate))
     elif name == 'MoneyTalks':
-        camTrack.append(defaultCamera())
+        camTrack.append(defaultCamera(openShotDuration=2.33))
     elif name == 'MumboJumbo':
         camTrack.append(defaultCamera(openShotDuration=3.0 / playRate))
     elif name == 'ParadigmShift':
@@ -953,7 +953,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ArbitratorPaperFiling':
         camTrack.append(Sequence(defaultCamera(openShotDuration=2.5, attackDuration=2.5), motionShot(2.5, 10, 1, 165, 25, 0, 0, target[0]['toon']), Wait(attackDuration - 2.5)))
     elif name == 'ArbitratorWhirlwind':
-        camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(20, 0, 20, 115, -30, 0, attackDuration - .5)))
+        camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(10, 0, 10, 120, -30, 0, attackDuration - .5)))
     elif name == 'ArbitratorThrowBook':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
                                  motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(1.7),
@@ -1185,7 +1185,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=.5))
     elif name == 'BookkeeperExplodingDocument':
         camTrack.append(Sequence(defaultCamera(openShotDuration=0, attackDuration=0),
-                                 motionShot(0.0, 8.8096, 7.77317, -180, 0.0, 0.0, 0, suit), Wait(2.7),
+                                 motionShot(0.0, 10.0, 7.0, -180, 0.0, 0.0, 0, suit), Wait(2.7),
                                  moveShot(0.0, -15.0, 10.0, 0, -20, 0, 1.5),
                                  heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration - 4.2)))
     elif name == 'BookkeeperMandatoryFiling':
@@ -1196,7 +1196,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc(
-                "The Commissioner applies a gag damage debuff to all toons who attacked him!",
+                "The Regulator applies a gag damage debuff to all toons who attacked her!",
                 attackDuration - 2)
             pbpTrack = pbpText.getShowIntervalCheat('Closed Session!', attackDuration - 2)
             return Parallel(pbpTrack, pbpDesc, camTrack2)
@@ -1694,21 +1694,27 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'DividendLiquidationEventDamage':
         if attackDuration > 2:
-            camTrack2 = randomActorShot(target[0]['toon'], battle, attackDuration, 'toon')
-            pbpText = attack['playByPlayText']
-            pbpDc = PlayByPlayText.PlayByPlayText()
-            pbpDesc = pbpDc.getShowIntervalDesc('Liquidated Toons take %s damage per round!' % attack['target'][0]['hp'], attackDuration - 2)
-            pbpTrack = pbpText.getShowIntervalCheat('Liquidation Event!', attackDuration - 2)
-            return Parallel(pbpTrack, pbpDesc, camTrack2)
+            camTrack2 = Parallel(heldShot(0.0, 0.0, 3.5, 180, -20, 0, attackDuration))
+            return camTrack2
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
             return camTrack2
+        # if attackDuration > 2:
+        #     camTrack2 = randomActorShot(target[0]['toon'], battle, attackDuration, 'toon')
+        #     pbpText = attack['playByPlayText']
+        #     pbpDc = PlayByPlayText.PlayByPlayText()
+        #     pbpDesc = pbpDc.getShowIntervalDesc('Liquidated Toons take %s damage per round!' % attack['target'][0]['hp'], attackDuration - 2)
+        #     pbpTrack = pbpText.getShowIntervalCheat('Liquidation Event!', attackDuration - 2)
+        #     return Parallel(pbpTrack, pbpDesc, camTrack2)
+        # else:
+        #     camTrack2 = defaultCamera(openShotDuration=0)
+        #     return camTrack2
     elif name == 'DividendTotalMarketMeltdown':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'DividendTotalMarketMeltdown2':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'DividendTotalMarketMeltdownDamage':
-        camTrack2 = heldShot(20.0, -20.0, 10.0, 45, -20, 0, attackDuration)
+        camTrack2 = heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration)
         return camTrack2
     elif name == 'DividendPeckingOrder':
         camTrack.append(heldShot(0.0, -20.0, 10.0, 0, -20, 0, attackDuration))
@@ -3467,9 +3473,7 @@ def allGroupShot(avatar, duration):
 
 
 def allGroupLowShot2(avatar, duration):
-    shot2 = heldShot(-18, -5, 5, -69, 0, 0, duration, 'allGroupLowShot')
-    shot3 = heldShot(18, -5, 5, 69, 0, 0, duration, 'allGroupLowShot')
-    return random.choice((shot2, shot3))
+    return heldShot(15, 0, 3, 89, 0, 0, duration, 'allGroupLowShot')
 
 
 def allGroupLowShot(avatar, duration, battle):

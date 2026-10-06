@@ -865,7 +865,7 @@ def doSuitAttack(attack):
     elif name == 'RecordkeeperPhantomEntrySpawn':
         suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySpawn(attack)
     elif name == 'RecordkeeperPhantomEntryDamage':
-        suitTrack = MovieHighRollerCheats.doPhantomEntryDamage(attack)
+        suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
     elif name == 'RecordkeeperPhantomEntrySacrifice':
         suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySacrifice(attack)
         # corporate butcherer
@@ -961,7 +961,7 @@ def doSuitAttack(attack):
     elif name == 'DividendLiquidationEvent':
         suitTrack = MovieBoardbotLitigationCheats.doLiquidationEvent(attack)
     elif name == 'DividendLiquidationEventDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doLiquidationEventDamage(attack)
+        suitTrack = MovieBoardbotLitigationCheats.doMeltdownDamage(attack)
     elif name == 'DividendTotalMarketMeltdown':
         suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown(attack)
     elif name == 'DividendTotalMarketMeltdown2':
@@ -2559,23 +2559,23 @@ def getPhoneTrack(suit, delay: float = 0.0, playRate: float = 1.0, wantSound: bo
     suitType = getSuitBodyType(suit.dna.name)
     if suitType == 'a':
         delay += 0.3 / playRate # Add time to reflect Hang Up's somewhat longer phone-appear time.
-        phonePosPoints = [Point3(0.13, 0.27, -0.11), VBase3(5.939, 2.763, -177.591)]
-        receiverPosPoints = [Point3(0.13, 0.27, -0.11), VBase3(-1.854, 2.434, -177.579)]
+        phonePosPoints = [Point3(-0.26011560693641655, 0.26011560693641655, -0.1), VBase3(180, 180, 0)]
+        receiverPosPoints = [Point3(0, -0.43352601156069426, -0.8670520231213885), VBase3(90, 0, 0)]
         scaleUpTime = 0.5
         pickupDelay = 0.1
         dialDuration = 2.75
         finalPhoneDelay = 0.4
     elif suitType == 'b':
         delay += 0.3 / playRate # Add time to reflect Hang Up's somewhat longer phone-appear time.
-        phonePosPoints = [Point3(0.23, 0.17, -0.11), VBase3(5.939, 2.763, -177.591)]
-        receiverPosPoints = [Point3(0.13, 0.17, -0.11), VBase3(5.939, 2.763, -177.591)]
+        phonePosPoints = [Point3(0.5202312138728296, 0.26011560693641655, 0), VBase3(180, 180, 0)]
+        receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
         scaleUpTime = 0.5
         pickupDelay = 0.1
         dialDuration = 2.75
         finalPhoneDelay = 0.4
     elif suitType == 'c':
-        phonePosPoints = [Point3(0.13, 0.27, -0.11), VBase3(5.939, 2.763, -177.591)]
-        receiverPosPoints = [Point3(0.13, 0.27, -0.11), VBase3(5.939, 2.763, -177.591)]
+        phonePosPoints = [Point3(0.5202312138728296, 0.26011560693641655, 0), VBase3(180, 180, 0)]
+        receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
         scaleUpTime = 1.0
         pickupDelay = 0.0
         dialDuration = 2.6
@@ -3191,61 +3191,192 @@ def doFingerWag(attack):
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
+
     BattleParticles.loadParticles()
-    particleEffect = BattleParticles.createParticleEffect('FingerWag')
-    BattleParticles.setEffectTexture(particleEffect, 'blah', color=Vec4(0.55, 0.0, 0.55, 1.0))
+
     partDelay = 1.3
     damageDelay = 2.7
     dodgeDelay = 1.5
+
     suitTrack = getSuitTrack(attack)
     partTracks: tuple[Sequence, ...] = ()
+
     for t in targets:
         toon = t['toon']
-        particleNode = battle.attachNewNode('finger-wag-particle-node')
-        particleNode.setPos(battle.getActorPosHpr(suit)[0])
-        particleNode.headsUp(toon)
+
+        # IMPORTANT:
+        # Make a separate particle effect for each target.
+        particleEffect = BattleParticles.createParticleEffect('FingerWag')
+
+        BattleParticles.setEffectTexture(
+            particleEffect,
+            'blah',
+            color=Vec4(0.55, 0.0, 0.55, 1.0)
+        )
+
+        particleNode = battle.attachNewNode(
+            'finger-wag-particle-node'
+        )
+
+        # Put the particle container at the Cog.
+        particleNode.setPos(
+            battle.getActorPosHpr(suit)[0]
+        )
+
+        # ------------------------------------------------
+        # AIM THE PARTICLE NODE AT THE TOON
+        # ------------------------------------------------
+
+        toonPos = toon.getPos(battle)
+
+        # Aim around the Toon's body instead of their feet.
+        toonPos.setZ(
+            toonPos.getZ() + toon.getHeight() * 0.5
+        )
+
+        particleNode.headsUp(
+            battle,
+            toonPos
+        )
+
         particleNode.setBin('fixed', 1)
+
+        # ------------------------------------------------
+        # POSITION THE PARTICLES ON THE COG
+        # ------------------------------------------------
+
+        if suit.dna.name == 'mm':
+            particleEffect.setPos(
+                0.167,
+                1.0,
+                1.3
+            )
+
+        elif suit.dna.name == 'tm':
+            particleEffect.setPos(
+                0.0,
+                1.1,
+                suit.getHeight() - 1.2
+            )
+
+        elif suit.dna.name in ('tw', 'stg'):
+            particleEffect.setPos(
+                0.167,
+                1.8,
+                5.0
+            )
+
+        elif suit.dna.name == 'p':
+            particleEffect.setPos(
+                0.167,
+                1.4,
+                3.6
+            )
+
+        elif suit.dna.name in ('pp', 'qc', 'nb'):
+            particleEffect.setPos(
+                0.167,
+                1.0,
+                4.1
+            )
+
+        elif suit.dna.name == 'pf':
+            particleEffect.setPos(
+                0.167,
+                1.4,
+                4.65
+            )
+
+        elif suit.dna.name in ('bs', 'fct'):
+            particleEffect.setPos(
+                0.167,
+                1.4,
+                5.3
+            )
+
+        elif suit.dna.name == 'bw':
+            particleEffect.setPos(
+                0.167,
+                2.0,
+                suit.getHeight() - 1.75
+            )
+
+        elif suit.dna.name == 'sgoat':
+            particleEffect.setPos(
+                0.167,
+                1.9,
+                suit.getHeight() - 2.0
+            )
+
+        elif suit.dna.name == 'mouthp':
+            particleEffect.setPos(
+                0.167,
+                2.2,
+                suit.getHeight() - 1.9
+            )
+
+        elif suit.dna.name == 'erfit':
+            particleEffect.setPos(
+                0.167,
+                1.9,
+                suit.getHeight() - 1.9
+            )
+
+        elif suit.dna.name in (
+            'cdirector',
+            'director',
+            'videog',
+            'safesupervis'
+        ):
+            particleEffect.setPos(
+                0.167,
+                1.9,
+                suit.getHeight() - 1.9
+            )
+
+        else:
+            particleEffect.setPos(
+                0.0,
+                1.1,
+                suit.getHeight() - 1.2
+            )
+
         partTrack = Sequence(
-            getPartTrack(particleEffect, partDelay, 3.5, (particleEffect, particleNode, 0), softStop=-2.0),
+            getPartTrack(
+                particleEffect,
+                partDelay,
+                3.5,
+                (particleEffect, particleNode, 0),
+                softStop=-1.5
+            ),
+
             Func(particleNode.removeNode)
         )
-        if suit.dna.name == "mm":
-            particleEffect.setPos(0.167, 1.0, 1.3)
-        elif suit.dna.name == "tm":
-            particleEffect.setPos(0.0, 1.1, suit.getHeight() - 1.2)
-        elif suit.dna.name in ("tw", "stg"):
-            particleEffect.setPos(0.167, 1.8, 5.0)
-            particleEffect.setHpr(-90.0, -60.0, 180.0)
-        elif suit.dna.name == "p":
-            particleEffect.setPos(0.167, 1.4, 3.6)
-        elif suit.dna.name in ('pp', 'qc', 'nb'):
-            particleEffect.setPos(0.167, 1.0, 4.1)
-        elif suit.dna.name == "pf":
-            particleEffect.setPos(0.167, 1.4, 4.65)
-        elif suit.dna.name in ("bs", "fct"):
-            particleEffect.setPos(0.167, 1.4, 5.3)
-        elif suit.dna.name == "bw":
-            particleEffect.setPos(0.167, 2.0, suit.getHeight() - 1.75)
-            particleEffect.setP(-110.0)
-        elif suit.dna.name == "sgoat":
-            particleEffect.setPos(0.167, 1.9, suit.getHeight() - 2.0)
-            particleEffect.setP(-110.0)
-        elif suit.dna.name == "mouthp":
-            particleEffect.setPos(0.167, 2.2, suit.getHeight() - 1.9)
-            particleEffect.setP(-110.0)
-        elif suit.dna.name == "erfit":
-            particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
-            particleEffect.setP(-115.0)
-        elif suit.dna.name in ("cdirector", "videog", "safesupervis"):
-            particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
-            particleEffect.setP(-105.0)
-        else:
-            particleEffect.setPos(0.0, 1.1, suit.getHeight() - 1.2)
+
         partTracks += (partTrack,)
 
-    toonTracks = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, ['duck'], dodgeAnimPlayRate=1.15, showMissedExtraTime=0.85)
-    soundTrack = getSoundTrack('SA_finger_wag.ogg', delay=1.3, node=suit)
-    return Parallel(suitTrack, toonTracks, *partTracks, soundTrack)
+    toonTracks = getToonTracks(
+        attack,
+        damageDelay,
+        ['slip-backward'],
+        dodgeDelay,
+        ['duck'],
+        dodgeAnimPlayRate=1.15,
+        showMissedExtraTime=0.85
+    )
+
+    soundTrack = getSoundTrack(
+        'SA_finger_wag.ogg',
+        delay=1.3,
+        node=suit
+    )
+
+    return Parallel(
+        suitTrack,
+        toonTracks,
+        *partTracks,
+        soundTrack
+    )
 
 
 def doWriteOff(attack: dict) -> MetaInterval:
@@ -3971,6 +4102,22 @@ def doBuzzWord(attack: dict) -> MetaInterval:
             for effect in particleEffects:
                 effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
 
+        elif suit.dna.name == 'wtapper':
+            for effect in particleEffects:
+                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
+
+        elif suit.dna.name == 'radiog':
+            for effect in particleEffects:
+                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
+
+        elif suit.dna.name == 'itn':
+            for effect in particleEffects:
+                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
+
+        elif suit.dna.name == 'anc':
+            for effect in particleEffects:
+                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
+
         particleNode = battle.attachNewNode('particle-node')
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
@@ -4377,10 +4524,10 @@ def doReOrg(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
 
-        if suit.dna.name in ('foreman', 'dold'):
+        if suit.dna.name in ('foreman', 'dold', 'bkeeper', 'cdirector'):
             particleNode.setZ(particleNode.getZ() + 3.0)
             particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name in ('hh', 'dola'):
+        elif suit.dna.name in ('hh', 'dola', 'tf', 'chg', 'shrp', 'sfs', 'cor', 'ppl'):
             particleNode.setZ(particleNode.getZ() + 1.0)
             particleNode.setP(particleNode.getP() - 5.0)
 
@@ -5323,32 +5470,79 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
+
     numWords: int = 25
     wordDelay: float = 3.7
-    suitTrack: Sequence = getSuitAnimTrack(attack)
+
+    suitTrack: Sequence = getSuitAnimTrack(attack, playRate=1.25)
+
     wordTracks: Parallel = Parallel()
+
     for i in range(numWords):
         word = __makeMoneyTalksNodePath()
+
         x = random.random() * 14.0 - 7.0
         y = random.random() * 2.0 + 0.5
         z = random.random() * 2.0 + 4.0
+
         wordTracks.append(Sequence(
             Wait(0.5 + i * 0.1),
+
             Func(word.reparentTo, battle),
             Func(word.setPosHpr, x, y, z, 0.0, 0.0, 0.0),
-            LerpScaleInterval(word, 0.5, 0.6, startScale=0.01, blendType='easeOut'),
+
+            LerpScaleInterval(
+                word,
+                0.5,
+                0.6,
+                startScale=0.01,
+                blendType='easeOut'
+            ),
+
             Wait(wordDelay - (1.0 + i * 0.1)),
+
             ParallelEndTogether(
                 LerpFunctionInterval(word.setY, 1.0, y, y - 9.0),
-                LerpFunctionInterval(word.setAlphaScale, 0.3, 1.0, 0.0)
+                LerpFunctionInterval(word.setZ, 1.0, z, 1.5),
+                LerpFunctionInterval(
+                    word.setAlphaScale,
+                    0.3,
+                    1.0,
+                    0.0
+                )
             ),
+
             Func(MovieUtil.removeProp, word)
         ))
 
     dodgeAnims = [['duck', 0.01, 1.4]]
-    toonTracks: Parallel = getToonTracks(attack, damageDelay=4.4, damageAnimNames=['conked'], dodgeDelay=3.7, splicedDodgeAnims=dodgeAnims)
-    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", node=suit)
-    return Parallel(suitTrack, wordTracks, toonTracks, soundTrack)
+
+    toonTracks: Parallel = getToonTracks(
+        attack,
+        damageDelay=4.4,
+        damageAnimNames=['conked'],
+        dodgeDelay=3.7,
+        splicedDodgeAnims=dodgeAnims
+    )
+
+    soundTrack: Sequence = getSoundTrack(
+        f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg",
+        node=suit
+    )
+
+    # Everything except suitTrack.
+    spedUpTrack = Parallel(
+        wordTracks,
+        toonTracks,
+        soundTrack
+    )
+
+    spedUpTrack.setPlayRate(1.5)
+
+    return Parallel(
+        suitTrack,
+        spedUpTrack
+    )
 
 
 def doDoubleTalk(attack):
@@ -6168,8 +6362,8 @@ def doRedTape(attack: dict) -> MetaInterval:
     targets: list[dict] = attack['target']
     playRate: float = attack['playRate']
     suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
-    tapePosPoints = [Point3(0.0, 0.09, -0.38), VBase3(-1.152, 86.581, -76.784)]
-    tapeScaleUpPoint = Point3(0.9, 0.9, 0.24)
+    tapePosPoints = [Point3(-0.21707670043415206, 0.04341534008683112, -0.390738060781473), VBase3(0, 90, 90)]
+    tapeScaleUpPoint = Point3(.9, .9, .9)
     propTracks: tuple[Sequence, ...] = ()
     allTubeTracks: tuple = ()
     for t in targets:
@@ -7404,7 +7598,7 @@ def doChomp(attack: dict) -> MetaInterval:
     dodgeAnims = [['jump', 0.01, 0.01]]
     toonTracks: Parallel = getToonTracks(attack, damageDelay=2.1, splicedDamageAnims=damageAnims, dodgeDelay=1.7, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=1.4)
     if hitAtleastOneToon(targets):
-        soundTrack: Sequence = getSoundTrack('SA_bite.ogg', delay=throwDelay, node=suit)
+        soundTrack: Sequence = getSoundTrack('SA_bite.ogg', delay=throwDelay, node=suit, playRate=1.05)
         return Parallel(suitTrack, toonTracks, soundTrack, *propTracks)
     else:
         return Parallel(suitTrack, toonTracks, *propTracks)
@@ -7483,7 +7677,6 @@ def doEvictionNotice(attack):
         propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, scale, scaleUpTime=0.25))
         propTrack.append(Wait(0.95))
         hitPoint = __toonFacePoint(toon, parent=battle)
-        hitPoint.setX(hitPoint.getX() - 1.4)
         missPoint = __toonGroundPoint(attack, toon, 0.5, parent=battle)
         missPoint.setX(missPoint.getX() - 1.1)
         propTrack.append(getPropThrowTrack(attack, paper, [hitPoint], [missPoint], .25, parent=battle, target=t))
@@ -8198,8 +8391,6 @@ def doThrowBook(attack: dict) -> MetaInterval:
         hitPoint = toon.getPos(battle)
         hitPoint.setX(hitPoint.getX())
         hitPoint.setY(hitPoint.getY())
-        if dmg > 0:
-            hitPoint.setZ(hitPoint.getZ() + 1.1)
         movePoint = Point3(hitPoint.getX(), hitPoint.getY() - 1.8, hitPoint.getZ() + 0.2)
         paperTrack.append(Func(battle.movie.needRestoreRenderProp, paper))
         paperTrack.append(Func(paper.wrtReparentTo, battle))
@@ -8324,15 +8515,27 @@ def doJargon(attack: dict) -> MetaInterval:
         if suit.dna.name == 'le':
             particleNode.setZ(particleNode.getZ() + 2.0)
             particleNode.setP(particleNode.getP() - 15.0)
+        elif suit.dna.name == 'le2':
+            particleNode.setZ(particleNode.getZ() + 2.0)
+            particleNode.setP(particleNode.getP() - 15.0)
+        elif suit.dna.name == 'magi':
+            particleNode.setZ(particleNode.getZ() + 2.0)
+            particleNode.setP(particleNode.getP() - 15.0)
         elif suit.dna.name == 'stenog':
             particleNode.setZ(particleNode.getZ() + 4.0)
             particleNode.setP(particleNode.getP() - 23.0)
+        elif suit.dna.name == 'bkeeper':
+            particleNode.setZ(particleNode.getZ() + 4.0)
+            particleNode.setP(particleNode.getP() - 23.0)
+        elif suit.dna.name == 'rkeeper':
+            particleNode.setZ(particleNode.getZ() + 4.0)
+            particleNode.setP(particleNode.getP() - 23.0)
 
-        partTrack = getPartTrack(particleEffect, partDelay + partInterval * 0.0, 2.0 / playRate, (particleEffect, particleNode, 0), softStop=-1.0)
-        partTrack2 = getPartTrack(particleEffect2, partDelay + partInterval * 1.0, 2.0 / playRate, (particleEffect2, particleNode, 0), softStop=-1.0)
-        partTrack3 = getPartTrack(particleEffect3, partDelay + partInterval * 2.0, 2.0 / playRate, (particleEffect3, particleNode, 0), softStop=-1.0)
+        partTrack = getPartTrack(particleEffect, partDelay + partInterval * 0.0, 3.0 / playRate, (particleEffect, particleNode, 0), softStop=-1.0)
+        partTrack2 = getPartTrack(particleEffect2, partDelay + partInterval * 1.0, 3.0 / playRate, (particleEffect2, particleNode, 0), softStop=-1.0)
+        partTrack3 = getPartTrack(particleEffect3, partDelay + partInterval * 2.0, 3.0 / playRate, (particleEffect3, particleNode, 0), softStop=-1.0)
         partTrack4 = Sequence(
-            getPartTrack(particleEffect4, partDelay + partInterval * 3.0, 1.5 / playRate, (particleEffect4, particleNode, 0), softStop=-1.0),
+            getPartTrack(particleEffect4, partDelay + partInterval * 3.0, 3.0 / playRate, (particleEffect4, particleNode, 0), softStop=-1.0),
             Func(particleNode.removeNode)
         )
         partTracks += (partTrack, partTrack2, partTrack3, partTrack4)
@@ -8403,6 +8606,9 @@ def doMumboJumbo(attack: dict) -> MetaInterval:
             particleNode.setZ(particleNode.getZ() + 2.25)
             particleNode.setP(particleNode.getP() - 15.0)
         elif suit.dna.name == 'stenog':
+            particleNode.setZ(particleNode.getZ() + 4.1)
+            particleNode.setP(particleNode.getP() - 25.0)
+        elif suit.dna.name == 'wtapper':
             particleNode.setZ(particleNode.getZ() + 4.1)
             particleNode.setP(particleNode.getP() - 25.0)
 
@@ -8480,7 +8686,6 @@ def doRestrainingOrder(attack):
         propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.75, scale, scaleUpTime=0.25))
         propTrack.append(Wait(0.95))
         hitPoint = __toonFacePoint(toon, parent=battle)
-        hitPoint.setX(hitPoint.getX() - 1.4)
         missPoint = __toonGroundPoint(attack, toon, 0.7, parent=battle)
         missPoint.setX(missPoint.getX() - 1.1)
         propTrack.append(getPropThrowTrack(attack, paper, [hitPoint], [missPoint], .25, parent=battle))
@@ -8705,6 +8910,15 @@ def doLegalese(attack: dict) -> MetaInterval:
         sprayNode.setBin('fixed', 1)
 
         if suit.dna.name == 'le':
+            sprayNode.setZ(sprayNode.getZ() + 3.0)
+            sprayNode.setP(sprayNode.getP() - 10.0)
+        if suit.dna.name == 'le2':
+            sprayNode.setZ(sprayNode.getZ() + 3.0)
+            sprayNode.setP(sprayNode.getP() - 10.0)
+        if suit.dna.name == 'cor':
+            sprayNode.setZ(sprayNode.getZ() + 3.0)
+            sprayNode.setP(sprayNode.getP() - 10.0)
+        if suit.dna.name == 'stol':
             sprayNode.setZ(sprayNode.getZ() + 3.0)
             sprayNode.setP(sprayNode.getP() - 10.0)
 

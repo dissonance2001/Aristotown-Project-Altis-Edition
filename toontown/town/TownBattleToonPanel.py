@@ -2261,7 +2261,7 @@ class TownBattleToonPanel(DirectFrame):
             self._attachToonStatusIcon(iconRoot, 
                                    slot, 
                                    tooltipTitle='Liability Flag', 
-                                   tooltipDescription="This Toon has been marked by the Commissioner as a liability! The Commissioner will deal extra damage to this Toon if they are attacked by other Cogs.", 
+                                   tooltipDescription="This Toon has been marked by the Regulator as a liability! If this Toon attacks her this round, she will retaliate against the other Toons.", 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
 
@@ -2485,7 +2485,7 @@ class TownBattleToonPanel(DirectFrame):
             self._attachToonStatusIcon(self.statusIcon, 
                                    slot, 
                                    tooltipTitle='Market Meltdown', 
-                                   tooltipDescription="The Dividend King has locked half of your Gag choices, while buffing the other half of them by %s. This Toon will take 25 per round for the duration of the Meltdown." % damageText, 
+                                   tooltipDescription="The Dividend King has locked half of your Gag choices, while buffing the other half of them by %s. This Toon will take 25 damage per round for the duration of the Meltdown." % damageText, 
                                    tooltipBuff=False, 
                                    slotColor=(0, 0.902, 1, 1))
             

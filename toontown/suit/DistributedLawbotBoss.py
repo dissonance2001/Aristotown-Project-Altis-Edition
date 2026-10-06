@@ -204,18 +204,30 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
     def hideLitigator(self):
         self.litigator.hide()
         self.litigatorMusic.setVolume(1)
+        self.setChatAbsolute(random.choice(("I believe this dispute requires litigation.",
+                                             "Present the argument they can't refute!",
+                                            "They've left me no choice but to litigate!")), CFSpeech | CFTimeout)
 
     def hideStenographer(self):
         self.stenographer.hide()
         self.stenoMusic.setVolume(1)
+        self.setChatAbsolute(random.choice(("Let the record reflect their incompetence.",
+                                             "Everything they say can and will be held against them.",
+                                            "Make sure we don't miss a word.")), CFSpeech | CFTimeout)
 
     def hideCaseManager(self):
         self.casemanager.hide()
         self.caseMusic.setVolume(1)
+        self.setChatAbsolute(random.choice(("This matter requires closer management.",
+                                             "I'm assigning this matter to you!",
+                                            "Consider these Toons your newest case!")), CFSpeech | CFTimeout)
 
     def hideScapegoat(self):
         self.scapegoat.hide()
         self.goatMusic.setVolume(1)
+        self.setChatAbsolute(random.choice(("Someone has to take responsibility for this!",
+                                             "Let's place the blame where it belongs.",
+                                            "Take the fall, that's what you're here for!")), CFSpeech | CFTimeout)
 
     def stopLitigatorMusic(self):
         self.litigatorMusic.stop()

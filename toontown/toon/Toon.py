@@ -2139,7 +2139,7 @@ class Toon(Avatar.Avatar, ToonHead):
 
             from math import pi, cos, sin
 
-            totalBills = max(1, (self.mandatoryTollNumber / 8))
+            totalBills = max(1, self.mandatoryTollNumber // 8)
             radius = 1.5
             height = self.height - 1.25
 

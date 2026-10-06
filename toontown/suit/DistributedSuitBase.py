@@ -3811,7 +3811,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
                     headLoopDuration /
                     adjustedSuitDuration
                 )
-                if self.dna.name in ('hroller', 'hrollers', 'hroller2', 'hho', 'fmaker', 'choreo', 'cinema') and not SuitDNA.getSuitBodyType(self.dna.name) in ['b', 'c']:
+                if (self.dna.name in ('hroller', 'hrollers', 'hroller2', 'hho', 'fmaker', 'radiog', 'ubuster', 'bkeeper', 'choreo', 'cinema') or self.isSkeleton) and not SuitDNA.getSuitBodyType(self.dna.name) in ['b', 'c']:
                     headPart.setPlayRate(
                         (headRate * 2),
                         headAnim
@@ -5538,7 +5538,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         spinTime = lastSpinFrame / fr
         openTime = (lastSpinFrame + 1) / fr
         if moveIn:
-            lerpPosTrack = Sequence(self.posInterval(timeTillLanding, pos, startPos=skyPos), Wait(impactLength))
+            lerpPosTrack = Sequence(LerpPosInterval(self, timeTillLanding, pos, startPos=skyPos, blendType='easeInOut'), Wait(impactLength))
             shadowScale = self.dropShadow.getScale()
             shadowTrack = Sequence(Func(self.dropShadow.reparentTo, render), Func(self.dropShadow.setPos, pos), self.dropShadow.scaleInterval(timeTillLanding, self.scale, startScale=Vec3(0.01, 0.01, 1.0)), Func(self.dropShadow.reparentTo, self.getShadowJoint()), Func(self.dropShadow.setPos, 0, 0, 0), Func(self.dropShadow.setScale, shadowScale))
             fadeInTrack = Sequence(Func(self.setTransparency, 1), self.colorScaleInterval(1, colorScale=VBase4(1, 1, 1, 1), startColorScale=VBase4(1, 1, 1, 0)), Func(self.clearColorScale), Func(self.clearTransparency))
@@ -5549,7 +5549,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             propTrack = Parallel(SoundInterval(self.propInSound, duration=waitTime + dur, node=self), Sequence(ActorInterval(self.prop, 'propeller', constrainedLoop=1, duration=waitTime + spinTime, startTime=0.0, endTime=spinTime), ActorInterval(self.prop, 'propeller', duration=propDur - openTime, startTime=openTime), Func(self.detachPropeller)))
             return Parallel(lerpPosTrack, shadowTrack, fadeInTrack, animTrack, propTrack, name=self.taskName('trackName'))
         else:
-            lerpPosTrack = Sequence(Wait(impactLength), LerpPosInterval(self, timeTillLanding, skyPos, startPos=pos))
+            lerpPosTrack = Sequence(Wait(impactLength), LerpPosInterval(self, timeTillLanding, skyPos, startPos=pos, blendType='easeInOut'))
             #shadowTrack = Sequence(Func(self.dropShadow.reparentTo, render), Func(self.dropShadow.setPos, pos), self.dropShadow.scaleInterval(timeTillLanding, Vec3(0.01, 0.01, 1.0), startScale=self.scale), Func(self.dropShadow.reparentTo, self.getShadowJoint()), Func(self.dropShadow.setPos, 0, 0, 0))
             fadeOutTrack = Sequence(Func(self.setTransparency, 1), self.colorScaleInterval(1, colorScale=VBase4(1, 1, 1, 0), startColorScale=VBase4(1, 1, 1, 1)), Func(self.clearColorScale), Func(self.clearTransparency), Func(self.reparentTo, hidden))
             actInt = ActorInterval(self, 'landing', loop=0, startTime=dur, endTime=0.0)

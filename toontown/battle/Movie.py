@@ -1708,7 +1708,6 @@ class Movie(DirectObject.DirectObject):
                     'UnionBusterContractEnforcementHealing',
                     'SueApplication',
                     'AbilityQueuedPreToon',
-                    'BookkeeperPaperCut',
                     'FilmmakerInFocus',
                     'AmbassadorAdvancement3',
                     'ContingencyMarkRevisedFiling',

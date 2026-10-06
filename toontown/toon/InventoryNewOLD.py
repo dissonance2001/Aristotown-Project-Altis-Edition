@@ -716,6 +716,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if 'allGagBoost2' in base.localAvatar.battleConditions:
             allGagBoost2 = True
 
+        highStakesBoost = False
+        if 'highStakesBoost' in base.localAvatar.battleConditions:
+            highStakesBoost = True
+
         raisedAnte = False
         if 'raisedAnte' in base.localAvatar.battleConditions:
             raisedAnte = True
@@ -741,6 +745,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             val = base.localAvatar.battleConditions[param][0]
             if allGagBoost and not track == LURE_TRACK:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['allGagBoost'][0]
+            if highStakesBoost:
+                val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['highStakesBoost'][0]
             if allGagBoost2 and not track == LURE_TRACK:
                 val = base.localAvatar.battleConditions[param][0] + base.localAvatar.battleConditions['allGagBoost2'][0]
             if viralSensation:
@@ -876,6 +882,14 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if governaughtBoost and not track == LURE_TRACK:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['governaughtBoost'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorizeJustAll(damage, 'governaughtBoost')
+        if highStakesBoost and track == LURE_TRACK:
+            lureValue = int(math.ceil(
+                ((ToontownBattleGlobals.AvLureKnockback[level] * 100) + base.localAvatar.battleConditions['highStakesBoost'][
+                    0])))
+            damageAppendStr = labelColorize(lureValue, 'highStakesBoost')
+        if highStakesBoost and not track == LURE_TRACK:
+            damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['highStakesBoost'][0] * 0.01) + 1.0)))
+            damageAppendStr = labelColorizeJustAll(damage, 'highStakesBoost')
         if raisedAnte and not track == LURE_TRACK:
             damage = int(math.ceil(damage * ((base.localAvatar.battleConditions['raisedAnte'][0] * 0.01) + 1.0)))
             damageAppendStr = labelColorizeJustAll(damage, 'raisedAnte')
@@ -1149,11 +1163,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if self.detailCredit == credit:
             return
         if credit != None:
-            self.detailCreditLabel['text'] = TTLocalizer.InventorySkillCredit % credit
+            self.detailCreditLabel['text'] = "Skill Credit: %s" % int(math.ceil(credit))
             if self.detailCredit == None:
                 self.detailCreditLabel['text_fg'] = (0, 0, 0, 1)
         else:
-            self.detailCreditLabel['text'] = TTLocalizer.InventorySkillCreditNone
+            self.detailCreditLabel['text'] = "Skill Credit: None"
             self.detailCreditLabel['text_fg'] = (1, 0.0, 0.0, 1.0)
         self.detailCredit = credit
         return
@@ -2010,6 +2024,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             else:
                 self.surrenderVoteFlag.hide()
             self.levelsButton.show()
+            self.fireButton.show()
+            self.sueButton.show()
         elif self.tutorialFlag == 1:
             self.runButton.hide()
             self.sosButton.hide()
@@ -2083,6 +2099,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                             if base.localAvatar.battleConditions['allGagBoost'][0] > 0.0:
                                 if not self.numItem(track, level) <= 0:
                                     self.makeDamageUpPressable(button, track, level)
+                        if 'highStakesBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['highStakesBoost'][0] > 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageUpPressable(button, track, level)
                         if 'viralSensation' in base.localAvatar.battleConditions and not self.numItem(
                                 track, level) <= 0:
                             if base.localAvatar.battleConditions['viralSensation'][0] > 0.0:
@@ -2096,6 +2117,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                         if 'allGagBoost' in base.localAvatar.battleConditions and not self.numItem(
                                 track, level) <= 0:
                             if base.localAvatar.battleConditions['allGagBoost'][0] < 0.0:
+                                if not self.numItem(track, level) <= 0:
+                                    self.makeDamageDownPressable(button, track, level)
+                        if 'highStakesBoost' in base.localAvatar.battleConditions and not self.numItem(
+                                track, level) <= 0:
+                            if base.localAvatar.battleConditions['highStakesBoost'][0] < 0.0:
                                 if not self.numItem(track, level) <= 0:
                                     self.makeDamageDownPressable(button, track, level)
                         if 'lureBoost' in base.localAvatar.battleConditions and not self.numItem(
@@ -2805,11 +2831,11 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         elif track == THROW_TRACK:
             return TTLocalizer.InventoryAffectsOneCog
         elif track == SQUIRT_TRACK:
-            return TTLocalizer.InventoryAffectsThreeCogs
+            return "Targets: Up to 3 Cogs"
         elif track == ZAP_TRACK:
-            return "Targets: 1 to 4 Cogs"
+            return "Targets: Up to 4 Soaked Cogs"
         elif track == SOUND_TRACK:
-            return TTLocalizer.InventoryAffectsOneCog
+            return "Targets: All Cogs"
         elif track == DROP_TRACK:
             return TTLocalizer.InventoryAffectsOneCog
         elif isGroup(track, level):

@@ -244,14 +244,14 @@ class BoardbotLitigationCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'dking':
                 if not self.suitHasCondition(suitId, 'alreadyMelted') and self.suitHasCondition(suitId, 'marketMeltdown'):
-                    attack = self.__getCheatAttack(suitId, {'suitName': '',
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                 'name': 'DividendTotalMarketMeltdownDamage',
                                                 'animName': 'nothing',
                                                 'hp': 0,
                                                 'acc': 100,
                                                 'freq': 0,
                                                 'group': SuitBattleGlobals.ATK_TGT_GROUP,
-                            'targetType': 'both',
+                            'targetType': 'suit',
                             'requiredConditions': ('marketMeltdown',),
                             'toonGroup': SuitBattleGlobals.ATK_TGT_GROUP,
                             'suitGroup': SuitBattleGlobals.ATK_TGT_GROUP,
@@ -263,58 +263,58 @@ class BoardbotLitigationCalculatorAI:
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
-            if not self.suitHasCondition(suitId, 'alreadyMelted') and self.suitHasCondition(suitId, 'marketMeltdown'):
-                attack = self.__getCheatAttack(suitId, {'suitName': '',
-                                            'name': 'DividendTotalMarketMeltdownDamage',
-                                            'animName': 'nothing',
-                                            'hp': 0,
-                                            'acc': 100,
-                                            'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
-                        'targetType': 'both',
-                         'requiredConditions': ('marketMeltdown',),
-                        'toonGroup': SuitBattleGlobals.ATK_TGT_GROUP,
-                        'suitGroup': SuitBattleGlobals.ATK_TGT_GROUP,
-                         'excludeManagers': False,
-                        'allowSelfTarget': True,
-                        'targetSelf': False})
-                if attack[SUIT_ATK_COL]:
-                    self.battle.suitAttacks.append(attack)
+            # if not self.suitHasCondition(suitId, 'alreadyMelted') and self.suitHasCondition(suitId, 'marketMeltdown'):
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                 'name': 'DividendTotalMarketMeltdownDamage',
+            #                                 'animName': 'nothing',
+            #                                 'hp': 0,
+            #                                 'acc': 100,
+            #                                 'freq': 0,
+            #                                 'group': SuitBattleGlobals.ATK_TGT_GROUP,
+            #             'targetType': 'both',
+            #              'requiredConditions': ('marketMeltdown',),
+            #             'toonGroup': SuitBattleGlobals.ATK_TGT_GROUP,
+            #             'suitGroup': SuitBattleGlobals.ATK_TGT_GROUP,
+            #              'excludeManagers': False,
+            #             'allowSelfTarget': True,
+            #             'targetSelf': False})
+            #     if attack[SUIT_ATK_COL]:
+            #         self.battle.suitAttacks.append(attack)
 
-            if not self.suitHasCondition(suitId, 'dotfinished'):
-                self.__appendToonConditionDamageAndRetaliation(
-                    condition='liquidated',
-                    damage=30,
-                    damageMovie='DividendLiquidationEventDamage',
-                    retaliateAtTurns=[1],
-                    retaliations=[
-                        {
-                            'suitNames': ['cdirector'],
-                            'movie': 'ContingencyMarkLiquidated',
-                            'animName': 'throw-object',
-                            'hp': 5,
-                            'queueCondition': 'markedcalculator2',
-                        },
-                        {
-                            'suitNames': ['cbutcher'],
-                            'movie': 'RecordkeeperRevisedfilingLiquidation',
-                            'animName': 'magic2',
-                            'hp': 33, 
-                            'queueCondition': 'liquidationRetaliation',
-                        }
-                    ]
-                )
-            # if self.battle.activeSuits[i].dna.name == 'dking':
-            #     if self.TurnsElapsed % 1 == 0:
-            #         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-            #          'name': 'DividendLiquidationEventDamage', # Insurance Healing
-            #          'animName': 'nothing',
-            #          'hp': 0,
-            #          'acc': 100,
-            #          'freq': 0,
-            #          'group': SuitBattleGlobals.ATK_TGT_GROUP})
-            #         if attack[SUIT_ATK_COL]:
-            #             self.battle.suitAttacks.append(attack)
+            # if not self.suitHasCondition(suitId, 'dotfinished'):
+            #     self.__appendToonConditionDamageAndRetaliation(
+            #         condition='liquidated',
+            #         damage=30,
+            #         damageMovie='DividendLiquidationEventDamage',
+            #         retaliateAtTurns=[1],
+            #         retaliations=[
+            #             {
+            #                 'suitNames': ['cdirector'],
+            #                 'movie': 'ContingencyMarkLiquidated',
+            #                 'animName': 'throw-object',
+            #                 'hp': 5,
+            #                 'queueCondition': 'markedcalculator2',
+            #             },
+            #             # {
+            #             #     'suitNames': ['cbutcher'],
+            #             #     'movie': 'RecordkeeperRevisedfilingLiquidation',
+            #             #     'animName': 'magic2',
+            #             #     'hp': 33, 
+            #             #     'queueCondition': 'liquidationRetaliation',
+            #             # }
+            #         ]
+            #     )
+            if self.battle.activeSuits[i].dna.name == 'dking':
+                if self.suitHasCondition(suitId, 'marketMeltdown'):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'DividendLiquidationEventDamage', # Insurance Healing
+                     'animName': 'nothing',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'liquid':
@@ -735,47 +735,47 @@ class BoardbotLitigationCalculatorAI:
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
-            if self.battle.activeSuits[i].dna.name == 'dking':
-                if self.suitHasCondition(suitId, 'liquidationcalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
-                    i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'liquidationcalculator2') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'DividendLiquidationEvent',  # Audit
-                                                                'animName': 'magic1',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-                    'excludeToonConditions': (
-                        'liquidated',
-                    )})
-                    if not attack[SUIT_ATK_COL]:
-                        ability = self.__getAbilityQueued(suitId)
-                        self.battle.suitAttacks.append(ability)
+            # if self.battle.activeSuits[i].dna.name == 'dking':
+            #     if self.suitHasCondition(suitId, 'liquidationcalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
+            #         i].currHP > 0:
+            #         attack = self.__getAbilityQueued(suitId)
+            #         if attack[SUIT_ATK_COL]:
+            #             self.battle.suitAttacks.append(attack)
+            #     if self.suitHasCondition(suitId, 'liquidationcalculator2') and self.__suitCanAttack(suitId):
+            #         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                                     'name': 'DividendLiquidationEvent',  # Audit
+            #                                                     'animName': 'magic1',
+            #                                                     'hp': 0,
+            #                                                     'acc': 100,
+            #                                                     'freq': 0,
+            #                                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+            #         'excludeToonConditions': (
+            #             'liquidated',
+            #         )})
+            #         if not attack[SUIT_ATK_COL]:
+            #             ability = self.__getAbilityQueued(suitId)
+            #             self.battle.suitAttacks.append(ability)
 
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                    self.setSuitCondition(suitId, 'liquidationcalculator2', 0, 0, 'setBoth')
-                if self.suitHasCondition(suitId, 'liquidationcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
-                    i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'liquidationcalculator') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'DividendLiquidationEvent',  # Audit
-                                                                'animName': 'magic1',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                                                                'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-                    'excludeToonConditions': (
-                        'liquidated',)})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
+            #         if attack[SUIT_ATK_COL]:
+            #             self.battle.suitAttacks.append(attack)
+            #         self.setSuitCondition(suitId, 'liquidationcalculator2', 0, 0, 'setBoth')
+            #     if self.suitHasCondition(suitId, 'liquidationcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
+            #         i].currHP > 0:
+            #         attack = self.__getAbilityQueued(suitId)
+            #         if attack[SUIT_ATK_COL]:
+            #             self.battle.suitAttacks.append(attack)
+            #     if self.suitHasCondition(suitId, 'liquidationcalculator') and self.__suitCanAttack(suitId):
+            #         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                                     'name': 'DividendLiquidationEvent',  # Audit
+            #                                                     'animName': 'magic1',
+            #                                                     'hp': 0,
+            #                                                     'acc': 100,
+            #                                                     'freq': 0,
+            #                                                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+            #         'excludeToonConditions': (
+            #             'liquidated',)})
+            #         if attack[SUIT_ATK_COL]:
+            #             self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'liquid':
                 if self.battle.activeSuits[i].currHP <= 1313 and not self.suitHasCondition(suitId, 'finalToll') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[
                     i].currHP > 0:

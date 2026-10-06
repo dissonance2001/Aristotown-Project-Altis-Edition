@@ -1067,7 +1067,7 @@ class AttackHPCalculatorAI(object):
                     damage = 1 + (math.ceil(attacker.getMaxHP() - attacker.getHP()) / 60.0)
 
                 elif attackName == 'DividendTotalMarketMeltdownDamage':
-                    damage = 35
+                    damage = 25
 
                 elif attackName == 'SafetyHighPressure':
                     damage = 45
@@ -1143,6 +1143,56 @@ class AttackHPCalculatorAI(object):
 
                 elif attackName == 'DividendTotalMarketMeltdownDamage':
                     damage = 150
+                    if self.suitHasCondition(targetId, 'vulnerable'):
+                        damage *= 1.3
+                    if self.suitHasCondition(targetId, 'vulnerablebroadcaster'):
+                        damage *= 2.0
+                    if self.suitHasCondition(targetId, 'vulnerablesilhouette1'):
+                        damage *= 1.5
+                    if self.suitHasCondition(targetId, 'vulnerablesilhouette2'):
+                        damage *= 2.0
+                    if self.suitHasCondition(targetId, 'vulnerablesilhouette3'):
+                        damage *= 3.0
+                    if self.suitHasCondition(targetId, 'vulnerablevideographer'):
+                        damage *= self.getSuitConditionModifier(targetId, 'vulnerablevideographer')
+                    if self.suitHasCondition(targetId, 'directorDamageReduction'):
+                        damage *= self.getSuitConditionModifier(targetId, 'directorDamageReduction')
+                    if self.suitHasCondition(targetId, 'damageReduction'):
+                        damage *= 0.7
+                    if self.suitHasCondition(targetId, 'enraged') and not self.suitHasCondition(targetId, 'desperation'):
+                        damage *= 0.7
+                    for effect in self.calculator.getAllRelevantConditions(targetId, StatusEffects.DefenseModifier, toon=False):
+                        if isinstance(effect.defenseMod, float):
+                            damage *= effect.defenseMod
+                    if attacker.getHP() > (attacker.getMaxHP() * 1.5):
+                        damage *= 1.5
+                    if attacker.getHP() > attacker.getMaxHP():
+                        damage *= 1.25
+                    if self.suitHasCondition(attacker.doId, 'dancesession'):
+                        damage *= 0.7
+                    if self.suitHasCondition(attacker.doId, 'ambassadorOverconfidence'):
+                        damage *= 0.75
+                        # self.damageHP += math.ceil(result * 2)
+                    if (self.suitHasCondition(attacker.doId, 'soaked') or self.suitHasCondition(attacker.doId, 'drenched')) and attacker.dna.name == 'safesupervis':
+                        damage *= 0.75
+                    if self.suitHasCondition(attacker.doId, 'drenched'):
+                        damage *= 0.85
+                    if self.suitHasCondition(attacker.doId, 'desperation'):
+                        damage *= (1 + self.getSuitConditionModifier(attacker.doId, 'desperation'))
+                    if self.suitHasCondition(attacker.doId, 'brokenconnection'):
+                        damage *= self.getSuitConditionModifier(attacker.doId, 'brokenconnection')
+                    if self.suitHasCondition(attacker.doId, 'yellowLight'):
+                        damage *= self.getSuitConditionModifier(attacker.doId, 'yellowLight')
+                    if self.suitHasCondition(attacker.doId, 'damageDown'):
+                        damage *= self.getSuitConditionModifier(attacker.doId, 'damageDown')
+                    if self.suitHasCondition(attacker.doId, 'override'):
+                        damage *= 1.3
+                    if self.suitHasCondition(attacker.doId, 'enraged'):
+                        damage *= self.getSuitConditionModifier(attacker.doId, 'enraged')
+                    if attacker.getDamageMultiplier() > 1:
+                        damage *= attacker.getDamageMultiplier()
+                    if self.suitHasCondition(attacker.doId, 'soaked') and attacker.dna.name == 'redd':
+                        damage *= 1.5
 
                     if self.suitHasCondition(targetId, 'marketMeltdown') and not self.suitHasCondition(targetId, 'alreadyMelted'):
                         self.setSuitCondition(targetId, 'alreadyMelted', 1, 1, 'setBoth')
@@ -1513,6 +1563,68 @@ class AttackHPCalculatorAI(object):
                 self.calculator.sacrificedCogs = 0
 
                 continue
+            elif attackName == 'DividendTotalMarketMeltdownDamage':
+                result = 150
+                if self.suitHasCondition(targetId, 'vulnerable'):
+                    damage *= 1.3
+                if self.suitHasCondition(targetId, 'vulnerablebroadcaster'):
+                    damage *= 2.0
+                if self.suitHasCondition(targetId, 'vulnerablesilhouette1'):
+                    damage *= 1.5
+                if self.suitHasCondition(targetId, 'vulnerablesilhouette2'):
+                    damage *= 2.0
+                if self.suitHasCondition(targetId, 'vulnerablesilhouette3'):
+                    damage *= 3.0
+                if self.suitHasCondition(targetId, 'vulnerablevideographer'):
+                    damage *= self.getSuitConditionModifier(targetId, 'vulnerablevideographer')
+                if self.suitHasCondition(targetId, 'directorDamageReduction'):
+                    damage *= self.getSuitConditionModifier(targetId, 'directorDamageReduction')
+                if self.suitHasCondition(targetId, 'damageReduction'):
+                    damage *= 0.7
+                if self.suitHasCondition(targetId, 'enraged') and not self.suitHasCondition(targetId, 'desperation'):
+                    damage *= 0.7
+                for effect in self.calculator.getAllRelevantConditions(targetId, StatusEffects.DefenseModifier, toon=False):
+                    if isinstance(effect.defenseMod, float):
+                        damage *= effect.defenseMod
+                if attacker.getHP() > (attacker.getMaxHP() * 1.5):
+                    damage *= 1.5
+                if attacker.getHP() > attacker.getMaxHP():
+                    damage *= 1.25
+                if self.suitHasCondition(attacker.doId, 'dancesession'):
+                    damage *= 0.7
+                if self.suitHasCondition(attacker.doId, 'ambassadorOverconfidence'):
+                    damage *= 0.75
+                    # self.damageHP += math.ceil(result * 2)
+                if (self.suitHasCondition(attacker.doId, 'soaked') or self.suitHasCondition(attacker.doId, 'drenched')) and attacker.dna.name == 'safesupervis':
+                    damage *= 0.75
+                if self.suitHasCondition(attacker.doId, 'drenched'):
+                    damage *= 0.85
+                if self.suitHasCondition(attacker.doId, 'desperation'):
+                    damage *= (1 + self.getSuitConditionModifier(attacker.doId, 'desperation'))
+                if self.suitHasCondition(attacker.doId, 'brokenconnection'):
+                    damage *= self.getSuitConditionModifier(attacker.doId, 'brokenconnection')
+                if self.suitHasCondition(attacker.doId, 'yellowLight'):
+                    damage *= self.getSuitConditionModifier(attacker.doId, 'yellowLight')
+                if self.suitHasCondition(attacker.doId, 'damageDown'):
+                    damage *= self.getSuitConditionModifier(attacker.doId, 'damageDown')
+                if self.suitHasCondition(attacker.doId, 'override'):
+                    damage *= 1.3
+                if self.suitHasCondition(attacker.doId, 'enraged'):
+                    damage *= self.getSuitConditionModifier(attacker.doId, 'enraged')
+                if attacker.getDamageMultiplier() > 1:
+                    damage *= attacker.getDamageMultiplier()
+                if self.suitHasCondition(attacker.doId, 'soaked') and attacker.dna.name == 'redd':
+                    damage *= 1.5
+
+                attack[SUIT_HP_COL][targetIndex] = 150
+
+                for s in self.battle.suits:
+                    suit = s
+                    currentBossHealth = s.currHP
+                    if currentBossHealth >= 1:
+                        self.setSuitCondition(suit.doId, 'alreadyMelted', 1, 1, 'setBoth')
+
+                continue
             elif attackName == 'AmbassadorHeadRollerGroup':
                 sacrificeAmount = int(targetSuit.currHP)
 
@@ -1521,7 +1633,7 @@ class AttackHPCalculatorAI(object):
 
                 self.syphonedHP += sacrificeAmount
                 self.calculator.sacrificedCogs += 1
-
+                self.setSuitCondition(attackerId, 'headroller2calculator', 0, 0, 'setBoth')
                 self.setSuitCondition(targetSuit.doId, 'ambassadorTarget', 0, 0, 'setBoth')
                 for s in self.battle.suits:
                     if s.dna.name == 'wtapper':
@@ -3580,13 +3692,15 @@ class AttackHPCalculatorAI(object):
                 self.setSuitCondition(theSuit.doId, 'bookkeeping', 0, 0, 'setBoth')
                 theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
             elif atkType['name'] == 'BookkeeperPaperCutSoaked':
-                if self.toonHasCondition(toon.doId, 'contingencyMarked') and self.toonHasCondition(toon.doId, 'contingencyHit'):
-                    self.setToonCondition(toon.doId, 'contingencyHit', 0, 0, 'setBoth')
-                    self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
-                    result = 20
+                if self.getToonConditionModifier(toonId, 'allGagBoost2') < -25:
+                    self.setToonCondition(toon.doId, 'allGagBoost2',
+                                            self.getToonConditionModifier(toonId, 'allGagBoost2'), 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'lureBoost2',
+                                            self.getToonConditionModifier(toonId, 'lureBoost2'), 2, 'setBoth')
                 else:
-                    result = 0
-                attack[SUIT_HP_COL][targetIndex] = result
+                    self.setToonCondition(toon.doId, 'allGagBoost2', -25, 2, 'setBoth')
+                    self.setToonCondition(toon.doId, 'lureBoost2', -25, 2, 'setBoth')
+                result = 30
             elif atkType['name'] == 'BookkeeperPaperCut':
                 self.setToonCondition(toon.doId, 'contingencyMarked', 1, 3, 'setBoth')
                 self.setToonCondition(toon.doId, 'paperCutRecentlyTargeted', 1, 2, 'setBoth')
@@ -5367,21 +5481,21 @@ class AttackHPCalculatorAI(object):
                 self.setToonCondition(toon.doId, 'disable8s', 1, 2, 'setBoth')
                 result = 20
                 attack[SUIT_HP_COL][targetIndex] = result
-            elif atkType['name'] == 'DividendLiquidationEventDamage':
-                for s in self.battle.suits:
-                    self.setSuitCondition(s.doId, 'dotfinished', 1, 1, 'setBoth')
-                result = 30
-                attack[SUIT_HP_COL][targetIndex] = result
-                if self.toonHasCondition(toonId, 'snapped'):
-                    result *= self.getToonConditionModifier(toonId, 'snapped')
-                if self.toonHasCondition(toonId, 'bombedToon'):
-                    result *= self.getToonConditionModifier(toonId, 'bombedToon')
-                if self.toonHasCondition(toonId, 'markedwood'):
-                    result *= self.getToonConditionModifier(toonId, 'markedwood')
-                # Going to slowly replace individual status effects so we acclimate to the new system before moving onto a more sophisticated means of this.
-                for condition in self.toonStatusConditionsNew[toonId]:
-                    if isinstance(condition, StatusEffects.Snapped):
-                        result *= condition.defenseMod
+            # elif atkType['name'] == 'DividendLiquidationEventDamage':
+            #     for s in self.battle.suits:
+            #         self.setSuitCondition(s.doId, 'dotfinished', 1, 1, 'setBoth')
+            #     result = 30
+            #     attack[SUIT_HP_COL][targetIndex] = result
+            #     if self.toonHasCondition(toonId, 'snapped'):
+            #         result *= self.getToonConditionModifier(toonId, 'snapped')
+            #     if self.toonHasCondition(toonId, 'bombedToon'):
+            #         result *= self.getToonConditionModifier(toonId, 'bombedToon')
+            #     if self.toonHasCondition(toonId, 'markedwood'):
+            #         result *= self.getToonConditionModifier(toonId, 'markedwood')
+            #     # Going to slowly replace individual status effects so we acclimate to the new system before moving onto a more sophisticated means of this.
+            #     for condition in self.toonStatusConditionsNew[toonId]:
+            #         if isinstance(condition, StatusEffects.Snapped):
+            #             result *= condition.defenseMod
             elif atkType['name'] == 'DividendPeckingOrder':
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -5426,31 +5540,9 @@ class AttackHPCalculatorAI(object):
                 self.setToonCondition(toon.doId, 'lureBoost', 50, 3, 'setBoth')
                 for suit in self.battle.activeSuits:
                     self.setSuitCondition(suit.doId, 'marketMeltdown', 1, 3, 'setBoth')
-            elif atkType['name'] == 'DividendTotalMarketMeltdownDamage':
+            elif atkType['name'] == 'DividendLiquidationEventDamage':
                 result = 25
                 attack[SUIT_HP_COL][targetIndex] = result
-                if self.toonHasCondition(toonId, 'snapped'):
-                    result *= self.getToonConditionModifier(toonId, 'snapped')
-                if self.toonHasCondition(toonId, 'bombedToon'):
-                    result *= self.getToonConditionModifier(toonId, 'bombedToon')
-                if self.toonHasCondition(toonId, 'markedwood'):
-                    result *= self.getToonConditionModifier(toonId, 'markedwood')
-                for suit in self.battle.activeSuits:
-                    if self.suitHasCondition(suit.doId, 'marketMeltdown'):
-                        if not self.suitHasCondition(suit.doId, 'alreadyMelted'):
-                            self.setSuitCondition(suit.doId, 'alreadyMelted', 1, 1, 'setBoth')
-                            suit.setHP(suit.currHP - 100)
-                            if (suit.currHP) <= 0:
-                                self.__removeLured(suit.doId)
-                                if suit.dna.name == 'cbutcher':
-                                    for s in self.battle.activeSuits:
-                                        if s.dna.name == 'rkeeper':
-                                            self.setSuitCondition(s.doId, 'phantomDeath', 1, 2, 'setBoth')
-                                if suit.getSkeleRevives() >= 1:
-                                    suit.useSkeleRevive()
-                                if not self.suitHasCondition(suit.doId, 'dead'):
-                                    self.calculator.deadSuits += 1
-                                    self.setSuitCondition(suit.doId, 'dead', 1, -1, 'setBoth')
                 # Check to see if the Liquidator already has extra attacks.
             # elif atkType['name'] == 'LiquidatorTornado':
             #     self.setToonCondition(toon.doId, 'confused', 1, 2, 'setBoth')
@@ -9625,7 +9717,6 @@ class AttackHPCalculatorAI(object):
                     'GagBanRetaliationSquirt',
                     'GagBanRetaliationZap',
                      'PowerhouseBurnDamage',
-                     'DividendLiquidationEventDamage',
                      'ErfitHydrationCheck',
                      'ErfitHydrationCheckRevert',
                     'GagBanRetaliationSound',

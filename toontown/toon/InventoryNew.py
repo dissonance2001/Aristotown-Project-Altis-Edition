@@ -897,8 +897,6 @@ class InventoryNew(InventoryBase.InventoryBase, DirectFrame):
             self.runButton.hide()
             self.sosButton.hide()
             self.passButton.hide()
-            self.fireButton.hide()
-            self.sueButton.hide()
         else:
             self.runButton.show()
             self.sosButton.show()
