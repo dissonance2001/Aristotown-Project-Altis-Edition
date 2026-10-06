@@ -504,8 +504,6 @@ def doSuitAttack(attack):
         suitTrack = doJargon(attack)
     elif name == 'Legalese':
         suitTrack = doLegalese(attack)
-    elif name == 'LawBook':
-        suitTrack = doThrowBook(attack)
     elif name == 'Liquidate':
         suitTrack = doLiquidate(attack)
     elif name == 'MarketCrash':
@@ -567,7 +565,7 @@ def doSuitAttack(attack):
         suitTrack = doInterestCalculations(attack)
     elif name == 'Tabulate':
         suitTrack = doTabulate(attack)
-    elif name == 'Golf':
+    elif name == 'TeeOff':
         suitTrack = doTeeOff(attack)
     elif name == 'ThrowBook':
         suitTrack = doThrowBook(attack)

@@ -860,8 +860,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=3.5 / playRate))
     elif name == 'Legalese':
         camTrack.append(defaultCamera(openShotDuration=3.0 / playRate))
-    elif name in ('LawBook', 'Novel', 'ThrowBook'):
-        camTrack.append(defaultCamera(openShotDuration=2.9 / playRate))
     elif name == 'Liquidate':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name in ('MarketCrash', 'Newspaper'):
@@ -870,6 +868,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.33))
     elif name == 'MumboJumbo':
         camTrack.append(defaultCamera(openShotDuration=3.0 / playRate))
+    elif name in ('Novel', 'ThrowBook'):
+        camTrack.append(defaultCamera(openShotDuration=2.9 / playRate))
     elif name == 'ParadigmShift':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'PeckingOrder':
@@ -914,7 +914,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera())
     elif name == 'Synergy':
         camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'Golf':
+    elif name == 'TeeOff':
         camTrack.append(defaultCamera(openShotDuration=2.9))
     elif name == 'TickingTimeBomb':
         camTrack.append(defaultCamera(openShotDuration=2.0))
