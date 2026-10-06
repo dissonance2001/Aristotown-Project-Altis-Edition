@@ -5703,7 +5703,7 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                   SuitAttack('BlueChip',
                                              hp=(35,),
                                              acc=(90,),
-                                             freq=(15)),
+                                             freq=(15,)),
                                   SuitAttack('BounceCheck',
                                              hp=(31,),
                                              acc=(95,),
