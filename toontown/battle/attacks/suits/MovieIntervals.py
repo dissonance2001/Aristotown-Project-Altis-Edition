@@ -23,9 +23,158 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from direct.actor.Actor import Actor
-from typing import Any, Literal, Union, Optional
+from typing import Any, Literal, Union, Optional, overload
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSuitAttacks')
+
+class SplicedAnim:
+    '''
+    SplicedAnim will replicate the list/dict style that Corporate Clash uses.  This should be more convenient and intuitive.
+
+    Attributes:
+        usingKwargs (bool): When this class is instantiated, either positional or keyword arguments, but not both simultaneously, can be used.&nbsp; Which one we use determines how the getIval() method assembles the track.&nbsp; If keyword arguments are used, this is True - otherwise, it is False.
+    '''
+    usingKwargs: bool
+
+    @overload
+    def __init__(self, /) -> None:
+        ...
+
+    @overload
+    def __init__(self, Anim: str, /) -> None:
+        ...
+
+    @overload
+    def __init__(self, Anim: str, Delay: float, /) -> None:
+        ...
+
+    @overload
+    def __init__(self, Anim: str, Delay: float, StartTime: float, /) -> None:
+        ...
+
+    @overload
+    def __init__(self, Anim: str, Delay: float, StartTime: float, Duration: float, /) -> None:
+        ...
+
+    @overload
+    def __init__(self, Anim: str, Delay: float, StartTime: float, Duration: float, Actor: Actor, /) -> None:
+        ...
+
+    @overload
+    def __init__(self, /, *, Anim: str, Delay: float = 1e-06, StartTime: Optional[float] = None, Duration: Optional[float] = None, PlayRate: float = 1.0) -> None:
+        ...
+
+    def __init__(self, *args, **kwargs) -> None:
+        '''
+        Parameters:
+            Anim (str): The animation name.
+            Delay (float): How much time after the previous animation before this one starts.
+            StartTime (float|None): The start time of the animation about to play.
+            Duration (float|None): How long this animation plays out.
+            Actor (Actor): <strong>Available only if using positional-only arguments,</strong> this can override the intended actor that is to animate this track.
+            PlayRate (float): <strong>Available only if using keyword-only arguments,</strong> this affects how fast a track plays out.
+        
+        Raises:
+            TypeError: TypeError is thrown if positional-only and keyword-only arguments are used while instantiating.
+            TypeError: TypeError is thrown if using keyword-only arguments and not using the 'Anim' keyword.
+            TypeError: TypeError is thrown if using keyword-only arguments other than 'Anim', 'Delay', 'StartTime', 'Duration', and 'PlayRate'.
+            TypeError: TypeError is thrown if more than five positional arguments are used.
+        '''
+        if args and kwargs:
+            raise TypeError('__init__() requires either positional- or keyword-only arguments, but not both.')
+
+        self.usingKwargs = bool(kwargs)
+        
+        self.theAnim: str = ''
+        self.delay: Union[float, None] = None
+        self.startTime: Union[float, None] = None
+        self.duration: Union[float, None] = None
+        self.actor: Union[Actor, None] = None
+        self.playRate: float = 1.0
+
+        if kwargs:
+            if 'Anim' in tuple(kwargs.keys()):
+                self.theAnim = kwargs['Anim']
+                del kwargs['Anim']
+            else:
+                raise TypeError("__init__() missing 1 required keyword-only argument: 'Anim'")
+
+            if 'Delay' in tuple(kwargs.keys()):
+                self.delay = kwargs['Delay']
+                del kwargs['Delay']
+            else:
+                self.delay = 1e-06
+
+            if 'StartTime' in tuple(kwargs.keys()):
+                self.startTime = kwargs['StartTime']
+                del kwargs['StartTime']
+
+            if 'Duration' in tuple(kwargs.keys()):
+                self.duration = kwargs['Duration']
+                del kwargs['Duration']
+
+            if 'PlayRate' in tuple(kwargs.keys()):
+                self.playRate = kwargs['PlayRate']
+                del kwargs['PlayRate']
+
+            for extraArg in tuple(kwargs.keys()): # Prevent extra arguments from being passed.
+                raise TypeError(f"__init__() got unexpected keyword argument '{extraArg}'")
+
+        else:
+            if len(args) > 5:
+                raise TypeError(f'__init__() takes from 1 to 6 positional arguments but {len(args) + 1} were given')
+            if len(args) >= 1:
+                self.theAnim = args[0]
+            if len(args) >= 2:
+                self.delay = args[1]
+            if len(args) >= 3:
+                self.startTime = args[2]
+            if len(args) >= 4:
+                self.duration = args[3]
+            if len(args) == 5:
+                self.actor = args[4]
+
+
+    def getIval(self, actor: Optional[Actor] = None, playRate: float = 1.0) -> Sequence:
+        '''
+        This method creates an assembled Sequence based on how the class is instantiated.
+
+        Parameters:
+            Actor (Actor|None): The Actor playing out the animation.  This argument is ignored if positional-only arguments were used to instantiate this class and an actor for the animation has been declared.
+            playRate (float): How fast the animation plays out.  This argument is ignored if keyword-only arguments were used to instantiate this class.
+        
+        Returns:
+            out (Sequence): The assembled interval is returned.
+        '''
+        track: Sequence = Sequence()
+        if self.usingKwargs:
+            if self.delay and self.delay > 0.0:
+                track.append(Wait(self.delay))
+            track.append(ActorInterval(actor, self.theAnim, startTime=self.startTime, duration=self.duration, playRate=self.playRate))
+        elif self.actor:
+            track.append(Wait(self.delay))
+            track.append(ActorInterval(self.actor, self.theAnim, startTime=self.startTime / playRate, duration=self.duration / playRate, playRate=playRate))
+        elif self.duration:
+            track.append(Wait(self.delay))
+            duration = self.duration
+            if duration < 0.0:
+                endTime = self.startTime + self.duration
+                if endTime <= 0.0:
+                    endTime = 0.01
+                track.append(ActorInterval(actor, self.theAnim, startTime=self.startTime / playRate, endTime=endTime / playRate, playRate=playRate))
+            else:
+                track.append(ActorInterval(actor, self.theAnim, startTime=self.startTime / playRate, duration=duration / playRate, playRate=playRate))
+        elif self.startTime:
+            track.append(Wait(self.delay))
+            track.append(ActorInterval(actor, self.theAnim, startTime=self.startTime / playRate, playRate=playRate))
+        elif self.delay:
+            track.append(Wait(self.delay))
+            track.append(ActorInterval(actor, self.theAnim, playRate=playRate))
+        elif self.theAnim:
+            track.append(ActorInterval(actor, self.theAnim, playRate=playRate))
+        else:
+            track.append(Wait(1e-06))
+        return track
 
 SPECIAL_CHAT_ATTACKS = (
     'RadiographerRadioInfrequency',
@@ -334,7 +483,7 @@ def hitAtleastOneToon(targets: list[dict]) -> bool:
     return False
 
 
-def getSuitTrack(attack: dict, delay: float = 1e-06, splicedAnims: Optional[list[Union[dict, list]]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
+def getSuitTrack(attack: dict, delay: float = 1e-06, splicedAnims: Optional[list[Union[SplicedAnim, dict, list]]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
@@ -490,7 +639,7 @@ def getToonGroupCenter(attack, battle):
     avg /= float(len(points))
     return avg
 
-def getSuitAnimTrackAttack(attack: dict, delay: float = 0.0, splicedAnims: Optional[list[Union[list, dict]]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
+def getSuitAnimTrackAttack(attack: dict, delay: float = 0.0, splicedAnims: Optional[list[Union[SplicedAnim, list, dict]]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
     suit = attack['suit']
     tauntIndex = attack['taunt']
     battle = attack['battle']
@@ -619,7 +768,7 @@ def getSuitAnimTrackAttack(attack: dict, delay: float = 0.0, splicedAnims: Optio
     return track
 
 
-def getSuitAnimTrack(attack: dict, delay: float = 0.0, splicedAnims: Optional[list[Union[dict, list]]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
+def getSuitAnimTrack(attack: dict, delay: float = 0.0, splicedAnims: Optional[list[Union[SplicedAnim, dict, list]]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
     suit = attack['suit']
     tauntIndex = attack['taunt']
     battle = attack['battle']
@@ -728,7 +877,7 @@ def getIndicatorTracks(toon, battle) -> Sequence:
     return indicatorTracks
 
 
-def getToonTrack(attack: dict, damageDelay: float = 1e-06, damageAnimNames: list[str] = [], dodgeDelay: float = 0.0001, dodgeAnimNames: list[str] = [], splicedDamageAnims: Optional[list[Union[dict, list]]] = None, splicedDodgeAnims: Optional[list[Union[dict, list]]] = None, target: Optional[dict] = None, showDamageExtraTime: float = 0.01, showMissedExtraTime: float = 0.5, forceHit: bool = False, hpTextType = None, lookAtInvoker: bool = True, damageAnimPlayRate: float = 1.0, dodgeAnimPlayRate: float = 1.0):
+def getToonTrack(attack: dict, damageDelay: float = 1e-06, damageAnimNames: list[str] = [], dodgeDelay: float = 0.0001, dodgeAnimNames: list[str] = [], splicedDamageAnims: Optional[list[SplicedAnim]] = None, splicedDodgeAnims: Optional[list[SplicedAnim]] = None, target: Optional[dict] = None, showDamageExtraTime: float = 0.01, showMissedExtraTime: float = 0.5, forceHit: bool = False, hpTextType = None, lookAtInvoker: bool = True, damageAnimPlayRate: float = 1.0, dodgeAnimPlayRate: float = 1.0):
     if not target:
         target = attack['target'][0]
     toon = target['toon']
@@ -763,7 +912,7 @@ def getToonTrack(attack: dict, damageDelay: float = 1e-06, damageAnimNames: list
         return Parallel(animTrack, indicatorTracks)
 
 
-def getToonTracks(attack: dict, damageDelay: float = 1e-06, damageAnimNames: list[str] = [], dodgeDelay: float = 1e-06, dodgeAnimNames: list[str] = [], splicedDamageAnims: Optional[list[Union[dict, list]]] = None, splicedDodgeAnims: Optional[list[Union[dict, list]]] = None, showDamageExtraTime: float = 0.01, showMissedExtraTime: float = 0.5, forceHit: bool = False, hpTextType = None, damageAnimPlayRate: float = 1.0, dodgeAnimPlayRate: float = 1.0) -> Parallel:
+def getToonTracks(attack: dict, damageDelay: float = 1e-06, damageAnimNames: list[str] = [], dodgeDelay: float = 1e-06, dodgeAnimNames: list[str] = [], splicedDamageAnims: Optional[list[SplicedAnim]] = None, splicedDodgeAnims: Optional[list[SplicedAnim]] = None, showDamageExtraTime: float = 0.01, showMissedExtraTime: float = 0.5, forceHit: bool = False, hpTextType = None, damageAnimPlayRate: float = 1.0, dodgeAnimPlayRate: float = 1.0) -> Parallel:
     toonTracks: Parallel = Parallel()
     targets: list[dict] = attack['target']
     for i in range(len(targets)):
@@ -903,7 +1052,7 @@ def getToonTracksCheat(attack, damageDelay = 1e-06, damageAnimNames = None, dodg
     return toonTracks
 
 
-def getToonDodgeTrack(target: dict, dodgeDelay: float, dodgeAnimNames: list[str], splicedDodgeAnims: Optional[list[Union[dict, list]]], showMissedExtraTime: float, dodgeAnimPlayRate: float = 1.0) -> Parallel:
+def getToonDodgeTrack(target: dict, dodgeDelay: float, dodgeAnimNames: list[str], splicedDodgeAnims: Optional[list[SplicedAnim]], showMissedExtraTime: float, dodgeAnimPlayRate: float = 1.0) -> Parallel:
     toon = target['toon']
     toonTrack: Sequence = Sequence()
     toonTrack.append(Wait(dodgeDelay))
@@ -1027,7 +1176,7 @@ def throwPos(t: float, object, duration: float, target, values: dict, gravity: f
     object.setPos(x, y, z)
 
 
-def getToonTakeDamageTrack(attack: dict, toon, died, dmg, delay: float, damageAnimNames: list[str] = [], splicedDamageAnims: Optional[list[Union[dict, list]]] = None, showDamageExtraTime: float = 0.01, hpTextType = None, damageAnimPlayRate: float = 1.0) -> Parallel:
+def getToonTakeDamageTrack(attack: dict, toon, died, dmg, delay: float, damageAnimNames: list[str] = [], splicedDamageAnims: Optional[list[SplicedAnim]] = None, showDamageExtraTime: float = 0.01, hpTextType = None, damageAnimPlayRate: float = 1.0) -> Parallel:
     toonTrack: Sequence = Sequence()
     toonTrack.append(Wait(delay))
     suitResponseTrack: Sequence = Sequence()
@@ -1078,55 +1227,16 @@ def getToonTakeDamageTrackCheat(attack, toon, died, dmg, delay, damageAnimNames 
     return Parallel(toonTrack, indicatorTrack, suitResponseTrack)
 
 
-def getSplicedAnimsTrack(anims: list[Union[dict, list]], actor: Optional[Actor] = None, playRate: float = 1.0) -> Sequence:
-    track = Sequence()
+def getSplicedAnimsTrack(anims: list[SplicedAnim], actor: Optional[Actor] = None, playRate: float = 1.0) -> Sequence:
+    track: Sequence = Sequence()
     for nextAnim in anims:
-        delay = 1e-06
-        if isinstance(nextAnim, dict):
-            AttackAnimKeys = MovieUtil.AttackAnimKeys
-            theAnim = nextAnim[AttackAnimKeys.Anim]
-            delay = nextAnim.get(AttackAnimKeys.Delay, delay)
-            startTime = nextAnim.get(AttackAnimKeys.StartTime)
-            duration = nextAnim.get(AttackAnimKeys.Duration)
-            playRate = nextAnim.get(AttackAnimKeys.PlayRate, 1.0)
-
-            if delay > 0.0:
-                track.append(Wait(delay))
-            track.append(ActorInterval(actor, theAnim, startTime=startTime, duration=duration, playRate=playRate))
-        else:
-            if len(nextAnim) >= 2:
-                if nextAnim[1] > 0:
-                    delay = nextAnim[1]
-            if len(nextAnim) <= 0:
-                track.append(Wait(delay))
-            elif len(nextAnim) == 1:
-                track.append(ActorInterval(actor, nextAnim[0], playRate=playRate))
-            elif len(nextAnim) == 2:
-                track.append(Wait(delay))
-                track.append(ActorInterval(actor, nextAnim[0], playRate=playRate))
-            elif len(nextAnim) == 3:
-                track.append(Wait(delay))
-                track.append(ActorInterval(actor, nextAnim[0], startTime=nextAnim[2] / playRate, playRate=playRate))
-            elif len(nextAnim) == 4:
-                track.append(Wait(delay))
-                duration = nextAnim[3]
-                if duration < 0.0:
-                    startTime = nextAnim[2]
-                    endTime = startTime + duration
-                    if endTime <= 0:
-                        endTime = 0.01
-                    track.append(ActorInterval(actor, nextAnim[0], startTime=startTime / playRate, endTime=endTime / playRate, playRate=playRate))
-                else:
-                    track.append(ActorInterval(actor, nextAnim[0], startTime=nextAnim[2] / playRate, duration=duration / playRate, playRate=playRate))
-            elif len(nextAnim) == 5:
-                track.append(Wait(delay))
-                track.append(ActorInterval(nextAnim[4], nextAnim[0], startTime=nextAnim[2] / playRate, duration=nextAnim[3] / playRate, playRate=playRate))
+        track.extend(nextAnim.getIval(actor, playRate=playRate))
 
     return track
 
 
-def getSplicedLerpAnims(animName: str, origDuration: float, newDuration: float, startTime: float = 0.0, fps: float = 30.0, reverse: bool = False) -> list[list]:
-    anims: list[list] = []
+def getSplicedLerpAnims(animName: str, origDuration: float, newDuration: float, startTime: float = 0.0, fps: float = 30.0, reverse: bool = False) -> list[SplicedAnim]:
+    anims: list[SplicedAnim] = []
     addition: float = 0.0
     numAnims = origDuration * fps
     timeInterval = newDuration / numAnims
@@ -1134,10 +1244,7 @@ def getSplicedLerpAnims(animName: str, origDuration: float, newDuration: float, 
     if reverse == 1:
         animInterval = -animInterval
     for i in range(0, int(numAnims)):
-        anims.append([animName,
-         timeInterval,
-         startTime + addition,
-         animInterval])
+        anims.append(SplicedAnim(animName, timeInterval, startTime + addition, animInterval))
         addition += animInterval
 
     return anims

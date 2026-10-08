@@ -22,6 +22,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits.MovieIntervals import (
+    SplicedAnim,
     throwPos,
     __doDamage,
     __doDamageCheat,
@@ -652,14 +653,11 @@ def doSynergy(attack):
     suitTrack = getSuitAnimTrackAttack(attack)
     partTrack: Sequence = getPartTrack(particleEffect, 1.0, 3.4, (particleEffect, suit, 0), softStop=-2.0)
     waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.8, 3.4, (waterfallEffect, suit, 0), softStop=-2.0)
-    damageAnims = [['slip-forward']]
+    damageAnims = [SplicedAnim('slip-forward')]
     dodgeAnims = []
-    dodgeAnims.append(['jump',
-     0.01,
-     0,
-     0.6])
+    dodgeAnims.append(SplicedAnim('jump', 0.01, 0.0, 0.6))
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
-    dodgeAnims.append(['jump', 0, 0.91])
+    dodgeAnims.append(SplicedAnim('jump', 0.0, 0.91))
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['slip-forward'], dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
     synergySoundTrack = Sequence(Wait(0.9), SoundInterval(globalBattleSoundCache.getSound('SA_synergy.ogg'), node=suit))
     if hitAtleastOneToon(targets):

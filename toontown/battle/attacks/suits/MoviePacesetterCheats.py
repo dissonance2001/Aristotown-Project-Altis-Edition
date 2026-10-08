@@ -27,6 +27,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits.MovieIntervals import (
+    SplicedAnim,
     throwPos,
     __doDamage,
     __doDamageCheat,
@@ -276,10 +277,7 @@ def doMovingGoalposts(attack):
     spinTracks2 = Parallel()
     spinTracks3 = Parallel()
     damageAnims = []
-    damageAnims.append(['duck',
-     0.01,
-     0.01,
-     1.1])
+    damageAnims.append(SplicedAnim('duck', 0.01, 0.01, 1.1))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     toonTracks = getToonTracksCheat(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, splicedDodgeAnims=damageAnims, showDamageExtraTime=2.1, showMissedExtraTime=1.0)

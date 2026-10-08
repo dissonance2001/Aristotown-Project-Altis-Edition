@@ -23,6 +23,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits.MovieIntervals import (
+    SplicedAnim,
     throwPos,
     __doDamage,
     __doDamageCheat,

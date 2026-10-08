@@ -24,6 +24,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits.MovieIntervals import (
+    SplicedAnim,
     throwPos,
     __doDamage,
     __doDamageCheat,
@@ -74,7 +75,7 @@ def doHydrationCheckRevert(attack):
     targets = attack['target']
     damageDelay = 1.3
     dodgeDelay = 0.25
-    damageAnims = [['slip-forward']]
+    damageAnims = [SplicedAnim('slip-forward')]
     puddleTracks = Parallel()
     soundTracks = Parallel()
     suitTracks = Parallel()
@@ -209,8 +210,8 @@ def doWringOut(attack):
     targets = attack['target']
     damageDelay = 1.0
     suitTrack = getSuitTrack(attack)
-    damageAnims = [['struggle', 0.01, 0.01, 1.0],
-     ['slip-backward', 0.01, 0.01]]
+    damageAnims = [SplicedAnim('struggle', 0.01, 0.01, 1.0),
+     SplicedAnim('slip-backward', 0.01, 0.01)]
     shakeTracks = Parallel()
     squeezeTracks = Parallel()
     partTracks = Parallel()
@@ -382,17 +383,11 @@ def doHemmorage(attack):
             propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(teeth.removeNode))
             propTracks.append(propTrack)
 
-    damageAnims = [['cringe',
-      0.01,
-      0.7,
-      1.2], ['conked',
-      0.01,
-      0.2,
-      2.1], ['conked', 0.01, 3.2]]
-    dodgeAnims = [['cringe',
-      0.01,
-      0.7,
-      0.2], ['duck', 0.01, 1.6]]
+    damageAnims = [SplicedAnim('cringe', 0.01, 0.7, 1.2),
+     SplicedAnim('conked', 0.01, 0.2, 2.1),
+     SplicedAnim('conked', 0.01, 3.2)]
+    dodgeAnims = [SplicedAnim('cringe', 0.01, 0.7, 0.2),
+     SplicedAnim('duck', 0.01, 1.6)]
     #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     battle = attack['battle']
     target = attack['target']

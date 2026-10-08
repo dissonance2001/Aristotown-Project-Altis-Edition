@@ -24,6 +24,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits.MovieIntervals import (
+    SplicedAnim,
     throwPos,
     __doDamage,
     __doDamageCheat,
@@ -135,14 +136,8 @@ def doOverheat(attack):
             flameTracks.append(flameSmallTrack)
             flecksTracks.append(flecksSmallTrack)
     damageAnims = []
-    damageAnims.append(['cringe',
-                        0.01,
-                        0.7,
-                        0.62])
-    damageAnims.append(['slip-forward',
-                        1e-05,
-                        0.4,
-                        1.2])
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.7, 0.62))
+    damageAnims.append(SplicedAnim('slip-forward', 1e-05, 0.4, 1.2))
     damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.8, startTime=1.2))
     suitTrack = Sequence(getSuitAnimTrackAttack(attack))
     toonTracks = getToonTracksCheat(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3,
@@ -175,10 +170,7 @@ def doRolled(attack):
     spinTracks2 = Parallel()
     spinTracks3 = Parallel()
     damageAnims = []
-    damageAnims.append(['duck',
-     0.01,
-     0.01,
-     1.1])
+    damageAnims.append(SplicedAnim('duck', 0.01, 0.01, 1.1))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     toonTracks = getToonTracksCheat(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, splicedDodgeAnims=damageAnims, showDamageExtraTime=2.1, showMissedExtraTime=1.0)
@@ -327,7 +319,7 @@ def doRedTape(attack):
             tubeTracks.append(getPropTrack(tubes[partNum], nextPart, tubePosPoints, 2.2, 3.17, scaleUpPoint=scaleUpPoint))
 
         tubeTracks.append(Func(battle.movie.clearRestoreHips))
-        damageAnims = [['nothing', 0.01, 0.35]]
+        damageAnims = [SplicedAnim('nothing', 0.01, 0.35)]
         notifyTracks.append(Sequence(Wait(2.4), Parallel(Func(toon.showHpTextNew, -int(dmg), text="COOLDOWN!", colorCode=1))))
         notifyTracks.append(Parallel(Func(toon.setToonStatusEffect, 'cooldown', turns=2, mode='refreshTurns')))
         allTubeTracks.append(tubeTracks)
@@ -471,7 +463,7 @@ def doExplosion(attack):
         suitTrack.append(Parallel(Func(suit.setHealthForMe, - (50 * len(battle.activeToons))), Func(suit.showHpTextNew, - (50 * len(battle.activeToons))), Func(suit.updateHealthBar, 0), suit.makeHighPressureDeathMovie((50 * len(battle.activeToons)), battle), ActorInterval(suit, 'slip-backward')))
         suitTracks.append(suitTrack)
         suitTrack.append(Func(suit.setNeutralAnimationDrop))
-    damageAnims = [['slip-forward', 0.01, 0.4]]
+    damageAnims = [SplicedAnim('slip-forward', 0.01, 0.4)]
     toonTracks = getToonTracks(attack, damageDelay=3.0, splicedDamageAnims=damageAnims, dodgeDelay=3.1, dodgeAnimNames=['sidestep'])
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=3.0)
     return Parallel(suitTracks, explosionTrack, toonTracks, soundTrack1)
@@ -929,16 +921,13 @@ def doSyphon(attack):
         suitTrack.append(Sequence(Func(suit.setHealthForMe, + dmg), Func(suit.updateHealthBar, 0)))
         selfDamageTrack = Sequence(Wait(2), Func(suit.showHpText, +dmg))
         selfDamageTracks.append(selfDamageTrack)
-    dodgeAnims = [['duck', 1e-06, 0.8]]
+    dodgeAnims = [SplicedAnim('duck', 1e-06, 0.8)]
     damageAnims = []
-    damageAnims.append(['cringe',
-                        0.01,
-                        0,
-                        0.5])
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.0, 0.5))
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.4, 0.5, startTime=0.5))
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.5, startTime=0.9))
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.6, startTime=1.2))
-    damageAnims.append(['cringe', 2.6, 1.5])
+    damageAnims.append(SplicedAnim('cringe', 2.6, 1.5))
     toonTrack = getToonTracks(attack, 1.0, [], 0.0, [])
     multiTrackList = Parallel(suitTrack, toonTrack, toonAnimTracks, selfDamageTracks, partTracks4)
     soundTrack = getSoundTrack('SA_ink_drain.ogg', delay=0.0, node=suit)
@@ -963,10 +952,8 @@ def doDeepFreeze(attack):
         sprayEffects.append(Func(toon.setToonStatusEffect, 'frozen', turns=3))
         sprayEffects.append(partTrack4)
 
-    damageAnims = [['cringe',
-      0.01,
-      0.4,
-      0.8], ['duck', 0.01, 1.6]]
+    damageAnims = [SplicedAnim('cringe', 0.01, 0.4, 0.8),
+     SplicedAnim('duck', 0.01, 1.6)]
     toonTracks = getToonTracksCheat(attack, damageDelay=4.0, splicedDamageAnims=damageAnims, splicedDodgeAnims=damageAnims, dodgeDelay=4.0,
                                showDamageExtraTime=2.1, showMissedExtraTime=2.0)
     soundTrack = getSoundTrack('SA_deepfreeze.ogg', delay=4.0, node=suit)
@@ -1052,14 +1039,11 @@ def doShakedownCooldown(attack):
 
     damageAnims = []
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.9, startTime=2.06))
-    damageAnims.append(['slip-backward', 0.01, 0.5])
+    damageAnims.append(SplicedAnim('slip-backward', 0.01, 0.5))
     dodgeAnims = []
-    dodgeAnims.append(['jump',
-     0.01,
-     0,
-     0.6])
+    dodgeAnims.append(SplicedAnim('jump', 0.01, 0.0, 0.6))
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.0, startTime=0.6))
-    dodgeAnims.append(['jump', 0, 0.91])
+    dodgeAnims.append(SplicedAnim('jump', 0.0, 0.91))
     toonTracks = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.7)
     toonTracks.append(Parallel(Func(toon.setToonStatusEffect, 'cooldown', turns=2, mode='refreshTurns')))
     if hitAtleastOneToon(targets):
@@ -1415,14 +1399,11 @@ def doShakedownVulnerable(attack):
 
     damageAnims = []
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.9, startTime=2.06))
-    damageAnims.append(['slip-backward', 0.01, 0.5])
+    damageAnims.append(SplicedAnim('slip-backward', 0.01, 0.5))
     dodgeAnims = []
-    dodgeAnims.append(['jump',
-     0.01,
-     0,
-     0.6])
+    dodgeAnims.append(SplicedAnim('jump', 0.01, 0.0, 0.6))
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.0, startTime=0.6))
-    dodgeAnims.append(['jump', 0, 0.91])
+    dodgeAnims.append(SplicedAnim('jump', 0.0, 0.91))
     toonTracks = getToonTrack(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.7)
     toonTracks.append(Parallel(Func(toon.setToonStatusEffect, 'vulnerable', modifier=25, turns=3)))
     if hitAtleastOneToon(targets):

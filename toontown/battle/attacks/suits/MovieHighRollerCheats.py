@@ -24,6 +24,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits.MovieIntervals import (
+    SplicedAnim,
     throwPos,
     __doDamage,
     __doDamageCheat,
@@ -475,7 +476,7 @@ def doSplashback(attack):
             splashTracks.append(splashTrack)
             suitTracks.append(suitTrack)
             soundTracks.append(soundTrack)
-    damageAnims = [['slip-forward', 0.01, 0.4]]
+    damageAnims = [SplicedAnim('slip-forward', 0.01, 0.4)]
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=4.0, splicedDamageAnims=damageAnims, dodgeDelay=3.1,
                                    dodgeAnimNames=['neutral'])
     return Parallel(suitTracks, knifeTracks, toonTracks, toonDamageTrack, soundTracks, splashTracks, notifyTracks)
@@ -644,7 +645,7 @@ def doSnipe(attack):
                                        Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)),
                                        Func(suit.setNeutralAnimationDrop)))
             notifyTracks.append(notifyTrack)
-    damageAnims = [['slip-backward', 0.01, 0.35]]
+    damageAnims = [SplicedAnim('slip-backward', 0.01, 0.35)]
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7,
                                          dodgeAnimNames=['neutral'])
     return Parallel(suitTracks, toonTracks, rightKnifeTracks, toonDamageTrack, notifyTracks, leftKnifeTracks, explosionTracks, soundTracks)
@@ -785,7 +786,7 @@ def doSnipeCut(attack):
             explosionTracks.append(explosionTrack)
             suitTracks.append(suitTrack)
             notifyTracks.append(notifyTrack)
-    damageAnims = [['slip-backward', 0.01, 0.35]]
+    damageAnims = [SplicedAnim('slip-backward', 0.01, 0.35)]
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7,
                                          dodgeAnimNames=['neutral'])
     return Parallel(suitTracks, toonTracks, rightKnifeTracks, toonDamageTrack, notifyTracks, leftKnifeTracks, explosionTracks, soundTracks)
@@ -839,7 +840,7 @@ def doSnipeDamageReduction(attack): #UNUSED
             if dmg > 0:
                 rightKnifeTracks.append(rightTrack)
 
-        damageAnims = [['slip-backward', 0.01, 0.35]]
+        damageAnims = [SplicedAnim('slip-backward', 0.01, 0.35)]
         toonTrack = getToonTracksCheat(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=['neutral'])
         notifyTrack = Sequence(Wait(1.6), Func(toon.showHpTextNew, - int(dmg), text="GAG DEBUFF!", colorCode=1))
         #toonTrack = getToonTracks(attack, damageDelay=1.6, splicedDamageAnims=damageAnims, dodgeDelay=0.7, dodgeAnimNames=[])
@@ -1833,13 +1834,9 @@ def doContentSync(attack):
             h = part.getH()
             p = part.getP()
             r = part.getR()
-            damageAnims = [['neutral',
-                    0.01,
-                    0.01,
-                    0.5], ['juggle',
-                           0.01,
-                           0.01,
-                           1.48], ['think', 0.01, 2.28]]
+            damageAnims = [SplicedAnim('neutral', 0.01, 0.01, 0.5),
+             SplicedAnim('juggle', 0.01, 0.01, 1.48),
+             SplicedAnim('think', 0.01, 2.28)]
             toonTracks2.append(Sequence(Wait(1.2), getSplicedAnimsTrack(damageAnims, actor=toon)))
             headTracks.append(Func(toon.headsUp, battle, suitPos))
             headTracks.append(Func(toon.makeContentSync, dmg))
@@ -1879,51 +1876,17 @@ def doContentSync(attack):
 
         allChestTracks.append(chestTracks)
 
-    damageAnims = [['neutral',
-                    0.01,
-                    0.01,
-                    0.5], ['juggle',
-                           0.01,
-                           0.01,
-                           1.48], ['think', 0.01, 2.28]]
+    damageAnims = [SplicedAnim('neutral', 0.01, 0.01, 0.5),
+     SplicedAnim('juggle', 0.01, 0.01, 1.48),
+     SplicedAnim('think', 0.01, 2.28)]
     dodgeAnims = []
-    dodgeAnims.append(['think',
-                       0.01,
-                       0,
-                       0.6])
+    dodgeAnims.append(SplicedAnim('think', 0.01, 0.0, 0.6))
     return Parallel(suitTrack, partTracks, toonTracks2, allHeadTracks, allChestTracks)
 
-def getSplicedAnimsTrack(anims, actor = None):
+def getSplicedAnimsTrack(anims: list[SplicedAnim], actor = None):
     track = Sequence()
     for nextAnim in anims:
-        delay = 1e-06
-        if len(nextAnim) >= 2:
-            if nextAnim[1] > 0:
-                delay = nextAnim[1]
-        if len(nextAnim) <= 0:
-            track.append(Wait(delay))
-        elif len(nextAnim) == 1:
-            track.append(ActorInterval(actor, nextAnim[0]))
-        elif len(nextAnim) == 2:
-            track.append(Wait(delay))
-            track.append(ActorInterval(actor, nextAnim[0]))
-        elif len(nextAnim) == 3:
-            track.append(Wait(delay))
-            track.append(ActorInterval(actor, nextAnim[0], startTime=nextAnim[2]))
-        elif len(nextAnim) == 4:
-            track.append(Wait(delay))
-            duration = nextAnim[3]
-            if duration < 0:
-                startTime = nextAnim[2]
-                endTime = startTime + duration
-                if endTime <= 0:
-                    endTime = 0.01
-                track.append(ActorInterval(actor, nextAnim[0], startTime=startTime, endTime=endTime))
-            else:
-                track.append(ActorInterval(actor, nextAnim[0], startTime=nextAnim[2], duration=duration))
-        elif len(nextAnim) == 5:
-            track.append(Wait(delay))
-            track.append(ActorInterval(nextAnim[4], nextAnim[0], startTime=nextAnim[2], duration=nextAnim[3]))
+        track.extend(nextAnim.getIval(actor))
 
     return track
 
@@ -1936,7 +1899,7 @@ def doRolled(attack: dict) -> MetaInterval:
     sprayTracks: tuple[Sequence, ...] = ()
     spinTracks: tuple[Sequence, ...] = ()
     damageAnims = []
-    damageAnims.append(['duck', 0.01, 0.01, 1.1])
+    damageAnims.append(SplicedAnim('duck', 0.01, 0.01, 1.1))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.0, startTime=2.26))
     toonTracks: Parallel = Parallel()
@@ -4316,9 +4279,9 @@ def doConduction(attack):
 
         allDuckTracks.append(duckTracks)
     suitTrack.append(Func(suit.makeNonImmortal))
-    damageAnims = [['cringe', 0.01, 0.14, 0.21],
-                   ['cringe', 0.01, 0.14, 0.13],
-                   ['cringe', 0.01, 0.43]]
+    damageAnims = [SplicedAnim('cringe', 0.01, 0.14, 0.21),
+                   SplicedAnim('cringe', 0.01, 0.14, 0.13),
+                   SplicedAnim('cringe', 0.01, 0.43)]
     toonTracks = getToonTracks(attack, damageDelay=3.2, splicedDamageAnims=damageAnims, dodgeDelay=2.8,
                                dodgeAnimNames=['sidestep'])
     soundTrack = getSoundTrack('cc_s_sfx_ene_hroller_conducktion.ogg', delay=throwDelay, node=suit)

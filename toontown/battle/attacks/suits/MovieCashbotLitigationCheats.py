@@ -22,6 +22,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits.MovieIntervals import (
+    SplicedAnim,
     throwPos,
     __doDamage,
     __doDamageCheat,
@@ -324,16 +325,13 @@ def doExtortion(attack):
         partTracks4.append(partTrack4)
         toonAnimTrack = Sequence(Wait(4), ActorInterval(toon, 'slip-forward', playRate=.675))
         toonAnimTracks.append(toonAnimTrack)
-    dodgeAnims = [['duck', 1e-06, 0.8]]
+    dodgeAnims = [SplicedAnim('duck', 1e-06, 0.8)]
     damageAnims = []
-    damageAnims.append(['cringe',
-                        0.01,
-                        0,
-                        0.5])
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.0, 0.5))
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.4, 0.5, startTime=0.5))
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.5, startTime=0.9))
     damageAnims.extend(getSplicedLerpAnims('cringe', 0.3, 0.6, startTime=1.2))
-    damageAnims.append(['cringe', 2.6, 1.5])
+    damageAnims.append(SplicedAnim('cringe', 2.6, 1.5))
     toonTrack = getToonTracks(attack, 4.0, [], 0.0, [])
     multiTrackList = Parallel(suitTrack, toonTrack, toonAnimTracks, selfDamageTracks, partTracks4)
     soundTrack = getSoundTrack('SA_gains_from_the_scrap.ogg', delay=0, node=suit)
@@ -355,10 +353,7 @@ def doProtectionPayout(attack):
     spinTracks3 = Parallel()
     partTracks4 = Parallel()
     damageAnims = []
-    damageAnims.append(['duck',
-     0.01,
-     0.01,
-     1.1])
+    damageAnims.append(SplicedAnim('duck', 0.01, 0.01, 1.1))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     #toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['sidestep'], showDamageExtraTime=2.1, showMissedExtraTime=1.0)
@@ -525,15 +520,9 @@ def doPeckingOrderGroup(attack):
             suitTracks.append(suitTrack)
             notifyTracks.append(notifyTrack)
     damageAnims = []
-    damageAnims.append(['cringe',
-     0.01,
-     0.14,
-     0.21])
-    damageAnims.append(['cringe',
-     0.01,
-     0.14,
-     0.13])
-    damageAnims.append(['cringe', 0.01, 0.43])
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.14, 0.21))
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.14, 0.13))
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.43))
     toonTrack = getToonTracksCheat(attack, damageDelay=2.5, splicedDamageAnims=damageAnims, dodgeDelay=1.75, dodgeAnimNames=['neutral'], showMissedExtraTime=1.1)
     return Parallel(suitTracks, toonTrack, soundTracks, notifyTracks, birdTracks)
 

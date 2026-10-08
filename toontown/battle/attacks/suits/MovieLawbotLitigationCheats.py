@@ -23,6 +23,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.battle.attacks.suits.MovieIntervals import (
+    SplicedAnim,
     throwPos,
     __doDamage,
     __doDamageCheat,
@@ -193,16 +194,10 @@ def doPaperweight(attack):
         propTracks.append(propTrack)
 
     damageAnims = []
-    damageAnims.append(['cringe',
-     0.01,
-     0.21,
-     0.08])
-    damageAnims.append(['slip-forward',
-     0.01,
-     0.6,
-     0.85])
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.21, 0.08))
+    damageAnims.append(SplicedAnim('slip-forward', 0.01, 0.6, 0.85))
     damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.95, startTime=1.2))
-    damageAnims.append(['slip-forward', 0.01, 1.51])
+    damageAnims.append(SplicedAnim('slip-forward', 0.01, 1.51))
     soundTrack = getSoundTrack('AA_drop_bigweight_miss.ogg', delay=propDelay + suitDelay + 0.7 + throwDuration, node=suit)
     toonTracks = getToonTracks(attack, damageDelay=4, splicedDamageAnims=damageAnims, dodgeDelay=1.5, dodgeAnimNames=['duck'], showDamageExtraTime=0.4, showMissedExtraTime=1.3)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack)
@@ -340,15 +335,12 @@ def doWhirlwind(attack):
         Func(cage.removeNode)
     )
     cagePropTracks.append(cagePropTrack)
-    damageAnims = [['slip-forward', 0.0001, 0.5]]
+    damageAnims = [SplicedAnim('slip-forward', 0.0001, 0.5)]
     damageAnims = []
-    damageAnims.append(['duck',
-                        0.01,
-                        0.01,
-                        1.1])
+    damageAnims.append(SplicedAnim('duck', 0.01, 0.01, 1.1))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
-    damageAnims.append(['slip-forward'])
+    damageAnims.append(SplicedAnim('slip-forward'))
     sinkPos = toon.getPos(battle)
     sinkPos.setZ(sinkPos.getZ() + 25)
     notifyTrack = Sequence(Wait(5.9), Func(toon.showHpTextNew, -int(dmg), text="CONFUSED!", colorCode=1), SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=suit))
@@ -405,15 +397,9 @@ def doPeckingOrder(attack):
             scaleTrack = Sequence(Wait(throwDelay), LerpScaleInterval(next, 0.5, Point3(9, 9, 9)), LerpScaleInterval(next, .5, Point3(0, 0, 0)))
             birdTracks.append(Sequence(Parallel(birdTrack, scaleTrack), Func(next.removeNode)))
     damageAnims = []
-    damageAnims.append(['cringe',
-                        0.01,
-                        0.14,
-                        0.21])
-    damageAnims.append(['cringe',
-                        0.01,
-                        0.14,
-                        0.13])
-    damageAnims.append(['cringe', 0.01, 0.43])
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.14, 0.21))
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.14, 0.13))
+    damageAnims.append(SplicedAnim('cringe', 0.01, 0.43))
     toonTrack = getToonTracksCheat(attack, damageDelay=2.5, splicedDamageAnims=damageAnims, dodgeDelay=0.75,
                               dodgeAnimNames=['duck'], showMissedExtraTime=1.1)
     soundTrack = getSoundTrack('tt_s_ara_cfg_eagleCry.ogg', delay=2, node=suit)
@@ -634,17 +620,11 @@ def doSnap2(attack, suit):
             propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(teeth.removeNode))
             propTracks.append(propTrack)
 
-    damageAnims = [['cringe',
-      0.01,
-      0.7,
-      1.2], ['conked',
-      0.01,
-      0.2,
-      2.1], ['conked', 0.01, 3.2]]
-    dodgeAnims = [['cringe',
-      0.01,
-      0.7,
-      0.2], ['duck', 0.01, 1.6]]
+    damageAnims = [SplicedAnim('cringe', 0.01, 0.7, 1.2),
+     SplicedAnim('conked', 0.01, 0.2, 2.1),
+     SplicedAnim('conked', 0.01, 3.2)]
+    dodgeAnims = [SplicedAnim('cringe', 0.01, 0.7, 0.2),
+     SplicedAnim('duck', 0.01, 1.6)]
     #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     battle = attack['battle']
     target = attack['target']
@@ -699,13 +679,9 @@ def doSnapBindings(attack, suit):
             propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(teeth.removeNode))
             propTracks.append(propTrack)
 
-    damageAnims = [['cringe',
-      0.01,
-      0.7,
-      1.2], ['conked',
-      0.01,
-      0.2,
-      2.1], ['conked', 0.01, 3.2]]
+    damageAnims = [SplicedAnim('cringe', 0.01, 0.7, 1.2),
+     SplicedAnim('conked', 0.01, 0.2, 2.1),
+     SplicedAnim('conked', 0.01, 3.2)]
     dodgeAnims = [['cringe',
       0.01,
       0.7,
@@ -764,17 +740,11 @@ def doSnapStenographer(attack, suit):
             propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(teeth.removeNode))
             propTracks.append(propTrack)
 
-    damageAnims = [['cringe',
-      0.01,
-      0.7,
-      1.2], ['conked',
-      0.01,
-      0.2,
-      2.1], ['conked', 0.01, 3.2]]
-    dodgeAnims = [['cringe',
-      0.01,
-      0.7,
-      0.2], ['duck', 0.01, 1.6]]
+    damageAnims = [SplicedAnim('cringe', 0.01, 0.7, 1.2),
+     SplicedAnim('conked', 0.01, 0.2, 2.1),
+     SplicedAnim('conked', 0.01, 3.2)]
+    dodgeAnims = [SplicedAnim('cringe', 0.01, 0.7, 0.2),
+     SplicedAnim('duck', 0.01, 1.6)]
     #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     battle = attack['battle']
     target = attack['target']
@@ -829,17 +799,11 @@ def doSnap(attack, suit):
             propTrack = Sequence(Parallel(teethAppearTrack, scaleTrack, hprTrack, animTrack), Func(teeth.removeNode))
             propTracks.append(propTrack)
 
-    damageAnims = [['cringe',
-      0.01,
-      0.7,
-      1.2], ['conked',
-      0.01,
-      0.2,
-      2.1], ['conked', 0.01, 3.2]]
-    dodgeAnims = [['cringe',
-      0.01,
-      0.7,
-      0.2], ['duck', 0.01, 1.6]]
+    damageAnims = [SplicedAnim('cringe', 0.01, 0.7, 1.2),
+     SplicedAnim('conked', 0.01, 0.2, 2.1),
+     SplicedAnim('conked', 0.01, 3.2)]
+    dodgeAnims = [SplicedAnim('cringe', 0.01, 0.7, 0.2),
+     SplicedAnim('duck', 0.01, 1.6)]
     #soundTrack = getSoundTrack('SA_bite%s.ogg' % ('' if hitAtleastOneToon(targets) else '_miss'), delay=2, node=suit)
     battle = attack['battle']
     target = attack['target']
@@ -1444,10 +1408,7 @@ def doLegallyBound(attack):
     spinTracks2 = Parallel()
     spinTracks3 = Parallel()
     damageAnims = []
-    damageAnims.append(['duck',
-     0.01,
-     0.01,
-     1.1])
+    damageAnims.append(SplicedAnim('duck', 0.01, 0.01, 1.1))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     damageAnims.extend(getSplicedLerpAnims('think', 0.66, 1.1, startTime=2.26))
     #toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['sidestep'], showDamageExtraTime=2.1, showMissedExtraTime=1.0)
