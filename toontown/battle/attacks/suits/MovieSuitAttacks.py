@@ -6376,17 +6376,17 @@ def doRedTape(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, *propTracks, soundTrack, *allTubeTracks)
 
 
-def doParadigmShift(attack):
+def doParadigmShift(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    damageDelay = 1.35
-    dodgeDelay = 0.95
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
+    damageDelay: float = 0.9
+    dodgeDelay: float = 0.95
     sprayEffect = BattleParticles.createParticleEffect('ShiftSpray')
-    suitName = suit.getStyleName()
     sprayEffect.setPos(Point3(-5.2, 4.6, 2.7))
-    suitTrack = Sequence(getSuitAnimTrack(attack))
-    sprayTrack: Sequence = getPartTrack(sprayEffect, 1.0, 2.9, (sprayEffect, suit, 0), softStop=-1.0)
+    suitTrack: Sequence = getSuitAnimTrack(attack, playRate=playRate)
+    sprayTrack: Sequence = getPartTrack(sprayEffect, 1.0 / playRate, 2.9, (sprayEffect, suit, 0), softStop=-1.0)
     liftTracks = Parallel()
     toonRiseTracks = Parallel()
     for t in targets:
@@ -6396,13 +6396,13 @@ def doParadigmShift(attack):
             liftEffect = BattleParticles.createParticleEffect('ShiftLift')
             liftEffect.setPos(toon.getPos(battle))
             liftEffect.setZ(liftEffect.getZ() - 1.3)
-            liftTracks.append(getPartTrack(liftEffect, 1.1, 5.1, (liftEffect, battle, 0), softStop=-1.0))
+            liftTracks.append(getPartTrack(liftEffect, 1.1 / playRate, 5.1, (liftEffect, battle, 0), softStop=-1.0))
             shadow = toon.dropShadow
             fakeShadow = MovieUtil.copyProp(shadow)
             x = toon.getX()
             y = toon.getY()
             z = toon.getZ()
-            height = 3
+            height = 3.0
             groundPoint = Point3(x, y, z)
             risePoint = Point3(x, y, z + height)
             shakeRight = Point3(x, y + 0.7, z + height)
@@ -6443,7 +6443,7 @@ def doParadigmShift(attack):
     dodgeAnims.append(SplicedAnim('jump', 0.0, 0.91))
     toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=2.7)
     if hitAtleastOneToon(targets):
-        soundTrack = getSoundTrack('SA_paradigm_shift.ogg', delay=1.5, node=suit)
+        soundTrack = getSoundTrack('SA_paradigm_shift.ogg', delay=1.5 / playRate, node=suit)
         return Parallel(suitTrack, sprayTrack, soundTrack, liftTracks, toonTracks, toonRiseTracks)
     else:
         return Parallel(suitTrack, sprayTrack, liftTracks, toonTracks, toonRiseTracks)

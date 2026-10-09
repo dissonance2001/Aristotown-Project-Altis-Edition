@@ -871,7 +871,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name in ('Novel', 'ThrowBook'):
         camTrack.append(defaultCamera(openShotDuration=2.9 / playRate))
     elif name == 'ParadigmShift':
-        camTrack.append(defaultCamera(openShotDuration=2.5))
+        camTrack.append(defaultCamera(openShotDuration=1.01))
     elif name == 'PeckingOrder':
         camTrack.append(defaultCamera(openShotDuration=2.8 / playRate))
     elif name == 'PinkSlip':
