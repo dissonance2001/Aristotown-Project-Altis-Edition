@@ -6471,9 +6471,8 @@ def doPowerTrip(attack):
     waterfallParticles = waterfallEffect.getParticlesNamed('particles-1')
     waterfallParticles.renderer.setCenterColor(centerColor)
     waterfallParticles.renderer.setEdgeColor(edgeColor)
-    suitName = suit.getStyleName()
-    if suitName == 'mh':
-        waterfallEffect.setPos(0, 4, 3.6)
+    if suit.dna.name in ('mh', 'mh2', 'std', 'std2'):
+        waterfallEffect.setPos(0.0, 4.0, 3.6)
     suitTrack = Sequence(getSuitAnimTrack(attack))
 
     def getPowerTrack(effect: ParticleEffect.ParticleEffect, suit = suit, battle = battle) -> Sequence:
