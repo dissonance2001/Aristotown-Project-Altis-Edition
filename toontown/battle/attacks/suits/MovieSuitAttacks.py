@@ -3452,7 +3452,7 @@ def doRubberStamp(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, propTrack, padPropTrack, soundTrack)
 
 
-def doRazzleDazzle(attack):
+def doRazzleDazzle(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
