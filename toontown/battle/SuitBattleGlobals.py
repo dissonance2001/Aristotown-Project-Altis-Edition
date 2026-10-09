@@ -1903,7 +1903,8 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                SuitAttack('RedTape',
                                           hp=(6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
                                           acc=(60, 65, 75, 85, 85, 90, 95, 95, 95, 95, 95, 95, 95, 95, 95),
-                                          freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20)))),
+                                          freq=(20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20))
+                           )),
  'fcs': SuitAttributesClass(name='Forecaster',
                             singularname='a Forecaster',
                             pluralname='Forecasters',
@@ -7093,6 +7094,7 @@ SuitAttacks = {
  'AcidRain': ('magic1', ATK_TGT_SINGLE),
  'Aftershock': ('quick-jump', ATK_TGT_GROUP),
  'Audit': ('calculator', ATK_TGT_SINGLE),
+ 'BackBreaker': ('victory', ATK_TGT_SINGLE),
  'Bash': ('magic1', ATK_TGT_GROUP),
  'Beguile': ('glower', ATK_TGT_GROUP),
  'BlueChip': ('blue-chip', ATK_TGT_SINGLE), # Single, Double or Group Targets Available
@@ -7101,6 +7103,7 @@ SuitAttacks = {
  'BounceRate': ('throw-object', ATK_TGT_SINGLE),
  'Breakthrough': ('throw-object', ATK_TGT_SINGLE),
  'BrainStorm': ('effort', ATK_TGT_SINGLE),
+ 'Brainwash': ('effort', ATK_TGT_SINGLE),
  'BuzzWord': ('speak', ATK_TGT_SINGLE),
  'Calculate': ('calculator', ATK_TGT_SINGLE),
  'Canned': ('throw-object', ATK_TGT_SINGLE),
@@ -7139,6 +7142,7 @@ SuitAttacks = {
  'FiveOClockShadow': ('effort', ATK_TGT_SINGLE),
  'FountainPen': ('pen-squirt', ATK_TGT_SINGLE),
  'FreezeAssets': ('glower', ATK_TGT_SINGLE),
+ 'Gerrymander': ('magic2', ATK_TGT_SINGLE),
  'GoldDust': ('glower', ATK_TGT_GROUP),
  'GoldRush': ('magic3', ATK_TGT_GROUP),
  'GlowerPower': ('glower', ATK_TGT_SINGLE),
@@ -7153,6 +7157,7 @@ SuitAttacks = {
  'Legalese': ('speak', ATK_TGT_SINGLE),
  'Liquidate': ('magic1', ATK_TGT_SINGLE),
  'MarketCrash': ('throw-object', ATK_TGT_SINGLE),
+ 'MindBlow': ('magic3', ATK_TGT_SINGLE),
  'MoneyTalks': ('speak', ATK_TGT_GROUP),
  'MoneyTrip': ('magic3', ATK_TGT_GROUP),  # Synergy
  'MysteriousDisappearance': ('throw-paper', ATK_TGT_SINGLE),

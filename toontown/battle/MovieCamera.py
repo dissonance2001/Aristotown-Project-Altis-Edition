@@ -864,6 +864,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
     elif name in ('MarketCrash', 'Newspaper'):
         camTrack.append(defaultCamera(openShotDuration=2.7 / playRate))
+    elif name == 'MindBlow':
+        camTrack.append(defaultCamera(openShotDuration=3.5 / playRate))
     elif name == 'MoneyTalks':
         camTrack.append(defaultCamera(openShotDuration=2.33))
     elif name == 'MumboJumbo':

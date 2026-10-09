@@ -477,6 +477,7 @@ ATTACK_PLAY_RATES: dict[str, float] = {
     'Jargon': 1.5,
     'Legalese': 1.5,
     'MarketCrash': 1.3,
+    'MindBlow': 1.3,
     'MudSling': 1.4,
     'MumboJumbo': 1.4,
     'Newspaper': 1.3,

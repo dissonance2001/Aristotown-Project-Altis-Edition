@@ -359,6 +359,8 @@ def doSuitAttack(attack):
         suitTrack = doQuake(attack)
     elif name == 'Audit':
         suitTrack = doAudit(attack)
+    elif name == 'BackBreaker':
+        suitTrack = doDefault(attack)
     elif name == 'Bash':
         suitTrack = doBash(attack)
     elif name == 'Beguile':
@@ -418,6 +420,8 @@ def doSuitAttack(attack):
         suitTrack = doBounceCheck(attack)
     elif name in ('BrainStorm', 'Forecast'):
         suitTrack = doBrainStorm(attack)
+    elif name == 'Brainwash':
+        suitTrack = doDefault(attack)
     elif name == 'BuzzWord':
         suitTrack = doBuzzWord(attack)
     elif name == 'Calculate':
@@ -473,6 +477,8 @@ def doSuitAttack(attack):
         suitTrack = doFountainPen(attack)
     elif name == 'FreezeAssets':
         suitTrack = doFreezeAssets(attack)
+    elif name == 'Gerrymander':
+        suitTrack = doDefault(attack)
     elif name == 'GlowerPower':
         suitTrack = doGlowerPower(attack)
     elif name == 'ShortSqueeze':
@@ -506,6 +512,8 @@ def doSuitAttack(attack):
         suitTrack = doLiquidate(attack)
     elif name in ('MarketCrash', 'Newspaper'):
         suitTrack = doMarketCrash(attack)
+    elif name == 'MindBlow':
+        suitTrack = doMindBlow(attack)
     elif name == 'MoneyTalks':
         suitTrack = doMoneyTalks(attack)
     elif name == 'MumboJumbo':
@@ -9075,3 +9083,46 @@ def doStumpSpeech(attack: dict) -> MetaInterval:
         soundTrack.append((time, SoundInterval(globalBattleSoundCache.getSound('tt_s_ara_cmg_cogStomp.ogg'), node=suit)))
 
     return Parallel(suitTrack, moveSuitTrack, toonFinalTrack, soundTrack)
+
+
+def doMindBlow(attack: dict) -> MetaInterval:
+    suit = attack['suit']
+    battle = attack['battle']
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
+    damageDelay: float = 2.3 / playRate
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    explosionTracks: Track = Track()
+    headExplodeTracks: tuple[Sequence, ...] = ()
+    damageAnims = [SplicedAnim(Anim='think', Delay=0.01, StartTime=0.01, Duration=damageDelay, PlayRate=playRate),
+     SplicedAnim('slip-backward', 0.01, 0.01)]
+    dodgeAnims = [SplicedAnim(Anim='think', Delay=0.01, StartTime=0.01, Duration=2.0 / playRate, PlayRate=playRate),
+     SplicedAnim('duck', 0.01, 1.4)]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=1e-06, splicedDamageAnims=damageAnims, dodgeDelay=1e-06, splicedDodgeAnims=dodgeAnims, showDamageExtraTime=(2.5 / playRate) + 0.01, showMissedExtraTime=(1.95 / playRate) + 0.5, damageAnimPlayRate=1.1)
+    soundTracks: Track = Track()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        explosionPoint = __toonFacePoint(toon, parent=battle)
+        explosionTracks.append((damageDelay, MovieUtil.createKapowExplosionTrack(battle, explosionPoint)))
+        soundTracks.append((damageDelay + 0.2, SoundInterval(globalBattleSoundCache.getSound(f'ENC_cogfall_apart_{random.randint(1, 6)}.ogg'), node=toon)))
+        if dmg > 0:
+            headParts = toon.getHeadParts()
+            initialScale = headParts.getPath(0).getScale()[0]
+            headExplodeTrack = Sequence(Wait(damageDelay))
+
+            def scaleHeadParallel(scale: float, duration, headParts = headParts):
+                headTracks = Parallel()
+                for partNum in range(0, headParts.getNumPaths()):
+                    nextPart = headParts.getPath(partNum)
+                    headTracks.append(LerpScaleInterval(nextPart, duration, Point3(scale, scale, scale)))
+                
+                return headTracks
+            
+            headExplodeTrack.append(Func(battle.movie.needRestoreHeadScale))
+            headExplodeTrack.append(scaleHeadParallel(initialScale * 0.0, 0.0))
+            headExplodeTrack.append(Wait(1.5 / playRate))
+            headExplodeTrack.append(scaleHeadParallel(initialScale, 2.0 / playRate))
+            headExplodeTracks += (headExplodeTrack,)
+    
+    return Parallel(suitTrack, explosionTracks, *headExplodeTracks, toonTracks, soundTracks)
