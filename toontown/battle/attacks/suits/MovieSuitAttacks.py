@@ -2844,70 +2844,77 @@ def doQuash(attack):
     return Parallel(suitTrack, partTracks, toonTracks, soundTracks)
 
 
-def doFountainPen(attack):
+def doFountainPen(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
     pen = globalPropPool.getProp('pen')
 
     def getPenTip(pen = pen):
         tip = pen.find('**/joint_toSpray')
         return tip.getPos(render)
 
-    suitTrack = getSuitTrack(attack)
-    propTrack = Sequence(Wait(0.01), Func(__showProp, pen, suit.getRightHand(), MovieUtil.PNT3_ZERO), LerpScaleInterval(pen, 0.5, Point3(1.5, 1.5, 1.5)), Wait(1.05))
-    sprayTracks = Parallel()
+    suitTrack: Sequence = getSuitTrack(attack)
+    propTrack = Sequence(
+        Wait(0.01),
+        Func(__showProp, pen, suit.getRightHand(), MovieUtil.PNT3_ZERO),
+        LerpScaleInterval(pen, 0.5, Point3(1.5, 1.5, 1.5)),
+        Wait(0.9)
+    )
+    sprayTracks: Parallel = Parallel()
     for t in targets:
         toon = t['toon']
         hitPoint = lambda toon = toon: __toonFacePoint(toon)
-        missPoint = lambda prop = pen, toon = toon: __toonMissPoint(prop, toon, 0, parent=render)
-        hitSprayTrack = MovieUtil.getSprayTrack(battle, VBase4(0, 0, 0, 1), getPenTip, hitPoint, 0.2, 0.2, 0.2, horizScale=0.1, vertScale=0.1)
-        missSprayTrack = MovieUtil.getSprayTrack(battle, VBase4(0, 0, 0, 1), getPenTip, missPoint, 0.2, 0.2, 0.2, horizScale=0.1, vertScale=0.1)
-        if t['hp'] > 0:
-            sprayTracks.append(hitSprayTrack)
-        else:
-            sprayTracks.append(missSprayTrack)
+        missPoint = lambda prop = pen, toon = toon: __toonMissPoint(prop, toon, 0.0, parent=render)
+        hitSprayTrack = MovieUtil.getSprayTrack(battle, VBase4(0.0, 0.0, 0.0, 1.0), getPenTip, hitPoint, 0.2, 0.2, 0.2, horizScale=0.1, vertScale=0.1)
+        missSprayTrack = MovieUtil.getSprayTrack(battle, VBase4(0.0, 0.0, 0.0, 1.0), getPenTip, missPoint, 0.2, 0.2, 0.2, horizScale=0.1, vertScale=0.1)
+        sprayTracks.append(hitSprayTrack if t['hp'] > 0 else missSprayTrack)
     
     propTrack.append(sprayTracks)
     propTrack += [LerpScaleInterval(pen, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProp, pen)]
 
-    def prepSplash(splash, targetPoint):
+    def prepSplash(splash: Actor.Actor, targetPoint) -> None:
         splash.reparentTo(render)
         splash.setPos(targetPoint)
         scale = splash.getScale()
         splash.setBillboardPointWorld()
         splash.setScale(scale)
 
-    splashTracks = Parallel()
+    splashTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         if dmg > 0:
             splash = globalPropPool.getProp('splash-from-splat')
-            splash.setColor(0, 0, 0, 1)
-            splash.setScale(0.15)
-            splashTrack = Sequence(Func(battle.movie.needRestoreRenderProp, splash), Wait(1.65), Func(prepSplash, splash, __toonFacePoint(toon)), ActorInterval(splash, 'splash-from-splat'), Func(MovieUtil.removeProp, splash), Func(battle.movie.clearRenderProp, splash))
+            splash.setColor(0.0, 0.0, 0.0, 1.0)
+            splash.setScale(0.25)
+            splashTrack = Sequence(
+                Func(battle.movie.needRestoreRenderProp, splash),
+                Wait(1.625),
+                Func(prepSplash, splash, __toonFacePoint(toon)),
+                ActorInterval(splash, 'splash-from-splat'),
+                Func(MovieUtil.removeProp, splash),
+                Func(battle.movie.clearRenderProp, splash)
+            )
             headParts = toon.getHeadParts()
             splashTrack.append(Func(battle.movie.needRestoreColor))
-            for partNum in range(0, headParts.getNumPaths()):
-                nextPart = headParts.getPath(partNum)
-                splashTrack.append(Func(nextPart.setColorScale, Vec4(0, 0, 0, 1)))
+            for nextPart in headParts:
+                splashTrack.append(Func(nextPart.setColorScale, Vec4(0.0, 0.0, 0.0, 1.0)))
 
             splashTrack.append(Func(MovieUtil.removeProp, splash))
             splashTrack.append(Wait(2.6))
-            for partNum in range(0, headParts.getNumPaths()):
-                nextPart = headParts.getPath(partNum)
+            for nextPart in headParts:
                 splashTrack.append(Func(nextPart.clearColorScale))
 
             splashTrack.append(Func(battle.movie.clearRestoreColor))
-            splashTracks.append(splashTrack)
+            splashTracks += (splashTrack,)
 
     penSpill = BattleParticles.createParticleEffect(file='penSpill')
     penSpill.setPos(getPenTip())
-    penSpillTrack: Sequence = getPartTrack(penSpill, 1.4, 0.7, (penSpill, pen, 0))
-    toonTracks = getToonTracks(attack, 1.81, ['conked'], dodgeDelay=0.11, splicedDodgeAnims=[SplicedAnim('duck', 0.01, 0.6)], showMissedExtraTime=1.66)
-    soundTrack = getSoundTrack('SA_fountain_pen.ogg', delay=1.6, node=suit)
-    return Parallel(suitTrack, toonTracks, propTrack, soundTrack, penSpillTrack, splashTracks)
+    penSpillTrack: Sequence = getPartTrack(penSpill, 1.0, 0.7, (penSpill, pen, 0))
+    toonTracks: Parallel = getToonTracks(attack, 1.6, ['conked'], dodgeDelay=0.11, splicedDodgeAnims=[SplicedAnim('duck', 0.01, 0.6)], showMissedExtraTime=1.66, damageAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack('SA_fountain_pen.ogg', delay=1.6, node=suit)
+    return Parallel(suitTrack, toonTracks, propTrack, soundTrack, penSpillTrack, *splashTracks)
 
 def makeZapBeamTrack(battle, coil, suit, tDelay, duration):
     beam = globalPropPool.getProp('zap_beam')
