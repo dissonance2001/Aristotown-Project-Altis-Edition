@@ -2758,7 +2758,7 @@ def doBeguile(attack: dict) -> MetaInterval:
     sparklePropTrack.append(Func(sparkle.find('**/scale_joint_sign').hide))
     sparklePropTrack.append(ActorInterval(sparkle, 'smile', startFrame=39))
     sparklePropTrack.append(Func(MovieUtil.removeProp, sparkle))
-    dodgeAnims = [['duck', 1e-06, 0.8]]
+    dodgeAnims = [SplicedAnim('duck', 1e-06, 0.8)]
     toonTracks: Parallel = getToonTracks(attack, damageDelay=2.1, damageAnimNames=['cringe'], dodgeDelay=1.7, splicedDodgeAnims=dodgeAnims)
     soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_beguile{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", node=suit)
     return Parallel(suitTrack, sparklePropTrack, toonTracks, soundTrack)
