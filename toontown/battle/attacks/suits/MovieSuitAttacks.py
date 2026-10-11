@@ -428,8 +428,8 @@ def doSuitAttack(attack):
         suitTrack = doCalculate(attack)
     elif name == 'Canned':
         suitTrack = doCanned(attack)
-    elif name == 'EvictionNotice':
-        suitTrack = doEvictionNotice(attack)
+    elif name in ('CashGrab', 'PickPocket'):
+        suitTrack = doPickPocket(attack)
     elif name == 'Chomp':
         suitTrack = doChomp(attack)
     elif name == 'Watercooler':
@@ -527,8 +527,6 @@ def doSuitAttack(attack):
             suitTrack = doParadigmShift(attack)
     elif name == 'PeckingOrder':
         suitTrack = doPeckingOrder(attack)
-    elif name == 'PickPocket':
-        suitTrack = doPickPocket(attack)
     elif name == 'PinkSlip':
         suitTrack = doPinkSlip(attack)
     elif name == 'PlayHardball':
@@ -5787,20 +5785,20 @@ def doStolenScene(attack):
     return multiTrackList
 
 
-def doPickPocket(attack):
+def doPickPocket(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
     dmg = target[0]['hp']
-    bill = globalPropPool.getProp('1dollar')
-    suitTrack = getSuitTrack(attack)
+    bill = globalPropPool.getProp('50dollar' if attack['name'] == 'CashGrab' else '1dollar')
+    suitTrack: Sequence = getSuitTrack(attack)
     suitTrack.append(Wait(1.0))
     billPosPoints = [Point3(-0.13024602026049337, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
-    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.25, 1.0, scaleUpPoint=Point3(1.41, 1.41, 1.41))
+    billPropTrack: Sequence = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.25, 1.0, scaleUpPoint=Point3(1.41, 1.41, 1.41))
     toonTrack = getToonTrack(attack, 0.25, ['cringe'], 0.01, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
     if dmg > 0:
-        soundTrack = getSoundTrack('SA_pick_pocket.ogg', delay=0.2, node=suit)
+        soundTrack: Sequence = getSoundTrack('SA_pick_pocket.ogg', delay=0.2, node=suit)
         multiTrackList.append(billPropTrack)
         multiTrackList.append(soundTrack)
     return multiTrackList

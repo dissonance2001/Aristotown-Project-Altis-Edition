@@ -782,6 +782,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=3.1))
     elif name == 'Canned':
         camTrack.append(defaultCamera(openShotDuration=2.9 / 1.3))
+    elif name in ('CashGrab', 'Embezzle', 'PennyPinch', 'PickPocket', 'StolenScene'):
+        camTrack.append(allGroupLowShot(suit, attackDuration, battle))
     elif name == 'Chomp':
         camTrack.append(defaultCamera(openShotDuration=2.8 / 1.5))
     elif name == 'Watercooler':
@@ -804,8 +806,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'Downsize':
         camTrack.append(defaultCamera(openShotDuration=1.8))
-    elif name in ('Embezzle', 'PennyPinch', 'PickPocket', 'StolenScene'):
-        camTrack.append(allGroupLowShot(suit, attackDuration, battle))
     elif name == 'EvictionNotice':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'EvilEye':

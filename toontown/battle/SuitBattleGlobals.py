@@ -7107,6 +7107,7 @@ SuitAttacks = {
  'BuzzWord': ('speak', ATK_TGT_SINGLE),
  'Calculate': ('calculator', ATK_TGT_SINGLE),
  'Canned': ('throw-object', ATK_TGT_SINGLE),
+ 'CashGrab': ('pickpocket', ATK_TGT_SINGLE),
  'Chomp': ('throw-object', ATK_TGT_SINGLE),
  'ClipOnTie': ('throw-object', ATK_TGT_SINGLE),
  'CloseTheLoop': ('phone', ATK_TGT_GROUP),
