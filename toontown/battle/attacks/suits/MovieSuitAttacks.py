@@ -3988,19 +3988,18 @@ def doMulligan(attack):
     return Parallel(suitTrack, toonTrack, clubPropTrack, ballPropTrack, soundTrack)
 
 
-def doBrainStorm(attack):
+def doBrainStorm(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
-    suitType = getSuitBodyType(attack['suitName'])
-    partDelay = 1.2
-    damageDelay = 2.5
-    dodgeDelay = 2.3
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    initialCloudHeight = suit.height + 3
-    cloudPosPoints = [Point3(0, 3, initialCloudHeight), VBase3(180, 0, 0)]
-    cloudPropTracks = Parallel()
+    partDelay: float = 0.45
+    damageDelay: float = 3.0
+    dodgeDelay: float = 2.0
+    suitTrack: Sequence = getSuitTrack(attack, delay=0.9, playRate=1.3)
+    initialCloudHeight = suit.height + 3.0
+    cloudPosPoints = [Point3(0.0, 3.0, initialCloudHeight), VBase3(180.0, 0.0, 0.0)]
+    cloudPropTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         snowEffect = BattleParticles.createParticleEffect('BrainStorm')
@@ -4013,25 +4012,40 @@ def doBrainStorm(attack):
         cloud = globalPropPool.getProp('stormcloud')
         cloudPropTrack = Sequence()
         cloudPropTrack.append(Func(cloud.pose, 'stormcloud', 0))
-        cloudPropTrack.append(getPropAppearTrack(cloud, suit, cloudPosPoints, 1e-06, Point3(3, 3, 3), scaleUpTime=0.7))
+        cloudPropTrack.append(getPropAppearTrack(cloud, suit, cloudPosPoints, 1e-06, Point3(3.0, 3.0, 3.0), scaleUpTime=0.7))
         cloudPropTrack.append(Func(battle.movie.needRestoreRenderProp, cloud))
         cloudPropTrack.append(Func(cloud.wrtReparentTo, render))
-        targetPoint = __toonFacePoint(toon)
-        targetPoint.setZ(targetPoint[2] + 3)
-        cloudPropTrack.append(Wait(0.5))
-        cloudPropTrack.append(LerpPosInterval(cloud, .5, pos=targetPoint, blendType='easeInOut'))
-        cloudPropTrack.append(Parallel(ParticleInterval(snowEffect, cloud, worldRelative=0, duration=3.2, cleanup=True, softStopT=-1), Sequence(Wait(0.5), ParticleInterval(snowEffect2, cloud, worldRelative=0, duration=2.7, cleanup=True, softStopT=-1)), Sequence(Wait(1.0), ParticleInterval(snowEffect3, cloud, worldRelative=0, duration=2.2, cleanup=True, softStopT=-1)), Sequence(ActorInterval(cloud, 'stormcloud', startTime=3, duration=0.5), ActorInterval(cloud, 'stormcloud', startTime=2.5, duration=0.5), ActorInterval(cloud, 'stormcloud', startTime=1, duration=1.5))))
-        cloudPropTrack.append(Wait(0.4))
-        cloudPropTrack.append(LerpScaleInterval(cloud, 0.5, MovieUtil.PNT3_NEARZERO))
+        targetPoint = __toonFacePoint(toon, zOffset=3.0)
+        cloudPropTrack.append(Wait(0.8))
+        cloudPropTrack.append(LerpPosInterval(cloud, 0.7, pos=targetPoint, blendType='easeInOut'))
+        cloudPropTrack.append(Wait(partDelay))
+        cloudPropTrack.append(Parallel(
+            ParticleInterval(snowEffect, cloud, worldRelative=0, duration=2.0, cleanup=True, softStopT=-0.7),
+            Sequence(
+                Wait(0.35),
+                ParticleInterval(snowEffect2, cloud, worldRelative=0, duration=1.65, cleanup=True, softStopT=-0.7),
+            ),
+            Sequence(
+                Wait(0.7),
+                ParticleInterval(snowEffect3, cloud, worldRelative=0, duration=1.3, cleanup=True, softStopT=-0.7),
+            ),
+            Sequence(
+                ActorInterval(cloud, 'stormcloud', startTime=3.0, duration=0.33),
+                ActorInterval(cloud, 'stormcloud', startTime=2.5, duration=0.33),
+                ActorInterval(cloud, 'stormcloud', startTime=1.0, duration=1.33),
+            ),
+        ))
+        cloudPropTrack.append(Wait(0.2))
+        cloudPropTrack.append(LerpScaleInterval(cloud, 0.2, MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
         cloudPropTrack.append(Func(MovieUtil.removeProp, cloud))
         cloudPropTrack.append(Func(battle.movie.clearRenderProp, cloud))
-        cloudPropTracks.append(cloudPropTrack)
+        cloudPropTracks += (cloudPropTrack,)
 
-    damageAnims = [SplicedAnim('cringe', 0.01, 0.4, 0.8),
-     SplicedAnim('duck', 1e-06, 1.6)]
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showMissedExtraTime=1.1)
-    soundTrack = getSoundTrack('SA_brainstorm.ogg', delay=1.9, node=suit)
-    return Parallel(suitTrack, toonTracks, cloudPropTracks, soundTrack)
+    damageAnims: list[SplicedAnim] = [SplicedAnim('cringe', 0.01, 0.4, 0.8),
+     SplicedAnim('duck', 1e-06, 2.0)]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showMissedExtraTime=1.1)
+    soundTrack: Sequence = getSoundTrack('SA_brainstorm.ogg', delay=1.6, node=suit)
+    return Parallel(suitTrack, toonTracks, *cloudPropTracks, soundTrack)
 
 
 def doBuzzWord(attack: dict) -> MetaInterval:
