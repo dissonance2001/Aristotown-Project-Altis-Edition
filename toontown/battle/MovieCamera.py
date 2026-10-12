@@ -814,6 +814,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.5)) # Double Cross movie's play rate is not flexible.  TODO: Make it flexible.
     elif name == 'MysteriousDisappearance':
         camTrack.append(defaultCamera(openShotDuration=2.0))
+    elif name == 'FallingKnife':
+        camTrack.append(randomOverShoulderShot(suit, target[0]['toon'], battle, attackDuration, focus='suit')) # Merely for the first part of the camera track.  The other part will be handled in the attack method itself.
     elif name == 'GoldRush':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'GoldDust':
@@ -842,8 +844,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         camTrack.append(defaultCamera(openShotDuration=2.45))
     elif name == 'RecordBreaker':
         camTrack.append(defaultCamera(openShotDuration=1.5))
-    elif name == 'FallingKnife':
-        camTrack.append(Sequence(defaultCamera(attackDuration=3.0, openShotDuration=3.0), heldRelativeShot(target[0]['toon'], 2.5, 10, 1, 165, 25, 0, attackDuration - 3.0)))
     elif name == 'GuiltTrip':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'FloodTheMarket':

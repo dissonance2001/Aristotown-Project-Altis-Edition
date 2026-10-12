@@ -8028,51 +8028,93 @@ def doFirestarterCigarSmoke(attack):
         return Parallel(suitTrack, propTrack, baseFlameSmallTrack, partTrack, toonTrack, soundTrack)
 
 
-def doFallingKnife(attack):
+def doFallingKnife(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    suitTrack = getSuitTrack(attack)
-    suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'a':
-        posPoints = [Point3(-0.1935483870967758, 0.4516129032258078, 0.0), VBase3(0, 0, 0)]
-    else:
-        posPoints = [Point3(-0.06451612903225978, 0.5806451612903203, 0.0), VBase3(0, 0, 0)]
-    knifeTracks = Parallel()
-    sparkTracks = Parallel()
-    for t in targets:
+    targets: list[dict] = attack['target']
+
+    knife = globalPropPool.getProp('dagger')
+    suitTrack: Sequence = getSuitTrack(attack)
+
+    damageDelay: float = 3.9
+    dodgeDelay: float = 2.3
+    propDelay: float = 0.35
+
+    partTracks: tuple[Sequence, ...] = ()
+
+    throwPoint = render.getRelativePoint(battle, battle.getActorPosHpr(suit)[0])
+    throwPoint.setZ(throwPoint.getZ() + 25.0)
+
+    def positionKnife(knife2, dropPoint, toon) -> None:
+        '''
+        This function positions the knife similarly to how Corporate Clash does it, except it handles positioning, scale, and rotation as well as moves the camera.
+        '''
+        toonPos = toon.getPos(battle)
+        camera.setPosHpr(battle, toonPos[0] + 6.0, toonPos[1] + 6.75, toonPos[2] + 1.5, 138.0, 20.0, 0.0) # Manual repositioning of the camera.
+        knife2.setPos(dropPoint)
+        knife2.setScale(0.9)
+        knife2.setHpr(camera.getH() + 90.0, -90.0, 0.0)
+
+    posPoints = [Point3(-0.2723, 0.5628, -0.0545), Point3(0.0, 0.0, 0.0)]
+    firstKnifeTrack = Sequence(
+        getPropAppearTrack(knife, suit.getRightHand(), posPoints, propDelay, Point3(0.96, 0.96, 0.96), scaleUpTime=0.3),
+        Wait(1.07),
+        Parallel(
+            Sequence(
+                Wait(0.15),
+                LerpScaleInterval(knife, 0.125, 0.01, blendType='easeIn'),
+                Func(knife.hide),
+            ),
+            getPropThrowTrack(attack, knife, [throwPoint], [throwPoint], hitDuration=0.275, missDuration=0.275),
+            LerpHprInterval(knife, 0.45, (0.0, 90.0, 0.0), blendType='easeIn')
+        )
+    )
+    fallingKnifeTracks: tuple[Sequence, ...] = ()
+
+    for i in range(len(targets) - 1, -1, -1): # Reverse-iterate so that when we position the camera, the Toon (techincally) targeted first gets focus.
+        t = targets[i]
         toon = t['toon']
         dmg = t['hp']
-        knife = globalPropPool.getProp('dagger')
-        knifeTrack = Sequence(
-            getPropAppearTrack(knife, suit.getRightHand(), posPoints, 0.25, scaleUpPoint=Point3(1.0), scaleUpTime=0.1),
-            Wait(1.3),
-            Parallel(
-                getThrowTrack(knife, toon.getPos(battle), 2.35, battle, -64.288),
-                LerpHprInterval(knife, 0.8, VBase3(720, 630, 720))
-            ),
-            Func(MovieUtil.removeProp, knife)
-        )
-        knifeTracks.append(knifeTrack)
-        sparkEffect = BattleParticles.loadParticleFile('resistanceEffectSparkle.ptf')
-        sparks = sparkEffect.getParticlesNamed('particles-1')
-        if sparks:
-            sparks.setPoolSize(10)
-            sparks.setLitterSize(10)
-            sparks.renderer.setEdgeColor(Vec4(1.0, 0.0, 0.0, 1.0))
-        if dmg != 0:
-            sparkTracks.append(Sequence(
-                Wait(4.0),
-                Parallel(
-                    ParticleInterval(sparkEffect, toon, worldRelative=0, duration=3.0, cleanup=True),
-                    autoFinish=1
-                )
-            ))
 
-    damageAnims = [SplicedAnim('slip-forward', 0.01, 0.4)]
-    toonTracks = getToonTracks(attack, damageDelay=4.0, splicedDamageAnims=damageAnims, dodgeDelay=3.1, dodgeAnimNames=['sidestep'])
-    soundTrack = getSoundTrack('SA_falling_knife.ogg', node=suit)
-    return Parallel(suitTrack, knifeTracks, sparkTracks, toonTracks, soundTrack)
+        knife2 = MovieUtil.copyProp(knife)
+        knife2.hide()
+
+        if dmg > 0:
+            particleNode = battle.attachNewNode('falling-knife-impact-particle-holder')
+            particleNode.setPos(battle.getActorPosHpr(toon)[0])
+
+            sprayEffect = BattleParticles.createParticleEffect(file='fallingKnifeSpray')
+
+            softStop = 1.5
+            particleTrack = Sequence(
+                getPartTrack(sprayEffect, damageDelay, 0.2 + softStop, (sprayEffect, particleNode, 0), softStop=-softStop),
+                Func(particleNode.removeNode),
+            )
+            partTracks += (particleTrack,)
+
+        dropPoint = toon.getPos(render)
+        dropPoint.setZ(dropPoint.getZ() + 25.0)
+        hitPoint = toon.getPos(render)
+        fallingKnifeTrack = Sequence(
+            Wait(propDelay + 2.85),
+            Func(positionKnife, knife2, dropPoint, toon),
+            Wait(0.32),
+            Parallel(
+                getPropThrowTrack(attack, knife2, [hitPoint], [hitPoint], hitDuration=0.525, missDuration=0.525),
+                Func(knife2.show),
+                Sequence(
+                    Wait(0.4),
+                    LerpScaleInterval(knife2, 0.124, 0.01, blendType='easeIn'),
+                )
+            )
+        )
+        fallingKnifeTracks += (fallingKnifeTrack,)
+
+    damageAnims: list[SplicedAnim] = [SplicedAnim('slip-forward', 0.01, 0.35)]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], dodgeAnimPlayRate=1.2)
+    soundTrack: Sequence = getSoundTrack(f"SA_falling_knife{'' if hitAtleastOneToon(targets) else '_miss'}.ogg", delay=0.0, node=suit)
+    return Parallel(suitTrack, toonTracks, soundTrack, firstKnifeTrack, *fallingKnifeTracks, *partTracks)
+
 
 def doShortSqueeze(attack: dict) -> MetaInterval:
     suit = attack['suit']
@@ -8510,10 +8552,7 @@ def doJargon(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
 
-        if suit.dna.name == 'le':
-            particleNode.setZ(particleNode.getZ() + 2.0)
-            particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name == 'le2':
+        if suit.dna.name in ('le', 'le2'):
             particleNode.setZ(particleNode.getZ() + 2.0)
             particleNode.setP(particleNode.getP() - 15.0)
         elif suit.dna.name == 'magi':
