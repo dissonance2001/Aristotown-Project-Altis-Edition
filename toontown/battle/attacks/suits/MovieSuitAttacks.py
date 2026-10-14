@@ -117,10 +117,11 @@ def __makeMoneyTalksNodePath():
     return tntop
 
 
-def doDefault(attack):
+def doDefault(attack: dict) -> MetaInterval:
     notify.debug('building suit attack in doDefault')
     attack['name'] = 'FingerWag'
     attack['animName'] = 'finger-wag'
+    attack['playRate'] = ToontownBattleGlobals.ATTACK_PLAY_RATES.get(attack['name'], 1.0)
     return doFingerWag(attack)
 
 
@@ -3170,18 +3171,18 @@ def doDiskScratch(attack):
     return Parallel(suitTrack, toonTrack, padPropTrack, soundTrack, lightingTrack)
 
 
-def doFingerWag(attack):
+def doFingerWag(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
 
     BattleParticles.loadParticles()
 
-    partDelay = 1.3
-    damageDelay = 2.7
-    dodgeDelay = 1.5
+    partDelay: float = 1.3
+    damageDelay: float = 2.7
+    dodgeDelay: float = 1.5
 
-    suitTrack = getSuitTrack(attack)
+    suitTrack: Sequence = getSuitTrack(attack)
     partTracks: tuple[Sequence, ...] = ()
 
     for t in targets:
