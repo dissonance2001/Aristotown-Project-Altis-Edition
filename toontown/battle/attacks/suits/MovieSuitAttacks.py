@@ -365,61 +365,23 @@ def doSuitAttack(attack):
         suitTrack = doBash(attack)
     elif name == 'Beguile':
         suitTrack = doBeguile(attack)
-    elif name == 'CloseTheLoop':
-        suitTrack = doCloseTheLoop(attack)
-    elif name == 'HostileTakeover':
-        suitTrack = doHostileTakeoverNew(attack)
-    elif name == 'NickelAndDime':
-        suitTrack = doNickelAndDime(attack)
-    elif name == 'Quash':
-        suitTrack = doQuash(attack)
-    elif name == 'PennyPinch':
-        suitTrack = doPennyPinch(attack)
-    elif name == 'Disassemble':
-        suitTrack = doDisassemble(attack)
-    elif name == 'DataCorruption':
-        suitTrack = doDataCorruption(attack)
-    elif name == 'DataBreach':
-        suitTrack = doDataBreach(attack)
-    elif name == 'VersionControl':
-        suitTrack = doVersionControl(attack)
-    elif name == 'DenialOfService':
-        suitTrack = doDenialOfService(attack)
-    elif name == 'Overload':
-        suitTrack = doOverload(attack)
-    elif name == 'Breakthrough':
-        suitTrack = doBreakthrough(attack)
-    elif name == 'Encrypt':
-        suitTrack = doEncrypt(attack)
-    elif name == 'BounceRate':
-        suitTrack = doBounceRate(attack)
     elif name == 'Reprogram':
         suitTrack = doReprogram(attack)
-    elif name == 'CloudStorage':
-        suitTrack = doCloudStorage(attack)
-    elif name == 'DoubleCross':
-        suitTrack = doDoubleCross(attack)
-    elif name == 'GoldDust':
-        suitTrack = doGoldDust(attack)
-    elif name == 'GoldRush':
-        suitTrack = doGoldRush(attack)
-    elif name == 'DiskScratch':
-        suitTrack = doDiskScratch(attack)
-    elif name == 'MysteriousDisappearance':
-        suitTrack = doMysteriousDisappearance(attack)
-    elif name == 'VoodooMagic':
-        suitTrack = doVoodooMagic(attack)
-    elif name == 'ElectrostaticEnergy':
-        suitTrack = doElectrostaticEnergy(attack)
     elif name == 'Bite':
         if suit.isAngry:
             suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doBite(attack))
         else:
             suitTrack = doBite(attack)
+    elif name in ('BlueChip', 'CoinToss'):
+        suitTrack = doBlueChip(attack)
     elif name == 'BounceCheck':
         suitTrack = doBounceCheck(attack)
+    elif name == 'BounceRate':
+        suitTrack = doBounceRate(attack)
     elif name in ('BrainStorm', 'Forecast'):
         suitTrack = doBrainStorm(attack)
+    elif name == 'Breakthrough':
+        suitTrack = doBreakthrough(attack)
     elif name == 'Brainwash':
         suitTrack = doDefault(attack)
     elif name == 'BuzzWord':
@@ -432,36 +394,48 @@ def doSuitAttack(attack):
         suitTrack = doPickPocket(attack)
     elif name == 'Chomp':
         suitTrack = doChomp(attack)
-    elif name == 'Watercooler':
-        suitTrack = doWatercooler(attack)
     elif name == 'CigarSmoke':
         suitTrack = doCigarSmoke(attack)
-    elif name == 'SmokeAndMirrors':
-        suitTrack = doCigarSmoke(attack)
-    elif name == 'StolenScene':
-        suitTrack = doStolenScene(attack)
-    elif name == 'RecordBreaker':
-        suitTrack = doRecordBreaker(attack)
     elif name == 'ClipOnTie':
         suitTrack = doClipOnTie(attack)
+    elif name == 'CloseTheLoop':
+        suitTrack = doCloseTheLoop(attack)
+    elif name == 'CloudStorage':
+        suitTrack = doCloudStorage(attack)
     elif name in ('Crunch', 'MudSling'):
         suitTrack = doCrunch(attack)
+    elif name == 'DataBreach':
+        suitTrack = doDataBreach(attack)
+    elif name == 'DataCorruption':
+        suitTrack = doDataCorruption(attack)
     elif name == 'Demotion':
         suitTrack = doDemotion(attack)
+    elif name == 'DenialOfService':
+        suitTrack = doDenialOfService(attack)
+    elif name == 'Disassemble':
+        suitTrack = doDisassemble(attack)
+    elif name == 'DiskScratch':
+        suitTrack = doDiskScratch(attack)
+    elif name == 'DoubleCross':
+        suitTrack = doDoubleCross(attack)
     elif name == 'DoubleTalk':
         suitTrack = doDoubleTalk(attack)
     elif name in ('DoubleWindsor', 'HalfWindsor'):
         suitTrack = doHalfWindsor(attack)
     elif name == 'Downsize':
         suitTrack = doDownsize(attack)
+    elif name == 'ElectrostaticEnergy':
+        suitTrack = doElectrostaticEnergy(attack)
+    elif name == 'Embezzle':
+        suitTrack = doEmbezzle(attack)
+    elif name == 'Encrypt':
+        suitTrack = doEncrypt(attack)
     elif name == 'EvictionNotice':
         suitTrack = doEvictionNotice(attack)
     elif name == 'EvilEye':
         suitTrack = doEvilEye(attack)
-    elif name == 'FiveOClockShadow':
-        suitTrack = doFiveOClockShadow(attack)
-    elif name == 'SandTrap':
-        suitTrack = doSandTrap(attack)
+    elif name == 'FallingKnife':
+        suitTrack = doFallingKnife(attack)
     elif name == 'Filibuster':
         suitTrack = doFilibuster(attack)
     elif name == 'FillWithLead':
@@ -473,6 +447,10 @@ def doSuitAttack(attack):
             suitTrack = doFingerWag(attack)
     elif name == 'Fired':
         suitTrack = doFired(attack)
+    elif name == 'FiveOClockShadow':
+        suitTrack = doFiveOClockShadow(attack)
+    elif name == 'FloodTheMarket':
+        suitTrack = doFloodTheMarket(attack)
     elif name == 'FountainPen':
         suitTrack = doFountainPen(attack)
     elif name == 'FreezeAssets':
@@ -481,29 +459,25 @@ def doSuitAttack(attack):
         suitTrack = doDefault(attack)
     elif name == 'GlowerPower':
         suitTrack = doGlowerPower(attack)
-    elif name == 'ShortSqueeze':
-        suitTrack = doShortSqueeze(attack)
-    elif name in ('BlueChip', 'CoinToss'):
-        suitTrack = doBlueChip(attack)
-    elif name == 'FallingKnife':
-        suitTrack = doFallingKnife(attack)
+    elif name == 'GoldDust':
+        suitTrack = doGoldDust(attack)
+    elif name == 'GoldRush':
+        suitTrack = doGoldRush(attack)
     elif name == 'GuiltTrip':
         if suit.isAngry:
             suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doGuiltTrip(attack))
         else:
             suitTrack = doGuiltTrip(attack)
-    elif name == 'Embezzle':
-        suitTrack = doEmbezzle(attack)
-    elif name == 'FloodTheMarket':
-        suitTrack = doFloodTheMarket(attack)
-    elif name == 'MoneyTrip':
-        suitTrack = doSynergy(attack)
     elif name == 'HangUp':
         suitTrack = doHangUp(attack)
     elif name == 'HeadShrink':
         suitTrack = doHeadShrink(attack)
+    elif name == 'HostileTakeover':
+        suitTrack = doHostileTakeoverNew(attack)
     elif name == 'HotAir':
         suitTrack = doHotAir(attack)
+    elif name == 'Inject':
+        suitTrack = doInject(attack)
     elif name == 'Jargon':
         suitTrack = doJargon(attack)
     elif name == 'Legalese':
@@ -518,8 +492,14 @@ def doSuitAttack(attack):
         suitTrack = doMoneyTalks(attack)
     elif name == 'MumboJumbo':
         suitTrack = doMumboJumbo(attack)
+    elif name == 'MysteriousDisappearance':
+        suitTrack = doMysteriousDisappearance(attack)
+    elif name == 'NickelAndDime':
+        suitTrack = doNickelAndDime(attack)
     elif name in ('Novel', 'ThrowBook'):
         suitTrack = doThrowBook(attack)
+    elif name == 'Overload':
+        suitTrack = doOverload(attack)
     elif name == 'ParadigmShift':
         if suit.isAngry:
             suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doParadigmShift(attack))
@@ -527,6 +507,8 @@ def doSuitAttack(attack):
             suitTrack = doParadigmShift(attack)
     elif name == 'PeckingOrder':
         suitTrack = doPeckingOrder(attack)
+    elif name == 'PennyPinch':
+        suitTrack = doPennyPinch(attack)
     elif name == 'PinkSlip':
         suitTrack = doPinkSlip(attack)
     elif name == 'PlayHardball':
@@ -537,10 +519,14 @@ def doSuitAttack(attack):
         suitTrack = doPowerTie(attack)
     elif name == 'PowerTrip':
         suitTrack = doPowerTrip(attack)
+    elif name == 'Quash':
+        suitTrack = doQuash(attack)
     elif name == 'RazzleDazzle':
         suitTrack = doRazzleDazzle(attack)
     elif name in ('ReArrange', 'ReOrg'):
         suitTrack = doReOrg(attack)
+    elif name == 'RecordBreaker':
+        suitTrack = doRecordBreaker(attack)
     elif name == 'RedTape':
         suitTrack = doRedTape(attack)
     elif name == 'RestrainingOrder':
@@ -553,22 +539,28 @@ def doSuitAttack(attack):
         suitTrack = doRubOut(attack)
     elif name == 'Sacked':
         suitTrack = doSacked(attack)
+    elif name == 'SandTrap':
+        suitTrack = doSandTrap(attack)
     elif name in ('Schmooze', 'TestSchmooze'):
         suitTrack = doSchmooze(attack)
     elif name == 'Shake':
         suitTrack = doShake(attack)
-    elif name == 'Inject':
-        suitTrack = doInject(attack)
+    elif name == 'ShortSqueeze':
+        suitTrack = doShortSqueeze(attack)
     elif name == 'Shred':
         suitTrack = doShred(attack)
+    elif name == 'SmokeAndMirrors':
+        suitTrack = doCigarSmoke(attack)
     elif name == 'SongAndDance':
         suitTrack = doSongAndDance(attack)
     elif name == 'Spin':
         suitTrack = doSpin(attack)
+    elif name == 'StolenScene':
+        suitTrack = doStolenScene(attack)
     elif name == 'StumpSpeech':
         suitTrack = doStumpSpeech(attack)
     elif name == 'Synergy':
-        suitTrack = doInterestCalculations(attack)
+        suitTrack = doSynergy(attack)
     elif name == 'Tabulate':
         suitTrack = doTabulate(attack)
     elif name == 'TeeOff':
@@ -580,6 +572,12 @@ def doSuitAttack(attack):
             suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doTremor(attack))
         else:
             suitTrack = doTremor(attack)
+    elif name == 'VersionControl':
+        suitTrack = doVersionControl(attack)
+    elif name == 'VoodooMagic':
+        suitTrack = doVoodooMagic(attack)
+    elif name == 'Watercooler':
+        suitTrack = doWatercooler(attack)
     elif name == 'Withdrawal':
         suitTrack = doWithdrawal(attack)
     elif name == 'WriteOff':
@@ -3510,10 +3508,6 @@ def doRazzleDazzle(attack: dict) -> MetaInterval:
     return Sequence(Parallel(suitTrack, signPropTrack, signPropAnimTrack, toonTracks, soundTrack), Func(MovieUtil.removeProp, sign))
 
 
-def doInterestCalculations(attack):
-    return doSynergy(attack)
-
-
 def doSynergy(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -4714,11 +4708,11 @@ def doGlowerPower(attack):
             [Point3(0.54, 4.3, 5.4), MovieUtil.PNT3_ZERO],
             [Point3(-0.06, 4.3, 5.4), MovieUtil.PNT3_ZERO],
         ),
-         "sfs": (
+        "sfs": (
             [Point3(0.54, 4.3, 5.4), MovieUtil.PNT3_ZERO],
             [Point3(-0.06, 4.3, 5.4), MovieUtil.PNT3_ZERO],
         ),
-         "gzt": (
+        "gzt": (
             [Point3(0.54, 4.3, 5.4), MovieUtil.PNT3_ZERO],
             [Point3(-0.06, 4.3, 5.4), MovieUtil.PNT3_ZERO],
         ),
@@ -4738,7 +4732,7 @@ def doGlowerPower(attack):
             [Point3(0.6, 5.3, 6.25), MovieUtil.PNT3_ZERO],
             [Point3(-0.1, 5.3, 6.25), MovieUtil.PNT3_ZERO],
         ),
-         "drk": (
+        "drk": (
             [Point3(0.6, 5.3, 6.0), MovieUtil.PNT3_ZERO],
             [Point3(-0.1, 5.3, 6.0), MovieUtil.PNT3_ZERO],
         ),
@@ -4781,7 +4775,7 @@ def doGlowerPower(attack):
         "shw": (
             [Point3(1.3, 4.75, 6.2), MovieUtil.PNT3_ZERO],
             [Point3(-0.9, 4.75, 6.2), MovieUtil.PNT3_ZERO],
-        ),
+        )
     }
     leftKnifeTracks = Parallel()
     rightKnifeTracks = Parallel()
