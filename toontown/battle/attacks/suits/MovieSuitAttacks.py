@@ -4115,14 +4115,13 @@ def doBuzzWord(attack: dict) -> MetaInterval:
         particleNode = battle.attachNewNode('particle-node')
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
-        particleTracks = ()
         for i in range(len(particleEffects) - 1):
             effect = particleEffects[i]
-            particleTracks += (getPartTrack(effect, partDelay / playRate, partDuration / playRate, (effect, particleNode, 0), softStop=-1.0),)
+            particleTracks += (getPartTrack(effect, partDelay / playRate, partDuration / playRate, (effect, particleNode, 0), softStop=-0.75),)
 
         effect = particleEffects[-1]
         particleTracks += (Sequence(
-            getPartTrack(effect, partDelay / playRate, partDuration / playRate, (effect, particleNode, 0), softStop=-1.0),
+            getPartTrack(effect, partDelay / playRate, partDuration / playRate, (effect, particleNode, 0), softStop=-0.75),
             Func(particleNode.removeNode)
         ),)
 
