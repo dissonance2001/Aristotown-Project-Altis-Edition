@@ -5649,7 +5649,7 @@ def doHotAir(attack: dict) -> MetaInterval:
         elif suit.dna.name == 'whunter':
             sprayNode.setY(sprayNode.getY() - 0.8)
             sprayNode.setZ(sprayNode.getZ() + 1.5)
-        elif suit.dna.name == 'mplayer':
+        elif suit.dna.name in ('mplayer', 'mplayers'):
             sprayNode.setY(sprayNode.getY() - 1.0)
             sprayNode.setZ(sprayNode.getZ() + 1.6)
 
