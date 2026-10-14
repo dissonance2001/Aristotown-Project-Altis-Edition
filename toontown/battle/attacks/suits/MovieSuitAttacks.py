@@ -3309,6 +3309,7 @@ def doFingerWag(attack: dict) -> MetaInterval:
         elif suit.dna.name in (
             'cdirector',
             'director',
+            'bcaster',
             'videog',
             'safesupervis'
         ):
