@@ -1566,57 +1566,57 @@ class AttackHPCalculatorAI(object):
             elif attackName == 'DividendTotalMarketMeltdownDamage':
                 result = 150
                 if self.suitHasCondition(targetId, 'vulnerable'):
-                    damage *= 1.3
+                    result *= 1.3
                 if self.suitHasCondition(targetId, 'vulnerablebroadcaster'):
-                    damage *= 2.0
+                    result *= 2.0
                 if self.suitHasCondition(targetId, 'vulnerablesilhouette1'):
-                    damage *= 1.5
+                    result *= 1.5
                 if self.suitHasCondition(targetId, 'vulnerablesilhouette2'):
-                    damage *= 2.0
+                    result *= 2.0
                 if self.suitHasCondition(targetId, 'vulnerablesilhouette3'):
-                    damage *= 3.0
+                    result *= 3.0
                 if self.suitHasCondition(targetId, 'vulnerablevideographer'):
-                    damage *= self.getSuitConditionModifier(targetId, 'vulnerablevideographer')
+                    result *= self.getSuitConditionModifier(targetId, 'vulnerablevideographer')
                 if self.suitHasCondition(targetId, 'directorDamageReduction'):
-                    damage *= self.getSuitConditionModifier(targetId, 'directorDamageReduction')
+                    result *= self.getSuitConditionModifier(targetId, 'directorDamageReduction')
                 if self.suitHasCondition(targetId, 'damageReduction'):
-                    damage *= 0.7
+                    result *= 0.7
                 if self.suitHasCondition(targetId, 'enraged') and not self.suitHasCondition(targetId, 'desperation'):
-                    damage *= 0.7
+                    result *= 0.7
                 for effect in self.calculator.getAllRelevantConditions(targetId, StatusEffects.DefenseModifier, toon=False):
                     if isinstance(effect.defenseMod, float):
-                        damage *= effect.defenseMod
+                        result *= effect.defenseMod
                 if attacker.getHP() > (attacker.getMaxHP() * 1.5):
-                    damage *= 1.5
+                    result *= 1.5
                 if attacker.getHP() > attacker.getMaxHP():
-                    damage *= 1.25
+                    result *= 1.25
                 if self.suitHasCondition(attacker.doId, 'dancesession'):
-                    damage *= 0.7
+                    result *= 0.7
                 if self.suitHasCondition(attacker.doId, 'ambassadorOverconfidence'):
-                    damage *= 0.75
+                    result *= 0.75
                     # self.damageHP += math.ceil(result * 2)
                 if (self.suitHasCondition(attacker.doId, 'soaked') or self.suitHasCondition(attacker.doId, 'drenched')) and attacker.dna.name == 'safesupervis':
-                    damage *= 0.75
+                    result *= 0.75
                 if self.suitHasCondition(attacker.doId, 'drenched'):
-                    damage *= 0.85
+                    result *= 0.85
                 if self.suitHasCondition(attacker.doId, 'desperation'):
-                    damage *= (1 + self.getSuitConditionModifier(attacker.doId, 'desperation'))
+                    result *= (1 + self.getSuitConditionModifier(attacker.doId, 'desperation'))
                 if self.suitHasCondition(attacker.doId, 'brokenconnection'):
-                    damage *= self.getSuitConditionModifier(attacker.doId, 'brokenconnection')
+                    result *= self.getSuitConditionModifier(attacker.doId, 'brokenconnection')
                 if self.suitHasCondition(attacker.doId, 'yellowLight'):
-                    damage *= self.getSuitConditionModifier(attacker.doId, 'yellowLight')
+                    result *= self.getSuitConditionModifier(attacker.doId, 'yellowLight')
                 if self.suitHasCondition(attacker.doId, 'damageDown'):
-                    damage *= self.getSuitConditionModifier(attacker.doId, 'damageDown')
+                    result *= self.getSuitConditionModifier(attacker.doId, 'damageDown')
                 if self.suitHasCondition(attacker.doId, 'override'):
-                    damage *= 1.3
+                    result *= 1.3
                 if self.suitHasCondition(attacker.doId, 'enraged'):
-                    damage *= self.getSuitConditionModifier(attacker.doId, 'enraged')
+                    result *= self.getSuitConditionModifier(attacker.doId, 'enraged')
                 if attacker.getDamageMultiplier() > 1:
-                    damage *= attacker.getDamageMultiplier()
+                    result *= attacker.getDamageMultiplier()
                 if self.suitHasCondition(attacker.doId, 'soaked') and attacker.dna.name == 'redd':
-                    damage *= 1.5
+                    result *= 1.5
 
-                attack[SUIT_HP_COL][targetIndex] = 150
+                attack[SUIT_HP_COL][targetIndex] = result
 
                 for s in self.battle.suits:
                     suit = s
