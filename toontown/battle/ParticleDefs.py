@@ -10945,6 +10945,64 @@ def shortSqueezeSpray(self):
 
 
 @particle
+def fallingKnifeSpray(self):
+    self.reset()
+    self.setPos(0.000, 0.000, 0.500)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(1.000, 1.000, 1.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("ZSpinParticleFactory")
+    p0.setRenderer("SparkleParticleRenderer")
+    p0.setEmitter("SphereVolumeEmitter")
+    p0.setPoolSize(512)
+    p0.setBirthRate(0.0500)
+    p0.setLitterSize(5)
+    p0.setLitterSpread(2)
+    p0.setSystemLifespan(0.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(3.0000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(1.0000)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(400.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Z Spin factory parameters
+    p0.factory.setInitialAngle(0.0000)
+    p0.factory.setInitialAngleSpread(40.0000)
+    p0.factory.enableAngularVelocity(1)
+    p0.factory.setFinalAngle(0.0000)
+    p0.factory.setFinalAngleSpread(120.0000)
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHANONE)
+    p0.renderer.setUserAlpha(1.00)
+    # Sparkle parameters
+    p0.renderer.setCenterColor(Vec4(1.00, 1.00, 1.00, 1.00))
+    p0.renderer.setEdgeColor(Vec4(1.00, 0.00, 0.00, 1.00))
+    p0.renderer.setBirthRadius(0.2000)
+    p0.renderer.setDeathRadius(0.1000)
+    p0.renderer.setLifeScale(SparkleParticleRenderer.SPSCALE)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
+    p0.emitter.setAmplitude(14.0000)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 14.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
+    # Sphere Volume parameters
+    p0.emitter.setRadius(2.0000)
+    self.addParticles(p0)
+    f0 = ForceGroup.ForceGroup('forces')
+    # Force parameters
+    force0 = LinearSinkForce(Point3(0.0000, 0.0000, -79.0000), LinearDistanceForce.FTONEOVERRSQUARED, 15.9701, 95.0000, 1)
+    force0.setActive(1)
+    f0.addForce(force0)
+    self.addForceGroup(f0)
+
+
+@particle
 def oil(self):
     self.reset()
     self.setPos(0.000, 0.000, 0.000)
