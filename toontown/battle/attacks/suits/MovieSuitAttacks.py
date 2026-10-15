@@ -2340,69 +2340,70 @@ def doClipOnTie(attack):
     return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound)
 
 
-def doSandTrap(attack):
+def doSandTrap(attack: dict) -> MetaInterval:
     battle = attack['battle']
-    targets = attack['target']
-    damageDelay = 1.3
-    dodgeDelay = 0.25
-    suitTrack = getSuitTrack(attack)
-    damageAnims = [SplicedAnim('melt'),
+    targets: list[dict] = attack['target']
+    damageDelay: float = 1.3
+    dodgeDelay: float = 0.25
+    suitTrack: Sequence = getSuitTrack(attack)
+    damageAnims: list[SplicedAnim] = [SplicedAnim('melt'),
      SplicedAnim('jump', 1.5, 0.4)]
-    puddleTracks = Parallel()
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay,
-                               dodgeAnimNames=['sidestep'])
-    soundTracks = Parallel()
+    puddleTracks: tuple[Sequence, ...] = ()
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'])
+    soundTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         sandTrap = globalPropPool.getProp('quicksand')
-        sandTrap.setHpr(Point3(120, 0, 0))
+        sandTrap.setHpr(Point3(120.0, 0.0, 0.0))
         sandTrap.setScale(0.01)
-        puddleTracks.append(Sequence(
+        puddleTracks += (Sequence(
             Func(battle.movie.needRestoreRenderProp, sandTrap),
             Wait(damageDelay - 0.7),
             Func(sandTrap.reparentTo, battle),
             Func(sandTrap.setPos, toon.getPos(battle)),
             LerpScaleInterval(sandTrap, 1.7, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO),
-            Wait(0.3 if dmg == 0 else 3.2),
+            Wait(3.2 if dmg > 0 else 0.3),
             LerpFunctionInterval(sandTrap.setAlphaScale, fromData=1, toData=0, duration=0.8),
             Func(sandTrap.removeNode)
-        ))
-        soundTracks.append(getSoundTrack('TL_quicksand.ogg', delay=0.5, duration=0.67 if dmg == 0 else 0.0, node=toon))
+        ),)
+        soundTracks += (getSoundTrack('TL_quicksand.ogg', delay=0.5, duration=0.0 if dmg > 0 else 0.67, node=toon),)
 
-    return Parallel(suitTrack, toonTracks, soundTracks, puddleTracks)
+    return Parallel(suitTrack, toonTracks, *soundTracks, *puddleTracks)
 
-def doFiveOClockShadow(attack):
+
+def doFiveOClockShadow(attack: dict) -> MetaInterval:
     battle = attack['battle']
-    targets = attack['target']
-    suitTrack = getSuitTrack(attack)
-    clockPropTracks = Parallel()
+    targets: list[dict] = attack['target']
+    suitTrack: Sequence = getSuitTrack(attack)
+    clockPropTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
+        dmg = t['hp']
         clock = globalPropPool.getProp('clock')
         hourHand = clock.find('**/hour_hand')
         minuteHand = clock.find('**/minute_hand')
         x, y, z = toon.getPos(battle)
-        clockPosPoints = [Point3(x, y, z + 0.01), VBase3(toon.getH(), 90, 0)]
+        clockPosPoints = [Point3(x, y, z + 0.01), VBase3(toon.getH(), 90.0, 0.0)]
         clockPropTrack = Sequence(
             getPropAppearTrack(clock, battle, clockPosPoints, 0.0, scaleUpPoint=Point3(1.0, 0.01, 1.0), scaleUpTime=1.0),
             Parallel(
-                LerpHprInterval(minuteHand, 5.0, VBase3(0, 0, -1800)),
-                LerpHprInterval(hourHand, 5.0, VBase3(0, 0, -150))
+                LerpHprInterval(minuteHand, 5.0, VBase3(0.0, 0.0, -1800.0)),
+                LerpHprInterval(hourHand, 5.0, VBase3(0.0, 0.0, -150.0))
             ),
             Func(base.playSfx, globalBattleSoundCache.getSound('telephone_ring.ogg'), node=clock),
             Wait(0.4),
             LerpColorScaleInterval(clock, 1.0, Vec4(0.0, 0.0, 0.0, 1.0)),
-            Wait(0.3 if t['hp'] == 0 else 3.9),
+            Wait(3.9 if dmg > 0 else 0.3),
             LerpFunctionInterval(clock.setAlphaScale, duration=0.8, fromData=1, toData=0),
             Func(clock.removeNode)
         )
-        clockPropTracks.append(clockPropTrack)
+        clockPropTracks += (clockPropTrack,)
 
-    damageAnims = [SplicedAnim('melt'),
+    damageAnims: list[SplicedAnim] = [SplicedAnim('melt'),
      SplicedAnim('jump', 1.5, 0.4)]
-    toonTracks = getToonTracks(attack, damageDelay=7.1, splicedDamageAnims=damageAnims, dodgeDelay=6.05, dodgeAnimNames=['sidestep'])
-    return Parallel(suitTrack, clockPropTracks, toonTracks)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=7.1, splicedDamageAnims=damageAnims, dodgeDelay=6.05, dodgeAnimNames=['sidestep'])
+    return Parallel(suitTrack, *clockPropTracks, toonTracks)
 
 def doDisassemble(attack):
     suit = attack['suit']
