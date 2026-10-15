@@ -610,16 +610,13 @@ def getSuitTrack(attack: dict, delay: float = 1e-06, splicedAnims: Optional[list
         shuffleAnim = 'shuffle-right'
     else:
         shuffleAnim = 'shuffle-left'
-    track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle))
-    )
+    track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)))
     if attack['name'] not in ('BroadcasterDonation', 'ScapegoatEnraged', 'ScapegoatShieldsUp', 'AmbassadorHeadRollerGroup'):
-            if not attack['animName'] in ['nothing', 'none', 'come-on', 'rush-job', 'overclocked']:
-                if not disrespectBlend == True:
-                    track.append(
-                suit.makeBlendInterval(shuffleAnim))
-                else:
-                    track.append(
-                    Func(suit.setNeutralAnimationDrop))
+        if not attack['animName'] in ('nothing', 'none', 'come-on', 'rush-job', 'overclocked'):
+            if not disrespectBlend:
+                track.append(suit.makeBlendInterval(shuffleAnim))
+            else:
+                track.append(Func(suit.setNeutralAnimationDrop))
     return track
 
 def getToonGroupCenter(attack, battle):
