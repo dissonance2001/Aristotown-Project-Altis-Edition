@@ -885,7 +885,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Rolodex':
         camTrack.append(defaultCamera(openShotDuration=3.5 / playRate))
     elif name == 'RubOut':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=(42.0 / 24.0) / playRate))
     elif name == 'RubberStamp':
         camTrack.append(defaultCamera(openShotDuration=(52.0 / 24.0) / playRate))
     elif name == 'Sacked':

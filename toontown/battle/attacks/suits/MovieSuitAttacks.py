@@ -3075,47 +3075,46 @@ def doElectrostaticEnergy(attack):
     toonTrack = getToonTracks(attack, damageDelay=2, splicedDamageAnims=damageAnims, dodgeDelay=1.75, dodgeAnimNames=['sidestep'], splicedDodgeAnims=[], showDamageExtraTime=0)
     return Parallel(suitTrack, zapTrack, cagePropTracks, smokeTracks, toonTrack)
 
-def doRubOut(attack):
+
+def doRubOut(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     pad = globalPropPool.getProp('pad')
     pencil = globalPropPool.getProp('pencil')
-    suitTrack = getSuitTrack(attack)
-    padPosPoints = [Point3(-0.66, 0.81, -0.06), VBase3(14.93, -2.29, 180.0)]
-    padPropTrack = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5, 2.57)
+    suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
+    padPosPoints = [Point3(-0.16, 0.51, -0.06), VBase3(14.93, -2.29, 180.0)]
+    padPropTrack: Sequence = getPropTrack(pad, suit.getLeftHand(), padPosPoints, 0.5 / playRate, 2.57 / playRate, scaleUpTime=0.5 / playRate, scaleDownTime=0.5 / playRate)
     pencilPosPoints = [Point3(0.04, -0.38, -0.1), VBase3(-170.223, -3.762, -62.929)]
-    pencilPropTrack = getPropTrack(pencil, suit.getRightHand(), pencilPosPoints, 0.5, 2.57)
-    toonTracks = getToonTracks(attack, 2.2, ['conked'], 2.0, ['jump'])
+    pencilPropTrack: Sequence = getPropTrack(pencil, suit.getRightHand(), pencilPosPoints, 0.5 / playRate, 2.57 / playRate, scaleUpTime=0.5 / playRate, scaleDownTime=0.5 / playRate)
+    toonTracks: Parallel = getToonTracks(attack, 1.7 / playRate, ['conked'], 2.0 / playRate, ['jump'], damageAnimPlayRate=1.2, showDamageExtraTime=1.0)
 
-    def hideParts(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
+    def hideParts(parts) -> Parallel:
+        track: Parallel = Parallel()
+        for nextPart in parts:
             track.append(Func(nextPart.setTransparency, 1))
-            track.append(LerpFunctionInterval(nextPart.setAlphaScale, fromData=1, toData=0, duration=0.2))
+            track.append(LerpFunctionInterval(nextPart.setAlphaScale, fromData=1, toData=0, duration=0.2 / playRate))
 
         return track
 
-    def showParts(parts):
-        track = Parallel()
-        for partNum in range(0, parts.getNumPaths()):
-            nextPart = parts.getPath(partNum)
-            track.append(Func(nextPart.clearColorScale))
-            track.append(Func(nextPart.clearTransparency))
 
-        return track
+    def showParts(parts) -> None:
+        for nextPart in parts:
+            nextPart.clearColorScale()
+            nextPart.clearTransparency()
 
-    hideTracks = Parallel()
-    headTracks = Parallel()
-    torsoTracks = Parallel()
-    legsTracks = Parallel()
+
+    hideTracks: tuple[Sequence, ...] = ()
+    partTracks: tuple[Sequence, ...] = ()
+    soundTrack: Sequence = getSoundTrack('SA_rubout.ogg', delay=1.65 / playRate, node=suit)
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         headEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getHeadColor())
         torsoEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getArmColor())
         legsEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getLegColor())
+        appearEffect = BattleParticles.createParticleEffect('RubOut', color=toon.style.getHeadColor())
         headParts = toon.getHeadParts()
         torsoParts = toon.getTorsoParts()
         legsParts = toon.getLegsParts()
@@ -3123,35 +3122,37 @@ def doRubOut(attack):
         bodyScale = ToontownGlobals.toonBodyScales[animal]
         headEffectHeight = __toonFacePoint(toon).getZ()
         legsHeight = ToontownGlobals.legHeightDict[toon.style.legs] * bodyScale
-        torsoEffectHeight = ToontownGlobals.torsoHeightDict[toon.style.torso] * bodyScale / 2 + legsHeight
-        legsEffectHeight = legsHeight / 2
+        torsoEffectHeight = (ToontownGlobals.torsoHeightDict[toon.style.torso] * bodyScale / 2.0 + legsHeight)
+        legsEffectHeight = legsHeight / 2.0
         effectX = headEffect.getX()
         effectY = headEffect.getY()
-        headEffect.setPos(effectX, effectY - 1.5, headEffectHeight)
-        torsoEffect.setPos(effectX, effectY - 1, torsoEffectHeight)
+        headEffect.setPos(effectX, effectY, headEffectHeight)
+        torsoEffect.setPos(effectX, effectY - 1.0, torsoEffectHeight)
         legsEffect.setPos(effectX, effectY - 0.6, legsEffectHeight)
-        partDelay = 2.5
+        appearEffect.setPos(effectX, effectY - 1.0, torsoEffectHeight)
+        partDelay = 1.8 / playRate
+        headTrack = getPartTrack(headEffect, partDelay + 0.0, (0.5 / playRate) + 1.0, [headEffect, toon, 0], softStop=-1.0)
+        torsoTrack = getPartTrack(torsoEffect, partDelay + (0.5 / playRate), (0.5 / playRate) + 1.0, [torsoEffect, toon, 0], softStop=-1.0)
+        legsTrack = getPartTrack(legsEffect, partDelay + (1.0 / playRate), (0.5 / playRate) + 1.0, [legsEffect, toon, 0], softStop=-1.0)
+        appearTrack = getPartTrack(appearEffect, partDelay + (2.0 / playRate), (0.5 / playRate) + 1.0, [appearEffect, toon, 0], softStop=-1.0)
         if dmg > 0:
-            headTracks.append(getPartTrack(headEffect, partDelay + 0.0, 1.5, (headEffect, toon, 0), softStop=-1.0))
-            torsoTracks.append(getPartTrack(torsoEffect, partDelay + 1.1, 1.5, (torsoEffect, toon, 0), softStop=-1.0))
-            legsTracks.append(getPartTrack(legsEffect, partDelay + 2.2, 1.5, (legsEffect, toon, 0), softStop=-1.0))
-            hideTracks.append(Sequence(
-                Wait(2.2),
+            hideTrack = Sequence(
+                Wait(1.8 / playRate),
                 Func(battle.movie.needRestoreColor),
                 hideParts(headParts),
-                Wait(0.4),
+                Wait(0.3 / playRate),
                 hideParts(torsoParts),
-                Wait(0.4),
+                Wait(0.3 / playRate),
                 hideParts(legsParts),
-                Wait(1),
-                showParts(headParts),
-                showParts(torsoParts),
-                showParts(legsParts),
+                Wait(0.8 / playRate),
+                Func(showParts, headParts + torsoParts + legsParts),
                 Func(battle.movie.clearRestoreColor)
-            ))
+            )
+            hideTracks += (hideTrack,)
+            partTracks += (headTrack, torsoTrack, legsTrack, appearTrack)
 
-    soundTrack = getSoundTrack('SA_rubout.ogg', delay=1.7, node=suit)
-    return Parallel(suitTrack, toonTracks, padPropTrack, pencilPropTrack, soundTrack, hideTracks, headTracks, torsoTracks, legsTracks)
+    return Parallel(suitTrack, toonTracks, padPropTrack, pencilPropTrack, soundTrack, *hideTracks, *partTracks)
+
 
 def doDiskScratch(attack):
     suit = attack['suit']
