@@ -2616,7 +2616,7 @@ def doPoundKey(attack: dict) -> MetaInterval:
         if suit.dna.name == 'stenog':
             particleNode.setZ(particleNode.getZ() + 3.5)
             particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name == 'mouthp':
+        elif suit.dna.name in ('bellring', 'mouthp'):
             particleNode.setZ(particleNode.getZ() + 1.0)
             particleNode.setP(particleNode.getP() - 5.0)
 
