@@ -4094,23 +4094,11 @@ def doBuzzWord(attack: dict) -> MetaInterval:
             for effect in particleEffects:
                 effect.setPos(0.0, 2.5, suit.getHeight() - 1.1)
         
-        elif suit.dna.name == 'stenog':
+        elif suit.dna.name in ('stenog', 'wtapper', 'radiog'):
             for effect in particleEffects:
                 effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
 
-        elif suit.dna.name == 'wtapper':
-            for effect in particleEffects:
-                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
-
-        elif suit.dna.name == 'radiog':
-            for effect in particleEffects:
-                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
-
-        elif suit.dna.name == 'itn':
-            for effect in particleEffects:
-                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
-
-        elif suit.dna.name == 'anc':
+        elif suit.dna.name in ('itn', 'anc'):
             for effect in particleEffects:
                 effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
 
@@ -8548,19 +8536,10 @@ def doJargon(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
 
-        if suit.dna.name in ('le', 'le2'):
+        if suit.dna.name in ('le', 'le2' 'magi'):
             particleNode.setZ(particleNode.getZ() + 2.0)
             particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name == 'magi':
-            particleNode.setZ(particleNode.getZ() + 2.0)
-            particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name == 'stenog':
-            particleNode.setZ(particleNode.getZ() + 4.0)
-            particleNode.setP(particleNode.getP() - 23.0)
-        elif suit.dna.name == 'bkeeper':
-            particleNode.setZ(particleNode.getZ() + 4.0)
-            particleNode.setP(particleNode.getP() - 23.0)
-        elif suit.dna.name == 'rkeeper':
+        elif suit.dna.name in ('stenog', 'bkeeper', 'rkeeper'):
             particleNode.setZ(particleNode.getZ() + 4.0)
             particleNode.setP(particleNode.getP() - 23.0)
 
@@ -8636,10 +8615,7 @@ def doMumboJumbo(attack: dict) -> MetaInterval:
         if suit.dna.name == 'm':
             particleNode.setZ(particleNode.getZ() + 2.25)
             particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name == 'stenog':
-            particleNode.setZ(particleNode.getZ() + 4.1)
-            particleNode.setP(particleNode.getP() - 25.0)
-        elif suit.dna.name == 'wtapper':
+        elif suit.dna.name in ('stenog', 'wtapper'):
             particleNode.setZ(particleNode.getZ() + 4.1)
             particleNode.setP(particleNode.getP() - 25.0)
 
@@ -8936,16 +8912,7 @@ def doLegalese(attack: dict) -> MetaInterval:
         sprayNode.headsUp(toon)
         sprayNode.setBin('fixed', 1)
 
-        if suit.dna.name == 'le':
-            sprayNode.setZ(sprayNode.getZ() + 3.0)
-            sprayNode.setP(sprayNode.getP() - 10.0)
-        if suit.dna.name == 'le2':
-            sprayNode.setZ(sprayNode.getZ() + 3.0)
-            sprayNode.setP(sprayNode.getP() - 10.0)
-        if suit.dna.name == 'cor':
-            sprayNode.setZ(sprayNode.getZ() + 3.0)
-            sprayNode.setP(sprayNode.getP() - 10.0)
-        if suit.dna.name == 'stol':
+        if suit.dna.name in ('le', 'le2', 'cor', 'stol'):
             sprayNode.setZ(sprayNode.getZ() + 3.0)
             sprayNode.setP(sprayNode.getP() - 10.0)
 
