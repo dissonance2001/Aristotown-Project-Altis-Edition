@@ -1396,14 +1396,13 @@ def doCaseInsuranceScapegoat(attack):
             healSounds.append(healSound)
     return Parallel(suitTracks, healSounds)
 
-def doLegallyBound(attack):
-    suit = attack['suit']
+def doLegallyBound(attack: dict) -> tuple[MetaInterval, Parallel]:
+    # Attack vitals.
     battle = attack['battle']
-    targets = attack['target']
-    damageDelay = 0
-    sprayEffects = [BattleParticles.createParticleEffect(file='spinSpray') for t in targets]
-    suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-    sprayTracks = getPartTracks(attack, sprayEffects, 1.0, 1.9, 0)
+    targets: list[dict] = attack['target']
+
+    # Attack movie.
+    damageDelay = 0.0
     spinTracks1 = Parallel()
     spinTracks2 = Parallel()
     spinTracks3 = Parallel()
@@ -1451,8 +1450,25 @@ def doLegallyBound(attack):
             soundTracks.append(getSoundTrack('LB_boss_paper_spin.ogg', delay=0))
             notifyTracks.append(notifyTrack)
             toonSpinTracks.append(Sequence(Wait(.75), LerpHprInterval(toon, 0.7, Point3(-10, 0, 0)), LerpHprInterval(toon, 0.5, Point3(-30, 0, 0)), LerpHprInterval(toon, 0.2, Point3(-60, 0, 0)), LerpHprInterval(toon, 0.7, Point3(-700, 0, 0)), LerpHprInterval(toon, 1.0, Point3(-1310, 0, 0)), LerpHprInterval(toon, 0.4, toon.getHpr()), Wait(0.5)))
+
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=0.9, splicedDamageAnims=damageAnims, dodgeDelay=0.91, dodgeAnimNames=['neutral'], showDamageExtraTime=1.0)
-    return Parallel(toonTracks, toonSpinTracks, toonDamageTrack, spinTracks1, spinTracks2, spinTracks3, notifyTracks, soundTracks)
+    atkTrack: MetaInterval = Parallel(toonTracks, toonSpinTracks, toonDamageTrack, spinTracks1, spinTracks2, spinTracks3, notifyTracks, soundTracks)
+    attackDuration: float = atkTrack.getDuration()
+
+    # Camera track and play-by-play text.
+    camTrack: Parallel = Parallel(MovieCamera.randomActorShot(targets[0]['toon'], battle, atkTrack.getDuration(), 'toon'))
+
+    if attackDuration > 2.0:
+        from toontown.battle.PlayByPlayText import PlayByPlayText
+        pbpText = attack['playByPlayText']
+        pbpDc: PlayByPlayText = PlayByPlayText()
+        displayName = TTLocalizer.SuitAttackNames.get(attack['name'], '')
+        pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 2.0)
+        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2.0)
+        camTrack.append(pbpTrack)
+        camTrack.append(pbpDesc)
+
+    return (atkTrack, camTrack)
 
 def doCaseInsurancePlanInsuranceScapegoat(attack, ind=None, ind2=None, ind3=None):
     suit = attack['suit']

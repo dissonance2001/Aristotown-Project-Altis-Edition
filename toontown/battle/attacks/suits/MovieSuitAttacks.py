@@ -657,7 +657,7 @@ def doSuitAttack(attack):
     elif name == 'CaseManagerLegalBindings2':
         suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance2(attack)
     elif name == 'CaseManagerLegallyBound':
-        suitTrack = MovieLawbotLitigationCheats.doLegallyBound(attack)
+        return MovieLawbotLitigationCheats.doLegallyBound(attack)
     elif name == 'CaseManagerCourtRecordBan':
         suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #scapegoat cheats
