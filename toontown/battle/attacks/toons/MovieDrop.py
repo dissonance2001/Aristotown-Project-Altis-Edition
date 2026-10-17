@@ -38,6 +38,7 @@ def doDrops(drops):
     suitDropsDict = {}
     groupDrops = []
     for drop in drops:
+        battle = drop['battle']
         track = drop['track']
         level = drop['level']
         targets = drop['target']
@@ -92,7 +93,7 @@ def doDrops(drops):
         camDuration += ival.getDuration()
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
-    camTrack = MovieCamera.chooseDropShot(drops, suitDropsDict, camDuration, enterDuration, exitDuration)
+    camTrack = MovieCamera.chooseDropShot(drops, suitDropsDict, camDuration, battle, enterDuration, exitDuration)
     return (dropTrack, camTrack)
 
 

@@ -1409,7 +1409,13 @@ class BattleCalculatorAI:
             return 0
 
         if suitId == mainTargetId:
-            damage = mainDamage
+            damage = self.applyCogDamageInterceptors(
+                mainDamage,
+                toonId,
+                suit,
+                suitId,
+                SQUIRT
+            )
         else:
             damage = mainDamage * splashMult
 
@@ -1967,6 +1973,43 @@ class BattleCalculatorAI:
             if status['turnsRemaining'] <= 0:
                 del self.toonStatusConditions[toonId][condition]
 
+    def applyTrapCogVulnerabilities(self, damage, suitId):
+        mult = 1.0
+
+        if self.suitHasCondition(suitId, 'vulnerable'):
+            mult *= 1.3
+
+        if self.suitHasCondition(suitId, 'vulnerablebroadcaster'):
+            mult *= 2.0
+
+        if self.suitHasCondition(suitId, 'vulnerablesilhouette1'):
+            mult *= 1.5
+
+        if self.suitHasCondition(suitId, 'vulnerablesilhouette2'):
+            mult *= 2.0
+
+        if self.suitHasCondition(suitId, 'vulnerablesilhouette3'):
+            mult *= 3.0
+
+        if self.suitHasCondition(suitId, 'vulnerablevideographer'):
+            mult *= self.getSuitConditionModifier(
+                suitId, 'vulnerablevideographer'
+            )
+
+        if self.suitHasCondition(suitId, 'marked'):
+            mult *= 1.1
+
+        if self.suitHasCondition(suitId, 'enraged') and not self.suitHasCondition(suitId, 'desperation'):
+            mult *= 0.7
+
+        for effect in self.getAllRelevantConditions(
+            suitId, StatusEffects.DefenseModifier, toon=False
+        ):
+            if isinstance(effect.defenseMod, float):
+                mult *= effect.defenseMod
+
+        return int(math.ceil(damage * mult))
+
     def applySecondaryCogDamageMultipliers(self, damage, toonId, suitId, atkTrack):
         if damage <= 0:
             return 0
@@ -2173,7 +2216,9 @@ class BattleCalculatorAI:
         if self.suitHasCondition(suitId, 'monsoon') and atkTrack != TRAP:
             mult *= 0.1
 
-        if self.suitHasCondition(suitId, 'enraged') and not self.suitHasCondition(suitId, 'desperation'):
+        if (self.suitHasCondition(suitId, 'enraged') and
+                not self.suitHasCondition(suitId, 'desperation') and
+                atkTrack != TRAP):
             mult *= 0.7
 
         if self.suitHasCondition(suitId, 'vulnerable') and atkTrack != TRAP:
@@ -2617,8 +2662,9 @@ class BattleCalculatorAI:
                             damageOwnerId = toonId
 
                         if attackDamage > 0:
-                            # Toon-side multipliers were already calculated when
-                            # the Trap was placed. Do NOT apply them again here.
+                            attackDamage = self.applyTrapCogVulnerabilities(
+                                attackDamage, targetId
+                            )
 
                             attackDamage = self.applyCogDamageInterceptors(
                                 attackDamage,
@@ -5955,7 +6001,27 @@ class BattleCalculatorAI:
         else:
             source = self.battle.activeToons
 
-        if not self.__suitAtkAffectsGroup(attack):
+        if self.__suitAttackTargetsBoth(attack):
+            targetList = []
+
+            for mixedIndex in attack[SUIT_TGT_COL]:
+                targetType, target = self.__decodeMixedSuitTarget(mixedIndex)
+
+                if targetType == 'toon':
+                    if self.__toonCanBeTargetedBySuit(target, attack):
+                        targetList.append(target)
+
+                elif targetType == 'suit':
+                    if (
+                        target is not None
+                        and target.currHP > 0
+                        and not self.suitHasCondition(target.doId, 'dead')
+                    ):
+                        targetList.append(target)
+
+            return targetList
+
+        elif not self.__suitAtkAffectsGroup(attack):
             for targetIndex in attack[SUIT_TGT_COL]:
 
                 if (
@@ -6435,32 +6501,21 @@ class BattleCalculatorAI:
 
         if not atkType:
             return
-        
+
         if atkType.get('targetType', 'toon') != 'both':
             return
 
-
         applyDamage = atkType.get('applyDamage', True)
-
-        damageTargetType = atkType.get(
-            'damageTarget',
-            'target'
-        )
-
-        healTargetType = atkType.get(
-            'healTarget',
-            'target'
-        )
-
-        useRevives = atkType.get(
-            'useRevives',
-            False
-        )
+        damageTargetType = atkType.get('damageTarget', 'target')
+        healTargetType = atkType.get('healTarget', 'target')
+        useRevives = atkType.get('useRevives', False)
 
         toonCount = len(self.battle.activeToons)
+        suitCount = len(self.battle.activeSuits)
 
         for mixedIndex in attack[SUIT_TGT_COL]:
 
+            # Mixed indices are ONLY used to read damage/healing.
             if (
                 mixedIndex < 0 or
                 mixedIndex >= len(attack[SUIT_HP_COL]) or
@@ -6477,33 +6532,29 @@ class BattleCalculatorAI:
             if mixedIndex < toonCount:
                 toonIndex = mixedIndex
 
-                if toonIndex >= len(self.battle.activeToons):
+                if toonIndex >= toonCount:
                     continue
 
                 toonId = self.battle.activeToons[toonIndex]
 
                 if applyDamage and damageAmount > 0:
+                    damageAmount = int(math.ceil(damageAmount))
                     toonHp = self.__getToonHp(toonId)
 
                     if toonHp - damageAmount <= 0:
-                        attack[TOON_DIED_COL] |= (
-                            1 << toonIndex
-                        )
+                        # TOON-ONLY INDEX
+                        attack[TOON_DIED_COL] |= (1 << toonIndex)
 
-                    self.toonHPAdjusts[toonId] -= math.ceil(
-                        damageAmount
-                    )
+                    self.toonHPAdjusts[toonId] -= damageAmount
 
             # =====================================================
             # COG TARGET
             # =====================================================
             else:
+                # Convert the mixed index into a Cog-only index.
                 suitIndex = mixedIndex - toonCount
 
-                if (
-                    suitIndex < 0 or
-                    suitIndex >= len(self.battle.activeSuits)
-                ):
+                if suitIndex < 0 or suitIndex >= suitCount:
                     continue
 
                 targetSuit = self.battle.activeSuits[suitIndex]
@@ -6526,32 +6577,37 @@ class BattleCalculatorAI:
                 if (
                     applyDamage and
                     damageAmount > 0 and
-                    damageRecipient is not None
+                    damageRecipient is not None and
+                    damageRecipient.currHP > 0
                 ):
+                    damageAmount = int(math.ceil(damageAmount))
+
                     hpBefore = damageRecipient.currHP
-                    hpAfter = hpBefore - damageAmount
+                    hpAfter = max(0, hpBefore - damageAmount)
 
-                    wouldDie = (
-                        hpBefore > 0 and
-                        hpAfter <= 0
-                    )
-
-                    if wouldDie:
+                    if hpAfter <= 0:
                         if useRevives and damageRecipient.getSkeleRevives() > 0:
                             damageRecipient.currHP = 0
                             damageRecipient.useSkeleRevive()
 
                             print('COG REVIVED:', damageRecipient.doId)
-                            print('REVIVES LEFT:', damageRecipient.getSkeleRevives())
 
                         else:
-                            if damageRecipient == targetSuit:
-                                attack[SUIT_TARGET_DIED_COL] |= (1 << mixedIndex)
-
                             damageRecipient.currHP = 0
-                            self.__clearDeadSuitBattleState(damageRecipient)
+
+                            # COG-ONLY INDEX
+                            # No Toon offset is included.
+                            if damageRecipient == targetSuit:
+                                attack[SUIT_TARGET_DIED_COL] |= (
+                                    1 << suitIndex
+                                )
+
+                            self.__clearDeadSuitBattleState(
+                                damageRecipient
+                            )
 
                             print('COG DIED:', damageRecipient.doId)
+
                     else:
                         damageRecipient.currHP = hpAfter
 
@@ -6559,12 +6615,25 @@ class BattleCalculatorAI:
                 # HEALING
                 # =================================================
                 if healAmount > 0 and healRecipient is not None:
-                    hardMaxHP = getattr(healRecipient, 'hardMaxHP', 1)
+
+                    if healRecipient.currHP <= 0:
+                        attack[SUIT_HEAL_COL][mixedIndex] = 0
+                        continue
+
+                    hardMaxHP = getattr(
+                        healRecipient, 'hardMaxHP', 1
+                    )
+
                     hpCap = healRecipient.maxHP * hardMaxHP
 
-                    actualHeal = min(healAmount, max(0, hpCap - healRecipient.currHP))
+                    actualHeal = int(min(
+                        math.ceil(healAmount),
+                        max(0, hpCap - healRecipient.currHP)
+                    ))
 
                     healRecipient.currHP += actualHeal
+
+                    # Still use mixedIndex for the movie healing array.
                     attack[SUIT_HEAL_COL][mixedIndex] = actualHeal
 
     def __getSuitAttackToonGroup(self, attack):
@@ -6784,7 +6853,7 @@ class BattleCalculatorAI:
 
                     else:
                         if damageRecipient == targetSuit:
-                            attack[SUIT_TARGET_DIED_COL] |= (1 << targetIndex)
+                            attack[SUIT_TARGET_DIED_COL] |= (1 << suitIndex)
 
                         damageRecipient.currHP = 0
                         self.__clearDeadSuitBattleState(damageRecipient)
@@ -7593,7 +7662,7 @@ class BattleCalculatorAI:
 
                         canAttack = self.__suitCanAttack(suit.doId)
 
-                        if canAttack or suit.dna.name in ('wtapper', 'safesupervis') and suit.currHP > 0:
+                        if canAttack or suit.dna.name == 'wtapper' and suit.currHP > 0:
                             retaliation = self.__getPerToonCheatAttack(suit.doId, targetIndex, {
                                 'suitName': suit.dna.name,
                                 'name': rule['movie'],

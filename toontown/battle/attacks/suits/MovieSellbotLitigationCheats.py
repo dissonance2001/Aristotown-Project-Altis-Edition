@@ -220,8 +220,8 @@ def doHighPressure(attack):
     soundTrack = getSoundTrack('incoming_whistle.ogg', delay=2.0, node=theSuit)
     soundTrack2 = getSoundTrack('SA_extra_tip.ogg', delay=1.5, node=theSuit)
     soundTrack1 = getSoundTrack('ENC_cogfall_apart_%s.ogg' % random.randint(1, 6), delay=4.0)
-
-    return Parallel(attackerTrack, suitTracks, knifeTracks, toonTracks, soundTrack, soundTrack1, soundTrack2, explosionTrack, explosionTrack2)
+    waitTrack = Sequence(Wait(8.0))
+    return Parallel(attackerTrack, waitTrack, suitTracks, knifeTracks, toonTracks, soundTrack, soundTrack1, soundTrack2, explosionTrack, explosionTrack2)
 
 def doHeatWaveCalculation(attack):
     BattleParticles.loadParticles()

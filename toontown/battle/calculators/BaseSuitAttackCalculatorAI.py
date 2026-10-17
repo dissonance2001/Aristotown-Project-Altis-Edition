@@ -1274,12 +1274,22 @@ class BaseSuitAttackCalculatorAI:
                             self.battle.suitAttacks.append(attack)
                     elif self.battle.findSuit(extraSuitId).dna.name == 'dking' and self.__suitCanAttack(extraSuitId):
                         attack = self.__getCheatAttack(extraSuitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'PeckingOrder',  # Syphon Movie
-                                                                'animName': 'throw-object',
+                                                                'name': 'CoinToss',  # Syphon Movie
+                                                                'animName': 'blue-chip',
                                                                 'hp': 25,
                                                                 'acc': 80,
                                                                 'freq': 0,
-                                                                'group': SuitBattleGlobals.ATK_TGT_SINGLE})
+                                                                'group': SuitBattleGlobals.ATK_TGT_DOUBLE})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                    elif self.battle.findSuit(extraSuitId).dna.name == 'bkeeper' and self.__suitCanAttack(extraSuitId):
+                        attack = self.__getCheatAttack(extraSuitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'BookkeeperCabinetCrackdown',  # Syphon Movie
+                                                                'animName': 'smile',
+                                                                'hp': 35,
+                                                                'acc': 80,
+                                                                'freq': 0,
+                                                                'group': SuitBattleGlobals.ATK_TGT_DOUBLE})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
                     elif self.__suitCanAttack(extraSuitId) and self.battle.findSuit(extraSuitId).dna.name == 'dopa':
@@ -1294,7 +1304,7 @@ class BaseSuitAttackCalculatorAI:
                             self.battle.suitAttacks.append(attack)
                     else:
                         if(self.__suitCanAttack(extraSuitId) and
-                        self.battle.findSuit(extraSuitId).dna.name not in ('dopr', 'supervis', 'dopa', 'dking') and
+                        self.battle.findSuit(extraSuitId).dna.name not in ('dopr', 'bkeeper', 'supervis', 'dopa', 'dking') and
                         not self.suitHasCondition(extraSuitId, 'sued')):
 
                             attack = self.__getGenericSuitAttack(extraSuitId)

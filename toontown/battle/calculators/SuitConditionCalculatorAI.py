@@ -160,7 +160,7 @@ class SuitConditionCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'bkeeper':  # bookkeeper
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'explodingcalculator', 1, 9, 'setBoth')
-                if (x + 1) % 2 == 0:
+                if x % 2 == 0:
                     self.setSuitCondition(suitId, 'filingcalculator', 1, 9, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'papercutcalculator', 1, 10, 'setBoth')
@@ -180,7 +180,7 @@ class SuitConditionCalculatorAI:
                 if self.getSuitConditionTurns(suitId, 'immune') == 1 and self.suitHasCondition(suitId, 'immune'):
                     self.setSuitCondition(suitId, 'wiretappedcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'ambass': #ambassador
-                if (x + 2) % 5 == 0:
+                if (x + 3) % 5 == 0:
                     self.setSuitCondition(suitId, 'refinementcalculator', 1, 10, 'setBoth')
                 if (x + 3) % 4 == 0:
                     self.setSuitCondition(suitId, 'advancementcalculator', 1, 10, 'setBoth')
@@ -260,8 +260,7 @@ class SuitConditionCalculatorAI:
                     self.setSuitCondition(suitId, 'markedcalculator', 1, 10, 'setBoth')
                 if (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'alreadyRedundant'):
                     self.setSuitCondition(suitId, 'redundantcalculator', 1, 10, 'setBoth')
-                if (x % 3 == 0) and self.suitHasCondition(suitId, 'alreadyHighPressure'):
-                    self.setSuitCondition(suitId, 'highpressurecalculator', 1, 10, 'setBoth')
+                self.setSuitCondition(suitId, 'highpressurecalculator', 1, 10, 'setBoth')
                 if ((x + 1) % 5 == 0) and self.battle.activeSuits[i].currHP < 6000:
                     self.setSuitCondition(suitId, 'selfRepairCalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'liquid':

@@ -1955,7 +1955,7 @@ class Movie(DirectObject.DirectObject):
                                 'suit': targetSuit,
                                 'hp': hps[mixedIndex] if mixedIndex < len(hps) else 0,
                                 'heal': heals[mixedIndex] if mixedIndex < len(heals) else 0,
-                                'died': sa[SUIT_TARGET_DIED_COL] & (1 << mixedIndex)
+                                'died': sa[SUIT_TARGET_DIED_COL] & (1 << suitIndex)
                             }
                             
 

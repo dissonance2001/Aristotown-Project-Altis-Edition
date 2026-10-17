@@ -720,6 +720,8 @@ def doSuitAttack(attack):
         suitTrack = MovieBossbotLitigationCheats.doPaperCutMulti(attack)
     elif name == 'BookkeeperPaperCutMarked':
         suitTrack = MovieBossbotLitigationCheats.doBookkeepingDamageUp(attack)
+    elif name == 'BookkeeperCabinetCrackdown':
+        suitTrack = MovieBossbotLitigationCheats.doCabinetCrackdown(attack)
     elif name == 'BookkeeperPaperCut':
         suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
     elif name == 'AmbassadorAdvancement2':
@@ -748,7 +750,7 @@ def doSuitAttack(attack):
     elif name == 'WiretapperBrokenConnection':
         suitTrack = MovieBossbotLitigationCheats.doBrokenConnection(attack)
     elif name == 'WiretapperGagBan':
-        suitTrack = MovieBossbotLitigationCheats.doCloseTheLoopNew(attack)
+        suitTrack = MovieFaceTheFamilyCheats.doOverseer(attack)
     elif name == 'WiretapperBusySignal':
         suitTrack = MovieBossbotLitigationCheats.doBusySignal(attack)
     #ambassador cheats
@@ -3822,6 +3824,14 @@ def doTeeOff(attack: dict) -> MetaInterval:
         ballPosPoints = [Point3(2.35*BallXMult, 2.35*BallYMult, 0.1)]
     elif suit.dna.name == 'm':
         ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+    elif suit.dna.name == 'ppl':
+        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+    elif suit.dna.name == 'mldr':
+        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+    elif suit.dna.name == 'bsht':
+        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+    elif suit.dna.name == 'rng':
+        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
     elif suit.dna.name in ('std', 'std2', 'mh', 'mh2'):
         ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
     elif suit.dna.name == 'rb':
@@ -3832,10 +3842,16 @@ def doTeeOff(attack: dict) -> MetaInterval:
         ballPosPoints = [Point3(4.1*BallXMult, 4.1*BallYMult, 0.1)]
     elif suit.dna.name == 'hho':
         ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+    elif suit.dna.name == 'anc':
+        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
     elif suit.dna.name == 'clubpres':
         ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
+    elif suit.dna.name == 'ambass':
+        ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
+    elif suit.dna.name == 'director':
+        ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
     else:
-        ballPosPoints = [Point3(2.1, 0.0, 0.1)]
+        ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
     ballPropTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
@@ -4247,6 +4263,7 @@ def doCanned(attack: dict) -> MetaInterval:
         hitPoint.setZ(hitPoint.getZ() + toon.height + 1.1)
         throwTrack.append(Func(battle.movie.needRestoreRenderProp, can))
         throwTrack.append(getThrowTrack(can, hitPoint, duration=throwDuration, parent=battle))
+        throwTrack.append(Func(can.hide))
         if dmg > 0:
             throwTrack.append(Func(battle.movie.needRestoreHips))
             throwTrack.append(Func(can.wrtReparentTo, hips[0]))
@@ -5451,9 +5468,9 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
     targets: list[dict] = attack['target']
 
     numWords: int = 25
-    wordDelay: float = 3.7
+    wordDelay: float = 2.5
 
-    suitTrack: Sequence = getSuitAnimTrack(attack, playRate=1.25)
+    suitTrack: Sequence = getSuitAnimTrack(attack, playRate=1.5)
 
     wordTracks: Parallel = Parallel()
 
@@ -5498,15 +5515,13 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
 
     toonTracks: Parallel = getToonTracks(
         attack,
-        damageDelay=4.4,
+        damageDelay=3.2,
         damageAnimNames=['conked'],
-        dodgeDelay=3.7,
+        dodgeDelay=2.5,
         splicedDodgeAnims=dodgeAnims
     )
 
-    soundTrack: Sequence = getSoundTrack(
-        f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg",
-        node=suit
+    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", node=suit, playRate=1.25
     )
 
     # Everything except suitTrack.
@@ -5516,7 +5531,6 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
         soundTrack
     )
 
-    spedUpTrack.setPlayRate(1.5)
 
     return Parallel(
         suitTrack,

@@ -187,7 +187,7 @@ fires = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4), (
 fbed = (('speak', 'speak', 4), ('cigar-smoke', 'firestarter-cigar-smoke', 4))
 chainsaw = (('roll-o-dex', 'roll-o-dex', 4), ('glower', 'glower', 4), ('quick-jump', 'jump', 4))
 phouse = (('cease', 'cease', 4), ('sparkplug', 'sparkplug', 4), ('snap', 'snap2', 4), ('magic3-alt', 'magic3-alt', 4), ('effort', 'effort', 4), ('quick-jump', 'jump', 4), ('speak', 'speak', 4), ('scabbard', 'scabbard', 4), ('summon', 'summon', 4), ('defense', 'defense', 4), ('glower', 'glower', 4))
-bkeeper = (('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction3', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
+bkeeper = (('smile', 'smile', 4), ('snap', 'snap2', 4), ('rubber-stamp', 'rubber-stamp', 4), ('sanction', 'sanction', 4), ('effort', 'effort', 4), ('pen-squirt', 'fountain-pen', 4), ('roll-o-dex', 'roll-o-dex', 4))
 wtapper = (('cease', 'cease3', 4), ('throttletwo', 'throttletwo', 4), ('rubber-stamp', 'rubber-stamp', 4), ('speak', 'speak', 4), ('sanction', 'sanction3', 4), ('snap', 'snap2', 4), ('roll-o-dex', 'roll-o-dex', 4))
 ambass = (('frustrated', 'frustrated', 4), ('neutral-override', 'neutral-override', 4), ('snap-override', 'snap-override', 4), ('defense', 'defense', 4), ('sacrifice-cog', 'sacrifice-cog', 4), ('deadwood', 'deadwood', 4), ('golf-club-swing', 'golf-club-swing', 4), ('glower', 'glower', 4), ('summon', 'summon', 4), ('snap', 'snap2', 4))
 

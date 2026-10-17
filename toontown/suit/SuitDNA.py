@@ -18,7 +18,7 @@ suitDeptCogs = {
     'l': [
         'bf', 'b', 'dt', 'ac', 'bs', 'sd', 'le', 'bw',
         'bf2', 'b2', 'dt2', 'ac2', 'bs2', 'sd2', 'le2', 'bw2',
-        'bsd', 'dcr', 'dcw', 'bck', 'surg', 'rat', 'magi', 'whistleb',
+        'bsd', 'dcr', 'dcw', 'bck', 'whistleb', 'surg', 'rat', 'magi',
         'pf', 'cv', 'nn', 'ad', 'sh', 'br', 
         # Regular Lawbots...
     ],
@@ -243,9 +243,9 @@ suitTierPools = {
         2: ['b', 'pf', 'b2', 'bsd'],
         3: ['dt', 'nn', 'dt2', 'dcr'],
         4: ['ac', 'cv', 'ac2'],
-        5: ['bs', 'ad', 'bs2', 'bck', 'dcw'],
+        5: ['bs', 'ad', 'bs2', 'bck', 'dcw', 'whistleb'],
         6: ['sd', 'sh', 'sd2', 'surg', 'rat'],
-        7: ['le', 'br', 'le2', 'magi', 'whistleb'],
+        7: ['le', 'br', 'le2', 'magi'],
         8: ['bw', 'bw2',],
     },
 

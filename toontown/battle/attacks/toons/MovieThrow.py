@@ -64,6 +64,7 @@ def doThrows(throws):
     singleHitDict = {}
     groupHitDict = {}
     for throw in throws:
+        battle = throw['battle']
         if attackAffectsGroup(throw['track'], throw['level']):
             for i in range(len(throw['target'])):
                 target = throw['target'][i]
@@ -103,7 +104,7 @@ def doThrows(throws):
     camDuration = retTrack.getDuration()
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
-    camTrack = MovieCamera.chooseThrowShot(throws, suitThrowsDict, camDuration, enterDuration=enterDuration, exitDuration=exitDuration)
+    camTrack = MovieCamera.chooseThrowShot(throws, suitThrowsDict, camDuration, battle, enterDuration=enterDuration, exitDuration=exitDuration)
     return (retTrack, camTrack)
 
 

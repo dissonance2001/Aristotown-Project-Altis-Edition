@@ -1102,7 +1102,7 @@ def doGavelCourtRecord2(attack):
         gavel = globalPropPool.getProp('LB_gavel')
         dmg = t['hp']
         toonPos = toon.getPos(battle)
-        gavelPos = Point3(toonPos.getX(), -20, 0)
+        gavelPos = Point3(toonPos.getX(), -21, 0)
         propTrack = Sequence(Wait(2.0),
             getPropAppearTrack(gavel, parent=battle, posPoints=[gavelPos, VBase3(0, 0, 0)], appearDelay=0.0,
                                scaleUpPoint=Point3(1.75), scaleUpTime=1.5),
@@ -1331,7 +1331,7 @@ def doLegalBindings(attack):
         tubeTracks.append(Func(battle.movie.clearRestoreHips))
         notifyTracks.append(Sequence(Wait(2.4), Func(toon.showHpString, "LEGALLY BOUND!", 10, color=(0.871, 0.827, 1.0, 1.0))))
         allTubeTracks.append(tubeTracks)
-        toonTracks.append(Sequence(Wait(2.4), Func(toon.setToonStatusEffect, 'bound', turns=3), ActorInterval(toon, 'struggle')))
+        toonTracks.append(Sequence(Wait(2.4), Func(toon.setToonStatusEffect, 'bound', turns=3), ActorInterval(toon, 'struggle'), Func(toon.loop, 'neutral')))
     soundTrack = getSoundTrack('SA_red_tape.ogg', delay=2.4, node=suit)
     return Parallel(suitTrack, toonTracks, propTracks, soundTrack, allTubeTracks, notifyTracks)
 
@@ -1464,7 +1464,7 @@ def doLegallyBound(attack: dict) -> tuple[MetaInterval, Parallel]:
         pbpDc: PlayByPlayText = PlayByPlayText()
         displayName = TTLocalizer.SuitAttackNames.get(attack['name'], '')
         pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 2.0)
-        pbpDesc = pbpDc.getShowIntervalDesc(TTLocalizer.SuitCheatDescription[attack['name']], attackDuration - 2.0)
+        pbpDesc = pbpDc.getShowIntervalDesc('Legally Bound Toons take %s damage per round!' % attack['target'][0]['hp'], attackDuration - 2)
         camTrack.append(pbpTrack)
         camTrack.append(pbpDesc)
 

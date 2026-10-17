@@ -649,7 +649,19 @@ class AttackHPCalculatorAI(object):
             self.setSuitCondition(theSuit.doId, 'brokenconnectioncalculator', 0, 0, 'setBoth')
         elif atkType['name'] == 'BookkeeperPaperCutMarked':
             self.setSuitCondition(theSuit.doId, 'bookkeeping', 0, 0, 'setBoth')
-            theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
+            found = False
+            if theSuit.doId not in self.suitStatusConditionsNew:
+                self.suitStatusConditionsNew[theSuit.doId] = []
+
+            for condIndex in range(len(self.suitStatusConditionsNew[theSuit.doId])):
+                condition = self.suitStatusConditionsNew[theSuit.doId][condIndex]
+                if isinstance(condition, StatusEffects.ExtraAttacks):
+                    condition.extraAttacks += 1
+                    found = True
+                    break
+
+            if not found:
+                self.suitStatusConditionsNew[theSuit.doId].append(StatusEffects.ExtraAttacks(1))
         elif atkType['name'] == 'ReddLiquidationSale':
             self.setSuitCondition(theSuit.doId, 'soakedcalculator', 0, 0, 'setBoth')
             self.setSuitCondition(theSuit.doId, 'soakedcalculator2', 1, 10, 'setBoth')
@@ -1070,7 +1082,7 @@ class AttackHPCalculatorAI(object):
                     damage = 25
 
                 elif attackName == 'SafetyHighPressure':
-                    damage = 45
+                    damage = 35
 
                 elif attackName == 'SafetyOverpressureDeath':
                     damage = int(math.ceil((attacker.getMaxHP() / 2) * .1))
@@ -1416,6 +1428,19 @@ class AttackHPCalculatorAI(object):
                 self.setSuitCondition(attackerId, 'selfRepairCalculator', 0, 0, 'setBoth')
 
                 continue
+            elif attackName == 'WiretapperGagBan':
+                healAmount = self.collectCallMultiplier * 10
+                if self.suitHasCondition(theSuit.doId, 'desperation'):
+                    healAmount *= (1 + self.getSuitConditionModifier(theSuit.doId, 'desperation'))
+                if theSuit.getDamageMultiplier() > 1:
+                    healAmount *= theSuit.getDamageMultiplier()
+
+                attack[SUIT_HP_COL][targetIndex] = 0
+                attack[SUIT_HEAL_COL][targetIndex] = healAmount
+
+                self.setSuitCondition(attackerId, 'selfRepairCalculator', 0, 0, 'setBoth')
+
+                continue
             elif attackName == 'DirectorBackToOnes':
                 self.setSuitCondition(targetSuit.doId, 'dazed', 0, 0, 'setBoth')
                 if self.suitHasCondition(targetSuit.doId, 'marked'):
@@ -1616,7 +1641,7 @@ class AttackHPCalculatorAI(object):
                 if self.suitHasCondition(attacker.doId, 'soaked') and attacker.dna.name == 'redd':
                     result *= 1.5
 
-                attack[SUIT_HP_COL][targetIndex] = result
+                attack[SUIT_HP_COL][targetIndex] = int(math.ceil(result))
 
                 for s in self.battle.suits:
                     suit = s
@@ -2939,6 +2964,11 @@ class AttackHPCalculatorAI(object):
                         currentBossHealth = s.currHP
                         if currentBossHealth >= 1:
                             self.setSuitCondition(suit.doId, 'ban2levels', 1, 3, 'setBoth')
+                    if s.dna.name == 'lgator':
+                        suit = s
+                        currentBossHealth = s.currHP
+                        if currentBossHealth >= 1:
+                            self.setSuitCondition(suit.doId, 'throwbookcalculator', 1, 10, 'setBoth')
             elif atkType['name'] == 'ScapegoatCourtRecordBan':
                 if self.toonHasCondition(toon.doId, 'banned3'):
                     self.setToonCondition(toon.doId, 'banned3', 1, 1, 'setBoth')
@@ -2961,7 +2991,6 @@ class AttackHPCalculatorAI(object):
                         if currentBossHealth >= 1:
                             self.setSuitCondition(suit.doId, 'bellowcalculator2', 1, 10, 'setBoth')
                             self.setSuitCondition(suit.doId, 'bashcalculator', 1, 10, 'setBoth')
-                            self.setSuitCondition(suit.doId, 'throwbookcalculator', 1, 10, 'setBoth')
             elif atkType['name'] == 'ScapegoatGavel':
                 result = 5
                 attack[SUIT_HP_COL][targetIndex] = result
@@ -3670,7 +3699,7 @@ class AttackHPCalculatorAI(object):
                     self.setSuitCondition(theSuit.doId, 'lured', 0, 0, 'setBoth')
                 self.__removeLured(theSuit.doId)
             elif atkType['name'] == 'BookkeeperMandatoryFiling':
-                result = 10
+                result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setToonCondition(toon.doId, 'dodgy', -100, 1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'filingcalculator', 0, 0, 'setBoth')
@@ -3690,7 +3719,19 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bookkeeping', 0, 0, 'setBoth')
-                theSuit.setDamageMultiplier(theSuit.getDamageMultiplier() * 1.1)
+                found = False
+                if targetSuit.doId not in self.suitStatusConditionsNew:
+                    self.suitStatusConditionsNew[theSuit.doId] = []
+
+                for condIndex in range(len(self.suitStatusConditionsNew[theSuit.doId])):
+                    condition = self.suitStatusConditionsNew[theSuit.doId][condIndex]
+                    if isinstance(condition, StatusEffects.ExtraAttacks):
+                        condition.extraAttacks += 1
+                        found = True
+                        break
+
+                if not found:
+                    self.suitStatusConditionsNew[theSuit.doId].append(StatusEffects.ExtraAttacks(1))
             elif atkType['name'] == 'BookkeeperPaperCutSoaked':
                 if self.getToonConditionModifier(toonId, 'allGagBoost2') < -25:
                     self.setToonCondition(toon.doId, 'allGagBoost2',

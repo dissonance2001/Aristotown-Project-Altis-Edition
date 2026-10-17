@@ -1415,7 +1415,37 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
     def __enterLocalToonWaitForInput(self):
         self.notify.debug('enterLocalToonWaitForInput()')
-        camera.posHprInterval(0.4, self.camPos, self.camHpr, blendType = 'easeInOut').start()
+        """Move the camera into position for the input state of battle."""
+
+        if base.localAvatar not in self.toons:
+            return
+
+        if base.camera.getParent() != self:
+            base.camera.wrtReparentTo(self)
+
+        if self.activeSuits:
+            camHeight = max(suit.getHeight() + 1 for suit in self.activeSuits)
+        else:
+            camHeight = 8.25
+
+        cameraPos = Point3(0, -8.6, max(camHeight * 2, 16.5))
+
+        self._hasEnteredWaitForInput = True
+
+        if hasattr(self, '_seq') and self._seq:
+            self._seq.pause()
+
+        self._seq = base.camera.posHprInterval(
+            0.4,
+            cameraPos,
+            Vec3(0, -61, 0),
+            other=self,
+            blendType='easeInOut'
+        )
+
+        self._seq.start()
+
+        base.camLens.setMinFov(65.0 / (4.0 / 3.0))
         base.camLens.setMinFov(self.camMenuFov/(4./3.))
         NametagGlobals.setWant2dNametags(False)
         self.townBattle.setState('Attack')

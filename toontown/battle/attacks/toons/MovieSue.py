@@ -73,6 +73,7 @@ def doSues(sues):
 
     i = 0
     for sue in sues:
+        battle = sue['battle']
         if doAdd:
             suitId = sue['target'][i]['suit'].doId
         else:
@@ -115,7 +116,7 @@ def doSues(sues):
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
     camDuration = retTrack.getDuration()
-    camTrack = MovieCamera.chooseSueShot(sues, suitSuesDict, camDuration, enterDuration, exitDuration)
+    camTrack = MovieCamera.chooseSueShot(sues, suitSuesDict, camDuration, battle, enterDuration, exitDuration)
     return (retTrack, camTrack)
 
 def __doSuitSues(sues):

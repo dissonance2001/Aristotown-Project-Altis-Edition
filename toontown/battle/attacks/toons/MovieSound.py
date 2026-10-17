@@ -42,6 +42,7 @@ def doSounds(sounds):
     for i in range(MAX_LEVEL_INDEX + 1):
         prevSounds[i] = []
     for sound in sounds:
+        battle = sound['battle']
         level = sound['level']
         prevSounds[level].append(sound)
         for target in sound['target']:
@@ -69,7 +70,7 @@ def doSounds(sounds):
     camDuration = mainTrack.getDuration() + deathTracks.getDuration()
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
-    camTrack = MovieCamera.chooseSoundShot(sounds, targets, camDuration, enterDuration, exitDuration)
+    camTrack = MovieCamera.chooseSoundShot(sounds, targets, camDuration, battle, enterDuration, exitDuration)
     return (soundTrack, camTrack)
 
 def __getSuitTrack(sound, hitCount, totalDamage):

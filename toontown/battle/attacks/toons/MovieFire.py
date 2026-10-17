@@ -73,6 +73,7 @@ def doFires(fires):
     
     i = 0
     for fire in fires:
+        battle = fire['battle']
         if doAdd:
             suitId = fire['target'][i]['suit'].doId
         else:
@@ -115,7 +116,7 @@ def doFires(fires):
     enterDuration = npcArrivals.getDuration()
     exitDuration = npcDepartures.getDuration()
     camDuration = retTrack.getDuration()
-    camTrack = MovieCamera.chooseFireShot(fires, suitFiresDict, camDuration, enterDuration, exitDuration)
+    camTrack = MovieCamera.chooseFireShot(fires, suitFiresDict, camDuration, battle, enterDuration, exitDuration)
     return (retTrack, camTrack)
 
 def __doSuitFires(fires):

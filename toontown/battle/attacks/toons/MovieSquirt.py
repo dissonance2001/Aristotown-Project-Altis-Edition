@@ -39,6 +39,7 @@ def doSquirts(squirts):
     doneUber = 0
     skip = 0
     for squirt in squirts:
+        battle = squirt['battle']
         skip = 0
         if skip:
             pass
@@ -78,7 +79,7 @@ def doSquirts(squirts):
             delay = delay + random.choice((0.1, 0.2, 0.3, 0.4, 0.5))
 
     camDuration = mtrack.getDuration()
-    camTrack = MovieCamera.chooseSquirtShot(squirts, suitSquirtsDict, camDuration)
+    camTrack = MovieCamera.chooseSquirtShot(squirts, suitSquirtsDict, camDuration, battle)
     return (mtrack, camTrack)
 
 
