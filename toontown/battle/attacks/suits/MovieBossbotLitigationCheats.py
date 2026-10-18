@@ -1094,7 +1094,7 @@ def doMandatoryFiling(attack):
         toonTrack = Sequence(
         Wait(1.25),
         Parallel(
-            Func(toon.enterFlattened),
+            Func(toon.enterFlattened), Func(toon.setToonStatusEffect, 'noDodge', modifier=1, turns=2),
             Func(toon.showHpTextNew,  0, text="NO DEFENSE!", colorCode=1),
             #Func(__doDamageCheat, toon, dmg, t['died'])
         ),
@@ -1213,7 +1213,7 @@ def doWiretapped(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        toonTracks = Sequence(Wait(2.8), Func(toon.setToonStatusEffect, 'wiretapped', modifier=dmg, turns=2), ActorInterval(toon, 'slip-backward'))
+        toonTracks = Sequence(Wait(2.8), Func(toon.setToonStatusEffect, 'wiretapped', modifier=dmg, turns=2), ActorInterval(toon, 'slip-backward'), Func(toon.loop, 'neutral'))
         toonTracksReal.append(toonTracks)
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     gearPoint = Point3(suitPos.getX(), suitPos.getY() - 10, suitPos.getZ() + suit.height - 0.2)
@@ -3028,6 +3028,15 @@ def doAftershockDamage(attack):
         dmg = t['hp']
         if dmg <= 0:
             continue
+
+        def positionCamera(toon) -> None:
+            '''
+            This function positions the knife similarly to how Corporate Clash does it, except it handles positioning, scale, and rotation as well as moves the camera.
+            '''
+            toonPos = toon.getPos(battle)
+            camera.setPosHpr(battle, toonPos[0] + 6.0, toonPos[1] + 6.75, toonPos[2] + 1.5, 138.0, 20.0, 0.0) # Manual repositioning of the camera.
+
+
         lightning = globalPropPool.getProp('lightning')
         lightning.reparentTo(battle)
         lightning.hide()
@@ -3075,7 +3084,8 @@ def doAftershockDamage(attack):
         if dmg > 0:
             notifyTracks.append(notifyTrack)
     toonDamageTrack = Sequence(getToonTracksCheat(attack, damageDelay=tContact, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep']))
-    return Parallel(notifyTracks, shakeTracks, waitTrack, toonDamageTrack, soundTracks)
+    cameraTrack = Sequence(Func(positionCamera, toon))
+    return Parallel(notifyTracks, cameraTrack, shakeTracks, waitTrack, toonDamageTrack, soundTracks)
 
 
 def doAftershock(attack):

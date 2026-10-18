@@ -263,23 +263,23 @@ class BoardbotLitigationCalculatorAI:
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
-            if not self.suitHasCondition(suitId, 'alreadyMelted') and self.suitHasCondition(suitId, 'marketMeltdown'):
-                attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                            'name': 'DividendTotalMarketMeltdownDamage',
-                                            'animName': 'nothing',
-                                            'hp': 0,
-                                            'acc': 100,
-                                            'freq': 0,
-                                            'group': SuitBattleGlobals.ATK_TGT_GROUP,
-                        'targetType': 'both',
-                         'requiredConditions': ('marketMeltdown',),
-                        'toonGroup': SuitBattleGlobals.ATK_TGT_GROUP,
-                        'suitGroup': SuitBattleGlobals.ATK_TGT_GROUP,
-                         'excludeManagers': False,
-                        'allowSelfTarget': True,
-                        'targetSelf': False})
-                if attack[SUIT_ATK_COL]:
-                    self.battle.suitAttacks.append(attack)
+            # if not self.suitHasCondition(suitId, 'alreadyMelted') and self.suitHasCondition(suitId, 'marketMeltdown'):
+            #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+            #                                 'name': 'DividendTotalMarketMeltdownDamage',
+            #                                 'animName': 'nothing',
+            #                                 'hp': 0,
+            #                                 'acc': 100,
+            #                                 'freq': 0,
+            #                                 'group': SuitBattleGlobals.ATK_TGT_GROUP,
+            #             'targetType': 'both',
+            #              'requiredConditions': ('marketMeltdown',),
+            #             'toonGroup': SuitBattleGlobals.ATK_TGT_GROUP,
+            #             'suitGroup': SuitBattleGlobals.ATK_TGT_GROUP,
+            #              'excludeManagers': False,
+            #             'allowSelfTarget': True,
+            #             'targetSelf': False})
+            #     if attack[SUIT_ATK_COL]:
+            #         self.battle.suitAttacks.append(attack)
 
             # if not self.suitHasCondition(suitId, 'dotfinished'):
             #     self.__appendToonConditionDamageAndRetaliation(

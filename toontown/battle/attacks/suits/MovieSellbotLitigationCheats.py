@@ -500,9 +500,9 @@ def doOverpressured(attack, ind):
         getPropAppearTrack(tnt, theSuit.getRightHand(), posPoints, .5, VBase3(0.5, 0.5, 0.5),
                            scaleUpTime=0.1),
         LerpColorScaleInterval(tnt, duration=4, colorScale=(0.867, 0, 1, 1),
-                               blendType='easeInOut'), Wait(0.5),
+                               blendType='easeInOut'), Wait(.75),
         Parallel(
-            getThrowTrack(tnt, Point3(0, 0, targetSuit.height + 2), 1.5, targetSuit, -25.288),
+            getThrowTrack(tnt, Point3(0, 0, targetSuit.height + 2), 1.25, targetSuit, -35.288),
             LerpHprInterval(tnt, 0.8, VBase3(0, 0, 0)), LerpScaleInterval(tnt, 0, VBase3(1, 1, 1))),
         Parallel(
             LerpPosInterval(tnt, 0.5, (0, 0, targetSuit.getHeight() - 2.5), other=targetSuit, blendType='easeIn'),

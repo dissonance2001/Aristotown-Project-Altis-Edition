@@ -3995,6 +3995,8 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         ):
             targetAnim = 'rolled'
 
+        elif self.hasSuitStatusEffect('highRollerPhase3'):
+            targetAnim = 'rolled'
         elif self.dna.name == 'hroller' and self.hasSuitStatusEffect('silhouetteShielding'):
             targetAnim = 'rolled'
         elif self.hasSuitStatusEffect('rolledNeutral'):
@@ -4272,6 +4274,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         elif self.hasSuitStatusEffect('silhouetteImmune') and not self.dna.name == 'hroller' and not self.dna.name == 'wtapper' and not self.dna.name == 'videog' and self.hasSuitStatusEffect('highRollerPhase3'):
             Sequence(Func(self.loop, 'highroller-neutral-levitate-loop')
                      ).start()
+        elif self.hasSuitStatusEffect('silhouetteShielding'):
+            Sequence(Func(self.loop, 'rolled')
+                                 ).start()
         elif self.hasSuitStatusEffect('vulnerable') and self.dna.name == 'hroller':
             Sequence(
                 Func(self.loop, 'neutral2%s' % ('-hurt' if float(self.currHP) / float(self.maxHP) <= 0.25 else '',))

@@ -3532,7 +3532,7 @@ def doContningencyClauseBanMovie(attack):
             pnt.setZ(pnt[2] + toon.getHeight() * 0.5)
             return Point3(pnt)
         notifyTrack = Sequence(Wait(3.75))
-        notifyTrack.append(Parallel(toon.makeShockDamageBurstTrack(duration=2.5, sparkCount=40), ActorInterval(toon, 'slip-backward')))
+        notifyTrack.append(Parallel(toon.makeShockDamageBurstTrack(duration=2.5, sparkCount=40), ActorInterval(toon, 'slip-backward'), Func(toon.loop, 'neutral')))
         targetPoint = lambda toon = toon: getToonTargetPoint(toon)
         targetPos = toon.getPos(battle)
         dSprayScale = 0.05

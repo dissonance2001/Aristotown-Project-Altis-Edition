@@ -377,7 +377,7 @@ def __doAdjacentZap(target, previousTarget, zap, chainIndex, lastZap):
 
     for headPart in suit.animatedHeadParts:
         headTrack.append(Func(headPart.pose, 'stun', 5))
-    headTrack.append(Wait(1.0))
+    headTrack.append(Wait(.5))
     headTrack.append(Func(suit.setNeutralAnimationHead))
 
     if hp <= 0:
@@ -413,13 +413,13 @@ def __doAdjacentZap(target, previousTarget, zap, chainIndex, lastZap):
 
     # Zap reaction.
     if lastZap:
-        impactTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle, died, level), MovieUtil.createSuitStunIntervalZap(suit, .5, 2.0), deathTracks))
+        impactTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle, died, level), MovieUtil.createSuitStunIntervalZap(suit, 0, 1.0), deathTracks))
     else:
         impactTrack.append(Parallel(headTrack, MovieUtil.zapCogNeutral(suit, anim, .5, 2.0, battle)))
 
     track.append(impactTrack)
 
-    if revived:
+    if revived and lastZap:
         if suit.dna.name == 'redd':
             track.append(
                 MovieUtil.createSuitReviveRedd(
@@ -444,7 +444,7 @@ def __doAdjacentZap(target, previousTarget, zap, chainIndex, lastZap):
                 )
             )
 
-    elif died:
+    elif died and lastZap:
         if suit.isVirtual:
             track.append(
                 Func(
@@ -575,7 +575,7 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         for headPart in suit.animatedHeadParts:
             headTrack.append(Func(headPart.pose, 'stun', 5))
 
-        headTrack.append(Wait(1.0))
+        headTrack.append(Wait(.5))
         headTrack.append(Func(suit.setNeutralAnimationHead))
         scapeGoatTrack = Sequence()
         sival = ActorInterval(suit, anim)
@@ -609,7 +609,7 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
         resetPos, resetHpr = battle.getActorPosHpr(suit)
         zapTrack = Sequence(ActorInterval(suit, anim, startTime=0, endTime=0.8))
         if lastZap:
-            suitTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle, died, level), MovieUtil.createSuitStunIntervalZap(suit, .5, 2.0), deathTracks))
+            suitTrack.append(Parallel(headTrack, MovieUtil.zapCog(suit, anim, .5, 2.0, battle, died, level), MovieUtil.createSuitStunIntervalZap(suit, 0, 1.0), deathTracks))
         else:
             suitTrack.append(Parallel(headTrack, MovieUtil.zapCogNeutral(suit, anim, .5, 2.0, battle)))
         bonusTrack = Sequence(Wait(tContact))
@@ -621,22 +621,22 @@ def __getSuitTrack(zap, suit, tContact, tDodge, hp, hpbonus, kbbonus, anim, died
             bonusTrack.append(Wait(0.75))
             bonusTrack.append(Func(suit.showHpText, -hpbonus, 1, openEnded=0, attackTrack=ZAP_TRACK))
             bonusTrack.append(updateHealthBar)
-        if suit.dna.name == 'redd' and revived != 0:
+        if suit.dna.name == 'redd' and revived != 0 and lastZap:
             suitTrack.append(MovieUtil.createSuitReviveRedd(suit, battle))
-        elif died != 0 and suit.isVirtual:
+        elif died != 0 and suit.isVirtual and lastZap:
             suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
         elif died != 0 and not suit.isVirtual and level > 3 and suit.dna.name != 'chainsaw':
             deathTracks.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             deathTracks.append(MovieUtil.shortCircuitTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual:
+        elif died != 0 and not suit.isVirtual and lastZap:
             suitTrack.append(Func(suit.clearSuitStatusEffect, 'zapped'))
             if suit.dna.name == 'chainsaw':
                 suitTrack.append(Func(MovieUtil.stopZapCogNeutral, suit))
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
-        elif revived != 0 and suit.isSkeleton:
+        elif revived != 0 and suit.isSkeleton and lastZap:
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
-        elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
+        elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd' and lastZap:
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
         else:
             #suitTrack.append(__createSuitResetPosTrack(suit, battle))

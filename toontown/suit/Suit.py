@@ -5937,7 +5937,7 @@ class Suit(Avatar.Avatar):
         # self.cooldownEffect.setHpr(180, 0, 0)
 
         self.cheerTrack = Sequence(ParticleInterval(self.cheerEffect, self, duration=3, softStopT=1))
-        if self.hasSuitStatusEffect('highRollerPhase3') and self.style.name == 'hroller2':
+        if self.hasSuitStatusEffect('highRollerPhase3') and self.style.name == 'hroller':
             self.cheerEffect.start()
 
     def makeNonImmortal(self, elite=False):

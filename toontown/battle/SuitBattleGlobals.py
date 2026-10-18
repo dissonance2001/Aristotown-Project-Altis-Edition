@@ -5667,7 +5667,7 @@ SuitAttributes: dict[str, SuitAttributesClass] = {'f': SuitAttributesClass(name=
                                   freq=(0,),
                                   acc=(50,),
                                   attacks=(
-                                      SuitAttack('FingerWag',
+                                      SuitAttack('Demotion',
                                                  hp=(32,),
                                                  acc=(90,),
                                                  freq=(20,)),

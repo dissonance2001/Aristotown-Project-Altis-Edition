@@ -216,6 +216,20 @@ def doLureResistance(attack, ind, ind2, ind3):
         suitTracks.append(suitTrack)
     return Parallel(suitTracks)
 
+def setPosFromOther(dest, source, offset = Point3(0, 0, 0)):
+    pos = render.getRelativePoint(source, offset)
+    dest.setPos(pos)
+    dest.reparentTo(render)
+
+def __getPartTrack(particleEffect, startDelay, durationDelay, partExtraArgs, softStop = 0):
+    pEffect = partExtraArgs[0]
+    parent = partExtraArgs[1]
+    if len(partExtraArgs) == 3:
+        worldRelative = partExtraArgs[2]
+    else:
+        worldRelative = 1
+    return Sequence(Wait(startDelay), ParticleInterval(pEffect, parent, worldRelative, duration=durationDelay, cleanup=True, softStopT=softStop))
+
 def doSingingBluesMegaphone(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -386,6 +400,8 @@ def doNoAttack(attack):
     notifyTracks = Parallel()
     if suit.dna.name == 'director':
         notifyTracks.append(Func(suit.clearSuitStatusEffect, 'directorShielding'))
+    for toon in battle.activeToons:
+        toon.clearToonStatusEffect('highRollerTurn1')
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -948,7 +964,7 @@ def doDonation(attack):
     theSuit = None
     suitPos, suitHpr = battle.getActorPosHpr(suit)
     for s in battle.activeSuits:
-        if s.dna.name == 'hroller2':
+        if s.dna.name == 'hroller':
             theSuit = s
 
     if theSuit == None:
@@ -1093,7 +1109,7 @@ def doBar(attack):
     for suit in battle.activeSuits:
         suitTrack = getSuitAnimTrack(attack, disrespectBlend=True)
         suitTrack.append(Wait(.25))
-        if suit.dna.name == 'hroller2':
+        if suit.dna.name == 'hroller':
             suitTrack.append(suit.makeBarInterval(battle, (25 * len(battle.activeToons))))
         else:
             suitTrack.append(suit.makeBarInterval(battle, (250 * len(battle.activeToons))))
@@ -1669,7 +1685,7 @@ def doPhase3(attack):
     suit = attack['suit']
     battle = attack['battle']
     for toon in battle.activeToons:
-        musicTrack.append(Parallel(Func(toon.setToonStatusEffect, 'raisedAnte', modifier=1250)))
+        musicTrack.append(Parallel(Func(toon.setToonStatusEffect, 'raisedAnte', modifier=1000)))
     destPos, h = battle.suitPendingPointsSilhouettesHighRoller[7]
     flyIval = suit.beginSupaFlyMove(destPos, True, 'flyIn')
     startPos = destPos + Point3(0, 0, 0)
@@ -2330,7 +2346,7 @@ def doDiceRouletteCogs(attack):
             Func(gavel.removeNode)
         )
         propTracks.append(propTrack)
-        if suit.dna.name == 'hroller2':
+        if suit.dna.name == 'hroller':
             toonTrack = Sequence(
                 Wait(1.5),
                 Parallel(

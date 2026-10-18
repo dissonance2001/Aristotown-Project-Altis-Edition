@@ -66,8 +66,12 @@ class SuitConditionCalculatorAI:
                     self.setSuitCondition(suitId, 'bindingscalculator', 1, 9, 'setBoth')
                 if x % 2 == 0:
                     self.setSuitCondition(suitId, 'insurancecalculator', 1, 10, 'setBoth')
-                if (x + 2) % 3 == 0:
-                    self.setSuitCondition(suitId, 'insurancecalculator3', 1, 10, 'setBoth')
+                currentBossHealth = -1
+                for s in self.battle.suits:
+                    if s.dna.name == 'sgoat':
+                        currentBossHealth = s.currHP
+                    if (x + 2) % 3 == 0 and currentBossHealth > 0:
+                        self.setSuitCondition(suitId, 'insurancecalculator3', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'insurancecalculator2', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'lgator':
@@ -260,7 +264,8 @@ class SuitConditionCalculatorAI:
                     self.setSuitCondition(suitId, 'markedcalculator', 1, 10, 'setBoth')
                 if (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'alreadyRedundant'):
                     self.setSuitCondition(suitId, 'redundantcalculator', 1, 10, 'setBoth')
-                self.setSuitCondition(suitId, 'highpressurecalculator', 1, 10, 'setBoth')
+                if (x % 3 == 0) and self.suitHasCondition(suitId, 'alreadyHighPressure'):
+                    self.setSuitCondition(suitId, 'highpressurecalculator', 1, 10, 'setBoth')
                 if ((x + 1) % 5 == 0) and self.battle.activeSuits[i].currHP < 6000:
                     self.setSuitCondition(suitId, 'selfRepairCalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'liquid':

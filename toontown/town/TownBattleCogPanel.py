@@ -3855,7 +3855,7 @@ class TownBattleCogPanel(DirectFrame):
                                    tooltipBuff=True, 
                                    slotColor=(1, 0.984, 0, 1))
 
-        if self.cog.hasSuitStatusEffect('vulnerable') and not self.cog.dna.name == 'hroller2':
+        if self.cog.hasSuitStatusEffect('vulnerable') and not self.cog.dna.name == 'hroller':
             status = loader.loadModel('phase_3.5/models/gui/status_effects')
             self.statusIcon = status.find('**/broken_shield_icon')
             slot = self._claimNextStatusSlot()

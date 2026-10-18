@@ -1446,9 +1446,6 @@ class BattleCalculatorAI:
             if suit.dna.name == 'lgator':
                 self.setSuitCondition(suit.doId, 'soakedcalculator', 1, 10, 'setBoth')
                 self.setToonCondition(toonId, 'soakToon', 1, 1, 'setBoth')
-            if suit.dna.name == 'hrollers':
-                self.setToonCondition(toonId, 'soakToon', math.ceil(baseDamage * 5), 1, 'setBoth')
-
             if suit.dna.name == 'phouse':
                 self.setSuitCondition(suit.doId, 'soakedcalculator', 1, 10, 'setBoth')
             if suit.dna.name == 'sgoat' and not self.suitHasCondition(suitId, 'enraged'):
@@ -2941,6 +2938,9 @@ class BattleCalculatorAI:
                         attackLevel,
                         toon.experience.getExp(attackTrack)
                     )
+
+                    if suit.dna.name == 'hrollers':
+                        self.setToonCondition(toonId, 'soakToon', math.ceil(baseDamage * 5), 1, 'setBoth')
 
                     mainTargetId = attack[TOON_TGT_COL]
 

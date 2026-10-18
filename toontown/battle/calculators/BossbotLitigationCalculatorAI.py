@@ -971,7 +971,7 @@ class BossbotLitigationCalculatorAI:
                                                 'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.battle.activeSuits[i].dna.name == 'phouse':
+                if self.battle.activeSuits[i].dna.name == 'phouse' and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                 'name': 'PowerhouseToleranceBuilding',  # Suppression Revert
                                                 'animName': 'nothing',

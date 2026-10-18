@@ -417,7 +417,7 @@ def __doAdjacentSquirtSplash(target, squirt):
                 )
             )
 
-    elif died:
+    elif died and not suit.hasSuitStatusEffect('overpressured'):
         if suit.isVirtual:
             track.append(
                 MovieUtil.createVirtualSuitDeathTrack(
@@ -618,9 +618,9 @@ def __getSuitTrack(suit, tContact, tDodge, attack, hp, hpbonus, kbbonus, anim, d
             suitTrack.append(MovieUtil.createSuitReviveTrackVirtual(suit, battle))
         elif revived != 0 and not suit.isSkeleton and suit.dna.name != 'redd':
             suitTrack.append(MovieUtil.createSuitReviveTrack(suit, battle))
-        elif died != 0 and suit.isVirtual:
+        elif died != 0 and suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             suitTrack.append(MovieUtil.createVirtualSuitDeathTrack(suit, battle))
-        elif died != 0 and not suit.isVirtual:
+        elif died != 0 and not suit.isVirtual and not suit.hasSuitStatusEffect('overpressured'):
             suitTrack.append(MovieUtil.createSuitDeathTrack(suit, battle))
         else:
             suitTrack.append(suit.makeDeathCheckInterval(0, battle))

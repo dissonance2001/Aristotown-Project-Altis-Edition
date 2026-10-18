@@ -168,6 +168,14 @@ def doPaperweight(attack):
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
+        
+        def positionCamera(toon) -> None:
+            '''
+            This function positions the knife similarly to how Corporate Clash does it, except it handles positioning, scale, and rotation as well as moves the camera.
+            '''
+            toonPos = toon.getPos(battle)
+            camera.setPosHpr(battle, toonPos[0] + 6.0, toonPos[1] + 6.75, toonPos[2] + 1.5, 138.0, 20.0, 0.0) # Manual repositioning of the camera.
+
         paperTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, propDelay, Point3(1, 1, 1), scaleUpTime=1.0))
         paperTrack.append(Wait(suitDelay))
         hitPoint = toon.getPos(battle)
@@ -199,8 +207,9 @@ def doPaperweight(attack):
     damageAnims.extend(getSplicedLerpAnims('slip-forward', 0.31, 0.95, startTime=1.2))
     damageAnims.append(SplicedAnim('slip-forward', 0.01, 1.51))
     soundTrack = getSoundTrack('AA_drop_bigweight_miss.ogg', delay=propDelay + suitDelay + 0.7 + throwDuration, node=suit)
+    cameraTrack = Sequence(Wait(propDelay + suitDelay + 0.7 + throwDuration), Func(positionCamera, toon))
     toonTracks = getToonTracks(attack, damageDelay=4, splicedDamageAnims=damageAnims, dodgeDelay=1.5, dodgeAnimNames=['duck'], showDamageExtraTime=0.4, showMissedExtraTime=1.3)
-    return Parallel(suitTrack, toonTracks, propTracks, soundTrack)
+    return Parallel(suitTrack, cameraTrack, toonTracks, propTracks, soundTrack)
 
 def doPaperRain(attack):
     suit = attack['suit']

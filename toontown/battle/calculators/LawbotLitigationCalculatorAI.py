@@ -567,7 +567,7 @@ class LawbotLitigationCalculatorAI:
                      'group': SuitBattleGlobals.ATK_TGT_SINGLE,
                                         'targetType': 'none'})
                     self.battle.suitAttacks.append(attack)
-                if self.battle.activeSuits[i].dna.name == 'sgoat' and not self.suitHasCondition(suitId, 'enraged'):
+                if self.battle.activeSuits[i].dna.name == 'sgoat' and not self.suitHasCondition(suitId, 'enraged') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                 'name': 'ScapegoatRageBuilding',  # Suppression Revert
                                                 'animName': 'nothing',

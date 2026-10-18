@@ -6794,6 +6794,12 @@ SuitAttackTaunts = {
                        "You're more corrupted than Frump!",
                        'Compatibility seems to be normal.'],
     'Demotion': {
+        'cdirector': ["Consider this a formal notice.",
+                      "Your employment status is about to change.",
+                      "Let's fix that inefficiency!",
+                      "You operate without structure, how exhausting.",
+                      "You've officially reached the bottom of the chain!",
+                      "You've failed to meet my expectations."],
         'ambass': ["You've been reassessed.",
                    "Let's adjust your position.",
                    "You're no longer operating at that level!",

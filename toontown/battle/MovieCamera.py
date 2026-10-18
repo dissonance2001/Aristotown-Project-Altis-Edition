@@ -797,7 +797,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'DiskScratch':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'DoubleTalk':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=3.9 / playRate))
     elif name == 'Downsize':
         camTrack.append(defaultCamera(openShotDuration=1.8))
     elif name == 'ElectrostaticEnergy':
@@ -805,7 +805,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Encrypt':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'EvictionNotice':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=3 / playRate))
     elif name == 'EvilEye':
         camTrack.append(defaultCamera(openShotDuration=2.7 / playRate))
     elif name == 'DoubleCross':
@@ -829,13 +829,13 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'FreezeAssets':
         camTrack.append(defaultCamera(openShotDuration=1.7 / playRate))
     elif name == 'GlowerPower':
-        camTrack.append(defaultCamera(openShotDuration=0.75))
+        camTrack.append(defaultCamera(openShotDuration=1.4))
     elif name == 'GoldDust':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'GoldRush':
         camTrack.append(defaultCamera(openShotDuration=2.0))
     elif name == 'GuiltTrip':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=0.9))
     elif name == 'HangUp':
         camTrack.append(defaultCamera(openShotDuration=(66.0/24.0) / playRate))
     elif name == 'HeadShrink':
@@ -879,7 +879,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PoundKey':
         camTrack.append(defaultCamera(openShotDuration=(46.0 / 24.0) / playRate))
     elif name == 'PowerTrip':
-        camTrack.append(defaultCamera(openShotDuration=1.5))
+        camTrack.append(defaultCamera(openShotDuration=0.9))
     elif name == 'Quash':
         camTrack.append(defaultCamera(openShotDuration=1.0))
     elif name == 'RazzleDazzle':
@@ -893,7 +893,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Reprogram':
         camTrack.append(defaultCamera(openShotDuration=1.5))
     elif name == 'RestrainingOrder':
-        camTrack.append(defaultCamera(openShotDuration=2.0))
+        camTrack.append(defaultCamera(openShotDuration=2.8 / playRate))
     elif name == 'Rolodex':
         camTrack.append(defaultCamera(openShotDuration=3.5 / playRate))
     elif name == 'RubOut':
@@ -951,7 +951,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'ArbitratorObjection':
         camTrack.append(Sequence(randomActorShot(suit, battle, 2, 'suit'), heldShot(10, 0, 10, 115, -30, 0, attackDuration - 2)))
     elif name == 'ArbitratorPaperFiling':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=2.5, attackDuration=2.5), motionShot(2.5, 10, 1, 165, 25, 0, 0, target[0]['toon']), Wait(attackDuration - 2.5)))
+        camTrack.append(Sequence(defaultCamera(openShotDuration=2.5, attackDuration=2.5), Wait(attackDuration - 2.5)))
     elif name == 'ArbitratorWhirlwind':
         camTrack.append(Sequence(randomActorShot(suit, battle, 0.5, 'suit'), heldShot(10, 0, 10, 120, -30, 0, attackDuration - .5)))
     elif name == 'ArbitratorThrowBook':
@@ -1113,8 +1113,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'PowerhouseSyphonDesperation':
         camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
     elif name == 'PowerhouseGroundbreaker':
-        camTrack.append(Sequence(defaultCamera(openShotDuration=1.5, attackDuration=1.5), Func(taskMgr.add, shake_camera, 'camera_shake'), Wait(attackDuration - 2.0),
-                                 Func(taskMgr.remove, 'camera_shake'), Wait(0.5)))
+        quake = 1
+        camTrack.append(suitCameraShakeShot(attackDuration, 1.0, quake=quake))
     elif name == 'PowerhouseGroundbreakerRevert':
         if attackDuration > 2:
             camTrack.append(Parallel(heldShot(0.0, 0.0, 3.5, 180, -20, 0, attackDuration)))
@@ -1167,7 +1167,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  heldRelativeShot(suit, 0.0, 9, 10, -180, -20.0, 0.0, attackDuration)))
     elif name == 'PowerhouseBurnDamage':
         if attackDuration > 2:
-            camTrack2 = Parallel(motionShot(2.5, 10, 1, 165, 25, 0, 0, target[0]['toon']), Wait(attackDuration))
+            camTrack2 = Parallel(Wait(attackDuration))
             pbpText = attack['playByPlayText']
             pbpDc = PlayByPlayText.PlayByPlayText()
             pbpDesc = pbpDc.getShowIntervalDesc('Surged Toons take %s extra damage per round!' % attack['target'][0]['hp'], attackDuration - 2)

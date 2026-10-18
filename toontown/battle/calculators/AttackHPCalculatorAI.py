@@ -7700,7 +7700,7 @@ class AttackHPCalculatorAI(object):
                 theSuit.setHP(77777)
                 theSuit.setMaxHP(77777)
                 for t in self.battle.activeToons:
-                    self.setToonCondition(t, 'raisedAnte', 1250, -1, 'setBoth')
+                    self.setToonCondition(t, 'raisedAnte', 1000, -1, 'setBoth')
                     toon = self.battle.getToon(t)
                     toon.b_setHp(999)
                     toon.b_setMaxHp(999)
@@ -9631,8 +9631,8 @@ class AttackHPCalculatorAI(object):
                     result = 0
                 if theSuit.dna.name == 'cdirector':
                     if result > 0:
-                        self.setToonCondition(toon.doId, 'allGagBoost', -40, 2, 'setBoth')
-                        self.setToonCondition(toon.doId, 'lureBoost', -40, 2, 'setBoth')
+                        self.setToonCondition(toon.doId, 'allGagBoost2', -40, 2, 'setBoth')
+                        self.setToonCondition(toon.doId, 'lureBoost2', -40, 2, 'setBoth')
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'bannedGagUsed', 0, 0, 'setBoth')
                 for s in self.battle.suits:
