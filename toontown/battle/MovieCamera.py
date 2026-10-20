@@ -805,7 +805,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
     elif name == 'Encrypt':
         camTrack.append(defaultCamera(openShotDuration=2.5))
     elif name == 'EvictionNotice':
-        camTrack.append(defaultCamera(openShotDuration=3 / playRate))
+        camTrack.append(defaultCamera(openShotDuration=3.0 / playRate))
     elif name == 'EvilEye':
         camTrack.append(defaultCamera(openShotDuration=2.7 / playRate))
     elif name == 'DoubleCross':

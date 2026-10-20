@@ -6522,14 +6522,14 @@ def doPowerTrip(attack: dict) -> MetaInterval:
     centerColor = Vec4(0.1, 0.1, 0.1, 0.4)
     edgeColor = Vec4(0.4, 0.1, 0.9, 0.7)
 
-    powerBar1 = BattleParticles.createParticleEffect(file='powertrip')
-    powerBar2 = BattleParticles.createParticleEffect(file='powertrip2')
+    powerBar1: ParticleEffect.ParticleEffect = BattleParticles.createParticleEffect(file='powertrip')
+    powerBar2: ParticleEffect.ParticleEffect = BattleParticles.createParticleEffect(file='powertrip2')
 
-    powerBar1.setPos(0, 6.1, 0.4)
-    powerBar1.setHpr(-60, 0, 0)
+    powerBar1.setPos(0.0, 6.1, 0.4)
+    powerBar1.setHpr(-60.0, 0.0, 0.0)
 
-    powerBar2.setPos(0, 6.1, 0.4)
-    powerBar2.setHpr(60, 0, 0)
+    powerBar2.setPos(0.0, 6.1, 0.4)
+    powerBar2.setHpr(60.0, 0.0, 0.0)
 
     powerBar1Particles = powerBar1.getParticlesNamed('particles-1')
     powerBar2Particles = powerBar2.getParticlesNamed('particles-1')
@@ -6539,25 +6539,25 @@ def doPowerTrip(attack: dict) -> MetaInterval:
     powerBar2Particles.renderer.setCenterColor(centerColor)
     powerBar2Particles.renderer.setEdgeColor(edgeColor)
 
-    waterfallEffect = BattleParticles.createParticleEffect('Waterfall')
+    waterfallEffect: ParticleEffect.ParticleEffect = BattleParticles.createParticleEffect('Waterfall')
     waterfallEffect.setScale(11)
 
     waterfallParticles = waterfallEffect.getParticlesNamed('particles-1')
     waterfallParticles.renderer.setCenterColor(centerColor)
     waterfallParticles.renderer.setEdgeColor(edgeColor)
 
-    if suit.dna.name == 'mh':
-        waterfallEffect.setPos(0, 4, 3.6)
+    if suit.dna.name in ('mh', 'mh2', 'std', 'std2'):
+        waterfallEffect.setPos(0.0, 4.0, 3.6)
 
     suitTrack: Sequence = getSuitAnimTrack(attack, playRate=playRate)
 
-    def getPowerTrack(effect):
+    def getPowerTrack(effect: ParticleEffect.ParticleEffect) -> Sequence:
         return Sequence(
             Wait(0.4 / playRate),
             Func(battle.movie.needRestoreParticleEffect, effect),
             Func(effect.start, suit),
             Wait(0.35 / playRate),
-            LerpPosInterval(effect, 1.0 / playRate, Point3(0, 20, 0.4), blendType='easeIn'),
+            LerpPosInterval(effect, 1.0 / playRate, Point3(0.0, 15.0, 0.4), blendType='easeIn'),
             LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4 / playRate),
             Func(effect.cleanup),
             Func(battle.movie.clearRestoreParticleEffect, effect)
@@ -7758,13 +7758,13 @@ def doEvictionNotice(attack: dict) -> MetaInterval:
 
         posPoints = [Point3(0.8, -1.75, -0.55), VBase3(40.584, -101.945, 18.316)]
 
-        propTrack: Sequence = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 1.0 / playRate, MovieUtil.PNT3_ONE, scaleUpTime=0.2))
+        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 1.0 / playRate, MovieUtil.PNT3_ONE, scaleUpTime=0.2))
         propTrack.append(Wait(1.73 / playRate))
 
-        hitPoint = __toonFacePoint(toon, parent=battle)
+        hitPoint = __toonFacePoint(toon, zOffset=-0.6, parent=battle)
         hitPoint.setX(hitPoint.getX() - 0.1)
 
-        missPoint = __toonGroundPoint(attack, toon, 0.5, parent=battle)
+        missPoint = __toonGroundPoint(attack, toon, 0.7, parent=battle)
         missPoint.setX(missPoint.getX() - 1.1)
 
         propTrack.append(getPropThrowTrack(attack, paper, [hitPoint], [missPoint], hitDuration=0.36 / playRate, missDuration=0.36 / playRate, parent=battle))
@@ -8713,8 +8713,8 @@ def doGuiltTrip(attack: dict) -> MetaInterval:
     centerColor = Vec4(1.0, 0.2, 0.2, 0.9)
     edgeColor = Vec4(0.9, 0.9, 0.9, 0.4)
 
-    powerBar1 = BattleParticles.createParticleEffect(file='guiltTrip')
-    powerBar2 = BattleParticles.createParticleEffect(file='guiltTrip')
+    powerBar1: ParticleEffect.ParticleEffect = BattleParticles.createParticleEffect(file='guiltTrip')
+    powerBar2: ParticleEffect.ParticleEffect = BattleParticles.createParticleEffect(file='guiltTrip')
 
     powerBar1.setPos(0, 6.1, 0.4)
     powerBar1.setHpr(-90, 0, 0)
@@ -8732,7 +8732,7 @@ def doGuiltTrip(attack: dict) -> MetaInterval:
     powerBar2Particles.renderer.setCenterColor(centerColor)
     powerBar2Particles.renderer.setEdgeColor(edgeColor)
 
-    waterfallEffect = BattleParticles.createParticleEffect('Waterfall')
+    waterfallEffect: ParticleEffect.ParticleEffect = BattleParticles.createParticleEffect('Waterfall')
     waterfallEffect.setScale(11)
 
     waterfallParticles = waterfallEffect.getParticlesNamed('particles-1')
@@ -8741,13 +8741,13 @@ def doGuiltTrip(attack: dict) -> MetaInterval:
 
     suitTrack: Sequence = getSuitAnimTrack(attack, playRate=playRate)
 
-    def getPowerTrack(effect):
+    def getPowerTrack(effect: ParticleEffect.ParticleEffect) -> Sequence:
         return Sequence(
             Wait(0.7 / playRate),
             Func(battle.movie.needRestoreParticleEffect, effect),
             Func(effect.start, suit),
             Wait(0.4 / playRate),
-            LerpPosInterval(effect, 1.0 / playRate, Point3(0, 20, 0.4)),
+            LerpPosInterval(effect, 1.0 / playRate, Point3(0.0, 15.0, 0.4)),
             LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4 / playRate),
             Func(effect.cleanup),
             Func(battle.movie.clearRestoreParticleEffect, effect)
@@ -8773,8 +8773,6 @@ def doRestrainingOrder(attack: dict) -> MetaInterval:
     targets: list[dict] = attack['target']
     playRate: float = attack['playRate']
 
-    BattleParticles.loadParticles()
-
     suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
     propTracks: tuple[Sequence, ...] = ()
     cloudTracks: tuple[Sequence, ...] = ()
@@ -8784,9 +8782,9 @@ def doRestrainingOrder(attack: dict) -> MetaInterval:
         dmg = t['hp']
         paper = globalPropPool.getProp('shredder-paper')
 
-        posPoints = [Point3(1.2, -1.5, 0), VBase3(150, -45, 120)]
+        posPoints = [Point3(1.2, -1.5, 0.0), VBase3(150.0, -45.0, 120.0)]
 
-        propTrack: Sequence = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.9 / playRate, MovieUtil.PNT3_ONE, scaleUpTime=0.4 / playRate))
+        propTrack = Sequence(getPropAppearTrack(paper, suit.getRightHand(), posPoints, 0.9 / playRate, MovieUtil.PNT3_ONE, scaleUpTime=0.4 / playRate))
         propTrack.append(Wait(1.73 / playRate))
 
         hitPoint = __toonFacePoint(toon, parent=battle)
@@ -8801,10 +8799,10 @@ def doRestrainingOrder(attack: dict) -> MetaInterval:
         if dmg > 0:
             restraintCloud = BattleParticles.createParticleEffect(file='restrainingOrderCloud')
             restraintCloud.setPos(hitPoint.getX(), hitPoint.getY() + 0.5, hitPoint.getZ())
-            cloudTrack: Sequence = getPartTrack(restraintCloud, 3.5 / playRate, 0.2, (restraintCloud, battle, 0))
+            cloudTrack = getPartTrack(restraintCloud, 3.5 / playRate, 0.2, (restraintCloud, battle, 0))
             cloudTracks += (cloudTrack,)
 
-    damageAnims = [SplicedAnim('struggle', 0.01, 0.2)]
+    damageAnims: list[SplicedAnim] = [SplicedAnim('struggle', 0.01, 0.2)]
 
     toonTracks: Parallel = getToonTracks(attack, damageDelay=3.3 / playRate, splicedDamageAnims=damageAnims, dodgeDelay=2.4 / playRate, dodgeAnimNames=['sidestep'], damageAnimPlayRate=1.3, dodgeAnimPlayRate=1.2)
 
