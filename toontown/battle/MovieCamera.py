@@ -1132,7 +1132,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack2 = defaultCamera(openShotDuration=3.0)
             pbpText = attack['playByPlayText']
             displayName = TTLocalizer.SuitAttackNames.get(name, '')
-            pbpTrack = pbpText.getShowInterval('Closed Session!', attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
+            pbpTrack = pbpText.getShowInterval(displayName, attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
             return Parallel(pbpTrack, camTrack2)
         else:
             camTrack2 = defaultCamera(openShotDuration=0)
