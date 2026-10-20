@@ -7,7 +7,7 @@ from toontown.battle.BattleProps import *
 from toontown.toonbase.ToontownBattleGlobals import *
 from toontown.battle.SuitBattleGlobals import *
 from direct.directnotify import DirectNotifyGlobal
-from toontown.battle import MovieUtil
+from toontown.battle import BattleGlobals, MovieUtil
 from direct.task.Task import Task
 from . import PlayByPlayText
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieCamera')
@@ -345,7 +345,7 @@ def chooseSoundCloseShot(sounds, targets, openDuration, openName, attackDuration
          suitGroupThreeQuarterLeftBehindShot,
          avatarBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
-    elif numSuits >= 2 and numSuits <= 7:
+    elif numSuits >= 2 and numSuits <= BattleGlobals.MaxBattleAvatars:
         shotChoices = [allGroupLowShot, suitGroupThreeQuarterLeftBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
     else:
@@ -395,7 +395,7 @@ def chooseThrowCloseShot(throws, suitThrowsDict, openDuration, openName, attackD
          avatarCloseUpThreeQuarterLeftShot,
          suitGroupThreeQuarterLeftBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
-    elif numSuits >= 2 and numSuits <= 7 or numSuits == 0:
+    elif numSuits >= 2 and numSuits <= BattleGlobals.MaxBattleAvatars or numSuits == 0:
         shotChoices = [allGroupLowShot, suitGroupThreeQuarterLeftBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
     else:
@@ -441,7 +441,7 @@ def chooseSquirtCloseShot(squirts, suitSquirtsDict, openDuration, openName, atta
         shotChoices = [avatarCloseUpThrowShot,
          avatarCloseUpThreeQuarterLeftShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
-    elif numSuits >= 2 and numSuits <= 7:
+    elif numSuits >= 2 and numSuits <= BattleGlobals.MaxBattleAvatars:
         shotChoices = [allGroupLowShot, suitGroupThreeQuarterLeftBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
     else:
@@ -521,7 +521,7 @@ def chooseDropCloseShot(drops, suitDropsDict, openDuration, openName, attackDura
          avatarCloseUpThreeQuarterLeftShot,
          suitGroupThreeQuarterLeftBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
-    elif numSuits >= 2 and numSuits <= 7 or numSuits == 0:
+    elif numSuits >= 2 and numSuits <= BattleGlobals.MaxBattleAvatars or numSuits == 0:
         shotChoices = [allGroupLowShot, suitGroupThreeQuarterLeftBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
     else:
@@ -3765,7 +3765,7 @@ def chooseFireCloseShot(throws, suitThrowsDict, openDuration, openName, attackDu
         shotChoices = [avatarCloseUpFireShot,
          avatarCloseUpThreeQuarterLeftFireShot,
          suitGroupThreeQuarterLeftBehindShot]
-    elif numSuits >= 2 and numSuits <= 7 or numSuits == 0:
+    elif numSuits >= 2 and numSuits <= BattleGlobals.MaxBattleAvatars or numSuits == 0:
         shotChoices = [suitGroupThreeQuarterLeftBehindShot]
     else:
         notify.error('Bad number of suits: %s' % numSuits)
