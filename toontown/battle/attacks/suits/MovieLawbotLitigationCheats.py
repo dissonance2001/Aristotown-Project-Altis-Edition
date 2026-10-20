@@ -1148,24 +1148,24 @@ def doGavelCourtRecord2(attack):
     toonDamageTrack = getToonTracksCheat(attack, 3.875, ['nothing'], 0, ['neutral'])
     return Parallel(toonTracks, toonDamageTrack, suitTrack, propTracks)
 
-def doGavelCourtRecord(attack):
-    suit = attack['suit']
+def doGavelCourtRecord(attack: dict) -> tuple[MetaInterval, Parallel]:
+    # Attack vitals.
     battle = attack['battle']
-    targets = attack['target']
-    propTracks = Parallel()
-    toonTracks = Parallel()
+    targets: list[dict] = attack['target']
+
+    # Attack movie.
     gavelTracks = Parallel()
-    nothingTrack = Sequence(Wait(1.0))
     for t in targets:
         toon = t['toon']
-        gavel = globalPropPool.getProp('LB_gavel')
+        dmg = t['hp']
+        died = t['died']
+        gavel = loader.loadModel('phase_11/models/lawbotHQ/LB_gavel')
         gavelSfx = loader.loadSfx("phase_11/audio/sfx/LB_gavel.ogg")
         gavel.setScale(0.01)
-        gavel.setPos(toon, 0, -14, 0)
-        gavel.setHpr(toon, 0, 0, 0)
-        dmg = t['hp']
+        gavel.setPos(toon, 0.0, -14.0, 0.0)
+        gavel.setHpr(toon, 0.0, 0.0, 0.0)
         finalScale = 1.75
-        finalP = -80
+        finalP = -80.0
         startHpr = toon.getHpr()
         toon.headsUp(gavel)
         endHpr = toon.getHpr()
@@ -1176,7 +1176,7 @@ def doGavelCourtRecord(attack):
         gavelFall1 = LerpHprInterval(
             gavel,
             0.5,
-            (startHpr[0], startHpr[1] - 15, startHpr[2]),
+            (startHpr[0], startHpr[1] - 15.0, startHpr[2]),
             blendType="easeInOut",
         )
         gavelFall2 = LerpHprInterval(
@@ -1202,27 +1202,38 @@ def doGavelCourtRecord(attack):
         gavelTrack = Sequence(
             gavelShow,
             gavelFall1,
-            Parallel(Sequence(Wait(1), gavelFall2), toonWalkTrack),
+            Parallel(Sequence(Wait(1.0), gavelFall2), toonWalkTrack),
         )
         gavelTrack.append(Func(base.playSfx, gavelSfx))
-        gavelTrack.append(Func(toon.enterFlattened))
-        gavelTrack.append(Func(toon.showHpText, -dmg, openEnded=0))
+        gavelTrack.append(Func(toon.setAnimState, 'Squish'))
         gavelTrack.append(Func(toon.playDialogueForString, "!"))
         gavelTrack.append(Func(toon.setHpr, startHpr))
-        gavelTrack.append(Wait(1))
+        gavelTrack.append(Wait(1.0))
+        gavelTrack.append(Func(__doDamage, toon, dmg, died))
         gavelTrack.append(LerpScaleInterval(gavel, 0.5, 0.01))
-        gavelTrack.append(Wait(0.5))
-        gavelTrack.append(Sequence(
-                    
-                
-                Sequence(
-                    Parallel(ActorInterval(toon, 'jump'), getSoundTrack('toon_decompress.ogg'), Sequence(Wait(.5), Func(toon.exitFlattened))),
-                    Func(toon.loop, 'neutral')
-                )))
+        gavelTrack.append(Wait(1.2))
+        gavelTrack.append(Func(toon.setAnimState, 'Neutral'))
         gavelTrack.append(Func(gavel.removeNode))
         gavelTracks.append(gavelTrack)
-    toonDamageTrack = getToonTracksCheat(attack, 3.9, ['nothing'], 0, ['neutral'])
-    return Parallel(toonTracks, gavelTracks, toonDamageTrack, propTracks)
+
+    atkTrack: MetaInterval = Sequence(Parallel(Sequence(gavelTracks), Wait(3.0)))
+    attackDuration: float = atkTrack.getDuration()
+
+    # Camera and play-by-play text.
+    camTrack: Parallel = Parallel(
+        Sequence(
+            MovieCamera.heldRelativeShot(targets[0]['toon'], 3.0, 10.0, 3.0, 163.0, 0.0, 0.0, 2.5, 'courtRecordDamageHeldShot'),
+            LerpFunctionInterval(camera.setP, 0.5, fromData=0.0, toData=10.0)
+        ),
+        Wait(attackDuration)
+    )
+    if attackDuration > 2.0:
+        from toontown.battle.PlayByPlayText import PlayByPlayText
+        pbpText: PlayByPlayText = attack['playByPlayText']
+        pbpTrack = pbpText.getShowInterval(('Court Record!', 'Due to an illegal action, this toon takes {!s} damage!'.format(targets[0]['hp'])), attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
+        camTrack.append(pbpTrack)
+
+    return (atkTrack, camTrack)
 
 def doLegalBindings2(attack):
     suit = attack['suit']
@@ -1469,13 +1480,10 @@ def doLegallyBound(attack: dict) -> tuple[MetaInterval, Parallel]:
 
     if attackDuration > 2.0:
         from toontown.battle.PlayByPlayText import PlayByPlayText
-        pbpText = attack['playByPlayText']
-        pbpDc: PlayByPlayText = PlayByPlayText()
+        pbpText: PlayByPlayText = attack['playByPlayText']
         displayName = TTLocalizer.SuitAttackNames.get(attack['name'], '')
-        pbpTrack = pbpText.getShowIntervalCheat(displayName, attackDuration - 2.0)
-        pbpDesc = pbpDc.getShowIntervalDesc('Legally Bound Toons take %s damage per round!' % attack['target'][0]['hp'], attackDuration - 2)
+        pbpTrack = pbpText.getShowInterval((displayName[0], displayName[1].format(attack['target'][0]['hp'])), attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
         camTrack.append(pbpTrack)
-        camTrack.append(pbpDesc)
 
     return (atkTrack, camTrack)
 

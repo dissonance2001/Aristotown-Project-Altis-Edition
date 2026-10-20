@@ -638,7 +638,7 @@ def doSuitAttack(attack):
     elif name == 'StenographerSanctionLitigator':
         suitTrack = MovieLawbotLitigationCheats.doCourtSanctionLitigator(attack)
     elif name == 'StenographerCourtRecordBan':
-        suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
+        return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #case manager cheats
     elif name == 'CaseManagerInsurancePlanScapegoat':
         suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsuranceScapegoat(attack, 1, 3, 5)
@@ -659,7 +659,7 @@ def doSuitAttack(attack):
     elif name == 'CaseManagerLegallyBound':
         return MovieLawbotLitigationCheats.doLegallyBound(attack)
     elif name == 'CaseManagerCourtRecordBan':
-        suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
+        return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #scapegoat cheats
     elif name == 'ScapegoatRageBuilding':
         suitTrack = MovieUniversalCheats.doRageBuilding(attack)
@@ -675,7 +675,7 @@ def doSuitAttack(attack):
     elif name == 'ScapegoatBarnyardBash':
         suitTrack = MovieLawbotLitigationCheats.doSuppressionRevert(attack)
     elif name == 'ScapegoatCourtRecordBan':
-        suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
+        return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
     #powerhouse cheats
     elif name == 'PowerhouseToleranceBuilding':
         suitTrack = MovieUniversalCheats.doRageBuilding(attack)
@@ -714,7 +714,7 @@ def doSuitAttack(attack):
     elif name == 'PowerhouseGeneration2':
         suitTrack = MovieBossbotLitigationCheats.doGeneration2(attack)
     elif name == 'PowerhouseBurnDamage':
-        suitTrack = MovieBossbotLitigationCheats.doAftershockDamage(attack)
+        return MovieBossbotLitigationCheats.doAftershockDamage(attack)
     #bookkeeper cheats
     elif name == 'BookkeeperPaperCutSoaked':
         suitTrack = MovieBossbotLitigationCheats.doPaperCutMulti(attack)
@@ -1133,7 +1133,7 @@ def doSuitAttack(attack):
     elif name == 'UnionBusterUnionBuster':
         suitTrack = MovieSellbotLitigationCheats.doUnionBuster(attack)
     elif name == 'UnionBusterUnionBusterDamage':
-        suitTrack = MovieSellbotLitigationCheats.doUnionBusterDamage(attack)
+        return MovieSellbotLitigationCheats.doUnionBusterDamage(attack)
     elif name == 'UnionBusterNoStrikeClause':
         suitTrack = MovieSellbotLitigationCheats.doUnionBuster(attack)
     elif name == 'UnionBusterUnionWages':
@@ -1582,7 +1582,7 @@ def doSuitAttack(attack):
     elif name == 'ForemanUnionized':
         suitTrack = MovieFaceTheFamilyCheats.doUnionized(attack)
     elif name == 'ForemanBurningDamage':
-        suitTrack = MovieBossbotLitigationCheats.doSlowBurn(attack)
+        return MovieBossbotLitigationCheats.doSlowBurn(attack)
     elif name == 'ForemanSleepyOvercharge':
         suitTrack = MovieFaceTheFamilyCheats.doSleepyOvercharge(attack)
     elif name == 'ForemanExplosion':
@@ -1832,7 +1832,7 @@ def doSuitAttack(attack):
         'GagBanRetaliationDrop'
     ):
         if suit.dna.name in ('stenog', 'caseman'):
-            suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
+            return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
         elif suit.dna.name == 'wtapper':
             suitTrack = MovieBossbotLitigationCheats.doCloseTheLoopNew(attack)
         elif suit.dna.name == 'racket':

@@ -1259,19 +1259,19 @@ def doUnionBuster(attack):
     soundTrack2 = getSoundTrack('ENC_cogjump_to_side2.ogg', delay=1, node=suit)
     return Parallel(suitTrack, soundTrack2, cagePropTracks, smokeTrack, toonTrack)
 
-def doUnionBusterDamage(attack):
-    suit = attack['suit']
+def doUnionBusterDamage(attack: dict) -> tuple[MetaInterval, Parallel]:
+    # Attack vitals.
     battle = attack['battle']
     targets = attack['target']
     target = attack['target']
     toon = target[0]['toon']
     dmg = target[0]['hp']
+
+    # Attack movie.
     propDelay = 0.7
     propTracks = Parallel()
     pressTracks = Parallel()
     soundTracks = Parallel()
-    suitTrack = Parallel(getSuitTrack(attack))
-    suitTracks = Parallel()
     notifyTracks = Parallel()
     soundTracks.append(
                 Track(
@@ -1335,7 +1335,7 @@ def doUnionBusterDamage(attack):
         toon = tgt['toon']
         dmg = tgt['hp']
         died = tgt['died']
-        toonTrack = Sequence(Func(toon.headsUp, battle, suit.getPos(battle)))
+        toonTrack = Sequence()
         if dmg > 0:
             animTrack = Sequence(
                 Wait(0.9),
@@ -1351,7 +1351,19 @@ def doUnionBusterDamage(attack):
             toonTrack.append(Parallel(animTrack, indicatorTrack))
             toonTracks.append(toonTrack)
 
-    return Parallel(propTracks, suitTracks, notifyTracks, pressTracks, toonTracks, soundTracks)
+    atkTrack: MetaInterval = Parallel(propTracks, notifyTracks, pressTracks, toonTracks, soundTracks)
+    attackDuration: float = atkTrack.getDuration()
+
+    # Camera and play-by-play text.
+    camTrack: Parallel = Parallel(MovieCamera.randomActorShot(targets[0]['toon'], battle, attackDuration, 'toon'))
+    if attackDuration > 2.0:
+        from toontown.battle.PlayByPlayText import PlayByPlayText
+        pbpText: PlayByPlayText = attack['playByPlayText']
+        displayName = TTLocalizer.SuitAttackNames.get(attack['name'], '')
+        pbpDesc = pbpText.getShowInterval((displayName[0], displayName[1].format(targets[0]['hp'])), attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=(0.0, 0.775))
+        camTrack.append(pbpDesc)
+
+    return (atkTrack, camTrack)
 
 def doUnionBusterDamageSingle(attack):
     suit = attack['suit']

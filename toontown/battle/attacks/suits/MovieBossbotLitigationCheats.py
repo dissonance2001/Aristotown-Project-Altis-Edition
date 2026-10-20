@@ -3006,10 +3006,13 @@ def getPartTrackLightning(particleEffect, startDelay, durationDelay, partExtraAr
         worldRelative = 1
     return Sequence(Wait(startDelay), ParticleInterval(particleEffect, parent, worldRelative, duration=durationDelay, cleanup=True, softStopT=softStop, renderParent=renderParent))
 
-def doAftershockDamage(attack):
+def doAftershockDamage(attack: dict) -> tuple[MetaInterval, Parallel]:
+    # Attack vitals.
     suit = attack['suit']
     battle = attack['battle']
     targets = attack['target']
+
+    # Attack movie.
     notifyTracks = Parallel()
     waitTrack = Sequence()
     shakeTracks = Parallel()
@@ -3084,8 +3087,21 @@ def doAftershockDamage(attack):
         if dmg > 0:
             notifyTracks.append(notifyTrack)
     toonDamageTrack = Sequence(getToonTracksCheat(attack, damageDelay=tContact, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep']))
-    cameraTrack = Sequence(Func(positionCamera, toon))
-    return Parallel(notifyTracks, cameraTrack, shakeTracks, waitTrack, toonDamageTrack, soundTracks)
+    atkTrack: MetaInterval = Parallel(notifyTracks, shakeTracks, waitTrack, toonDamageTrack, soundTracks)
+    attackDuration: float = atkTrack.getDuration()
+
+    # Camera track and play-by-play text.
+    toonPos = targets[0]['toon'].getPos(battle)
+    camTrack: Parallel = Parallel(MovieCamera.heldRelativeShot(battle, toonPos[0] + 6.0, toonPos[1] + 6.75, toonPos[2] + 1.5, 138.0, 20.0, 0.0, attackDuration))
+
+    if attackDuration > 2.0:
+        from toontown.battle.PlayByPlayText import PlayByPlayText
+        pbpText: PlayByPlayText = attack['playByPlayText']
+        displayName = TTLocalizer.SuitAttackNames.get(attack['name'], '')
+        pbpTrack = pbpText.getShowInterval((displayName[0], displayName[1].format(attack['target'][0]['hp'])), attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
+        camTrack.append(pbpTrack)
+
+    return (atkTrack, camTrack)
 
 
 def doAftershock(attack):
@@ -3192,11 +3208,13 @@ def doAftershock(attack):
     soundTrack = getSoundTrack('SA_sparkplug2.ogg', delay=0, node=suit)
     return Parallel(suitTrack, zapTrack, soundTrack, cagePropTracks, moveTracks, suitTrack2, notifyTracks, smokeTracks, toonTrack)
 
-def doSlowBurn(attack):
-    suit = attack['suit']
+def doSlowBurn(attack: dict) -> tuple[MetaInterval, Parallel]:
+    # Attack vitals.
     battle = attack['battle']
     targets = attack['target']
     BattleParticles.loadParticles()
+
+    # Attack movie.
     baseFlameTracks = Parallel()
     flameTracks = Parallel()
     notifyTracks = Parallel()
@@ -3230,7 +3248,7 @@ def doSlowBurn(attack):
         flecksTrack = getPartTrack(flecksEffect, 1.8, 2.1, (flecksEffect, toon, 0), softStop=-1.0)
         notifyTrack = Sequence(Wait(1.5), Func(toon.showHpText, - int(dmg)))
         if dmg > 0:
-            soundTrack = getSoundTrack('SA_hot_air.ogg', delay=1.0, node=suit)
+            soundTrack = getSoundTrack('SA_hot_air.ogg', delay=1.0)
             soundTracks.append(soundTrack)
             notifyTracks.append(notifyTrack)
             colorTrack = getColorTrack(battle, toon, 2.0, 'all', 2.5, Vec4(0.0, 0.0, 0.0, 1.0))
@@ -3239,7 +3257,19 @@ def doSlowBurn(attack):
             flecksTracks.append(flecksTrack)
             colorTracks.append(colorTrack)
     toonDamageTrack = getToonTracksCheat(attack, damageDelay=1.5, splicedDamageAnims=damageAnims, dodgeDelay=0.3, dodgeAnimNames=['sidestep'])
-    return Parallel(baseFlameTracks, flameTracks, flecksTracks, notifyTracks, toonDamageTrack, colorTracks, soundTracks)
+    atkTrack: MetaInterval = Parallel(baseFlameTracks, flameTracks, flecksTracks, notifyTracks, toonDamageTrack, colorTracks, soundTracks)
+    attackDuration: float = atkTrack.getDuration()
+
+    # Camera track and play-by-play text
+    camTrack: Parallel = Parallel(MovieCamera.heldShot(10.0, 0.0, 10.0, 115.0, -30.0, 0.0, attackDuration))
+    if attackDuration > 2.0:
+        from toontown.battle.PlayByPlayText import PlayByPlayText
+        pbpText: PlayByPlayText = attack['playByPlayText']
+        displayName = TTLocalizer.SuitAttackNames.get(attack['name'], '')
+        pbpTrack = pbpText.getShowInterval(displayName, attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=(0.0, 0.775))
+        camTrack.append(pbpTrack)
+
+    return (atkTrack, camTrack)
 
 def doLureImmune(attack):
     suit = attack['suit']
