@@ -29,6 +29,8 @@ class CogHQAI:
 
         self.lobbyMgr = None
         self.lobbyElevator = None
+        # Optional {bossType: constructor} table for a boss-selection lobby elevator.
+        self.lobbyBossCtors = None
         self.hardLobbyMgr = None
         self.hardLobbyElevator = None
 
@@ -53,7 +55,7 @@ class CogHQAI:
             self.hardmodeDoor = self.makeHardCogHQDoor(self.hardmodeLobbyZoneId, 0, 1, self.hardmodeFADoorCode)
 
     def createLobbyManager(self):
-        self.lobbyMgr = LobbyManagerAI.LobbyManagerAI(self.air, self.bossCtor, self.zoneIdrCode)
+        self.lobbyMgr = LobbyManagerAI.LobbyManagerAI(self.air, self.bossCtor, self.zoneIdrCode, bossCtors=self.lobbyBossCtors)
         self.lobbyMgr.generateWithRequired(self.lobbyZoneId)
         if self.hardmodeLobbyZoneId:
             self.hardLobbyMgr = LobbyManagerAI.LobbyManagerAI(self.air, self.hardmodeBossCtor, self.zoneIdrCode)

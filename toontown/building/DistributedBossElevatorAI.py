@@ -18,10 +18,20 @@ class DistributedBossElevatorAI(DistributedElevatorExtAI.DistributedElevatorExtA
         self.type = ELEVATOR_VP
         self.countdownTime = ElevatorData[self.type]['countdown']
 
+    def getBossTypeForTrip(self):
+        """Overridden by elevators that let the group choose the boss (None = lobby default)."""
+        return None
+
+    def createBossOfficeForTrip(self, avIdList):
+        bossType = self.getBossTypeForTrip()
+        if bossType is None:
+            return self.bldg.createBossOffice(avIdList)
+        return self.bldg.createBossOffice(avIdList, bossType=bossType)
+
     def elevatorClosed(self):
         numPlayers = self.countFullSeats()
         if numPlayers > 0:
-            bossZone = self.bldg.createBossOffice(self.seats)
+            bossZone = self.createBossOfficeForTrip(self.seats)
             for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
@@ -34,7 +44,7 @@ class DistributedBossElevatorAI(DistributedElevatorExtAI.DistributedElevatorExtA
 
     def sendAvatarsToDestination(self, avIdList):
         if len(avIdList) > 0:
-            bossZone = self.bldg.createBossOffice(avIdList)
+            bossZone = self.createBossOfficeForTrip(avIdList)
             for avId in avIdList:
                 if avId:
                     self.sendUpdateToAvatarId(avId, 'setBossOfficeZoneForce', [bossZone])

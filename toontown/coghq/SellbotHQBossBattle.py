@@ -1,6 +1,7 @@
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.suit import DistributedSellbotBoss
+from toontown.suit import DistributedClashSellbotBoss
 from direct.directnotify import DirectNotifyGlobal
 from toontown.coghq import CogHQBossBattle
 
@@ -18,7 +19,8 @@ class SellbotHQBossBattle(CogHQBossBattle.CogHQBossBattle):
         CogHQBossBattle.CogHQBossBattle.unload(self)
 
     def enter(self, requestStatus):
-        CogHQBossBattle.CogHQBossBattle.enter(self, requestStatus, DistributedSellbotBoss.OneBossCog)
+        bossCog = DistributedClashSellbotBoss.OneBossCog or DistributedSellbotBoss.OneBossCog
+        CogHQBossBattle.CogHQBossBattle.enter(self, requestStatus, bossCog)
         self.__setupHighSky()
 
     def exit(self):

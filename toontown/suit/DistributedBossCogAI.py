@@ -337,10 +337,12 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI, ContentSyncA
         toons = self.involvedToons[:]
         random.shuffle(toons)
         numToons = min(len(toons), 8)
-        if numToons < 4:
-            numToonsB = numToons / 1
+        # Integer division: '/' gives a float on Python 3 and breaks the list slices below.
+        # Same split rule as Clash: up to 4 toons all fight in battle A, more are divided A/B.
+        if numToons <= 4:
+            numToonsB = 0
         else:
-            numToonsB = (numToons + random.choice([0, 1])) / 1
+            numToonsB = (numToons + random.choice([0, 1])) // 2
         self.toonsA = toons[numToonsB:numToons]
         self.toonsB = toons[:numToonsB]
         self.looseToons += toons[numToons:]
@@ -377,7 +379,7 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI, ContentSyncA
                 totalToons += 1
                 totalCogSuitTier += toon.cogTypes[self.deptIndex]
 
-        averageTier = math.floor(totalCogSuitTier / totalToons) + 1
+        averageTier = math.floor(totalCogSuitTier / max(1, totalToons)) + 1
         return int(averageTier)
 
     def getBattleAPosHpr(self):

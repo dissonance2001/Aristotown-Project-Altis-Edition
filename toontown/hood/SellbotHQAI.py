@@ -4,6 +4,8 @@ from toontown.building import FADoorCodes
 from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPartyAI
 from toontown.coghq.DistributedFactoryElevatorExtAI import DistributedFactoryElevatorExtAI
 from toontown.hood import CogHQAI
+from toontown.suit import BossSelectionGlobals
+from toontown.suit import DistributedClashSellbotBossAI
 from toontown.suit import DistributedSellbotBossAI
 from toontown.suit import DistributedSellbotBossMiniAI
 from toontown.suit import DistributedSuitPlannerAI
@@ -25,6 +27,13 @@ class SellbotHQAI(CogHQAI.CogHQAI):
         self.factoryElevators = []
         self.factoryBoardingParty = None
         self.suitPlanners = []
+
+        # VP lobby: let the group pick between OCVP (Altis) and the Clash VP.
+        if simbase.config.GetBool('want-vp-boss-selection', True):
+            self.lobbyBossCtors = {
+                BossSelectionGlobals.SELLBOT_OCVP: DistributedSellbotBossMiniAI.DistributedSellbotBossMiniAI,
+                BossSelectionGlobals.SELLBOT_VP: DistributedClashSellbotBossAI.DistributedClashSellbotBossAI,
+            }
 
         self.startup()
 

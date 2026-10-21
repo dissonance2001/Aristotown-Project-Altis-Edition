@@ -620,6 +620,7 @@ from toontown.suit import DistributedBoardOfficeSuit/AI
 from toontown.suit import DistributedStageSuit/AI
 from toontown.suit import DistributedSellbotBoss/AI
 from toontown.suit import DistributedSellbotBossMini/AI
+from toontown.suit import DistributedClashSellbotBoss/AI
 from toontown.suit import DistributedCashbotBoss/AI
 from toontown.suit import DistributedHighRollerBoss/AI
 from toontown.suit import DistributedVideographerBoss/AI
@@ -1511,6 +1512,24 @@ dclass DistributedSellbotBossMini : DistributedBossCog {
   doStrafe(uint8, uint8) broadcast;
   cagedToonBattleThree(uint16, uint32) broadcast;
   toonPromoted(uint8(0-1));
+};
+dclass DistributedClashSellbotBoss : DistributedBossCog {
+  setCagedToonNpcId(uint32) required broadcast ram;
+  setDooberIds(uint32[]) broadcast ram;
+  setBossDamage(uint16, uint8, int16) broadcast ram;
+  setState(string) broadcast ram;
+  setBattleDifficulty(uint8) broadcast ram;
+  hitBoss(uint8) airecv clsend;
+  hitBossInsides() airecv clsend;
+  hitToon(uint32) airecv clsend;
+  finalPieSplat() airecv clsend;
+  touchCage() airecv clsend;
+  doStrafe(uint8, uint8) broadcast;
+  cagedToonBattleThree(uint16, uint32) broadcast;
+  toonPromoted(uint8(0-1));
+  updateDamageDealt(uint32) broadcast ram;
+  updateStunCount(uint32) broadcast ram;
+  setRewards(uint32[] = []);
 };
 
 dclass DistributedCashbotBoss : DistributedBossCog {
@@ -2913,6 +2932,8 @@ dclass DistributedPlutocratSigilvator : DistributedSigilvator {
 };
 
 dclass DistributedVPElevator : DistributedBossElevator {
+  setBossType(uint8) required broadcast ram;
+  requestBossType(uint8) airecv clsend;
 };
 
 dclass DistributedCFOElevator : DistributedBossElevator {
