@@ -8341,7 +8341,11 @@ SuitAttackTaunts = {
                    "Here's something for your reel.",
                    "That's going in the blooper reel.",
                    "Let's add a little spin to this shot."],
-        None: ['Generic Attack Phrase.']
+        None: ['A new record!',
+               'Now this is something for the books!',
+               "You've officially been surpassed.",
+               'Just try and beat this.',
+               'I hate to break it to you, but...']
     },
     'RedTape': {
         'rkeeper': ["Nothing proceeds without proper authorization.",
