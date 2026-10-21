@@ -2272,16 +2272,16 @@ def doGoldRush(attack):
         return Parallel(suitTrack, partTrack, waterfallTrack, synergySoundTrack, toonTracks)
 
 
-def doClipOnTie(attack):
+def doClipOnTie(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    throwDelay = 1.0
-    damageDelay = throwDelay + 1.23
-    dodgeDelay = damageDelay - 0.20
-    suitTrack = getSuitTrack(attack, playRate=1.5)
+    targets: list[dict] = attack['target']
+    throwDelay: float = 1.0
+    damageDelay: float = throwDelay + 1.23
+    dodgeDelay: float = damageDelay - 0.20
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.5)
     posPoints = [Point3(0.66, 0.51, -0.45), VBase3(-69.652, -57.199, 67.96)]
-    tiePropTracks: Parallel = Parallel()
+    tiePropTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -2335,11 +2335,11 @@ def doClipOnTie(attack):
             tiePropTrack.append(LerpScaleInterval(tie, duration=0.30, scale=MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
         tiePropTrack.append(Func(MovieUtil.removeProp, tie))
         tiePropTrack.append(Func(battle.movie.clearRenderProp, tie))
-        tiePropTracks.append(tiePropTrack)
+        tiePropTracks += (tiePropTrack,)
 
-    toonTracks = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
-    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit, playRate=1.2)
-    return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
+    throwSound: Sequence = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit, playRate=1.2)
+    return Parallel(suitTrack, toonTracks, *tiePropTracks, throwSound)
 
 
 def doSandTrap(attack: dict) -> MetaInterval:
@@ -2804,44 +2804,45 @@ def doHostileTakeover(attack):
     return Parallel(suitTrack, toonTrack, cloudPropTrack, soundTrack)
 
 
-def doNickelAndDime(attack):
+def doNickelAndDime(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    damageDelay = 1.7
-    particleEffect = BattleParticles.createParticleEffect('NickelAndDime') 
-    waterfallEffect = BattleParticles.createParticleEffect(file='nickelDimeWaterfall')
-    suitTrack = getSuitAnimTrack(attack)
+    targets: list[dict] = attack['target']
+    damageDelay: float = 1.7
+    particleEffect: ParticleEffect.ParticleEffect = BattleParticles.createParticleEffect('NickelAndDime') 
+    waterfallEffect: ParticleEffect.ParticleEffect = BattleParticles.createParticleEffect(file='nickelDimeWaterfall')
+    suitTrack: Sequence = getSuitAnimTrack(attack)
     partTrack: Sequence = getPartTrack(particleEffect, 1.0, 2.9, (particleEffect, suit, 0), softStop=-2.0)
     waterfallTrack: Sequence = getPartTrack(waterfallEffect, 0.8, 2.9, (waterfallEffect, suit, 0), softStop=-2.0)
-    damageAnims = [SplicedAnim('slip-forward')]
-    dodgeAnims = []
+    damageAnims: list[SplicedAnim] = [SplicedAnim('slip-forward')]
+    dodgeAnims: list[SplicedAnim] = []
     dodgeAnims.append(SplicedAnim('jump', 0.01, 0.0, 0.6))
     dodgeAnims.extend(getSplicedLerpAnims('jump', 0.31, 1.3, startTime=0.6))
     dodgeAnims.append(SplicedAnim('jump', 0.0, 0.91))
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['slip-forward'], dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
-    soundTrack = getSoundTrack('ttr_s_ene_bat_nickelAndDime%s.ogg' % ('' if hitAtleastOneToon(targets) else ''), node=suit)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, damageAnimNames=['slip-forward'], dodgeDelay=0.91, splicedDodgeAnims=dodgeAnims, showMissedExtraTime=1.0)
+    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_nickelAndDime{'' if hitAtleastOneToon(targets) else ''}.ogg", node=suit)
     return Parallel(suitTrack, partTrack, waterfallTrack, soundTrack, toonTracks)
 
 
-def doQuash(attack):
-    targets = attack['target']
-    suitTrack = getSuitAnimTrack(attack)
-    partTracks = Parallel()
-    toonTracks = getToonTracks(attack, 1.6, ['slip-forward'], 1e-06, ['duck'])
-    soundTracks = Parallel()
+def doQuash(attack: dict) -> MetaInterval:
+    suit = attack['suit']
+    targets: list[dict] = attack['target']
+    suitTrack: Sequence = getSuitAnimTrack(attack)
+    partTracks: tuple[Sequence, ...] = ()
+    toonTracks: Parallel = getToonTracks(attack, 1.6, ['slip-forward'], 1e-06, ['duck'])
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
         if dmg > 0:
             particleEffect = BattleParticles.createParticleEffect(file='quash')
             partTrack = getPartTrack(particleEffect, 0.01, 3.5, (particleEffect, toon, 0), softStop=-1.0)
-            partTracks.append(partTrack)
+            partTracks += (partTrack,)
 
     if hitAtleastOneToon(targets):
-        soundTracks.append(getSoundTrack('ttr_s_ene_bat_quash.ogg', node=toon))
-
-    return Parallel(suitTrack, partTracks, toonTracks, soundTracks)
+        soundTrack: Sequence = getSoundTrack('ttr_s_ene_bat_quash.ogg', node=suit)
+        return Parallel(suitTrack, *partTracks, toonTracks, soundTrack)
+    else:
+        return Parallel(suitTrack, *partTracks, toonTracks)
 
 
 def doFountainPen(attack: dict) -> MetaInterval:
@@ -4831,16 +4832,16 @@ def doGlowerPower(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, soundTrack, *leftKnifeTracks, *rightKnifeTracks)
 
 
-def doHalfWindsor(attack):
+def doHalfWindsor(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    throwDelay = 1.0
-    damageDelay = throwDelay + 1.23
-    dodgeDelay = damageDelay - 0.20
-    suitTrack = getSuitTrack(attack, playRate=1.5)
+    targets: list[dict] = attack['target']
+    throwDelay: float = 1.0
+    damageDelay: float = throwDelay + 1.23
+    dodgeDelay: float = damageDelay - 0.20
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.5)
     posPoints = [Point3(-0.3, 1.2, 0.58), VBase3(109.0, -3.0, -108.2)]
-    tiePropTracks: Parallel = Parallel()
+    tiePropTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -4888,15 +4889,15 @@ def doHalfWindsor(attack):
             tiePropTrack.append(LerpScaleInterval(tie, duration=0.30, scale=MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
         tiePropTrack.append(Func(MovieUtil.removeProp, tie))
         tiePropTrack.append(Func(battle.movie.clearRenderProp, tie))
-        tiePropTracks.append(tiePropTrack)
+        tiePropTracks += (tiePropTrack,)
 
-    toonTracks = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
-    throwSound = getSoundTrack('SA_half_windsor_throw.ogg', delay=throwDelay + 0.8, node=suit, playRate=1.2)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
+    throwSound: Sequence = getSoundTrack('SA_half_windsor_throw.ogg', delay=throwDelay + 0.8, node=suit, playRate=1.2)
     if hitAtleastOneToon(targets):
-        hitSound = getSoundTrack('SA_writeoff_ding_only.ogg', delay=throwDelay + 1.05, node=suit)
-        return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound, hitSound)
+        hitSound: Sequence = getSoundTrack('SA_writeoff_ding_only.ogg', delay=throwDelay + 1.05, node=suit)
+        return Parallel(suitTrack, toonTracks, *tiePropTracks, throwSound, hitSound)
     else:
-        return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound)
+        return Parallel(suitTrack, toonTracks, *tiePropTracks, throwSound)
 
 
 def doHalfWindsorOLD(attack):
@@ -5279,16 +5280,16 @@ def doPlayHardball(attack: dict) -> MetaInterval:
     return Parallel(suitTrack, toonTracks, *propTracks, soundTrack)
 
 
-def doPowerTie(attack):
+def doPowerTie(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    throwDelay = 1.0
-    damageDelay = throwDelay + 1.23
-    dodgeDelay = damageDelay - 0.20
-    suitTrack = getSuitTrack(attack, playRate=1.5)
+    targets: list[dict] = attack['target']
+    throwDelay: float = 1.0
+    damageDelay: float = throwDelay + 1.23
+    dodgeDelay: float = damageDelay - 0.20
+    suitTrack: Sequence = getSuitTrack(attack, playRate=1.5)
     posPoints = [Point3(0.6, -0.5, -0.3), VBase3(90.0, 90.0, -163.443)]
-    tiePropTracks: Parallel = Parallel()
+    tiePropTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
@@ -5335,15 +5336,15 @@ def doPowerTie(attack):
             ))
             tiePropTrack.append(LerpScaleInterval(tie, duration=0.30, scale=MovieUtil.PNT3_NEARZERO, blendType='easeIn'))
         tiePropTrack.append(Func(MovieUtil.removeProp, tie))
-        tiePropTracks.append(tiePropTrack)
+        tiePropTracks += (tiePropTrack,)
 
-    toonTrack = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
-    throwSound = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit, playRate=1.2)
+    toonTracks: Parallel = getToonTracks(attack, damageDelay, ['slip-backward'], dodgeDelay, [], damageAnimPlayRate=1.15, dodgeAnimPlayRate=1.15)
+    throwSound: Sequence = getSoundTrack('SA_powertie_throw.ogg', delay=throwDelay + 0.8, node=suit, playRate=1.2)
     if hitAtleastOneToon(targets):
-        hitSound = getSoundTrack('SA_powertie_impact.ogg', delay=throwDelay + 1.05, node=suit)
-        return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound, hitSound)
+        hitSound: Sequence = getSoundTrack('SA_powertie_impact.ogg', delay=throwDelay + 1.05, node=suit)
+        return Parallel(suitTrack, toonTracks, *tiePropTracks, throwSound, hitSound)
     else:
-        return Parallel(suitTrack, toonTrack, tiePropTracks, throwSound)
+        return Parallel(suitTrack, toonTracks, *tiePropTracks, throwSound)
 
 
 def doPowerTieOLD(attack):
@@ -5419,10 +5420,10 @@ def doPowerTieOLD(attack):
     else:
         return Parallel(suitTrack, toonTracks, tiePropTracks, throwSound)
 
-def doCloseTheLoop(attack):
+def doCloseTheLoop(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
+    targets: list[dict] = attack['target']
     BattleParticles.loadParticles()
     centerColor = Vec4(0.1, 0.1, 0.1, 0.4)
     edgeColor = Vec4(0.4, 0.1, 0.9, 0.7)
