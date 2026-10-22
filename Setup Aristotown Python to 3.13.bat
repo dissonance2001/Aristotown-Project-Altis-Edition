@@ -74,7 +74,7 @@ if errorlevel 1 goto :failed
 
 echo.
 echo Installing the tested Python 3.13 Panda3D build and compatibility pins...
-"%ENV%\Scripts\python.exe" -m pip install --pre --extra-index-url https://archive.panda3d.org/ "panda3d==1.11.0.dev4050" "pymongo==4.9.2" "StrEnum==0.4.15" "six==1.17.0"
+"%ENV%\Scripts\python.exe" -m pip install --pre --find-links https://archive.panda3d.org/branches/master/panda3d/ "panda3d==1.11.0.dev4050" "pymongo==4.9.2" "StrEnum==0.4.15" "six==1.17.0"
 if errorlevel 1 goto :failed
 
 echo.
