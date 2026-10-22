@@ -16,14 +16,14 @@ if /i "%~1"=="AI" goto AI
 
 cd /d "%ALTIS_ROOT%"
 if not exist "%ALTIS_ROOT%\toontown\toonbase\ClientStart.py" (
-  echo ERROR: Altis source root not detected.
+  echo ERROR: Aristotown source root not detected.
   echo This launcher must be placed in the root folder beside toontown, otp and dependencies.
   pause
   exit /b 1
 )
 if not exist "%PYTHON%" (
   echo ERROR: Python 3.13 environment not found: "%PYTHON%"
-  echo Run Setup_Python313_Altis.bat from this source root first.
+  echo Run Setup Aristotown Python to 3.13 from this source root first.
   pause
   exit /b 1
 )
@@ -41,11 +41,11 @@ if not errorlevel 1 (
   exit /b 1
 )
 
-echo Starting Altis Python 3.13 services using the existing database configuration...
+echo Starting Aristotown Python 3.13 services using the existing database configuration...
 echo Source root: %ALTIS_ROOT%
 echo.
 
-start "Altis Astron Python 3.13" "%ComSpec%" /k call "%~f0" ASTRON
+start "Aristotown Astron Python 3.13" "%ComSpec%" /k call "%~f0" ASTRON
 echo Waiting for Astron startup...
 for /L %%I in (1,1,30) do (
   netstat -ano -p TCP | findstr ":7199" | findstr "LISTENING" >nul
@@ -57,11 +57,11 @@ pause
 exit /b 1
 
 :ASTRON_READY
-start "Altis UberDOG Python 3.13" "%ComSpec%" /k call "%~f0" UBERDOG
+start "Aristotown UberDOG Python 3.13" "%ComSpec%" /k call "%~f0" UBERDOG
 echo Waiting for UberDOG startup...
 timeout /t 6 /nobreak >nul
-start "Altis AI Python 3.13" "%ComSpec%" /k call "%~f0" AI
-echo Altis services have been launched. This launcher will now close.
+start "Aristotown AI Python 3.13" "%ComSpec%" /k call "%~f0" AI
+echo Aristotown services have been launched. This launcher will now close.
 exit /b 0
 
 :ASTRON
@@ -112,15 +112,15 @@ if not exist "%MONGO_DATA%" (
   exit /b 1
 )
 
-echo Starting Altis's bundled MongoDB on 127.0.0.1:27017...
-start "Altis MongoDB" /D "%MONGO_DIR%" "%MONGOD%" --dbpath "%MONGO_DATA%" --port 27017 --bind_ip 127.0.0.1
+echo Starting Aristotown's bundled MongoDB on 127.0.0.1:27017...
+start "Aristotown MongoDB" /D "%MONGO_DIR%" "%MONGOD%" --dbpath "%MONGO_DATA%" --port 27017 --bind_ip 127.0.0.1
 for /L %%I in (1,1,30) do (
   timeout /t 1 /nobreak >nul
   netstat -ano -p TCP | findstr ":27017" | findstr "LISTENING" >nul
   if not errorlevel 1 goto MONGO_READY
 )
 echo ERROR: Bundled MongoDB did not begin listening on port 27017 within 30 seconds.
-echo Check the Altis MongoDB window for the error.
+echo Check the Aristotown MongoDB window for the error.
 exit /b 1
 
 :MONGO_READY
