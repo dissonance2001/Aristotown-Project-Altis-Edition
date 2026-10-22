@@ -100,6 +100,16 @@ TRACK_ORDER = [
 NON_GAG_TRACK_ORDER = [attackEnum for attackEnum in TRACK_ORDER if attackEnum not in ATTACK_TRACKS]
 GAG_TRACK_ORDER = [attackEnum for attackEnum in TRACK_ORDER if attackEnum in ATTACK_TRACKS]
 
+NON_ATTACKS = [AttackEnum.TOON_UN_ATTACK, AttackEnum.TOON_PASS, AttackEnum.TOON_NO_ATTACK]
+
+# Attack times
+ATTACK_TIME = 20.0
+
+# Reward times, in seconds
+REWARD_TIMEOUT = 120
+FLOOR_REWARD_TIMEOUT = 4
+BUILDING_REWARD_TIMEOUT = 300
+
 AccuracyBonuses = [0,
  20,
  40,
@@ -138,6 +148,106 @@ SUITS_UNLURED_IMMEDIATELY = 1
 CLEAR_MULTIPLE_TRAPS = 0
 KBBONUS_LURED_FLAG = 0
 KBBONUS_TGT_LURED = 1
+
+def getBossBattleCreditMultiplier(battleNumber: int) -> float:
+    '''
+    Parameters:
+        battleNumber (int): 1 for the first battle and 2 for the second battle.
+    
+    Returns:
+        out (float): the skill credit multiplier for the two first battles of the final battle sequence with the Senior V.P.
+    '''
+    return 1.0
+
+
+def getInvasionMultiplier() -> float:
+    '''
+    This gets multiplied on every street battle and in every interior.
+    User must first check to see if there is an invasion.
+    
+    Returns:
+        out (float): the skill credit multiplier during invasions. (base = 2.0)
+    '''
+    return 2.0
+
+
+def getMegaMultiplier() -> float:
+    '''
+    Returns:
+        out (float): 3.0
+    '''
+    return 3.0
+
+
+def getMoreXpHolidayMultiplier() -> float:
+    '''
+    This gets multiplied on every street battle and in every interior.
+    User must first check to see if there is an invasion.
+
+    Returns:
+        out (float): the skill credit multiplier during the more xp holiday. (base = 2.0)
+    '''
+    return 2.0
+
+
+def getCogHQMultiplier() -> float:
+    '''
+    Returns:
+        out (float): 2.0
+    '''
+    return 2.0
+
+
+def encodeUber(trackList):
+    bitField = 0
+    for trackIndex in range(len(trackList)):
+        if trackList[trackIndex] > 0:
+            bitField += pow(2, trackIndex)
+
+    return bitField
+
+
+def decodeUber(flagMask):
+    if flagMask == 0:
+        return []
+    maxPower = 16
+    workNumber = flagMask
+    workPower = maxPower
+    trackList = []
+    while workPower >= 0:
+        if workNumber >= pow(2, workPower):
+            workNumber -= pow(2, workPower)
+            trackList.insert(0, 1)
+        else:
+            trackList.insert(0, 0)
+        workPower -= 1
+
+    endList = len(trackList)
+    foundOne: bool = False
+    while not foundOne:
+        if trackList[endList - 1] == 0:
+            trackList.pop(endList - 1)
+            endList -= 1
+        else:
+            foundOne = True
+
+    return trackList
+
+
+def getUberFlag(flagMask, index):
+    decode = decodeUber(flagMask)
+    if index >= len(decode):
+        return 0
+    else:
+        return decode[index]
+
+
+def getUberFlagSafe(flagMask, index):
+    if flagMask == 'unknown' or flagMask < 0:
+        return -1
+    else:
+        return getUberFlag(flagMask, index)
+
 
 def getFancyTrackText(track: AttackEnum) -> str:
     return {
