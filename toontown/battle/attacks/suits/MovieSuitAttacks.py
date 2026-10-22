@@ -5482,9 +5482,10 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
 
     numWords: int = 25
-    wordDelay: float = 2.5
+    wordDelay: float = 3.7 / playRate
 
     suitTrack: Sequence = getSuitAnimTrack(attack, playRate=1.5)
 
@@ -5498,27 +5499,27 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
         z = random.random() * 2.0 + 4.0
 
         wordTracks.append(Sequence(
-            Wait(0.5 + i * 0.1),
+            Wait((0.5 + i * 0.1) / playRate),
 
             Func(word.reparentTo, battle),
             Func(word.setPosHpr, x, y, z, 0.0, 0.0, 0.0),
 
             LerpScaleInterval(
                 word,
-                0.5,
+                0.5 / playRate,
                 0.6,
                 startScale=0.01,
                 blendType='easeOut'
             ),
 
-            Wait(wordDelay - (1.0 + i * 0.1)),
+            Wait(wordDelay - (1.0 + i * 0.1) / playRate),
 
             ParallelEndTogether(
-                LerpFunctionInterval(word.setY, 1.0, y, y - 9.0),
-                LerpFunctionInterval(word.setZ, 1.0, z, 1.5),
+                LerpFunctionInterval(word.setY, 1.0 / playRate, y, y - 9.0),
+                LerpFunctionInterval(word.setZ, 1.0 / playRate, z, 1.5),
                 LerpFunctionInterval(
                     word.setAlphaScale,
-                    0.3,
+                    0.3 / playRate,
                     1.0,
                     0.0
                 )
@@ -5531,13 +5532,14 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
 
     toonTracks: Parallel = getToonTracks(
         attack,
-        damageDelay=3.2,
+        damageDelay=4.4 / playRate,
         damageAnimNames=['conked'],
-        dodgeDelay=2.5,
-        splicedDodgeAnims=dodgeAnims
+        dodgeDelay=3.7 / playRate,
+        splicedDodgeAnims=dodgeAnims,
+        damageAnimPlayRate=1.2
     )
 
-    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", node=suit, playRate=1.25)
+    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", node=suit, playRate=playRate)
 
     return Parallel(suitTrack, wordTracks, toonTracks, soundTrack)
 
