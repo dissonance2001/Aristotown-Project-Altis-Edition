@@ -5537,21 +5537,9 @@ def doMoneyTalks(attack: dict) -> MetaInterval:
         splicedDodgeAnims=dodgeAnims
     )
 
-    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", node=suit, playRate=1.25
-    )
+    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_moneyTalks{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", node=suit, playRate=1.25)
 
-    # Everything except suitTrack.
-    spedUpTrack = Parallel(
-        wordTracks,
-        toonTracks,
-        soundTrack
-    )
-
-
-    return Parallel(
-        suitTrack,
-        spedUpTrack
-    )
+    return Parallel(suitTrack, wordTracks, toonTracks, soundTrack)
 
 
 
