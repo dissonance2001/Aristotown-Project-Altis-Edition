@@ -3735,33 +3735,34 @@ def doDenialOfService(attack):
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack)
 
 
-def doHostileTakeoverNew(attack):
+def doHostileTakeoverNew(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
-    knifeDelay = 1.0
-    suitTrack = getSuitAnimTrack(attack, playRate=1.25)
-    knifeTracks = Parallel()
+    playRate: float = attack['playRate']
+    knifeDelay: float = 1.0 / playRate
+    suitTrack: Sequence = getSuitAnimTrack(attack, playRate=1.25)
+    knifeTracks: tuple[Sequence, ...] = ()
     for i in range(120):
         knife = globalPropPool.getProp('dagger')
         knifePos = Point3(random.randrange(-10.0, 10.0), random.randrange(-10.0, -4.0), 10.0)
-        landPos = Point3(knifePos.getX() - 3.0, knifePos.getY() - 3, -2.0)
+        landPos = Point3(knifePos.getX() - 3.0, knifePos.getY() - 3.0, -2.0)
         knifeTrack = Sequence(
-            Wait(knifeDelay + 0.025 * i),
+            Wait(knifeDelay + ((0.025 * i) / playRate)),
             Func(knife.reparentTo, battle),
             Func(knife.setPos, knifePos),
             Func(knife.lookAt, landPos),
             Func(knife.setScale, Point3(0.75)),
-            LerpPosInterval(knife, 0.1, landPos),
+            LerpPosInterval(knife, 0.1 / playRate, landPos),
             Func(MovieUtil.removeProp, knife)
         )
-        knifeTracks.append(knifeTrack)
+        knifeTracks += (knifeTrack,)
 
-    damageAnims = [SplicedAnim('slip-forward', 0.01, 0.4, 1.2),
+    damageAnims: list[SplicedAnim] = [SplicedAnim('slip-forward', 0.01, 0.4, 1.2),
      SplicedAnim('slip-forward', 0.01, 1.0)]
-    dodgeAnims = [SplicedAnim('duck', 1e-06, 0.8)]
-    toonTracks = getToonTracks(attack, damageDelay=knifeDelay + 0.11, splicedDamageAnims=damageAnims, dodgeDelay=knifeDelay - 0.1, splicedDodgeAnims=dodgeAnims)
-    soundTrack = Sequence(Wait(1.0), SoundInterval(globalBattleSoundCache.getSound('ttr_s_ene_bat_hostileTakeover.ogg'), node=suit))
-    return Parallel(suitTrack, knifeTracks, soundTrack, toonTracks)
+    dodgeAnims: list[SplicedAnim] = [SplicedAnim('duck', 1e-06, 0.8)]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=knifeDelay + (0.11 / playRate), splicedDamageAnims=damageAnims, dodgeDelay=knifeDelay - (0.1 / playRate), splicedDodgeAnims=dodgeAnims)
+    soundTrack: Sequence = getSoundTrack('ttr_s_ene_bat_hostileTakeover.ogg', delay=1.0 / playRate, node=suit)
+    return Parallel(suitTrack, *knifeTracks, soundTrack, toonTracks)
 
 
 def doMoneyTrip(attack):
