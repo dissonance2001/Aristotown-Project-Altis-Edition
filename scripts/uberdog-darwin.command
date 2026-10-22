@@ -1,27 +1,24 @@
 #!/bin/bash
-
 set -u
 
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_ROOT" || exit 1
 
-if [ -d .venv ]; then
-    VENV_DIR="$PROJECT_ROOT/.venv"
-elif [ -d venv ]; then
-    VENV_DIR="$PROJECT_ROOT/venv"
-else
-    if ! command -v python3.9 >/dev/null 2>&1; then
-        echo "Python 3.9 is required but was not found on PATH."
-        exit 1
-    fi
+VENV_DIR="$PROJECT_ROOT/.venv313"
+PYTHON="$VENV_DIR/bin/python"
+COMPAT_ROOT="$PROJECT_ROOT/dependencies/python313-compat"
 
-    VENV_DIR="$PROJECT_ROOT/.venv"
-    echo "Creating Python 3.9 virtual environment at $VENV_DIR..."
-    python3.9 -m venv "$VENV_DIR" || exit 1
+if [ ! -x "$PYTHON" ]; then
+    echo "Python 3.13 environment not found: $VENV_DIR"
+    echo "Run ./setup_macos.command first."
+    read -r -p "Press Enter to close..."
+    exit 1
 fi
 
-# shellcheck disable=SC1090
-source "$VENV_DIR/bin/activate" || exit 1
+export PYTHONPATH="$COMPAT_ROOT${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPYCACHEPREFIX="$PROJECT_ROOT/dependencies/python313-pycache-macos"
+export PYTHONUNBUFFERED=1
+export PYTHONFAULTHANDLER=1
 
 MAX_CHANNELS=999999
 STATESERVER=4002
@@ -30,7 +27,10 @@ EVENTLOGGER_IP="127.0.0.1:7197"
 BASE_CHANNEL="${BASE_CHANNEL:-1000000}"
 
 while true; do
-    python -m toontown.uberdog.ServiceStart --base-channel "$BASE_CHANNEL" \
+    "$PYTHON" -u -X faulthandler -m toontown.uberdog.ServiceStart --base-channel "$BASE_CHANNEL" \
         --max-channels "$MAX_CHANNELS" --stateserver "$STATESERVER" \
         --astron-ip "$ASTRON_IP" --eventlogger-ip "$EVENTLOGGER_IP"
+    STATUS=$?
+    echo "Altis UberDOG exited with code $STATUS; restarting in 2 seconds..."
+    sleep 2
 done

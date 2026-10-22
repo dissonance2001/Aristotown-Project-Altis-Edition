@@ -665,7 +665,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
             return []
         if not needle:
             return []
-        self.air.mongodb.astron.objects.ensure_index('fields.setName')
+        self.air.mongodb.astron.objects.create_index('fields.setName')
         exp = re.compile('.*%s.*' % needle, re.IGNORECASE)
         result = self.air.mongodb.astron.objects.find({'fields.setName._0': exp})
         return [avatar['_id'] for avatar in result]
