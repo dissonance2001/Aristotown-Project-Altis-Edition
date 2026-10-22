@@ -2177,14 +2177,15 @@ def doDiceRoulette(attack):
     soundTrack2 = getSoundTrack('cc_s_sfx_ene_hroller_reappear_after_wheel.ogg', delay=4.75, node=suit)
     soundTrack3 = getSoundTrack('cc_s_sfx_ene_hroller_sweep_before_wheel2.ogg', delay=0.75, node=suit)
     soundTrack = Parallel(soundTrack3)
-    if name == 'HighRollerDiceRouletteCogs':
-        suitTrack.append(doDiceRouletteCogs(attack))
-    elif name == 'HighRollerDiceRouletteToons':
-        suitTrack.append(doDiceRouletteToons(attack))
-    elif name == 'HighRollerDiceRouletteEveryone':
-        suitTrack.append(doDiceRouletteAll(attack))
-    elif name == 'HighRollerDiceRouletteNobody':
-        suitTrack.append(doDiceRouletteNothing(attack))
+    match name:
+        case 'HighRollerDiceRouletteCogs':
+            suitTrack.append(doDiceRouletteCogs(attack))
+        case 'HighRollerDiceRouletteToons':
+            suitTrack.append(doDiceRouletteToons(attack))
+        case 'HighRollerDiceRouletteEveryone':
+            suitTrack.append(doDiceRouletteAll(attack))
+        case 'HighRollerDiceRouletteNobody':
+            suitTrack.append(doDiceRouletteNothing(attack))
     return Parallel(suitTrack, soundTrack, suitTrack2)
 
 def doWheelSpin2(attack):

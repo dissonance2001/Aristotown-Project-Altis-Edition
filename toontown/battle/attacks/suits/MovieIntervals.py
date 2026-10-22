@@ -970,72 +970,73 @@ def getToonDodgeTrackCheat2(attack, target, dodgeDelay, dodgeAnimNames, splicedD
     toon = target['toon']
     battle = attack['battle']
     toonTrack = Sequence()
-    if attack['name'] == 'MintMovingGoalposts':
-        for t in battle.activeToons:
-            toonTrack.append(Wait(dodgeDelay))
-            if dodgeAnimNames:
-                for d in dodgeAnimNames:
-                    if d == 'sidestep':
-                        toonTrack.append(getAllyToonsDodgeParallel(target))
-                    else:
-                        toonTrack.append(ActorInterval(t, d))
+    match attack['name']:
+        case 'MintMovingGoalposts':
+            for t in battle.activeToons:
+                toonTrack.append(Wait(dodgeDelay))
+                if dodgeAnimNames:
+                    for d in dodgeAnimNames:
+                        if d == 'sidestep':
+                            toonTrack.append(getAllyToonsDodgeParallel(target))
+                        else:
+                            toonTrack.append(ActorInterval(t, d))
 
-            else:
-                toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
-            toonTrack.append(Func(t.loop, 'neutral'))
-    elif attack['name'] == 'HighRollerDamageReduction':
-        for t in battle.activeToons:
-            toonTrack.append(Wait(dodgeDelay))
-            if dodgeAnimNames:
-                for d in dodgeAnimNames:
-                    if d == 'sidestep':
-                        toonTrack.append(getAllyToonsDodgeParallel(target))
-                    else:
-                        toonTrack.append(ActorInterval(t, d))
-
-            else:
-                toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
-            toonTrack.append(Func(t.loop, 'neutral'))
-    elif attack['name'] == 'HustlerBaitAndSwitch':
-        for t in battle.activeToons:
-            toonTrack.append(Wait(dodgeDelay))
-            if dodgeAnimNames:
-                for d in dodgeAnimNames:
-                    if d == 'sidestep':
-                        toonTrack.append(getAllyToonsDodgeParallel(target))
-                    else:
-                        toonTrack.append(ActorInterval(t, d))
-
-            else:
-                toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
-            toonTrack.append(Func(t.loop, 'neutral'))
-    elif attack['name'] == 'ContingencyOperationalFreeze':
-        for t in battle.activeToons:
-            toonTrack.append(Wait(dodgeDelay))
-            if dodgeAnimNames:
-                for d in dodgeAnimNames:
-                    if d == 'sidestep':
-                        toonTrack.append(getAllyToonsDodgeParallel(target))
-                    else:
-                        toonTrack.append(ActorInterval(t, d))
-
-            else:
-                toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
-            toonTrack.append(Func(t.loop, 'neutral'))
-    elif attack['name'] == 'VideographerHardCut':
-        toonTrack.append(Wait(dodgeDelay))
-        if dodgeAnimNames:
-            for d in dodgeAnimNames:
-                if d == 'sidestep':
-                   toonTrack.append(getAllyToonsDodgeParallel(target))
                 else:
-                    toonTrack.append(ActorInterval(toon, d))
+                    toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
+                toonTrack.append(Func(t.loop, 'neutral'))
+        case 'HighRollerDamageReduction':
+            for t in battle.activeToons:
+                toonTrack.append(Wait(dodgeDelay))
+                if dodgeAnimNames:
+                    for d in dodgeAnimNames:
+                        if d == 'sidestep':
+                            toonTrack.append(getAllyToonsDodgeParallel(target))
+                        else:
+                            toonTrack.append(ActorInterval(t, d))
 
-        else:
-            toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=toon))
-        toonTrack.append(Func(toon.loop, 'neutral'))
-    else:
-        toonTrack.append(Func(toon.loop, 'neutral'))
+                else:
+                    toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
+                toonTrack.append(Func(t.loop, 'neutral'))
+        case 'HustlerBaitAndSwitch':
+            for t in battle.activeToons:
+                toonTrack.append(Wait(dodgeDelay))
+                if dodgeAnimNames:
+                    for d in dodgeAnimNames:
+                        if d == 'sidestep':
+                            toonTrack.append(getAllyToonsDodgeParallel(target))
+                        else:
+                            toonTrack.append(ActorInterval(t, d))
+
+                else:
+                    toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
+                toonTrack.append(Func(t.loop, 'neutral'))
+        case 'ContingencyOperationalFreeze':
+            for t in battle.activeToons:
+                toonTrack.append(Wait(dodgeDelay))
+                if dodgeAnimNames:
+                    for d in dodgeAnimNames:
+                        if d == 'sidestep':
+                            toonTrack.append(getAllyToonsDodgeParallel(target))
+                        else:
+                            toonTrack.append(ActorInterval(t, d))
+
+                else:
+                    toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=t))
+                toonTrack.append(Func(t.loop, 'neutral'))
+        case 'VideographerHardCut':
+            toonTrack.append(Wait(dodgeDelay))
+            if dodgeAnimNames:
+                for d in dodgeAnimNames:
+                    if d == 'sidestep':
+                       toonTrack.append(getAllyToonsDodgeParallel(target))
+                    else:
+                        toonTrack.append(ActorInterval(toon, d))
+
+            else:
+                toonTrack.append(getSplicedAnimsTrack(splicedDodgeAnims, actor=toon))
+            toonTrack.append(Func(toon.loop, 'neutral'))
+        case _:
+            toonTrack.append(Func(toon.loop, 'neutral'))
     return toonTrack
 
 
@@ -1106,14 +1107,15 @@ def getPropThrowTrack(attack: dict, prop, hitPoints = [], missPoints = [], hitDu
 
     def getLambdas(list, prop, toon):
         for i in range(len(list)):
-            if list[i] == 'face':
-                list[i] = lambda toon = toon: __toonFacePoint(toon)
-            elif list[i] == 'miss':
-                list[i] = lambda prop = prop, toon = toon: __toonMissPoint(prop, toon)
-            elif list[i] == 'bounceHit':
-                list[i] = lambda prop = prop, toon = toon: __throwBounceHitPoint(prop, toon)
-            elif list[i] == 'bounceMiss':
-                list[i] = lambda prop = prop, toon = toon: __throwBounceMissPoint(prop, toon)
+            match list[i]:
+                case 'face':
+                    list[i] = lambda toon = toon: __toonFacePoint(toon)
+                case 'miss':
+                    list[i] = lambda prop = prop, toon = toon: __toonMissPoint(prop, toon)
+                case 'bounceHit':
+                    list[i] = lambda prop = prop, toon = toon: __throwBounceHitPoint(prop, toon)
+                case 'bounceMiss':
+                    list[i] = lambda prop = prop, toon = toon: __throwBounceMissPoint(prop, toon)
 
         return list
 

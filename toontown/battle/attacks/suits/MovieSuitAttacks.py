@@ -354,1516 +354,1358 @@ def doSuitAttack(attack):
     notify.debug('building suit attack in doSuitAttack: %s' % attack['name'])
     name = attack['name']
     suit = attack['suit']
-    if name == 'AcidRain':
-        suitTrack = doAcidRain(attack)
-    elif name in ('Aftershock', 'Quake'):
-        suitTrack = doQuake(attack)
-    elif name == 'Audit':
-        suitTrack = doAudit(attack)
-    elif name == 'BackBreaker':
-        suitTrack = doDefault(attack)
-    elif name == 'Bash':
-        suitTrack = doBash(attack)
-    elif name == 'Beguile':
-        suitTrack = doBeguile(attack)
-    elif name == 'Bite':
-        if suit.isAngry:
-            suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doBite(attack))
-        else:
-            suitTrack = doBite(attack)
-    elif name in ('BlueChip', 'CoinToss'):
-        suitTrack = doBlueChip(attack)
-    elif name == 'BounceCheck':
-        suitTrack = doBounceCheck(attack)
-    elif name == 'BounceRate':
-        suitTrack = doBounceRate(attack)
-    elif name in ('BrainStorm', 'Forecast'):
-        suitTrack = doBrainStorm(attack)
-    elif name == 'Breakthrough':
-        suitTrack = doBreakthrough(attack)
-    elif name == 'Brainwash':
-        suitTrack = doDefault(attack)
-    elif name == 'BuzzWord':
-        suitTrack = doBuzzWord(attack)
-    elif name == 'Calculate':
-        suitTrack = doCalculate(attack)
-    elif name == 'Canned':
-        suitTrack = doCanned(attack)
-    elif name in ('CashGrab', 'PickPocket'):
-        suitTrack = doPickPocket(attack)
-    elif name == 'Chomp':
-        suitTrack = doChomp(attack)
-    elif name == 'CigarSmoke':
-        suitTrack = doCigarSmoke(attack)
-    elif name == 'ClipOnTie':
-        suitTrack = doClipOnTie(attack)
-    elif name == 'CloseTheLoop':
-        suitTrack = doCloseTheLoop(attack)
-    elif name == 'CloudStorage':
-        suitTrack = doCloudStorage(attack)
-    elif name in ('Crunch', 'MudSling'):
-        suitTrack = doCrunch(attack)
-    elif name == 'DataBreach':
-        suitTrack = doDataBreach(attack)
-    elif name == 'DataCorruption':
-        suitTrack = doDataCorruption(attack)
-    elif name == 'Demotion':
-        suitTrack = doDemotion(attack)
-    elif name == 'DenialOfService':
-        suitTrack = doDenialOfService(attack)
-    elif name == 'Disassemble':
-        suitTrack = doDisassemble(attack)
-    elif name == 'DiskScratch':
-        suitTrack = doDiskScratch(attack)
-    elif name == 'DoubleCross':
-        suitTrack = doDoubleCross(attack)
-    elif name == 'DoubleTalk':
-        suitTrack = doDoubleTalk(attack)
-    elif name in ('DoubleWindsor', 'HalfWindsor'):
-        suitTrack = doHalfWindsor(attack)
-    elif name == 'Downsize':
-        suitTrack = doDownsize(attack)
-    elif name == 'ElectrostaticEnergy':
-        suitTrack = doElectrostaticEnergy(attack)
-    elif name == 'Embezzle':
-        suitTrack = doEmbezzle(attack)
-    elif name == 'Encrypt':
-        suitTrack = doEncrypt(attack)
-    elif name == 'EvictionNotice':
-        suitTrack = doEvictionNotice(attack)
-    elif name == 'EvilEye':
-        suitTrack = doEvilEye(attack)
-    elif name == 'FallingKnife':
-        suitTrack = doFallingKnife(attack)
-    elif name == 'Filibuster':
-        suitTrack = doFilibuster(attack)
-    elif name == 'FillWithLead':
-        suitTrack = doFillWithLead(attack)
-    elif name == 'FingerWag':
-        if suit.isAngry:
-            suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doFingerWag(attack))
-        else:
-            suitTrack = doFingerWag(attack)
-    elif name == 'Fired':
-        suitTrack = doFired(attack)
-    elif name == 'FiveOClockShadow':
-        suitTrack = doFiveOClockShadow(attack)
-    elif name == 'FloodTheMarket':
-        suitTrack = doFloodTheMarket(attack)
-    elif name == 'FountainPen':
-        suitTrack = doFountainPen(attack)
-    elif name == 'FreezeAssets':
-        suitTrack = doFreezeAssets(attack)
-    elif name == 'Gerrymander':
-        suitTrack = doDefault(attack)
-    elif name == 'GlowerPower':
-        suitTrack = doGlowerPower(attack)
-    elif name == 'GoldDust':
-        suitTrack = doGoldDust(attack)
-    elif name == 'GoldRush':
-        suitTrack = doGoldRush(attack)
-    elif name == 'GuiltTrip':
-        if suit.isAngry:
-            suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doGuiltTrip(attack))
-        else:
-            suitTrack = doGuiltTrip(attack)
-    elif name == 'HangUp':
-        suitTrack = doHangUp(attack)
-    elif name == 'HeadShrink':
-        suitTrack = doHeadShrink(attack)
-    elif name == 'HostileTakeover':
-        suitTrack = doHostileTakeoverNew(attack)
-    elif name == 'HotAir':
-        suitTrack = doHotAir(attack)
-    elif name == 'Inject':
-        suitTrack = doInject(attack)
-    elif name == 'Jargon':
-        suitTrack = doJargon(attack)
-    elif name == 'Legalese':
-        suitTrack = doLegalese(attack)
-    elif name == 'Liquidate':
-        suitTrack = doLiquidate(attack)
-    elif name in ('MarketCrash', 'Newspaper'):
-        suitTrack = doMarketCrash(attack)
-    elif name == 'MindBlow':
-        suitTrack = doMindBlow(attack)
-    elif name == 'MoneyTalks':
-        suitTrack = doMoneyTalks(attack)
-    elif name == 'MumboJumbo':
-        suitTrack = doMumboJumbo(attack)
-    elif name == 'MysteriousDisappearance':
-        suitTrack = doMysteriousDisappearance(attack)
-    elif name == 'NickelAndDime':
-        suitTrack = doNickelAndDime(attack)
-    elif name in ('Novel', 'ThrowBook'):
-        suitTrack = doThrowBook(attack)
-    elif name == 'Overload':
-        suitTrack = doOverload(attack)
-    elif name == 'ParadigmShift':
-        if suit.isAngry:
-            suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doParadigmShift(attack))
-        else:
-            suitTrack = doParadigmShift(attack)
-    elif name == 'PeckingOrder':
-        suitTrack = doPeckingOrder(attack)
-    elif name == 'PennyPinch':
-        suitTrack = doPennyPinch(attack)
-    elif name == 'PinkSlip':
-        suitTrack = doPinkSlip(attack)
-    elif name == 'PlayHardball':
-        suitTrack = doPlayHardball(attack)
-    elif name == 'PoundKey':
-        suitTrack = doPoundKey(attack)
-    elif name == 'PowerTie':
-        suitTrack = doPowerTie(attack)
-    elif name == 'PowerTrip':
-        suitTrack = doPowerTrip(attack)
-    elif name == 'Quash':
-        suitTrack = doQuash(attack)
-    elif name == 'RazzleDazzle':
-        suitTrack = doRazzleDazzle(attack)
-    elif name in ('ReArrange', 'ReOrg'):
-        suitTrack = doReOrg(attack)
-    elif name == 'RecordBreaker':
-        suitTrack = doRecordBreaker(attack)
-    elif name == 'RedTape':
-        suitTrack = doRedTape(attack)
-    elif name == 'Reprogram':
-        suitTrack = doReprogram(attack)
-    elif name == 'RestrainingOrder':
-        suitTrack = doRestrainingOrder(attack)
-    elif name == 'Rolodex':
-        suitTrack = doRolodex(attack)
-    elif name == 'RubberStamp':
-        suitTrack = doRubberStamp(attack)
-    elif name == 'RubOut':
-        suitTrack = doRubOut(attack)
-    elif name == 'Sacked':
-        suitTrack = doSacked(attack)
-    elif name == 'SandTrap':
-        suitTrack = doSandTrap(attack)
-    elif name in ('Schmooze', 'TestSchmooze'):
-        suitTrack = doSchmooze(attack)
-    elif name == 'Shake':
-        suitTrack = doShake(attack)
-    elif name == 'ShortSqueeze':
-        suitTrack = doShortSqueeze(attack)
-    elif name == 'Shred':
-        suitTrack = doShred(attack)
-    elif name == 'SmokeAndMirrors':
-        suitTrack = doCigarSmoke(attack)
-    elif name == 'SongAndDance':
-        suitTrack = doSongAndDance(attack)
-    elif name == 'Spin':
-        suitTrack = doSpin(attack)
-    elif name == 'StolenScene':
-        suitTrack = doStolenScene(attack)
-    elif name == 'StumpSpeech':
-        suitTrack = doStumpSpeech(attack)
-    elif name == 'Synergy':
-        suitTrack = doSynergy(attack)
-    elif name == 'Tabulate':
-        suitTrack = doTabulate(attack)
-    elif name == 'TeeOff':
-        suitTrack = doTeeOff(attack)
-    elif name == 'TickingTimeBomb':
-        suitTrack = doTickingTimeBomb(attack)
-    elif name == 'Tremor':
-        if suit.isAngry:
-            suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doTremor(attack))
-        else:
-            suitTrack = doTremor(attack)
-    elif name == 'VersionControl':
-        suitTrack = doVersionControl(attack)
-    elif name == 'VoodooMagic':
-        suitTrack = doVoodooMagic(attack)
-    elif name == 'Watercooler':
-        suitTrack = doWatercooler(attack)
-    elif name == 'Withdrawal':
-        suitTrack = doWithdrawal(attack)
-    elif name == 'WriteOff':
-        suitTrack = doWriteOff(attack)
-        #redd heir-wing cheats
-    elif name == 'ReddAutoRepair':
-        suitTrack = MovieLawbotLitigationCheats.doAutoRepair(attack)
-    elif name == 'ReddLiquidationSale':
-        suitTrack = MovieLawbotLitigationCheats.doLiquidationSale(attack)
-    elif name == 'ReddPeckingOrder':
-        suitTrack = MovieLawbotLitigationCheats.doPeckingOrder(attack)
-        # wsi cheats
-    elif name == 'WSICeaseAndDesist':
-        suitTrack = MovieLawbotLitigationCheats.doCeaseAndDesist(attack)
-    elif name == 'WSIJuryNotice':
-        suitTrack = MovieLawbotLitigationCheats.doJuryNotice(attack)
-        # arbitrator cheats
-    elif name == 'ArbitratorObjection':
-        if suit.isAngry:
-            suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), MovieLawbotLitigationCheats.doGavelCourtRecord2(attack))
-        else:
-            suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord2(attack)
-    elif name == 'ArbitratorPaperFiling':
-        suitTrack = MovieLawbotLitigationCheats.doPaperweight(attack)
-    elif name == 'ArbitratorWhirlwind':
-        suitTrack = MovieLawbotLitigationCheats.doWhirlwind(attack)
-    elif name == 'ArbitratorThrowBook':
-        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 1)
-    elif name == 'ArbitratorThrowBook2':
-        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 2)
-    elif name == 'ArbitratorThrowBook3':
-        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 3)
-    elif name == 'ArbitratorThrowBook4':
-        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 4)
-    elif name == 'ArbitratorThrowBook5':
-        suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 5)
-    #litigator cheats
-    elif name == 'LitigatorSnapSoak':
-        suitTrack = MovieLawbotLitigationCheats.doSnapBindings(attack, suit)
-    elif name == 'LitigatorSnapBindings':
-        suitTrack = MovieLawbotLitigationCheats.doSnapBindings(attack, suit)
-    elif name == 'LitigatorSnap':
-        suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
-    elif name == 'LitigatorSnapStenographer':
-        suitTrack = MovieLawbotLitigationCheats.doSnapStenographer(attack, suit)
-    elif name == 'LitigatorBayouBash':
-        suitTrack = MovieLawbotLitigationCheats.doBayouBash(attack)
-    elif name == 'LitigatorBayouBellow':
-        suitTrack = MovieLawbotLitigationCheats.doBayouBellow(attack)
-    #stenographer cheats
-    elif name == 'StenographerSanctionBindings':
-        suitTrack = MovieLawbotLitigationCheats.doCourtSanction2(attack)
-    elif name == 'StenographerSanctionSuppression':
-        suitTrack = MovieLawbotLitigationCheats.doCourtSanction2(attack)
-    elif name == 'StenographerSanction':
-        suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack)
-    elif name == 'StenographerSanctionLitigator':
-        suitTrack = MovieLawbotLitigationCheats.doCourtSanctionLitigator(attack)
-    elif name == 'StenographerCourtRecordBan':
-        return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
-    #case manager cheats
-    elif name == 'CaseManagerInsurancePlanScapegoat':
-        suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsuranceScapegoat(attack, 1, 3, 5)
-    elif name == 'CaseManagerInsurancePlanScapegoat2':
-        suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsuranceScapegoat(attack, 0, 2, 4)
-    elif name == 'CaseManagerInsurancePlan':
-        suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack, 1, 3, 5)
-    elif name == 'CaseManagerInsurancePlan2':
-        suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack, 0, 2, 4)
-    elif name == 'CaseManagerInsurance':
-        suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
-    elif name == 'CaseManagerInsurance2':
-        suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
-    elif name == 'CaseManagerLegalBindings':
-        suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
-    elif name == 'CaseManagerLegalBindings2':
-        suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance2(attack)
-    elif name == 'CaseManagerLegallyBound':
-        return MovieLawbotLitigationCheats.doLegallyBound(attack)
-    elif name == 'CaseManagerCourtRecordBan':
-        return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
-    #scapegoat cheats
-    elif name == 'ScapegoatRageBuilding':
-        suitTrack = MovieUniversalCheats.doRageBuilding(attack)
-    elif name == 'ScapegoatShieldsUp':
-        suitTrack = MovieLawbotLitigationCheats.doShieldsUp(attack)
-    elif name == 'ScapegoatEnraged':
-        suitTrack = MovieLawbotLitigationCheats.doEnraged(attack)
-    elif name == 'ScapegoatGavel':
-        if suit.isAngry:
-            suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), MovieLawbotLitigationCheats.doSuppression(attack))
-        else:
-            suitTrack = MovieLawbotLitigationCheats.doSuppression(attack)
-    elif name == 'ScapegoatBarnyardBash':
-        suitTrack = MovieLawbotLitigationCheats.doSuppressionRevert(attack)
-    elif name == 'ScapegoatCourtRecordBan':
-        return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
-    #powerhouse cheats
-    elif name == 'PowerhouseToleranceBuilding':
-        suitTrack = MovieUniversalCheats.doRageBuilding(attack)
-    elif name == 'PowerhouseAbsorb':
-        suitTrack = MovieBossbotLitigationCheats.doAbsorb(attack)
-    elif name == 'PowerhouseSoakImmune':
-        suitTrack = MovieBossbotLitigationCheats.doSoakImmune(attack)
-    elif name == 'PowerhouseGroundbreaker':
-        suitTrack = MovieBossbotLitigationCheats.doGroundbreaker(attack)
-    elif name == 'PowerhouseGroundbreakerRevert':
-        suitTrack = MovieBossbotLitigationCheats.doGroundbreakerRevert(attack)
-    elif name == 'PowerhouseLureImmune':
-        suitTrack = MovieBossbotLitigationCheats.doLureImmune(attack)
-    elif name == 'PowerhouseSyphon':
-        suitTrack = MovieBossbotLitigationCheats.doSyphon(attack)
-    elif name == 'PowerhouseZapImmune':
-        suitTrack = MovieBossbotLitigationCheats.doZapImmune(attack)
-    elif name == 'PowerhouseDropImmune':
-        suitTrack = MovieBossbotLitigationCheats.doDropImmune(attack)
-    elif name == 'PowerhouseSyphonDesperation':
-        suitTrack = MovieBossbotLitigationCheats.doSyphonDesperation(attack)
-    elif name == 'PowerhouseSnipeVulnerable':
-        suitTrack = MovieBossbotLitigationCheats.doThrowImmune(attack)
-    elif name == 'PowerhouseSnipeGagBan':
-        suitTrack = MovieBossbotLitigationCheats.doAftershock(attack)
-    elif name == 'PowerhouseSnipeSoaked':
-        suitTrack = MovieBossbotLitigationCheats.doAftershock(attack)
-    elif name == 'PowerhouseSnipeBookkept':
-        suitTrack = MovieBossbotLitigationCheats.doAftershock(attack)
-    elif name == 'PowerhouseSnipeMulligan':
-        suitTrack = MovieBossbotLitigationCheats.doSoundImmune(attack)
-    elif name == 'PowerhouseSnipeCollectCall':
-        suitTrack = MovieBossbotLitigationCheats.doGeneration3(attack)
-    elif name == 'PowerhouseGeneration':
-        suitTrack = MovieBossbotLitigationCheats.doGeneration(attack)
-    elif name == 'PowerhouseGeneration2':
-        suitTrack = MovieBossbotLitigationCheats.doGeneration2(attack)
-    elif name == 'PowerhouseBurnDamage':
-        return MovieBossbotLitigationCheats.doAftershockDamage(attack)
-    #bookkeeper cheats
-    elif name == 'BookkeeperPaperCutSoaked':
-        suitTrack = MovieBossbotLitigationCheats.doPaperCutMulti(attack)
-    elif name == 'BookkeeperPaperCutMarked':
-        suitTrack = MovieBossbotLitigationCheats.doBookkeepingDamageUp(attack)
-    elif name == 'BookkeeperCabinetCrackdown':
-        suitTrack = MovieBossbotLitigationCheats.doCabinetCrackdown(attack)
-    elif name == 'BookkeeperPaperCut':
-        suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
-    elif name == 'AmbassadorAdvancement2':
-        suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
-    elif name == 'AmbassadorAdvancement3':
-        suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
-    elif name == 'BookkeeperExplodingDocument':
-        suitTrack = MovieBossbotLitigationCheats.doOverseer(attack)
-    elif name == 'BookkeeperBookkeepingRetaliation':
-        suitTrack = MovieBossbotLitigationCheats.doBookkeepingRetaliation(attack)
-    elif name == 'BookkeeperBookkeeping':
-        suitTrack = MovieBossbotLitigationCheats.doBookkeeping(attack)
-    elif name == 'BookkeeperMandatoryFiling':
-        suitTrack = MovieBossbotLitigationCheats.doMandatoryFiling(attack)
-    #wiretapper cheats
-    elif name == 'WiretapperCollectCall':
-        suitTrack = MovieBossbotLitigationCheats.doCollectCall(attack)
-    elif name == 'WiretapperCollectCall2':
-        suitTrack = MovieBossbotLitigationCheats.doVoicemail(attack)
-    elif name == 'WiretapperCollectCallDamage':
-        suitTrack = MovieBossbotLitigationCheats.doCollectCallDues(attack)
-    elif name == 'WiretapperWiretapped':
-        suitTrack = MovieBossbotLitigationCheats.doWiretapped(attack)
-    elif name == 'WiretapperVoicemail':
-        suitTrack = MovieBossbotLitigationCheats.doVoicemailReal(attack)
-    elif name == 'WiretapperBrokenConnection':
-        suitTrack = MovieBossbotLitigationCheats.doBrokenConnection(attack)
-    elif name == 'WiretapperGagBan':
-        suitTrack = MovieFaceTheFamilyCheats.doOverseer(attack)
-    elif name == 'WiretapperBusySignal':
-        suitTrack = MovieBossbotLitigationCheats.doBusySignal(attack)
-    #ambassador cheats
-    elif name == 'AmbassadorHeadRoller':
-        suitTrack = MovieBossbotLitigationCheats.doDamageUp1(attack)
-    elif name == 'AmbassadorHeadRoller':
-        suitTrack = MovieBossbotLitigationCheats.doDamageUp1(attack)
-    elif name == 'AmbassadorHeadRoller2':
-        suitTrack = MovieBossbotLitigationCheats.doDamageUp2(attack)
-    elif name == 'AmbassadorHeadRoller3':
-        suitTrack = MovieBossbotLitigationCheats.doDamageUp3(attack)
-    elif name == 'AmbassadorHeadRoller4':
-        suitTrack = MovieBossbotLitigationCheats.doDamageUp4(attack)
-    elif name == 'AmbassadorHeadRoller5':
-        suitTrack = MovieBossbotLitigationCheats.doDamageUp5(attack)
-    elif name == 'AmbassadorAdvancement':
-        suitTrack = MovieBossbotLitigationCheats.doAdvancement(attack)
-    elif name == 'AmbassadorAdvancement4':
-        suitTrack = MovieBossbotLitigationCheats.doAdvancement(attack, 4)
-    elif name == 'AmbassadorAdvancement5':
-        suitTrack = MovieBossbotLitigationCheats.doAdvancement(attack, 5)
-    elif name == 'AmbassadorHeadRollerGroup':
-        suitTrack = MovieBossbotLitigationCheats.doHeadRollerGroup(attack)
-    elif name == 'AmbassadorRefinement':
-        suitTrack = MovieBossbotLitigationCheats.doOilRainHeal(attack)
-    elif name == 'AmbassadorRefinementManager':
-        suitTrack = MovieBossbotLitigationCheats.doOilRainHealManager(attack)
-    elif name == 'AmbassadorPhase2':
-        suitTrack = MovieBossbotLitigationCheats.doAmbassadorPhase2(attack)
-    elif name == 'AmbassadorDamageUp':
-        suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUp(attack)
-    elif name == 'AmbassadorManagerialProtection':
-        suitTrack = MovieBossbotLitigationCheats.doTeeOff(attack)
-    elif name == 'AmbassadorManagerialProtectionImmunity':
-        suitTrack = MovieBossbotLitigationCheats.doTeeOff(attack)
-    elif name == 'AmbassadorMulligan':
-        suitTrack = MovieBossbotLitigationCheats.doFore(attack)
-    elif name == 'AmbassadorGhostMentality':
-        suitTrack = MovieBossbotLitigationCheats.doGhostMentality(attack)
-        # liquidator
-    elif name == 'LiquidatorOilRain':
-        suitTrack = MovieBoardbotLitigationCheats.doOilRain(attack)
-    elif name == 'LiquidatorOilRainDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doOilRainDamage(attack)
-    elif name == 'LiquidatorFreezingRain':
-        suitTrack = MovieBoardbotLitigationCheats.doFreezingRain(attack)
-    elif name == 'LiquidatorHeavyRain':
-        suitTrack = MovieBoardbotLitigationCheats.doHeavyRain(attack)
-    elif name == 'LiquidatorHeavyRainDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doHeavyRainDamage(attack)
-    elif name == 'LiquidatorStormCell':
-        suitTrack = MovieBoardbotLitigationCheats.doStormCell(attack)
-    elif name == 'LiquidatorStormCellDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doStormCellDamage(attack)
-    elif name == 'LiquidatorInversion':
-        suitTrack = MovieBoardbotLitigationCheats.doInversion(attack)
-    elif name == 'LiquidatorMonsoon':
-        suitTrack = MovieBoardbotLitigationCheats.doMonsoon(attack)
-    elif name == 'LiquidatorTornado':
-        suitTrack = MovieBoardbotLitigationCheats.doTornado(attack)
-        # tollmaster
-    elif name == 'TollmasterRushHour':
-        suitTrack = MovieBoardbotLitigationCheats.doRushHour(attack)
-    elif name == 'TollmasterMandatoryToll':
-        suitTrack = MovieBoardbotLitigationCheats.doMandatoryToll(attack)
-    elif name == 'TollmasterMandatoryTollFinal':
-        suitTrack = MovieBoardbotLitigationCheats.doMandatoryTollFinal(attack)
-    elif name == 'TollmasterResonanceTax':
-        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax(attack)
-    elif name == 'TollmasterResonanceTax2':
-        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax2(attack)
-    elif name == 'TollmasterResonanceTax3':
-        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax3(attack)
-    elif name == 'TollmasterResonanceTax4':
-        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax4(attack)
-    elif name == 'TollmasterResonanceTax5':
-        suitTrack = MovieBoardbotLitigationCheats.doResonanceTax5(attack)
-    elif name == 'TollmasterMissedPayment':
-        suitTrack = MovieBoardbotLitigationCheats.doMissedPayment(attack)
-    elif name == 'TollmasterLedgerOfSound':
-        suitTrack = MovieBoardbotLitigationCheats.doLedgerOfSound(attack)
-    elif name == 'TollmasterBalanceTheLedger':
-        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger(attack)
-    elif name == 'TollmasterBalanceTheLedger2':
-        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger2(attack)
-    elif name == 'TollmasterBalanceTheLedger3':
-        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger3(attack)
-    elif name == 'TollmasterBalanceTheLedger4':
-        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger4(attack)
-    elif name == 'TollmasterBalanceTheLedger5':
-        suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger5(attack)
-        # record keeper
-    elif name == 'RecordkeeperMinutesTaken':
-        suitTrack = MovieBoardbotLitigationCheats.doPermanentRecordAudit(attack)
-    elif name == 'RecordkeeperMinutesTakenContingency':
-        suitTrack = MovieBoardbotLitigationCheats.doPermanentRecordAuditBanned(attack)
-    elif name == 'RecordkeeperMinutesTakenDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doMinutesTakenDamageBooks(attack)
-    elif name == 'RecordkeeperPaperTrail':
-        suitTrack = MovieBoardbotLitigationCheats.doShadowToon(attack)
-    elif name == 'RecordkeeperRevisedFiling':
-        suitTrack = MovieBoardbotLitigationCheats.doRevisedFiling(attack)
-    elif name == 'RecordkeeperRevisedFilingLiquidation':
-        suitTrack = MovieBoardbotLitigationCheats.doShadowToon2(attack)
-    elif name == 'RecordkeeperRedlinedClause':
-        suitTrack = MovieBoardbotLitigationCheats.doRedlinedClause(attack)
-    elif name == 'RecordkeeperRedlinedClauseMissedPayment':
-        suitTrack = MovieBoardbotLitigationCheats.doMinutesTaken(attack)
-    elif name == 'RecordkeeperAuditCycle':
-        suitTrack = MovieBoardbotLitigationCheats.doAuditCycle(attack)
-    elif name == 'RecordkeeperPhantomEntrySpawn':
-        suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySpawn(attack)
-    elif name == 'RecordkeeperPhantomEntryDamage':
-        suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
-    elif name == 'RecordkeeperPhantomEntrySacrifice':
-        suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySacrifice(attack)
-        # corporate butcherer
-    elif name == 'ButcherOverride':
-        if suit.isChainsawPhase3:
-            suitTrack = MovieBoardbotLitigationCheats.doOverridePhase3(attack)
-        else:
-            suitTrack = MovieBoardbotLitigationCheats.doOverride(attack)
-    elif name == 'ButcherOverrideRemoval':
-        if suit.isChainsawPhase3:
-            suitTrack = MovieBoardbotLitigationCheats.doOverrideRemovalPhase3(attack)
-        else:
-            suitTrack = MovieBoardbotLitigationCheats.doOverrideRemoval(attack)
-    elif name == 'ButcherRevvingUp':
-        suitTrack = MovieBoardbotLitigationCheats.doRevvingUp(attack)
-    elif name == 'ButcherRevvingUpWhipsaw':
-        suitTrack = MovieBoardbotLitigationCheats.doRevvingUpWhipsaw(attack)
-    elif name == 'ButcherKickback':
-        suitTrack = MovieBoardbotLitigationCheats.doKickback(attack)
-    elif name == 'ButcherMarkedWood':
-        suitTrack = MovieBoardbotLitigationCheats.do7000RPM(attack)
-    elif name == 'ButcherOffboarding':
-        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 1)
-    elif name == 'ButcherOffboarding2':
-        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 2)
-    elif name == 'ButcherOffboarding3':
-        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 3)
-    elif name == 'ButcherOffboarding4':
-        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 4)
-    elif name == 'ButcherOffboarding5':
-        suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 5)
-    elif name == 'ButcherAggrandize':
-        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 1)
-    elif name == 'ButcherAggrandize2':
-        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 2)
-    elif name == 'ButcherAggrandize3':
-        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 3)
-    elif name == 'ButcherAggrandize4':
-        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 4)
-    elif name == 'ButcherAggrandize5':
-        suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 5)
-    elif name == 'ButcherSparkPlug':
-        suitTrack = MovieBoardbotLitigationCheats.do2000RPMSparkPlug(attack)
-    elif name == 'ButcherSparkPlugDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doSparkPlugDamage(attack)
-    elif name == 'ButcherScabbard':
-        suitTrack = MovieBoardbotLitigationCheats.do7000RPMScabbard(attack)
-    elif name == 'ButcherLayoffs':
-        suitTrack = MovieBoardbotLitigationCheats.do10000RPM(attack)
-        # contingency director
-    elif name == 'ContingencyOverrideRevert':
-        suitTrack = MovieBoardbotLitigationCheats.doContingencyOverrideRevert(attack)
-    elif name == 'ContingencyOverride':
-        suitTrack = MovieBoardbotLitigationCheats.doContingencyOverride(attack)
-    elif name == 'ContingencyFailsafeProtocol':
-        suitTrack = MoviePacesetterCheats.doCorporateRestructuring(attack)
-        # suitTrack = MovieBoardbotLitigationCheats.doFailsafeProtocol(attack)
-    elif name == 'ContingencyRiskThresholdBreach75':
-        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach75(attack)
-    elif name == 'ContingencyRiskThresholdBreach50':
-        suitTrack = MovieBoardbotLitigationCheats.doMarkedWood(attack) # Marking Application
-    elif name == 'ContingencyRiskThresholdBreach25':
-        suitTrack = MovieHighRollerCheats.doSnipe(attack) # Marking Damage
-    elif name == 'ContingencySelfRepair':
-        suitTrack = MovieBoardbotLitigationCheats.doSelfRepair(attack)
-    elif name == 'ContingencyContingencyClause':
-        suitTrack = MovieBoardbotLitigationCheats.doContingencyClause(attack)
-    elif name == 'ContingencyContingencyClauseRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach25(attack)
-    elif name == 'ContingencyRedundantAuthority':
-        suitTrack = MovieBoardbotLitigationCheats.doRedundantAuthority(attack)
-    elif name == 'ContingencyOperationalFreeze':
-        suitTrack = MovieFaceTheFamilyCheats.doHighStakesContingency(attack)
-    elif name == 'ContingencyForecastCollapse':
-        suitTrack = MovieBoardbotLitigationCheats.doForecastCollapse(attack)
-    elif name == 'ContingencyRiskThresholdBreach':
-        suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach(attack)
-    elif name == 'ContingencyMarkLiquidated':
-        suitTrack = MovieBoardbotLitigationCheats.doMarkedWood(attack)
-    elif name == 'ContingencyMarkRevisedFiling':
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-        # dividend king
-    elif name == 'DividendAccountRollover':
-        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover(attack)
-    elif name == 'DividendAccountRollover2':
-        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover2(attack)
-    elif name == 'DividendAccountRollover3':
-        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover3(attack)
-    elif name == 'DividendAccountRollover4':
-        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover4(attack)
-    elif name == 'DividendAccountRollover5':
-        suitTrack = MovieBoardbotLitigationCheats.doAccountRollover5(attack)
-    elif name == 'DividendLiquidationEvent':
-        suitTrack = MovieBoardbotLitigationCheats.doLiquidationEvent(attack)
-    elif name == 'DividendLiquidationEventDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doMeltdownDamage(attack)
-    elif name == 'DividendTotalMarketMeltdown':
-        suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown(attack)
-    elif name == 'DividendTotalMarketMeltdown2':
-        suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown2(attack)
-    elif name == 'DividendTotalMarketMeltdownDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doMeltdownDamage(attack)
-    elif name == 'DividendPeckingOrder':
-        suitTrack = MovieBoardbotLitigationCheats.doScabbard(attack)
-    elif name == 'DividendPeckingOrderZapped':
-        suitTrack = MovieBoardbotLitigationCheats.doEmbezzle(attack)
-    elif name == 'DividendZapRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doThrowRetaliation(attack)
-        # ottoman cheats
-    elif name == 'OttomanRevisedDraft':
-        suitTrack = MovieBoardbotLitigationCheats.doWhirlwind(attack)
-    elif name == 'OttomanRedPenReview':
-        suitTrack = MovieBoardbotLitigationCheats.doRedPenReview(attack)
-    elif name == 'OttomanFootnoteOverload':
-        suitTrack = MovieBoardbotLitigationCheats.doFootnoteOverload(attack)
-    elif name == 'OttomanPerformanceReview':
-        suitTrack = MovieBoardbotLitigationCheats.doPerformanceReview(attack)
-    elif name == 'OttomanPerformanceReviewRevert':
-        suitTrack = MovieBoardbotLitigationCheats.doPerformanceReviewRevert(attack)
-        # crystalline cheats
-    elif name == 'CrystalShatteringClarity':
-        suitTrack = MovieBoardbotLitigationCheats.doShatteringClarity(attack)
-    elif name == 'CrystalRefractDamage':
-        suitTrack = MovieBoardbotLitigationCheats.doRefractDamage(attack)
-    elif name == 'CrystalRefractDamageRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doRefractDamageRetaliation(attack)
-    elif name == 'CrystalFracturedLimitsOffensive':
-        suitTrack = MovieBoardbotLitigationCheats.doFracturedLimits(attack)
-    elif name == 'CrystalFracturedLimitsDefensive':
-        suitTrack = MovieBoardbotLitigationCheats.doFracturedLimits(attack)
-    elif name == 'CrystalFracturedLimitsRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doFracturedLimitsRetaliation(attack)
-    elif name == 'CrystalPrismaticDistortion':
-        suitTrack = MovieBoardbotLitigationCheats.doPrismaticDistortion(attack)
-        # chairman cheats
-    elif name == 'ChairmanTrapRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doTrapRetaliation(attack)
-    elif name == 'ChairmanLureRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doLureRetaliation(attack)
-    elif name == 'ChairmanThrowRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doThrowRetaliation(attack)
-    elif name == 'ChairmanSquirtRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doSquirtRetaliation(attack)
-    elif name == 'ChairmanZapRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doZapRetaliation(attack)
-    elif name == 'ChairmanSoundRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doSoundRetaliation(attack)
-    elif name == 'ChairmanDropRetaliation':
-        suitTrack = MovieBoardbotLitigationCheats.doDropRetaliation(attack)
-    elif name == 'ChairmanCage':
-        suitTrack = MovieBoardbotLitigationCheats.doCage(attack)
-    elif name == 'ChairmanPhase2':
-        suitTrack = MovieBoardbotLitigationCheats.doPhase2(attack)
-    elif name == 'ChairmanOvertime':
-        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 1)
-    elif name == 'ChairmanOvertime2':
-        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 2)
-    elif name == 'ChairmanOvertime3':
-        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 3)
-    elif name == 'ChairmanOvertime4':
-        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 4)
-    elif name == 'ChairmanOvertime5':
-        suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 5)
-    elif name == 'ChairmanHostileLiquidation':
-        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 1)
-    elif name == 'ChairmanHostileLiquidation2':
-        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 2)
-    elif name == 'ChairmanHostileLiquidation3':
-        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 3)
-    elif name == 'ChairmanHostileLiquidation4':
-        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 4)
-    elif name == 'ChairmanHostileLiquidation5':
-        suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 5)
-    elif name == 'ChairmanSnipe':
-        suitTrack = MovieBoardbotLitigationCheats.doSnipe(attack)
-        # safety supervisor
-    elif name == 'SafetyOverpressureDeath':
-        suitTrack = MovieSellbotLitigationCheats.doOverpressureDeath(attack)
-    elif name == 'SafetyOverpressured':
-        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 1)
-    elif name == 'SafetyOverpressured2':
-        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 2)
-    elif name == 'SafetyOverpressured3':
-        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 3)
-    elif name == 'SafetyOverpressured4':
-        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 4)
-    elif name == 'SafetyOverpressured5':
-        suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 5)
-    elif name == 'SafetyHighPressure':
-        suitTrack = MovieSellbotLitigationCheats.doHighPressure(attack)
-    elif name == 'SafetyHeatWave':
-        suitTrack = MovieSellbotLitigationCheats.doHeatWave(attack)
-    elif name == 'SafetyHeatWaveCalculation':
-        suitTrack = MovieSellbotLitigationCheats.doHeatWaveCalculation(attack)
-    elif name == 'SafetyViolation':
-        suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
-    elif name == 'SafetyPromotion':
-        suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 1)
-    elif name == 'SafetyPromotion2':
-        suitTrack = MovieSellbotLitigationCheats.doOverheat(attack)
-    elif name == 'SafetyPromotion3':
-        suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 3)
-    elif name == 'SafetyPromotion4':
-        suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 4)
-    elif name == 'SafetyPromotion5':
-        suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 5)
-    elif name == 'SafetySoakRetaliation':
-        suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
-        # hustler
-    elif name == 'HustlerLimitedTimeOfferApprove':
-        suitTrack = MovieSellbotLitigationCheats.doLimitedTimeOfferApprove(attack)
-    elif name == 'HustlerLimitedTimeOfferDenied':
-        suitTrack = MovieSellbotLitigationCheats.doLimitedTimeOfferDenied(attack)
-    elif name == 'HustlerSalesPitch':
-        suitTrack = MovieSellbotLitigationCheats.doSalesPitch(attack)
-    elif name == 'HustlerCustomerRetention':
-        suitTrack = MovieSellbotLitigationCheats.doContractEnforcementHealing(attack)
-    elif name == 'HustlerClosingTime':
-        suitTrack = MovieSellbotLitigationCheats.doClosingTime(attack)
-    elif name == 'HustlerBaitAndSwitch':
-        suitTrack = MovieHighRollerCheats.doContentSync(attack)
-    elif name == 'HustlerExclusiveOffer':
-        suitTrack = MovieSellbotLitigationCheats.doContractEnforcementBan(attack)
-    elif name == 'HustlerExclusiveOfferRetaliation':
-        suitTrack = MovieSellbotLitigationCheats.doExclusiveRetaliation(attack)
-    elif name == 'HustlerHalfWindsor':
-        suitTrack = doSpin(attack)
-        # traffic manager
-    elif name == 'UnionBusterContractEnforcementHealing':
-        suitTrack = MovieSellbotLitigationCheats.doContractEnforcementHealing(attack)
-    elif name == 'TrafficDetour':
-        suitTrack = MovieSellbotLitigationCheats.doDetourNew(attack)
-    elif name == 'TrafficCongestionPricing':
-        suitTrack = MovieSellbotLitigationCheats.doRoadBlock(attack)
-    elif name == 'TrafficRedLight':
-        suitTrack = MovieSellbotLitigationCheats.doRedLight(attack)
-    elif name == 'TrafficYellowLight':
-        suitTrack = MovieSellbotLitigationCheats.doYellowLight(attack)
-    elif name == 'TrafficTrafficViolation':
-        suitTrack = MovieSellbotLitigationCheats.doContingencyClauseRetaliation(attack)
-    elif name == 'TrafficRedLightRetaliation':
-        suitTrack = MovieSellbotLitigationCheats.doContingencyClauseRetaliation(attack)
-    elif name == 'TrafficGreenLight':
-        suitTrack = MovieSellbotLitigationCheats.doGreenLight(attack)
-    elif name == 'TrafficGreenLightRetaliation':
-        suitTrack = MovieSellbotLitigationCheats.doContingencyClauseRetaliation(attack)
-    elif name == 'TrafficYield':
-        suitTrack = MovieSellbotLitigationCheats.doYield(attack)
-    elif name == 'UnionBusterBreachOfContract':
-        suitTrack = MovieSellbotLitigationCheats.doBreachOfContract(attack) # YIELD VARIATIONS
-    elif name == 'UnionBusterCompensationClaims':
-        suitTrack = MovieSellbotLitigationCheats.doCompensationClaims(attack)
-    elif name == 'UnionBusterBreachOfContract2':
-        suitTrack = MovieSellbotLitigationCheats.doBreachOfContract2(attack)
-    elif name == 'UnionBusterBreachOfContract3':
-        suitTrack = MovieSellbotLitigationCheats.doBreachOfContract2(attack)
-    elif name == 'UnionBusterBreachOfContract4':
-        suitTrack = MovieSellbotLitigationCheats.doBreachOfContract2(attack)
-        # union buster
-    elif name == 'UnionBusterUnionDues':
-        suitTrack = MovieUniversalCheats.doSynergy(attack)
-    elif name == 'UnionBusterUnionCalculator':
-        suitTrack = MovieSellbotLitigationCheats.doUnionCalculator(attack)
-    elif name == 'UnionBusterUnionBust':
-        suitTrack = MovieSellbotLitigationCheats.doUnionBust(attack)
-    elif name == 'UnionBusterUnionBuster':
-        suitTrack = MovieSellbotLitigationCheats.doUnionBuster(attack)
-    elif name == 'UnionBusterUnionBusterDamage':
-        return MovieSellbotLitigationCheats.doUnionBusterDamage(attack)
-    elif name == 'UnionBusterNoStrikeClause':
-        suitTrack = MovieSellbotLitigationCheats.doUnionBuster(attack)
-    elif name == 'UnionBusterUnionWages':
-        suitTrack = MovieSellbotLitigationCheats.doUnionWages(attack)
-    elif name == 'UnionBusterUnionWages2':
-        suitTrack = MovieSellbotLitigationCheats.doUnionWages2(attack)
-    elif name == 'UnionBusterUnionWages3':
-        suitTrack = MovieSellbotLitigationCheats.doUnionWages3(attack)
-    elif name == 'UnionBusterUnionWages4':
-        suitTrack = MovieSellbotLitigationCheats.doUnionWages4(attack)
-    elif name == 'UnionBusterUnionWages5':
-        suitTrack = MovieSellbotLitigationCheats.doUnionWages5(attack)
-    elif name == 'UnionBusterContractEnforcement':
-        suitTrack = MovieSellbotLitigationCheats.doShadowToon(attack)
-    elif name == 'UnionBusterContractEnforcement2':
-        suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
-        # racketeer
-    elif name == 'RacketeerOverextendedLeverage2':
-        suitTrack = MovieCashbotLitigationCheats.doOverextendedLeverage(attack)
-    elif name == 'RacketeerOverextendedLeverage':
-        suitTrack = MovieCashbotLitigationCheats.doProtectedRacket(attack)
-    elif name == 'RacketeerProfiteering':
-        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 1)
-    elif name == 'RacketeerProfiteering2':
-        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 2)
-    elif name == 'RacketeerProfiteering3':
-        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 3)
-    elif name == 'RacketeerProfiteering4':
-        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 4)
-    elif name == 'RacketeerProfiteering5':
-        suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 5)
-    elif name == 'RacketeerExtortion':
-        suitTrack = MovieCashbotLitigationCheats.doExtortion(attack)
-    elif name == 'RacketeerExtortion2':
-        suitTrack = MovieCashbotLitigationCheats.doProtectionPayout(attack)
-    elif name == 'RacketeerCompensation':
-        suitTrack = MovieCashbotLitigationCheats.doCompensation(attack)
-    elif name == 'RacketeerHustling': # Pressurizer Target Check
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-    elif name == 'RacketeerRacketeering':
-        suitTrack = MovieCashbotLitigationCheats.doRacketeering(attack)
-    elif name == 'RacketeerPeckingOrderRetaliation':
-        suitTrack = MovieCashbotLitigationCheats.doPeckingOrderGroup(attack)
-    elif name == 'RacketeerPeckingOrderRetaliationSoak':
-        suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
-        # radiographer
-    elif name == 'RadiographerRadioInfrequency':
-        suitTrack = MovieSellbotLitigationCheats.doRadioInfrequency(attack)
-    elif name == 'RadiographerHotTake':
-        suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
-    elif name == 'RadiographerHotTakeDamage':
-        suitTrack = MovieSellbotLitigationCheats.doHotTakeDamage(attack)
-    elif name == 'RadiographerHotTakeRetaliation': # Pressurizer Rise From The Ashes
-        suitTrack = MovieSellbotLitigationCheats.doShadowToon(attack)
-    elif name == 'RadiographerOvermodulated':
-        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 1)
-    elif name == 'RadiographerOvermodulated2':
-        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 2)
-    elif name == 'RadiographerOvermodulated3':
-        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 3)
-    elif name == 'RadiographerOvermodulated4':
-        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 4)
-    elif name == 'RadiographerOvermodulated5':
-        suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 5)
-    elif name == 'RadiographerDanceSession':
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-        # payroll manager
-    elif name == 'PayrollPayrollProcessing':
-        suitTrack = MovieCashbotLitigationCheats.doPayrollProcessing(attack)    
-    elif name == 'PayrollPerformanceBonus':
-        suitTrack = MovieCashbotLitigationCheats.doPerformanceBonus(attack)    
-        # derrick man cheat
-    elif name == 'DerrickManRefinement':
-        suitTrack = MovieDirectorsCheats.doRefinementDerrickMan(attack)
-        #  dola cheat
-    elif name == 'DOLAInkDrain':
-        suitTrack = MovieDirectorsCheats.doInkDrainDOLA(attack)
-        #  dopr cheat
-    elif name == 'DOPRAmbushMarketing':
-        suitTrack = MovieDirectorsCheats.doAmbushMarketing(attack)
-        # erclaim erfit cheats
-    elif name == 'PlutocratCoreStandupGuy':
-        suitTrack = MoviePlutocratCheats.doStandupGuy(attack)
-    elif name.startswith('PlutocratCoreShakedown_'):
-        suitTrack = MoviePlutocratCheats.doShakedown(attack)
-    elif name == 'PlutocratCoreGhostPayroll':
-        suitTrack = MoviePlutocratCheats.doGhostPayroll(attack)
-    elif name == 'PlutocratCoreSlushFund':
-        suitTrack = MoviePlutocratCheats.doSlushFund(attack)
-    elif name.startswith('PlutocratCoreKickUp_'):
-        suitTrack = MoviePlutocratCheats.doKickUp(attack)
-    elif name == 'PlutocratCoreSitdown':
-        suitTrack = MoviePlutocratCheats.doSitdown(attack)
-    elif name.startswith('PlutocratCoreUsuryWaiter_'):
-        suitTrack = MoviePlutocratCheats.doUsuryWaiter(attack)
-    elif name.startswith('PlutocratCoreUsuryFodder_'):
-        suitTrack = MoviePlutocratCheats.doUsuryFodder(attack)
-    elif name.startswith('PlutocratCoreTribute_'):
-        suitTrack = MoviePlutocratCheats.doTribute(attack)
-    elif name.startswith('PlutocratCoreDeepFreeze_'):
-        suitTrack = MoviePlutocratCheats.doDeepFreeze(attack)
-    elif name.startswith('PlutocratCoreSnowSquall_'):
-        suitTrack = MoviePlutocratCheats.doSnowSquall(attack)
-    elif name == 'PlutocratCoreSnowSquallDamage':
-        suitTrack = MoviePlutocratCheats.doSnowSquallDamage(attack)
-    elif name.startswith('PlutocratCoreShatter_'):
-        suitTrack = MoviePlutocratCheats.doShatter(attack)
-    elif name.startswith('ChainsawCoreRevvingUp'):
-        suitTrack = MovieChainsawCore.doRevvingUp(attack, False)
-    elif name.startswith('ChainsawCoreWhipsaw'):
-        suitTrack = MovieChainsawCore.doRevvingUp(attack, True)
-    elif name == 'ChainsawCorePhaseTwo':
-        suitTrack = MovieChainsawCore.doPhaseTwo(attack)
-    elif name == 'ChainsawCorePhaseThree':
-        suitTrack = MovieChainsawCore.doPhaseThree(attack)
-    elif name.startswith('ChainsawCoreOffboarding'):
-        suitTrack = MovieChainsawCore.doOffboarding(attack)
-    elif name.startswith('ChainsawCoreCutTheSlack'):
-        suitTrack = MovieChainsawCore.doCutTheSlack(attack)
-    elif name == 'ChainsawCoreMarkedWood':
-        suitTrack = MovieChainsawCore.doMarkedWood(attack)
-    elif name.startswith('ChainsawCoreAggrandize'):
-        suitTrack = MovieChainsawCore.doAggrandize(attack)
-    elif name == 'ChainsawCoreChainLinked':
-        suitTrack = MovieChainsawCore.doChainLinked(attack)
-    elif name.startswith('ChainsawCoreScabbard'):
-        suitTrack = MovieChainsawCore.doScabbard(attack)
-    elif name == 'ChainsawCoreSparkPlug':
-        suitTrack = MovieChainsawCore.doSparkPlug(attack)
-    elif name == 'ChainsawCoreSparkPlugDamage':
-        suitTrack = MovieChainsawCore.doSparkPlugDamage(attack)
-    elif name in ('ChainsawCoreThrottle', 'ChainsawCoreThrottleTwo'):
-        suitTrack = MovieChainsawCore.doThrottle(attack)
-    elif name.startswith('ChainsawCoreLayoffs'):
-        suitTrack = MovieChainsawCore.doLayoffs(attack)
-    elif name == 'ChainsawCoreDeadwood':
-        suitTrack = MovieChainsawCore.doDeadwood(attack)
-    elif name.startswith('ChainsawCoreKickback'):
-        suitTrack = MovieChainsawCore.doKickback(attack)
-    elif name == 'PacesetterComeOn':
-        suitTrack = MoviePacesetterCheats.doComeOn(attack)
-    elif name == 'PacesetterMovingGoalposts':
-        suitTrack = MoviePacesetterCheats.doMovingGoalposts(attack)
-    elif name == 'PacesetterContentSync':
-        suitTrack = MovieHighRollerCheats.doContentSync(attack)
-    elif name == 'PacesetterCorporateRestructuring':
-        suitTrack = MoviePacesetterCheats.doCorporateRestructuring(attack)
-    elif name == 'PacesetterHurrySickness':
-        suitTrack = MoviePacesetterCheats.doHurrySickness(attack)
-    elif name == 'PacesetterHurrySicknessBan':
-        suitTrack = MoviePacesetterCheats.doHurrySicknessBan(attack)
-    elif name == 'PacesetterOverclocked':
-        suitTrack = MoviePacesetterCheats.doOverclocked(attack)
-    elif name == 'PacesetterTurn1':
-        suitTrack = MoviePacesetterCheats.doTurn1(attack)
-    elif name == 'PacesetterTurn2':
-        suitTrack = MoviePacesetterCheats.doTurn2(attack)
-    elif name == 'PacesetterEarlyOverclocked':
-        suitTrack = MoviePacesetterCheats.doEarlyOverclocked(attack)
-    elif name == 'ErclaimHemmorage':
-        suitTrack = MovieCountCheats.doHemmorage(attack)
-    elif name == 'ErclaimHemmorageHealing':
-        suitTrack = MovieCountCheats.doHemmorageHealing(attack)
-    elif name == 'ErclaimLaffSteal':
-        suitTrack = MovieCountCheats.doLaffSteal(attack)
-    elif name == 'ErclaimRiseFromTheScrap':
-        suitTrack = MovieCountCheats.doRiseFromTheScrap(attack)
-    elif name == 'ErclaimScopeCreep':
-        suitTrack = MovieCountCheats.doScopeCreep(attack)
-    elif name == 'ErclaimPhase2':
-        suitTrack = MovieCountCheats.doErclaimPhase2(attack)
-    elif name == 'ErclaimSacrifice':
-        suitTrack = MovieCountCheats.doSacrifice(attack)
-    elif name == 'ErclaimSacrifice2':
-        suitTrack = MovieCountCheats.doSacrifice(attack)
-    elif name == 'ErclaimSacrifice3':
-        suitTrack = MovieCountCheats.doSacrifice(attack)
-    elif name == 'ErclaimSacrifice4':
-        suitTrack = MovieCountCheats.doSacrifice(attack)
-    elif name == 'ErclaimSacrifice5':
-        suitTrack = MovieCountCheats.doSacrifice(attack)
-    elif name == 'ErfitWringOut':
-        suitTrack = MovieCountCheats.doWringOut(attack)
-    elif name == 'ErfitHydrationCheck':
-        suitTrack = MovieCountCheats.doHydrationCheck(attack)
-    elif name == 'ErfitHydrationCheckRevert':
-        suitTrack = MovieCountCheats.doHydrationCheckRevert(attack)
-    elif name == 'ErfitProToonShake':
-        suitTrack = MovieCountCheats.doProToonShake(attack)
-    elif name == 'ErfitGainsFromTheScrap':
-        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
-    elif name == 'ErfitGainsFromTheScrap2':
-        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
-    elif name == 'ErfitGainsFromTheScrap3':
-        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
-    elif name == 'ErfitGainsFromTheScrap4':
-        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
-    elif name == 'ErfitGainsFromTheScrap5':
-        suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
-    elif name == 'ErfitPersonalTrainer':
-        suitTrack = MovieCountCheats.doPersonalTrainer(attack)
-    elif name == 'ErfitPhase2':
-        suitTrack = MovieCountCheats.doProToonShakeDamage(attack)
-        # high roller phase 1
-    elif name == 'HighRollerLureResistance':
-        suitTrack = MovieHighRollerCheats.doLureResistance(attack, 1, 3, 5)
-    elif name == 'HighRollerLureResistance2':
-        suitTrack = MovieHighRollerCheats.doLureResistance(attack, 2, 4, 6)
-    elif name == 'HighRollerPhase2':
-        suitTrack = MovieHighRollerCheats.doPhase2(attack)
-    elif name == 'HighRollerNoAttack':
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-    elif name == 'HighRollerWheelSpin':
-        suitTrack = MovieHighRollerCheats.doWheelSpin(attack)
-    elif name == 'HighRollerPuzzle':
-        suitTrack = MovieHighRollerCheats.doPuzzle(attack)
-    elif name == 'HighRollerPuzzleBan':
-        suitTrack = MovieHighRollerCheats.doPuzzleBan(attack)
-    elif name == 'HighRollerGameOver':
-        suitTrack = MovieHighRollerCheats.doCommercialBreak(attack)
-    elif name == 'HighRollerGameOver2':
-        suitTrack = MovieHighRollerCheats.doCommercialBreak(attack)
-    elif name == 'HighRollerCommercialBreak':
-        suitTrack = MovieHighRollerCheats.doCommercialBreak2(attack)
-    elif name == 'HighRollerGameTimeSpawn':
-        suitTrack = MovieHighRollerCheats.doGameTimeSpawn(attack)
-    elif name == 'HighRollerGameTimeCog':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 1)
-    elif name == 'HighRollerGameTimeCog2':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 1)
-    elif name == 'HighRollerGameTimeCog3':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 2)
-    elif name == 'HighRollerGameTimeCog4':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 2)
-    elif name == 'HighRollerGameTimeCog5':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 3)
-    elif name == 'HighRollerGameTimeCog6':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 3)
-    elif name == 'HighRollerGameTimeCog7':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 4)
-    elif name == 'HighRollerGameTimeCog8':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 4)
-    elif name == 'HighRollerGameTimeCog9':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 5)
-    elif name == 'HighRollerGameTimeCog10':
-        suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 5)
-    elif name == 'HighRollerBust':
-        suitTrack = MovieHighRollerCheats.doBust(attack)
-    # high roller phase 2 cheats
-    elif name == 'HighRollerPhase3':
-        suitTrack = MovieHighRollerCheats.doPhase3(attack)
-    # high roller phase 3 cheats
-    elif name == 'HighRollerFreeCruise':
-        suitTrack = MovieHighRollerCheats.doFreeCruise(attack)
-    elif name == 'HighRollerRolled':
-        suitTrack = MovieHighRollerCheats.doRolled(attack)
-    elif name == 'HighRollerConduction':
-        suitTrack = MovieHighRollerCheats.doConduction(attack)
-    elif name == 'HighRollerDiceRouletteCogs':
-        suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
-    elif name == 'HighRollerDiceRouletteToons':
-        suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
-    elif name == 'HighRollerDiceRouletteEveryone':
-        suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
-    elif name == 'HighRollerDiceRouletteNobody':
-        suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
-    elif name == 'HighRollerTrickOfTheLight':
-        suitTrack = MovieHighRollerCheats.doTrickOfTheLight(attack)
-    elif name == 'HighRollerAceInTheHole':
-        suitTrack = MovieHighRollerCheats.doAceInTheHole(attack)
-    elif name == 'HighRollerVulnerable':
-        suitTrack = MovieHighRollerCheats.doVulnerable(attack)
-    elif name == 'HighRollerRaisingTheAnte':
-        suitTrack = MovieHighRollerCheats.doFreeCruise(attack)
-    # high roller silhouette cheats
-    elif name == 'HighRollerDonation':
-        suitTrack = MovieHighRollerCheats.doDonation(attack)
-    elif name == 'HighRollerSyphon':
-        suitTrack = MovieHighRollerCheats.doSyphon(attack)
-    elif name == 'HighRollerBar':
-        suitTrack = MovieHighRollerCheats.doBar(attack)
-    elif name == 'HighRollerBar2':
-        suitTrack = MovieHighRollerCheats.doBar(attack)
-    elif name == 'HighRollerSingingBlues':
-        suitTrack = MovieHighRollerCheats.doSingingBluesMegaphone(attack)
-    elif name == 'HighRollerDamageReduction':
-        suitTrack = MovieFaceTheFamilyCheats.doHighStakes(attack)
-    elif name == 'HighRollerSplashback':
-        suitTrack = MovieHighRollerCheats.doSplashback(attack)
-    elif name == 'HighRollerCheerRetaliation':
-        suitTrack = MovieHighRollerCheats.doSnipe(attack)
-    #videographer cheats
-    elif name == 'VideographerStagelightsCogs':
-        suitTrack = MovieVideographerCheats.doSignalLost(attack)
-    elif name == 'VideographerStagelightsToons':
-        suitTrack = MovieVideographerCheats.doSignalLost(attack)
-    elif name == 'VideographerHardCut':
-        suitTrack = MovieVideographerCheats.doHardCut(attack)
-    elif name == 'VideographerStarOfTheShow':
-        suitTrack = MovieVideographerCheats.doStarOfTheShow(attack)
-    elif name == 'VideographerHardCut':
-        suitTrack = MovieVideographerCheats.doHardCut(attack)
-    elif name == 'VideographerRisingStars':
-        suitTrack = MovieVideographerCheats.doRisingStars(attack)
-    elif name == 'VideographerRisingStars2':
-        suitTrack = MovieVideographerCheats.doRisingStars(attack)
-    elif name == 'VideographerRisingStarsSilhouette':
-        suitTrack = MovieVideographerCheats.doRisingStars(attack)
-    elif name == 'VideographerRisingStarsSacrifice':
-        suitTrack = MovieVideographerCheats.doRisingStarsSacrifice(attack)
-    elif name == 'VideographerVideoStatic':
-        suitTrack = MovieVideographerCheats.doVideoStatic(attack)
-    elif name == 'VideographerPhase3':
-        suitTrack = MovieVideographerCheats.doVideographerPhase3(attack)
-    elif name == 'VideographerElectricShock':
-        suitTrack = MovieVideographerCheats.doPhase3Videographer(attack)
-    elif name == 'VideographerElectricShock2':
-        suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
-    elif name == 'VideographerElectricShock3':
-        suitTrack = MovieVideographerCheats.doHardCutBan(attack)
-    elif name == 'VideographerElectricShock4':
-        suitTrack = MovieVideographerCheats.doTouchUp(attack)
-    elif name == 'VideographerAttackRewind':
-        suitTrack = MovieVideographerCheats.doAttackRewind(attack)
-    elif name == 'VideographerDirectorCuts':
-        suitTrack = MovieVideographerCheats.doDirectorCuts(attack)
-    elif name == 'VideographerDeath':
-        suitTrack = MovieUtil.createVideographerDeathMovie(attack)
-    # broadcaster cheats
-    elif name == 'BroadcasterDonation':
-        suitTrack = MovieVideographerCheats.doDonation2(attack)
-    elif name == 'BroadcasterDonation2':
-        suitTrack = MovieVideographerCheats.doDonationFail(attack)
-    elif name == 'BroadcasterViralSensation':
-        suitTrack = MovieVideographerCheats.doViralSensation(attack)
-    #filmmaker cheats
-    elif name == 'ChoreoPlacesEveryone':
-        suitTrack = MovieVideographerCheats.doPlacesEveryone(attack)
-    elif name == 'ChoreoChoreography':
-        suitTrack = MovieVideographerCheats.doChoreography(attack)
-    elif name == 'FilmmakerCameraFlash':
-        suitTrack = MovieVideographerCheats.doCameraFlash(attack)
-    elif name == 'FilmmakerCaughtOnCamera':
-        suitTrack = MovieVideographerCheats.doCaughtOnCamera(attack)
-    elif name == 'FilmmakerInFocus':
-        suitTrack = MovieVideographerCheats.doInFocus(attack)
-    elif name == 'FilmmakerWrappedInTheFilm':
-        suitTrack = MovieVideographerCheats.doWrappedInTheFilm(attack)
-    elif name == 'FilmmakerCameraRewind':
-        suitTrack = MovieVideographerCheats.doCameraRewind(attack)
-    elif name == 'FilmmakerBudgetCuts':
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-    #director cheats
-    elif name == 'DirectorCut':
-        suitTrack = MovieVideographerCheats.doRecordCut(attack)
-    elif name == 'DirectorAction':
-        suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
-    elif name == 'DirectorActionCog':
-        suitTrack = MovieVideographerCheats.doActionCog(attack)
-    elif name == 'DirectorActionRetaliation':
-        suitTrack = MovieVideographerCheats.doRecordCut(attack)
-    elif name == 'DirectorActionPartner':
-        suitTrack = MovieVideographerCheats.doActionPartner(attack)
-    elif name == 'DirectorBackToOnes':
-        suitTrack = MovieVideographerCheats.doBackToOnes(attack)
-    elif name == 'DirectorProductionBudget':
-        suitTrack = MovieVideographerCheats.doSynergy(attack)
-    elif name == 'DirectorBudgetExpansion':
-        suitTrack = MovieVideographerCheats.doBudgetExpansion(attack)
-    #universal cheats
-    elif name == 'TargetCheck':
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-    elif name == 'AmbassadorTargetCheck':
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-    elif name == 'Desperation':
-        suitTrack = MovieHighRollerCheats.doDesperation(attack)
-    elif name == 'Desperation2':
-        suitTrack = MovieUniversalCheats.doDesperation2(attack)
-    elif name == 'SynergyFees':
-        suitTrack = MovieUniversalCheats.doSynergy(attack)
-    elif name == 'CalculatingFees':
-        suitTrack = MovieUniversalCheats.doCourtCalculations(attack)
-    elif name == 'DeathCheck':
-        suitTrack = MovieUniversalCheats.doDeathCheck(attack)
-    elif name == 'CogSpawn':
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-    elif name == 'SoakRemoval':
-        suitTrack = MovieUniversalCheats.doSoakRemoval(attack)
-    elif name == 'DrenchDecrement':
-        suitTrack = MovieUniversalCheats.doDrenchDecrement(attack)
-    elif name == 'OilRemoval':
-        suitTrack = MovieBossbotLitigationCheats.doOilRemoval(attack)
-    elif name == 'GovernaughtDeath':
-        suitTrack = MovieUniversalCheats.doGovernaughtDeath(attack)
-    elif name == 'MarkRemoval':
-        suitTrack = MovieUniversalCheats.doMarkRemoval(attack)
-    elif name in (
-    'LureRemovalPreToon',
-    'LureRemoval',
-    'LureRemovalHeal',
-    'LureRemovalTrap',
-    'LureRemovalLure',
-    'LureRemovalSound',
-    'LureRemovalThrow',
-    'LureRemovalSquirt',
-    'LureRemovalZap',
-    'LureRemovalDrop'
-        ):
-        suitTrack = MovieUniversalCheats.doLureRemoval(attack)
-    elif name == 'SyphonMovie':
-        suitTrack = MovieUniversalCheats.doSyphonMovie(attack)
-    elif name == 'DamageMovie':
-        suitTrack = MovieUniversalCheats.doDamageMovie(attack)
-    elif name == 'SueApplication':
-        suitTrack = MovieUniversalCheats.doSueApplication(attack)
-    elif name == 'SueRemoval':
-        suitTrack = MovieUniversalCheats.doSueRemoval(attack)
-    elif name == 'SueDamage':
-        suitTrack = MovieUniversalCheats.doSueDamage(attack)
-    elif name == 'ZapMovie':
-        suitTrack = MovieUniversalCheats.doZapMovie(attack)
-    elif name == 'AbilityQueued':
-        suitTrack = MovieUniversalCheats.doAbilityQueued(attack)
-    elif name == 'AbilityQueuedPreToon':
-        suitTrack = MovieUniversalCheats.doAbilityQueued(attack)
-    elif name == 'AbsorbMovie':
-        suitTrack = MovieUniversalCheats.doAbsorbMovie(attack)
-    elif name == 'AbsorbMovieLevel':
-        suitTrack = MovieUniversalCheats.doAbsorbMovieLevel(attack)
-    elif name == 'ForemanPolish':
-        suitTrack = MovieBossbotLitigationCheats.doOilRainHeal(attack)
-    elif name == 'ForemanExtortion':
-        suitTrack = MovieCashbotLitigationCheats.doExtortion(attack)
-    elif name == 'ForemanSnipe':
-        suitTrack = MovieHighRollerCheats.doSnipe(attack)
-    elif name == 'ForemanRedTape':
-        suitTrack = MovieFaceTheFamilyCheats.doRedTape(attack)
-    elif name == 'ForemanContractor':
-        suitTrack = MovieFaceTheFamilyCheats.doContractor(attack)
-    elif name == 'ForemanContributing':
-        suitTrack = MovieFaceTheFamilyCheats.doContributing(attack)
-    elif name == 'ForemanContractorDeath':
-        suitTrack = MovieFaceTheFamilyCheats.doContractorRemoval(attack)
-    elif name == 'ForemanBurning':
-        suitTrack = MovieFaceTheFamilyCheats.doOverheat(attack)
-    elif name == 'ForemanUnionized':
-        suitTrack = MovieFaceTheFamilyCheats.doUnionized(attack)
-    elif name == 'ForemanBurningDamage':
-        return MovieBossbotLitigationCheats.doSlowBurn(attack)
-    elif name == 'ForemanSleepyOvercharge':
-        suitTrack = MovieFaceTheFamilyCheats.doSleepyOvercharge(attack)
-    elif name == 'ForemanExplosion':
-        suitTrack = MovieFaceTheFamilyCheats.doExplosion(attack)
-    elif name == 'ForemanCompensation':
-        suitTrack = MovieFaceTheFamilyCheats.doCompensation(attack)
-    elif name == 'ForemanCompensation2':
-        suitTrack = MovieFaceTheFamilyCheats.doCompensation2(attack)
-    elif name == 'ForemanCompensation3':
-        suitTrack = MovieFaceTheFamilyCheats.doCompensation3(attack)
-    elif name == 'ForemanCompensation4':
-        suitTrack = MovieFaceTheFamilyCheats.doCompensation4(attack)
-    elif name == 'ForemanCompensation5':
-        suitTrack = MovieFaceTheFamilyCheats.doCompensation5(attack)
-    elif name == 'MintLifeInsurance':
-        suitTrack = MovieFaceTheFamilyCheats.doLifeInsurance(attack)
-    elif name == 'MintScheming':
-        suitTrack = MovieFaceTheFamilyCheats.doScheming(attack)
-    elif name == 'MintPolicyTerminated':
-        suitTrack = MovieFaceTheFamilyCheats.doPolicyTerminated(attack)
-    elif name == 'MintFraudulentDamage':
-        suitTrack = MovieFaceTheFamilyCheats.doFraudulentDamage(attack)
-    elif name == 'MintAbacusAbove15':
-        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
-    elif name == 'MintAbacusBelow15':
-        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
-    elif name == 'MintAccountant1':
-        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
-    elif name == 'MintAccountant2':
-        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
-    elif name == 'MintAccountant3':
-        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
-    elif name == 'MintAccountant4':
-        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
-    elif name == 'MintAccountant5':
-        suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
-    elif name == 'MintUsury':
-        suitTrack = MovieFaceTheFamilyCheats.doUsury(attack)
-    elif name == 'MintApprove':
-        suitTrack = MovieFaceTheFamilyCheats.doApproveDisapprove(attack)
-    elif name == 'MintDisapprove':
-        suitTrack = MovieFaceTheFamilyCheats.doApproveDisapprove(attack)
-    elif name == 'MintHurrySickness':
-        suitTrack = MovieFaceTheFamilyCheats.doHurrySickness(attack)
-    elif name == 'MintMovingGoalposts':
-        suitTrack = MovieHighRollerCheats.doContentSync(attack)
-    elif name == 'MintLureResistance':
-        suitTrack = MovieHighRollerCheats.doLureResistance(attack, 1, 3, 5)
-    elif name == 'MintLureResistance2':
-        suitTrack = MovieHighRollerCheats.doLureResistance(attack, 2, 4, 6)
-    elif name == 'MintLedger':
-        suitTrack = MovieBoardbotLitigationCheats.doLedgerOfSound(attack)
-    elif name == 'MintAudit':
-        suitTrack = MovieBoardbotLitigationCheats.doAuditCycle(attack)
-    elif name == 'MintSynergy':
-        suitTrack = doSynergy(attack)
-    elif name == 'MintCompoundingInterest':
-        suitTrack = doSynergy(attack)
-    elif name == 'WhistleCompensation':
-        suitTrack = MovieLawbotLitigationCheats.doCompensation(attack)
-    elif name == 'AttorneyRemand':
-        suitTrack = MovieHighRollerCheats.doRemand(attack)
-    elif name == 'AttorneyObjection':
-        suitTrack = MovieFaceTheFamilyCheats.doObjection(attack)
-    elif name == 'AttorneyObjectionSustained':
-        suitTrack = MovieFaceTheFamilyCheats.doObjectionSustained(attack)
-    elif name == 'AttorneyDrainingPower':
-        suitTrack = MovieFaceTheFamilyCheats.doDrainingPower(attack)
-    elif name == 'AttorneyInkDrain':
-        suitTrack = MovieFaceTheFamilyCheats.doInkDrain(attack)
-    elif name == 'AttorneyShakedownVulnerable':
-        suitTrack = MovieFaceTheFamilyCheats.doShakedownVulnerable(attack)
-    elif name == 'AttorneyShakedownCooldown':
-        suitTrack = MovieFaceTheFamilyCheats.doShakedownCooldown(attack)
-    elif name == 'AttorneyObjectionOverruled':
-        suitTrack = MovieFaceTheFamilyCheats.doObjectionOverruled(attack)
-    elif name == 'AttorneyChrono':
-        suitTrack = MovieFaceTheFamilyCheats.doComeOn(attack)
-    elif name in (
-        'AttorneyOverseer',
-        'AttorneyOverseerDrop',
-        'AttorneyOverseerSquirt',
-        'AttorneyOverseerThrow'
-    ):
-        suitTrack = MovieFaceTheFamilyCheats.doOverseer(attack)
-    elif name in (
-        'KnockbackThrow',
-    'KnockbackSquirt'
-    ):
-        suitTrack = MovieUniversalCheats.doKnockback(attack)
-    elif name in (
-            'ComboThrow',
-    'ComboSquirt',
-    'ComboDrop'
-    ):
-        suitTrack = MovieUniversalCheats.doCombo(attack)
-    elif name == 'AttorneyRushJob':
-        suitTrack = MovieFaceTheFamilyCheats.doRushJob(attack)
-    elif name == 'AttorneyHurrySickness':
-        suitTrack = MovieFaceTheFamilyCheats.doHurrySickness(attack)
-    elif name == 'AttorneyDizzy':
-        suitTrack = MovieLawbotLitigationCheats.doWhirlwind(attack)
-    elif name == 'UnstableTransformation':
-        suitTrack = MovieFaceTheFamilyCheats.doUnstableTransformation(attack)
-
-    elif name == 'RushJobTrap':
-        suitTrack = MovieFaceTheFamilyCheats.doRushJobTrap(attack)
-
-    elif name == 'RushJobLure':
-        suitTrack = MovieFaceTheFamilyCheats.doRushJobLure(attack)
-
-    elif name == 'RushJobThrow':
-        suitTrack = MovieFaceTheFamilyCheats.doRushJobThrow(attack)
-
-    elif name == 'RushJobSquirt':
-        suitTrack = MovieFaceTheFamilyCheats.doRushJobSquirt(attack)
-
-    elif name == 'RushJobZap':
-        suitTrack = MovieFaceTheFamilyCheats.doRushJobZap(attack)
-
-    elif name == 'RushJobSound':
-        suitTrack = MovieFaceTheFamilyCheats.doRushJobSound(attack)
-
-    elif name == 'RushJobDrop':
-        suitTrack = MovieFaceTheFamilyCheats.doRushJobDrop(attack)
-        
-    elif name == 'PresidentTargetCheck':
-        suitTrack = MovieHighRollerCheats.doNoAttack(attack)
-    elif name == 'PresidentMandatoryFiling':
-        suitTrack = MovieBossbotLitigationCheats.doMandatoryFiling(attack)
-    elif name == 'PresidentLiability':
-        suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
-    elif name == 'PresidentLiability2':
-        suitTrack = MovieBossbotLitigationCheats.doPaperCutMulti(attack)
-    elif name == 'PresidentExtraTip':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 1)
-    elif name == 'PresidentExtraTip2':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 2)
-    elif name == 'PresidentExtraTip3':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 3)
-    elif name == 'PresidentExtraTip4':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 4)
-    elif name == 'PresidentExtraTip5':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 5)
-    elif name == 'PresidentExtraTip6':
-        suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 0)
-    elif name == 'PresidentSnap':
-        suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
-    elif name == 'PresidentSyphon':
-        suitTrack = MovieFaceTheFamilyCheats.doSyphon(attack)
-    elif name == 'PresidentBayouBellow':
-        suitTrack = MovieLawbotLitigationCheats.doBayouBellow(attack)
-    elif name == 'PresidentSnipe':
-        suitTrack = MovieHighRollerCheats.doSnipe(attack)
-    elif name == 'PresidentDeepFreeze':
-        suitTrack = MovieFaceTheFamilyCheats.doDeepFreeze(attack)
-    elif name == 'PresidentFrozenDeath':
-        suitTrack = MovieFaceTheFamilyCheats.doFrozenDeath(attack)
-    elif name == 'PresidentPuzzling':
-        suitTrack = MovieFaceTheFamilyCheats.doPuzzling(attack)
-    elif name == 'PresidentDriver':
-        suitTrack = MovieFaceTheFamilyCheats.doDriver(attack)
-    elif name == 'PresidentMulligan':
-        suitTrack = MovieFaceTheFamilyCheats.doMulligan(attack)
-    elif name == 'PresidentSensational':
-        suitTrack = MovieFaceTheFamilyCheats.doSensational(attack)
-    elif name == 'PresidentViralSensation':
-        suitTrack = MovieFaceTheFamilyCheats.doViralSensation(attack)
-    elif name == 'PresidentHighStakes':
-        suitTrack = MovieFaceTheFamilyCheats.doHighStakes(attack)
-    elif name in (
-    'HighStakesHeal',
-    'HighStakesTrap',
-    'HighStakesLure',
-    'HighStakesSound',
-    'HighStakesThrow',
-    'HighStakesSquirt',
-    'HighStakesZap',
-    'HighStakesDrop'
-        ):
-        suitTrack = MovieFaceTheFamilyCheats.doHighStakesNew(attack)
-    elif name in (
-        'BanLevel4', 'BanLevel5', 'BanLevel6', 'BanLevel7', 'BanLevel8',
-        'BanLevel45', 'BanLevel46', 'BanLevel47', 'BanLevel48',
-        'BanLevel56', 'BanLevel57', 'BanLevel58',
-        'BanLevel67', 'BanLevel68', 'BanLevel78',
-
-        'BanToonup', 'BanTrap', 'BanLure', 'BanThrow',
-        'BanSquirt', 'BanZap', 'BanSound', 'BanDrop',
-
-        'BanToonupTrap', 'BanToonupLure', 'BanToonupThrow', 'BanToonupSquirt',
-        'BanToonupZap', 'BanToonupSound', 'BanToonupDrop',
-
-        'BanTrapLure', 'BanTrapThrow', 'BanTrapSquirt', 'BanTrapZap',
-        'BanTrapSound', 'BanTrapDrop',
-
-        'BanLureThrow', 'BanLureSquirt', 'BanLureZap',
-        'BanLureSound', 'BanLureDrop',
-
-        'BanThrowSquirt', 'BanThrowZap', 'BanThrowSound', 'BanThrowDrop',
-
-        'BanSquirtZap', 'BanSquirtSound', 'BanSquirtDrop',
-
-        'BanZapSound', 'BanZapDrop',
-
-        'BanSoundDrop'
-    ):
-        if suit.dna.name == 'cdirector':
-            suitTrack = MovieBoardbotLitigationCheats.doContningencyClauseBanMovie(attack)
-        elif suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
-        elif suit.dna.name == 'ubuster':
-            suitTrack = MovieSellbotLitigationCheats.doContractEnforcementBan(attack)
-        else:
-            suitTrack = MovieUniversalCheats.doCourtRecord(attack)
-    elif name in (
-        'DisableToonupTrap', 'DisableToonupLure', 'DisableToonupThrow',
-        'DisableToonupSquirt', 'DisableToonupZap', 'DisableToonupSound', 'DisableToonupDrop',
-
-        'DisableTrapLure', 'DisableTrapThrow', 'DisableTrapSquirt',
-        'DisableTrapZap', 'DisableTrapSound', 'DisableTrapDrop',
-
-        'DisableLureThrow', 'DisableLureSquirt', 'DisableLureZap',
-        'DisableLureSound', 'DisableLureDrop',
-
-        'DisableThrowSquirt', 'DisableThrowZap', 'DisableThrowSound', 'DisableThrowDrop',
-
-        'DisableSquirtZap', 'DisableSquirtSound', 'DisableSquirtDrop',
-
-        'DisableZapSound', 'DisableZapDrop',
-
-        'DisableSoundDrop',
-
-        'DisableLevel45', 'DisableLevel46', 'DisableLevel47', 'DisableLevel48',
-        'DisableLevel56', 'DisableLevel57', 'DisableLevel58',
-        'DisableLevel67', 'DisableLevel68', 'DisableLevel78'
-                                        ):
-        suitTrack = MovieUniversalCheats.doCourtMandate(attack)
-    elif name in (
-        'GagBanRetaliationHeal',
-        'GagBanRetaliationTrap',
-        'GagBanRetaliationLure',
-        'GagBanRetaliationThrow',
-        'GagBanRetaliationSquirt',
-        'GagBanRetaliationZap',
-        'GagBanRetaliationSound',
-        'GagBanRetaliationDrop'
-    ):
-        if suit.dna.name in ('stenog', 'caseman'):
+    match name:
+        case 'AcidRain':
+            suitTrack = doAcidRain(attack)
+        case 'Aftershock' | 'Quake':
+            suitTrack = doQuake(attack)
+        case 'Audit':
+            suitTrack = doAudit(attack)
+        case 'BackBreaker':
+            suitTrack = doDefault(attack)
+        case 'Bash':
+            suitTrack = doBash(attack)
+        case 'Beguile':
+            suitTrack = doBeguile(attack)
+        case 'Bite':
+            if suit.isAngry:
+                suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doBite(attack))
+            else:
+                suitTrack = doBite(attack)
+        case 'BlueChip' | 'CoinToss':
+            suitTrack = doBlueChip(attack)
+        case 'BounceCheck':
+            suitTrack = doBounceCheck(attack)
+        case 'BounceRate':
+            suitTrack = doBounceRate(attack)
+        case 'BrainStorm' | 'Forecast':
+            suitTrack = doBrainStorm(attack)
+        case 'Breakthrough':
+            suitTrack = doBreakthrough(attack)
+        case 'Brainwash':
+            suitTrack = doDefault(attack)
+        case 'BuzzWord':
+            suitTrack = doBuzzWord(attack)
+        case 'Calculate':
+            suitTrack = doCalculate(attack)
+        case 'Canned':
+            suitTrack = doCanned(attack)
+        case 'CashGrab' | 'PickPocket':
+            suitTrack = doPickPocket(attack)
+        case 'Chomp':
+            suitTrack = doChomp(attack)
+        case 'CigarSmoke':
+            suitTrack = doCigarSmoke(attack)
+        case 'ClipOnTie':
+            suitTrack = doClipOnTie(attack)
+        case 'CloseTheLoop':
+            suitTrack = doCloseTheLoop(attack)
+        case 'CloudStorage':
+            suitTrack = doCloudStorage(attack)
+        case 'Crunch' | 'MudSling':
+            suitTrack = doCrunch(attack)
+        case 'DataBreach':
+            suitTrack = doDataBreach(attack)
+        case 'DataCorruption':
+            suitTrack = doDataCorruption(attack)
+        case 'Demotion':
+            suitTrack = doDemotion(attack)
+        case 'DenialOfService':
+            suitTrack = doDenialOfService(attack)
+        case 'Disassemble':
+            suitTrack = doDisassemble(attack)
+        case 'DiskScratch':
+            suitTrack = doDiskScratch(attack)
+        case 'DoubleCross':
+            suitTrack = doDoubleCross(attack)
+        case 'DoubleTalk':
+            suitTrack = doDoubleTalk(attack)
+        case 'DoubleWindsor' | 'HalfWindsor':
+            suitTrack = doHalfWindsor(attack)
+        case 'Downsize':
+            suitTrack = doDownsize(attack)
+        case 'ElectrostaticEnergy':
+            suitTrack = doElectrostaticEnergy(attack)
+        case 'Embezzle':
+            suitTrack = doEmbezzle(attack)
+        case 'Encrypt':
+            suitTrack = doEncrypt(attack)
+        case 'EvictionNotice':
+            suitTrack = doEvictionNotice(attack)
+        case 'EvilEye':
+            suitTrack = doEvilEye(attack)
+        case 'FallingKnife':
+            suitTrack = doFallingKnife(attack)
+        case 'Filibuster':
+            suitTrack = doFilibuster(attack)
+        case 'FillWithLead':
+            suitTrack = doFillWithLead(attack)
+        case 'FingerWag':
+            if suit.isAngry:
+                suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doFingerWag(attack))
+            else:
+                suitTrack = doFingerWag(attack)
+        case 'Fired':
+            suitTrack = doFired(attack)
+        case 'FiveOClockShadow':
+            suitTrack = doFiveOClockShadow(attack)
+        case 'FloodTheMarket':
+            suitTrack = doFloodTheMarket(attack)
+        case 'FountainPen':
+            suitTrack = doFountainPen(attack)
+        case 'FreezeAssets':
+            suitTrack = doFreezeAssets(attack)
+        case 'Gerrymander':
+            suitTrack = doDefault(attack)
+        case 'GlowerPower':
+            suitTrack = doGlowerPower(attack)
+        case 'GoldDust':
+            suitTrack = doGoldDust(attack)
+        case 'GoldRush':
+            suitTrack = doGoldRush(attack)
+        case 'GuiltTrip':
+            if suit.isAngry:
+                suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doGuiltTrip(attack))
+            else:
+                suitTrack = doGuiltTrip(attack)
+        case 'HangUp':
+            suitTrack = doHangUp(attack)
+        case 'HeadShrink':
+            suitTrack = doHeadShrink(attack)
+        case 'HostileTakeover':
+            suitTrack = doHostileTakeoverNew(attack)
+        case 'HotAir':
+            suitTrack = doHotAir(attack)
+        case 'Inject':
+            suitTrack = doInject(attack)
+        case 'Jargon':
+            suitTrack = doJargon(attack)
+        case 'Legalese':
+            suitTrack = doLegalese(attack)
+        case 'Liquidate':
+            suitTrack = doLiquidate(attack)
+        case 'MarketCrash' | 'Newspaper':
+            suitTrack = doMarketCrash(attack)
+        case 'MindBlow':
+            suitTrack = doMindBlow(attack)
+        case 'MoneyTalks':
+            suitTrack = doMoneyTalks(attack)
+        case 'MumboJumbo':
+            suitTrack = doMumboJumbo(attack)
+        case 'MysteriousDisappearance':
+            suitTrack = doMysteriousDisappearance(attack)
+        case 'NickelAndDime':
+            suitTrack = doNickelAndDime(attack)
+        case 'Novel' | 'ThrowBook':
+            suitTrack = doThrowBook(attack)
+        case 'Overload':
+            suitTrack = doOverload(attack)
+        case 'ParadigmShift':
+            if suit.isAngry:
+                suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doParadigmShift(attack))
+            else:
+                suitTrack = doParadigmShift(attack)
+        case 'PeckingOrder':
+            suitTrack = doPeckingOrder(attack)
+        case 'PennyPinch':
+            suitTrack = doPennyPinch(attack)
+        case 'PinkSlip':
+            suitTrack = doPinkSlip(attack)
+        case 'PlayHardball':
+            suitTrack = doPlayHardball(attack)
+        case 'PoundKey':
+            suitTrack = doPoundKey(attack)
+        case 'PowerTie':
+            suitTrack = doPowerTie(attack)
+        case 'PowerTrip':
+            suitTrack = doPowerTrip(attack)
+        case 'Quash':
+            suitTrack = doQuash(attack)
+        case 'RazzleDazzle':
+            suitTrack = doRazzleDazzle(attack)
+        case 'ReArrange' | 'ReOrg':
+            suitTrack = doReOrg(attack)
+        case 'RecordBreaker':
+            suitTrack = doRecordBreaker(attack)
+        case 'RedTape':
+            suitTrack = doRedTape(attack)
+        case 'Reprogram':
+            suitTrack = doReprogram(attack)
+        case 'RestrainingOrder':
+            suitTrack = doRestrainingOrder(attack)
+        case 'Rolodex':
+            suitTrack = doRolodex(attack)
+        case 'RubberStamp':
+            suitTrack = doRubberStamp(attack)
+        case 'RubOut':
+            suitTrack = doRubOut(attack)
+        case 'Sacked':
+            suitTrack = doSacked(attack)
+        case 'SandTrap':
+            suitTrack = doSandTrap(attack)
+        case 'Schmooze' | 'TestSchmooze':
+            suitTrack = doSchmooze(attack)
+        case 'Shake':
+            suitTrack = doShake(attack)
+        case 'ShortSqueeze':
+            suitTrack = doShortSqueeze(attack)
+        case 'Shred':
+            suitTrack = doShred(attack)
+        case 'SmokeAndMirrors':
+            suitTrack = doCigarSmoke(attack)
+        case 'SongAndDance':
+            suitTrack = doSongAndDance(attack)
+        case 'Spin':
+            suitTrack = doSpin(attack)
+        case 'StolenScene':
+            suitTrack = doStolenScene(attack)
+        case 'StumpSpeech':
+            suitTrack = doStumpSpeech(attack)
+        case 'Synergy':
+            suitTrack = doSynergy(attack)
+        case 'Tabulate':
+            suitTrack = doTabulate(attack)
+        case 'TeeOff':
+            suitTrack = doTeeOff(attack)
+        case 'TickingTimeBomb':
+            suitTrack = doTickingTimeBomb(attack)
+        case 'Tremor':
+            if suit.isAngry:
+                suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doTremor(attack))
+            else:
+                suitTrack = doTremor(attack)
+        case 'VersionControl':
+            suitTrack = doVersionControl(attack)
+        case 'VoodooMagic':
+            suitTrack = doVoodooMagic(attack)
+        case 'Watercooler':
+            suitTrack = doWatercooler(attack)
+        case 'Withdrawal':
+            suitTrack = doWithdrawal(attack)
+        case 'WriteOff':
+            suitTrack = doWriteOff(attack)
+            #redd heir-wing cheats
+        case 'ReddAutoRepair':
+            suitTrack = MovieLawbotLitigationCheats.doAutoRepair(attack)
+        case 'ReddLiquidationSale':
+            suitTrack = MovieLawbotLitigationCheats.doLiquidationSale(attack)
+        case 'ReddPeckingOrder':
+            suitTrack = MovieLawbotLitigationCheats.doPeckingOrder(attack)
+            # wsi cheats
+        case 'WSICeaseAndDesist':
+            suitTrack = MovieLawbotLitigationCheats.doCeaseAndDesist(attack)
+        case 'WSIJuryNotice':
+            suitTrack = MovieLawbotLitigationCheats.doJuryNotice(attack)
+            # arbitrator cheats
+        case 'ArbitratorObjection':
+            if suit.isAngry:
+                suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), MovieLawbotLitigationCheats.doGavelCourtRecord2(attack))
+            else:
+                suitTrack = MovieLawbotLitigationCheats.doGavelCourtRecord2(attack)
+        case 'ArbitratorPaperFiling':
+            suitTrack = MovieLawbotLitigationCheats.doPaperweight(attack)
+        case 'ArbitratorWhirlwind':
+            suitTrack = MovieLawbotLitigationCheats.doWhirlwind(attack)
+        case 'ArbitratorThrowBook':
+            suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 1)
+        case 'ArbitratorThrowBook2':
+            suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 2)
+        case 'ArbitratorThrowBook3':
+            suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 3)
+        case 'ArbitratorThrowBook4':
+            suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 4)
+        case 'ArbitratorThrowBook5':
+            suitTrack = MovieLawbotLitigationCheats.doThrowBookCog(attack, 5)
+        #litigator cheats
+        case 'LitigatorSnapSoak':
+            suitTrack = MovieLawbotLitigationCheats.doSnapBindings(attack, suit)
+        case 'LitigatorSnapBindings':
+            suitTrack = MovieLawbotLitigationCheats.doSnapBindings(attack, suit)
+        case 'LitigatorSnap':
+            suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
+        case 'LitigatorSnapStenographer':
+            suitTrack = MovieLawbotLitigationCheats.doSnapStenographer(attack, suit)
+        case 'LitigatorBayouBash':
+            suitTrack = MovieLawbotLitigationCheats.doBayouBash(attack)
+        case 'LitigatorBayouBellow':
+            suitTrack = MovieLawbotLitigationCheats.doBayouBellow(attack)
+        #stenographer cheats
+        case 'StenographerSanctionBindings':
+            suitTrack = MovieLawbotLitigationCheats.doCourtSanction2(attack)
+        case 'StenographerSanctionSuppression':
+            suitTrack = MovieLawbotLitigationCheats.doCourtSanction2(attack)
+        case 'StenographerSanction':
+            suitTrack = MovieLawbotLitigationCheats.doCourtSanction(attack)
+        case 'StenographerSanctionLitigator':
+            suitTrack = MovieLawbotLitigationCheats.doCourtSanctionLitigator(attack)
+        case 'StenographerCourtRecordBan':
             return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
-        elif suit.dna.name == 'wtapper':
-            suitTrack = MovieBossbotLitigationCheats.doCloseTheLoopNew(attack)
-        elif suit.dna.name == 'racket':
-            suitTrack = MovieCashbotLitigationCheats.doPeckingOrderGroup(attack)
-        elif suit.dna.name == 'cdirector':
+        #case manager cheats
+        case 'CaseManagerInsurancePlanScapegoat':
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsuranceScapegoat(attack, 1, 3, 5)
+        case 'CaseManagerInsurancePlanScapegoat2':
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsuranceScapegoat(attack, 0, 2, 4)
+        case 'CaseManagerInsurancePlan':
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack, 1, 3, 5)
+        case 'CaseManagerInsurancePlan2':
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance(attack, 0, 2, 4)
+        case 'CaseManagerInsurance':
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
+        case 'CaseManagerInsurance2':
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
+        case 'CaseManagerLegalBindings':
+            suitTrack = MovieLawbotLitigationCheats.doLegalBindings(attack)
+        case 'CaseManagerLegalBindings2':
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurancePlanInsurance2(attack)
+        case 'CaseManagerLegallyBound':
+            return MovieLawbotLitigationCheats.doLegallyBound(attack)
+        case 'CaseManagerCourtRecordBan':
+            return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
+        #scapegoat cheats
+        case 'ScapegoatRageBuilding':
+            suitTrack = MovieUniversalCheats.doRageBuilding(attack)
+        case 'ScapegoatShieldsUp':
+            suitTrack = MovieLawbotLitigationCheats.doShieldsUp(attack)
+        case 'ScapegoatEnraged':
+            suitTrack = MovieLawbotLitigationCheats.doEnraged(attack)
+        case 'ScapegoatGavel':
+            if suit.isAngry:
+                suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), MovieLawbotLitigationCheats.doSuppression(attack))
+            else:
+                suitTrack = MovieLawbotLitigationCheats.doSuppression(attack)
+        case 'ScapegoatBarnyardBash':
+            suitTrack = MovieLawbotLitigationCheats.doSuppressionRevert(attack)
+        case 'ScapegoatCourtRecordBan':
+            return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
+        #powerhouse cheats
+        case 'PowerhouseToleranceBuilding':
+            suitTrack = MovieUniversalCheats.doRageBuilding(attack)
+        case 'PowerhouseAbsorb':
+            suitTrack = MovieBossbotLitigationCheats.doAbsorb(attack)
+        case 'PowerhouseSoakImmune':
+            suitTrack = MovieBossbotLitigationCheats.doSoakImmune(attack)
+        case 'PowerhouseGroundbreaker':
+            suitTrack = MovieBossbotLitigationCheats.doGroundbreaker(attack)
+        case 'PowerhouseGroundbreakerRevert':
+            suitTrack = MovieBossbotLitigationCheats.doGroundbreakerRevert(attack)
+        case 'PowerhouseLureImmune':
+            suitTrack = MovieBossbotLitigationCheats.doLureImmune(attack)
+        case 'PowerhouseSyphon':
+            suitTrack = MovieBossbotLitigationCheats.doSyphon(attack)
+        case 'PowerhouseZapImmune':
+            suitTrack = MovieBossbotLitigationCheats.doZapImmune(attack)
+        case 'PowerhouseDropImmune':
+            suitTrack = MovieBossbotLitigationCheats.doDropImmune(attack)
+        case 'PowerhouseSyphonDesperation':
+            suitTrack = MovieBossbotLitigationCheats.doSyphonDesperation(attack)
+        case 'PowerhouseSnipeVulnerable':
+            suitTrack = MovieBossbotLitigationCheats.doThrowImmune(attack)
+        case 'PowerhouseSnipeGagBan':
+            suitTrack = MovieBossbotLitigationCheats.doAftershock(attack)
+        case 'PowerhouseSnipeSoaked':
+            suitTrack = MovieBossbotLitigationCheats.doAftershock(attack)
+        case 'PowerhouseSnipeBookkept':
+            suitTrack = MovieBossbotLitigationCheats.doAftershock(attack)
+        case 'PowerhouseSnipeMulligan':
+            suitTrack = MovieBossbotLitigationCheats.doSoundImmune(attack)
+        case 'PowerhouseSnipeCollectCall':
+            suitTrack = MovieBossbotLitigationCheats.doGeneration3(attack)
+        case 'PowerhouseGeneration':
+            suitTrack = MovieBossbotLitigationCheats.doGeneration(attack)
+        case 'PowerhouseGeneration2':
+            suitTrack = MovieBossbotLitigationCheats.doGeneration2(attack)
+        case 'PowerhouseBurnDamage':
+            return MovieBossbotLitigationCheats.doAftershockDamage(attack)
+        #bookkeeper cheats
+        case 'BookkeeperPaperCutSoaked':
+            suitTrack = MovieBossbotLitigationCheats.doPaperCutMulti(attack)
+        case 'BookkeeperPaperCutMarked':
+            suitTrack = MovieBossbotLitigationCheats.doBookkeepingDamageUp(attack)
+        case 'BookkeeperCabinetCrackdown':
+            suitTrack = MovieBossbotLitigationCheats.doCabinetCrackdown(attack)
+        case 'BookkeeperPaperCut':
+            suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
+        case 'AmbassadorAdvancement2':
+            suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
+        case 'AmbassadorAdvancement3':
+            suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
+        case 'BookkeeperExplodingDocument':
+            suitTrack = MovieBossbotLitigationCheats.doOverseer(attack)
+        case 'BookkeeperBookkeepingRetaliation':
+            suitTrack = MovieBossbotLitigationCheats.doBookkeepingRetaliation(attack)
+        case 'BookkeeperBookkeeping':
+            suitTrack = MovieBossbotLitigationCheats.doBookkeeping(attack)
+        case 'BookkeeperMandatoryFiling':
+            suitTrack = MovieBossbotLitigationCheats.doMandatoryFiling(attack)
+        #wiretapper cheats
+        case 'WiretapperCollectCall':
+            suitTrack = MovieBossbotLitigationCheats.doCollectCall(attack)
+        case 'WiretapperCollectCall2':
+            suitTrack = MovieBossbotLitigationCheats.doVoicemail(attack)
+        case 'WiretapperCollectCallDamage':
+            suitTrack = MovieBossbotLitigationCheats.doCollectCallDues(attack)
+        case 'WiretapperWiretapped':
+            suitTrack = MovieBossbotLitigationCheats.doWiretapped(attack)
+        case 'WiretapperVoicemail':
+            suitTrack = MovieBossbotLitigationCheats.doVoicemailReal(attack)
+        case 'WiretapperBrokenConnection':
+            suitTrack = MovieBossbotLitigationCheats.doBrokenConnection(attack)
+        case 'WiretapperGagBan':
+            suitTrack = MovieFaceTheFamilyCheats.doOverseer(attack)
+        case 'WiretapperBusySignal':
+            suitTrack = MovieBossbotLitigationCheats.doBusySignal(attack)
+        #ambassador cheats
+        case 'AmbassadorHeadRoller':
+            suitTrack = MovieBossbotLitigationCheats.doDamageUp1(attack)
+        case 'AmbassadorHeadRoller2':
+            suitTrack = MovieBossbotLitigationCheats.doDamageUp2(attack)
+        case 'AmbassadorHeadRoller3':
+            suitTrack = MovieBossbotLitigationCheats.doDamageUp3(attack)
+        case 'AmbassadorHeadRoller4':
+            suitTrack = MovieBossbotLitigationCheats.doDamageUp4(attack)
+        case 'AmbassadorHeadRoller5':
+            suitTrack = MovieBossbotLitigationCheats.doDamageUp5(attack)
+        case 'AmbassadorAdvancement':
+            suitTrack = MovieBossbotLitigationCheats.doAdvancement(attack)
+        case 'AmbassadorAdvancement4':
+            suitTrack = MovieBossbotLitigationCheats.doAdvancement(attack, 4)
+        case 'AmbassadorAdvancement5':
+            suitTrack = MovieBossbotLitigationCheats.doAdvancement(attack, 5)
+        case 'AmbassadorHeadRollerGroup':
+            suitTrack = MovieBossbotLitigationCheats.doHeadRollerGroup(attack)
+        case 'AmbassadorRefinement':
+            suitTrack = MovieBossbotLitigationCheats.doOilRainHeal(attack)
+        case 'AmbassadorRefinementManager':
+            suitTrack = MovieBossbotLitigationCheats.doOilRainHealManager(attack)
+        case 'AmbassadorPhase2':
+            suitTrack = MovieBossbotLitigationCheats.doAmbassadorPhase2(attack)
+        case 'AmbassadorDamageUp':
+            suitTrack = MovieBossbotLitigationCheats.doAmbassadorDamageUp(attack)
+        case 'AmbassadorManagerialProtection' | 'AmbassadorManagerialProtectionImmunity':
+            suitTrack = MovieBossbotLitigationCheats.doTeeOff(attack)
+        case 'AmbassadorMulligan':
+            suitTrack = MovieBossbotLitigationCheats.doFore(attack)
+        case 'AmbassadorGhostMentality':
+            suitTrack = MovieBossbotLitigationCheats.doGhostMentality(attack)
+            # liquidator
+        case 'LiquidatorOilRain':
+            suitTrack = MovieBoardbotLitigationCheats.doOilRain(attack)
+        case 'LiquidatorOilRainDamage':
+            suitTrack = MovieBoardbotLitigationCheats.doOilRainDamage(attack)
+        case 'LiquidatorFreezingRain':
+            suitTrack = MovieBoardbotLitigationCheats.doFreezingRain(attack)
+        case 'LiquidatorHeavyRain':
+            suitTrack = MovieBoardbotLitigationCheats.doHeavyRain(attack)
+        case 'LiquidatorHeavyRainDamage':
+            suitTrack = MovieBoardbotLitigationCheats.doHeavyRainDamage(attack)
+        case 'LiquidatorStormCell':
+            suitTrack = MovieBoardbotLitigationCheats.doStormCell(attack)
+        case 'LiquidatorStormCellDamage':
+            suitTrack = MovieBoardbotLitigationCheats.doStormCellDamage(attack)
+        case 'LiquidatorInversion':
+            suitTrack = MovieBoardbotLitigationCheats.doInversion(attack)
+        case 'LiquidatorMonsoon':
+            suitTrack = MovieBoardbotLitigationCheats.doMonsoon(attack)
+        case 'LiquidatorTornado':
+            suitTrack = MovieBoardbotLitigationCheats.doTornado(attack)
+            # tollmaster
+        case 'TollmasterRushHour':
+            suitTrack = MovieBoardbotLitigationCheats.doRushHour(attack)
+        case 'TollmasterMandatoryToll':
+            suitTrack = MovieBoardbotLitigationCheats.doMandatoryToll(attack)
+        case 'TollmasterMandatoryTollFinal':
+            suitTrack = MovieBoardbotLitigationCheats.doMandatoryTollFinal(attack)
+        case 'TollmasterResonanceTax':
+            suitTrack = MovieBoardbotLitigationCheats.doResonanceTax(attack)
+        case 'TollmasterResonanceTax2':
+            suitTrack = MovieBoardbotLitigationCheats.doResonanceTax2(attack)
+        case 'TollmasterResonanceTax3':
+            suitTrack = MovieBoardbotLitigationCheats.doResonanceTax3(attack)
+        case 'TollmasterResonanceTax4':
+            suitTrack = MovieBoardbotLitigationCheats.doResonanceTax4(attack)
+        case 'TollmasterResonanceTax5':
+            suitTrack = MovieBoardbotLitigationCheats.doResonanceTax5(attack)
+        case 'TollmasterMissedPayment':
+            suitTrack = MovieBoardbotLitigationCheats.doMissedPayment(attack)
+        case 'TollmasterLedgerOfSound':
+            suitTrack = MovieBoardbotLitigationCheats.doLedgerOfSound(attack)
+        case 'TollmasterBalanceTheLedger':
+            suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger(attack)
+        case 'TollmasterBalanceTheLedger2':
+            suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger2(attack)
+        case 'TollmasterBalanceTheLedger3':
+            suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger3(attack)
+        case 'TollmasterBalanceTheLedger4':
+            suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger4(attack)
+        case 'TollmasterBalanceTheLedger5':
+            suitTrack = MovieBoardbotLitigationCheats.doBalanceTheLedger5(attack)
+            # record keeper
+        case 'RecordkeeperMinutesTaken':
+            suitTrack = MovieBoardbotLitigationCheats.doPermanentRecordAudit(attack)
+        case 'RecordkeeperMinutesTakenContingency':
+            suitTrack = MovieBoardbotLitigationCheats.doPermanentRecordAuditBanned(attack)
+        case 'RecordkeeperMinutesTakenDamage':
+            suitTrack = MovieBoardbotLitigationCheats.doMinutesTakenDamageBooks(attack)
+        case 'RecordkeeperPaperTrail':
+            suitTrack = MovieBoardbotLitigationCheats.doShadowToon(attack)
+        case 'RecordkeeperRevisedFiling':
+            suitTrack = MovieBoardbotLitigationCheats.doRevisedFiling(attack)
+        case 'RecordkeeperRevisedFilingLiquidation':
+            suitTrack = MovieBoardbotLitigationCheats.doShadowToon2(attack)
+        case 'RecordkeeperRedlinedClause':
+            suitTrack = MovieBoardbotLitigationCheats.doRedlinedClause(attack)
+        case 'RecordkeeperRedlinedClauseMissedPayment':
+            suitTrack = MovieBoardbotLitigationCheats.doMinutesTaken(attack)
+        case 'RecordkeeperAuditCycle':
+            suitTrack = MovieBoardbotLitigationCheats.doAuditCycle(attack)
+        case 'RecordkeeperPhantomEntrySpawn':
+            suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySpawn(attack)
+        case 'RecordkeeperPhantomEntryDamage':
+            suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
+        case 'RecordkeeperPhantomEntrySacrifice':
+            suitTrack = MovieBoardbotLitigationCheats.doPhantomEntrySacrifice(attack)
+            # corporate butcherer
+        case 'ButcherOverride':
+            if suit.isChainsawPhase3:
+                suitTrack = MovieBoardbotLitigationCheats.doOverridePhase3(attack)
+            else:
+                suitTrack = MovieBoardbotLitigationCheats.doOverride(attack)
+        case 'ButcherOverrideRemoval':
+            if suit.isChainsawPhase3:
+                suitTrack = MovieBoardbotLitigationCheats.doOverrideRemovalPhase3(attack)
+            else:
+                suitTrack = MovieBoardbotLitigationCheats.doOverrideRemoval(attack)
+        case 'ButcherRevvingUp':
+            suitTrack = MovieBoardbotLitigationCheats.doRevvingUp(attack)
+        case 'ButcherRevvingUpWhipsaw':
+            suitTrack = MovieBoardbotLitigationCheats.doRevvingUpWhipsaw(attack)
+        case 'ButcherKickback':
+            suitTrack = MovieBoardbotLitigationCheats.doKickback(attack)
+        case 'ButcherMarkedWood':
+            suitTrack = MovieBoardbotLitigationCheats.do7000RPM(attack)
+        case 'ButcherOffboarding':
+            suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 1)
+        case 'ButcherOffboarding2':
+            suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 2)
+        case 'ButcherOffboarding3':
+            suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 3)
+        case 'ButcherOffboarding4':
+            suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 4)
+        case 'ButcherOffboarding5':
+            suitTrack = MovieBoardbotLitigationCheats.do2000RPMOffboarding(attack, 5)
+        case 'ButcherAggrandize':
+            suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 1)
+        case 'ButcherAggrandize2':
+            suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 2)
+        case 'ButcherAggrandize3':
+            suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 3)
+        case 'ButcherAggrandize4':
+            suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 4)
+        case 'ButcherAggrandize5':
+            suitTrack = MovieBoardbotLitigationCheats.do3000RPMAggrandize(attack, 5)
+        case 'ButcherSparkPlug':
+            suitTrack = MovieBoardbotLitigationCheats.do2000RPMSparkPlug(attack)
+        case 'ButcherSparkPlugDamage':
+            suitTrack = MovieBoardbotLitigationCheats.doSparkPlugDamage(attack)
+        case 'ButcherScabbard':
+            suitTrack = MovieBoardbotLitigationCheats.do7000RPMScabbard(attack)
+        case 'ButcherLayoffs':
+            suitTrack = MovieBoardbotLitigationCheats.do10000RPM(attack)
+            # contingency director
+        case 'ContingencyOverrideRevert':
+            suitTrack = MovieBoardbotLitigationCheats.doContingencyOverrideRevert(attack)
+        case 'ContingencyOverride':
+            suitTrack = MovieBoardbotLitigationCheats.doContingencyOverride(attack)
+        case 'ContingencyFailsafeProtocol':
+            suitTrack = MoviePacesetterCheats.doCorporateRestructuring(attack)
+            # suitTrack = MovieBoardbotLitigationCheats.doFailsafeProtocol(attack)
+        case 'ContingencyRiskThresholdBreach75':
+            suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach75(attack)
+        case 'ContingencyRiskThresholdBreach50':
+            suitTrack = MovieBoardbotLitigationCheats.doMarkedWood(attack) # Marking Application
+        case 'ContingencyRiskThresholdBreach25':
+            suitTrack = MovieHighRollerCheats.doSnipe(attack) # Marking Damage
+        case 'ContingencySelfRepair':
+            suitTrack = MovieBoardbotLitigationCheats.doSelfRepair(attack)
+        case 'ContingencyContingencyClause':
+            suitTrack = MovieBoardbotLitigationCheats.doContingencyClause(attack)
+        case 'ContingencyContingencyClauseRetaliation':
             suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach25(attack)
-        elif suit.dna.name == 'ubuster':
-            suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
-        else:
+        case 'ContingencyRedundantAuthority':
+            suitTrack = MovieBoardbotLitigationCheats.doRedundantAuthority(attack)
+        case 'ContingencyOperationalFreeze':
+            suitTrack = MovieFaceTheFamilyCheats.doHighStakesContingency(attack)
+        case 'ContingencyForecastCollapse':
+            suitTrack = MovieBoardbotLitigationCheats.doForecastCollapse(attack)
+        case 'ContingencyRiskThresholdBreach':
+            suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach(attack)
+        case 'ContingencyMarkLiquidated':
+            suitTrack = MovieBoardbotLitigationCheats.doMarkedWood(attack)
+        case 'ContingencyMarkRevisedFiling':
+            suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+            # dividend king
+        case 'DividendAccountRollover':
+            suitTrack = MovieBoardbotLitigationCheats.doAccountRollover(attack)
+        case 'DividendAccountRollover2':
+            suitTrack = MovieBoardbotLitigationCheats.doAccountRollover2(attack)
+        case 'DividendAccountRollover3':
+            suitTrack = MovieBoardbotLitigationCheats.doAccountRollover3(attack)
+        case 'DividendAccountRollover4':
+            suitTrack = MovieBoardbotLitigationCheats.doAccountRollover4(attack)
+        case 'DividendAccountRollover5':
+            suitTrack = MovieBoardbotLitigationCheats.doAccountRollover5(attack)
+        case 'DividendLiquidationEvent':
+            suitTrack = MovieBoardbotLitigationCheats.doLiquidationEvent(attack)
+        case 'DividendLiquidationEventDamage':
+            suitTrack = MovieBoardbotLitigationCheats.doMeltdownDamage(attack)
+        case 'DividendTotalMarketMeltdown':
+            suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown(attack)
+        case 'DividendTotalMarketMeltdown2':
+            suitTrack = MovieBoardbotLitigationCheats.doTotalMarketMeltdown2(attack)
+        case 'DividendTotalMarketMeltdownDamage':
+            suitTrack = MovieBoardbotLitigationCheats.doMeltdownDamage(attack)
+        case 'DividendPeckingOrder':
+            suitTrack = MovieBoardbotLitigationCheats.doScabbard(attack)
+        case 'DividendPeckingOrderZapped':
+            suitTrack = MovieBoardbotLitigationCheats.doEmbezzle(attack)
+        case 'DividendZapRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doThrowRetaliation(attack)
+            # ottoman cheats
+        case 'OttomanRevisedDraft':
+            suitTrack = MovieBoardbotLitigationCheats.doWhirlwind(attack)
+        case 'OttomanRedPenReview':
+            suitTrack = MovieBoardbotLitigationCheats.doRedPenReview(attack)
+        case 'OttomanFootnoteOverload':
+            suitTrack = MovieBoardbotLitigationCheats.doFootnoteOverload(attack)
+        case 'OttomanPerformanceReview':
+            suitTrack = MovieBoardbotLitigationCheats.doPerformanceReview(attack)
+        case 'OttomanPerformanceReviewRevert':
+            suitTrack = MovieBoardbotLitigationCheats.doPerformanceReviewRevert(attack)
+            # crystalline cheats
+        case 'CrystalShatteringClarity':
+            suitTrack = MovieBoardbotLitigationCheats.doShatteringClarity(attack)
+        case 'CrystalRefractDamage':
+            suitTrack = MovieBoardbotLitigationCheats.doRefractDamage(attack)
+        case 'CrystalRefractDamageRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doRefractDamageRetaliation(attack)
+        case 'CrystalFracturedLimitsOffensive':
+            suitTrack = MovieBoardbotLitigationCheats.doFracturedLimits(attack)
+        case 'CrystalFracturedLimitsDefensive':
+            suitTrack = MovieBoardbotLitigationCheats.doFracturedLimits(attack)
+        case 'CrystalFracturedLimitsRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doFracturedLimitsRetaliation(attack)
+        case 'CrystalPrismaticDistortion':
+            suitTrack = MovieBoardbotLitigationCheats.doPrismaticDistortion(attack)
+            # chairman cheats
+        case 'ChairmanTrapRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doTrapRetaliation(attack)
+        case 'ChairmanLureRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doLureRetaliation(attack)
+        case 'ChairmanThrowRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doThrowRetaliation(attack)
+        case 'ChairmanSquirtRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doSquirtRetaliation(attack)
+        case 'ChairmanZapRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doZapRetaliation(attack)
+        case 'ChairmanSoundRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doSoundRetaliation(attack)
+        case 'ChairmanDropRetaliation':
+            suitTrack = MovieBoardbotLitigationCheats.doDropRetaliation(attack)
+        case 'ChairmanCage':
+            suitTrack = MovieBoardbotLitigationCheats.doCage(attack)
+        case 'ChairmanPhase2':
+            suitTrack = MovieBoardbotLitigationCheats.doPhase2(attack)
+        case 'ChairmanOvertime':
+            suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 1)
+        case 'ChairmanOvertime2':
+            suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 2)
+        case 'ChairmanOvertime3':
+            suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 3)
+        case 'ChairmanOvertime4':
+            suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 4)
+        case 'ChairmanOvertime5':
+            suitTrack = MovieBoardbotLitigationCheats.doOvertime(attack, 5)
+        case 'ChairmanHostileLiquidation':
+            suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 1)
+        case 'ChairmanHostileLiquidation2':
+            suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 2)
+        case 'ChairmanHostileLiquidation3':
+            suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 3)
+        case 'ChairmanHostileLiquidation4':
+            suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 4)
+        case 'ChairmanHostileLiquidation5':
+            suitTrack = MovieBoardbotLitigationCheats.doHostileLiquidation(attack, 5)
+        case 'ChairmanSnipe':
+            suitTrack = MovieBoardbotLitigationCheats.doSnipe(attack)
+            # safety supervisor
+        case 'SafetyOverpressureDeath':
+            suitTrack = MovieSellbotLitigationCheats.doOverpressureDeath(attack)
+        case 'SafetyOverpressured':
+            suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 1)
+        case 'SafetyOverpressured2':
+            suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 2)
+        case 'SafetyOverpressured3':
+            suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 3)
+        case 'SafetyOverpressured4':
+            suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 4)
+        case 'SafetyOverpressured5':
+            suitTrack = MovieSellbotLitigationCheats.doOverpressured(attack, 5)
+        case 'SafetyHighPressure':
+            suitTrack = MovieSellbotLitigationCheats.doHighPressure(attack)
+        case 'SafetyHeatWave':
+            suitTrack = MovieSellbotLitigationCheats.doHeatWave(attack)
+        case 'SafetyHeatWaveCalculation':
+            suitTrack = MovieSellbotLitigationCheats.doHeatWaveCalculation(attack)
+        case 'SafetyViolation':
+            suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
+        case 'SafetyPromotion':
+            suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 1)
+        case 'SafetyPromotion2':
+            suitTrack = MovieSellbotLitigationCheats.doOverheat(attack)
+        case 'SafetyPromotion3':
+            suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 3)
+        case 'SafetyPromotion4':
+            suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 4)
+        case 'SafetyPromotion5':
+            suitTrack = MovieSellbotLitigationCheats.doPromotion(attack, 5)
+        case 'SafetySoakRetaliation':
+            suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
+            # hustler
+        case 'HustlerLimitedTimeOfferApprove':
+            suitTrack = MovieSellbotLitigationCheats.doLimitedTimeOfferApprove(attack)
+        case 'HustlerLimitedTimeOfferDenied':
+            suitTrack = MovieSellbotLitigationCheats.doLimitedTimeOfferDenied(attack)
+        case 'HustlerSalesPitch':
+            suitTrack = MovieSellbotLitigationCheats.doSalesPitch(attack)
+        case 'HustlerCustomerRetention':
+            suitTrack = MovieSellbotLitigationCheats.doContractEnforcementHealing(attack)
+        case 'HustlerClosingTime':
+            suitTrack = MovieSellbotLitigationCheats.doClosingTime(attack)
+        case 'HustlerBaitAndSwitch':
+            suitTrack = MovieHighRollerCheats.doContentSync(attack)
+        case 'HustlerExclusiveOffer':
+            suitTrack = MovieSellbotLitigationCheats.doContractEnforcementBan(attack)
+        case 'HustlerExclusiveOfferRetaliation':
+            suitTrack = MovieSellbotLitigationCheats.doExclusiveRetaliation(attack)
+        case 'HustlerHalfWindsor':
+            suitTrack = doSpin(attack)
+            # traffic manager
+        case 'UnionBusterContractEnforcementHealing':
+            suitTrack = MovieSellbotLitigationCheats.doContractEnforcementHealing(attack)
+        case 'TrafficDetour':
+            suitTrack = MovieSellbotLitigationCheats.doDetourNew(attack)
+        case 'TrafficCongestionPricing':
+            suitTrack = MovieSellbotLitigationCheats.doRoadBlock(attack)
+        case 'TrafficRedLight':
+            suitTrack = MovieSellbotLitigationCheats.doRedLight(attack)
+        case 'TrafficYellowLight':
+            suitTrack = MovieSellbotLitigationCheats.doYellowLight(attack)
+        case 'TrafficTrafficViolation':
+            suitTrack = MovieSellbotLitigationCheats.doContingencyClauseRetaliation(attack)
+        case 'TrafficRedLightRetaliation':
+            suitTrack = MovieSellbotLitigationCheats.doContingencyClauseRetaliation(attack)
+        case 'TrafficGreenLight':
+            suitTrack = MovieSellbotLitigationCheats.doGreenLight(attack)
+        case 'TrafficGreenLightRetaliation':
+            suitTrack = MovieSellbotLitigationCheats.doContingencyClauseRetaliation(attack)
+        case 'TrafficYield':
+            suitTrack = MovieSellbotLitigationCheats.doYield(attack)
+        case 'UnionBusterBreachOfContract':
+            suitTrack = MovieSellbotLitigationCheats.doBreachOfContract(attack) # YIELD VARIATIONS
+        case 'UnionBusterCompensationClaims':
+            suitTrack = MovieSellbotLitigationCheats.doCompensationClaims(attack)
+        case 'UnionBusterBreachOfContract2':
+            suitTrack = MovieSellbotLitigationCheats.doBreachOfContract2(attack)
+        case 'UnionBusterBreachOfContract3':
+            suitTrack = MovieSellbotLitigationCheats.doBreachOfContract2(attack)
+        case 'UnionBusterBreachOfContract4':
+            suitTrack = MovieSellbotLitigationCheats.doBreachOfContract2(attack)
+            # union buster
+        case 'UnionBusterUnionDues':
+            suitTrack = MovieUniversalCheats.doSynergy(attack)
+        case 'UnionBusterUnionCalculator':
+            suitTrack = MovieSellbotLitigationCheats.doUnionCalculator(attack)
+        case 'UnionBusterUnionBust':
+            suitTrack = MovieSellbotLitigationCheats.doUnionBust(attack)
+        case 'UnionBusterUnionBuster':
+            suitTrack = MovieSellbotLitigationCheats.doUnionBuster(attack)
+        case 'UnionBusterUnionBusterDamage':
+            return MovieSellbotLitigationCheats.doUnionBusterDamage(attack)
+        case 'UnionBusterNoStrikeClause':
+            suitTrack = MovieSellbotLitigationCheats.doUnionBuster(attack)
+        case 'UnionBusterUnionWages':
+            suitTrack = MovieSellbotLitigationCheats.doUnionWages(attack)
+        case 'UnionBusterUnionWages2':
+            suitTrack = MovieSellbotLitigationCheats.doUnionWages2(attack)
+        case 'UnionBusterUnionWages3':
+            suitTrack = MovieSellbotLitigationCheats.doUnionWages3(attack)
+        case 'UnionBusterUnionWages4':
+            suitTrack = MovieSellbotLitigationCheats.doUnionWages4(attack)
+        case 'UnionBusterUnionWages5':
+            suitTrack = MovieSellbotLitigationCheats.doUnionWages5(attack)
+        case 'UnionBusterContractEnforcement':
+            suitTrack = MovieSellbotLitigationCheats.doShadowToon(attack)
+        case 'UnionBusterContractEnforcement2':
+            suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
+            # racketeer
+        case 'RacketeerOverextendedLeverage2':
+            suitTrack = MovieCashbotLitigationCheats.doOverextendedLeverage(attack)
+        case 'RacketeerOverextendedLeverage':
+            suitTrack = MovieCashbotLitigationCheats.doProtectedRacket(attack)
+        case 'RacketeerProfiteering':
+            suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 1)
+        case 'RacketeerProfiteering2':
+            suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 2)
+        case 'RacketeerProfiteering3':
+            suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 3)
+        case 'RacketeerProfiteering4':
+            suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 4)
+        case 'RacketeerProfiteering5':
+            suitTrack = MovieCashbotLitigationCheats.doProfiteering(attack, 5)
+        case 'RacketeerExtortion':
+            suitTrack = MovieCashbotLitigationCheats.doExtortion(attack)
+        case 'RacketeerExtortion2':
+            suitTrack = MovieCashbotLitigationCheats.doProtectionPayout(attack)
+        case 'RacketeerCompensation':
+            suitTrack = MovieCashbotLitigationCheats.doCompensation(attack)
+        case 'RacketeerHustling': # Pressurizer Target Check
+            suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+        case 'RacketeerRacketeering':
+            suitTrack = MovieCashbotLitigationCheats.doRacketeering(attack)
+        case 'RacketeerPeckingOrderRetaliation':
+            suitTrack = MovieCashbotLitigationCheats.doPeckingOrderGroup(attack)
+        case 'RacketeerPeckingOrderRetaliationSoak':
+            suitTrack = MovieSellbotLitigationCheats.doOverheat2(attack)
+            # radiographer
+        case 'RadiographerRadioInfrequency':
+            suitTrack = MovieSellbotLitigationCheats.doRadioInfrequency(attack)
+        case 'RadiographerHotTake':
+            suitTrack = MovieSellbotLitigationCheats.doHotTake(attack)
+        case 'RadiographerHotTakeDamage':
+            suitTrack = MovieSellbotLitigationCheats.doHotTakeDamage(attack)
+        case 'RadiographerHotTakeRetaliation': # Pressurizer Rise From The Ashes
+            suitTrack = MovieSellbotLitigationCheats.doShadowToon(attack)
+        case 'RadiographerOvermodulated':
+            suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 1)
+        case 'RadiographerOvermodulated2':
+            suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 2)
+        case 'RadiographerOvermodulated3':
+            suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 3)
+        case 'RadiographerOvermodulated4':
+            suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 4)
+        case 'RadiographerOvermodulated5':
+            suitTrack = MovieSellbotLitigationCheats.doOvermodulated(attack, 5)
+        case 'RadiographerDanceSession':
+            suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+            # payroll manager
+        case 'PayrollPayrollProcessing':
+            suitTrack = MovieCashbotLitigationCheats.doPayrollProcessing(attack)    
+        case 'PayrollPerformanceBonus':
+            suitTrack = MovieCashbotLitigationCheats.doPerformanceBonus(attack)    
+            # derrick man cheat
+        case 'DerrickManRefinement':
+            suitTrack = MovieDirectorsCheats.doRefinementDerrickMan(attack)
+            #  dola cheat
+        case 'DOLAInkDrain':
+            suitTrack = MovieDirectorsCheats.doInkDrainDOLA(attack)
+            #  dopr cheat
+        case 'DOPRAmbushMarketing':
+            suitTrack = MovieDirectorsCheats.doAmbushMarketing(attack)
+            # erclaim erfit cheats
+        case 'PlutocratCoreStandupGuy':
+            suitTrack = MoviePlutocratCheats.doStandupGuy(attack)
+        case _ if name.startswith('PlutocratCoreShakedown_'):
+            suitTrack = MoviePlutocratCheats.doShakedown(attack)
+        case 'PlutocratCoreGhostPayroll':
+            suitTrack = MoviePlutocratCheats.doGhostPayroll(attack)
+        case 'PlutocratCoreSlushFund':
+            suitTrack = MoviePlutocratCheats.doSlushFund(attack)
+        case _ if name.startswith('PlutocratCoreKickUp_'):
+            suitTrack = MoviePlutocratCheats.doKickUp(attack)
+        case 'PlutocratCoreSitdown':
+            suitTrack = MoviePlutocratCheats.doSitdown(attack)
+        case _ if name.startswith('PlutocratCoreUsuryWaiter_'):
+            suitTrack = MoviePlutocratCheats.doUsuryWaiter(attack)
+        case _ if name.startswith('PlutocratCoreUsuryFodder_'):
+            suitTrack = MoviePlutocratCheats.doUsuryFodder(attack)
+        case _ if name.startswith('PlutocratCoreTribute_'):
+            suitTrack = MoviePlutocratCheats.doTribute(attack)
+        case _ if name.startswith('PlutocratCoreDeepFreeze_'):
+            suitTrack = MoviePlutocratCheats.doDeepFreeze(attack)
+        case _ if name.startswith('PlutocratCoreSnowSquall_'):
+            suitTrack = MoviePlutocratCheats.doSnowSquall(attack)
+        case _ if name == 'PlutocratCoreSnowSquallDamage':
+            suitTrack = MoviePlutocratCheats.doSnowSquallDamage(attack)
+        case _ if name.startswith('PlutocratCoreShatter_'):
+            suitTrack = MoviePlutocratCheats.doShatter(attack)
+        case _ if name.startswith('ChainsawCoreRevvingUp'):
+            suitTrack = MovieChainsawCore.doRevvingUp(attack, False)
+        case _ if name.startswith('ChainsawCoreWhipsaw'):
+            suitTrack = MovieChainsawCore.doRevvingUp(attack, True)
+        case 'ChainsawCorePhaseTwo':
+            suitTrack = MovieChainsawCore.doPhaseTwo(attack)
+        case 'ChainsawCorePhaseThree':
+            suitTrack = MovieChainsawCore.doPhaseThree(attack)
+        case _ if name.startswith('ChainsawCoreOffboarding'):
+            suitTrack = MovieChainsawCore.doOffboarding(attack)
+        case _ if name.startswith('ChainsawCoreCutTheSlack'):
+            suitTrack = MovieChainsawCore.doCutTheSlack(attack)
+        case 'ChainsawCoreMarkedWood':
+            suitTrack = MovieChainsawCore.doMarkedWood(attack)
+        case _ if name.startswith('ChainsawCoreAggrandize'):
+            suitTrack = MovieChainsawCore.doAggrandize(attack)
+        case 'ChainsawCoreChainLinked':
+            suitTrack = MovieChainsawCore.doChainLinked(attack)
+        case _ if name.startswith('ChainsawCoreScabbard'):
+            suitTrack = MovieChainsawCore.doScabbard(attack)
+        case 'ChainsawCoreSparkPlug':
+            suitTrack = MovieChainsawCore.doSparkPlug(attack)
+        case 'ChainsawCoreSparkPlugDamage':
+            suitTrack = MovieChainsawCore.doSparkPlugDamage(attack)
+        case 'ChainsawCoreThrottle' | 'ChainsawCoreThrottleTwo':
+            suitTrack = MovieChainsawCore.doThrottle(attack)
+        case _ if name.startswith('ChainsawCoreLayoffs'):
+            suitTrack = MovieChainsawCore.doLayoffs(attack)
+        case 'ChainsawCoreDeadwood':
+            suitTrack = MovieChainsawCore.doDeadwood(attack)
+        case _ if name.startswith('ChainsawCoreKickback'):
+            suitTrack = MovieChainsawCore.doKickback(attack)
+        case 'PacesetterComeOn':
+            suitTrack = MoviePacesetterCheats.doComeOn(attack)
+        case 'PacesetterMovingGoalposts':
+            suitTrack = MoviePacesetterCheats.doMovingGoalposts(attack)
+        case 'PacesetterContentSync':
+            suitTrack = MovieHighRollerCheats.doContentSync(attack)
+        case 'PacesetterCorporateRestructuring':
+            suitTrack = MoviePacesetterCheats.doCorporateRestructuring(attack)
+        case 'PacesetterHurrySickness':
+            suitTrack = MoviePacesetterCheats.doHurrySickness(attack)
+        case 'PacesetterHurrySicknessBan':
+            suitTrack = MoviePacesetterCheats.doHurrySicknessBan(attack)
+        case 'PacesetterOverclocked':
+            suitTrack = MoviePacesetterCheats.doOverclocked(attack)
+        case 'PacesetterTurn1':
+            suitTrack = MoviePacesetterCheats.doTurn1(attack)
+        case 'PacesetterTurn2':
+            suitTrack = MoviePacesetterCheats.doTurn2(attack)
+        case 'PacesetterEarlyOverclocked':
+            suitTrack = MoviePacesetterCheats.doEarlyOverclocked(attack)
+        case 'ErclaimHemmorage':
+            suitTrack = MovieCountCheats.doHemmorage(attack)
+        case 'ErclaimHemmorageHealing':
+            suitTrack = MovieCountCheats.doHemmorageHealing(attack)
+        case 'ErclaimLaffSteal':
+            suitTrack = MovieCountCheats.doLaffSteal(attack)
+        case 'ErclaimRiseFromTheScrap':
+            suitTrack = MovieCountCheats.doRiseFromTheScrap(attack)
+        case 'ErclaimScopeCreep':
+            suitTrack = MovieCountCheats.doScopeCreep(attack)
+        case 'ErclaimPhase2':
+            suitTrack = MovieCountCheats.doErclaimPhase2(attack)
+        case 'ErclaimSacrifice' | 'ErclaimSacrifice2' | 'ErclaimSacrifice3' | 'ErclaimSacrifice4' | 'ErclaimSacrifice5':
+            suitTrack = MovieCountCheats.doSacrifice(attack)
+        case 'ErfitWringOut':
+            suitTrack = MovieCountCheats.doWringOut(attack)
+        case 'ErfitHydrationCheck':
+            suitTrack = MovieCountCheats.doHydrationCheck(attack)
+        case 'ErfitHydrationCheckRevert':
+            suitTrack = MovieCountCheats.doHydrationCheckRevert(attack)
+        case 'ErfitProToonShake':
+            suitTrack = MovieCountCheats.doProToonShake(attack)
+        case 'ErfitGainsFromTheScrap' | 'ErfitGainsFromTheScrap2' | 'ErfitGainsFromTheScrap3' | 'ErfitGainsFromTheScrap4' | 'ErfitGainsFromTheScrap5':
+            suitTrack = MovieCountCheats.doGainsFromTheScrap(attack)
+        case 'ErfitPersonalTrainer':
+            suitTrack = MovieCountCheats.doPersonalTrainer(attack)
+        case 'ErfitPhase2':
+            suitTrack = MovieCountCheats.doProToonShakeDamage(attack)
+            # high roller phase 1
+        case 'HighRollerLureResistance':
+            suitTrack = MovieHighRollerCheats.doLureResistance(attack, 1, 3, 5)
+        case 'HighRollerLureResistance2':
+            suitTrack = MovieHighRollerCheats.doLureResistance(attack, 2, 4, 6)
+        case 'HighRollerPhase2':
+            suitTrack = MovieHighRollerCheats.doPhase2(attack)
+        case 'HighRollerNoAttack':
+            suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+        case 'HighRollerWheelSpin':
+            suitTrack = MovieHighRollerCheats.doWheelSpin(attack)
+        case 'HighRollerPuzzle':
+            suitTrack = MovieHighRollerCheats.doPuzzle(attack)
+        case 'HighRollerPuzzleBan':
+            suitTrack = MovieHighRollerCheats.doPuzzleBan(attack)
+        case 'HighRollerGameOver' | 'HighRollerGameOver2':
+            suitTrack = MovieHighRollerCheats.doCommercialBreak(attack)
+        case 'HighRollerCommercialBreak':
+            suitTrack = MovieHighRollerCheats.doCommercialBreak2(attack)
+        case 'HighRollerGameTimeSpawn':
+            suitTrack = MovieHighRollerCheats.doGameTimeSpawn(attack)
+        case 'HighRollerGameTimeCog':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 1)
+        case 'HighRollerGameTimeCog2':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 1)
+        case 'HighRollerGameTimeCog3':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 2)
+        case 'HighRollerGameTimeCog4':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 2)
+        case 'HighRollerGameTimeCog5':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 3)
+        case 'HighRollerGameTimeCog6':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 3)
+        case 'HighRollerGameTimeCog7':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 4)
+        case 'HighRollerGameTimeCog8':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 4)
+        case 'HighRollerGameTimeCog9':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog(attack, 5)
+        case 'HighRollerGameTimeCog10':
+            suitTrack = MovieHighRollerCheats.doGameTimeCog2(attack, 5)
+        case 'HighRollerBust':
+            suitTrack = MovieHighRollerCheats.doBust(attack)
+        # high roller phase 2 cheats
+        case 'HighRollerPhase3':
+            suitTrack = MovieHighRollerCheats.doPhase3(attack)
+        # high roller phase 3 cheats
+        case 'HighRollerFreeCruise':
+            suitTrack = MovieHighRollerCheats.doFreeCruise(attack)
+        case 'HighRollerRolled':
+            suitTrack = MovieHighRollerCheats.doRolled(attack)
+        case 'HighRollerConduction':
+            suitTrack = MovieHighRollerCheats.doConduction(attack)
+        case 'HighRollerDiceRouletteCogs' | 'HighRollerDiceRouletteToons' | 'HighRollerDiceRouletteEveryone' | 'HighRollerDiceRouletteNobody':
+            suitTrack = MovieHighRollerCheats.doDiceRoulette(attack)
+        case 'HighRollerTrickOfTheLight':
+            suitTrack = MovieHighRollerCheats.doTrickOfTheLight(attack)
+        case 'HighRollerAceInTheHole':
+            suitTrack = MovieHighRollerCheats.doAceInTheHole(attack)
+        case 'HighRollerVulnerable':
+            suitTrack = MovieHighRollerCheats.doVulnerable(attack)
+        case 'HighRollerRaisingTheAnte':
+            suitTrack = MovieHighRollerCheats.doFreeCruise(attack)
+        # high roller silhouette cheats
+        case 'HighRollerDonation':
+            suitTrack = MovieHighRollerCheats.doDonation(attack)
+        case 'HighRollerSyphon':
+            suitTrack = MovieHighRollerCheats.doSyphon(attack)
+        case 'HighRollerBar' | 'HighRollerBar2':
+            suitTrack = MovieHighRollerCheats.doBar(attack)
+        case 'HighRollerSingingBlues':
+            suitTrack = MovieHighRollerCheats.doSingingBluesMegaphone(attack)
+        case 'HighRollerDamageReduction':
+            suitTrack = MovieFaceTheFamilyCheats.doHighStakes(attack)
+        case 'HighRollerSplashback':
+            suitTrack = MovieHighRollerCheats.doSplashback(attack)
+        case 'HighRollerCheerRetaliation':
+            suitTrack = MovieHighRollerCheats.doSnipe(attack)
+        #videographer cheats
+        case 'VideographerStagelightsCogs':
+            suitTrack = MovieVideographerCheats.doSignalLost(attack)
+        case 'VideographerStagelightsToons':
+            suitTrack = MovieVideographerCheats.doSignalLost(attack)
+        case 'VideographerHardCut':
+            suitTrack = MovieVideographerCheats.doHardCut(attack)
+        case 'VideographerStarOfTheShow':
+            suitTrack = MovieVideographerCheats.doStarOfTheShow(attack)
+        case 'VideographerHardCut':
+            suitTrack = MovieVideographerCheats.doHardCut(attack)
+        case 'VideographerRisingStars' | 'VideographerRisingStars2':
+            suitTrack = MovieVideographerCheats.doRisingStars(attack)
+        case 'VideographerRisingStarsSilhouette':
+            suitTrack = MovieVideographerCheats.doRisingStars(attack)
+        case 'VideographerRisingStarsSacrifice':
+            suitTrack = MovieVideographerCheats.doRisingStarsSacrifice(attack)
+        case 'VideographerVideoStatic':
+            suitTrack = MovieVideographerCheats.doVideoStatic(attack)
+        case 'VideographerPhase3':
+            suitTrack = MovieVideographerCheats.doVideographerPhase3(attack)
+        case 'VideographerElectricShock':
+            suitTrack = MovieVideographerCheats.doPhase3Videographer(attack)
+        case 'VideographerElectricShock2':
+            suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
+        case 'VideographerElectricShock3':
+            suitTrack = MovieVideographerCheats.doHardCutBan(attack)
+        case 'VideographerElectricShock4':
+            suitTrack = MovieVideographerCheats.doTouchUp(attack)
+        case 'VideographerAttackRewind':
+            suitTrack = MovieVideographerCheats.doAttackRewind(attack)
+        case 'VideographerDirectorCuts':
+            suitTrack = MovieVideographerCheats.doDirectorCuts(attack)
+        case 'VideographerDeath':
+            suitTrack = MovieUtil.createVideographerDeathMovie(attack)
+        # broadcaster cheats
+        case 'BroadcasterDonation':
+            suitTrack = MovieVideographerCheats.doDonation2(attack)
+        case 'BroadcasterDonation2':
+            suitTrack = MovieVideographerCheats.doDonationFail(attack)
+        case 'BroadcasterViralSensation':
+            suitTrack = MovieVideographerCheats.doViralSensation(attack)
+        #filmmaker cheats
+        case 'ChoreoPlacesEveryone':
+            suitTrack = MovieVideographerCheats.doPlacesEveryone(attack)
+        case 'ChoreoChoreography':
+            suitTrack = MovieVideographerCheats.doChoreography(attack)
+        case 'FilmmakerCameraFlash':
+            suitTrack = MovieVideographerCheats.doCameraFlash(attack)
+        case 'FilmmakerCaughtOnCamera':
+            suitTrack = MovieVideographerCheats.doCaughtOnCamera(attack)
+        case 'FilmmakerInFocus':
+            suitTrack = MovieVideographerCheats.doInFocus(attack)
+        case 'FilmmakerWrappedInTheFilm':
+            suitTrack = MovieVideographerCheats.doWrappedInTheFilm(attack)
+        case 'FilmmakerCameraRewind':
+            suitTrack = MovieVideographerCheats.doCameraRewind(attack)
+        case 'FilmmakerBudgetCuts':
+            suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+        #director cheats
+        case 'DirectorCut':
+            suitTrack = MovieVideographerCheats.doRecordCut(attack)
+        case 'DirectorAction':
+            suitTrack = MovieVideographerCheats.doPhantomEntryDamage(attack)
+        case 'DirectorActionCog':
+            suitTrack = MovieVideographerCheats.doActionCog(attack)
+        case 'DirectorActionRetaliation':
+            suitTrack = MovieVideographerCheats.doRecordCut(attack)
+        case 'DirectorActionPartner':
+            suitTrack = MovieVideographerCheats.doActionPartner(attack)
+        case 'DirectorBackToOnes':
+            suitTrack = MovieVideographerCheats.doBackToOnes(attack)
+        case 'DirectorProductionBudget':
+            suitTrack = MovieVideographerCheats.doSynergy(attack)
+        case 'DirectorBudgetExpansion':
+            suitTrack = MovieVideographerCheats.doBudgetExpansion(attack)
+        #universal cheats
+        case 'TargetCheck' | 'AmbassadorTargetCheck':
+            suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+        case 'Desperation':
+            suitTrack = MovieHighRollerCheats.doDesperation(attack)
+        case 'Desperation2':
+            suitTrack = MovieUniversalCheats.doDesperation2(attack)
+        case 'SynergyFees':
+            suitTrack = MovieUniversalCheats.doSynergy(attack)
+        case 'CalculatingFees':
+            suitTrack = MovieUniversalCheats.doCourtCalculations(attack)
+        case 'DeathCheck':
+            suitTrack = MovieUniversalCheats.doDeathCheck(attack)
+        case 'CogSpawn':
+            suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+        case 'SoakRemoval':
+            suitTrack = MovieUniversalCheats.doSoakRemoval(attack)
+        case 'DrenchDecrement':
+            suitTrack = MovieUniversalCheats.doDrenchDecrement(attack)
+        case 'OilRemoval':
+            suitTrack = MovieBossbotLitigationCheats.doOilRemoval(attack)
+        case 'GovernaughtDeath':
+            suitTrack = MovieUniversalCheats.doGovernaughtDeath(attack)
+        case 'MarkRemoval':
+            suitTrack = MovieUniversalCheats.doMarkRemoval(attack)
+        case 'LureRemovalPreToon' | 'LureRemoval' | 'LureRemovalHeal' | 'LureRemovalTrap' | 'LureRemovalLure' | 'LureRemovalSound' | 'LureRemovalThrow' | 'LureRemovalSquirt' | 'LureRemovalZap' | 'LureRemovalDrop':
+            suitTrack = MovieUniversalCheats.doLureRemoval(attack)
+        case 'SyphonMovie':
+            suitTrack = MovieUniversalCheats.doSyphonMovie(attack)
+        case 'DamageMovie':
+            suitTrack = MovieUniversalCheats.doDamageMovie(attack)
+        case 'SueApplication':
+            suitTrack = MovieUniversalCheats.doSueApplication(attack)
+        case 'SueRemoval':
+            suitTrack = MovieUniversalCheats.doSueRemoval(attack)
+        case 'SueDamage':
+            suitTrack = MovieUniversalCheats.doSueDamage(attack)
+        case 'ZapMovie':
+            suitTrack = MovieUniversalCheats.doZapMovie(attack)
+        case 'AbilityQueued' | 'AbilityQueuedPreToon':
+            suitTrack = MovieUniversalCheats.doAbilityQueued(attack)
+        case 'AbsorbMovie':
+            suitTrack = MovieUniversalCheats.doAbsorbMovie(attack)
+        case 'AbsorbMovieLevel':
+            suitTrack = MovieUniversalCheats.doAbsorbMovieLevel(attack)
+        case 'ForemanPolish':
+            suitTrack = MovieBossbotLitigationCheats.doOilRainHeal(attack)
+        case 'ForemanExtortion':
+            suitTrack = MovieCashbotLitigationCheats.doExtortion(attack)
+        case 'ForemanSnipe':
+            suitTrack = MovieHighRollerCheats.doSnipe(attack)
+        case 'ForemanRedTape':
+            suitTrack = MovieFaceTheFamilyCheats.doRedTape(attack)
+        case 'ForemanContractor':
+            suitTrack = MovieFaceTheFamilyCheats.doContractor(attack)
+        case 'ForemanContributing':
+            suitTrack = MovieFaceTheFamilyCheats.doContributing(attack)
+        case 'ForemanContractorDeath':
+            suitTrack = MovieFaceTheFamilyCheats.doContractorRemoval(attack)
+        case 'ForemanBurning':
+            suitTrack = MovieFaceTheFamilyCheats.doOverheat(attack)
+        case 'ForemanUnionized':
+            suitTrack = MovieFaceTheFamilyCheats.doUnionized(attack)
+        case 'ForemanBurningDamage':
+            return MovieBossbotLitigationCheats.doSlowBurn(attack)
+        case 'ForemanSleepyOvercharge':
+            suitTrack = MovieFaceTheFamilyCheats.doSleepyOvercharge(attack)
+        case 'ForemanExplosion':
+            suitTrack = MovieFaceTheFamilyCheats.doExplosion(attack)
+        case 'ForemanCompensation':
+            suitTrack = MovieFaceTheFamilyCheats.doCompensation(attack)
+        case 'ForemanCompensation2':
+            suitTrack = MovieFaceTheFamilyCheats.doCompensation2(attack)
+        case 'ForemanCompensation3':
+            suitTrack = MovieFaceTheFamilyCheats.doCompensation3(attack)
+        case 'ForemanCompensation4':
+            suitTrack = MovieFaceTheFamilyCheats.doCompensation4(attack)
+        case 'ForemanCompensation5':
+            suitTrack = MovieFaceTheFamilyCheats.doCompensation5(attack)
+        case 'MintLifeInsurance':
+            suitTrack = MovieFaceTheFamilyCheats.doLifeInsurance(attack)
+        case 'MintScheming':
+            suitTrack = MovieFaceTheFamilyCheats.doScheming(attack)
+        case 'MintPolicyTerminated':
+            suitTrack = MovieFaceTheFamilyCheats.doPolicyTerminated(attack)
+        case 'MintFraudulentDamage':
+            suitTrack = MovieFaceTheFamilyCheats.doFraudulentDamage(attack)
+        case 'MintAbacusAbove15' | 'MintAbacusBelow15' | 'MintAccountant1' | 'MintAccountant2' | 'MintAccountant3' | 'MintAccountant4' | 'MintAccountant5':
+            suitTrack = MovieFaceTheFamilyCheats.doAccountantRequirement(attack)
+        case 'MintUsury':
+            suitTrack = MovieFaceTheFamilyCheats.doUsury(attack)
+        case 'MintApprove' | 'MintDisapprove':
+            suitTrack = MovieFaceTheFamilyCheats.doApproveDisapprove(attack)
+        case 'MintHurrySickness':
+            suitTrack = MovieFaceTheFamilyCheats.doHurrySickness(attack)
+        case 'MintMovingGoalposts':
+            suitTrack = MovieHighRollerCheats.doContentSync(attack)
+        case 'MintLureResistance':
+            suitTrack = MovieHighRollerCheats.doLureResistance(attack, 1, 3, 5)
+        case 'MintLureResistance2':
+            suitTrack = MovieHighRollerCheats.doLureResistance(attack, 2, 4, 6)
+        case 'MintLedger':
+            suitTrack = MovieBoardbotLitigationCheats.doLedgerOfSound(attack)
+        case 'MintAudit':
+            suitTrack = MovieBoardbotLitigationCheats.doAuditCycle(attack)
+        case 'MintSynergy' | 'MintCompoundingInterest':
+            suitTrack = doSynergy(attack)
+        case 'WhistleCompensation':
+            suitTrack = MovieLawbotLitigationCheats.doCompensation(attack)
+        case 'AttorneyRemand':
+            suitTrack = MovieHighRollerCheats.doRemand(attack)
+        case 'AttorneyObjection':
+            suitTrack = MovieFaceTheFamilyCheats.doObjection(attack)
+        case 'AttorneyObjectionSustained':
+            suitTrack = MovieFaceTheFamilyCheats.doObjectionSustained(attack)
+        case 'AttorneyDrainingPower':
+            suitTrack = MovieFaceTheFamilyCheats.doDrainingPower(attack)
+        case 'AttorneyInkDrain':
+            suitTrack = MovieFaceTheFamilyCheats.doInkDrain(attack)
+        case 'AttorneyShakedownVulnerable':
+            suitTrack = MovieFaceTheFamilyCheats.doShakedownVulnerable(attack)
+        case 'AttorneyShakedownCooldown':
+            suitTrack = MovieFaceTheFamilyCheats.doShakedownCooldown(attack)
+        case 'AttorneyObjectionOverruled':
+            suitTrack = MovieFaceTheFamilyCheats.doObjectionOverruled(attack)
+        case 'AttorneyChrono':
+            suitTrack = MovieFaceTheFamilyCheats.doComeOn(attack)
+        case 'AttorneyOverseer' | 'AttorneyOverseerDrop' | 'AttorneyOverseerSquirt' | 'AttorneyOverseerThrow':
+            suitTrack = MovieFaceTheFamilyCheats.doOverseer(attack)
+        case 'KnockbackThrow' | 'KnockbackSquirt':
+            suitTrack = MovieUniversalCheats.doKnockback(attack)
+        case 'ComboThrow' | 'ComboSquirt' | 'ComboDrop':
+            suitTrack = MovieUniversalCheats.doCombo(attack)
+        case 'AttorneyRushJob':
+            suitTrack = MovieFaceTheFamilyCheats.doRushJob(attack)
+        case 'AttorneyHurrySickness':
+            suitTrack = MovieFaceTheFamilyCheats.doHurrySickness(attack)
+        case 'AttorneyDizzy':
+            suitTrack = MovieLawbotLitigationCheats.doWhirlwind(attack)
+        case 'UnstableTransformation':
+            suitTrack = MovieFaceTheFamilyCheats.doUnstableTransformation(attack)
+        case 'RushJobTrap':
+            suitTrack = MovieFaceTheFamilyCheats.doRushJobTrap(attack)
+        case 'RushJobLure':
+            suitTrack = MovieFaceTheFamilyCheats.doRushJobLure(attack)
+        case 'RushJobThrow':
+            suitTrack = MovieFaceTheFamilyCheats.doRushJobThrow(attack)
+        case 'RushJobSquirt':
+            suitTrack = MovieFaceTheFamilyCheats.doRushJobSquirt(attack)
+        case 'RushJobZap':
+            suitTrack = MovieFaceTheFamilyCheats.doRushJobZap(attack)
+        case 'RushJobSound':
+            suitTrack = MovieFaceTheFamilyCheats.doRushJobSound(attack)
+        case 'RushJobDrop':
+            suitTrack = MovieFaceTheFamilyCheats.doRushJobDrop(attack)
+        case 'PresidentTargetCheck':
+            suitTrack = MovieHighRollerCheats.doNoAttack(attack)
+        case 'PresidentMandatoryFiling':
+            suitTrack = MovieBossbotLitigationCheats.doMandatoryFiling(attack)
+        case 'PresidentLiability':
+            suitTrack = MovieBossbotLitigationCheats.doPaperCut(attack)
+        case 'PresidentLiability2':
+            suitTrack = MovieBossbotLitigationCheats.doPaperCutMulti(attack)
+        case 'PresidentExtraTip':
+            suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 1)
+        case 'PresidentExtraTip2':
+            suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 2)
+        case 'PresidentExtraTip3':
+            suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 3)
+        case 'PresidentExtraTip4':
+            suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 4)
+        case 'PresidentExtraTip5':
+            suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 5)
+        case 'PresidentExtraTip6':
+            suitTrack = MovieFaceTheFamilyCheats.doExtraTip(attack, 0)
+        case 'PresidentSnap':
+            suitTrack = MovieLawbotLitigationCheats.doSnap(attack, suit)
+        case 'PresidentSyphon':
+            suitTrack = MovieFaceTheFamilyCheats.doSyphon(attack)
+        case 'PresidentBayouBellow':
+            suitTrack = MovieLawbotLitigationCheats.doBayouBellow(attack)
+        case 'PresidentSnipe':
+            suitTrack = MovieHighRollerCheats.doSnipe(attack)
+        case 'PresidentDeepFreeze':
+            suitTrack = MovieFaceTheFamilyCheats.doDeepFreeze(attack)
+        case 'PresidentFrozenDeath':
+            suitTrack = MovieFaceTheFamilyCheats.doFrozenDeath(attack)
+        case 'PresidentPuzzling':
+            suitTrack = MovieFaceTheFamilyCheats.doPuzzling(attack)
+        case 'PresidentDriver':
+            suitTrack = MovieFaceTheFamilyCheats.doDriver(attack)
+        case 'PresidentMulligan':
+            suitTrack = MovieFaceTheFamilyCheats.doMulligan(attack)
+        case 'PresidentSensational':
+            suitTrack = MovieFaceTheFamilyCheats.doSensational(attack)
+        case 'PresidentViralSensation':
+            suitTrack = MovieFaceTheFamilyCheats.doViralSensation(attack)
+        case 'PresidentHighStakes':
+            suitTrack = MovieFaceTheFamilyCheats.doHighStakes(attack)
+        case 'HighStakesHeal' | 'HighStakesTrap' | 'HighStakesLure' | 'HighStakesSound' | 'HighStakesThrow' | 'HighStakesSquirt' | 'HighStakesZap' | 'HighStakesDrop':
+            suitTrack = MovieFaceTheFamilyCheats.doHighStakesNew(attack)
+        case 'BanLevel4' | 'BanLevel5' | 'BanLevel6' | 'BanLevel7' | 'BanLevel8' | 'BanLevel45' | 'BanLevel46' | 'BanLevel47' | 'BanLevel48' | 'BanLevel56' | 'BanLevel57' | 'BanLevel58' | 'BanLevel67' | 'BanLevel68' | 'BanLevel78' | 'BanToonup' | 'BanTrap' | 'BanLure' | 'BanThrow' | 'BanSquirt' | 'BanZap' | 'BanSound' | 'BanDrop' | 'BanToonupTrap' | 'BanToonupLure' | 'BanToonupThrow' | 'BanToonupSquirt' | 'BanToonupZap' | 'BanToonupSound' | 'BanToonupDrop' | 'BanTrapLure' | 'BanTrapThrow' | 'BanTrapSquirt' | 'BanTrapZap' | 'BanTrapSound' | 'BanTrapDrop' | 'BanLureThrow' | 'BanLureSquirt' | 'BanLureZap' | 'BanLureSound' | 'BanLureDrop' | 'BanThrowSquirt' | 'BanThrowZap' | 'BanThrowSound' | 'BanThrowDrop' | 'BanSquirtZap' | 'BanSquirtSound' | 'BanSquirtDrop' | 'BanZapSound' | 'BanZapDrop' | 'BanSoundDrop':
+            match suit.dna.name:
+                case 'cdirector':
+                    suitTrack = MovieBoardbotLitigationCheats.doContningencyClauseBanMovie(attack)
+                case 'wtapper':
+                    suitTrack = MovieBossbotLitigationCheats.doBudgetCuts(attack)
+                case 'ubuster':
+                    suitTrack = MovieSellbotLitigationCheats.doContractEnforcementBan(attack)
+                case _:
+                    suitTrack = MovieUniversalCheats.doCourtRecord(attack)
+        case 'DisableToonupTrap' | 'DisableToonupLure' | 'DisableToonupThrow' | 'DisableToonupSquirt' | 'DisableToonupZap' | 'DisableToonupSound' | 'DisableToonupDrop' | 'DisableTrapLure' | 'DisableTrapThrow' | 'DisableTrapSquirt' | 'DisableTrapZap' | 'DisableTrapSound' | 'DisableTrapDrop' | 'DisableLureThrow' | 'DisableLureSquirt' | 'DisableLureZap' | 'DisableLureSound' | 'DisableLureDrop' | 'DisableThrowSquirt' | 'DisableThrowZap' | 'DisableThrowSound' | 'DisableThrowDrop' | 'DisableSquirtZap' | 'DisableSquirtSound' | 'DisableSquirtDrop' | 'DisableZapSound' | 'DisableZapDrop' | 'DisableSoundDrop' | 'DisableLevel45' | 'DisableLevel46' | 'DisableLevel47' | 'DisableLevel48' | 'DisableLevel56' | 'DisableLevel57' | 'DisableLevel58' | 'DisableLevel67' | 'DisableLevel68' | 'DisableLevel78':
             suitTrack = MovieUniversalCheats.doCourtMandate(attack)
-    elif name in (
-        'AbsorbMovieLure',
-        'AbsorbMovieThrow',
-        'AbsorbMovieSquirt',
-        'AbsorbMovieZap',
-        'AbsorbMovieSound',
-        'AbsorbMovieDrop'
-    ):
-        suitTrack = MovieUniversalCheats.doAbsorbMovie(attack)
-    elif name in (
-        'AbsorbMovieLevelLure',
-        'AbsorbMovieLevelThrow',
-        'AbsorbMovieLevelSquirt',
-        'AbsorbMovieLevelZap',
-        'AbsorbMovieLevelSound',
-        'AbsorbMovieLevelDrop'
-    ):
-        suitTrack = MovieUniversalCheats.doAbsorbMovieLevel(attack)
-    else:
-        notify.warning('unknown attack: %s substituting Finger Wag' % name)
-        suitTrack = doDefault(attack)
+        case 'GagBanRetaliationHeal' | 'GagBanRetaliationTrap' | 'GagBanRetaliationLure' | 'GagBanRetaliationThrow' | 'GagBanRetaliationSquirt' | 'GagBanRetaliationZap' | 'GagBanRetaliationSound' | 'GagBanRetaliationDrop':
+            match suit.dna.name:
+                case 'stenog' | 'caseman':
+                    return MovieLawbotLitigationCheats.doGavelCourtRecord(attack)
+                case 'wtapper':
+                    suitTrack = MovieBossbotLitigationCheats.doCloseTheLoopNew(attack)
+                case 'racket':
+                    suitTrack = MovieCashbotLitigationCheats.doPeckingOrderGroup(attack)
+                case 'cdirector':
+                    suitTrack = MovieBoardbotLitigationCheats.doRiskThresholdBreach25(attack)
+                case 'ubuster':
+                    suitTrack = MovieSellbotLitigationCheats.doBreachOfContractGroup(attack)
+                case _:
+                    suitTrack = MovieUniversalCheats.doCourtMandate(attack)
+        case 'AbsorbMovieLure' | 'AbsorbMovieThrow' | 'AbsorbMovieSquirt' | 'AbsorbMovieZap' | 'AbsorbMovieSound' | 'AbsorbMovieDrop':
+            suitTrack = MovieUniversalCheats.doAbsorbMovie(attack)
+        case 'AbsorbMovieLevelLure' | 'AbsorbMovieLevelThrow' | 'AbsorbMovieLevelSquirt' | 'AbsorbMovieLevelZap' | 'AbsorbMovieLevelSound' | 'AbsorbMovieLevelDrop':
+            suitTrack = MovieUniversalCheats.doAbsorbMovieLevel(attack)
+        case _:
+            notify.warning('unknown attack: %s substituting Finger Wag' % name)
+            suitTrack = doDefault(attack)
     chainsawCtscCamera = (
         name in (
             'ChainsawCorePhaseTwo',
@@ -1880,48 +1722,49 @@ def doSuitAttack(attack):
         name.startswith('ChainsawCoreScabbard') or
         name.startswith('ChainsawCoreLayoffs')
     )
-    if name == 'PlutocratCoreStandupGuy':
-        camTrack = MovieCamera.heldRelativeShot(
-            suit, 0, 12, 13, 180, -30, 0,
-            suitTrack.getDuration(), 'singleAvatarShot')
-    elif name == 'PlutocratCoreSlushFund':
-        camTrack = MovieCamera.randomActorShot(
-            suit, attack['battle'], suitTrack.getDuration(), 'suit')
-    elif name.startswith('PlutocratCore'):
-        camTrack = Sequence(Wait(suitTrack.getDuration()))
-    elif name == 'ChainsawCorePhaseTwo':
-        duration = suitTrack.getDuration()
-        camTrack = Sequence(
-            Func(camera.reparentTo, attack['suit']),
-            Func(camera.setPosHpr,
-                 2.95629, 7.58349, 7.5835,
-                 156.86395, 0.0, 0.0),
-            Func(camera.wrtReparentTo, attack['battle']),
-            Wait(8.0),
-            Func(camera.reparentTo, attack['suit']),
-            Func(camera.setPosHpr,
-                 -4.5696, -0.0014, 8.48323,
-                 -101.56812, 0.0, 0.0),
-            LerpPosHprInterval(
-                camera, 5.0,
-                (-4.5696, -0.0014, 7.96911),
-                (-101.56812, 0.0, 0.0),
-                startPos=(-4.5696, -0.0014, 8.48323),
-                startHpr=(-101.56812, 0.0, 0.0),
-                blendType='noBlend'),
-            Func(camera.wrtReparentTo, attack['battle']))
-        if duration > 13.0:
-            camTrack.append(Wait(duration - 13.0))
-    elif chainsawCtscCamera:
-        camTrack = Sequence(Wait(suitTrack.getDuration()))
-    elif name.startswith('ChainsawCoreKickback'):
-        camTrack = MovieCamera.randomActorShot(
-            attack['suit'], attack['battle'], suitTrack.getDuration(), 'suit')
-    elif name.startswith('ChainsawCore'):
-        camTrack = MovieCamera.randomActorShot(
-            attack['suit'], attack['battle'], suitTrack.getDuration(), 'suit')
-    else:
-        camTrack = MovieCamera.chooseSuitShot(attack, suitTrack.getDuration())
+    match name:
+        case 'PlutocratCoreStandupGuy':
+            camTrack = MovieCamera.heldRelativeShot(
+                suit, 0, 12, 13, 180, -30, 0,
+                suitTrack.getDuration(), 'singleAvatarShot')
+        case 'PlutocratCoreSlushFund':
+            camTrack = MovieCamera.randomActorShot(
+                suit, attack['battle'], suitTrack.getDuration(), 'suit')
+        case _ if name.startswith('PlutocratCore'):
+            camTrack = Sequence(Wait(suitTrack.getDuration()))
+        case 'ChainsawCorePhaseTwo':
+            duration = suitTrack.getDuration()
+            camTrack = Sequence(
+                Func(camera.reparentTo, attack['suit']),
+                Func(camera.setPosHpr,
+                     2.95629, 7.58349, 7.5835,
+                     156.86395, 0.0, 0.0),
+                Func(camera.wrtReparentTo, attack['battle']),
+                Wait(8.0),
+                Func(camera.reparentTo, attack['suit']),
+                Func(camera.setPosHpr,
+                     -4.5696, -0.0014, 8.48323,
+                     -101.56812, 0.0, 0.0),
+                LerpPosHprInterval(
+                    camera, 5.0,
+                    (-4.5696, -0.0014, 7.96911),
+                    (-101.56812, 0.0, 0.0),
+                    startPos=(-4.5696, -0.0014, 8.48323),
+                    startHpr=(-101.56812, 0.0, 0.0),
+                    blendType='noBlend'),
+                Func(camera.wrtReparentTo, attack['battle']))
+            if duration > 13.0:
+                camTrack.append(Wait(duration - 13.0))
+        case _ if chainsawCtscCamera:
+            camTrack = Sequence(Wait(suitTrack.getDuration()))
+        case _ if name.startswith('ChainsawCoreKickback'):
+            camTrack = MovieCamera.randomActorShot(
+                attack['suit'], attack['battle'], suitTrack.getDuration(), 'suit')
+        case _ if name.startswith('ChainsawCore'):
+            camTrack = MovieCamera.randomActorShot(
+                attack['suit'], attack['battle'], suitTrack.getDuration(), 'suit')
+        case _:
+            camTrack = MovieCamera.chooseSuitShot(attack, suitTrack.getDuration())
     battle = attack['battle']
     target = attack['target']
     groupStatus = attack['group']
@@ -2542,29 +2385,30 @@ def getPhoneTrack(suit, delay: float = 0.0, playRate: float = 1.0, wantSound: bo
     receiver = globalPropPool.getProp('receiver')
 
     suitType = getSuitBodyType(suit.dna.name)
-    if suitType == 'a':
-        delay += 0.3 / playRate # Add time to reflect Hang Up's somewhat longer phone-appear time.
-        phonePosPoints = [Point3(-0.26011560693641655, 0.26011560693641655, -0.1), VBase3(180, 180, 0)]
-        receiverPosPoints = [Point3(0, -0.43352601156069426, -0.8670520231213885), VBase3(90, 0, 0)]
-        scaleUpTime = 0.5
-        pickupDelay = 0.1
-        dialDuration = 2.75
-        finalPhoneDelay = 0.4
-    elif suitType == 'b':
-        delay += 0.3 / playRate # Add time to reflect Hang Up's somewhat longer phone-appear time.
-        phonePosPoints = [Point3(0.5202312138728296, 0.26011560693641655, 0), VBase3(180, 180, 0)]
-        receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
-        scaleUpTime = 0.5
-        pickupDelay = 0.1
-        dialDuration = 2.75
-        finalPhoneDelay = 0.4
-    elif suitType == 'c':
-        phonePosPoints = [Point3(0.5202312138728296, 0.26011560693641655, 0), VBase3(180, 180, 0)]
-        receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
-        scaleUpTime = 1.0
-        pickupDelay = 0.0
-        dialDuration = 2.6
-        finalPhoneDelay = 0.55
+    match suitType:
+        case 'a':
+            delay += 0.3 / playRate # Add time to reflect Hang Up's somewhat longer phone-appear time.
+            phonePosPoints = [Point3(-0.26011560693641655, 0.26011560693641655, -0.1), VBase3(180, 180, 0)]
+            receiverPosPoints = [Point3(0, -0.43352601156069426, -0.8670520231213885), VBase3(90, 0, 0)]
+            scaleUpTime = 0.5
+            pickupDelay = 0.1
+            dialDuration = 2.75
+            finalPhoneDelay = 0.4
+        case 'b':
+            delay += 0.3 / playRate # Add time to reflect Hang Up's somewhat longer phone-appear time.
+            phonePosPoints = [Point3(0.5202312138728296, 0.26011560693641655, 0), VBase3(180, 180, 0)]
+            receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
+            scaleUpTime = 0.5
+            pickupDelay = 0.1
+            dialDuration = 2.75
+            finalPhoneDelay = 0.4
+        case 'c':
+            phonePosPoints = [Point3(0.5202312138728296, 0.26011560693641655, 0), VBase3(180, 180, 0)]
+            receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
+            scaleUpTime = 1.0
+            pickupDelay = 0.0
+            dialDuration = 2.6
+            finalPhoneDelay = 0.55
 
     scaleUpPoint = MovieUtil.PNT3_ONE
     
@@ -2615,12 +2459,13 @@ def doPoundKey(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
 
-        if suit.dna.name == 'stenog':
-            particleNode.setZ(particleNode.getZ() + 3.5)
-            particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name in ('bellring', 'mouthp'):
-            particleNode.setZ(particleNode.getZ() + 1.0)
-            particleNode.setP(particleNode.getP() - 5.0)
+        match suit.dna.name:
+            case 'stenog':
+                particleNode.setZ(particleNode.getZ() + 3.5)
+                particleNode.setP(particleNode.getP() - 15.0)
+            case 'bellring' | 'mouthp':
+                particleNode.setZ(particleNode.getZ() + 1.0)
+                particleNode.setP(particleNode.getP() - 5.0)
 
         partTrack = Sequence(
             getPartTrack(particleEffect, 1.6 / playRate, (2.55 / playRate) + 1.0, (particleEffect, particleNode, 0), softStop=-2.0),
@@ -2747,12 +2592,13 @@ def doBeguile(attack: dict) -> MetaInterval:
     suitSplicedAnims = [SplicedAnim('glower', 0.01, 0.01, 1.5),
      SplicedAnim('glower', 2.0, 1.51)]
     suitTrack: Sequence = getSuitAnimTrack(attack)
-    if suit.dna.name in ('bcaster', 'videog'):
-        sparklePosPoints = [Point3(-0.1, 0.25, -1.5), VBase3(360.0, 0.0, 0.0)]
-    elif suit.dna.name == 'hustle':
-        sparklePosPoints = [Point3(-0.05, 0.65, -1.5), VBase3(335.0, 0.0, 0.0)]
-    else:
-        sparklePosPoints = [Point3(-0.1, 0.35, -1.5), VBase3(335.0, 0.0, 0.0)]
+    match suit.dna.name:
+        case 'bcaster' | 'videog':
+            sparklePosPoints = [Point3(-0.1, 0.25, -1.5), VBase3(360.0, 0.0, 0.0)]
+        case 'hustle':
+            sparklePosPoints = [Point3(-0.05, 0.65, -1.5), VBase3(335.0, 0.0, 0.0)]
+        case _:
+            sparklePosPoints = [Point3(-0.1, 0.35, -1.5), VBase3(335.0, 0.0, 0.0)]
     sparklePropTrack: Sequence = Sequence(Wait(1.0))
     sparklePropTrack.append(Func(__showProp, sparkle, head, sparklePosPoints[0], sparklePosPoints[1]))
     sparklePropTrack.append(Func(sparkle.find('**/scale_joint_sign').hide))
@@ -3234,102 +3080,45 @@ def doFingerWag(attack: dict) -> MetaInterval:
         # POSITION THE PARTICLES ON THE COG
         # ------------------------------------------------
 
-        if suit.dna.name == 'mm':
-            particleEffect.setPos(
-                0.167,
-                1.0,
-                1.3
-            )
+        match suit.dna.name:
+            case 'mm':
+                particleEffect.setPos(0.167, 1.0, 1.3)
 
-        elif suit.dna.name == 'tm':
-            particleEffect.setPos(
-                0.0,
-                1.1,
-                suit.getHeight() - 1.2
-            )
+            case 'tm':
+                particleEffect.setPos(0.0, 1.1, suit.getHeight() - 1.2)
 
-        elif suit.dna.name in ('tw', 'stg'):
-            particleEffect.setPos(
-                0.167,
-                1.8,
-                5.0
-            )
+            case 'tw' | 'stg':
+                particleEffect.setPos(0.167, 1.8, 5.0)
 
-        elif suit.dna.name == 'p':
-            particleEffect.setPos(
-                0.167,
-                1.4,
-                3.6
-            )
+            case 'p':
+                particleEffect.setPos(0.167, 1.4, 3.6)
 
-        elif suit.dna.name in ('pp', 'qc', 'nb'):
-            particleEffect.setPos(
-                0.167,
-                1.0,
-                4.1
-            )
+            case 'pp' | 'qc' | 'nb':
+                particleEffect.setPos(0.167, 1.0, 4.1)
 
-        elif suit.dna.name == 'pf':
-            particleEffect.setPos(
-                0.167,
-                1.4,
-                4.65
-            )
+            case 'pf':
+                particleEffect.setPos(0.167, 1.4, 4.65)
 
-        elif suit.dna.name in ('bs', 'fct'):
-            particleEffect.setPos(
-                0.167,
-                1.4,
-                5.3
-            )
+            case 'bs' | 'fct':
+                particleEffect.setPos(0.167, 1.4, 5.3)
 
-        elif suit.dna.name == 'bw':
-            particleEffect.setPos(
-                0.167,
-                2.0,
-                suit.getHeight() - 1.75
-            )
+            case 'bw':
+                particleEffect.setPos(0.167, 2.0, suit.getHeight() - 1.75)
 
-        elif suit.dna.name == 'sgoat':
-            particleEffect.setPos(
-                0.167,
-                1.9,
-                suit.getHeight() - 2.0
-            )
+            case 'sgoat':
+                particleEffect.setPos(0.167, 1.9, suit.getHeight() - 2.0)
 
-        elif suit.dna.name == 'mouthp':
-            particleEffect.setPos(
-                0.167,
-                2.2,
-                suit.getHeight() - 1.9
-            )
+            case 'mouthp':
+                particleEffect.setPos(0.167, 2.2, suit.getHeight() - 1.9)
 
-        elif suit.dna.name == 'erfit':
-            particleEffect.setPos(
-                0.167,
-                1.9,
-                suit.getHeight() - 1.9
-            )
+            case 'erfit':
+                particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
 
-        elif suit.dna.name in (
-            'cdirector',
-            'director',
-            'bcaster',
-            'videog',
-            'safesupervis'
-        ):
-            particleEffect.setPos(
-                0.167,
-                1.9,
-                suit.getHeight() - 1.9
-            )
+            case 'cdirector' | 'director' | 'bcaster' | 'videog' | 'safesupervis':
+                particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
 
-        else:
-            particleEffect.setPos(
-                0.0,
-                1.1,
-                suit.getHeight() - 1.2
-            )
+            case _:
+                particleEffect.setPos(0.0, 1.1, suit.getHeight() - 1.2)
 
         partTrack = Sequence(
             getPartTrack(
@@ -3820,40 +3609,41 @@ def doTeeOff(attack: dict) -> MetaInterval:
     BallYMult: float = 0.753
     clubPosPoints = [Point3(0.2724, 3.4425, 0.5446), VBase3(-1.3617, 60.5138, -84.6605)]
     clubPropTrack: Sequence = getPropTrack(club, suit.getRightHand(), clubPosPoints, 0.7 / playRate, (HitDelay + 1.3) / playRate, Point3(1.0, 1.0, 1.0), scaleUpTime=0.15 / playRate, scaleDownTime=0.15 / playRate)
-    if suit.dna.name == 'ym':
-        ballPosPoints = [Point3(2.25*BallXMult, 2.25*BallYMult, 0.1)]
-    elif suit.dna.name == 'autocad':
-        ballPosPoints = [Point3(2.35*BallXMult, 2.35*BallYMult, 0.1)]
-    elif suit.dna.name == 'm':
-        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
-    elif suit.dna.name == 'ppl':
-        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
-    elif suit.dna.name == 'mldr':
-        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
-    elif suit.dna.name == 'bsht':
-        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
-    elif suit.dna.name == 'rng':
-        ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
-    elif suit.dna.name in ('std', 'std2', 'mh', 'mh2'):
-        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
-    elif suit.dna.name == 'rb':
-        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
-    elif suit.dna.name == 'tbc':
-        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
-    elif suit.dna.name == 'mg':
-        ballPosPoints = [Point3(4.1*BallXMult, 4.1*BallYMult, 0.1)]
-    elif suit.dna.name == 'hho':
-        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
-    elif suit.dna.name == 'anc':
-        ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
-    elif suit.dna.name == 'clubpres':
-        ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
-    elif suit.dna.name == 'ambass':
-        ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
-    elif suit.dna.name == 'director':
-        ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
-    else:
-        ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
+    match suit.dna.name:
+        case 'ym':
+            ballPosPoints = [Point3(2.25*BallXMult, 2.25*BallYMult, 0.1)]
+        case 'autocad':
+            ballPosPoints = [Point3(2.35*BallXMult, 2.35*BallYMult, 0.1)]
+        case 'm':
+            ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+        case 'ppl':
+            ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+        case 'mldr':
+            ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+        case 'bsht':
+            ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+        case 'rng':
+            ballPosPoints = [Point3(3.2*BallXMult, 3.2*BallYMult, 0.1)]
+        case 'std' | 'std2' | 'mh' | 'mh2':
+            ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+        case 'rb':
+            ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+        case 'tbc':
+            ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+        case 'mg':
+            ballPosPoints = [Point3(4.1*BallXMult, 4.1*BallYMult, 0.1)]
+        case 'hho':
+            ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+        case 'anc':
+            ballPosPoints = [Point3(4.2*BallXMult, 4.2*BallYMult, 0.1)]
+        case 'clubpres':
+            ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
+        case 'ambass':
+            ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
+        case 'director':
+            ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
+        case _:
+            ballPosPoints = [Point3(4.5*BallXMult, 4.5*BallYMult, 0.1)]
     ballPropTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
@@ -4092,33 +3882,34 @@ def doBuzzWord(attack: dict) -> MetaInterval:
                 BattleParticles.setEffectTexture(effect, texturesList[i], color=Vec4(0.0, 0.0, 0.0, 1.0))
             particleEffects += (effect,)
 
-        if suit.dna.name in ('m', 'sh'):
-            for effect in particleEffects:
-                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -20.0, 0.0)
+        match suit.dna.name:
+            case 'm' | 'sh':
+                for effect in particleEffects:
+                    effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -20.0, 0.0)
 
-        elif suit.dna.name == 'dt':
-            for effect in particleEffects:
-                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 1.6, 0.0, -10.0, 0.0)
+            case 'dt':
+                for effect in particleEffects:
+                    effect.setPosHpr(0.0, 2.8, suit.getHeight() - 1.6, 0.0, -10.0, 0.0)
 
-        elif suit.dna.name == 'mm':
-            for effect in particleEffects:
-                effect.setPos(0.0, 0.8, suit.getHeight() - 0.25)
+            case 'mm':
+                for effect in particleEffects:
+                    effect.setPos(0.0, 0.8, suit.getHeight() - 0.25)
 
-        elif suit.dna.name == 'prethink':
-            for effect in particleEffects:
-                effect.setPos(0.0, 2.1, suit.getHeight() - 1.8)
-        
-        elif suit.dna.name == 'nn':
-            for effect in particleEffects:
-                effect.setPos(0.0, 2.5, suit.getHeight() - 1.1)
-        
-        elif suit.dna.name in ('stenog', 'wtapper', 'radiog'):
-            for effect in particleEffects:
-                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
+            case 'prethink':
+                for effect in particleEffects:
+                    effect.setPos(0.0, 2.1, suit.getHeight() - 1.8)
+            
+            case 'nn':
+                for effect in particleEffects:
+                    effect.setPos(0.0, 2.5, suit.getHeight() - 1.1)
+            
+            case 'stenog' | 'wtapper' | 'radiog':
+                for effect in particleEffects:
+                    effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
 
-        elif suit.dna.name in ('itn', 'anc'):
-            for effect in particleEffects:
-                effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
+            case 'itn' | 'anc':
+                for effect in particleEffects:
+                    effect.setPosHpr(0.0, 2.8, suit.getHeight() - 2.5, 0.0, -25.0, 0.0)
 
         particleNode = battle.attachNewNode('particle-node')
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
@@ -4508,12 +4299,13 @@ def doReOrg(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
 
-        if suit.dna.name in ('foreman', 'dold', 'bkeeper', 'cdirector'):
-            particleNode.setZ(particleNode.getZ() + 3.0)
-            particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name in ('hh', 'dola', 'tf', 'chg', 'shrp', 'sfs', 'cor', 'ppl'):
-            particleNode.setZ(particleNode.getZ() + 1.0)
-            particleNode.setP(particleNode.getP() - 5.0)
+        match suit.dna.name:
+            case 'foreman' | 'dold' | 'bkeeper' | 'cdirector':
+                particleNode.setZ(particleNode.getZ() + 3.0)
+                particleNode.setP(particleNode.getP() - 15.0)
+            case 'hh' | 'dola' | 'tf' | 'chg' | 'shrp' | 'sfs' | 'cor' | 'ppl':
+                particleNode.setZ(particleNode.getZ() + 1.0)
+                particleNode.setP(particleNode.getP() - 5.0)
 
         partTrack = Sequence(
             getPartTrack(sprayEffects, 1.0 / playRate, 2.9 / playRate, (sprayEffects, particleNode, 0), softStop=-1.0),
@@ -5669,21 +5461,22 @@ def doHotAir(attack: dict) -> MetaInterval:
         flameTrack = getPartTrack(flameEffect, flameDelay, flameDuration, (flameEffect, toon, 0), softStop=-1.0)
         flecksTrack = getPartTrack(flecksEffect, flecksDelay, flecksDuration, (flecksEffect, toon, 0), softStop=-1.0)
 
-        if suit.dna.name == 'foreman':
-            sprayNode.setY(sprayNode.getY() - 1.0)
-            sprayNode.setZ(sprayNode.getZ() + 2.0)
-        elif suit.dna.name == 'fires':
-            sprayNode.setY(sprayNode.getY() - 1.0)
-            sprayNode.setZ(sprayNode.getZ() + 1.0)
-        elif suit.dna.name in ('cnd', 'cnd2'):
-            sprayNode.setY(sprayNode.getY() - 1.0)
-            sprayNode.setZ(sprayNode.getZ() + 1.0)
-        elif suit.dna.name == 'whunter':
-            sprayNode.setY(sprayNode.getY() - 0.8)
-            sprayNode.setZ(sprayNode.getZ() + 1.5)
-        elif suit.dna.name in ('mplayer', 'mplayers', 'safesupervis'):
-            sprayNode.setY(sprayNode.getY() - 1.0)
-            sprayNode.setZ(sprayNode.getZ() + 1.6)
+        match suit.dna.name:
+            case 'foreman':
+                sprayNode.setY(sprayNode.getY() - 1.0)
+                sprayNode.setZ(sprayNode.getZ() + 2.0)
+            case 'fires':
+                sprayNode.setY(sprayNode.getY() - 1.0)
+                sprayNode.setZ(sprayNode.getZ() + 1.0)
+            case 'cnd' | 'cnd2':
+                sprayNode.setY(sprayNode.getY() - 1.0)
+                sprayNode.setZ(sprayNode.getZ() + 1.0)
+            case 'whunter':
+                sprayNode.setY(sprayNode.getY() - 0.8)
+                sprayNode.setZ(sprayNode.getZ() + 1.5)
+            case 'mplayer' | 'mplayers' | 'safesupervis':
+                sprayNode.setY(sprayNode.getY() - 1.0)
+                sprayNode.setZ(sprayNode.getZ() + 1.6)
 
         sprayTracks += (sprayTrack,)
         if dmg > 0:
@@ -5908,18 +5701,19 @@ def doCigarSmoke(attack):
     dmg = target[0]['hp']
     tauntIndex = attack['taunt']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    if suit.dna.name in ['cinema', 'choreo', 'fmaker'] and not suit.isSkeleton:
-        return doSmokeAndMirrors(attack)
-    elif suit.dna.name == 'hho' and not suit.isSkeleton:
-        return doHeadHonchoCigarSmoke(attack)
-    elif suit.dna.name == 'payman' and not suit.isSkeleton:
-        return doHeadHonchoCigarSmoke(attack)
-    elif suit.dna.name == 'fires' and not suit.isSkeleton:
-        return doFirestarterCigarSmoke(attack)
-    elif suit.dna.name == 'safesupervis' and not suit.isSkeleton:
-        return doFirestarterCigarSmoke(attack)
-    else:
-        pass
+    match suit.dna.name:
+        case 'cinema' | 'choreo' | 'fmaker' if not suit.isSkeleton:
+            return doSmokeAndMirrors(attack)
+        case 'hho' if not suit.isSkeleton:
+            return doHeadHonchoCigarSmoke(attack)
+        case 'payman' if not suit.isSkeleton:
+            return doHeadHonchoCigarSmoke(attack)
+        case 'fires' if not suit.isSkeleton:
+            return doFirestarterCigarSmoke(attack)
+        case 'safesupervis' if not suit.isSkeleton:
+            return doFirestarterCigarSmoke(attack)
+        case _:
+            pass
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':
         suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
@@ -5988,27 +5782,29 @@ def doCigarSmokeOLD(attack):
     dmg = target[0]['hp']
     tauntIndex = attack['taunt']
     taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    if suit.dna.name == 'hho' and not suit.isSkeleton:
-        return doHeadHonchoCigarSmoke(attack)
-    elif suit.dna.name == 'payman' and not suit.isSkeleton:
-        return doHeadHonchoCigarSmoke(attack)
-    elif suit.dna.name == 'fires' and not suit.isSkeleton:
-        return doFirestarterCigarSmoke(attack)
-    elif suit.dna.name == 'safesupervis' and not suit.isSkeleton:
-        return doFirestarterCigarSmoke(attack)
-    else:
-        pass
+    match suit.dna.name:
+        case 'hho' if not suit.isSkeleton:
+            return doHeadHonchoCigarSmoke(attack)
+        case 'payman' if not suit.isSkeleton:
+            return doHeadHonchoCigarSmoke(attack)
+        case 'fires' if not suit.isSkeleton:
+            return doFirestarterCigarSmoke(attack)
+        case 'safesupervis' if not suit.isSkeleton:
+            return doFirestarterCigarSmoke(attack)
+        case _:
+            pass
     BattleParticles.loadParticles()
     smoke = BattleParticles.createParticleEffect('Smoke')
     #BattleParticles.setEffectTexture(smoke, 'snow-particle')
     cigar = globalPropPool.getProp('cigar')
     suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'a':
-        suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
-        cigarPosPoints = [Point3(-0.05, -0.2, -0.25), VBase3(180.0, 0.0, 0.0)]
-    elif suitType == 'c':
-        suitTrack = Sequence(getSuitTrack(attack))
-        cigarPosPoints = [Point3(0.13024602026048981, -0.390738060781473, -0.21707670043415206), VBase3(180.0, 0.0, 0.0)]
+    match suitType:
+        case 'a':
+            suitTrack = Sequence(getSuitTrack(attack, playRate=1.25))
+            cigarPosPoints = [Point3(-0.05, -0.2, -0.25), VBase3(180.0, 0.0, 0.0)]
+        case 'c':
+            suitTrack = Sequence(getSuitTrack(attack))
+            cigarPosPoints = [Point3(0.13024602026048981, -0.390738060781473, -0.21707670043415206), VBase3(180.0, 0.0, 0.0)]
     cigarPropTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.0, 4.0, scaleUpPoint=Point3(7.0, 7.0, 7.0))
     toonTrack = getToonTrack(attack, 2.8, ['cringe'], 2.0, ['sidestep'])
     multiTrackList = Parallel(suitTrack, toonTrack)
@@ -8598,12 +8394,13 @@ def doJargon(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
 
-        if suit.dna.name in ('le', 'le2' 'magi'):
-            particleNode.setZ(particleNode.getZ() + 2.0)
-            particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name in ('stenog', 'bkeeper', 'rkeeper'):
-            particleNode.setZ(particleNode.getZ() + 4.0)
-            particleNode.setP(particleNode.getP() - 23.0)
+        match suit.dna.name:
+            case 'le' | 'le2' | 'magi':
+                particleNode.setZ(particleNode.getZ() + 2.0)
+                particleNode.setP(particleNode.getP() - 15.0)
+            case 'stenog' | 'bkeeper' | 'rkeeper':
+                particleNode.setZ(particleNode.getZ() + 4.0)
+                particleNode.setP(particleNode.getP() - 23.0)
 
         partTrack = getPartTrack(particleEffect, partDelay + partInterval * 0.0, 3.0 / playRate, (particleEffect, particleNode, 0), softStop=-1.0)
         partTrack2 = getPartTrack(particleEffect2, partDelay + partInterval * 1.0, 3.0 / playRate, (particleEffect2, particleNode, 0), softStop=-1.0)
@@ -8674,12 +8471,13 @@ def doMumboJumbo(attack: dict) -> MetaInterval:
             Func(particleNode.removeNode)
         )
 
-        if suit.dna.name == 'm':
-            particleNode.setZ(particleNode.getZ() + 2.25)
-            particleNode.setP(particleNode.getP() - 15.0)
-        elif suit.dna.name in ('stenog', 'wtapper'):
-            particleNode.setZ(particleNode.getZ() + 4.1)
-            particleNode.setP(particleNode.getP() - 25.0)
+        match suit.dna.name:
+            case 'm':
+                particleNode.setZ(particleNode.getZ() + 2.25)
+                particleNode.setP(particleNode.getP() - 15.0)
+            case 'stenog' | 'wtapper':
+                particleNode.setZ(particleNode.getZ() + 4.1)
+                particleNode.setP(particleNode.getP() - 25.0)
 
         partTrack3 = getPartTrack(particleEffect3, 4.1 / playRate, 2.7 / playRate, (particleEffect3, toon, 0), softStop=-1.0)
         partTrack4 = getPartTrack(particleEffect4, 4.1 / playRate, 2.7 / playRate, (particleEffect4, toon, 0), softStop=-1.0)
