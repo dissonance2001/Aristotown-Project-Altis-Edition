@@ -366,8 +366,6 @@ def doSuitAttack(attack):
         suitTrack = doBash(attack)
     elif name == 'Beguile':
         suitTrack = doBeguile(attack)
-    elif name == 'Reprogram':
-        suitTrack = doReprogram(attack)
     elif name == 'Bite':
         if suit.isAngry:
             suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), doBite(attack))
@@ -530,6 +528,8 @@ def doSuitAttack(attack):
         suitTrack = doRecordBreaker(attack)
     elif name == 'RedTape':
         suitTrack = doRedTape(attack)
+    elif name == 'Reprogram':
+        suitTrack = doReprogram(attack)
     elif name == 'RestrainingOrder':
         suitTrack = doRestrainingOrder(attack)
     elif name == 'Rolodex':
