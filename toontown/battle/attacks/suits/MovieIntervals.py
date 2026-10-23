@@ -483,7 +483,7 @@ def hitAtleastOneToon(targets: list[dict]) -> bool:
     return False
 
 
-def getSuitTrack(attack: dict, delay: float = 1e-06, splicedAnims: Optional[list[SplicedAnim]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
+def getSuitTrack(attack: dict, delay: float = 1e-06, wantSpeechHeadAnim: bool = True, splicedAnims: Optional[list[SplicedAnim]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
     suit = attack['suit']
     battle = attack['battle']
     tauntIndex = attack['taunt']
@@ -588,8 +588,7 @@ def getSuitTrack(attack: dict, delay: float = 1e-06, splicedAnims: Optional[list
         track.append(Func(suit.setChatAbsoluteSpecial, taunt, CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    track.append(Sequence(
-        LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle)))
+    track.append(Func(suit.setHpr, battle, (origH + delta, 0.0, 0.0)))
     if splicedAnims:
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
@@ -636,7 +635,7 @@ def getToonGroupCenter(attack, battle):
     avg /= float(len(points))
     return avg
 
-def getSuitAnimTrackAttack(attack: dict, delay: float = 0.0, splicedAnims: Optional[list[SplicedAnim]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
+def getSuitAnimTrackAttack(attack: dict, delay: float = 0.0, wantSpeechHeadAnim: bool = True, splicedAnims: Optional[list[SplicedAnim]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
     suit = attack['suit']
     tauntIndex = attack['taunt']
     battle = attack['battle']
@@ -713,8 +712,7 @@ def getSuitAnimTrackAttack(attack: dict, delay: float = 0.0, splicedAnims: Optio
         track.append(Func(suit.setChatAbsoluteSpecial, taunt, CFSpeech | CFTimeout))
     else:
         track.append(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    track.append(Sequence(
-        LerpHprInterval(suit, 0, (origH + delta, 0, 0), startHpr=(origH, 0, 0), other=battle)))
+    track.append(Func(suit.setHpr, battle, (origH + delta, 0.0, 0.0)))
     if splicedAnims:
         track.append(getSplicedAnimsTrack(splicedAnims, actor=suit))
     else:
@@ -765,7 +763,7 @@ def getSuitAnimTrackAttack(attack: dict, delay: float = 0.0, splicedAnims: Optio
     return track
 
 
-def getSuitAnimTrack(attack: dict, delay: float = 0.0, splicedAnims: Optional[list[SplicedAnim]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
+def getSuitAnimTrack(attack: dict, delay: float = 0.0, wantSpeechHeadAnim: bool = True, splicedAnims: Optional[list[SplicedAnim]] = None, playRate: float = 1.0, disrespectBlend: bool = False) -> Sequence:
     suit = attack['suit']
     tauntIndex = attack['taunt']
     battle = attack['battle']
