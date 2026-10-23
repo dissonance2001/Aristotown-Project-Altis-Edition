@@ -76,7 +76,8 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
         base.musicManager.stopAllSounds()
         self.pacelobbyMusicFile = loader.loadMusic('phase_9/audio/bgm/merc/instance_pacesetter_lobby.ogg')
         self.paceLobbyMusicTime = 0.0
-        self.pacelobbyMusic = base.playMusic(self.pacelobbyMusicFile, looping=1)
+        self.pacelobbyMusic = self.pacelobbyMusicFile
+        base.playMusic(self.pacelobbyMusicFile, looping=1)
         taskMgr.remove(self.paceMusicPositionTaskName)
         taskMgr.doMethodLater(0.25, self._trackPaceLobbyMusicPosition, self.paceMusicPositionTaskName)
         return task.done
@@ -310,7 +311,8 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
     def _resumeTVMusic(self):
         if not getattr(self, 'pacelobbyMusicFile', None):
             self.pacelobbyMusicFile = loader.loadMusic('phase_9/audio/bgm/merc/instance_pacesetter_lobby.ogg')
-        self.pacelobbyMusic = base.playMusic(
+        self.pacelobbyMusic = self.pacelobbyMusicFile
+        base.playMusic(
             self.pacelobbyMusicFile,
             looping=1,
             time=max(0.0, self.paceLobbyMusicTime),
@@ -355,7 +357,8 @@ class DistributedPaceLobbyInterior(DistributedToonInterior.DistributedToonInteri
                 except Exception:
                     pass
         if getattr(self, 'pacelobbyMusicFile', None):
-            self.pacelobbyMusic = base.playMusic(
+            self.pacelobbyMusic = self.pacelobbyMusicFile
+            base.playMusic(
                 self.pacelobbyMusicFile,
                 looping=1,
                 time=max(0.0, self.paceLobbyMusicTime),
