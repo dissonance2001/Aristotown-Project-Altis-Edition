@@ -812,7 +812,7 @@ def doRefractDamageRetaliation(attack):
     knifeTracks = Parallel()
     for i in range(120):
         knife = globalPropPool.getProp('dagger')
-        knifePos = Point3(random.randrange(-10.0, 10.0), random.randrange(-10.0, -4.0), 10.0)
+        knifePos = Point3(random.random() * 20.0 - 10.0, random.random() * 6.0 - 10.0, 10.0)
         landPos = Point3(knifePos.getX() - 3.0, knifePos.getY() - 3, -2.0)
         knifeTrack = Sequence(
             Wait(knifeDelay + 0.025 * i),
