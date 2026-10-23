@@ -7199,6 +7199,7 @@ SuitAttacks = {
     'SongAndDance': ('song-and-dance', ATK_TGT_GROUP),
     'Spin': ('magic3', ATK_TGT_SINGLE),
     'StolenScene': ('pickpocket', ATK_TGT_SINGLE),
+    'Stomper': ('glower', ATK_TGT_SINGLE),
     'StumpSpeech': ('quick-jump', ATK_TGT_SINGLE),
     'Synergy': ('magic3', ATK_TGT_GROUP),
     'Tabulate': ('calculator', ATK_TGT_SINGLE),

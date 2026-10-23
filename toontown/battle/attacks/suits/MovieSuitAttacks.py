@@ -559,6 +559,8 @@ def doSuitAttack(attack):
             suitTrack = doSpin(attack)
         case 'StolenScene':
             suitTrack = doStolenScene(attack)
+        case 'Stomper':
+            suitTrack = doStomper(attack)
         case 'StumpSpeech':
             suitTrack = doStumpSpeech(attack)
         case 'Synergy':
@@ -8191,6 +8193,61 @@ def doBlueChip(attack: dict) -> MetaInterval:
     toonTracks: Parallel = getToonTracks(attack, damageDelay, [], dodgeDelay, ['sidestep'], dodgeAnimPlayRate=1.2)
     soundTrack: Sequence = getSoundTrack('SA_blue_chip.ogg', delay=0.0, node=suit)
     return Sequence(Parallel(suitTrack, toonTracks, *toonReactTracks, soundTrack, *propTracks), Func(MovieUtil.removeProps, chips))
+
+
+def doStomper(attack: dict) -> MetaInterval:
+    from toontown.coghq.DistributedStomper import DistributedStomper
+    suit = attack['suit']
+    battle = attack['battle']
+    targets: list[dict] = attack['target']
+    damageDelay: float = 1.33
+    suitTrack: Sequence = getSuitTrack(attack)
+    stomperTracks: tuple[Sequence, ...] = ()
+    toonReactTracks: tuple[Sequence, ...] = ()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        stomper = loader.loadModel('phase_11/models/lawbotHQ/LB_square_stomper' if suit.style.dept == 'l' else 'phase_9/models/cogHQ/square_stomper')
+        stomper.setScale(2.0)
+        stomper.setP(270.0)
+        stomper.find('**/shaft').setScale(1.0, 7.5, 1.0)
+        smoke = loader.loadModel('phase_4/models/props/test_clouds')
+        smoke.setColor(0.8, 0.7, 0.5, 1.0)
+        smoke.setBillboardPointEye()
+        stomperTrack = Sequence(Func(stomper.reparentTo, battle))
+        toonPos = toon.getPos(battle)
+        stomperTrack.append(Func(stomper.setPos, (toonPos.getX(), toonPos.getY(), toon.getZ() + 25.0)))
+        stomperTrack.append(Wait(1.05))
+        stomperTrack.append(LerpPosInterval(stomper, 0.28, toonPos))
+        stomperTrack.append(Func(base.playSfx, base.loader.loadSfx('phase_4/audio/sfx/CHQ_FACT_stomper_small.ogg'), node=stomper, volume=0.45))
+        stomperTrack.append(Wait(0.5))
+        stomperTrack.append(LerpPosInterval(stomper, 1.0, (toonPos.getX(), toonPos.getY(), toonPos.getZ() + 25.0), blendType='easeInOut'))
+        stomperTrack.append(Func(stomper.removeNode))
+        smokeTrack = Sequence(
+            Wait(damageDelay),
+            Func(smoke.reparentTo, battle),
+            Func(smoke.setScale, 1.0),
+            Func(smoke.setPos, toonPos),
+            Parallel(
+                LerpScaleInterval(smoke, 0.2, Point3(4.0, 1.0, 4.0)),
+                LerpColorScaleInterval(smoke, 1.0, Vec4(1.0, 1.0, 1.0, 0.0))
+            ),
+            Func(smoke.removeNode)
+        )
+        stomperTracks += (stomperTrack, smokeTrack)
+        if dmg > 0:
+            toonReactTrack = Sequence(
+                Wait(damageDelay),
+                Func(toon.setAnimState, 'Squish'),
+                Func(toon.playDialogueForString, '!'),
+                Wait(2.7),
+                Func(toon.setAnimState, 'Neutral')
+            )
+            toonReactTracks += (toonReactTrack,)
+
+    toonTracks: Parallel = getToonTracks(attack, damageDelay, [], 0.8, ['sidestep'], dodgeAnimPlayRate=1.2)
+
+    return Parallel(suitTrack, *stomperTracks, toonTracks, *toonReactTracks)
 
 
 def doBlueChipOLD(attack):

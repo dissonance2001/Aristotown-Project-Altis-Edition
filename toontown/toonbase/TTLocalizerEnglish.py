@@ -4985,6 +4985,7 @@ SuitAttackNames = {
     'SongAndDance': "Song And Dance!",
     'Spin': "Spin!",
     'StolenScene': "Stolen Scene!",
+    'Stomper': 'Stomper!',
     'StumpSpeech': 'Stump Speech!',
     'Synergy': "Synergy!",
     'Tabulate': "Tabulate!",

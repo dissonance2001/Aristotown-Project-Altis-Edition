@@ -918,6 +918,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack.append(defaultCamera(openShotDuration=4.1))
         case 'Spin':
             camTrack.append(defaultCamera(openShotDuration=1.7))
+        case 'Stomper':
+            camTrack.append(defaultCamera(openShotDuration=1.0))
         case 'StumpSpeech':
             camTrack.append(defaultCamera())
         case 'Synergy':
