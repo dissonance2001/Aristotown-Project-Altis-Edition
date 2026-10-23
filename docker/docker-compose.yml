@@ -1,0 +1,87 @@
+name: aristotown
+
+x-altis-image: &altis-image
+  image: altis-python313:local
+  build:
+    context: .
+    dockerfile: Dockerfile
+
+services:
+  mongo:
+    image: mongo:8.3.8
+    platform: linux/amd64
+    container_name: Aristotown-mongo
+    restart: always
+    volumes:
+      - altis-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand(\"ping\").ok' | grep 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  astron:
+    container_name: Aristotown
+    <<: *altis-image
+    restart: always
+    init: true
+    working_dir: /app
+    command: ["astron"]
+    volumes:
+      - ..:/app:ro
+      - altis-astron-logs:/var/log/altis
+    ports:
+      - "7198:7198/tcp"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 7199"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 10s
+
+  uberdog:
+    container_name: Aristotown-uberdog
+    <<: *altis-image
+    restart: always
+    init: true
+    working_dir: /app
+    command: ["uberdog"]
+    volumes:
+      - ..:/app:ro
+      - ../user:/app/user:rw
+    environment:
+      PYTHONPATH: /app/dependencies/python313-compat:/app
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONPYCACHEPREFIX: /tmp/altis-pycache
+    depends_on:
+      astron:
+        condition: service_healthy
+
+  ai:
+    container_name: Aristotown-ai
+    <<: *altis-image
+    restart: always
+    init: true
+    working_dir: /app
+    command: ["ai"]
+    volumes:
+      - ..:/app:ro
+      - ../user:/app/user:rw
+    environment:
+      PYTHONPATH: /app/dependencies/python313-compat:/app
+      PYTHONUNBUFFERED: "1"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONPYCACHEPREFIX: /tmp/altis-pycache
+    depends_on:
+      astron:
+        condition: service_healthy
+      uberdog:
+        condition: service_started
+
+volumes:
+  altis-astron-logs:
+    name: altis_altis-astron-logs
+  altis-mongo-data:
+    name: aristotown-mongo-data
