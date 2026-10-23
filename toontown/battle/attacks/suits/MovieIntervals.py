@@ -611,7 +611,7 @@ def getSuitTrack(attack: dict, delay: float = 1e-06, wantSpeechHeadAnim: bool = 
         shuffleAnim = 'shuffle-left'
     track.append(Parallel(ActorInterval(suit, shuffleAnim), LerpHprInterval(suit, suit.getDuration(shuffleAnim), (origH, 0, 0), startHpr=(origH + delta, 0, 0), other=battle)))
     if attack['name'] not in ('BroadcasterDonation', 'ScapegoatEnraged', 'ScapegoatShieldsUp', 'AmbassadorHeadRollerGroup'):
-        if not attack['animName'] in ('nothing', 'none', 'come-on', 'rush-job', 'overclocked'):
+        if attack['animName'] not in ('nothing', 'none', 'come-on', 'rush-job', 'overclocked'):
             if not disrespectBlend:
                 track.append(suit.makeBlendInterval(shuffleAnim))
             else:
@@ -752,7 +752,7 @@ def getSuitAnimTrackAttack(attack: dict, delay: float = 0.0, wantSpeechHeadAnim:
             Func(suit.loop, 'neutral-enraged'))
     else:
         if attack['name'] not in ('BroadcasterDonation', 'ScapegoatShieldsUp', 'ScapegoatEnraged', 'AmbassadorHeadRollerGroup'):
-            if not attack['animName'] in ('nothing', 'none', 'come-on', 'rush-job', 'overclocked'):
+            if attack['animName'] not in ('nothing', 'none', 'come-on', 'rush-job', 'overclocked'):
                 if not disrespectBlend:
                     track.append(
                 suit.makeBlendInterval(shuffleAnim))
@@ -806,7 +806,7 @@ def getSuitAnimTrack(attack: dict, delay: float = 0.0, wantSpeechHeadAnim: bool 
             Func(suit.loop, 'neutral-enraged'))
     else:
         if attack['name'] not in ('BroadcasterDonation', 'ScapegoatShieldsUp', 'ScapegoatEnraged', 'AmbassadorHeadRollerGroup'):
-            if not attack['animName'] in ('nothing', 'none', 'come-on', 'rush-job', 'overclocked'):
+            if attack['animName'] not in ('nothing', 'none', 'come-on', 'rush-job', 'overclocked'):
                 if not disrespectBlend:
                     track.append(
                 suit.makeBlendInterval('neutral2'))
