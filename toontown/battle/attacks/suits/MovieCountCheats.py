@@ -205,57 +205,98 @@ def doHydrationCheck(attack):
 
     return Parallel(suitTrack, toonPosTracks, elevatorTracks, toonTracks, toonTracks2, propTracks)
 
-def doWringOut(attack):
+def doWringOut(attack: dict) -> MetaInterval:
+    suit = attack['suit']
     battle = attack['battle']
-    targets = attack['target']
-    damageDelay = 1.0
-    suitTrack = getSuitTrack(attack)
-    damageAnims = [SplicedAnim('struggle', 0.01, 0.01, 1.0),
-     SplicedAnim('slip-backward', 0.01, 0.01)]
-    shakeTracks = Parallel()
-    squeezeTracks = Parallel()
-    partTracks = Parallel()
-    partTracks2 = Parallel()
-    partTracks3 = Parallel()
-    toonTracks = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=0.5, dodgeAnimNames=['sidestep'], showDamageExtraTime=1.1)
-    soundTracks = Track()
+    targets: list[dict] = attack['target']
+
+    damageDelay: float = 1.07
+    dodgeDelay: float = 0.4
+    particleDelay: float = 0.9
+    stretchDelay: float = 1.07
+
+    suitTrack: Sequence = getSuitTrack(attack)
+
+    damageAnims: list[SplicedAnim] = [
+        SplicedAnim(Anim='struggle', StartTime=1.0, Duration=1.0),
+        SplicedAnim(Anim='slip-backward')
+    ]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], dodgeAnimPlayRate=1.2, showDamageExtraTime=1.0)
+    toonStretchTracks: tuple[Sequence, ...] = ()
+    partTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
-        if dmg > 0:
-            particleEffect = BattleParticles.createParticleEffect(file='trickleLiquidate')
-            particleEffect2 = BattleParticles.createParticleEffect(file='trickleLiquidate')
-            particleEffect3 = BattleParticles.createParticleEffect(file='trickleLiquidate')
-            x, y, z = toon.getPos()
-            groundPoint = Point3(x, y, z)
-            moveTime = 0.15
-            shakeTrack = Sequence(Wait(damageDelay))
-            for i in range(5):
-                shakeTrack.append(LerpPosInterval(toon, moveTime, Point3(x, y, z + 3)))
-                shakeTrack.append(LerpPosInterval(toon, moveTime, Point3(x, y, z + 1.5)))
-            
-            shakeTrack.append(LerpPosInterval(toon, 0.15, groundPoint))
-            shakeTracks.append(shakeTrack)
-            shakeTracks.append(Parallel(Func(toon.setToonStatusEffect, 'driedOut', modifier=1, turns=3)))
-            initialScale = toon.getScale()
-            xScale, yScale, zScale = initialScale
-            squeezeTrack = Sequence(
-                Wait(damageDelay),
-                Func(battle.movie.needRestoreToonScale),
-                LerpScaleInterval(toon, 0.1, Vec3(xScale * 0.6, yScale * 0.46, zScale * 1.2)),
-                Wait(1.1),
-                LerpScaleInterval(toon, 0.2, Vec3(xScale * 1.2, yScale * 1.2, zScale * 0.8)),
-                LerpScaleInterval(toon, 0.2, initialScale),
-                Func(battle.movie.clearRestoreToonScale)
-            )
-            squeezeTracks.append(squeezeTrack)
-            partTracks.append(getPartTrack(particleEffect, 1.0, 1.5, (particleEffect, toon, 0)))
-            partTracks2.append(getPartTrack(particleEffect2, 1.1, 1.4, (particleEffect2, toon, 0)))
-            partTracks3.append(getPartTrack(particleEffect3, 1.1, 1.4, (particleEffect3, toon, 0)))
-            soundTracks.append((1.0, SoundInterval(globalBattleSoundCache.getSound('SA_short_squeeze.ogg'), node=toon)))
-            soundTracks.append((2.4, SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg'), node=toon)))
+        toonPos = toon.getPos()
+        upPos = Vec3(toonPos[0], toonPos[1], toonPos[2] + 3.5)
+        downPos = Vec3(toonPos[0], toonPos[1], toonPos[2] + 0.5)
 
-    return Parallel(suitTrack, shakeTracks, squeezeTracks, partTracks, partTracks2, partTracks3, toonTracks, soundTracks)
+        if dmg > 0:
+            particleNode = battle.attachNewNode('short-squeeze-particle-node')
+            particleNode.setPos(battle.getActorPosHpr(toon)[0])
+            particleNode.setZ(toon.getHeight() / 2.0)
+            sprayEffect = BattleParticles.createParticleEffect(file='liquidate')
+            partTrack = Sequence(
+                getPartTrack(sprayEffect, particleDelay + 0.2, 2.6, (sprayEffect, particleNode, 0), softStop=-1.4),
+
+                Func(particleNode.removeNode),
+            )
+
+            stretchParts = toon.headParts + toon.legsParts + toon.torsoParts
+
+            finalHeadPartsScale = 1.0
+            if toon.cheesyEffect == ToontownGlobals.CEBigHead:
+                finalHeadPartsScale = 2.5
+            elif toon.cheesyEffect == ToontownGlobals.CESmallHead:
+                finalHeadPartsScale = 0.5
+
+            finalLegPartsScale = 1.0
+            if toon.cheesyEffect == ToontownGlobals.CEBigLegs:
+                finalLegPartsScale = 1.4
+            elif toon.cheesyEffect == ToontownGlobals.CESmallLegs:
+               finalLegPartsScale = 0.6
+
+            finalTorsoPartsScale = 1.0 / finalLegPartsScale
+
+            toonStretchTrack = Sequence(
+                Wait(stretchDelay),
+                Parallel(
+                    *[LerpScaleInterval(part, 0.2, (0.75, 0.75, 1.3), blendType='easeIn') for part in stretchParts],
+                    Sequence(
+                        *[Sequence(
+                            LerpPosInterval(toon, 0.19 if i == 3 else 0.13, upPos),
+                            LerpPosInterval(toon, 0.19 if i == 3 else 0.13, downPos),
+                        ) for i in range(4)],
+                    ),
+                ),
+                Parallel(
+                    LerpPosInterval(toon, 0.06, toonPos, blendType='easeIn'),
+                    Sequence(
+                        Parallel(
+                            *[LerpScaleInterval(part, 0.15, finalHeadPartsScale*1.3, blendType='easeOut') for part in toon.headParts],
+                            *[LerpScaleInterval(part, 0.15, finalLegPartsScale*1.3, blendType='easeOut') for part in toon.legsParts],
+                            *[LerpScaleInterval(part, 0.15, finalTorsoPartsScale*1.3, blendType='easeOut') for part in toon.torsoParts],
+                        ),
+                        Parallel(
+                            *[LerpScaleInterval(part, 0.4, finalHeadPartsScale, blendType='easeIn') for part in toon.headParts],
+                            *[LerpScaleInterval(part, 0.4, finalLegPartsScale, blendType='easeIn') for part in toon.legsParts],
+                            *[LerpScaleInterval(part, 0.4, finalTorsoPartsScale, blendType='easeIn') for part in toon.torsoParts],
+                        ),
+                    ),
+                ),
+            )
+
+            toonStretchTracks += (toonStretchTrack,)
+            partTracks += (partTrack,)
+
+    if hitAtleastOneToon(targets):
+        soundTrack: Track = Track(
+            (damageDelay, SoundInterval(globalBattleSoundCache.getSound('SA_short_squeeze.ogg'), node=suit)),
+            (damageDelay + 1.2, SoundInterval(globalBattleSoundCache.getSound('Toon_bodyfall_synergy.ogg')))
+        )
+        return Parallel(suitTrack, toonTracks, *toonStretchTracks, *partTracks, soundTrack)
+    else:
+        return Parallel(suitTrack, toonTracks, *toonStretchTracks, *partTracks)
 
 def doProToonShake(attack):
     suit = attack['suit']

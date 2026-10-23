@@ -1746,7 +1746,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             else:
                 camTrack.append(Sequence(defaultCamera(openShotDuration=2.0)))
         case 'ErfitWringOut':
-            camTrack.append(defaultCamera(openShotDuration=1.0))
+            camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
         case 'ErfitHydrationCheckRevert':
             if attackDuration > 2:
                 camTrack2 = Parallel(heldShot(0.0, 0.0, 3.5, 180, -20, 0, attackDuration))
