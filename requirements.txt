@@ -6,3 +6,5 @@ pyyaml
 semidbm
 six
 strenum
+pywebview>=5.4
+yt-dlp[default]

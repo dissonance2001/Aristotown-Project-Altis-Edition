@@ -10,6 +10,8 @@ class DistributedAnimatedProp(DistributedObject.DistributedObject):
         DistributedObject.DistributedObject.__init__(self, cr)
         self.fsm = ClassicFSM.ClassicFSM('DistributedAnimatedProp', [State.State('off', self.enterOff, self.exitOff, ['playing', 'attract']), State.State('attract', self.enterAttract, self.exitAttract, ['playing']), State.State('playing', self.enterPlaying, self.exitPlaying, ['attract'])], 'off', 'off')
         self.fsm.enterInitialState()
+        self.videoUrl = ''
+        self.videoTimestamp = 0
 
     def generate(self):
         DistributedObject.DistributedObject.generate(self)
@@ -33,6 +35,10 @@ class DistributedAnimatedProp(DistributedObject.DistributedObject):
 
     def setAvatarInteract(self, avatarId):
         self.avatarId = avatarId
+
+    def setVideo(self, videoUrl, timestamp):
+        self.videoUrl = videoUrl or ''
+        self.videoTimestamp = timestamp or 0
 
     def setOwnerDoId(self, ownerDoId):
         self.ownerDoId = ownerDoId

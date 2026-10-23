@@ -16,6 +16,9 @@ from panda3d.core import *
 
 loadPrcFile('dependencies/config/general.prc')
 loadPrcFile('dependencies/config/release/dev.prc')
+# ALTIS_TV_OPENAL_SETTING_BEGIN
+loadPrcFileData('Altis TV audio backend', 'audio-library-name p3openal_audio')
+# ALTIS_TV_OPENAL_SETTING_END
 if sys.platform == 'darwin':
     loadPrcFile('dependencies/config/macos.prc')
 

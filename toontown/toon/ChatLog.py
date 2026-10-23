@@ -66,6 +66,7 @@ class ChatLog(DirectFrame, DirectObject):
         self._displaySequence = Sequence()
         self._notificationSequence = Sequence()
         self._entryFocused = False
+        self._hudRefreshTaskName = 'altis-chat-hud-refresh-%s' % id(self)
 
         self._makeQuickMenu()
         self._makeDisplay()
@@ -85,12 +86,9 @@ class ChatLog(DirectFrame, DirectObject):
 
         base.cr.chatLog = self
         print('[ChatSystem] Aristotown chat interface loaded.')
-        try:
-            if base.localAvatar.chatMgr.fsm.getCurrentState().getName() == 'off':
-                self.disableInterface()
-        except:
-            pass
         self._refreshInterfaceVisibility()
+        taskMgr.remove(self._hudRefreshTaskName)
+        taskMgr.doMethodLater(0.25, self._refreshHUDAfterLoad, self._hudRefreshTaskName)
 
     def _handleBulkLoadBegin(self):
         self._bulkLoading = True
@@ -106,10 +104,16 @@ class ChatLog(DirectFrame, DirectObject):
         self.reparentTo(hidden)
 
     def _handleBulkLoadEnd(self):
-        # ToontownLoader emits this after ToontownLoadingScreen.end() has hidden
-        # the loading GUI, so the normal chat HUD can safely return now.
         self._bulkLoading = False
         self._refreshInterfaceVisibility()
+        taskMgr.remove(self._hudRefreshTaskName)
+        taskMgr.doMethodLater(0.1, self._refreshHUDAfterLoad, self._hudRefreshTaskName)
+
+    def _refreshHUDAfterLoad(self, task):
+        if self._bulkLoading:
+            return task.done
+        self._refreshInterfaceVisibility()
+        return task.done
 
     def _refreshInterfaceVisibility(self):
         if not self.interfaceEnabled or self._bulkLoading:
@@ -1910,6 +1914,7 @@ class ChatLog(DirectFrame, DirectObject):
                 pass
 
     def stop(self):
+        taskMgr.remove(self._hudRefreshTaskName)
         self.ignoreAll()
         if getattr(self, 'stickerMenu', None):
             self.stickerMenu.destroy()

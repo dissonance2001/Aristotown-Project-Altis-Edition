@@ -1,3 +1,4 @@
+import builtins
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from otp.chat import ChatInputNormal
@@ -33,6 +34,24 @@ class TTChatInputNormal(ChatInputNormal.ChatInputNormal):
         self.ignore('sentRegularChat')
         ChatInputNormal.ChatInputNormal.delete(self)
         loader.unloadModel('phase_3.5/models/gui/chat_input_gui')
+
+    def sendChat(self, text, overflow=False):
+        message = str(text or '').strip().lower()
+        if message in ('/playlist', '/fs'):
+            tvPlayer = getattr(builtins, '_projectAltisTVPlayer', None)
+            if tvPlayer:
+                if message == '/playlist':
+                    if tvPlayer.controlPanel and tvPlayer.controlPanel.isHidden():
+                        tvPlayer._showControlPanel()
+                    else:
+                        tvPlayer._hideControlPanel()
+                else:
+                    tvPlayer.toggleFullscreen()
+                self.chatEntry.enterText('')
+                self.hammerspaceItemSuggestions.hide()
+                messenger.send('sentRegularChat')
+                return
+        return ChatInputNormal.ChatInputNormal.sendChat(self, text, overflow)
 
     def typeCallback(self, extraArgs):
         if localAvatar.chatMgr.chatInputWhiteList and localAvatar.chatMgr.chatInputWhiteList.isActive():

@@ -1079,6 +1079,8 @@ dclass DistributedAnimatedProp : DistributedObject {
   requestExit() airecv clsend;
   avatarExit(uint32) broadcast;
   setState(string, int16) required broadcast ram;
+  requestPlayVideo(string(0-512)) airecv clsend;
+  setVideo(string(0-512), int16) required broadcast ram;
 };
 
 typedef int16 pair16[2];

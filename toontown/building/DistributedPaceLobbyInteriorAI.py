@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.building.DistributedToonInteriorAI import DistributedToonInteriorAI
 from toontown.building.DistributedPaceElevatorAI import DistributedPaceElevatorAI
 from toontown.building.DistributedHighRollerSigilvatorAI import DistributedHighRollerSigilvatorAI
+from toontown.building.DistributedAnimatedPropAI import DistributedAnimatedPropAI
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import NPCToons
 from toontown.instances import InstanceGlobals
@@ -26,12 +27,20 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
         self.paceCat = None
         self.paceLobbyManager = getattr(
             self.air, 'instanceZoneManager', None)
+        self.tvController = None
 
     def generate(self):
         DistributedToonInteriorAI.generate(self)
         self.createPaceElevator()
         self.createMotoroomSigilvator()
         self.createPaceCat()
+        self.createTVController()
+
+    def createTVController(self):
+        if self.tvController:
+            return
+        self.tvController = DistributedAnimatedPropAI(self.air, ToontownGlobals.PacesetterLobby)
+        self.tvController.generateWithRequired(self.zoneId)
 
     def createPaceCat(self):
         if self.paceCat:
@@ -136,6 +145,10 @@ class DistributedPaceLobbyInteriorAI(DistributedToonInteriorAI):
         return manager.createInstance(avIdList, instanceId)
 
     def delete(self):
+        if self.tvController:
+            self.tvController.requestDelete()
+            self.tvController = None
+
         if self.paceCat:
             self.paceCat.requestDelete()
             self.paceCat = None

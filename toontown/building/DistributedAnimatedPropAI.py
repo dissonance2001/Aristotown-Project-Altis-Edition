@@ -2,6 +2,8 @@ from direct.distributed import DistributedObjectAI
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
 from otp.ai.AIBaseGlobal import *
+from urllib.parse import urlparse, parse_qs
+import re
 
 class DistributedAnimatedPropAI(DistributedObjectAI.DistributedObjectAI):
 
@@ -20,6 +22,8 @@ class DistributedAnimatedPropAI(DistributedObjectAI.DistributedObjectAI):
         self.fsm.enterInitialState()
         self.propId = propId
         self.avatarId = 0
+        self.videoUrl = ''
+        self.videoTimestamp = 0
 
     def delete(self):
         self.fsm.requestFinalState()
@@ -41,6 +45,9 @@ class DistributedAnimatedPropAI(DistributedObjectAI.DistributedObjectAI):
     def requestInteract(self):
         avatarId = self.air.getAvatarIdFromSender()
         stateName = self.fsm.getCurrentState().getName()
+        if self.propId == 9613:
+            self.fsm.request('attract' if stateName == 'playing' else 'playing')
+            return
         if stateName != 'playing':
             self.sendUpdate('setAvatarInteract', [avatarId])
             self.avatarId = avatarId
@@ -50,11 +57,53 @@ class DistributedAnimatedPropAI(DistributedObjectAI.DistributedObjectAI):
 
     def requestExit(self):
         avatarId = self.air.getAvatarIdFromSender()
-        if avatarId == self.avatarId:
-            stateName = self.fsm.getCurrentState().getName()
+        stateName = self.fsm.getCurrentState().getName()
+        if self.propId == 9613:
             if stateName == 'playing':
-                self.sendUpdate('avatarExit', [avatarId])
                 self.fsm.request('attract')
+            return
+        if avatarId == self.avatarId and stateName == 'playing':
+            self.sendUpdate('avatarExit', [avatarId])
+            self.fsm.request('attract')
+
+    def getVideo(self):
+        return [self.videoUrl, self.videoTimestamp]
+
+    def requestPlayVideo(self, videoUrl):
+        avatarId = self.air.getAvatarIdFromSender()
+        if self.propId != 9613 or not isinstance(videoUrl, str) or len(videoUrl) > 512:
+            return
+        parsed = urlparse(videoUrl.strip())
+        host = (parsed.hostname or '').lower()
+        videoId = ''
+        if host == 'youtu.be':
+            videoId = parsed.path.strip('/').split('/')[0]
+        elif host in ('youtube.com', 'www.youtube.com', 'm.youtube.com', 'music.youtube.com'):
+            if parsed.path == '/watch':
+                videoId = parse_qs(parsed.query).get('v', [''])[0]
+            elif parsed.path.startswith(('/shorts/', '/embed/', '/live/')):
+                parts = parsed.path.strip('/').split('/')
+                if len(parts) > 1:
+                    videoId = parts[1]
+        if not re.fullmatch(r'[A-Za-z0-9_-]{6,20}', videoId):
+            return
+        videoUrl = 'https://www.youtube.com/watch?v=' + videoId
+        if self.fsm.getCurrentState().getName() == 'playing':
+            self.fsm.request('attract')
+        self.videoUrl = videoUrl
+        self.videoTimestamp = globalClockDelta.getRealNetworkTime()
+        self.sendUpdate('setVideo', [self.videoUrl, self.videoTimestamp])
+        self.fsm.request('playing')
+
+    def requestSeekVideo(self, seconds):
+        if self.propId != 9613 or not self.videoUrl or self.fsm.getCurrentState().getName() != 'playing':
+            return
+        try:
+            seconds = max(0, min(65535, int(seconds)))
+        except (TypeError, ValueError):
+            return
+        self.videoTimestamp = globalClockDelta.getRealNetworkTime() - seconds
+        self.sendUpdate('setVideo', [self.videoUrl, self.videoTimestamp])
 
     def getState(self):
         return [self.fsm.getCurrentState().getName(), globalClockDelta.getRealNetworkTime()]
