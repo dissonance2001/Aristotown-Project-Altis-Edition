@@ -7972,13 +7972,13 @@ def doShortSqueeze(attack: dict) -> MetaInterval:
 
     suitTrack: Sequence = getSuitTrack(attack)
 
-    damageAnims = [
+    damageAnims: list[SplicedAnim] = [
         SplicedAnim(Anim='struggle', StartTime=1.0, Duration=1.0),
         SplicedAnim(Anim='slip-backward')
     ]
     toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], dodgeAnimPlayRate=1.2, showDamageExtraTime=1.0)
-    toonStretchTracks = ()
-    partTracks = ()
+    toonStretchTracks: tuple[Sequence, ...] = ()
+    partTracks: tuple[Sequence, ...] = ()
     for t in targets:
         toon = t['toon']
         dmg = t['hp']
