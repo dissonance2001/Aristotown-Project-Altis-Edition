@@ -978,6 +978,7 @@ class DistributedClashSellbotBoss(ClashBossClientCompat, DistributedBossCog.Dist
         # Boss Cog is still in the middle of the floor.
         DistributedBossCog.DistributedBossCog.enterBattleOne(self)
         self.clashIdleToons()
+        self.clashAcceptNametagClicks()
         self.reparentTo(render)
         self.setPosHpr(*BossCogGlobals.SellbotBossBattleOnePosHpr)
         self.clearChat()
@@ -1113,6 +1114,7 @@ class DistributedClashSellbotBoss(ClashBossClientCompat, DistributedBossCog.Dist
         self.toonsToBattlePosition(self.toonsA, self.battleANode)
         self.toonsToBattlePosition(self.toonsB, self.battleBNode)
         self.clashIdleToons()
+        self.clashAcceptNametagClicks()
         if self.battleA is None or self.battleB is None:
             cageIndex = 3
         else:
@@ -1160,6 +1162,7 @@ class DistributedClashSellbotBoss(ClashBossClientCompat, DistributedBossCog.Dist
         base.discord.applyPreset('boss-s-5')
         DistributedBossCog.DistributedBossCog.enterBattleThree(self)
         self.clashIdleToons()
+        self.clashAcceptNametagClicks()
         self.clearChat()
         self.cagedToon.clearChat()
         self.reparentTo(render)

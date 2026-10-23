@@ -68,6 +68,44 @@ class ClashMusicShim:
         return sound.getName()
 
 
+def installClashSkelecogNametagPatch():
+    """Client only. Turning a cog into a skelecog rebuilds its model, which drops its clickable
+    nametag. The boss sets the skelecog flag after the cogs are generated, so skelecogs in the VP
+    battle could not be clicked. Re-enable the nametag after the rebuild (Clash VP battles only)."""
+    try:
+        from toontown.suit import DistributedSuitBase
+    except Exception:
+        return
+    cls = DistributedSuitBase.DistributedSuitBase
+    if getattr(cls, '_clashSkelePickablePatched', False):
+        return
+
+    def inClashVpBattle():
+        try:
+            for obj in base.cr.doId2do.values():
+                if getattr(obj, 'useClashJoinCam', False):
+                    return True
+        except Exception:
+            pass
+        return False
+
+    def wrap(original):
+        def setSkelecog(self, flag, *args, **kwargs):
+            result = original(self, flag, *args, **kwargs)
+            if flag and inClashVpBattle():
+                try:
+                    self.setPickable(1)
+                except Exception:
+                    pass
+            return result
+        return setSkelecog
+
+    for name in ('setSkelecog', 'setSkelecog2'):
+        if hasattr(cls, name):
+            setattr(cls, name, wrap(getattr(cls, name)))
+    cls._clashSkelePickablePatched = True
+
+
 def installClashBattleFinalPatch():
     """Client only. Replaces DistributedBattleFinal.showSuitsJoining for the Clash VP (and only
     for it; OCVP keeps Altis's behaviour) without touching the Altis file. Cogs grow while they
@@ -161,6 +199,7 @@ class ClashBossClientCompat:
         from toontown.suit import DistributedBossCog, BossHealthBar
         from toontown.coghq import CogDisguiseGlobals
         installClashBattleFinalPatch()
+        installClashSkelecogNametagPatch()
         DistributedBossCog.DistributedBossCog.announceGenerate(self)
         # Altis's base uses its own arena battle spots; Clash's VP arena (BossRoomHQ) needs Clash's
         from toontown.suit import BossCogGlobals
@@ -231,6 +270,43 @@ class ClashBossClientCompat:
                             self.toFinalBattleMode()
                         else:
                             self.toWalkMode()
+
+    attackThreshold = 1.0  # grace period (seconds) after being zapped by the VP, like Clash
+
+    def zapLocalToon(self, attackCode, origin=None):
+        from toontown.suit import DistributedBossCog
+        now = globalClock.getFrameTime()
+        if now < getattr(self, 'lastZapLocalTime', 0) + self.attackThreshold:
+            return
+        wasStunned = localAvatar.isStunned
+        DistributedBossCog.DistributedBossCog.zapLocalToon(self, attackCode, origin)
+        if not wasStunned and localAvatar.isStunned:
+            self.lastZapLocalTime = now
+
+    def clashAcceptNametagClicks(self):
+        """Altis's base class only reacts to nametag clicks in the pie battle; OCVP lets you click
+        toons and cogs in every battle state. Do the same for the Clash VP."""
+        self.accept('clickedNametag', self.clashClickedNameTag)
+        self.accept('friendAvatar', self.clashHandleFriendAvatar)
+        self.accept('avatarDetails', self.clashHandleAvatarDetails)
+
+    def clashClickedNameTag(self, avatar):
+        from toontown.friends import FriendsListManager
+        place = self.cr.playGame.getPlace() if self.cr else None
+        if place and hasattr(place, 'fsm'):
+            FriendsListManager.FriendsListManager._FriendsListManager__handleClickedNametag(place, avatar)
+
+    def clashHandleFriendAvatar(self, avId, avName, avDisableName):
+        from toontown.friends import FriendsListManager
+        place = self.cr.playGame.getPlace() if self.cr else None
+        if place and hasattr(place, 'fsm'):
+            FriendsListManager.FriendsListManager._FriendsListManager__handleFriendAvatar(place, avId, avName, avDisableName)
+
+    def clashHandleAvatarDetails(self, avId, avName, playerId=None):
+        from toontown.friends import FriendsListManager
+        place = self.cr.playGame.getPlace() if self.cr else None
+        if place and hasattr(place, 'fsm'):
+            FriendsListManager.FriendsListManager._FriendsListManager__handleAvatarDetails(place, avId, avName, playerId)
 
     def clashIdleToons(self):
         """Put every involved toon back on its idle loop and restart the look-around task."""
@@ -467,7 +543,11 @@ ClashLocalizerStrings = {
 # placeholders that Clash's VP code formats into them (a plain "%s" or the
 # "primary"/"jump" dict keys). Always installed under a Clash-prefixed name;
 # the Clash VP client uses these.
-ClashOnlyLocalizerStrings = {'ClashCagedToonYippee': 'Thank you, %s! You took down the V.P.!',
+ClashOnlyLocalizerStrings = {'CagedToonThankYouTemp': {
+        'one': "Thanks a lot for saving me again, by the way.\x07For your valiant efforts, I'll give you some IOUs!\x07You can call myself and {npc} during battle, and we'll come to help you out!\x07Don't worry about me, I'll do my best not to get captured again.",
+        'many': "Thanks a lot for saving me again, by the way.\x07For your valiant efforts, I'll give you some IOUs!\x07You can call myself, {npcFirst} and {npcLast} during battle, and we'll come to help you out!\x07Don't worry about me, I'll do my best not to get captured again.",
+    },
+    'ClashCagedToonYippee': 'Thank you, %s! You took down the V.P.!',
  'ClashCagedToonPrepareBattleThree': 'Alright, now we need to attack the V.P. Cog directly.\x07Luckily, the '
                                      'Resistance has given me a whole bunch of pies you can use!\x07Jump up '
                                      "and touch the bottom of my cage and I'll give you some pies.\x07Press "

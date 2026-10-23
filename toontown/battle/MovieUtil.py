@@ -3768,3 +3768,48 @@ def sortAttacks(attacksDict):
 
     attacks.sort(key=cmp_to_key(compFunc))
     return attacks
+
+
+# 4 cogs dying is fucking loud
+_DEATH_SOUND_WINDOW = 0.5
+_DEATH_SOUND_FALLOFF = 1.5   # higher = quieter extra deaths
+_deathSoundState = {'time': -10.0, 'count': 0, 'depth': 0}
+
+
+def _scaleDeathSounds(ival, factor):
+    from direct.interval.SoundInterval import SoundInterval
+    if isinstance(ival, SoundInterval):
+        ival.volume = ival.volume * factor
+    for child in getattr(ival, 'ivals', None) or ():
+        _scaleDeathSounds(child, factor)
+
+
+def _wrapDeathTrack(func):
+    def wrapper(*args, **kwargs):
+        state = _deathSoundState
+        state['depth'] += 1
+        try:
+            track = func(*args, **kwargs)
+        finally:
+            state['depth'] -= 1
+        if state['depth'] > 0:  # called from inside another death track; the outer call counts
+            return track
+        now = globalClock.getFrameTime()
+        if now - state['time'] > _DEATH_SOUND_WINDOW:
+            state['count'] = 0
+        state['time'] = now
+        state['count'] += 1
+        if state['count'] > 1:
+            try:
+                _scaleDeathSounds(track, 1.0 / (state['count'] ** _DEATH_SOUND_FALLOFF))
+            except Exception:
+                pass
+        return track
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+
+for _name in ('createSuitDeathTrack', 'createSuitDeathTrackExplosiveForeman',
+              'createSuitHeadlessDeathTrack', 'createSuitWreckingDeathTrack'):
+    if _name in globals():
+        globals()[_name] = _wrapDeathTrack(globals()[_name])
