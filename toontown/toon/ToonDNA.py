@@ -1003,68 +1003,9 @@ def _scanPhase4Clothing(clothingRoot, registry, minimumIds, knownPaths):
     return registryChanged, discoveredCount
 
 
-def loadCustomClothing():
-    registryPath = _getExistingPath(CUSTOM_CLOTHING_REGISTRY)
-    registry = _loadClothingRegistry(registryPath)
-    minimumIds = {
-        'shirt': len(Shirts),
-        'sleeves': len(Sleeves),
-        'shorts': len(BoyShorts),
-        'skirt': len(GirlBottoms),
-    }
-    knownPaths = _getKnownClothingPaths()
-    registryChanged = False
-    discoveredCount = 0
-    foundClothingRoot = False
-    for sourceName, clothingDirectory in CUSTOM_CLOTHING_DIRECTORIES:
-        clothingRoot = _getExistingPath(clothingDirectory)
-        if not os.path.isdir(clothingRoot):
-            notify.info('Custom clothing directory not found: %s' % clothingDirectory)
-            continue
-        foundClothingRoot = True
-        if sourceName == 'phase_14':
-            sourceChanged, sourceCount = _scanPhase14Clothing(
-                clothingRoot, registry, minimumIds)
-        else:
-            sourceChanged, sourceCount = _scanPhase4Clothing(
-                clothingRoot, registry, minimumIds, knownPaths)
-        if sourceChanged:
-            registryChanged = True
-        discoveredCount += sourceCount
-    # The AI may not mount or scan texture directories, but it still needs to
-    # apply IDs already stored in clothing_registry.json so requestSetClothing
-    # validates the same IDs as the client.
-    defaultShirt = Shirts[0]
-    defaultSleeves = Sleeves[0]
-    defaultShorts = BoyShorts[0]
-    defaultGirlBottom = GirlBottoms[0]
-    for folderName in sorted(registry['outfits'].keys()):
-        outfitData = registry['outfits'][folderName]
-        if not isinstance(outfitData, dict):
-            continue
-        shirtPath = outfitData.get('shirt')
-        shirtId = outfitData.get('shirt_id')
-        if isinstance(shirtPath, str) and isinstance(shirtId, int):
-            _setListItemAtId(Shirts, shirtId, shirtPath, defaultShirt)
-        sleevesPath = outfitData.get('sleeves')
-        sleevesId = outfitData.get('sleeves_id')
-        if isinstance(sleevesPath, str) and isinstance(sleevesId, int):
-            _setListItemAtId(Sleeves, sleevesId, sleevesPath, defaultSleeves)
-        shortsPath = outfitData.get('shorts')
-        shortsId = outfitData.get('shorts_id')
-        if isinstance(shortsPath, str) and isinstance(shortsId, int):
-            _setListItemAtId(BoyShorts, shortsId, shortsPath, defaultShorts)
-        skirtPath = outfitData.get('skirt')
-        skirtId = outfitData.get('skirt_id')
-        if isinstance(skirtPath, str) and isinstance(skirtId, int):
-            _setListItemAtId(GirlBottoms, skirtId, (skirtPath, SKIRT), defaultGirlBottom)
-    if registryChanged or not os.path.isfile(registryPath):
-        _saveClothingRegistry(registryPath, registry)
-    notify.info('Loaded %s custom clothing item(s) from the clothing registry.' % discoveredCount)
 
 
 
-loadCustomClothing()
 
 
 
