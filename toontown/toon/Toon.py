@@ -3388,6 +3388,7 @@ class Toon(Avatar.Avatar, ToonHead):
         pass
 
     def generateToonClothes(self, fromNet = 0):
+        from toontown.inventory.enums.ItemEnums import ItemType
         swappedTorso = 0
         if self.hasLOD():
             if self.style.getGender() == 'f' and fromNet == 0:
@@ -3481,6 +3482,15 @@ class Toon(Avatar.Avatar, ToonHead):
 
                 caps = thisPart.findAllMatches('**/torso-bot-cap')
                 caps.setColor(darkBottomColor)
+
+        equippedItems = getattr(self, 'equippedItems', None)
+        if equippedItems:
+            for item in equippedItems:
+                if item.getItemType() == ItemType.Cosmetic_Clothing_Bottom:
+                    self.setBottomItem(item)
+            for item in equippedItems:
+                if item.getItemType() == ItemType.Cosmetic_Clothing_Top:
+                    self.setTopItem(item)
 
         return swappedTorso
 

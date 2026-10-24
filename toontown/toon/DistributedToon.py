@@ -104,6 +104,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         # InventoryManager whenever this toon's inventory is (re)received. See
         # setEquippedItems/getEquippedItems below.
         self.equippedItems = []
+        self._equippedItemsReceived = False
         self.disguisePageFlag = 0
         self.sosPageFlag = 0
         self.cogIndex = -1
@@ -243,28 +244,17 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             self.equippedItems = equippedItems
         else:
             self.equippedItems = InventoryItem.fromStructList(equippedItems)
+        self._equippedItemsReceived = True
         messenger.send(f'EquippedInventorySet-{self.doId}')
-        self.handlePostEquippedItemsSet()
+        torso = self.getPart('torso')
+        if self.style and torso is not None and not torso.isEmpty():
+            self.handlePostEquippedItemsSet()
 
     def handlePostEquippedItemsSet(self):
-        from toontown.inventory.enums.ItemEnums import (
-            ItemType, ClothingTopItemType, ClothingBottomItemType
-        )
-        from toontown.inventory.base.InventoryItem import InventoryItem
+        from toontown.inventory.enums.ItemEnums import ItemType
 
         equippedClothingBottoms = self.getEquippedItemsOfType(ItemType.Cosmetic_Clothing_Bottom)
-        equippedClothingBottom = (
-            equippedClothingBottoms[0]
-            if equippedClothingBottoms
-            else InventoryItem.fromSubtype(ClothingBottomItemType.ShortswithBelt)
-        )
-
         equippedClothingTops = self.getEquippedItemsOfType(ItemType.Cosmetic_Clothing_Top)
-        equippedClothingTop = (
-            equippedClothingTops[0]
-            if equippedClothingTops
-            else InventoryItem.fromSubtype(ClothingTopItemType.Shirt_Desat_Classic_Plain)
-        )
 
         accessoryTypes = [
             ItemType.Cosmetic_Hat,
@@ -279,7 +269,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             for item in self.getEquippedItemsOfType(itemType)
         ]
 
-        self.setToonEquippedItems([equippedClothingBottom, equippedClothingTop] + equippedAccessories)
+        torso = self.getPart('torso')
+        if torso is not None and not torso.isEmpty():
+            self.generateToonClothes()
+            self.setToonEquippedItems(equippedClothingBottoms + equippedClothingTops + equippedAccessories)
 
     def getEquippedItems(self):
         return self.equippedItems
@@ -1029,6 +1022,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.setGlasses(*oldGlasses)
         self.setBackpack(*oldBackpack)
         self.setShoes(*oldShoes)
+        if (self._equippedItemsReceived and
+                not getattr(self, 'isDisguised', False)):
+            self.handlePostEquippedItemsSet()
 
     def setHat(self, idx, textureIdx, colorIdx):
         Toon.Toon.setHat(self, idx, textureIdx, colorIdx)
