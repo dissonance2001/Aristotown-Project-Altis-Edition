@@ -920,6 +920,9 @@ class DistributedSellbotBossMini(DistributedBossCog.DistributedBossCog, FSM.FSM)
         self.cagedToon.addActive()
 
     def enterIntroduction(self):
+        # Discord Rich Presence
+        if localAvatar.doId in self.involvedToons:
+            base.discord.applyPreset('sellbot-lit-team')
         self.reparentTo(render)
         self.setPosHpr(0, 50, 18, 180, 0, 0)
         self.stopAnimate()

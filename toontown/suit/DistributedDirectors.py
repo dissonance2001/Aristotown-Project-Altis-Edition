@@ -361,6 +361,9 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         if not self.resistanceToonOnstage:
             self.__showResistanceToon(True)
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
+        # Discord Rich Presence
+        if localAvatar.doId in self.involvedToons:
+            base.discord.applyPreset('boss-exe-team')
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)

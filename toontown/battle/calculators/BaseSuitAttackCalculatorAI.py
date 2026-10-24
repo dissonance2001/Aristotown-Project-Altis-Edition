@@ -1486,7 +1486,7 @@ class BaseSuitAttackCalculatorAI:
                     attack = self.__getLureRemovalPreToon(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if (x + 2) % 3 == 0 and self.__suitCanAttack(suitId):
+                if (x + 1) % 3 == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'ErclaimHemmorage', # Auto Repair
                      'animName': 'throw-object',

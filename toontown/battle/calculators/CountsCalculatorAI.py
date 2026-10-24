@@ -264,7 +264,8 @@ class CountsCalculatorAI:
                             'targetSelf': False,
                             'targetWeakest': True,
                             'damageTarget': 'target',
-                            'healTarget': 'attacker'
+                            'healTarget': 'attacker',
+                            'excludeManagers': True,
                         })
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
@@ -324,7 +325,8 @@ class CountsCalculatorAI:
                             'targetSelf': False,
                             'targetWeakest': True,
                             'damageTarget': 'target',
-                            'healTarget': 'attacker'
+                            'healTarget': 'attacker',
+                            'excludeManagers': True,
                         })
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)

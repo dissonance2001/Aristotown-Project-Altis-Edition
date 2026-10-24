@@ -57,7 +57,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
         if wantFadeIn:
             normalTextScaleSeq = Sequence(
                 LerpFunc(self.setTextScale, fromData=0.025, toData=TTLocalizer.PBPTonscreenText * 1.1, duration=0.3, blendType='easeInOut'),
-                LerpFunc(self.setTextScale, fromData=TTLocalizer.PBPTonscreenText * 1.1, toData=TTLocalizer.PBPTonscreenText, duration=0.8, blendType='easeInOut')
+                LerpFunc(self.setTextScale, fromData=TTLocalizer.PBPTonscreenText * 1.1, toData=TTLocalizer.PBPTonscreenText, duration=0.08, blendType='easeInOut')
             )
         else:
             normalTextScaleSeq = Sequence(

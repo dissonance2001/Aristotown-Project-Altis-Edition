@@ -382,6 +382,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         return Sequence(Func(node.setPos, fromPos), Func(node.headsUp, toPos), node.posInterval(time, toPos))
 
     def __makeRollToBattleTwoMovie(self):
+        # Discord Rich Presence
+        if localAvatar.doId in self.involvedToons:
+            base.discord.applyPreset('boss-ol-3')
         self.litigator.reparentTo(render)
         self.litigator.setPosHpr(-10.5, 149, 4.0, -90, 0, 0)
         self.stenographer.reparentTo(render)
@@ -971,6 +974,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.stopAnimate()
         # self.__hideWitnessToon()
         DistributedBossCog.DistributedBossCog.enterIntroduction(self)
+        # Discord Rich Presence
+        if localAvatar.doId in self.involvedToons:
+            base.discord.applyPreset('wsi-fight')
         base.playMusic(self.promotionMusic, looping=1, volume=0.9)
         NametagGlobals.setWant2dNametags(False)
         NametagGlobals.setWantActiveNametags(True)

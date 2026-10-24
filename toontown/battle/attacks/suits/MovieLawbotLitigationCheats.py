@@ -1145,7 +1145,7 @@ def doGavelCourtRecord2(attack):
         if dmg > 0:
             propTracks.append(propTrack)
             toonTracks.append(toonTrack)
-    toonDamageTrack = getToonTracksCheat(attack, 3.875, ['nothing'], 0, ['neutral'])
+    toonDamageTrack = getToonTracksCheat(attack, 5.375, ['nothing'], 0, ['neutral'])
     return Parallel(toonTracks, toonDamageTrack, suitTrack, propTracks)
 
 def doGavelCourtRecord(attack: dict) -> tuple[MetaInterval, Parallel]:

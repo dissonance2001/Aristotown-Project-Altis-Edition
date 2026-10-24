@@ -493,6 +493,13 @@ presets = {
         'party': True,
         'max_party_size': 8,
     },
+    'sellbot-lit-team': {
+        'state': 'Fighting the Pressure Division!',
+        'large_image_key': 'sbhq_vp_battle',
+        'large_image_hover': 'Sellbot Towers',
+        'party': True,
+        'max_party_size': 8,
+    },
     'boss-s-4': {
         'state': 'Fighting Skelecogs!',
         'large_image_key': 'sbhq_vp_battle',
@@ -646,6 +653,13 @@ presets = {
         'party': True,
         'max_party_size': 8,
     },
+    'wsi-fight': {
+        'state': 'Fighting the Witness Stand-In!',
+        'large_image_key': 'lbhq_clo_battle',
+        'large_image_hover': 'Lawbot Executive Lawfice',
+        'party': True,
+        'max_party_size': 8,
+    },
     'boss-ol-4': {
         'state': 'Gathering evidence!',
         'large_image_key': 'lbhq_clo_battle',
@@ -677,6 +691,13 @@ presets = {
     'bb-golf': {
         'state': 'Infiltrating the Bossbot %s',
         'large_image_key': 'bbhq_cgc',
+    },
+    'boss-exe-team': {
+        'state': 'Fighting the Executive Board!',
+        'large_image_key': 'bbhq_ceo_battle',
+        'large_image_hover': 'Bossbot HQ Clubhouse',
+        'party': True,
+        'max_party_size': 4,
     },
     'boss-c-1': {
         'state': 'Fighting the CEO!',
