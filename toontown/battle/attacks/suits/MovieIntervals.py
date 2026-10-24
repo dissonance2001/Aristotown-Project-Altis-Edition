@@ -817,6 +817,19 @@ def getSuitAnimTrack(attack: dict, delay: float = 0.0, wantSpeechHeadAnim: bool 
     return track
 
 
+def getSuitSayTrack(attack, delay: float = 0.0, duration: Optional[float] = None, wantSpeechHeadAnim: bool = True):
+    suit = attack['suit']
+    tauntIndex = attack['taunt']
+    taunt = getAttackTaunt(attack['name'], suit.dna.name, tauntIndex)
+    return Sequence(
+        Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout),
+        Sequence(
+            Wait(duration),
+            Func(suit.clearChat)
+        ) if duration != None else Wait(0.0)
+    )
+
+
 def getPartTrack(particleEffect: ParticleEffect.ParticleEffect, startDelay: float, durationDelay: float, partExtraArgs: Union[tuple[ParticleEffect.ParticleEffect, Any, Literal[0, 1]], tuple[ParticleEffect.ParticleEffect, Any]], softStop: float = 0.0) -> Sequence:
     particleEffect: ParticleEffect.ParticleEffect = partExtraArgs[0]
     parent = partExtraArgs[1]
