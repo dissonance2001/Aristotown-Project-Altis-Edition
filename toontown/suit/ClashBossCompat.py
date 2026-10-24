@@ -68,44 +68,6 @@ class ClashMusicShim:
         return sound.getName()
 
 
-def installClashSkelecogNametagPatch():
-    """Client only. Turning a cog into a skelecog rebuilds its model, which drops its clickable
-    nametag. The boss sets the skelecog flag after the cogs are generated, so skelecogs in the VP
-    battle could not be clicked. Re-enable the nametag after the rebuild (Clash VP battles only)."""
-    try:
-        from toontown.suit import DistributedSuitBase
-    except Exception:
-        return
-    cls = DistributedSuitBase.DistributedSuitBase
-    if getattr(cls, '_clashSkelePickablePatched', False):
-        return
-
-    def inClashVpBattle():
-        try:
-            for obj in base.cr.doId2do.values():
-                if getattr(obj, 'useClashJoinCam', False):
-                    return True
-        except Exception:
-            pass
-        return False
-
-    def wrap(original):
-        def setSkelecog(self, flag, *args, **kwargs):
-            result = original(self, flag, *args, **kwargs)
-            if flag and inClashVpBattle():
-                try:
-                    self.setPickable(1)
-                except Exception:
-                    pass
-            return result
-        return setSkelecog
-
-    for name in ('setSkelecog', 'setSkelecog2'):
-        if hasattr(cls, name):
-            setattr(cls, name, wrap(getattr(cls, name)))
-    cls._clashSkelePickablePatched = True
-
-
 def installClashBattleFinalPatch():
     """Client only. Replaces DistributedBattleFinal.showSuitsJoining for the Clash VP (and only
     for it; OCVP keeps Altis's behaviour) without touching the Altis file. Cogs grow while they
@@ -199,7 +161,6 @@ class ClashBossClientCompat:
         from toontown.suit import DistributedBossCog, BossHealthBar
         from toontown.coghq import CogDisguiseGlobals
         installClashBattleFinalPatch()
-        installClashSkelecogNametagPatch()
         DistributedBossCog.DistributedBossCog.announceGenerate(self)
         # Altis's base uses its own arena battle spots; Clash's VP arena (BossRoomHQ) needs Clash's
         from toontown.suit import BossCogGlobals
@@ -324,6 +285,12 @@ class ClashBossClientCompat:
         from toontown.toonbase import ToontownBattleGlobals
         self.cleanupIntervals()
         localAvatar.inventory.setBattleCreditMultiplier(ToontownBattleGlobals.getBossBattleCreditMultiplier(2))
+        # Altis's base class has no Battle Two, and Battle One only enables clickable nametags for
+        # itself; without this the skelecogs' (and everyone's) nametags are not clickable here.
+        from toontown.nametag import NametagGlobals
+        NametagGlobals.setWant2dNametags(False)
+        NametagGlobals.setWantActiveNametags(True)
+        base.localAvatar.setFriendsListButtonActive(1)
         self.toonsToBattlePosition(self.toonsA, self.battleANode)
         self.toonsToBattlePosition(self.toonsB, self.battleBNode)
         self.releaseToons()
