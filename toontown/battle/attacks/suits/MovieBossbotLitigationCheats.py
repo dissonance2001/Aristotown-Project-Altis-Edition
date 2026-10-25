@@ -3266,7 +3266,7 @@ def doSlowBurn(attack: dict) -> tuple[MetaInterval, Parallel]:
         from toontown.battle.PlayByPlayText import PlayByPlayText
         pbpText: PlayByPlayText = attack['playByPlayText']
         displayName = TTLocalizer.SuitAttackNames.get(attack['name'], '')
-        pbpTrack = pbpText.getShowInterval(displayName, attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=(0.0, 0.775))
+        pbpTrack = pbpText.getShowInterval(displayName, attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
         camTrack.append(pbpTrack)
 
     return (atkTrack, camTrack)

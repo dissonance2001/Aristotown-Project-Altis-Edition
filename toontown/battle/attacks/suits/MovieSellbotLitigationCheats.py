@@ -1360,7 +1360,7 @@ def doUnionBusterDamage(attack: dict) -> tuple[MetaInterval, Parallel]:
         from toontown.battle.PlayByPlayText import PlayByPlayText
         pbpText: PlayByPlayText = attack['playByPlayText']
         displayName = TTLocalizer.SuitAttackNames.get(attack['name'], '')
-        pbpDesc = pbpText.getShowInterval((displayName[0], displayName[1].format(targets[0]['hp'])), attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=(0.0, 0.775))
+        pbpDesc = pbpText.getShowInterval((displayName[0], displayName[1].format(targets[0]['hp'])), attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
         camTrack.append(pbpDesc)
 
     return (atkTrack, camTrack)
