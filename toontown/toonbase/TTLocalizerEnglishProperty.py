@@ -1,4 +1,5 @@
 PBPTonscreenText = 0.2
+PBPTsubTextModifier = 0.5
 RPdirectFrame = (1.75, 1, 0.75)
 RPtrackLabels = 0.05
 RPmeritBarLabels = 0.165

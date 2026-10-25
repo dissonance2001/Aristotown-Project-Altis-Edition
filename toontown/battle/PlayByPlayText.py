@@ -66,7 +66,7 @@ class PlayByPlayText(OnscreenText.OnscreenText):
 
         if isinstance(text, tuple):
             self.subTextColor = (1.0, 0.5, 0.0, 1.0) if self.color == (1.0, 0.0, 0.0, 1.0) else (0.85, 0.78, 1.0, 1.0)
-            subTextScale = TTLocalizer.PBPTonscreenText * 0.5 # TODO: Replace 0.5 with PBPTsubTextModifier variable (does not exist in TTLocalizer).
+            subTextScale: float = TTLocalizer.PBPTonscreenText * TTLocalizer.PBPTsubTextModifier
 
             subTextScaleSeq: Sequence = Sequence(
                 LerpFunc(self.subText.setTextScale, fromData=0.025, toData=subTextScale * 1.1, duration=0.3, blendType='easeInOut'),
