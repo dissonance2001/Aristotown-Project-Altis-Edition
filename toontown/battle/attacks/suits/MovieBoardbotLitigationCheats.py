@@ -2436,7 +2436,8 @@ def doContingencyClauseOLD(attack):
 
     return Parallel(suitTrack, safeTracks, toonTracks, squishTracks, toonTrack)
 
-def doShadowToon(attack):
+def doShadowToon(attack: dict) -> MetaInterval:
+    from ..toons.MovieThrow import __suitMissPoint, __piePreMiss, __pieMissLerpCallback
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']

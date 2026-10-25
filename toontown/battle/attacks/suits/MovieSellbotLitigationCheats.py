@@ -3630,7 +3630,8 @@ def __getSoundTrack(level, hitSuit, tPieLeavesHand, node = None):
     else:
         return throwTrack
 
-def doShadowToon(attack):
+def doShadowToon(attack: dict) -> MetaInterval:
+    from ..toons.MovieThrow import __suitMissPoint, __piePreMiss, __pieMissLerpCallback
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
