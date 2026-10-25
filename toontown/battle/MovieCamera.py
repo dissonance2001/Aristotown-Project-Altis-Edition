@@ -1172,7 +1172,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                                  moveShot(0.0, -20.0, 10.0, 0.0, -20.0, 0.0, 1.5),
                                  heldShot(0.0, -20.0, 10.0, 0.0, -20.0, 0.0, attackDuration - 6.5))
             pbpText = attack['playByPlayText']
-            displayName = TTLocalizer.SuitAttackName.get(name, '')
+            displayName = TTLocalizer.SuitAttackNames.get(name, '')
             pbpTrack = pbpText.getShowInterval((displayName[0], displayName[1].format(targetSuit.name)), attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
         
             return Parallel(pbpTrack, camTrack2)
