@@ -618,7 +618,7 @@ def getSuitTrack(attack: dict, delay: float = 1e-06, wantSpeechHeadAnim: bool = 
                 track.append(Func(suit.setNeutralAnimationDrop))
     return track
 
-def getToonGroupCenter(attack, battle):
+def getToonGroupCenter(attack: dict, battle):
     targets = attack.get('target', [])
     points = []
 
@@ -817,7 +817,7 @@ def getSuitAnimTrack(attack: dict, delay: float = 0.0, wantSpeechHeadAnim: bool 
     return track
 
 
-def getSuitSayTrack(attack, delay: float = 0.0, duration: Optional[float] = None, wantSpeechHeadAnim: bool = True):
+def getSuitSayTrack(attack: dict, delay: float = 0.0, duration: Optional[float] = None, wantSpeechHeadAnim: bool = True) -> Sequence:
     suit = attack['suit']
     tauntIndex = attack['taunt']
     taunt = getAttackTaunt(attack['name'], suit.dna.name, tauntIndex)
@@ -1186,13 +1186,15 @@ def throwPos(t: float, object, duration: float, target, values: dict, gravity: f
     object.setPos(x, y, z)
 
 
-def getToonTakeDamageTrack(attack: dict, toon, died, dmg, delay: float, damageAnimNames: list[str] = [], splicedDamageAnims: Optional[list[SplicedAnim]] = None, showDamageExtraTime: float = 0.01, hpTextType = None, damageAnimPlayRate: float = 1.0) -> Parallel:
+def getToonTakeDamageTrack(attack: dict, toon, died, dmg, delay: float, damageAnimNames: list[str] = [], splicedDamageAnims: Optional[list[SplicedAnim]] = None, showDamageExtraTime: float = 0.01, hpTextType: Optional[int] = None, damageAnimPlayRate: float = 1.0) -> Parallel:
     toonTrack: Sequence = Sequence()
     toonTrack.append(Wait(delay))
     suitResponseTrack: Sequence = Sequence()
     suit = attack['suit']
 
     # Pass through an int to use its general attack hp text definition
+    text: str
+    color: tuple[float, float, float, float]
     if hpTextType and False:
         # hpTextInfo = TTLocalizer.GeneralAttackHpTexts[hpTextType]
         # text = hpTextInfo[0]
