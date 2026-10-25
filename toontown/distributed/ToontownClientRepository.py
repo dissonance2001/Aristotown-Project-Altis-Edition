@@ -595,23 +595,28 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.handler = None
 
     def enterCloseShard(self, loginState = None):
+        self._closeShardCacheDisabledByUs = False
+        cache = getattr(self, 'cache', None)
+        if cache is not None and getattr(cache, 'maxCacheItems', 0) > 0 and hasattr(cache, 'turnOff'):
+            cache.turnOff()
+            self._closeShardCacheDisabledByUs = True
         OTPClientRepository.OTPClientRepository.enterCloseShard(self, loginState)
         self.handler = self.handleCloseShard
         self._removeLocalAvFromStateServer()
 
     def handleCloseShard(self, msgType, di):
         if msgType == CLIENT_ENTER_OBJECT_REQUIRED:
-            di2 = PyDatagramIterator(di)
+            di2 = PyDatagramIterator(di.getDatagram(), di.getCurrentIndex())
             parentId = di2.getUint32()
             if self._doIdIsOnCurrentShard(parentId):
                 return
         elif msgType == CLIENT_ENTER_OBJECT_REQUIRED_OTHER:
-            di2 = PyDatagramIterator(di)
+            di2 = PyDatagramIterator(di.getDatagram(), di.getCurrentIndex())
             parentId = di2.getUint32()
             if self._doIdIsOnCurrentShard(parentId):
                 return
         elif msgType == CLIENT_OBJECT_SET_FIELD:
-            di2 = PyDatagramIterator(di)
+            di2 = PyDatagramIterator(di.getDatagram(), di.getCurrentIndex())
             doId = di2.getUint32()
             if self._doIdIsOnCurrentShard(doId):
                 return
@@ -625,9 +630,16 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         OTPClientRepository.OTPClientRepository._logFailedDisable(self, doId, ownerView)
 
     def exitCloseShard(self):
-        OTPClientRepository.OTPClientRepository.exitCloseShard(self)
-        self.ignore(ToontownClientRepository.ClearInterestDoneEvent)
-        self.handler = None
+        try:
+            OTPClientRepository.OTPClientRepository.exitCloseShard(self)
+        finally:
+            self.ignore(ToontownClientRepository.ClearInterestDoneEvent)
+            self.handler = None
+            if getattr(self, '_closeShardCacheDisabledByUs', False):
+                cache = getattr(self, 'cache', None)
+                if cache is not None and hasattr(cache, 'turnOn'):
+                    cache.turnOn()
+                self._closeShardCacheDisabledByUs = False
 
     def isShardInterestOpen(self):
         return self.old_setzone_interest_handle is not None or self.uberZoneInterest is not None

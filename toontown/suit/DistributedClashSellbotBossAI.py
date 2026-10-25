@@ -11,6 +11,8 @@ from toontown.modifiers.contentsync.ContentSyncEnums import ContentSyncType
 from toontown.suit import BossCogGlobals
 from toontown.suit import DistributedBossCogAI, DistributedSuitAI, SuitDNA
 from toontown.suit.ClashBossCompat import ClashBossAICompat
+from toontown.inventory.enums.ItemEnums import IOUItemType
+from toontown.inventory.registry.IOURegistry import IOURegistry
 from toontown.toon import NPCToons
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
@@ -27,13 +29,13 @@ class DistributedClashSellbotBossAI(ClashBossAICompat, DistributedBossCogAI.Dist
         DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, 's')
         FSM.FSM.__init__(self, 'DistributedClashSellbotBossAI')
         self.doobers = []
-        self.cagedToonNpcId = random.choice(list(NPCToons.HQnpcFriends.keys()))
+        self.cagedToonNpcId = 90001  # Rain, always (same as Clash)
         self.bossMaxDamage = BossCogGlobals.SellbotBossMaxDamage
         self.battleOnePlanner = SuitBuildingGlobals.SUIT_PLANNER_VP
         self.battleTwoPlanner = SuitBuildingGlobals.SUIT_PLANNER_VP_SKELECOGS
         self.recoverRate = 0
         self.recoverStartTime = 0
-        self.numSos = 1
+        self.numIOUs = 2
         self.pieHealAmt = 1
         self.toonDamagesDict = {}
         self.toonStunsDict = {}
@@ -48,6 +50,8 @@ class DistributedClashSellbotBossAI(ClashBossAICompat, DistributedBossCogAI.Dist
                                    BossCogGlobals.BossCogRecoverDizzyAttack]
         self.__openedDoorThree = False
         self.begunToonAmount = -1
+        iouChoices = [iou for iou in IOURegistry if iou != IOUItemType.AllBoost]  # Rain is always given separately
+        self.giveRewards = [random.choice(iouChoices) for _ in range(20)]
 
     def announceGenerate(self):
         super().announceGenerate()
@@ -503,12 +507,13 @@ class DistributedClashSellbotBossAI(ClashBossAICompat, DistributedBossCogAI.Dist
             toon = self.air.doId2do.get(toonId)
             if not toon:
                 continue
-            rewardCount = self.numSos
-            if hasattr(toon, 'applyGumballBoosters'):
-                from toontown.gumball import GumballGlobals
-                rewardCount = toon.applyGumballBoosters([GumballGlobals.REWARD_BOSS_SELLBOT], rewardCount, True)
-            if not toon.attemptAddNPCFriend(self.cagedToonNpcId, numCalls=rewardCount):
-                self.notify.info('%s.unable to add NPCFriend %s to %s.' % (self.doId, self.cagedToonNpcId, toonId))
+            # Every boss always rewards 1 Rain, plus random IOUs (same as Clash)
+            rewards = [IOUItemType.AllBoost] + self.giveRewards[:self.numIOUs]
+            self.toonRewards[toonId] = rewards
+            self.sendUpdateToAvatarId(toonId, 'setRewards', [rewards])
+            for reward in rewards:
+                if not toon.getHammerspace().addItem(reward):
+                    self.notify.info('%s.unable to add IOU %s to %s.' % (self.doId, reward, toonId))
             toon.b_promote(self.deptIndex)
             toon.addStat(ToontownGlobals.STATS_VP)
             self.showTip(toon, 'TIP_DISGUISE_PROMOTION')
@@ -572,4 +577,4 @@ class DistributedClashSellbotBossAI(ClashBossAICompat, DistributedBossCogAI.Dist
         self.pieHealAmt = 3
         self.battleOnePlanner = SuitBuildingGlobals.SUIT_PLANNER_VP
         self.battleTwoPlanner = SuitBuildingGlobals.SUIT_PLANNER_VP_SKELECOGS
-        self.numSos = 1
+        self.numIOUs = 3

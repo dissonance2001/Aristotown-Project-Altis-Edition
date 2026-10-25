@@ -13,14 +13,20 @@ from toontown.modifiers.ModifierEnums import ModifierType
 from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
 from toontown.toon.ToonHead import ToonHead
 from toontown.toon.gui import GuiBinGlobals
-from toontown.toon.npc import NPCToons
+from toontown.toon import NPCToons
 from toontown.toon.socialpanel.SocialPanelGlobals import sp_gui
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownGlobals, TTLocalizer
-from toontown.battle import BattleGlobals
+from toontown.toonbase.ToontownBattleGlobals import AvPropsNew
+from toontown.clashbattle.battle import BattleGlobals
 from toontown.gui.TTGui import ExtendedOnscreenText, ScalingButton, ScrollWheelFrame, kwargsToOptionDefs
-from toontown.battle.BattleGUIGlobals import *
-from toontown.battle.statuses import StatusEffectGlobals as SEG, StatusEffects, SEE
+from toontown.clashbattle.battle.BattleGUIGlobals import *
+try:
+    from toontown.clashbattle.battle.statuses import StatusEffectGlobals as SEG, StatusEffects, SEE
+except ImportError:
+    SEG = None
+    StatusEffects = None
+    SEE = None
 from toontown.battle import SuitBattleGlobals
 from toontown.utils import Nodes
 from toontown.utils.text import getTextScaleAfterLength, capTextScaleToWidth
@@ -92,7 +98,6 @@ TOON_PANEL_SURRENDER_FLAG = 608
 Tracks = BattleGlobals.Tracks
 TrackColors = BattleGlobals.TrackColors
 Levels = BattleGlobals.Levels
-AvPropsNew = BattleGlobals.AvPropsNew
 
 # Text properties
 tpm = TextPropertiesManager.getGlobalPtr()
@@ -152,7 +157,10 @@ tpm.setProperties("BattleInfo_Damage", battleInfoDamage)
 # Battle GUI Classes #
 # -=-=-=-=-=-=-=-=-= #
 class ChoiceEmblem(DirectFrame):
-    def __init__(self, parent=aspect2d, ccpScale: float = 0.0026, **kw):
+    def __init__(self, parent=aspect2d, ccpScale: float = 0.0026, inventoryTrackMap=None, **kw):
+        self.bgColorSeq = None
+        self.inventoryTrackMap = tuple(inventoryTrackMap) if inventoryTrackMap is not None else None
+        self._inventoryGagIconModel = None
         gagSelectionGui = base.loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
         self.undecidedImage = gagSelectionGui.find('**/emblem_question')
         self.blankImage = gagSelectionGui.find('**/emblem_gag')
@@ -240,22 +248,56 @@ class ChoiceEmblem(DirectFrame):
         self['image'] = self.undecidedImage
 
     def destroy(self):
+        if getattr(self, '_choiceEmblemDestroyed', False):
+            return
+        self._choiceEmblemDestroyed = True
         self.finishBgSeq()
-        DirectFrame.destroy(self)
         taskMgr.remove(self.uniqueName('scroll-task'))
-        del self.bgColorSeq
-        del self.presBgTexture
-        del self.undecidedImage
-        del self.blankImage
-        del self.blankPresImage
-        del self.passImage
-        del self.emblem
-        del self.luredSuits
-        del self.avatar
+        iconModel = getattr(self, '_inventoryGagIconModel', None)
+        if iconModel is not None:
+            if not iconModel.isEmpty():
+                iconModel.removeNode()
+            self._inventoryGagIconModel = None
+        DirectFrame.destroy(self)
+        for attr in (
+            'bgColorSeq', 'presBgTexture', 'undecidedImage', 'blankImage',
+            'blankPresImage', 'passImage', 'inventoryTrackMap', 'emblem',
+            'luredSuits', 'avatar'
+        ):
+            if hasattr(self, attr):
+                delattr(self, attr)
+
+    def getGagIconGeom(self, track, level, avatar=None):
+        inventory = getattr(avatar, 'inventory', None) if avatar is not None else None
+        if inventory is None:
+            inventory = getattr(base.localAvatar, 'inventory', None)
+        if inventory is not None:
+            try:
+                geom = inventory.buttonLookup(track, level)
+            except (AttributeError, IndexError, TypeError):
+                geom = None
+            if geom is not None and not geom.isEmpty():
+                return geom
+
+        if self._inventoryGagIconModel is None or self._inventoryGagIconModel.isEmpty():
+            self._inventoryGagIconModel = base.loader.loadModel('phase_3.5/models/gui/inventory_icons')
+
+        if isinstance(track, int) and isinstance(level, int) and 0 <= track < len(AvPropsNew) and 0 <= level < len(AvPropsNew[track]):
+            iconName = AvPropsNew[track][level]
+            geom = self._inventoryGagIconModel.find('**/' + iconName)
+            if not geom.isEmpty():
+                return geom
+
+        return None
 
     def setValues(self, track: int, level: int = None, avatar=None,
                   suitId: int = 0, luredSuits: dict = None, battle: bool = False,
                   target=None, townBattle=None):
+        sourceTrack = track
+        if self.inventoryTrackMap is not None and isinstance(track, int) and 0 <= track < len(self.inventoryTrackMap):
+            track = self.inventoryTrackMap[track]
+        inventoryTrack = sourceTrack if self.inventoryTrackMap is not None and isinstance(sourceTrack, int) and 0 <= sourceTrack < len(self.inventoryTrackMap) else track
+
         # Only change the values if the new ones are different.
         if self.track == track and self.level == level and self.luredSuits == luredSuits:
             return
@@ -284,7 +326,7 @@ class ChoiceEmblem(DirectFrame):
         # Is this prestige?
         prestige = False
         if avatar is not None and (0 <= track < len(Tracks)):
-            prestige = avatar.getTrackBonusLevel(track) >= 1
+            prestige = avatar.getTrackBonusLevel(inventoryTrack) >= 1
 
         if trackChanged or levelChanged:
             direction = -1  # gags going in left
@@ -369,13 +411,25 @@ class ChoiceEmblem(DirectFrame):
             self['image_color'] = (r, g, b, 1)
             iou = IOURegistry[level]
             npcToon = NPCToons.NPCToonDict.get(iou.getNpcId())
+            npcName = getattr(npcToon, 'name', None)
+            npcDNA = None
+            if npcToon is not None and hasattr(npcToon, 'getToonDNA'):
+                npcDNA = npcToon.getToonDNA()
+            elif npcToon is not None:
+                from toontown.toon import ToonDNA
+                npcName = npcToon[1]
+                dnaType = npcToon[2]
+                dnaData = NPCToons.getRandomDNA(iou.getNpcId(), npcToon[3]) if dnaType == 'r' else dnaType
+                npcDNA = ToonDNA.ToonDNA()
+                npcDNA.newToonFromProperties(*dnaData)
             head = ToonHead()
-            head.setupHead(npcToon.getToonDNA(), forGui=1)
-            head.fitAndCenterHead(0.45, forGui=1)
+            if npcDNA is not None:
+                head.setupHead(npcDNA, forGui=1)
+                head.fitAndCenterHead(0.45, forGui=1)
 
-            hNode = self.emblem.attachNewNode('head', 20)
-            head.reparentTo(hNode)
-            self.emblem.headModel = head
+                hNode = self.emblem.attachNewNode('head', 20)
+                head.reparentTo(hNode)
+                self.emblem.headModel = head
 
             if battle:
                 uses = iou.getUses()
@@ -396,7 +450,7 @@ class ChoiceEmblem(DirectFrame):
 
                 text = f"\1deepBlue\1{damageType}:\2 \1{'BattleInfo_Positive'}\1+{modifier}\2\nNext {fullAttackName}"
 
-                self.emblem["text"] = npcToon.name
+                self.emblem["text"] = npcName or "SOS Toon"
                 self.emblem["text_pos"] = (0, 0.4)
                 self.emblem["text_font"] = ToontownGlobals.getBuildingNametagFont()
 
@@ -404,15 +458,15 @@ class ChoiceEmblem(DirectFrame):
         elif track in BattleGlobals.ATTACK_TRACKS:
             r, g, b = TrackColors[track]
             self['image_color'] = (r, g, b, 1)
-            geom = base.localAvatar.inventory.buttonLookup(track, level)
+            geom = self.getGagIconGeom(inventoryTrack, level, avatar)
             self.emblem['geom'] = geom
             self.emblem['geom_scale'] = self.geomScale
             self.emblem['geom_pos'] = (0, 0, 0)
 
             # Handle UV texture if the gag is prestiged.
             if avatar is not None:
-                prestige = avatar.getTrackBonusLevel(track) >= 1
-                baseDamage = BattleGlobals.getAvPropDamage(track, level, avatar.getExperience()[track], prestige)
+                prestige = avatar.getTrackBonusLevel(inventoryTrack) >= 1
+                baseDamage = BattleGlobals.getAvPropDamage(track, level, avatar.experience.getExp(inventoryTrack), prestige)
                 finalDamage = self.getToonDamageModifiers(avatar, track, baseDamage, target)
             else:
                 prestige = False
@@ -478,9 +532,10 @@ class ChoiceEmblem(DirectFrame):
             self.bgColorSeq.loop()
 
     def finishBgSeq(self):
-        if self.bgColorSeq:
-            self.bgColorSeq.finish()
-            self.bgColorSeq = None
+        bgColorSeq = getattr(self, 'bgColorSeq', None)
+        self.bgColorSeq = None
+        if bgColorSeq:
+            bgColorSeq.finish()
 
     def makeEmblemBase(self) -> DirectFrame:
         frame = DirectFrame(
@@ -564,6 +619,8 @@ class ChoiceEmblem(DirectFrame):
             self.emblemMoveSeq = None
 
     def getToonDamageModifiers(self, avatar, attackType: int, damage, target):
+        if StatusEffects is None:
+            return int(math.ceil(round(damage, 4)))
         attackEffects = avatar.getStatusEffectsOfType(StatusEffects.AttackEffectivenessStatusEffect)
         for statusEffect in attackEffects:
             if not statusEffect.isDisabled():
@@ -1088,7 +1145,7 @@ class ToonInfoTooltip(DirectFrame):
                     1
                 )
                 titleColor = None
-                gagLevel = GagsContentSyncModifier.capGagLevel(do=av, cap=av.getExperience().getExpLevel(track))
+                gagLevel = GagsContentSyncModifier.capGagLevel(do=av, cap=av.experience.getExpLevel(track))
                 gagIcon = inventory.invModels[track][gagLevel]
                 gagColor = None
             else:

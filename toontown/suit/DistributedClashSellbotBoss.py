@@ -21,6 +21,8 @@ from toontown.shader import FogGlobals
 from toontown.shader.ToontownFog import ToontownFog
 from toontown.suit import DistributedBossCog, SuitDNA
 from toontown.suit.ClashBossCompat import ClashBossClientCompat
+from toontown.inventory.enums.ItemEnums import IOUItemType
+from toontown.inventory.registry.IOURegistry import IOURegistry
 from toontown.toon import NPCToons
 # from toontown.toonbase import BattleGlobals
 from toontown.toonbase import ToontownGlobals, TTLocalizer
@@ -703,7 +705,29 @@ class DistributedClashSellbotBoss(ClashBossClientCompat, DistributedBossCog.Dist
         return speech
 
     def __makeCageOpenMovie(self):
-        speech = TTLocalizer.CagedToonThankYou
+        # List the IOU NPCs the toons received (Rain is always there, so she is skipped)
+        rewardsList = []
+        for iouId in (self.rewards or []):
+            if iouId == IOUItemType.AllBoost:
+                continue
+            iou = IOURegistry[iouId]
+            if iou.getNpcId() not in rewardsList:
+                rewardsList.append(iou.getNpcId())
+        if len(rewardsList) == 0:
+            speech = TTLocalizer.CagedToonThankYou
+        elif len(rewardsList) == 1:
+            speech = TTLocalizer.CagedToonThankYouTemp['one'].format(npc=NPCToons.getNPCName(rewardsList[0]))
+        else:
+            npcFirst = ""
+            npcLast = ""
+            for idx, npcId in enumerate(rewardsList):
+                if idx == 0:
+                    npcFirst = NPCToons.getNPCName(npcId)
+                elif idx + 1 == len(rewardsList):
+                    npcLast = NPCToons.getNPCName(npcId)
+                else:
+                    npcFirst += ", %s" % NPCToons.getNPCName(npcId)
+            speech = TTLocalizer.CagedToonThankYouTemp['many'].format(npcFirst=npcFirst, npcLast=npcLast)
         speech = self.__talkAboutPromotion(speech)
         name = self.uniqueName('CageOpen')
         seq = Sequence(

@@ -296,7 +296,7 @@ class ScavengeConditionFrame(ConditionFrame):
             parent=self.anchor,
             relief=None,
             pos=(mult * 0.250, -0.01, -0.065),
-            text=npcToon.name,
+            text=npcToon[1],
             text_font=ToontownGlobals.getBuildingNametagFont(),
             text_scale=0.036,
             text_fg=(1, 1, 1, 1),

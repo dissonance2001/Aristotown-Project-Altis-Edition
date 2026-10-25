@@ -1,4 +1,4 @@
-from direct.gui.DirectGui import *
+﻿from direct.gui.DirectGui import *
 from panda3d.core import *
 from panda3d.direct import *
 from toontown.toonbase.ToontownBattleGlobals import *
@@ -39,6 +39,46 @@ DISPLAY_CONTENT_SYNC_ORDERS = {
     'contentSync7': [TRAP_TRACK, DROP_TRACK, SQUIRT_TRACK, SOUND_TRACK, THROW_TRACK, ZAP_TRACK, LURE_TRACK, HEAL_TRACK],
     'contentSync8': [TRAP_TRACK, SQUIRT_TRACK, DROP_TRACK, THROW_TRACK, ZAP_TRACK, LURE_TRACK, HEAL_TRACK, SOUND_TRACK],
 }
+
+_CLASH_GAG_TRACK_MAP = (0, 1, 2, 6, 4, 5, 3, 7)
+_CLASH_GAG_ACCURACY = (
+    (100, 100, 100, 100, 100, 100, 100, 100),
+    (0, 0, 0, 0, 0, 0, 0, 0),
+    (80, 75, 80, 75, 85, 80, 85, 85),
+    (95, 95, 95, 95, 95, 95, 95, 95),
+    (95, 95, 95, 95, 95, 95, 95, 95),
+    (100, 100, 100, 100, 100, 100, 100, 100),
+    (80, 80, 80, 80, 80, 80, 80, 80),
+    (60, 60, 60, 60, 60, 60, 60, 60),
+)
+
+
+def _clashGagAccuracyString(track, level):
+    clashTrack = _CLASH_GAG_TRACK_MAP[track]
+    accuracy = 100 if track == TRAP_TRACK else _CLASH_GAG_ACCURACY[clashTrack][min(max(level, 0), 7)]
+    if track == ZAP_TRACK:
+        rating = getattr(TTLocalizer, 'BattleGlobalAccuracyIfSoaked', 'If Soaked')
+    elif accuracy >= 100:
+        rating = getattr(TTLocalizer, 'BattleGlobalAccuracyPerfect', 'Perf.')
+    elif accuracy >= 90:
+        rating = getattr(TTLocalizer, 'BattleGlobalAccuracyHigh', 'High')
+    elif accuracy >= 70:
+        rating = getattr(TTLocalizer, 'BattleGlobalAccuracyMedium', 'Med.')
+    elif accuracy >= 50:
+        rating = getattr(TTLocalizer, 'BattleGlobalAccuracyLow', 'Low')
+    elif accuracy > 0:
+        rating = getattr(TTLocalizer, 'BattleGlobalAccuracyAwful', 'Awful')
+    else:
+        rating = getattr(TTLocalizer, 'BattleGlobalAccuracyNever', 'Never')
+    return f'{accuracy}% ({rating})'
+
+
+def _applyClashGagInfoHeading(label, track):
+    text = label['text'] or ''
+    heading = 'Hit:' if track == ZAP_TRACK else 'Base Hit:'
+    if 'Accuracy:' in text:
+        label['text'] = text.replace('Accuracy:', heading, 1)
+
 
 class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
     notify = DirectNotifyGlobal.directNotify.newCategory('InventoryNew')
@@ -250,6 +290,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         del self.deleteEnterButton
         self.deleteExitButton.destroy()
         del self.deleteExitButton
+        self.detailEmblem.destroy()
+        del self.detailEmblem
         del self.detailFrame
         del self.detailNameLabel
         del self.detailAmountLabel
@@ -412,6 +454,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.gagEmblemOrganicTex = None
         self.gagEmblemScrollIval = None
         self.gagEmblem.hide()
+        from toontown.clashbattle.battle import BattleGUI as ClashBattleGUI
+        self.detailEmblem = ClashBattleGUI.ChoiceEmblem(parent=self.detailFrame, pos=(0.0, 0, 0.18), scale=.88, ccpScale=0.003, inventoryTrackMap=_CLASH_GAG_TRACK_MAP)
+        self.questionEmblem.hide()
+        self.gagEmblem.hide()
                                                                                 
                                                                                 
                                                                         
@@ -425,8 +471,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             pos=(0, 0, 0.105),
             text_font=getInterfaceFont(),
             text_align=TextNode.ACenter,
-            relief=None,
-            image=self.invModels[0][0]
+            relief=None
         )
         self.detailAmountLabel = DirectLabel(
             parent=self.detailFrame,
@@ -466,6 +511,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.updateTotalPropsText()
         self.trackRows = []
         self.trackNameLabels = []
+        self.trackNameLabelScales = []
         self.trackBars = []
 
         self.buttons = []
@@ -531,6 +577,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                     relief=None
                 )
             )
+            self.trackNameLabelScales.append(nameScale)
             self.trackBars.append(DirectWaitBar(parent=self.trackRows[track], pos=(-0.77 + adjustLeft, -0.1, -0.025), relief=DGG.SUNKEN, frameSize=(-0.6,
              0.6,
              -0.1,
@@ -653,23 +700,18 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             1
         )
 
-        self.gagEmblem['image_color'] = trackColor
-
         self.questionEmblem.hide()
-        self.gagEmblem.show()
+        self.gagEmblem.hide()
+        self.detailEmblem.setValues(track, level, self.toon)
+        self.detailEmblem.show()
         self.totalLabel.hide()
         self.detailNameLabel.show()
-        self.detailNameLabel.configure(text=AvPropStrings[track][level], image_image=self.invModels[track][level])
-        if self.activateMode == 'book':
-            self.detailNameLabel.configure(image_scale=18.0, image_pos=(0.0, 0, 1.08))
-        else:
-            self.detailNameLabel.configure(image_scale=20, image_pos=(0, 0, 2.75))
+        self.detailNameLabel.configure(text=AvPropStrings[track][level])
         self.detailAmountLabel.show()
         maxLevel = BattleGlobals.MAX_LEVEL_INDEX
         for gagModifier in base.localAvatar.getModifiersOfType(ModifierType.GagsContentSync):
             maxLevel = min(maxLevel, gagModifier.getMaxGagLevel())
         organicBonus = self.toon.checkGagBonus(track, level)
-        self.setGagEmblemOrganic(organicBonus)
         self.detailAmountLabel.configure(text=TTLocalizer.InventoryDetailAmount % {'numItems': self.numItem(track, level),
          'maxItems': self.getMax(track, level)})
         self.detailDataLabel.show()
@@ -683,7 +725,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         damageBonus = 0
 
         damageAppendStr = ''
-        accString = AvTrackAccStrings[track]
+        accString = _clashGagAccuracyString(track, level)
 
         iouBoosts = {}
         for condition, conditionData in list(base.localAvatar.battleConditions.items()):
@@ -1148,6 +1190,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             self.setDetailCredit(track, None)
         self.detailCreditLabel.show()
+        _applyClashGagInfoHeading(self.detailDataLabel, track)
         return
 
     def setDetailCredit(self, track, credit):
@@ -1173,15 +1216,19 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         return
 
     def hideDetail(self, event = None):
-        self.totalLabel.show()
-        self.questionEmblem.show()
+        self.detailEmblem.clearValues()
+        self.detailEmblem.show()
+        self.questionEmblem.hide()
         self.gagEmblem.hide()
+        self.totalLabel.show()
         self.detailNameLabel.hide()
         self.detailAmountLabel.hide()
         self.detailDataLabel.hide()
         self.detailCreditLabel.hide()
 
     def noDetail(self):
+        self.detailEmblem.clearValues()
+        self.detailEmblem.hide()
         self.totalLabel.hide()
         self.gagEmblem.hide()
         self.questionEmblem.hide()
@@ -1283,6 +1330,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.questionEmblem.setScale(.82)
         self.gagEmblem.setPos(0.0, 0, 0.26)
         self.gagEmblem.setScale(.82)
+        self.detailEmblem.setPos(0.0, 0, 0.26)
+        self.detailEmblem.setScale(.82)
 
                                                                            
                                                          
@@ -1316,6 +1365,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.questionEmblem.setScale(.45)
         self.gagEmblem.setPos(-.0475, 0, 0.015)
         self.gagEmblem.setScale(.45)
+        self.detailEmblem.setPos(-.0475, 0, 0.015)
+        self.detailEmblem.setScale(.45)
 
         self.detailNameLabel.setPos(-.0475, 0, -.15)
         self.detailNameLabel.setScale(0.06)
@@ -1767,6 +1818,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.detailFrame.setScale(0.8)
         self.gagEmblem.setPos(0.001, 0, 0.43)
         self.gagEmblem.setScale(0.7)
+        self.detailEmblem.setPos(0.001, 0, 0.43)
+        self.detailEmblem.setScale(0.7)
 
         self.questionEmblem.setPos(0.01, 0, 0.44)
         self.questionEmblem.setScale(0.7)
@@ -1850,6 +1903,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.questionEmblem.setColor(1, 1, 1, 1)
         self.gagEmblem.setPos(0.001, 0, 0.43)
         self.gagEmblem.setScale(0.7)
+        self.detailEmblem.setPos(0.001, 0, 0.43)
+        self.detailEmblem.setScale(0.7)
 
     def _revertPurchaseCustomLayout(self):
         # Restore trackRows/buttons to stock positions from load().
@@ -2753,6 +2808,16 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         for levelIndex in range(0, len(Levels[trackIndex])):
             self.buttons[trackIndex][levelIndex].hide()
 
+    def setTrackTitleMaxed(self, trackIndex, maxed):
+        label = self.trackNameLabels[trackIndex]
+        baseScale = self.trackNameLabelScales[trackIndex]
+        if maxed:
+            label.setZ(0.0)
+            label.setScale(baseScale[0] * 1.15, baseScale[1] * 1.15, baseScale[2] * 1.15)
+        else:
+            label.setZ(0.025)
+            label.setScale(*baseScale)
+
     def showTrack(self, trackIndex):
         self.trackNameLabels[trackIndex].show()
         self.trackBars[trackIndex].show()
@@ -2760,17 +2825,20 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.buttons[trackIndex][levelIndex].show()
 
         curExp, nextExp = self.getCurAndNextExpValues(trackIndex)
-        if curExp >= UnpaidMaxSkills[trackIndex] and self.toon.getGameAccess() != OTPGlobals.AccessFull:
-            self.trackBars[trackIndex]['range'] = nextExp
-            self.trackBars[trackIndex]['text'] = TTLocalizer.InventoryGuestExp
-        elif curExp >= regMaxSkill:
+        if curExp >= regMaxSkill:
             self.trackBars[trackIndex].hide()
             self.trackBars[trackIndex]['range'] = UberSkill
             self.trackBars[trackIndex]['text'] = TTLocalizer.InventoryUberTrackExp % {'nextExp': MaxSkill - curExp}
+            self.setTrackTitleMaxed(trackIndex, True)
+        elif curExp >= UnpaidMaxSkills[trackIndex] and self.toon.getGameAccess() != OTPGlobals.AccessFull:
+            self.trackBars[trackIndex]['range'] = nextExp
+            self.trackBars[trackIndex]['text'] = TTLocalizer.InventoryGuestExp
+            self.setTrackTitleMaxed(trackIndex, False)
         else:
             self.trackBars[trackIndex]['range'] = nextExp
             self.trackBars[trackIndex]['text'] = TTLocalizer.InventoryTrackExp % {'curExp': curExp,
              'nextExp': nextExp}
+            self.setTrackTitleMaxed(trackIndex, False)
 
     def updateInvString(self, invString):
         InventoryBase.InventoryBase.updateInvString(self, invString)
@@ -2800,16 +2868,24 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         if track == None and level == None:
             for track in range(len(Tracks)):
                 curExp, nextExp = self.getCurAndNextExpValues(track)
-                if curExp >= UnpaidMaxSkills[track] and self.toon.getGameAccess() != OTPGlobals.AccessFull:
-                    self.trackBars[track]['range'] = nextExp
-                    self.trackBars[track]['text'] = TTLocalizer.InventoryGuestExp
-                elif curExp >= regMaxSkill:
+                if curExp >= regMaxSkill:
+                    self.trackBars[track].hide()
+                    self.trackBars[track]['range'] = UberSkill
                     self.trackBars[track]['text'] = TTLocalizer.InventoryUberTrackExp % {'nextExp': MaxSkill - curExp}
                     self.trackBars[track]['value'] = curExp - regMaxSkill
+                    self.setTrackTitleMaxed(track, True)
+                elif curExp >= UnpaidMaxSkills[track] and self.toon.getGameAccess() != OTPGlobals.AccessFull:
+                    self.trackBars[track].show()
+                    self.trackBars[track]['range'] = nextExp
+                    self.trackBars[track]['text'] = TTLocalizer.InventoryGuestExp
+                    self.setTrackTitleMaxed(track, False)
                 else:
+                    self.trackBars[track].show()
+                    self.trackBars[track]['range'] = nextExp
                     self.trackBars[track]['text'] = TTLocalizer.InventoryTrackExp % {'curExp': curExp,
                      'nextExp': nextExp}
                     self.trackBars[track]['value'] = curExp
+                    self.setTrackTitleMaxed(track, False)
                 for level in range(0, len(Levels[track])):
                     self.updateButton(track, level)
 

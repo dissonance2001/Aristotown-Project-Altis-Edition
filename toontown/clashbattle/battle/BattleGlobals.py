@@ -3,6 +3,7 @@ BattleGlobals: central repository for all battle globals
 """
 
 import math
+from enum import IntEnum, auto
 
 from panda3d.core import ConfigVariableDouble, Point3, Vec3
 from toontown.battle.attacks.base.AttackEnum import AttackEnum
