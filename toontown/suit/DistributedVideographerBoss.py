@@ -225,6 +225,7 @@ class DistributedVideographerBoss(DistributedObject.DistributedObject, FSM.FSM):
 
     def disable(self):
         global OneVideographerController
+        self.stopHighRollerParticles()
         taskMgr.remove(self.uniqueName('highRollerInstanceReady'))
         taskMgr.remove(self.uniqueName('physics'))
         if self.toonRequest is not None:
@@ -2192,7 +2193,7 @@ class MajorPlayerStagelight:
     def getValidAngle(self):
         a, b, c = self.start
         x, y, z = self.end
-        return Vec3(random.randint(a, x), random.randint(b, y), random.randint(c, z))
+        return Vec3(random.uniform(a, x), random.uniform(b, y), random.uniform(c, z))
 
     def getDuration(self):
         start, end = self.durationToMove
