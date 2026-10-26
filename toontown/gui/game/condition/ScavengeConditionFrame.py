@@ -13,7 +13,7 @@ if __name__ == "__main__":
 from toontown.gui.GUINode import GUINode
 
 from toontown.gui.game.condition.ConditionFrame import ConditionFrame
-from toontown.gui.game.condition.ConditionGlobals import ConditionArgs, ConditionArg, ConditionState, ConditionSide, ConditionStateArgs
+from toontown.gui.game.condition.ConditionGlobals import ConditionArgs, ConditionArg, ConditionState, ConditionSide, ConditionStateArgs, SmallFrameScale
 
 from toontown.gui.game.condition.subframes.ConditionSubframeBase import ConditionSubframeBase
 from toontown.gui.hover.HoverFrameTypes import HoverFrameTypes
@@ -27,10 +27,12 @@ from toontown.inventory.enums.ItemEnums import MaterialItemType, ItemType
 from toontown.battle.attacks.base.AttackEnum import AttackEnum
 from toontown.battle import BattleGlobals
 from toontown.toon import NPCToons
+from toontown.toon.npc.NPCToonConstants import NPCToonID
 from toontown.toon.ToonHead import ToonHead
 from toontown.toonbase import TTLocalizer
 
-from direct.gui.DirectGui import DirectLabel, OnscreenImage
+from direct.gui import DirectGuiGlobals as DGG
+from direct.gui.DirectGui import DirectFrame, DirectLabel, OnscreenImage
 from direct.interval.IntervalGlobal import LerpFunctionInterval, Sequence, Wait
 from panda3d.core import *
 from typing import Optional
@@ -59,7 +61,7 @@ class ScavengeConditionFrame(ConditionFrame):
         self.icon: Optional[NodePath] = None
 
         self.currencySubtype = self.obj.getItemSubtype()
-        self.isCurrencyPopup = self.currencySubtype in (
+        self.isCurrencyPopup = self.obj.getItemType() == ItemType.Material and self.currencySubtype in (
             MaterialItemType.Jellybeans,
             MaterialItemType.Gumballs,
             MaterialItemType.PinkSlips,
@@ -76,11 +78,19 @@ class ScavengeConditionFrame(ConditionFrame):
         self.iouNameLabel = None
         self.iouBoostLabel = None
         self.iouQuantityLabel = None
+        self.iouHoverTarget = None
 
-        if self.isCurrencyPopup:
+        if self.isCurrencyPopup or self.isIOUPopup:
             self.frame.setColorScale(1, 1, 1, 0)
+            self.frame.setDepthWrite(False)
+            self.frame.setDepthTest(False)
 
     def destroy(self):
+        if self.isIOUPopup:
+            hoverMgr = getattr(base, 'hoverMgr', None)
+            if hoverMgr and getattr(hoverMgr, '_HoverFrameManager__hoveredItem', None) is self.obj:
+                hoverMgr.unhoverObject()
+
         if self.currencyCountSeq:
             self.currencyCountSeq.pause()
             self.currencyCountSeq = None
@@ -95,6 +105,10 @@ class ScavengeConditionFrame(ConditionFrame):
             if element:
                 element.destroy()
                 setattr(self, elementName, None)
+
+        if self.iouHoverTarget:
+            self.iouHoverTarget.destroy()
+            self.iouHoverTarget = None
 
         if self.iouHead:
             self.iouHead.cleanup()
@@ -250,21 +264,16 @@ class ScavengeConditionFrame(ConditionFrame):
         cardModel.removeNode()
 
         self.iouCard.setScale(0.45)
-        self.iouCard.setPos(
-            (0.24 if self.side == ConditionSide.LEFT else -0.24),
-            0.02,
-            -0.005,
-        )
+        # Everything on the card is centred on this one column.
+        mult = 1 if self.side == ConditionSide.LEFT else -1
+        cx = mult * 0.24
+        self.iouCard.setPos(cx, 0.02, -0.005)
         self.iouCard.setTransparency(TransparencyAttrib.MAlpha)
         self.iouCard.setColorScale(trackColor)
         self.iouCard.setDepthWrite(False)
         self.iouCard.setDepthTest(False)
         self.iouCard.setBin('fixed', -10)
 
-        # Fully hide the normal scavenge frame. Making it transparent still
-        # lets it write to the depth buffer, which causes the two frames to
-        # flicker against each other.
-        self.frame.hide()
 
         # 3-D NPC head rendered directly in the 2-D popup.
         npc = NPCToons.createLocalNPC(npcId)
@@ -273,17 +282,23 @@ class ScavengeConditionFrame(ConditionFrame):
         self.iouHead = ToonHead()
         self.iouHead.setupHead(npc.getStyle(), forGui=1)
         self.iouHead.fitAndCenterHead(0.44, forGui=1)
+        headSpecies = npc.getStyle().head[0]
         npc.removeNode()
         self.iouHead.reparentTo(self.iconHolder)
-        self.iouHead.setPos(0.15, 0, 0.002)
-        self.iouHead.setScale(0.08)
-
-        mult = 1 if self.side == ConditionSide.LEFT else -1
+        # iconHolder sits at mult * 0.105 (see place()), so offset to the card's centre column.
+        # The head's origin is at the base of the neck, so it sits lower than its visual centre.
+        # Flippy's head already fits; every other NPC head is shown smaller.
+        headScale = 0.062
+        headZ = -0.002
+        if headSpecies == 'r':
+            headZ = -0.014
+        self.iouHead.setPos(cx - mult * 0.105, 0, headZ - 0.005)
+        self.iouHead.setScale(headScale)
 
         self.iouTrackLabel = DirectLabel(
             parent=self.anchor,
             relief=None,
-            pos=(mult * 0.250, -0.01, 0.105),
+            pos=(cx, -0.01, 0.105),
             text=trackName,
             text_font=ToontownGlobals.getSignFont(),
             text_scale=0.042,
@@ -292,27 +307,30 @@ class ScavengeConditionFrame(ConditionFrame):
             text_align=TextNode.ACenter,
         )
 
+        nameLen = len(npcToon[1])
+        nameScale = 0.036 if nameLen <= 12 else max(0.024, 0.036 * 12.0 / nameLen)
+
         self.iouNameLabel = DirectLabel(
             parent=self.anchor,
             relief=None,
-            pos=(mult * 0.250, -0.01, -0.065),
+            pos=(cx, -0.01, -0.065),
             text=npcToon[1],
             text_font=ToontownGlobals.getBuildingNametagFont(),
-            text_scale=0.036,
+            # Keep the name on one line; shrink long names (e.g. Cindy Sprinkles) to fit the card.
+            text_scale=nameScale,
             text_fg=(1, 1, 1, 1),
             text_shadow=(0, 0, 0, 1),
             text_align=TextNode.ACenter,
-            text_wordwrap=8.0,
         )
 
         self.iouBoostLabel = DirectLabel(
             parent=self.anchor,
             relief=None,
-            pos=(mult * 0.250, -0.01, -0.135),
+            pos=(cx, -0.01, -0.135),
             text='+%d %s' % (boost, boostTerm),
             text_font=ToontownGlobals.getSignFont(),
             text_scale=0.037,
-            text_fg=trackColor,
+            text_fg=(1, 1, 1, 1),
             text_shadow=(0, 0, 0, 1),
             text_align=TextNode.ACenter,
         )
@@ -320,14 +338,30 @@ class ScavengeConditionFrame(ConditionFrame):
         self.iouQuantityLabel = DirectLabel(
             parent=self.anchor,
             relief=None,
-            pos=(mult * 0.265, -0.01, -0.04),
+            # Bottom-right corner of the card.
+            pos=(mult * 0.34, -0.01, -0.172),
             text='+%d' % quantity,
-            text_font=ToontownGlobals.getSignFont(),
-            text_scale=0.055,
+            text_font=ToontownGlobals.getToonFont(),
+            text_scale=0.058,
             text_fg=(1, 1, 1, 1),
             text_shadow=(0, 0, 0, 1),
+            text_shadowOffset=(0.028, 0.028),
             text_align=TextNode.ACenter,
         )
+
+        self.iouHoverTarget = DirectFrame(
+            parent=self.anchor,
+            relief=None,
+            frameSize=(-0.24, 0.24, -0.21, 0.15),
+            frameColor=(0, 0, 0, 0),
+            pos=(cx, 0, 0),
+            state=DGG.NORMAL,
+        )
+        self.iouHoverTarget.setTransparency(TransparencyAttrib.MAlpha)
+        self.iouHoverTarget.setDepthWrite(False)
+        self.iouHoverTarget.setDepthTest(False)
+        self.iouHoverTarget.bind(DGG.WITHIN, self.mouseWithinBounds)
+        self.iouHoverTarget.bind(DGG.WITHOUT, self.mouseWithoutBounds)
 
     """
     Visuals
@@ -345,11 +379,29 @@ class ScavengeConditionFrame(ConditionFrame):
         newCol = (newCol[0], newCol[1], newCol[2], 0.6)
         return newCol
 
+    def mouseWithinBounds(self, _=None):
+        if not self.HoverFrameType:
+            return
+        if getattr(base, 'hoverMgr', None):
+            hoverTarget = self.iouHoverTarget if self.isIOUPopup and self.iouHoverTarget else self.frame
+            base.hoverMgr.hoverObject(
+                hoverTarget,
+                item=self.obj,
+                itemType=self.HoverFrameType,
+                frameDir='right',
+            )
+
+    def mouseWithoutBounds(self, _=None):
+        if getattr(base, 'hoverMgr', None):
+            base.hoverMgr.unhoverObject()
+
     def getFrameScale(self) -> float:
         """
         Gets the scale of this frame.
         Index is the actual index position on da side.
         """
+        if getattr(self, 'isIOUPopup', False):
+            return SmallFrameScale * 1.12
         return super().getFrameScale() * 1.12
 
     """
@@ -406,6 +458,9 @@ class ScavengeConditionFrame(ConditionFrame):
 
             self.iconHolder.setScale(1.0)
             self.iconHolder.setPos(mult * 0.105, 0, 0.005)
+            # The IOU card is taller than a normal popup, so reserve its real height or stacked
+            # popups overlap each other. Lower this number to pack them closer together.
+            self['easyHeight'] = max(self['easyHeight'], 0.44)
             return
 
         if not self.icon:

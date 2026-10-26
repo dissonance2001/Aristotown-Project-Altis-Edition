@@ -6046,26 +6046,121 @@ def unites(value=32767):
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[int])
 def fires(count):
-    """
-    Modifies the invoker's pink slip count.
-    """
+    """Sets the invoker's pink slip count and shows the reward popup."""
     invoker = spellbook.getInvoker()
     if not 0 <= count <= 9999:
         return 'Your fire count must be in range (0-9999).'
+    from toontown.inventory.enums.ItemEnums import MaterialItemType, ItemType
+    hammerspace = invoker.getHammerspace()
+    if hammerspace is None:
+        return 'Your Hammerspace inventory is not ready yet.'
+    for item in hammerspace.findItemsOfType(ItemType.Material):
+        if item.getItemSubtype() == MaterialItemType.PinkSlips:
+            hammerspace.removeItem(item)
+    if count and not hammerspace.addItem(MaterialItemType.PinkSlips, count):
+        return 'Could not update your fire inventory.'
     invoker.b_setPinkSlips(count)
     return 'You were given %d fires.' % count
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[int])
 def sues(count):
-    """
-    Modifies the invoker's sue count.
-    """
+    """Sets the invoker's sue count and shows the reward popup."""
     invoker = spellbook.getInvoker()
     if not 0 <= count <= 9999:
         return 'Your sue count must be in range (0-9999).'
+    from toontown.inventory.enums.ItemEnums import MaterialItemType, ItemType
+    hammerspace = invoker.getHammerspace()
+    if hammerspace is None:
+        return 'Your Hammerspace inventory is not ready yet.'
+    for item in hammerspace.findItemsOfType(ItemType.Material):
+        if item.getItemSubtype() == MaterialItemType.CeaseAndDesists:
+            hammerspace.removeItem(item)
+    if count and not hammerspace.addItem(MaterialItemType.CeaseAndDesists, count):
+        return 'Could not update your sue inventory.'
     invoker.b_setCeaseAndDesists(count)
     return 'You were given %d sues.' % count
-	
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+def ious():
+    """Grants 9,999 of each standard Corporate Clash IOU to Hammerspace and battle inventory."""
+    invoker = spellbook.getInvoker()
+    hammerspace = invoker.getHammerspace()
+    if hammerspace is None:
+        return 'Your Hammerspace inventory is not ready yet.'
+
+    from toontown.inventory.base.InventoryItem import InventoryItem
+    from toontown.inventory.enums.InventoryEnums import InventoryAction
+    from toontown.inventory.enums.ItemEnums import IOUItemType, ItemType
+    from toontown.toon.IOURegistry import IOURegistry as BattleIOURegistry
+
+    iouSubtypes = (
+        IOUItemType.ToonUpThreeStar,
+        IOUItemType.ToonUpFourStar,
+        IOUItemType.ToonUpFiveStar,
+        IOUItemType.TrapThreeStar,
+        IOUItemType.TrapFourStar,
+        IOUItemType.TrapFiveStar,
+        IOUItemType.LureThreeStar,
+        IOUItemType.LureFourStar,
+        IOUItemType.LureFiveStar,
+        IOUItemType.ThrowThreeStar,
+        IOUItemType.ThrowFourStar,
+        IOUItemType.ThrowFiveStar,
+        IOUItemType.SquirtThreeStar,
+        IOUItemType.SquirtFourStar,
+        IOUItemType.SquirtFiveStar,
+        IOUItemType.ZapThreeStar,
+        IOUItemType.ZapFourStar,
+        IOUItemType.ZapFiveStar,
+        IOUItemType.SoundThreeStar,
+        IOUItemType.SoundFourStar,
+        IOUItemType.SoundFiveStar,
+        IOUItemType.DropThreeStar,
+        IOUItemType.DropFourStar,
+        IOUItemType.DropFiveStar,
+    )
+
+    hammerspace.removeAllItemsOfType(ItemType.IOU)
+    granted = 0
+    failed = []
+    for iouSubtype in iouSubtypes:
+        item = InventoryItem.fromSubtype(iouSubtype, quantity=9999)
+        try:
+            hammerspace._addDelta(InventoryAction.ADD, item.copy())
+            hammerspace._performAddItem(item, equipOnAdd=False)
+            granted += 1
+        except Exception as exc:
+            failed.append('%s (%s)' % (iouSubtype.name, exc))
+
+    # The battle/SOS UI uses NPCFriendsDict, not Hammerspace. Add the matching
+    # SOS-card NPC IDs there as well, preserving every unrelated SOS card.
+    battleFriends = dict(invoker.getNPCFriendsDict())
+    battleGranted = 0
+    for iouSubtype in iouSubtypes:
+        definition = BattleIOURegistry.get(int(iouSubtype))
+        if definition is None:
+            continue
+        npcId = definition.getNpcId()
+        if npcId not in npcFriends:
+            continue
+        # The legacy SOS/battle inventory is capped at maxCallsPerNPC (100).
+        # Keep that battle-side count valid while Hammerspace stores 9,999.
+        battleFriends[npcId] = invoker.maxCallsPerNPC
+        battleGranted += 1
+
+    invoker.b_setNPCFriendsDict(list(battleFriends.items()))
+    if not invoker.sosPageFlag:
+        invoker.b_setMaxNPCFriends(invoker.getMaxNPCFriends() | 32768)
+
+    avId = invoker.getDoId()
+    invoker.air.inventoryManager.setAvatarInventory(avId=avId, inventory=hammerspace)
+    invoker.air.inventoryManager.inventoryDb.saveInventory(avId, hammerspace)
+
+    if failed:
+        return 'Granted %d Hammerspace IOUs and %d battle/SOS IOUs; failed: %s.' % (
+            granted, battleGranted, ', '.join(failed))
+    return 'Granted 9,999 of %d IOU types to Hammerspace and added %d battle/SOS IOUs at the supported 100-use limit each.' % (granted, battleGranted)
+
 @magicWord(category=CATEGORY_MODERATOR, types=[int])
 def warn(banWorthy):
     """

@@ -156,6 +156,7 @@ COMMANDS = (
     {'name': 'idnametags', 'usage': '', 'description': 'Display avatar IDs inside nametags.', 'aliases': (), 'access': 300},
     {'name': 'immortal', 'usage': '', 'description': 'Make target (if 400+) or self (if 399-) immortal.', 'aliases': (), 'access': 390},
     {'name': 'inventory', 'usage': '<a> [b] [c]', 'description': 'Altis Magic Word command.', 'aliases': (), 'access': 400},
+    {'name': 'ious', 'usage': '', 'description': 'Sets every registered IOU to 9,999.', 'aliases': (), 'access': 400},
     {'name': 'kick', 'usage': '[reason]', 'description': 'Kick the target from the game server.', 'aliases': (), 'access': 375},
     {'name': 'kickid', 'usage': '<id> [reason]', 'description': 'Kick the target from the game server.', 'aliases': (), 'access': 375},
     {'name': 'killceo', 'usage': '', 'description': 'Altis Magic Word command.', 'aliases': (), 'access': 450},
