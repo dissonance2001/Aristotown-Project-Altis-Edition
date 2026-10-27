@@ -4043,12 +4043,13 @@ def doCanned(attack: dict) -> MetaInterval:
         scale = 18.0
         torso = toon.style.torso
         torso = torso[0]
-        if torso == 's':
-            scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 1.9975)
-        elif torso == 'm':
-            scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 1.7975)
-        elif torso == 'l':
-            scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 2.31)
+        match torso:
+            case 's':
+                scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 1.9975)
+            case 'm':
+                scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 1.7975)
+            case 'l':
+                scaleUpPoint = Point3(scale * 2.63, scale * 2.63, scale * 2.31)
         throwTrack: Sequence = Sequence(getPropAppearTrack(can, suit.getRightHand(), posPoints, propDelay, Point3(6.0, 6.0, 6.0), scaleUpTime=0.5 / playRate))
         propDelay = propDelay + (0.5 / playRate)
         throwTrack.append(Wait(suitDelay))
@@ -4105,7 +4106,7 @@ def doCanned(attack: dict) -> MetaInterval:
                 LerpHprInterval(can, 0.2, Point3(-96.34, -2.63, 179.89))
             )
             dustTrack = Sequence()
-        canTrack: Sequence = Sequence(
+        canTrack = Sequence(
             Parallel(throwTrack, scaleTrack, hprTrack),
             Func(MovieUtil.removeProp, can),
             Func(battle.movie.clearRenderProp, can)
@@ -4886,27 +4887,28 @@ def doRolodex(attack: dict) -> MetaInterval:
     damageDelay: float
     dodgeDelay: float
     suitType = getSuitBodyType(suit.dna.name)
-    if suitType == 'a':
-        propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
-        propScale = Point3(1.2, 1.2, 1.2)
-        part2Delay = 2.8
-        part3Delay = 3.2
-        damageDelay = 3.8
-        dodgeDelay = 2.5
-    elif suitType == 'b':
-        propPosPoints = [Point3(0.12, 0.24, 0.01), VBase3(99.032, 5.973, -179.839)]
-        propScale = Point3(0.91, 0.91, 0.91)
-        part2Delay = 3.1
-        part3Delay = 3.5
-        damageDelay = 4.0
-        dodgeDelay = 2.5
-    elif suitType == 'c':
-        propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
-        propScale = Point3(1.2, 1.2, 1.2)
-        part2Delay = 2.8
-        part3Delay = 3.2
-        damageDelay = 3.5
-        dodgeDelay = 2.5
+    match suitType:
+        case 'a':
+            propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
+            propScale = Point3(1.2, 1.2, 1.2)
+            part2Delay = 2.8
+            part3Delay = 3.2
+            damageDelay = 3.8
+            dodgeDelay = 2.5
+        case 'b':
+            propPosPoints = [Point3(0.12, 0.24, 0.01), VBase3(99.032, 5.973, -179.839)]
+            propScale = Point3(0.91, 0.91, 0.91)
+            part2Delay = 3.1
+            part3Delay = 3.5
+            damageDelay = 4.0
+            dodgeDelay = 2.5
+        case 'c':
+            propPosPoints = [Point3(-0.51, -0.03, -0.1), VBase3(89.673, 2.166, 177.786)]
+            propScale = Point3(1.2, 1.2, 1.2)
+            part2Delay = 2.8
+            part3Delay = 3.2
+            damageDelay = 3.5
+            dodgeDelay = 2.5
     propTrack: Sequence = getPropTrack(rollodex, suit.getLeftHand(), propPosPoints, 1e-06, 4.6 / playRate, scaleUpPoint=propScale, scaleUpTime=0.5 / playRate, scaleDownTime=0.5 / playRate)
     partTracks: tuple[Sequence, ...] = ()
     for t in targets:
@@ -4918,12 +4920,13 @@ def doRolodex(attack: dict) -> MetaInterval:
         particleNode.setPos(battle.getActorPosHpr(suit)[0])
         particleNode.headsUp(toon)
 
-        if suit.style.name == 'hh':
-            particleNode.setZ(2.0)
-            particleNode.setP(-12.0)
-        elif suit.style.name in ('caseman', 'chainsaw'):
-            particleNode.setZ(2.9)
-            particleNode.setP(-17.0)
+        match suit.style.name:
+            case 'hh':
+                particleNode.setZ(2.0)
+                particleNode.setP(-12.0)
+            case 'caseman' | 'chainsaw':
+                particleNode.setZ(2.9)
+                particleNode.setP(-17.0)
         partTrack2 = getPartTrack(particleEffect2, part2Delay / playRate, part2Duration / playRate, (particleEffect2, particleNode, 0), softStop=-1.0)
         partTrack3 = Sequence(
             getPartTrack(particleEffect3, part3Delay / playRate, part3Duration / playRate, (particleEffect3, particleNode, 0), softStop=-1.0),
@@ -6202,12 +6205,13 @@ def doRedTape(attack: dict) -> MetaInterval:
         torso = torso[0]
         animal = animal[0]
         tubeHeight = -0.8
-        if torso == 's':
-            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
-        elif torso == 'm':
-            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
-        elif torso == 'l':
-            scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 1.11)
+        match torso:
+            case 's':
+                scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
+            case 'm':
+                scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 0.7975)
+            case 'l':
+                scaleUpPoint = Point3(scale * 2.03, scale * 2.03, scale * 1.11)
         if animal in ('h', 'd'):
             tubeHeight = -0.87
             scaleUpPoint = Point3(scale * 1.69, scale * 1.69, scale * 0.67)
@@ -6471,14 +6475,15 @@ def doBounceCheck(attack: dict) -> MetaInterval:
 
 def getThrowEndPoint(toon, whichBounce: str, battle):
     pnt = toon.getPos(battle)
-    if whichBounce == "one":
-        pnt = Vec3(-5.0, 0.0, 0.8)
-    elif whichBounce == "two":
-        pnt = Vec3(2.75, -2.0, 0.8)
-    elif whichBounce == "hit":
-        pnt.setZ(pnt[2] + toon.shoulderHeight + 0.3)
-    elif whichBounce == "miss":
-        pnt = Vec3(0, -8, 13)
+    match whichBounce:
+        case "one":
+            pnt = Vec3(-5.0, 0.0, 0.8)
+        case "two":
+            pnt = Vec3(2.75, -2.0, 0.8)
+        case "hit":
+            pnt.setZ(pnt[2] + toon.shoulderHeight + 0.3)
+        case "miss":
+            pnt = Vec3(0.0, -8.0, 13.0)
     return Point3(pnt)
 
 
