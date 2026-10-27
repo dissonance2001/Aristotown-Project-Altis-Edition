@@ -87,19 +87,53 @@ DogMuzzleDict = {'dls': '/models/char/dogMM_Shorts-headMuzzles-',
 
 PreloadHeads = {}
 
+def preloadToonHeads():
+    global PreloadHeads
+    if not PreloadHeads:
+        print('Preloading Toon heads...')
+
+        def preload(task):
+            for key in list(HeadDict.keys()):
+                fileRoot = HeadDict[key]
+
+                PreloadHeads['phase_3' + fileRoot + '1000'] = loader.loadModel('phase_3' + fileRoot + '1000')
+                PreloadHeads['phase_3' + fileRoot + '1000'].flattenMedium()
+
+                PreloadHeads['phase_3' + fileRoot + '500'] = loader.loadModel('phase_3' + fileRoot + '500')
+                PreloadHeads['phase_3' + fileRoot + '500'].flattenMedium()
+
+                PreloadHeads['phase_3' + fileRoot + '250'] = loader.loadModel('phase_3' + fileRoot + '250')
+                PreloadHeads['phase_3' + fileRoot + '250'].flattenMedium()
+
+            return task.done
+
+        taskMgr.add(preload, 'reload-toon')
+
+preloadToonHeads()
+
+PreloadHeads = {}
 
 def preloadToonHeads():
-    return
+    global PreloadHeads
+    if not PreloadHeads:
+        print ('Preloading Toon heads...')
 
+        def preload(task):
+            for key in list(HeadDict.keys()):
+                fileRoot = HeadDict[key]
 
-def getPreloadedToonHead(filepath):
-    model = PreloadHeads.get(filepath)
-    if model is None:
-        model = loader.loadModel(filepath)
-        model.flattenMedium()
-        PreloadHeads[filepath] = model
-    return model
+                PreloadHeads['phase_3' + fileRoot + '1000'] = loader.loadModel('phase_3' + fileRoot + '1000')
+                PreloadHeads['phase_3' + fileRoot + '1000'].flattenMedium()
 
+                PreloadHeads['phase_3' + fileRoot + '500'] = loader.loadModel('phase_3' + fileRoot + '500')
+                PreloadHeads['phase_3' + fileRoot + '500'].flattenMedium()
+
+                PreloadHeads['phase_3' + fileRoot + '250'] = loader.loadModel('phase_3' + fileRoot + '250')
+                PreloadHeads['phase_3' + fileRoot + '250'].flattenMedium()
+
+            return task.done
+
+        taskMgr.add(preload, 'reload-toon')
 
 preloadToonHeads()
 
@@ -683,7 +717,7 @@ class ToonHead(Actor.Actor):
             ToonHead.notify.error('unknown head style: %s' % headStyle)
         if len(lods) == 1:
             filepath = 'phase_3' + filePrefix + lods[0]
-            self.loadModel(getPreloadedToonHead(filepath), 'head', 'lodRoot', copy = True)
+            self.loadModel(PreloadHeads[filepath], 'head', 'lodRoot', copy = True)
             if not forGui:
                 pLoaded = self.loadPumpkin(headStyle[1], None, copy)
                 self.loadSnowMan(headStyle[1], None, copy)
@@ -702,7 +736,7 @@ class ToonHead(Actor.Actor):
         else:
             for lod in lods:
                 filepath = 'phase_3' + filePrefix + lod
-                self.loadModel(getPreloadedToonHead(filepath), 'head', lod, True)
+                self.loadModel(PreloadHeads[filepath], 'head', lod, True)
                 if not forGui:
                     pLoaded = self.loadPumpkin(headStyle[1], lod, copy)
                     self.loadSnowMan(headStyle[1], lod, copy)
