@@ -813,11 +813,15 @@ class TownBattle(StateData.StateData):
         level = gagChangeInfo.get('level')
         if not isinstance(track, int) or not isinstance(level, int):
             return
+        if track < 0 or track >= len(AvPropsNew) or level < 0 or level >= len(AvPropsNew[track]):
+            return
         self.track = track
         self.level = level
         self.lastActionMode = 'Inventory'
         self.lockIn = False
         self.toonPanels[self.localNum].setValues(self.localNum, track, level)
+        if getattr(self.waitPanel, 'isLoaded', False):
+            self.waitPanel.setLockIn(False)
         messenger.send(self.battleEvent, [{'mode': 'GagChange', 'track': track, 'level': level}])
 
     def updateLockIns(self, battleIndices, lockIns):
@@ -826,7 +830,9 @@ class TownBattle(StateData.StateData):
             if toonIndex < 0 or toonIndex >= len(self.toonPanels):
                 continue
             lockedIn = bool(lockIns[i])
-            self.toonPanels[toonIndex].setLockIn(lockedIn)
+            toonPanel = self.toonPanels[toonIndex]
+            if hasattr(toonPanel, 'setLockIn'):
+                toonPanel.setLockIn(lockedIn)
             if toonIndex == self.localNum:
                 self.lockIn = lockedIn
                 if getattr(self.waitPanel, 'isLoaded', False):

@@ -680,8 +680,6 @@ class TownBattleToonPanel(DirectFrame):
             scale=(0.13, 1, 0.26),
         )
         self.gagLocked.hide()
-        self.lockInState = None
-        self.setLockIn(False)
         surrenderFlagImage = toonPanelGui.find('**/surrender_flag')
         if surrenderFlagImage.isEmpty():
             surrenderGui = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
@@ -3031,18 +3029,6 @@ class TownBattleToonPanel(DirectFrame):
 
         return int(math.ceil(result))
 
-    def setLockIn(self, lockedIn):
-        lockedIn = bool(lockedIn)
-        if lockedIn == self.lockInState:
-            return
-        self.lockInState = lockedIn
-        if lockedIn:
-            self.gagLock.hide()
-            self.gagLocked.show()
-        else:
-            self.gagLocked.hide()
-            self.gagLock.show()
-
     def setValues(self, index, track, level=None, numTargets=None, targetIndex=None, localNum=None, targetSuit=None, comboMultiplier=1.0, comboCount=0, dropThrowMultiplier=1.0, wetTargets=None, targetSuits=None, incomingThrowTargets=None, trapTargets=None):
         self.notify.debug('Toon Panel setValues: index=%s track=%s level=%s numTargets=%s targetIndex=%s localNum=%s' % (index, track, level, numTargets, targetIndex, localNum))
 
@@ -3110,12 +3096,18 @@ class TownBattleToonPanel(DirectFrame):
             self.hasGag = 0
         if track == BattleBase.NO_ATTACK or track == BattleBase.UN_ATTACK:
             self.showChoiceIcon(self.undecidedIcon, Vec4(0.6, 0.6, 0.6, 1))
+            self.gagLock.hide()
+            self.gagLocked.show()
 
         elif track == BattleBase.PASS_ATTACK:
             self.showChoiceIcon(self.passIcon, Vec4(1, 0, 0, 1))
+            self.gagLock.hide()
+            self.gagLocked.show()
 
         elif track == BattleBase.FIRE:
             self.showChoiceIcon(self.fireIcon, Vec4(0.937, 0.718, 0.816, 1))
+            self.gagLock.hide()
+            self.gagLocked.show()
             self.whichText.show()
             self.whichText['text'] = self.determineWhichText(numTargets, targetIndex, localNum, index, track)
 
@@ -3162,6 +3154,8 @@ class TownBattleToonPanel(DirectFrame):
             self.choiceEmblem.show()
             self.setChoiceOrganic(organic)
             self.passText.hide()
+            self.gagLock.hide()
+            self.gagLocked.show()
             self.gagNode.show()
             invButton = base.localAvatar.inventory.buttonLookup(track, level)
             self.gag = invButton.instanceUnderNode(self.gagNode, 'gag')

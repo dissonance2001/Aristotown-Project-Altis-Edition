@@ -1290,16 +1290,12 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def timeout(self):
         toonId = self.air.getAvatarIdFromSender()
 
-        print(('TIMEOUT CALLED:', toonId, self.toonAttacks.get(toonId)))
+        if not self.responses.get(toonId, 0):
+            self.toonAttacks[toonId] = getToonAttack(toonId)
+            self.d_setChosenToonAttacks()
+            self.responses[toonId] = 1
 
-        if toonId in self.toonAttacks:
-            print(('IGNORING TIMEOUT, TOON ALREADY HAS ATTACK:', self.toonAttacks[toonId]))
-            return
-
-        self.toonAttacks[toonId] = getToonAttack(toonId)
-        self.d_setChosenToonAttacks()
-        self.responses[toonId] += 1
-        self.lockIns[toonId] = 0
+        self.lockIns[toonId] = 1
         self.d_setLockIns()
 
         if self.__allActiveToonsRespondedAndLockedIn():

@@ -50,8 +50,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.localToonJustJoined = 0
         self.choseAttackAlready = 0
         self.lockIn = False
-        self.targetId = -1
         self.lockIns = ([-1, -1, -1, -1], [False, False, False, False])
+        self.targetId = -1
         self.toons = []
         self.exitedToons = []
         self.numSurrendered = 0
@@ -1696,10 +1696,13 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             lockIn = bool(response['lockIn'])
             self.d_requestLockIn(base.localAvatar.doId, lockIn)
         elif mode == 'GagChange':
-            track = response['track']
-            level = response['level']
+            track = response.get('track')
+            level = response.get('level')
+            if not isinstance(track, int) or not isinstance(level, int):
+                return
             self.lockIn = False
-            self.sendUpdate('requestAttack', [track, level, self.targetId, False])
+            self.d_requestAttack(base.localAvatar.doId, track, level, self.targetId, False)
+            noAttack = 1
         elif mode == 'Fire':
             target = response['target']
             targetId = self.activeSuits[target].doId
