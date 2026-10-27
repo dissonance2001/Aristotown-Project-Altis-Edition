@@ -6586,7 +6586,7 @@ SuitAttackTaunts = {
                      "Give them something to believe.",
                      "What they don't see won't hurt them.",
                      "Let's change the audience's perspective.",
-                     "Don't believe everything you see."
+                     "Don't believe everything you see.",
                      "Every masterpiece needs atmosphere.",
                      "The audience loves dramatic tension.",
                      "You'll never see the ending through this smoke.",

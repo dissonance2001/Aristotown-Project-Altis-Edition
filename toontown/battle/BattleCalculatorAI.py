@@ -7322,8 +7322,8 @@ class BattleCalculatorAI:
                 self.setSuitCondition(theSuit.doId, 'silhouettespawn', 1, 1, 'setBoth')
             if currentBossHealth2 >= 1 and (x + 1) % 2 == 0:
                 self.setSuitCondition(theSuit.doId, 'hollywoodcalculator', 1, 1, 'setBoth')
-            if currentBossHealth3 == -1:
-                self.setSuitCondition(theSuit.doId, 'immunecalculator', 1, 1, 'setBoth')
+            # if currentBossHealth3 == -1:
+            #     self.setSuitCondition(theSuit.doId, 'immunecalculator', 1, 1, 'setBoth')
         if theSuit.dna.name == 'radiog':
             x = self.TurnsElapsed
             currentBossHealth = -1
