@@ -185,13 +185,22 @@ def loadModels():
     global Preloaded
     if not Preloaded:
         print('Preloading suits...')
+        preloadState = {'index': 0}
 
         def preload(task):
-            for filepath in SuitParts:
-                Preloaded[filepath] = loader.loadModel(filepath)
-                Preloaded[filepath].flattenMedium()
+            if preloadState['index'] >= len(SuitParts):
+                return task.done
 
-            return task.done
+            filepath = SuitParts[preloadState['index']]
+            model = loader.loadModel(filepath)
+            if model:
+                model.flattenMedium()
+            Preloaded[filepath] = model
+            preloadState['index'] += 1
+
+            if preloadState['index'] >= len(SuitParts):
+                return task.done
+            return task.cont
 
         taskMgr.add(preload, 'preload-suit')
 
