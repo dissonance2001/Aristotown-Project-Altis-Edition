@@ -154,7 +154,70 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
     def getRespectInvasions(self):
         return self.__respectInvasions
 
+    def _makeInventoryIconModels(self, invModel):
+        if invModel is None or invModel.isEmpty():
+            return [[NodePath() for _ in AvPropsNew[track]] for track in range(len(AvPropsNew))]
+
+        iconModels = []
+        for track in range(len(AvPropsNew)):
+            itemList = []
+            for item in range(len(AvPropsNew[track])):
+                itemList.append(invModel.find('**/' + AvPropsNew[track][item]))
+            iconModels.append(itemList)
+        return iconModels
+
+    def _inventoryIconModelsAreValid(self, iconModels):
+        if not isinstance(iconModels, (list, tuple)) or len(iconModels) != len(AvPropsNew):
+            return False
+
+        for track in range(len(AvPropsNew)):
+            if not isinstance(iconModels[track], (list, tuple)) or len(iconModels[track]) != len(AvPropsNew[track]):
+                return False
+            for iconModel in iconModels[track]:
+                if iconModel is None or iconModel.isEmpty():
+                    return False
+        return True
+
+    def _loadInventoryIconModels(self):
+        modelPath = 'phase_3.5/models/gui/inventory_icons'
+        invModel = loader.loadModel(modelPath)
+        iconModels = self._makeInventoryIconModels(invModel)
+
+        if not self._inventoryIconModelsAreValid(iconModels):
+            if invModel is not None and not invModel.isEmpty():
+                invModel.removeNode()
+
+            invModel = loader.loadModelRaw(modelPath)
+            if invModel is not None and not invModel.isEmpty():
+                try:
+                    from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
+                    ContentPackCompatibility.applyClashGagIconCompatibility(invModel)
+                except Exception:
+                    pass
+            iconModels = self._makeInventoryIconModels(invModel)
+
+        if invModel is not None and not invModel.isEmpty():
+            invModel.removeNode()
+        return iconModels
+
+    def _repairGagIconModels(self):
+        if self._inventoryIconModelsAreValid(getattr(self, 'invModels', None)):
+            return
+
+        iconModels = self._loadInventoryIconModels()
+        if not self._inventoryIconModelsAreValid(iconModels):
+            return
+
+        self.invModels = iconModels
+        for track, buttonList in enumerate(getattr(self, 'buttons', [])):
+            if track >= len(iconModels):
+                break
+            for item, button in enumerate(buttonList):
+                if item < len(iconModels[track]) and not iconModels[track][item].isEmpty():
+                    button['geom'] = iconModels[track][item]
+
     def show(self):
+        self._repairGagIconModels()
         self.applyDisplayTrackOrder()
         self.updateTotalPropsText()
         if self.tutorialFlag:
@@ -357,17 +420,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
     def load(self):
         self.gagEmblemScrollStage = None
         self.notify.debug('Loading Inventory for %d' % self.toon.doId)
-        invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-        self.invModels = []
-        for track in range(len(AvPropsNew)):
-            itemList = []
-            for item in range(len(AvPropsNew[track])):
-                itemList.append(invModel.find('**/' + AvPropsNew[track][item]))
-
-            self.invModels.append(itemList)
-
-        invModel.removeNode()
-        del invModel
+        self.invModels = self._loadInventoryIconModels()
         self.buttonModels = loader.loadModel('phase_3.5/models/gui/inventory_gui')
         self.rowModels = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
         self.prestigeStar = self.rowModels.find('**/prestige_star_empty')
@@ -375,18 +428,6 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         gagSelectGui = loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
 
 
-        hasOrganic = False
-
-
-        for item in range(0, len(Levels[track])):
-            if self.toon.checkGagBonus(track, item):
-                hasOrganic = True
-                break
-
-        if hasOrganic:
-            starGeom = self.rowModels.find('**/prestige_star')
-        else:
-            starGeom = self.rowModels.find('**/prestige_star_empty')
         for track in range(0, len(Tracks)):
             if track == 0:
                 self.rowModel = self.rowModels.find('**/track_toon-up')
@@ -3048,6 +3089,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         self.storePurchaseFrame.hide()
 
     def buttonLookup(self, track, level):
+        iconModel = self.invModels[track][level]
+        if iconModel.isEmpty():
+            self._repairGagIconModels()
         return self.invModels[track][level]
 
     def enterTrackFrame(self, track, guiItem):
