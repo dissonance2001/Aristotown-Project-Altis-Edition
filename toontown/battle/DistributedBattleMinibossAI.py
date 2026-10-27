@@ -46,14 +46,14 @@ class DistributedBattleMinibossAI(DistributedBattleFinalAI.DistributedBattleFina
         self.pacesetterExplicitPassToons.clear()
         return DistributedBattleFinalAI.DistributedBattleFinalAI.enterWaitForInput(self)
 
-    def requestAttack(self, track, level, av):
+    def requestAttack(self, track, level, av, lockIn=False):
         toonId = self.air.getAvatarIdFromSender()
         if track == PASS:
             self.pacesetterExplicitPassToons.add(toonId)
         else:
             self.pacesetterExplicitPassToons.discard(toonId)
         return DistributedBattleFinalAI.DistributedBattleFinalAI.requestAttack(
-            self, track, level, av)
+            self, track, level, av, lockIn)
 
 
     def getBossCogId(self):

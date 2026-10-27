@@ -49,6 +49,9 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.activeIntervals = {}
         self.localToonJustJoined = 0
         self.choseAttackAlready = 0
+        self.lockIn = False
+        self.targetId = -1
+        self.lockIns = ([-1, -1, -1, -1], [False, False, False, False])
         self.toons = []
         self.exitedToons = []
         self.numSurrendered = 0
@@ -882,6 +885,35 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                     self.townBattle.setState('Attack')
             self.townBattle.updateChosenAttacks(self.townBattleAttacks[0], self.townBattleAttacks[1], self.townBattleAttacks[2], self.townBattleAttacks[3])
 
+
+    def setLockIns(self, ids, lockIns):
+        if self.__battleCleanedUp:
+            return
+
+        toonIndices = []
+        values = []
+        localToonInList = 0
+        for i, toonId in enumerate(ids[:4]):
+            toon = self.findToon(toonId)
+            lockedIn = bool(lockIns[i]) if i < len(lockIns) else False
+            if toon is None or self.activeToons.count(toon) == 0:
+                toonIndices.append(-1)
+                values.append(lockedIn)
+                continue
+            if toon is base.localAvatar:
+                localToonInList = 1
+                self.lockIn = lockedIn
+            toonIndices.append(self.activeToons.index(toon))
+            values.append(lockedIn)
+
+        while len(toonIndices) < 4:
+            toonIndices.append(-1)
+            values.append(False)
+
+        self.lockIns = (toonIndices, values)
+        if self.localToonActive() and localToonInList:
+            self.townBattle.updateLockIns(toonIndices, values)
+
     def setBattleExperience(self, id0, origExp0, earnedExp0, origQuests0, items0, missedItems0, origMerits0, merits0, parts0, id1, origExp1, earnedExp1, origQuests1, items1, missedItems1, origMerits1, merits1, parts1, id2, origExp2, earnedExp2, origQuests2, items2, missedItems2, origMerits2, merits2, parts2, id3, origExp3, earnedExp3, origQuests3, items3, missedItems3, origMerits3, merits3, parts3, deathList, uberList, helpfulToonsList):
         if self.__battleCleanedUp:
             return
@@ -1388,9 +1420,15 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.notify.debug('network:joinDone(%d)' % avId)
         self.sendUpdate('joinDone', [avId])
 
-    def d_requestAttack(self, toonId, track, level, av):
-        self.notify.debug('network:requestAttack(%d, %d, %d)' % (track, level, av))
-        self.sendUpdate('requestAttack', [track, level, av])
+    def d_requestAttack(self, toonId, track, level, av, lockIn=False):
+        self.lockIn = bool(lockIn)
+        self.notify.debug('network:requestAttack(%d, %d, %d, %s)' % (track, level, av, self.lockIn))
+        self.sendUpdate('requestAttack', [track, level, av, self.lockIn])
+
+    def d_requestLockIn(self, toonId, lockIn):
+        self.lockIn = bool(lockIn)
+        self.notify.debug('network:requestLockIn(%s)' % self.lockIn)
+        self.sendUpdate('requestLockIn', [self.lockIn])
 
     def d_requestPetProxy(self, toonId, av):
         self.notify.debug('network:requestPetProxy(%s)' % av)
@@ -1543,6 +1581,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def __handleLocalToonBattleEvent(self, response):
         #self.townBattle.adjustStatusEffects(self.activeToons)
         mode = response['mode']
+        lockIn = bool(response.get('lockIn', getattr(self.townBattle, 'lockIn', self.lockIn)))
         noAttack = 0
         if mode == 'Attack':
             self.notify.debug('got an attack')
@@ -1601,7 +1640,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                             track = -1
                             level = -1
                             targetId = -1
-            self.d_requestAttack(base.localAvatar.doId, track, level, targetId)
+            self.targetId = targetId
+            self.d_requestAttack(base.localAvatar.doId, track, level, targetId, lockIn)
         elif mode == 'IOUPreview':
             track = response['track']
             level = response['level']
@@ -1611,7 +1651,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
                 return
             if target >= 0 and target < len(self.activeToons):
                 targetId = self.activeToons[target].doId
-                self.d_requestAttack(base.localAvatar.doId, track, level, targetId)
+                self.d_requestAttack(base.localAvatar.doId, track, level, targetId, lockIn)
             else:
                 self.notify.warning('invalid IOU preview target: %d' % target)
             noAttack = 1
@@ -1625,16 +1665,16 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         elif mode == 'SOS':
             targetId = response['id']
             self.notify.debug('got an SOS for friend: %d' % targetId)
-            self.d_requestAttack(base.localAvatar.doId, SOS, -1, targetId)
+            self.d_requestAttack(base.localAvatar.doId, SOS, -1, targetId, lockIn)
         elif mode == 'NPCSOS':
             targetId = response['id']
             self.notify.debug('got an NPCSOS for friend: %d' % targetId)
-            self.d_requestAttack(base.localAvatar.doId, NPCSOS, -1, targetId)
+            self.d_requestAttack(base.localAvatar.doId, NPCSOS, -1, targetId, lockIn)
         elif mode == 'PETSOS':
             targetId = response['id']
             trickId = response['trickId']
             self.notify.debug('got an PETSOS for pet: %d' % targetId)
-            self.d_requestAttack(base.localAvatar.doId, PETSOS, trickId, targetId)
+            self.d_requestAttack(base.localAvatar.doId, PETSOS, trickId, targetId, lockIn)
         elif mode == 'PETSOSINFO':
             petProxyId = response['id']
             self.notify.debug('got a PETSOSINFO for pet: %d' % petProxyId)
@@ -1648,18 +1688,26 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         elif mode == 'Pass':
             targetId = response['id']
             self.notify.debug('got a Pass')
-            self.d_requestAttack(base.localAvatar.doId, PASS, -1, -1)
+            self.d_requestAttack(base.localAvatar.doId, PASS, -1, -1, lockIn)
         elif mode == 'UnAttack':
             self.d_requestAttack(base.localAvatar.doId, UN_ATTACK, -1, -1)
             noAttack = 1
+        elif mode == 'LockIn':
+            lockIn = bool(response['lockIn'])
+            self.d_requestLockIn(base.localAvatar.doId, lockIn)
+        elif mode == 'GagChange':
+            track = response['track']
+            level = response['level']
+            self.lockIn = False
+            self.sendUpdate('requestAttack', [track, level, self.targetId, False])
         elif mode == 'Fire':
             target = response['target']
             targetId = self.activeSuits[target].doId
-            self.d_requestAttack(base.localAvatar.doId, FIRE, -1, targetId)
+            self.d_requestAttack(base.localAvatar.doId, FIRE, -1, targetId, lockIn)
         elif mode == 'Sue':
             target = response['target']
             targetId = self.activeSuits[target].doId
-            self.d_requestAttack(base.localAvatar.doId, SUE, -1, targetId)
+            self.d_requestAttack(base.localAvatar.doId, SUE, -1, targetId, lockIn)
         else:
             self.notify.warning('unknown battle response')
             return

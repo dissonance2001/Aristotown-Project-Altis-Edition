@@ -31,6 +31,40 @@ from toontown.battle import SuitBattleGlobals
 from toontown.utils import Nodes
 from toontown.utils.text import getTextScaleAfterLength, capTextScaleToWidth
 
+def _isAltisChatTyping():
+    try:
+        avatar = base.localAvatar
+    except (NameError, AttributeError):
+        return False
+    if avatar is None:
+        return False
+
+    typing = getattr(avatar, 'localToonTyping', None)
+    if typing is not None:
+        return bool(typing)
+
+    chatLog = getattr(avatar, 'chatLog', None)
+    if chatLog is None:
+        repository = getattr(base, 'cr', None)
+        chatLog = getattr(repository, 'chatLog', None) if repository is not None else None
+    if chatLog is not None and getattr(chatLog, '_entryFocused', False):
+        return True
+
+    chatManager = getattr(avatar, 'chatMgr', None)
+    if chatManager is not None:
+        for inputName in ('chatInputNormal', 'chatInputWhiteList'):
+            chatInput = getattr(chatManager, inputName, None)
+            chatEntry = getattr(chatInput, 'chatEntry', None) if chatInput is not None else None
+            if chatEntry is not None:
+                try:
+                    if chatEntry['focus']:
+                        return True
+                except (KeyError, TypeError, AttributeError):
+                    pass
+
+    return False
+
+
 
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= #
 # Enum for GUI element dictionary keys #
@@ -160,6 +194,7 @@ class ChoiceEmblem(DirectFrame):
     def __init__(self, parent=aspect2d, ccpScale: float = 0.0026, inventoryTrackMap=None, **kw):
         self.bgColorSeq = None
         self.inventoryTrackMap = tuple(inventoryTrackMap) if inventoryTrackMap is not None else None
+        self.legacyIOURegistry = False
         self._inventoryGagIconModel = None
         gagSelectionGui = base.loader.loadModel('phase_3.5/models/gui/battlegui/gag_selection_panels')
         self.undecidedImage = gagSelectionGui.find('**/emblem_question')
@@ -261,7 +296,7 @@ class ChoiceEmblem(DirectFrame):
         DirectFrame.destroy(self)
         for attr in (
             'bgColorSeq', 'presBgTexture', 'undecidedImage', 'blankImage',
-            'blankPresImage', 'passImage', 'inventoryTrackMap', 'emblem',
+            'blankPresImage', 'passImage', 'inventoryTrackMap', 'legacyIOURegistry', 'emblem',
             'luredSuits', 'avatar'
         ):
             if hasattr(self, attr):
@@ -304,7 +339,12 @@ class ChoiceEmblem(DirectFrame):
 
         self.finishBgSeq()
 
-        gagOrder = BattleGlobals.GAG_TRACK_ORDER if townBattle is None or townBattle.battle is None else townBattle.battle.getGagOrder()
+        activeBattle = getattr(townBattle, 'battle', None) if townBattle is not None else None
+        getGagOrder = getattr(activeBattle, 'getGagOrder', None)
+        if callable(getGagOrder):
+            gagOrder = getGagOrder()
+        else:
+            gagOrder = BattleGlobals.GAG_TRACK_ORDER
 
         # Figure out state.
         trackChanged = self.track != track
@@ -409,7 +449,15 @@ class ChoiceEmblem(DirectFrame):
         elif track == AttackEnum.TOON_NPC:
             r, g, b = BattleGlobals.SOSColor
             self['image_color'] = (r, g, b, 1)
-            iou = IOURegistry[level]
+            if getattr(self, 'legacyIOURegistry', False):
+                from toontown.toon import IOURegistry as LegacyIOURegistry
+                iou = LegacyIOURegistry.IOURegistry.get(level)
+            else:
+                iou = IOURegistry.get(level)
+            if iou is None:
+                self['image'] = self.undecidedImage
+                self['image_color'] = (1, 1, 1, 1)
+                return
             npcToon = NPCToons.NPCToonDict.get(iou.getNpcId())
             npcName = getattr(npcToon, 'name', None)
             npcDNA = None
@@ -518,7 +566,15 @@ class ChoiceEmblem(DirectFrame):
         if not avatar:
             return
 
-        bannedGags = townBattle.getToonBannedGags(avatar)
+        getToonBannedGags = getattr(townBattle, 'getToonBannedGags', None)
+        if not callable(getToonBannedGags):
+            return
+
+        try:
+            bannedGags = getToonBannedGags(avatar)
+        except (AttributeError, KeyError, TypeError):
+            return
+
         if bannedGags and level in bannedGags.get(track, []):
             def setImageColor(value):
                 g = lerp(0.35, 0.6, value)
@@ -712,7 +768,7 @@ class TargetingGUI(DirectFrame):
                 targetingGui.find('**/back_hover')
             ),
             image_scale=(1, 1, 0.5),
-            text=TTLocalizer.TownBattleBack,
+            text=getattr(TTLocalizer, 'TownBattleBack', 'BACK'),
             text_fg=(0.157, 0.153, 0.306, 1),
             text_pos=(0.03, -0.062),
             text_scale=0.16,
@@ -726,9 +782,10 @@ class TargetingGUI(DirectFrame):
             relief=None,
             image=self.notLockedInImageList,
             image_scale=(1, 1, 0.5),
-            text='TEXT MISSING',
-            text_pos=(0.03, -0.065),
-            text_scale=0.24,
+            text='LOCK IN',
+            text_pos=(0.07, -0.065),
+            text_scale=0.17,
+            text_align=TextNode.ACenter,
             frameSize=(-0.33, 0.47, -0.25, 0.25),
             pos=(0.65, 0, -0.3),
             scale=0.5
@@ -802,7 +859,7 @@ class TargetingGUI(DirectFrame):
 
         def doLockIn():
             # Ignore this if we have chat open.
-            if base.localAvatar.localToonTyping:
+            if _isAltisChatTyping():
                 return
 
             if self.lockInButton['command']:
@@ -829,7 +886,10 @@ class TargetingGUI(DirectFrame):
         track = self.emblem.track
         level = self.emblem.level
         if None in (track, level):
-            # No gags -- don't even bother showing them again.
+            return
+        if not isinstance(track, int) or not 0 <= track < len(AvPropsNew):
+            return
+        if not isinstance(level, int) or not 0 <= level <= 7:
             return
 
         # Attempt to show if gags exist.
@@ -843,13 +903,17 @@ class TargetingGUI(DirectFrame):
 
     def changeGagLevel(self, direction: int, fromHotkey: bool = False):
         # Ignore this if we have chat open and got the input from a hotkey.
-        if fromHotkey and base.localAvatar.localToonTyping:
+        if fromHotkey and _isAltisChatTyping():
             return
 
         # Change the gag level we plan to use.
         track = self.emblem.track
         level = self.emblem.level
         if None in (track, level):
+            return self.updateGagButtons()
+        if not isinstance(track, int) or not 0 <= track < len(AvPropsNew):
+            return self.updateGagButtons()
+        if not isinstance(level, int) or not 0 <= level <= 7:
             return self.updateGagButtons()
 
         # Get the next gag level.
@@ -872,8 +936,13 @@ class TargetingGUI(DirectFrame):
         Gets the next gag level in a certain direction.
         If it does not exist, will return -1.
         """
+        if not isinstance(track, int) or not 0 <= track < len(AvPropsNew):
+            return -1
+        if not isinstance(level, int) or not 0 <= level <= 7:
+            return -1
+
         inventory = base.localAvatar.inventory
-        counterfeit = base.localAvatar.getStatusEffectOfId(SEE.EFFECT_COUNTERFEIT_CONTAINER)
+        counterfeit = base.localAvatar.getStatusEffectOfId(SEE.EFFECT_COUNTERFEIT_CONTAINER) if SEE is not None else None
 
         while True:
             # Move the level a bit.
@@ -881,8 +950,13 @@ class TargetingGUI(DirectFrame):
             if not (0 <= level <= 7):
                 break
 
-            if inventory.isGagDisabled(track, level):
-                continue
+            isGagDisabled = getattr(inventory, 'isGagDisabled', None)
+            if callable(isGagDisabled):
+                try:
+                    if isGagDisabled(track, level):
+                        continue
+                except (AttributeError, TypeError):
+                    pass
 
             # Do we have items here?
             numItem = inventory.numItem(track, level)
@@ -966,15 +1040,15 @@ class TargetingGUI(DirectFrame):
         self.lockedIn = lockedIn
         if self.lockedIn:
             self.lock['image'] = self.lockedImage
-            self.lockInButton['text'] = TTLocalizer.TownBattleUndo
+            self.lockInButton['text'] = getattr(TTLocalizer, 'TownBattleUndo', 'UNDO')
             self.lockInButton['image'] = self.lockedInImageList
-            self.background['text'] = TTLocalizer.TownBattleLockedIn
+            self.background['text'] = getattr(TTLocalizer, 'TownBattleLockedIn', 'LOCKED IN!')
             self.stopLockInTrack()
         else:
             self.lock['image'] = self.unlockedImage
-            self.lockInButton['text'] = TTLocalizer.TownBattleLock
+            self.lockInButton['text'] = getattr(TTLocalizer, 'TownBattleLock', 'LOCK IN')
             self.lockInButton['image'] = self.notLockedInImageList
-            self.background['text'] = TTLocalizer.TownBattleLockIn
+            self.background['text'] = getattr(TTLocalizer, 'TownBattleLockIn', 'Lock In')
             # Don't re-start it if it is already playing.
             if not (self.lockInButtonTrack and self.lockInButtonTrack.isPlaying()):
                 self.startLockInTrack()

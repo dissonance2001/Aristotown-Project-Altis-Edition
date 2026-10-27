@@ -1742,6 +1742,7 @@ dclass DistributedBattleBase : DistributedObject {
   setMovie(int16, uint32[], uint32[], ToonAttack[], int16[], SuitAttack[]) required broadcast ram;
   setToonTrackOrder(int8[]) broadcast ram;
   setChosenToonAttacks(uint32[], int16[], int16[], int32[]) broadcast ram;
+  setLockIns(uint32[], bool[]) required broadcast ram;
   setNumSurrendered(uint8, uint8, uint32[]) broadcast ram;
   setBattleExperience(int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], int32, int16[], int16[], uint32[], int16[], int16[], int16[], int16[], uint32[], uint8[], int16[], uint32[]) required broadcast ram;
   denyLocalToonJoin();
@@ -1758,7 +1759,8 @@ dclass DistributedBattleBase : DistributedObject {
   movieDone() airecv clsend;
   rewardDone() airecv clsend;
   joinDone(uint32) airecv clsend;
-  requestAttack(int8, int8, int32) airecv clsend;
+  requestAttack(int8, int8, int32, bool) airecv clsend;
+  requestLockIn(bool) airecv clsend;
   requestPetProxy(uint32) airecv clsend;
 };
 

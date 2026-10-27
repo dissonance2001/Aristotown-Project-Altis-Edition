@@ -180,6 +180,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
 
     def _loadInventoryIconModels(self):
         modelPath = 'phase_3.5/models/gui/inventory_icons'
+        if not hasattr(self, 'inventoryIconModelRoots'):
+            self.inventoryIconModelRoots = []
+
         invModel = loader.loadModel(modelPath)
         iconModels = self._makeInventoryIconModels(invModel)
 
@@ -197,24 +200,29 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             iconModels = self._makeInventoryIconModels(invModel)
 
         if invModel is not None and not invModel.isEmpty():
-            invModel.removeNode()
+            if self._inventoryIconModelsAreValid(iconModels):
+                self.inventoryIconModelRoots.append(invModel)
+            else:
+                invModel.removeNode()
         return iconModels
 
     def _repairGagIconModels(self):
-        if self._inventoryIconModelsAreValid(getattr(self, 'invModels', None)):
-            return
-
-        iconModels = self._loadInventoryIconModels()
+        iconModels = getattr(self, 'invModels', None)
         if not self._inventoryIconModelsAreValid(iconModels):
-            return
+            iconModels = self._loadInventoryIconModels()
+            if not self._inventoryIconModelsAreValid(iconModels):
+                return False
+            self.invModels = iconModels
 
-        self.invModels = iconModels
         for track, buttonList in enumerate(getattr(self, 'buttons', [])):
             if track >= len(iconModels):
                 break
             for item, button in enumerate(buttonList):
-                if item < len(iconModels[track]) and not iconModels[track][item].isEmpty():
-                    button['geom'] = iconModels[track][item]
+                if item < len(iconModels[track]):
+                    iconModel = iconModels[track][item]
+                    if iconModel is not None and not iconModel.isEmpty():
+                        button['geom'] = iconModel
+        return True
 
     def show(self):
         self._repairGagIconModels()
@@ -373,6 +381,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
                 button.destroy()
 
         del self.buttons
+        for iconRoot in getattr(self, 'inventoryIconModelRoots', []):
+            if iconRoot is not None and not iconRoot.isEmpty():
+                iconRoot.removeNode()
+        self.inventoryIconModelRoots = []
         InventoryBase.InventoryBase.unload(self)
         DirectFrame.destroy(self)
         return
@@ -676,7 +688,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             self.buttons[track].append(starButton)
         return
 
-    def __handleSelection(self, track, level):
+    def __handleSelection(self, track, level, alt=False, *eventArgs):
         if self.activateMode == 'purchaseDelete' or self.activateMode == 'bookDelete' or self.activateMode == 'storePurchaseDelete':
             if self.numItem(track, level):
                 self.useItem(track, level)
@@ -689,7 +701,10 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         elif self.gagTutMode:
             pass
         else:
-            messenger.send('inventory-selection', [track, level])
+            if alt and self.activateMode == 'battle':
+                messenger.send('inventory-selection-alt', [track, level])
+            else:
+                messenger.send('inventory-selection', [track, level])
 
     def __handleRun(self):
         messenger.send('inventory-run')
@@ -2608,6 +2623,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             )
 
     def battleDeactivateButtons(self):
+        for buttonList in self.buttons:
+            for button in buttonList:
+                button.unbind(DGG.B3PRESS)
         self.invFrame.reparentTo(self)
         self.levelsButton.hide()
         self.battleFrame.hide()
@@ -2719,6 +2737,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             shadowColor = self.ShadowColor
         button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
+        button.unbind(DGG.B3PRESS)
+        if self.activateMode == 'battle':
+            button.bind(DGG.B3PRESS, self.__handleSelection, extraArgs=[track, level, True])
         if self.interactivePropTrackBonus == track:
             button.configure(image_color=self.PropBonusPressableImageColor)
             self.addToPropBonusIval(button)
@@ -2735,6 +2756,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             shadowColor = self.UnpressableShadowBuffedColor
         else:
             shadowColor = self.ShadowColor
+        button.unbind(DGG.B3PRESS)
         button.configure(text_shadow=shadowColor, geom_color=self.UnpressableGeomColor, image_image=self.flatButton, commandButtons=(DGG.LMB,))
         button.configure(image_color=self.UnpressableImageColor)
 
@@ -2747,6 +2769,9 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         else:
             shadowColor = self.ShadowColor
         button.configure(image0_image=self.upButton, image2_image=self.rolloverButton, text_shadow=shadowColor, geom_color=self.PressableGeomColor, commandButtons=(DGG.LMB,))
+        button.unbind(DGG.B3PRESS)
+        if self.activateMode == 'battle':
+            button.bind(DGG.B3PRESS, self.__handleSelection, extraArgs=[track, level, True])
         if self.interactivePropTrackBonus == track:
             button.configure(image_color=self.PropBonusNoncreditPressableImageColor)
             self.addToPropBonusIval(button)
@@ -2826,6 +2851,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             shadowColor = self.UnpressableShadowBuffedColor
         else:
             shadowColor = self.ShadowColor
+        button.unbind(DGG.B3PRESS)
         button.configure(text_shadow=shadowColor, geom_color=self.UnpressableGeomColor, image_image=self.flatButton, commandButtons=())
         button.configure(image_color=self.UnpressableImageColor)
 
@@ -2837,6 +2863,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
             shadowColor = self.ShadowBuffedColor
         else:
             shadowColor = self.ShadowColor
+        button.unbind(DGG.B3PRESS)
         button.configure(text_shadow=shadowColor, geom_color=self.BookUnpressableGeomColor, image_image=self.flatButton, commandButtons=())
         color = self.BookUnpressableImage0Color
         if organicBonus:

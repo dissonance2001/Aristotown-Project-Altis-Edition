@@ -7,6 +7,7 @@ DefaultSettings = {
 'loadDisplay': 'pandagl',
 'toonChatSounds': True,
 'newGui': False,
+'auto-lock-in': 0,
 'show-disclaimer': True,
 'fieldofview': 52,
 'show-cog-levels': True,

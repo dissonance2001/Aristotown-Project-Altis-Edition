@@ -53,6 +53,9 @@ class TownBattle(StateData.StateData):
         self.track = -1
         self.level = -1
         self.lastActionMode = 'Inventory'
+        self.lockIn = False
+        self.lockInEvent = 'lock-in-request'
+        self.gagChangeEvent = 'gag-change-event'
         self.target = 0
         self.timeRunningOutTrack = None
         self.timeRunnoutOutPulseTrack = None
@@ -91,7 +94,8 @@ class TownBattle(StateData.StateData):
         self.attackPanelDoneEvent = 'attack-panel-done'
         self.attackPanel = TownBattleAttackPanel.TownBattleAttackPanel(self.attackPanelDoneEvent)
         self.waitPanelDoneEvent = 'wait-panel-done'
-        self.waitPanel = TownBattleWaitPanel.TownBattleWaitPanel(self.waitPanelDoneEvent)
+        self.waitPanel = TownBattleWaitPanel.TownBattleWaitPanel(
+            self.waitPanelDoneEvent, self.lockInEvent, self.gagChangeEvent, townBattle=self)
         self.chooseCogPanelDoneEvent = 'choose-cog-panel-done'
         self.chooseCogPanel = TownBattleChooseAvatarPanel.TownBattleChooseAvatarPanel(self.chooseCogPanelDoneEvent, 0)
         self.chooseToonPanelDoneEvent = 'choose-toon-panel-done'
@@ -599,6 +603,9 @@ class TownBattle(StateData.StateData):
         self.target = 0
 
     def enterAttack(self):
+        self.lockIn = False
+        if getattr(self.waitPanel, 'isLoaded', False):
+            self.waitPanel.setLockIn(False)
         self.attackPanel.enter()
         self.accept(self.attackPanelDoneEvent, self.__handleAttackPanelDone)
 
@@ -608,6 +615,7 @@ class TownBattle(StateData.StateData):
 
     def __handleAttackPanelDone(self, doneStatus):
         self.notify.debug('doneStatus: %s' % doneStatus)
+        self.lockIn = bool(doneStatus.get('lockIn', False))
         mode = doneStatus['mode']
         if mode == 'Inventory':
             self.lastActionMode = 'Inventory'
@@ -783,11 +791,46 @@ class TownBattle(StateData.StateData):
 
     def enterAttackWait(self, chosenToon=-1):
         self.accept(self.waitPanelDoneEvent, self.__handleAttackWaitBack)
+        self.accept(self.lockInEvent, self.__handleLockIn)
+        self.accept(self.gagChangeEvent, self.__handleGagChange)
         self.waitPanel.enter(self.numToons, self.track, self.level, self.lastActionMode)
 
     def exitAttackWait(self):
         self.waitPanel.exit()
         self.ignore(self.waitPanelDoneEvent)
+        self.ignore(self.lockInEvent)
+        self.ignore(self.gagChangeEvent)
+
+    def __handleLockIn(self, lockInInfo):
+        if lockInInfo.get('mode') != 'LockIn':
+            return
+        messenger.send(self.battleEvent, [{'mode': 'LockIn', 'lockIn': bool(lockInInfo.get('lockIn', False))}])
+
+    def __handleGagChange(self, gagChangeInfo):
+        if gagChangeInfo.get('mode') != 'GagChange':
+            return
+        track = gagChangeInfo.get('track')
+        level = gagChangeInfo.get('level')
+        if not isinstance(track, int) or not isinstance(level, int):
+            return
+        self.track = track
+        self.level = level
+        self.lastActionMode = 'Inventory'
+        self.lockIn = False
+        self.toonPanels[self.localNum].setValues(self.localNum, track, level)
+        messenger.send(self.battleEvent, [{'mode': 'GagChange', 'track': track, 'level': level}])
+
+    def updateLockIns(self, battleIndices, lockIns):
+        for i in range(min(4, len(battleIndices), len(lockIns))):
+            toonIndex = battleIndices[i]
+            if toonIndex < 0 or toonIndex >= len(self.toonPanels):
+                continue
+            lockedIn = bool(lockIns[i])
+            self.toonPanels[toonIndex].setLockIn(lockedIn)
+            if toonIndex == self.localNum:
+                self.lockIn = lockedIn
+                if getattr(self.waitPanel, 'isLoaded', False):
+                    self.waitPanel.setLockIn(lockedIn)
 
     def __handleAttackWaitBack(self, doneStatus):
         mode = doneStatus['mode']
@@ -802,6 +845,7 @@ class TownBattle(StateData.StateData):
                 self.fsm.request('ChooseCog')
             else:
                 self.fsm.request('Attack')
+            self.lockIn = False
             response = {}
             response['mode'] = 'UnAttack'
             messenger.send(self.battleEvent, [response])

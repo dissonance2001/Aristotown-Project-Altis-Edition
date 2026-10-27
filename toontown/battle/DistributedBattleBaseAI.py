@@ -39,6 +39,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.finishCallback = finishCallback
         self.avatarExitEvents = []
         self.responses = {}
+        self.lockIns = {}
         self.surrenderRequests = {}
         self.numSurrendered = 0
         self.maxSurrendered = 0
@@ -1142,6 +1143,28 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
 
         self.ignoreResponses = 0
 
+    def d_setLockIns(self):
+        self.sendUpdate('setLockIns', self.getLockIns())
+
+    def getLockIns(self):
+        ids = []
+        lockIns = []
+        for toonId in self.activeToons:
+            ids.append(toonId)
+            lockIns.append(bool(self.lockIns.get(toonId, 0)))
+        return [ids, lockIns]
+
+    def resetLockIns(self):
+        self.lockIns = {toonId: 0 for toonId in self.toons}
+        self.d_setLockIns()
+
+    def __allActiveToonsRespondedAndLockedIn(self):
+        for toonId in self.activeToons:
+            if self.responses.get(toonId, 0) == 0 or not self.lockIns.get(toonId, 0):
+                return 0
+        self.ignoreResponses = 1
+        return 1
+
     def allToonsResponded(self):
         for t in self.toons:
             if self.responses[t] == 0:
@@ -1167,11 +1190,12 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         return 1
 
     def __removeResponse(self, toonId):
-        del self.responses[toonId]
+        self.responses.pop(toonId, None)
+        self.lockIns.pop(toonId, None)
         if self.ignoreResponses == 0 and len(self.toons) > 0:
             currStateName = self.fsm.getCurrentState().getName()
             if currStateName == 'WaitForInput':
-                if self.__allActiveToonsResponded():
+                if self.__allActiveToonsRespondedAndLockedIn():
                     self.notify.debug('removeResponse() - dont wait for movie')
                     self.__requestMovie()
             elif currStateName == 'PlayMovie':
@@ -1275,8 +1299,10 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.toonAttacks[toonId] = getToonAttack(toonId)
         self.d_setChosenToonAttacks()
         self.responses[toonId] += 1
+        self.lockIns[toonId] = 0
+        self.d_setLockIns()
 
-        if self.__allActiveToonsResponded():
+        if self.__allActiveToonsRespondedAndLockedIn():
             self.__requestMovie(timeout=1)
 
     def movieDone(self):
@@ -1340,7 +1366,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         if self.__allToonsRespondedJoin(avId):
             self.__makeAvPending(avId)
 
-    def requestAttack(self, track, level, av):
+    def requestAttack(self, track, level, av, lockIn=False):
         toonId = self.air.getAvatarIdFromSender()
         oldAttack = self.toonAttacks.get(toonId)
 
@@ -1413,6 +1439,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
             self.toonAttacks[toonId] = getToonAttack(toonId, track=UN_ATTACK)
             if toonId in self.responses:
                 self.responses[toonId] = 0
+            self.lockIns[toonId] = 0
             validResponse = 0
         elif track == PASS:
             self.toonAttacks[toonId] = getToonAttack(toonId, track=PASS)
@@ -1443,8 +1470,26 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.d_setChosenToonAttacks()
         if validResponse == 1:
             self.responses[toonId] += 1
+            self.lockIns[toonId] = int(bool(lockIn))
+        else:
+            self.lockIns[toonId] = 0
+        self.d_setLockIns()
         self.notify.debug('toon: %d chose an attack' % toonId)
-        if self.__allActiveToonsResponded():
+        if self.__allActiveToonsRespondedAndLockedIn():
+            self.__requestMovie()
+
+    def requestLockIn(self, value):
+        toonId = self.air.getAvatarIdFromSender()
+        toon = self.air.doId2do.get(toonId)
+        if self.ignoreResponses or self.fsm.getCurrentState().getName() != 'WaitForInput':
+            return
+        if toon is None or toonId not in self.activeToons:
+            return
+        if self.responses.get(toonId, 0) <= 0:
+            return
+        self.lockIns[toonId] = int(bool(value))
+        self.d_setLockIns()
+        if self.__allActiveToonsRespondedAndLockedIn():
             self.__requestMovie()
 
     def requestPetProxy(self, av):
@@ -1707,6 +1752,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         self.joinableFsm.request('Joinable')
         self.runableFsm.request('Runable')
         self.resetResponses()
+        self.resetLockIns()
         self.adjustSurrendered()
         self.__requestAdjust()
         if not self.tutorialFlag:
@@ -2441,7 +2487,7 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
     def enterNotAdjusting(self):
         self.notify.debug('enterNotAdjusting()')
         if self.movieRequested == 1:
-            if len(self.activeToons) > 0 and self.__allActiveToonsResponded():
+            if len(self.activeToons) > 0 and self.__allActiveToonsRespondedAndLockedIn():
                 self.__requestMovie()
 
     def exitNotAdjusting(self):

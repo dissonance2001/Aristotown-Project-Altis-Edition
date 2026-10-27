@@ -27,16 +27,19 @@ class BattleManagerAI:
             battle.signupToon(toonId, pos[0], pos[1], pos[2])
         else:
             battle = self.battleConstructor(self.air, self, pos, suit, toonId, zoneId, finishCallback, maxSuits, interactivePropTrackBonus=interactivePropTrackBonus)
-            battle.generateWithRequired(zoneId)
             battle.battleCellId = cellId
             self.cellId2battle[cellId] = battle
+            battle.generateWithRequired(zoneId)
         return battle
 
     def requestBattleAddSuit(self, cellId, suit):
         return self.cellId2battle[cellId].suitRequestJoin(suit)
 
     def destroy(self, battle):
-        cellId = battle.battleCellId
-        self.notify.debug('BattleManager - destroying battle %d' % cellId)
-        del self.cellId2battle[cellId]
+        cellId = getattr(battle, 'battleCellId', None)
+        if cellId is None or self.cellId2battle.get(cellId) is not battle:
+            cellId = next((key for key, value in self.cellId2battle.items() if value is battle), None)
+        if cellId is not None and self.cellId2battle.get(cellId) is battle:
+            self.notify.debug('BattleManager - destroying battle %d' % cellId)
+            del self.cellId2battle[cellId]
         battle.requestDelete()

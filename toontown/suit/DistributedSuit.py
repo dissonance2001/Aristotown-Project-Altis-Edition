@@ -464,10 +464,14 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def __handleToonCollision(self, collEntry):
         if not base.localAvatar.wantBattles:
             return
+        if getattr(base.localAvatar, 'isStunned', False):
+            return
         toonId = base.localAvatar.getDoId()
         self.notify.debug('Distributed suit: requesting a Battle with ' + 'toon: %d' % toonId)
+        self.headsUp(base.localAvatar)
         self.d_requestBattle(self.getPos(), self.getHpr())
         self.setState('WaitForBattle')
+        self.headsUp(base.localAvatar)
 
     def setAnimState(self, state):
         self.setState(state)
@@ -646,6 +650,8 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
     def enterWaitForBattle(self):
         DistributedSuitBase.DistributedSuitBase.enterWaitForBattle(self)
         self.resumePath(0)
+        if base.localAvatar is not None:
+            self.headsUp(base.localAvatar)
 
     def enterFlyAway(self):
         self.enableBattleDetect('flyAway', self.__handleToonCollision)
