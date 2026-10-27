@@ -371,30 +371,16 @@ TorsoDict = {
     'ld': '/models/char/tt_a_chr_dgl_skirt_torso_'}
 
 def loadModels():
-    global Preloaded
-    if not Preloaded:
-        print('Preloading avatars...')
+    return
 
-        def preload(task):
-            for key in list(LegDict.keys()):
-                fileRoot = LegDict[key]
 
-                Preloaded[fileRoot+'-1000'] = loader.loadModel('phase_3' + fileRoot + '1000')
-                Preloaded[fileRoot+'-500'] = loader.loadModel('phase_3' + fileRoot + '500')
-                Preloaded[fileRoot+'-250'] = loader.loadModel('phase_3' + fileRoot + '250')
-
-            for key in list(TorsoDict.keys()):
-                fileRoot = TorsoDict[key]
-
-                Preloaded[fileRoot+'-1000'] = loader.loadModel('phase_3' + fileRoot + '1000')
-
-                if len(key) > 1:
-                    Preloaded[fileRoot+'-500'] = loader.loadModel('phase_3' + fileRoot + '500')
-                    Preloaded[fileRoot+'-250'] = loader.loadModel('phase_3' + fileRoot + '250')
-
-            return task.done
-
-        taskMgr.add(preload, 'preload-avatar')
+def getPreloadedToonModel(fileRoot, lod):
+    key = fileRoot + '-' + str(lod)
+    model = Preloaded.get(key)
+    if model is None:
+        model = loader.loadModel('phase_3' + fileRoot + str(lod))
+        Preloaded[key] = model
+    return model
 
 def loadBasicAnims():
     loadPhaseAnims()
@@ -3123,12 +3109,12 @@ class Toon(Avatar.Avatar, ToonHead):
 
     def setLODs(self):
         self.setLODNode()
-        levelOneIn = base.config.GetInt('lod1-in', 20)
+        levelOneIn = base.config.GetInt('lod1-in', 15)
         levelOneOut = base.config.GetInt('lod1-out', 0)
-        levelTwoIn = base.config.GetInt('lod2-in', 80)
-        levelTwoOut = base.config.GetInt('lod2-out', 20)
+        levelTwoIn = base.config.GetInt('lod2-in', 55)
+        levelTwoOut = base.config.GetInt('lod2-out', 15)
         levelThreeIn = base.config.GetInt('lod3-in', 280)
-        levelThreeOut = base.config.GetInt('lod3-out', 80)
+        levelThreeOut = base.config.GetInt('lod3-out', 55)
         self.addLOD(1000, levelOneIn, levelOneOut)
         self.addLOD(500, levelTwoIn, levelTwoOut)
         self.addLOD(250, levelThreeIn, levelThreeOut)
@@ -3249,9 +3235,9 @@ class Toon(Avatar.Avatar, ToonHead):
         filePrefix = LegDict.get(legStyle)
         if filePrefix is None:
             self.notify.error('unknown leg style: %s' % legStyle)
-        self.loadModel(Preloaded[filePrefix+'-1000'], 'legs', '1000', True)
-        self.loadModel(Preloaded[filePrefix+'-500'], 'legs', '500', True)
-        self.loadModel(Preloaded[filePrefix+'-250'], 'legs', '250', True)
+        self.loadModel(getPreloadedToonModel(filePrefix, 1000), 'legs', '1000', True)
+        self.loadModel(getPreloadedToonModel(filePrefix, 500), 'legs', '500', True)
+        self.loadModel(getPreloadedToonModel(filePrefix, 250), 'legs', '250', True)
         if not copy:
             self.showPart('legs', '1000')
             self.showPart('legs', '500')
@@ -3287,13 +3273,13 @@ class Toon(Avatar.Avatar, ToonHead):
         filePrefix = TorsoDict.get(torsoStyle)
         if filePrefix is None:
             self.notify.error('unknown torso style: %s' % torsoStyle)
-        self.loadModel(Preloaded[filePrefix+'-1000'], 'torso', '1000', True)
+        self.loadModel(getPreloadedToonModel(filePrefix, 1000), 'torso', '1000', True)
         if len(torsoStyle) == 1:
-            self.loadModel(Preloaded[filePrefix+'-1000'], 'torso', '500', True)
-            self.loadModel(Preloaded[filePrefix+'-1000'], 'torso', '250', True)
+            self.loadModel(getPreloadedToonModel(filePrefix, 1000), 'torso', '500', True)
+            self.loadModel(getPreloadedToonModel(filePrefix, 1000), 'torso', '250', True)
         else:
-            self.loadModel(Preloaded[filePrefix+'-500'], 'torso', '500', True)
-            self.loadModel(Preloaded[filePrefix+'-250'], 'torso', '250', True)
+            self.loadModel(getPreloadedToonModel(filePrefix, 500), 'torso', '500', True)
+            self.loadModel(getPreloadedToonModel(filePrefix, 250), 'torso', '250', True)
         if not copy:
             self.showPart('torso', '1000')
             self.showPart('torso', '500')

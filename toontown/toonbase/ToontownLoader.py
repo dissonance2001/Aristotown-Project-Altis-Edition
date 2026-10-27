@@ -87,10 +87,6 @@ class ToontownLoader(nLoader.Loader):
         if ret and 'status_effects' in modelName:
             ContentPackCompatibility.applyStatusEffectsCompatibility(ret)
 
-        if ret:
-            gsg = base.win.getGsg()
-            if gsg:
-                ret.prepareScene(gsg)
 
         self.tick()
         return ret
