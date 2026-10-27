@@ -2724,6 +2724,17 @@ def heldRelativeShot(other, x, y, z, h, p, r, duration, name = 'heldRelativeShot
     track.append(Wait(duration))
     return track
 
+
+def heldRelativeHeadsUpShot(other, x: float, y: float, z: float, headsUpObject, duration: float, name: str = 'heldRelativeHeadsUpShot') -> Sequence:
+    track: Sequence = Sequence(name=name)
+    # Let the camera display the toons
+    track.append(Func(camera.setPos, other, x, y, z))
+    # Heads up the camera towards the given object
+    track.append(Func(camera.headsUp, headsUpObject))
+    # Hold that pose
+    track.append(Wait(duration))
+    return track
+
 def motionShot(x, y, z, h, p, r, duration, other = None, name = 'motionShot'):
     if other:
         posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z), other=other, blendType='easeInOut')
@@ -2862,8 +2873,20 @@ def moveCameraOnly(x, y, z, duration, other=None,
 #     )
 
 
+def hprShot(hpr, duration: float, other = None, name: str = 'hprShot'):
+    return LerpHprInterval(camera, duration, hpr=hpr, other=other, name=name) # Simplified from the Clash variant, because other for LerpHprInterval is None by default, which is also the default for hprShot(), thereby making a check to omit the default argument if it matches the default argument unnecessary.
+
+
 def allGroupShot(avatar, duration, battle=None):
     return heldShot(10, 0, 10, 89, -30, 0, duration, "allGroupShot")
+
+
+def allGroupOverheadShot(avatar, duration: float, battle = None) -> Sequence:
+    return heldShot(0.0, -15.0, 9.0, 0.0, -20.0, 0.0, duration, 'allGroupOverheadShot')
+
+
+def allGroupLowerOverheadShot(avatar, duration: float, battle = None) -> Sequence:
+    return heldShot(0.0, -16.5, 7.0, 0.0, -5.0, 0.0, duration, "allGroupLowerOverheadShot")
 
 
 def allGroupLowShot2(avatar, duration, battle=None):
