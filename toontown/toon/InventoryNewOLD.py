@@ -1451,7 +1451,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
     def bookActivateButtons(self):
         self.__applyBookDetailLayout()
         self.updateTotalPropsText()
-        self.setPos(0.1, 0, 0.52)
+        self.setPos(0.2, 0, 0.52)
         self.setScale(0.8)
 
                                                                                
