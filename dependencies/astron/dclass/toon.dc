@@ -1,25 +1,10 @@
-from direct.distributed import DistributedObject/AI/UD
-from direct.distributed import DistributedNode/AI/UD
-from direct.distributed import DistributedSmoothNode/AI
-from direct.distributed import DistributedCartesianGrid/AI
-from direct.distributed import DistributedCamera/AI/OV
+from direct.distributed import DistributedObject/AI/UD, DistributedNode/AI/UD, DistributedSmoothNode/AI, DistributedCartesianGrid/AI, DistributedCamera/AI/OV
 from otp.distributed import Account/AI/UD
-from otp.ai import TimeManager/AI
-from otp.ai import MagicWordManager/AI
-from otp.avatar import DistributedAvatar/AI/UD
-from otp.avatar import DistributedPlayer/AI
-from otp.friends import FriendManager/AI
-from otp.friends import AvatarFriendsManager/UD
-from otp.friends import PlayerFriendsManager/UD
-from otp.friends import GuildManager/AI/UD
-from otp.friends import FriendInfo
-from otp.friends import AvatarFriendInfo
-from otp.distributed import ObjectServer/AI/UD
-from otp.distributed import DistributedDistrict/AI/UD
-from otp.distributed import DistributedDirectory/AI
-from otp.distributed import DistributedTestObject/AI
-from otp.snapshot import SnapshotDispatcher/AI/UD
-from otp.snapshot import SnapshotRenderer/AI/UD
+from otp.ai import TimeManager/AI, MagicWordManager/AI
+from otp.avatar import DistributedAvatar/AI/UD, DistributedPlayer/AI
+from otp.friends import FriendManager/AI, AvatarFriendsManager/UD, PlayerFriendsManager/UD, GuildManager/AI/UD, FriendInfo, AvatarFriendInfo
+from otp.distributed import ObjectServer/AI/UD, DistributedDistrict/AI/UD, DistributedDirectory/AI, DistributedTestObject/AI
+from otp.snapshot import SnapshotDispatcher/AI/UD, SnapshotRenderer/AI/UD
 from otp.uberdog import OtpAvatarManager/AI/UD
 from otp.chat import ChatAgent/AI/UD
 from otp.uberdog import SpeedchatRelay/UD
@@ -589,332 +574,88 @@ from direct.distributed import DistributedObjectGlobal
 from toontown.ai import WelcomeValleyManager/AI
 from toontown.building import DistributedAnimatedProp/AI
 from toontown.toon import DistributedToon/AI/UD
-from toontown.classicchars import DistributedCCharBase/AI
-from toontown.classicchars import DistributedMickey/AI
-from toontown.classicchars import DistributedVampireMickey/AI
-from toontown.classicchars import DistributedMinnie/AI
-from toontown.classicchars import DistributedWitchMinnie/AI
-from toontown.classicchars import DistributedGoofy/AI
-from toontown.classicchars import DistributedSuperGoofy/AI
-from toontown.classicchars import DistributedDaisy/AI
-from toontown.classicchars import DistributedSockHopDaisy/AI
-from toontown.classicchars import DistributedChip/AI
-from toontown.classicchars import DistributedPoliceChip/AI
-from toontown.classicchars import DistributedDale/AI
-from toontown.classicchars import DistributedJailbirdDale/AI
-from toontown.classicchars import DistributedGoofySpeedway/AI
-from toontown.classicchars import DistributedDonald/AI
-from toontown.classicchars import DistributedFrankenDonald/AI
-from toontown.classicchars import DistributedDonaldDock/AI
-from toontown.classicchars import DistributedPluto/AI
-from toontown.classicchars import DistributedWesternPluto/AI
-from toontown.safezone import DistributedTrolley/AI
-from toontown.safezone import DistributedPartyGate/AI
-from toontown.suit import DistributedSuitPlanner/AI
-from toontown.suit import DistributedSuitBase/AI
-from toontown.suit import DistributedSuit/AI
-from toontown.suit import DistributedTutorialSuit/AI
-from toontown.suit import DistributedFactorySuit/AI
-from toontown.suit import DistributedMintSuit/AI
-from toontown.suit import DistributedBoardOfficeSuit/AI
-from toontown.suit import DistributedStageSuit/AI
-from toontown.suit import DistributedSellbotBoss/AI
-from toontown.suit import DistributedSellbotBossMini/AI
-from toontown.suit import DistributedClashSellbotBoss/AI
-from toontown.suit import DistributedCashbotBoss/AI
-from toontown.suit import DistributedHighRollerBoss/AI
-from toontown.suit import DistributedVideographerBoss/AI
-from toontown.suit import DistributedDirectorsMiniboss/AI
-from toontown.suit import DistributedCashbotBossMini/AI
-from toontown.coghq import DistributedCashbotBossSafe/AI
-from toontown.coghq import DistributedCashbotBossCrane/AI
-from toontown.suit import DistributedCashbotBossGoon/AI
-from toontown.suit import DistributedDirectors/AI
-from toontown.suit import DistributedBoardbotBoss/AI
-from toontown.battle import DistributedBattleBase/AI
-from toontown.battle import DistributedBattle/AI
-from toontown.battle import DistributedBattleBldg/AI
+from toontown.classicchars import DistributedCCharBase/AI, DistributedMickey/AI, DistributedVampireMickey/AI, DistributedMinnie/AI, DistributedWitchMinnie/AI, DistributedGoofy/AI, DistributedSuperGoofy/AI, DistributedDaisy/AI, DistributedSockHopDaisy/AI, DistributedChip/AI, DistributedPoliceChip/AI, DistributedDale/AI, DistributedJailbirdDale/AI, DistributedGoofySpeedway/AI, DistributedDonald/AI, DistributedFrankenDonald/AI, DistributedDonaldDock/AI, DistributedPluto/AI, DistributedWesternPluto/AI
+from toontown.safezone import DistributedTrolley/AI, DistributedPartyGate/AI
+from toontown.suit import DistributedSuitPlanner/AI, DistributedSuitBase/AI, DistributedSuit/AI, DistributedTutorialSuit/AI, DistributedFactorySuit/AI, DistributedMintSuit/AI, DistributedBoardOfficeSuit/AI, DistributedStageSuit/AI, DistributedSellbotBoss/AI, DistributedSellbotBossMini/AI, DistributedClashSellbotBoss/AI, DistributedCashbotBoss/AI, DistributedHighRollerBoss/AI, DistributedVideographerBoss/AI, DistributedDirectorsMiniboss/AI, DistributedCashbotBossMini/AI
+from toontown.coghq import DistributedCashbotBossSafe/AI, DistributedCashbotBossCrane/AI
+from toontown.suit import DistributedCashbotBossGoon/AI, DistributedDirectors/AI, DistributedBoardbotBoss/AI
+from toontown.battle import DistributedBattleBase/AI, DistributedBattle/AI, DistributedBattleBldg/AI
 from toontown.tutorial import DistributedBattleTutorial/AI
 from toontown.coghq import DistributedBattleFactory/AI
-from toontown.battle import DistributedBattleFinal/AI
-from toontown.battle import DistributedCashbotBattleFinal/AI
-from toontown.safezone import DistributedBoat/AI
-from toontown.safezone import DistributedButterfly/AI
-from toontown.safezone import DistributedMMPiano/AI
-from toontown.safezone import DistributedDGFlower/AI
-from toontown.fishing import DistributedFishingPond/AI
-from toontown.fishing import DistributedFishingTarget/AI
-from toontown.fishing import DistributedPondBingoManager/AI
+from toontown.battle import DistributedBattleFinal/AI, DistributedCashbotBattleFinal/AI
+from toontown.safezone import DistributedBoat/AI, DistributedButterfly/AI, DistributedMMPiano/AI, DistributedDGFlower/AI
+from toontown.fishing import DistributedFishingPond/AI, DistributedFishingTarget/AI, DistributedPondBingoManager/AI
 from toontown.safezone import DistributedFishingSpot/AI
-from toontown.estate import DistributedCannon/AI
-from toontown.estate import DistributedTarget/AI
-from toontown.minigame import DistributedMinigame/AI
-from toontown.minigame import DistributedMinigameTemplate/AI
-from toontown.minigame import DistributedRaceGame/AI
-from toontown.minigame import DistributedCannonGame/AI
-from toontown.minigame import DistributedPhotoGame/AI
-from toontown.minigame import DistributedPatternGame/AI
-from toontown.minigame import DistributedRingGame/AI
-from toontown.minigame import DistributedTagGame/AI
-from toontown.minigame import DistributedMazeGame/AI
-from toontown.minigame import DistributedTugOfWarGame/AI
-from toontown.minigame import DistributedCatchGame/AI
-from toontown.minigame import DistributedDivingGame/AI
-from toontown.minigame import DistributedTargetGame/AI
-from toontown.estate import EstateManager/AI
-from toontown.estate import DistributedEstate/AI
-from toontown.estate import DistributedHouse/AI
-from toontown.estate import DistributedHouseInterior/AI
-from toontown.estate import DistributedGarden/AI
+from toontown.estate import DistributedCannon/AI, DistributedTarget/AI
+from toontown.minigame import DistributedMinigame/AI, DistributedMinigameTemplate/AI, DistributedRaceGame/AI, DistributedCannonGame/AI, DistributedPhotoGame/AI, DistributedPatternGame/AI, DistributedRingGame/AI, DistributedTagGame/AI, DistributedMazeGame/AI, DistributedTugOfWarGame/AI, DistributedCatchGame/AI, DistributedDivingGame/AI, DistributedTargetGame/AI
+from toontown.estate import EstateManager/AI, DistributedEstate/AI, DistributedHouse/AI, DistributedHouseInterior/AI, DistributedGarden/AI
 from toontown.shtiker import DeleteManager/AI
 from toontown.ai import NewsManager/AI
-from toontown.shtiker import PurchaseManager/AI
-from toontown.shtiker import NewbiePurchaseManager/AI
+from toontown.shtiker import PurchaseManager/AI, NewbiePurchaseManager/AI
 from toontown.safezone import SafeZoneManager/AI
 from toontown.tutorial import TutorialManager/AI
 from toontown.catalog import CatalogManager/AI
-from toontown.safezone import DistributedTreasure/AI
-from toontown.safezone import DistributedSZTreasure/AI
-from toontown.safezone import DistributedEFlyingTreasure/AI
+from toontown.safezone import DistributedTreasure/AI, DistributedSZTreasure/AI, DistributedEFlyingTreasure/AI
 from toontown.coghq import DistributedCashbotBossTreasure/AI
-from toontown.building import DistributedTrophyMgr/AI
-from toontown.building import DistributedBuilding/AI
-from toontown.building import DistributedAnimBuilding/AI
-from toontown.building import DistributedToonInterior/AI
-from toontown.building import DistributedToonHallInterior/AI
-from toontown.building import DistributedSuitInterior/AI
-from toontown.building import DistributedHQInterior/AI
-from toontown.building import DistributedGagshopInterior/AI
-from toontown.building import DistributedPetshopInterior/AI
-from toontown.building import DistributedKartShopInterior/AI
-from toontown.building import DistributedSchoolHouseInterior/AI
-from toontown.building import DistributedLighthouseInterior/AI
-from toontown.building import DistributedDerrickmanInterior/AI
-from toontown.building import DistributedChainsawInterior/AI
-from toontown.building import DistributedChainsawLobbyInterior/AI
-from toontown.building import DistributedMajorPlayerInterior/AI
-from toontown.building import DistributedPizzeriaInterior/AI
-from toontown.building import DistributedPaceLobbyInterior/AI
-from toontown.building import DistributedDungeonInterior/AI
-from toontown.building import DistributedDoor/AI
-from toontown.building import DistributedAnimDoor/AI
-from toontown.building import DistributedLightSwitch/AI
+from toontown.building import DistributedTrophyMgr/AI, DistributedBuilding/AI, DistributedAnimBuilding/AI, DistributedToonInterior/AI, DistributedToonHallInterior/AI, DistributedSuitInterior/AI, DistributedHQInterior/AI, DistributedGagshopInterior/AI, DistributedPetshopInterior/AI, DistributedKartShopInterior/AI, DistributedSchoolHouseInterior/AI, DistributedLighthouseInterior/AI, DistributedDerrickmanInterior/AI, DistributedChainsawInterior/AI, DistributedChainsawLobbyInterior/AI, DistributedMajorPlayerInterior/AI, DistributedPizzeriaInterior/AI, DistributedPaceLobbyInterior/AI, DistributedDungeonInterior/AI, DistributedDoor/AI, DistributedAnimDoor/AI, DistributedLightSwitch/AI
 from toontown.estate import DistributedHouseDoor/AI
-from toontown.coghq import DistributedCogHQDoor/AI
-from toontown.coghq import DistributedSellbotHQDoor/AI
-from toontown.toon import DistributedNPCToonBase/AI
-from toontown.toon import DistributedNPCToon/AI
-from toontown.toon import DistributedNPCHQOfficer/AI
-from toontown.toon import DistributedNPCSpecialQuestGiver/AI
-from toontown.toon import DistributedNPCFlippyInToonHall/AI
-from toontown.toon import DistributedNPCScientist/AI
-from toontown.toon import DistributedNPCClerk/AI
-from toontown.toon import DistributedNPCTailor/AI
-from toontown.toon import DistributedNPCBlocker/AI
-from toontown.toon import DistributedNPCFisherman/AI
-from toontown.toon import DistributedNPCRodClerk/AI
-from toontown.toon import DistributedNPCPartyPerson/AI
-from toontown.toon import DistributedNPCPetclerk/AI
-from toontown.toon import DistributedNPCKartClerk/AI
-from toontown.toon import DistributedNPCLoopyG/AI
-from toontown.toon import DistributedNPCInvisible/AI
-from toontown.building import DistributedKnockKnockDoor/AI
-from toontown.building import DistributedElevator/AI
-from toontown.building import DistributedElevatorFSM/AI
-from toontown.building import DistributedElevatorExt/AI
-from toontown.building import DistributedElevatorInt/AI
-from toontown.coghq import DistributedFactoryElevatorExt/AI
-from toontown.coghq import DistributedMintElevatorExt/AI
+from toontown.coghq import DistributedCogHQDoor/AI, DistributedSellbotHQDoor/AI
+from toontown.toon import DistributedNPCToonBase/AI, DistributedNPCToon/AI, DistributedNPCHQOfficer/AI, DistributedNPCSpecialQuestGiver/AI, DistributedNPCFlippyInToonHall/AI, DistributedNPCScientist/AI, DistributedNPCClerk/AI, DistributedNPCTailor/AI, DistributedNPCBlocker/AI, DistributedNPCFisherman/AI, DistributedNPCRodClerk/AI, DistributedNPCPartyPerson/AI, DistributedNPCPetclerk/AI, DistributedNPCKartClerk/AI, DistributedNPCLoopyG/AI, DistributedNPCInvisible/AI
+from toontown.building import DistributedKnockKnockDoor/AI, DistributedElevator/AI, DistributedElevatorFSM/AI, DistributedElevatorExt/AI, DistributedElevatorInt/AI
+from toontown.coghq import DistributedFactoryElevatorExt/AI, DistributedMintElevatorExt/AI
 from toontown.coghq.boardbothq import DistributedBoardOfficeElevatorExt/AI
-from toontown.coghq import DistributedLawOfficeElevatorExt/AI
-from toontown.coghq import DistributedLawOfficeElevatorInt/AI
-from toontown.building import DistributedElevatorFloor/AI
-from toontown.building import DistributedBossElevator/AI
-from toontown.building import DistributedSigilvator/AI
-from toontown.building import DistributedHighRollerSigilvator/AI
-from toontown.building import DistributedChainsawSigilvator/AI
+from toontown.coghq import DistributedLawOfficeElevatorExt/AI, DistributedLawOfficeElevatorInt/AI
+from toontown.building import DistributedElevatorFloor/AI, DistributedBossElevator/AI, DistributedSigilvator/AI, DistributedHighRollerSigilvator/AI, DistributedChainsawSigilvator/AI
 from toontown.instances.elevators.mercs import DistributedPlutocratSigilvator/AI
 from toontown.building import DistributedVPElevator/AI
 from toontown.coghq import DistributedCogHQBossDoor/AI
-from toontown.building import DistributedCountErfitElevator/AI
-from toontown.building import DistributedCFOElevator/AI
-from toontown.building import DistributedCBMElevator/AI
-from toontown.building import DistributedCJElevator/AI
-from toontown.building import DistributedCountErclaimElevator/AI
-from toontown.suit import DistributedPacesetterBoss/AI
-from toontown.suit import DistributedChainsawBoss/AI
-from toontown.suit import DistributedPlutocratBoss/AI
+from toontown.building import DistributedCountErfitElevator/AI, DistributedCFOElevator/AI, DistributedCBMElevator/AI, DistributedCJElevator/AI, DistributedCountErclaimElevator/AI
+from toontown.suit import DistributedPacesetterBoss/AI, DistributedChainsawBoss/AI, DistributedPlutocratBoss/AI
 from toontown.instances import DistributedCutsceneSkipButton/AI
-from toontown.building import DistributedBBElevator/AI
-from toontown.building import DistributedMultislackerElevator/AI
-from toontown.building import DistributedPaceElevator/AI
-from toontown.building import DistributedCMElevator/AI
-from toontown.building import DistributedDirectorsElevator/AI
-from toontown.building import DistributedBoardingParty/AI
-from toontown.building import DistributedTutorialInterior/AI
-from toontown.estate import DistributedBankMgr/AI
-from toontown.estate import DistributedMailbox/AI
-from toontown.estate import DistributedFurnitureManager/AI
-from toontown.estate import DistributedFurnitureItem/AI
-from toontown.estate import DistributedBank/AI
-from toontown.estate import DistributedCloset/AI
-from toontown.estate import DistributedTrunk/AI
-from toontown.estate import DistributedPhone/AI
+from toontown.building import DistributedBBElevator/AI, DistributedMultislackerElevator/AI, DistributedPaceElevator/AI, DistributedCMElevator/AI, DistributedDirectorsElevator/AI, DistributedBoardingParty/AI, DistributedTutorialInterior/AI
+from toontown.estate import DistributedBankMgr/AI, DistributedMailbox/AI, DistributedFurnitureManager/AI, DistributedFurnitureItem/AI, DistributedBank/AI, DistributedCloset/AI, DistributedTrunk/AI, DistributedPhone/AI
 from toontown.effects import DistributedFireworkShow/AI
 from toontown.estate import DistributedFireworksCannon/AI
 from toontown.coghq import LobbyManager/AI
-from otp.level import DistributedLevel/AI
-from otp.level import DistributedEntity/AI
-from otp.level import DistributedInteractiveEntity/AI
-from toontown.coghq import DistributedFactory/AI
-from toontown.coghq import DistributedLawOffice/AI
-from toontown.coghq import DistributedLawOfficeFloor/AI
-from toontown.coghq import DistributedLift/AI
-from toontown.coghq import DistributedDoorEntity/AI
-from toontown.coghq import DistributedSwitch/AI
-from toontown.coghq import DistributedButton/AI
-from toontown.coghq import DistributedTrigger/AI
-from toontown.coghq import DistributedCrushableEntity/AI
-from toontown.coghq import DistributedCrusherEntity/AI
-from toontown.coghq import DistributedStomper/AI
-from toontown.coghq import DistributedStomperPair/AI
-from toontown.coghq import DistributedLaserField/AI
-from toontown.coghq import DistributedGolfGreenGame/AI
-from toontown.coghq import DistributedSecurityCamera/AI
-from toontown.coghq import DistributedMover/AI
-from toontown.coghq import DistributedElevatorMarker/AI
-from toontown.coghq import DistributedBarrelBase/AI
-from toontown.coghq import DistributedGagBarrel/AI
-from toontown.coghq import DistributedBeanBarrel/AI
-from toontown.coghq import DistributedHealBarrel/AI
-from toontown.coghq import DistributedGrid/AI
-from toontown.coghq import ActiveCell/AI
-from toontown.coghq import DirectionalCell/AI
-from toontown.coghq import CrusherCell/AI
-from toontown.coghq import DistributedCrate/AI
-from toontown.coghq import DistributedSinkingPlatform/AI
-from toontown.suit import DistributedGoon/AI
-from toontown.suit import DistributedGridGoon/AI
+from otp.level import DistributedLevel/AI, DistributedEntity/AI, DistributedInteractiveEntity/AI
+from toontown.coghq import DistributedFactory/AI, DistributedLawOffice/AI, DistributedLawOfficeFloor/AI, DistributedLift/AI, DistributedDoorEntity/AI, DistributedSwitch/AI, DistributedButton/AI, DistributedTrigger/AI, DistributedCrushableEntity/AI, DistributedCrusherEntity/AI, DistributedStomper/AI, DistributedStomperPair/AI, DistributedLaserField/AI, DistributedGolfGreenGame/AI, DistributedSecurityCamera/AI, DistributedMover/AI, DistributedElevatorMarker/AI, DistributedBarrelBase/AI, DistributedGagBarrel/AI, DistributedBeanBarrel/AI, DistributedHealBarrel/AI, DistributedGrid/AI, ActiveCell/AI, DirectionalCell/AI, CrusherCell/AI, DistributedCrate/AI, DistributedSinkingPlatform/AI
+from toontown.suit import DistributedGoon/AI, DistributedGridGoon/AI
 from toontown.coghq import BattleBlocker/AI
-from toontown.ai import DistributedAprilToonsMgr/AI
-from toontown.ai import DistributedBlackCatMgr/AI
-from toontown.ai import DistributedPolarBearMgr/AI
-from toontown.ai import DistributedPolarPlaceEffectMgr/AI
-from toontown.ai import DistributedSofieListenerMgr/AI
-from toontown.ai import DistributedGreenToonEffectMgr/AI
-from toontown.ai import DistributedResistanceEmoteMgr/AI
-from toontown.ai import DistributedScavengerHuntTarget/AI
-from toontown.ai import DistributedTrickOrTreatTarget/AI
-from toontown.ai import DistributedWinterCarolingTarget/AI
-from toontown.coghq import DistributedMint/AI
-from toontown.coghq import DistributedMintRoom/AI
-from toontown.coghq import DistributedMintBattle/AI
-from toontown.coghq.boardbothq import DistributedBoardOffice/AI
-from toontown.coghq.boardbothq import DistributedBoardOfficeRoom/AI
-from toontown.coghq.boardbothq import DistributedBoardOfficeBattle/AI
-from toontown.coghq import DistributedStage/AI
-from toontown.coghq import DistributedStageRoom/AI
-from toontown.coghq import DistributedStageBattle/AI
+from toontown.ai import DistributedAprilToonsMgr/AI, DistributedBlackCatMgr/AI, DistributedPolarBearMgr/AI, DistributedPolarPlaceEffectMgr/AI, DistributedSofieListenerMgr/AI, DistributedGreenToonEffectMgr/AI, DistributedResistanceEmoteMgr/AI, DistributedScavengerHuntTarget/AI, DistributedTrickOrTreatTarget/AI, DistributedWinterCarolingTarget/AI
+from toontown.coghq import DistributedMint/AI, DistributedMintRoom/AI, DistributedMintBattle/AI
+from toontown.coghq.boardbothq import DistributedBoardOffice/AI, DistributedBoardOfficeRoom/AI, DistributedBoardOfficeBattle/AI
+from toontown.coghq import DistributedStage/AI, DistributedStageRoom/AI, DistributedStageBattle/AI
 from toontown.pets.PetDCImports/AI import *
-from toontown.pets import DistributedPetProxy/AI
-from toontown.pets import DistributedPublicPet/AI
-from toontown.pets import DistributedPublicPetMgr/AI
+from toontown.pets import DistributedPetProxy/AI, DistributedPublicPet/AI, DistributedPublicPetMgr/AI
 from toontown.coghq.InGameEditorDCImports/AI import *
-from toontown.distributed import ToontownDistrict/AI
-from toontown.distributed import ToontownDistrictStats/AI
-from toontown.racing import DistributedVehicle/AI
-from toontown.racing import DistributedStartingBlock/AI
-from toontown.racing import DistributedRace/AI
-from toontown.racing import DistributedKartPad/AI
-from toontown.racing import DistributedRacePad/AI
-from toontown.racing import DistributedViewPad/AI
-from toontown.racing import DistributedStartingBlock/AI
-from toontown.racing import DistributedLeaderBoard/AI
-from toontown.racing import DistributedGag/AI
-from toontown.racing import DistributedProjectile/AI
+from toontown.distributed import ToontownDistrict/AI, ToontownDistrictStats/AI
+from toontown.racing import DistributedVehicle/AI, DistributedStartingBlock/AI, DistributedRace/AI, DistributedKartPad/AI, DistributedRacePad/AI, DistributedViewPad/AI, DistributedStartingBlock/AI, DistributedLeaderBoard/AI, DistributedGag/AI, DistributedProjectile/AI
 from toontown.racing.DistributedStartingBlock/AI import DistributedViewingBlock/AI
 from toontown.uberdog.ClientServicesManager/UD import ClientServicesManager/UD
 from toontown.uberdog.DistributedDeliveryManager/AI/UD import DistributedDeliveryManager/AI/UD
 from toontown.uberdog.DistributedDataStoreManager/AI/UD import DistributedDataStoreManager/AI/UD
-from toontown.suit import DistributedLawbotBoss/AI
-from toontown.suit import DistributedCountErclaimBoss/AI
-from toontown.suit import DistributedCountErfitBoss/AI
-from toontown.suit import DistributedPacesetterBoss/AI
+from toontown.suit import DistributedLawbotBoss/AI, DistributedCountErclaimBoss/AI, DistributedCountErfitBoss/AI, DistributedPacesetterBoss/AI
 from toontown.coghq import DistributedLawbotBossGavel/AI
 from toontown.suit import DistributedLawbotBossSuit/AI
-from toontown.coghq import DistributedLawbotCannon/AI
-from toontown.coghq import DistributedLawbotChair/AI
-from toontown.estate import DistributedLawnDecor/AI
-from toontown.estate import DistributedGardenPlot/AI
-from toontown.estate import DistributedGardenBox/AI
-from toontown.estate import DistributedFlower/AI
-from toontown.estate import DistributedGagTree/AI
-from toontown.estate import DistributedStatuary/AI
-from toontown.estate import DistributedToonStatuary/AI
-from toontown.estate import DistributedChangingStatuary/AI
-from toontown.estate import DistributedAnimatedStatuary/AI
-from toontown.estate import DistributedPlantBase/AI
-from toontown.estate import DistributedLawnDecor/AI
-from toontown.minigame import DistributedTravelGame/AI
-from toontown.minigame import DistributedPairingGame/AI
-from toontown.minigame import DistributedVineGame/AI
-from toontown.golf import DistributedPhysicsWorld/AI
-from toontown.golf import DistributedGolfHole/AI
-from toontown.golf import DistributedGolfCourse/AI
-from toontown.parties import DistributedParty/AI
-from toontown.parties import DistributedPartyActivity/AI
-from toontown.parties import DistributedPartyTeamActivity/AI
-from toontown.parties import DistributedPartyCannon/AI
-from toontown.parties import DistributedPartyCannonActivity/AI
-from toontown.parties import DistributedPartyCatchActivity/AI
-from toontown.parties import DistributedPartyWinterCatchActivity/AI
-from toontown.parties import DistributedPartyCogActivity/AI
-from toontown.parties import DistributedPartyWinterCogActivity/AI
-from toontown.parties import DistributedPartyFireworksActivity/AI
-from toontown.parties import DistributedPartyDanceActivityBase/AI
-from toontown.parties import DistributedPartyDanceActivity/AI
-from toontown.parties import DistributedPartyDance20Activity/AI
-from toontown.parties import DistributedPartyValentineDanceActivity/AI
-from toontown.parties import DistributedPartyValentineDance20Activity/AI
-from toontown.parties import DistributedPartyTrampolineActivity/AI
-from toontown.parties import DistributedPartyValentineTrampolineActivity/AI
-from toontown.parties import DistributedPartyVictoryTrampolineActivity/AI
-from toontown.parties import DistributedPartyWinterTrampolineActivity/AI
-from toontown.parties import DistributedPartyTugOfWarActivity/AI
-from toontown.parties import DistributedPartyJukeboxActivityBase/AI
-from toontown.parties import DistributedPartyJukeboxActivity/AI
-from toontown.parties import DistributedPartyJukebox40Activity/AI
-from toontown.parties import DistributedPartyValentineJukeboxActivity/AI
-from toontown.parties import DistributedPartyValentineJukebox40Activity/AI
-from toontown.friends import TTPlayerFriendsManager/UD
-from toontown.friends import TTAFriendsManager/UD
+from toontown.coghq import DistributedLawbotCannon/AI, DistributedLawbotChair/AI
+from toontown.estate import DistributedLawnDecor/AI, DistributedGardenPlot/AI, DistributedGardenBox/AI, DistributedFlower/AI, DistributedGagTree/AI, DistributedStatuary/AI, DistributedToonStatuary/AI, DistributedChangingStatuary/AI, DistributedAnimatedStatuary/AI, DistributedPlantBase/AI, DistributedLawnDecor/AI
+from toontown.minigame import DistributedTravelGame/AI, DistributedPairingGame/AI, DistributedVineGame/AI
+from toontown.golf import DistributedPhysicsWorld/AI, DistributedGolfHole/AI, DistributedGolfCourse/AI
+from toontown.parties import DistributedParty/AI, DistributedPartyActivity/AI, DistributedPartyTeamActivity/AI, DistributedPartyCannon/AI, DistributedPartyCannonActivity/AI, DistributedPartyCatchActivity/AI, DistributedPartyWinterCatchActivity/AI, DistributedPartyCogActivity/AI, DistributedPartyWinterCogActivity/AI, DistributedPartyFireworksActivity/AI, DistributedPartyDanceActivityBase/AI, DistributedPartyDanceActivity/AI, DistributedPartyDance20Activity/AI, DistributedPartyValentineDanceActivity/AI, DistributedPartyValentineDance20Activity/AI, DistributedPartyTrampolineActivity/AI, DistributedPartyValentineTrampolineActivity/AI, DistributedPartyVictoryTrampolineActivity/AI, DistributedPartyWinterTrampolineActivity/AI, DistributedPartyTugOfWarActivity/AI, DistributedPartyJukeboxActivityBase/AI, DistributedPartyJukeboxActivity/AI, DistributedPartyJukebox40Activity/AI, DistributedPartyValentineJukeboxActivity/AI, DistributedPartyValentineJukebox40Activity/AI
+from toontown.friends import TTPlayerFriendsManager/UD, TTAFriendsManager/UD
 from toontown.uberdog import TTSpeedchatRelay/UD
-from toontown.safezone import DistributedGolfKart/AI
-from toontown.safezone import DistributedPicnicBasket/AI
-from toontown.safezone import DistributedGameTable/AI
+from toontown.safezone import DistributedGolfKart/AI, DistributedPicnicBasket/AI, DistributedGameTable/AI
 from toontown.distributed import DistributedTimer/AI
 from toontown.suit import DistributedBossbotBoss/AI
-from toontown.coghq import DistributedCogKart/AI
-from toontown.coghq import DistributedCountryClub/AI
-from toontown.coghq import DistributedCountryClubRoom/AI
-from toontown.coghq import DistributedMoleField/AI
-from toontown.coghq import DistributedCountryClubBattle/AI
+from toontown.coghq import DistributedCogKart/AI, DistributedCountryClub/AI, DistributedCountryClubRoom/AI, DistributedMoleField/AI, DistributedCountryClubBattle/AI
 from toontown.building import DistributedClubElevator/AI
 from toontown.coghq import DistributedMaze/AI
-from toontown.battle import DistributedBattleWaiters/AI
-from toontown.battle import DistributedBattleMiniboss/AI
-from toontown.battle import DistributedBattlePlutocrat/AI
-from toontown.battle import DistributedBattleChainsaw/AI
-from toontown.coghq import DistributedFoodBelt/AI
-from toontown.coghq import DistributedBanquetTable/AI
+from toontown.battle import DistributedBattleWaiters/AI, DistributedBattleMiniboss/AI, DistributedBattlePlutocrat/AI, DistributedBattleChainsaw/AI
+from toontown.coghq import DistributedFoodBelt/AI, DistributedBanquetTable/AI
 from toontown.battle import DistributedBattleDiners/AI
 from toontown.coghq import DistributedGolfSpot/AI
-from toontown.minigame import DistributedIceGame/AI
-from toontown.minigame import DistributedCogThiefGame/AI
-from toontown.minigame import DistributedTwoDGame/AI
-from toontown.safezone import DistributedChineseCheckers/AI
-from toontown.safezone import DistributedCheckers/AI
-from toontown.safezone import DistributedFindFour/AI
+from toontown.minigame import DistributedIceGame/AI, DistributedCogThiefGame/AI, DistributedTwoDGame/AI
+from toontown.safezone import DistributedChineseCheckers/AI, DistributedCheckers/AI, DistributedFindFour/AI
 from toontown.uberdog.DistributedMailManager/AI/UD import DistributedMailManager/AI/UD
 from toontown.rpc.AwardManager/UD import AwardManager/UD
 from toontown.uberdog.DistributedCpuInfoMgr/AI/UD import DistributedCpuInfoMgr/AI/UD
@@ -929,28 +670,11 @@ from toontown.ai.DistributedHydrantZeroMgr/AI import DistributedHydrantZeroMgr/A
 from toontown.ai.DistributedMailboxZeroMgr/AI import DistributedMailboxZeroMgr/AI
 from toontown.ai.DistributedTrashcanZeroMgr/AI import DistributedTrashcanZeroMgr/AI
 from toontown.ai import DistributedSillyMeterMgr/AI
-from toontown.cogdominium import DistributedCogdoInterior/AI
-from toontown.cogdominium import DistributedCogdoBattleBldg/AI
-from toontown.cogdominium import DistributedCogdoElevatorExt/AI
-from toontown.cogdominium import DistributedCogdoElevatorInt/AI
-from toontown.cogdominium import DistributedCogdoBarrel/AI
-from toontown.cogdominium import DistCogdoGame/AI
-from toontown.cogdominium import DistCogdoLevelGame/AI
-from toontown.cogdominium import DistCogdoBoardroomGame/AI
-from toontown.cogdominium import DistCogdoCraneGame/AI
-from toontown.cogdominium import DistCogdoMazeGame/AI
-from toontown.cogdominium import DistCogdoFlyingGame/AI
-from toontown.cogdominium import DistCogdoCrane/AI
-from toontown.cogdominium import DistCogdoCraneMoneyBag/AI
-from toontown.cogdominium import DistCogdoCraneCog/AI
-from toontown.weather import DistributedWeatherCycle/AI
-from toontown.weather import DistributedWeatherStorm/AI
+from toontown.cogdominium import DistributedCogdoInterior/AI, DistributedCogdoBattleBldg/AI, DistributedCogdoElevatorExt/AI, DistributedCogdoElevatorInt/AI, DistributedCogdoBarrel/AI, DistCogdoGame/AI, DistCogdoLevelGame/AI, DistCogdoBoardroomGame/AI, DistCogdoCraneGame/AI, DistCogdoMazeGame/AI, DistCogdoFlyingGame/AI, DistCogdoCrane/AI, DistCogdoCraneMoneyBag/AI, DistCogdoCraneCog/AI
+from toontown.weather import DistributedWeatherCycle/AI, DistributedWeatherStorm/AI
 from toontown.club import DistributedToonClub/AI/UD
-from toontown.environment import DistributedDayTimeManager/AI
-from toontown.environment import DistributedRainManager/AI
-from toontown.environment import DistributedWeatherMGR/AI
-from toontown.events.winter import DistributedWinterMinigameSuit/AI
-from toontown.events.winter import DistributedToonseltownMinigame/AI
+from toontown.environment import DistributedDayTimeManager/AI, DistributedRainManager/AI, DistributedWeatherMGR/AI
+from toontown.events.winter import DistributedWinterMinigameSuit/AI, DistributedToonseltownMinigame/AI
 
 
 struct GiftItem {

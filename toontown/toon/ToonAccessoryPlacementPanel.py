@@ -288,28 +288,6 @@ HATS = 0
 GLASSES = 1
 BACKPACKS = 2
 
-# ToonDNA already registers custom accessories during module import. The editor
-# may perform one additional refresh when it first opens, but searching,
-# clearing the search box, or changing tabs must never register the same BAMs
-# again. Re-registering on every list rebuild made the native IDs climb by the
-# number of custom models each time.
-_EDITOR_CUSTOM_ACCESSORIES_REGISTERED = False
-
-
-def _registerCustomAccessoriesForEditorOnce():
-    global _EDITOR_CUSTOM_ACCESSORIES_REGISTERED
-
-    if _EDITOR_CUSTOM_ACCESSORIES_REGISTERED:
-        return
-
-    try:
-        ToonDNA.registerCustomAccessoriesAsNative()
-        _EDITOR_CUSTOM_ACCESSORIES_REGISTERED = True
-    except Exception as error:
-        print('Accessory editor native rescan failed:', error)
-
-
-
 class ToonAccessoryPlacementPanel(object):
 
     def __init__(self):
@@ -697,7 +675,6 @@ class ToonAccessoryPlacementPanel(object):
     def populateList(self, searchText=''):
         self.clearAccessoryButtons()
 
-        _registerCustomAccessoriesForEditorOnce()
 
         searchText = searchText.lower().replace(' ', '')
 
