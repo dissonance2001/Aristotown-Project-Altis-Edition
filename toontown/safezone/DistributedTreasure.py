@@ -41,7 +41,30 @@ class DistributedTreasure(DistributedObject.DistributedObject):
         self.loadModel()
         self.startAnimation()
         self.nodePath.wrtReparentTo(render)
+        if self.treasureType == TreasureGlobals.TreasureOT:
+            self.snapToGround()
         self.accept(self.uniqueName('entertreasureSphere'), self.handleEnterSphere)
+
+    def snapToGround(self):
+        pos = self.nodePath.getPos(render)
+        rayNode = CollisionNode(self.uniqueName('treasureGroundRay'))
+        rayNode.addSolid(CollisionRay(0, 0, 0, 0, 0, -1))
+        rayNode.setFromCollideMask(FloorBitmask)
+        rayNode.setIntoCollideMask(BitMask32.allOff())
+        rayPath = render.attachNewNode(rayNode)
+        rayPath.setPos(pos[0], pos[1], max(pos[2] + 100.0, 100.0))
+        traverser = CollisionTraverser(self.uniqueName('treasureGroundTraverser'))
+        queue = CollisionHandlerQueue()
+        traverser.addCollider(rayPath, queue)
+        try:
+            traverser.traverse(render)
+            queue.sortEntries()
+            if queue.getNumEntries():
+                groundZ = queue.getEntry(0).getSurfacePoint(render).getZ()
+                self.nodePath.setZ(render, groundZ)
+        finally:
+            traverser.removeCollider(rayPath)
+            rayPath.removeNode()
 
     def handleEnterSphere(self, collEntry = None):
         localAvId = base.localAvatar.getDoId()
