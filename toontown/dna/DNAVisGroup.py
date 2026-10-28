@@ -83,5 +83,7 @@ class DNAVisGroup(DNAGroup.DNAGroup):
         for _ in range(numCells):
             w = dgi.getUint8()
             h = dgi.getUint8()
-            x, y, z = [dgi.getInt32() / 100.0 for i in range(3)]
+            x = dgi.getInt32() / 100.0
+            y = dgi.getInt32() / 100.0
+            z = dgi.getInt32() / 100.0
             self.addBattleCell(DNABattleCell.DNABattleCell(w, h, LVector3f(x, y, z)))

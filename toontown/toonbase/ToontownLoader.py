@@ -9,6 +9,7 @@ from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
 
 class ToontownLoader(nLoader.Loader):
     TickPeriod = 0.1
+    EnteringTickPeriod = 0.25
 
     def __init__(self, base):
         nLoader.Loader.__init__(self, base)
@@ -65,8 +66,9 @@ class ToontownLoader(nLoader.Loader):
     def tick(self):
         if self.inBulkBlock:
             now = globalClock.getRealTime()
-            if now - self._lastTickT > self.TickPeriod:
-                self._lastTickT += self.TickPeriod
+            tickPeriod = self.EnteringTickPeriod if self.blockName == 'localAvatarPlayGame' else self.TickPeriod
+            if now - self._lastTickT > tickPeriod:
+                self._lastTickT = now
                 self.loadingScreen.tick()
                 if hasattr(base, 'cr'):
                     base.cr.considerHeartbeat()

@@ -103,6 +103,7 @@ class ToonBase(OTPBase.OTPBase):
         self._targetFPS = 0.0
         self._displayedFPS = 0.0
         self._fpsReady = False
+        self._lastFPSLabel = None
         self._fpsHadLocalAvatar = getattr(self, 'localAvatar', None) is not None
         self._fpsJustLoaded = False
         self._fpsZoneId = None
@@ -792,7 +793,7 @@ class ToonBase(OTPBase.OTPBase):
         # Start detecting speed hacks:
         self.lastSpeedHackCheck = time.time()
         self.lastTrueClockTime = TrueClock.getGlobalPtr().getLongTime()
-        taskMgr.add(self.__speedHackCheckTick, 'speedHackCheck-tick')
+        taskMgr.doMethodLater(0.1, self.__speedHackCheckTick, 'speedHackCheck-tick')
 
     def __speedHackCheckTick(self, task):
         elapsed = time.time() - self.lastSpeedHackCheck
@@ -807,8 +808,8 @@ class ToonBase(OTPBase.OTPBase):
 
         self.lastSpeedHackCheck = time.time()
         self.lastTrueClockTime = TrueClock.getGlobalPtr().getLongTime()
-
-        return task.cont
+        task.delayTime = 0.1
+        return task.again
 
     def removeGlitchMessage(self):
         self.ignore('InputState-forward')
@@ -1029,6 +1030,9 @@ class ToonBase(OTPBase.OTPBase):
         self.fpsFrame["frameSize"] = (frameLeft, frameRight, self._fpsFrameBottom, self._fpsFrameTop)
 
     def updateFPS(self, task):
+        if self.fpsFrame.isHidden():
+            return Task.cont
+
         dt = globalClock.getDt()
         localAvatar = getattr(self, 'localAvatar', None)
         hasLocalAvatar = localAvatar is not None
@@ -1074,13 +1078,9 @@ class ToonBase(OTPBase.OTPBase):
                 self._displayedFPS = self._targetFPS
                 self._fpsReady = True
                 self._fpsJustLoaded = False
-                self.fpsText.setText("%d FPS" % int(self._displayedFPS + 0.5))
-                self._resizeFpsFrame()
             elif not self._fpsReady and len(self._fpsSamples) >= 5:
                 self._displayedFPS = self._targetFPS
                 self._fpsReady = True
-                self.fpsText.setText("%d FPS" % int(self._displayedFPS + 0.5))
-                self._resizeFpsFrame()
 
         if self._fpsReady:
             difference = self._targetFPS - self._displayedFPS
@@ -1094,8 +1094,11 @@ class ToonBase(OTPBase.OTPBase):
             else:
                 self._displayedFPS = self._targetFPS
 
-            self.fpsText.setText("%d FPS" % int(self._displayedFPS + 0.5))
-            self._resizeFpsFrame()
+            fpsLabel = "%d FPS" % int(self._displayedFPS + 0.5)
+            if not self.fpsFrame.isHidden() and fpsLabel != self._lastFPSLabel:
+                self.fpsText.setText(fpsLabel)
+                self._lastFPSLabel = fpsLabel
+                self._resizeFpsFrame()
 
         return Task.cont
 

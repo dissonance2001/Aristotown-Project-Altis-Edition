@@ -30,7 +30,7 @@ class DNAGroup(object):
         self.name = str(name)
 
     def add(self, child):
-        self.children += [child]
+        self.children.append(child)
 
     def remove(self, child):
         self.children.remove(child)

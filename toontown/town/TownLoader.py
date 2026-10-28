@@ -21,6 +21,18 @@ from toontown.hood import QuietZoneState
 from toontown.hood import ZoneUtil
 from direct.interval.IntervalGlobal import *
 from toontown.dna.DNAParser import DNABulkLoader
+import time
+
+_townLoaderPropClassCache = {}
+
+def _getTownLoaderPropClass(className):
+    classObj = _townLoaderPropClassCache.get(className)
+    if classObj is None:
+        symbols = {}
+        base.cr.importModule(symbols, 'toontown.hood', [className])
+        classObj = getattr(symbols[className], className)
+        _townLoaderPropClassCache[className] = classObj
+    return classObj
 
 class TownLoader(StateData.StateData):
     notify = DirectNotifyGlobal.directNotify.newCategory('TownLoader')
@@ -212,11 +224,22 @@ class TownLoader(StateData.StateData):
         pass
 
     def createHood(self, dnaFile, loadStorage = 1):
+        timing = base.config.GetBool('want-zone-load-timing', False)
+        totalStart = time.perf_counter() if timing else None
+        stageStart = totalStart
         if loadStorage:
             files = ('phase_5/dna/storage_town.pdna', self.townStorageDNAFile)
             dnaBulk = DNABulkLoader(self.hood.dnaStore, files)
             dnaBulk.loadDNAFiles()
+            if timing:
+                now = time.perf_counter()
+                self.notify.info('Zone load timing - storage DNA: %.3fs' % (now - stageStart))
+                stageStart = now
         node = loader.loadDNAFile(self.hood.dnaStore, dnaFile)
+        if timing:
+            now = time.perf_counter()
+            self.notify.info('Zone load timing - street DNA: %.3fs' % (now - stageStart))
+            stageStart = now
         self.notify.debug('done loading %s' % dnaFile)
         if node.getNumParents() == 1:
             self.geom = NodePath(node.getParent(0))
@@ -227,6 +250,10 @@ class TownLoader(StateData.StateData):
         if prepareHoodGeometry:
             prepareHoodGeometry()
         self.makeDictionaries(self.hood.dnaStore)
+        if timing:
+            now = time.perf_counter()
+            self.notify.info('Zone load timing - zone dictionaries: %.3fs' % (now - stageStart))
+            stageStart = now
         self.reparentLandmarkBlockNodes()
         self.renameFloorPolys(self.nodeList)
         self.createAnimatedProps(self.nodeList)
@@ -236,10 +263,22 @@ class TownLoader(StateData.StateData):
             np = npl.getPath(i)
             np.setTag('transformIndex', repr(i))
             self.holidayPropTransforms[i] = np.getNetTransform()
+        if timing:
+            now = time.perf_counter()
+            self.notify.info('Zone load timing - scene setup: %.3fs' % (now - stageStart))
+            stageStart = now
         gsg = base.win.getGsg()
         if gsg:
             self.geom.prepareScene(gsg)
+        if timing:
+            now = time.perf_counter()
+            self.notify.info('Zone load timing - prepareScene: %.3fs' % (now - stageStart))
+            stageStart = now
         self.geom.flattenLight()
+        if timing:
+            now = time.perf_counter()
+            self.notify.info('Zone load timing - flattenLight: %.3fs' % (now - stageStart))
+            self.notify.info('Zone load timing - total createHood: %.3fs' % (now - totalStart))
         self.geom.setName('town_top_level')
 
     def reparentLandmarkBlockNodes(self):
@@ -264,12 +303,15 @@ class TownLoader(StateData.StateData):
         a1 = Vec4(1, 1, 1, 1)
         a0 = Vec4(1, 1, 1, 0)
         numVisGroups = dnaStore.getNumDNAVisGroupsAI()
+        hoodMgr = base.cr.hoodMgr
+        getTrueZoneId = ZoneUtil.getTrueZoneId
+        groupData = []
         for i in range(numVisGroups):
             groupFullName = dnaStore.getDNAVisGroupName(i)
             visGroup = dnaStore.getDNAVisGroupAI(i)
-            groupName = base.cr.hoodMgr.extractGroupName(groupFullName)
-            zoneId = int(groupName)
-            zoneId = ZoneUtil.getTrueZoneId(zoneId, self.zoneId)
+            groupName = hoodMgr.extractGroupName(groupFullName)
+            zoneId = getTrueZoneId(int(groupName), self.zoneId)
+            groupData.append((groupFullName, zoneId))
             groupNode = self.geom.find('**/' + groupFullName)
             if groupNode.isEmpty():
                 self.notify.error('Could not find visgroup')
@@ -284,23 +326,19 @@ class TownLoader(StateData.StateData):
             self.nodeList.append(groupNode)
             self.zoneDict[zoneId] = groupNode
             visibles = []
-            for i in range(visGroup.getNumVisibles()):
-                visibles.append(int(visGroup.visibles[i]))
+            for j in range(visGroup.getNumVisibles()):
+                visibles.append(int(visGroup.visibles[j]))
             visibles.append(ZoneUtil.getBranchZone(zoneId))
             self.zoneVisDict[zoneId] = visibles
             fadeDuration = 1
             self.fadeOutDict[groupNode] = Sequence(Func(groupNode.setTransparency, 1), LerpColorScaleInterval(groupNode, fadeDuration, a0, startColorScale=a1), Func(groupNode.clearColorScale), Func(groupNode.clearTransparency), Func(groupNode.stash), name='fadeZone-' + str(zoneId), autoPause=1)
             self.fadeInDict[groupNode] = Sequence(Func(groupNode.unstash), Func(groupNode.setTransparency, 1), LerpColorScaleInterval(groupNode, fadeDuration, a1, startColorScale=a0), Func(groupNode.clearColorScale), Func(groupNode.clearTransparency), name='fadeZone-' + str(zoneId), autoPause=1)
 
-        for i in range(numVisGroups):
-            groupFullName = dnaStore.getDNAVisGroupName(i)
-            zoneId = int(base.cr.hoodMgr.extractGroupName(groupFullName))
-            zoneId = ZoneUtil.getTrueZoneId(zoneId, self.zoneId)
+        for i, (groupFullName, zoneId) in enumerate(groupData):
             for j in range(dnaStore.getNumVisiblesInDNAVisGroup(i)):
                 visName = dnaStore.getVisibleName(i, j)
-                groupName = base.cr.hoodMgr.extractGroupName(visName)
-                nextZoneId = int(groupName)
-                nextZoneId = ZoneUtil.getTrueZoneId(nextZoneId, self.zoneId)
+                groupName = hoodMgr.extractGroupName(visName)
+                nextZoneId = getTrueZoneId(int(groupName), self.zoneId)
                 visNode = self.zoneDict[nextZoneId]
                 self.nodeDict[zoneId].append(visNode)
 
@@ -336,9 +374,7 @@ class TownLoader(StateData.StateData):
                     className = splits[0]
                 else:
                     className = animPropNode.getName()[14:-8]
-                symbols = {}
-                base.cr.importModule(symbols, 'toontown.hood', [className])
-                classObj = getattr(symbols[className], className)
+                classObj = _getTownLoaderPropClass(className)
                 animPropObj = classObj(animPropNode)
                 animPropList = self.animPropDict.setdefault(i, [])
                 animPropList.append(animPropObj)
@@ -354,9 +390,7 @@ class TownLoader(StateData.StateData):
                     className = 'TrashcanInteractiveProp'
                 elif 'mailbox' in interactivePropNode.getName():
                     className = 'MailboxInteractiveProp'
-                symbols = {}
-                base.cr.importModule(symbols, 'toontown.hood', [className])
-                classObj = getattr(symbols[className], className)
+                classObj = _getTownLoaderPropClass(className)
                 interactivePropObj = classObj(interactivePropNode)
                 animPropList = self.animPropDict.get(i)
                 if animPropList is None:
@@ -378,9 +412,7 @@ class TownLoader(StateData.StateData):
             for j in range(numAnimatedBuildingNodes):
                 animatedBuildingNode = animatedBuildingNodes.getPath(j)
                 className = 'GenericAnimatedBuilding'
-                symbols = {}
-                base.cr.importModule(symbols, 'toontown.hood', [className])
-                classObj = getattr(symbols[className], className)
+                classObj = _getTownLoaderPropClass(className)
                 animatedBuildingObj = classObj(animatedBuildingNode)
                 animPropList = self.animPropDict.get(i)
                 if animPropList is None:

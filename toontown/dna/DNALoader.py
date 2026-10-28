@@ -147,7 +147,9 @@ class DNALoader(object):
         for i in range(num_points):
             index = dgi.getUint16()
             point_type = dgi.getUint8()
-            x, y, z = (dgi.getInt32() / 100.0 for _ in range(3))
+            x = dgi.getInt32() / 100.0
+            y = dgi.getInt32() / 100.0
+            z = dgi.getInt32() / 100.0
             pos = LPoint3f(x, y, z)
             landmark_building_index = dgi.getInt16()
             self.curStore.storeSuitPoint(DNASuitPoint.DNASuitPoint(index, point_type, pos, landmark_building_index))
@@ -178,7 +180,7 @@ class DNALoader(object):
                     new_comp = DNAVisGroup.DNAVisGroup("unnamed_comp")
                     self.curStore.storeDNAVisGroup(new_comp)
                 else:
-                    if comp_code in list(compClassTable.keys()):
+                    if comp_code in compClassTable:
                         new_comp = compClassTable[comp_code]("unnamed_comp")
                     else:
                         raise DNAError.DNAError("Invalid comp code %s" % comp_code)
