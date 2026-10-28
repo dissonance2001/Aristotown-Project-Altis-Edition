@@ -1006,7 +1006,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
             for headPart in self.animatedHeadParts:
                 headInterval = Sequence(ActorInterval(headPart, 'gsnap'), Func(self.setNeutralAnimationHead))
                 hasAnimatedHead = True
-                Parallel(headInterval, suitInterval).start()
+                Parallel(headInterval).start()
 
     def decrementDrenchRound(self):
         if self.splashInterval:
@@ -4520,9 +4520,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         if self.getDizzy():
             self.luredInterval = self.__createSuitResetPosTrack(battle)
             self.luredInterval.start()
-        else:
-            self.luredInterval = Func(self.setNeutralAnimationTrap)
-            self.luredInterval.start()
+        # else:
+        #     self.luredInterval = Func(self.setNeutralAnimationTrap)
+        #     self.luredInterval.start()
 
     def checkCogLuredDeath(self, battle):
         if self.luredInterval != None:
@@ -4838,6 +4838,23 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': "Overpressured\n%s" % name,
                                                         'dept': dept,
                                                         'level': level}
+        return nameInfo
+
+    def createNameInfoWaitstaff(self):
+        name = self.name
+        dept = self.getStyleDept()
+        level = str(self.getActualLevel())
+        if self.getManager():
+            level += TTLocalizer.ManagerPostFix
+        if self.getExecutive() and not self.getManager():
+            level += TTLocalizer.ExecutivePostFix
+        if self.getGovernaught() and not self.getManager():
+            level += TTLocalizer.GovernaughtPostFix
+        if self.getSkeleRevives() > 0:
+            level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
+        nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': "%s" % name,
+                                                        'dept': dept,
+                                                        'level': level + "Waitstaff"}
         return nameInfo
 
     def createNameInfoShadow(self):

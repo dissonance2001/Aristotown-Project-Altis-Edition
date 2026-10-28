@@ -2127,8 +2127,11 @@ def doNoStrikeClause(attack):
     tape.setColor(0.129, 0, 0.329, 1)
     suitTrack = Sequence(getSuitAnimTrackAttack(attack, playRate=1.5))
     tubes = []
-    tapePosPoints = [Point3(-0.25, 0, -0.25), VBase3(0, 0, 0)]
-    tapeScaleUpPoint = Point3(1, 1, 0.74)
+    tapePosPoints = [
+        Point3(-0.0, 0.09, -0.38),
+        VBase3(-1.152, 86.581, -76.784),
+    ]
+    tapeScaleUpPoint = Point3(0.9, 0.9, 0.24)
     propTracks = Parallel()
     toonTracks = Parallel()
     allTubeTracks = Parallel()
@@ -2188,18 +2191,20 @@ def doBreachOfContract(attack):
     sanctioned = loader.loadModel('phase_5/models/props/ttrpg_m_ene_prp_deniedSign')
     missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
     propTrack = Sequence(
-        Wait(0.5),
+        Wait(0.55),
         Func(battle.movie.needRestoreRenderProp, sanctioned),
         Func(sanctioned.reparentTo, render),
         Func(sanctioned.setScale, 4.0),
-        Func(sanctioned.setPosHpr, suit.getLeftHand(), -.6, 0, -0.25, 0, 90, 0),
-        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
+         Func(sanctioned.setPosHpr, suit, -3, 4, 6, 0, 0, 90),
+        Func(sanctioned.setP, 0),
+        Func(sanctioned.setR, 0),
+        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .4),
         Func(sanctioned.removeNode)
     )
-    toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0.2, ['sidestep'])
     suitTrack = getSuitTrack(attack)
-    soundTrack = getSoundTrack('SA_hurry_sickness.ogg', delay =.5, node=suit)
-    notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextNew, -int(dmg), text="BREACHED!", colorCode=1))
+    toonTrack = getToonTrackCheat(attack, suitTrack.getDuration() - 1.6, ['conked'], 0, ['duck'])
+    soundTrack = getSoundTrack('SA_hurry_sickness.ogg', delay =.25, node=suit)
+    notifyTrack = Sequence(Wait(suitTrack.getDuration() - 1.6), Func(toon.showHpTextNew, -int(dmg), text="BREACHED!", colorCode=1))
     notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'breached', modifier=50, turns=3, mode='keepHighest')))
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
 
@@ -2212,18 +2217,20 @@ def doBreachOfContract2(attack):
     sanctioned = loader.loadModel('phase_5/models/props/ttrpg_m_ene_prp_deniedSign')
     missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
     propTrack = Sequence(
-        Wait(0.5),
+        Wait(0.55),
         Func(battle.movie.needRestoreRenderProp, sanctioned),
         Func(sanctioned.reparentTo, render),
         Func(sanctioned.setScale, 4.0),
-        Func(sanctioned.setPosHpr, suit.getLeftHand(), -.6, 0, -0.25, 0, 90, 0),
-        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
+         Func(sanctioned.setPosHpr, suit, -3, 4, 6, 0, 0, 90),
+        Func(sanctioned.setP, 0),
+        Func(sanctioned.setR, 0),
+        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .4),
         Func(sanctioned.removeNode)
     )
-    toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0.2, ['sidestep'])
     suitTrack = getSuitTrack(attack)
-    soundTrack = getSoundTrack('SA_hurry_sickness.ogg', delay =.5, node=suit)
-    notifyTrack = Sequence(Wait(.8), Func(toon.showHpTextNew, -int(dmg), text="BREACHED!", colorCode=1))
+    toonTrack = getToonTrackCheat(attack, suitTrack.getDuration() - 1.6, ['conked'], 0, ['duck'])
+    soundTrack = getSoundTrack('SA_hurry_sickness.ogg', delay =.25, node=suit)
+    notifyTrack = Sequence(Wait(suitTrack.getDuration() - 1.6), Func(toon.showHpTextNew, -int(dmg), text="BREACHED!", colorCode=1))
     notifyTrack.append(Parallel(Func(toon.checkDamageDown, 25)))
     notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'breached', modifier=25, turns=3, mode='keepHighest')))
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)

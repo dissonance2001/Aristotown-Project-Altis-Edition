@@ -245,6 +245,7 @@ suitTrack2ResetNames = [
     'RacketeerHustling',
     'ZapMovie',
     'AbilityQueued',
+    'AmbassadorRefinement',
     'HighRollerSplashback',
     'HighRollerCheerRetaliation',
     'ErfitPhase2',
@@ -776,9 +777,9 @@ def doSuitAttack(attack):
         case 'AmbassadorHeadRollerGroup':
             suitTrack = MovieBossbotLitigationCheats.doHeadRollerGroup(attack)
         case 'AmbassadorRefinement':
-            suitTrack = MovieBossbotLitigationCheats.doOilRainHeal(attack)
+            suitTrack = MovieLawbotLitigationCheats.doCaseInsurance(attack)
         case 'AmbassadorRefinementManager':
-            suitTrack = MovieBossbotLitigationCheats.doOilRainHealManager(attack)
+            suitTrack = MovieBossbotLitigationCheats.doAmbassadorSpawn(attack)
         case 'AmbassadorPhase2':
             suitTrack = MovieBossbotLitigationCheats.doAmbassadorPhase2(attack)
         case 'AmbassadorDamageUp':
@@ -3101,23 +3102,29 @@ def doFingerWag(attack: dict) -> MetaInterval:
             case 'pf':
                 particleEffect.setPos(0.167, 1.4, 4.65)
 
-            case 'bs' | 'fct':
+            case 'bs' | 'fct' | 'bs2' | 'dcw' | 'whistleb':
                 particleEffect.setPos(0.167, 1.4, 5.3)
+                particleNode.setP(particleNode.getP() - 5)
 
-            case 'bw':
+            case 'bw' | 'bw2':
                 particleEffect.setPos(0.167, 2.0, suit.getHeight() - 1.75)
+                particleNode.setP(particleNode.getP() - 15)
 
             case 'sgoat':
                 particleEffect.setPos(0.167, 1.9, suit.getHeight() - 2.0)
+                particleNode.setP(particleNode.getP() - 5)
 
             case 'mouthp':
                 particleEffect.setPos(0.167, 2.2, suit.getHeight() - 1.9)
+                particleNode.setP(particleNode.getP() - 5)
 
             case 'erfit':
                 particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
+                particleNode.setP(particleNode.getP() - 20)
 
             case 'cdirector' | 'director' | 'bcaster' | 'videog' | 'safesupervis':
                 particleEffect.setPos(0.167, 1.9, suit.getHeight() - 1.9)
+                particleNode.setP(particleNode.getP() - 20)
 
             case _:
                 particleEffect.setPos(0.0, 1.1, suit.getHeight() - 1.2)
@@ -3126,9 +3133,9 @@ def doFingerWag(attack: dict) -> MetaInterval:
             getPartTrack(
                 particleEffect,
                 partDelay,
-                3.5,
+                4.0,
                 (particleEffect, particleNode, 0),
-                softStop=-1.5
+                softStop=-2.0
             ),
 
             Func(particleNode.removeNode)
@@ -3954,7 +3961,15 @@ def doDemotion(attack: dict) -> MetaInterval:
         sprayNode.setPos(battle.getActorPosHpr(suit)[0])
         sprayNode.setZ(suit.getHeight() * 0.66)
         sprayNode.lookAt(toon)
-        sprayNode.setP(sprayNode.getP() + 15.0)
+        match suit.dna.name:
+            case 'ambass' | 'foreman' | 'chw' | 'supervis' | 'cdirector':
+                sprayNode.setP(sprayNode.getP() + 15.0)
+
+            case 'charon':
+                sprayNode.setP(sprayNode.getP() + 10.0)
+
+            case _:
+                sprayNode.setP(sprayNode.getP() + 0.0)
         partTrack = Sequence(
             getPartTrack(sprayEffect, 0.7, 2.1, (sprayEffect, sprayNode, 0), softStop=-1.0),
             Func(sprayNode.removeNode)
@@ -4303,7 +4318,7 @@ def doReOrg(attack: dict) -> MetaInterval:
         particleNode.headsUp(toon)
 
         match suit.dna.name:
-            case 'foreman' | 'dold' | 'bkeeper' | 'cdirector':
+            case 'foreman' | 'dold' | 'bkeeper' | 'cdirector' | 'mplayer' | 'mplayers':
                 particleNode.setZ(particleNode.getZ() + 3.0)
                 particleNode.setP(particleNode.getP() - 15.0)
             case 'hh' | 'dola' | 'tf' | 'chg' | 'shrp' | 'sfs' | 'cor' | 'ppl':
@@ -4924,7 +4939,7 @@ def doRolodex(attack: dict) -> MetaInterval:
             case 'hh':
                 particleNode.setZ(2.0)
                 particleNode.setP(-12.0)
-            case 'caseman' | 'chainsaw':
+            case 'caseman' | 'chainsaw' | 'wtapper':
                 particleNode.setZ(2.9)
                 particleNode.setP(-17.0)
         partTrack2 = getPartTrack(particleEffect2, part2Delay / playRate, part2Duration / playRate, (particleEffect2, particleNode, 0), softStop=-1.0)
@@ -5476,12 +5491,12 @@ def doHotAir(attack: dict) -> MetaInterval:
             case 'cnd' | 'cnd2':
                 sprayNode.setY(sprayNode.getY() - 1.0)
                 sprayNode.setZ(sprayNode.getZ() + 1.0)
-            case 'whunter':
+            case 'whunter' | 'stck' | 'bsht' | 'lvw' | 'bck' | 'neg' | 'kbc' | 'ghw':
                 sprayNode.setY(sprayNode.getY() - 0.8)
                 sprayNode.setZ(sprayNode.getZ() + 1.5)
             case 'mplayer' | 'mplayers' | 'safesupervis':
-                sprayNode.setY(sprayNode.getY() - 1.0)
-                sprayNode.setZ(sprayNode.getZ() + 1.6)
+                sprayNode.setY(sprayNode.getY() + 1.5)
+                sprayNode.setZ(sprayNode.getZ() + 3.0)
 
         sprayTracks += (sprayTrack,)
         if dmg > 0:
@@ -5666,37 +5681,88 @@ def doVoodooMagic(attack):
     tauntIndex = attack['taunt']
     target = attack['target']
     toon = target[0]['toon']
-    taunt = getAttackTaunt(attack['name'], attack['suitName'], tauntIndex)
-    tauntInterval = Sequence(Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout))
-    battle = attack['battle']
+
+    taunt = getAttackTaunt(
+        attack['name'],
+        attack['suitName'],
+        tauntIndex
+    )
+
+    tauntInterval = Sequence(
+        Func(suit.setChatAbsolute, taunt, CFSpeech | CFTimeout)
+    )
+
+    origPos, origHpr = battle.getActorPosHpr(suit)
+
     sinkPos = suit.getPos(battle)
-    dropPos = suit.getPos(battle)
-    sinkPos2 = suit.getPos(battle)
-    dropPos2 = suit.getPos(battle)
     sinkPos.setY(sinkPos.getY() + 12.5)
     sinkPos.setZ(sinkPos.getZ() - 4.5)
-    sinkPos2.setY(sinkPos.getY() - 32)
+
+    sinkPos2 = suit.getPos(battle)
+    sinkPos2.setY(sinkPos2.getY() - 19.5)
+    sinkPos2.setZ(sinkPos2.getZ() - 4.5)
+
     targetPos = toon.getPos(battle)
-    headsUp = Func(suit.headsUp, battle, targetPos)
-    origPos, origHpr = battle.getActorPosHpr(suit)
-    suitReset = Func(suit.setHpr, battle, origHpr)
-    targetPos2 = toon.getPos(battle)
-    headsUp2 = Func(suit.setHpr, battle, origHpr)
-    moveTrack = Sequence(LerpPosInterval(suit, 0, sinkPos2, other=battle), headsUp, Wait(3.0), suitReset, Func(suit.setPos, battle, dropPos))
-    suitTrack = Sequence(getSuitTrack(attack))
-    suitTrack.append(Wait(1.0))
+
+    moveTrack = Sequence(
+        Func(suit.setPos, battle, sinkPos2),
+        Func(suit.headsUp, battle, targetPos),
+        Wait(3.0),
+        Func(suit.setPos, battle, origPos),
+        Func(suit.setHpr, battle, origHpr)
+    )
+
+    suitTrack = Sequence(
+        getSuitTrack(attack),
+        Wait(1.0)
+    )
+
     dmg = target[0]['hp']
+
     bill = globalPropPool.getProp('1dollar')
-    billPosPoints = [Point3(-0.01, 0.45, -0.25), VBase3(136.424, -46.434, -129.712)]
-    billPropTrack = getPropTrack(bill, suit.getRightHand(), billPosPoints, 0.6, 0.55,
-                                 scaleUpPoint=Point3(1.41, 1.41, 1.41))
-    toonTrack = getToonTrack(attack, 0.6, ['cringe'], 0.01, ['sidestep'])
-    multiTrackList = Parallel(suitTrack, toonTrack)
+
+    billPosPoints = [
+        Point3(-0.01, 0.45, -0.25),
+        VBase3(136.424, -46.434, -129.712)
+    ]
+
+    billPropTrack = getPropTrack(
+        bill,
+        suit.getRightHand(),
+        billPosPoints,
+        0.6,
+        0.55,
+        scaleUpPoint=Point3(1.41, 1.41, 1.41)
+    )
+
+    toonTrack = getToonTrack(
+        attack,
+        0.6,
+        ['cringe'],
+        0.01,
+        ['sidestep']
+    )
+
+    effectTrack = Parallel(
+        suitTrack,
+        toonTrack
+    )
+
     if dmg > 0:
-        soundTrack = getSoundTrack('SA_pick_pocket.ogg', delay=0.2, node=suit)
-        multiTrackList.append(billPropTrack)
-        multiTrackList.append(soundTrack)
-    return Parallel(suitTrack, moveTrack, multiTrackList, toonTrack)
+        soundTrack = getSoundTrack(
+            'SA_pick_pocket.ogg',
+            delay=0.2,
+            node=suit
+        )
+
+        effectTrack.append(billPropTrack)
+        effectTrack.append(soundTrack)
+
+    return Parallel(
+        tauntInterval,
+        moveTrack,
+        effectTrack
+    )
 
 def doCigarSmoke(attack):
     suit = attack['suit']
@@ -5732,12 +5798,31 @@ def doCigarSmoke(attack):
     baseFlameSmall = BattleParticles.createParticleEffect(file='cigarSmokeAtk')
     baseFlameEffect = BattleParticles.createParticleEffect(file='cigarSmokeAtk')
     cigarSmoke = BattleParticles.createParticleEffect(file='smoke')
-    baseFlameSmall.setScale(0.7)
     cigar = globalPropPool.getProp('cigar')
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.5, 3.5, scaleUpPoint=cigarScale)
-    baseFlameTrack: Sequence = getPartTrack(baseFlameEffect, 2.25, 3.25, (baseFlameEffect, suit, 0), softStop=-2.0)
-    baseFlameSmallTrack: Sequence = getPartTrack(baseFlameSmall, 2.25, 3.25, (baseFlameSmall, suit, 0), softStop=-2.0)
-    partTrack: Sequence = getPartTrack(cigarSmoke, 1.0, 4.0, (cigarSmoke, suit, 0), softStop=-2.0)
+    particleNode = battle.attachNewNode('cigar-particle-node')
+    particleNode.setPos(battle.getActorPosHpr(suit)[0])
+    particleNode.headsUp(toon)
+    baseFlameTrack: Sequence = getPartTrack(baseFlameEffect, 2.25, 3.25, (baseFlameEffect, particleNode, 0), softStop=-2.0)
+    baseFlameSmallTrack: Sequence = getPartTrack(baseFlameSmall, 2.25, 3.25, (baseFlameSmall, particleNode, 0), softStop=-2.0)
+    partTrack: Sequence = getPartTrack(cigarSmoke, 0.5, 3.0, (cigarSmoke, suit, 0), softStop=-2.0)
+
+    match suit.dna.name:
+        case 'bw' | 'bw2' | 'txl' | 'tbc' | 'fires' | 'cnd' | 'cnd2' | 'rb' | 'hho' | 'chw' | 'itn' | 'anc':
+            particleNode.setZ(suit.getHeight() - 2.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 20.0)
+
+        case 'clubpres' | 'safesupervis' | 'videog' | 'bcaster' | 'director':
+            particleNode.setZ(suit.getHeight() - 2.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 25.0)
+
+        case 'blh' | 'autocad' | 'asm':
+            particleNode.setZ(suit.getHeight() - 1.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 10.0)
+            
 
     def changeColor(parts) -> Parallel:
         track: Parallel = Parallel()
@@ -6180,8 +6265,11 @@ def doRedTape(attack: dict) -> MetaInterval:
     targets: list[dict] = attack['target']
     playRate: float = attack['playRate']
     suitTrack: Sequence = getSuitTrack(attack, playRate=playRate)
-    tapePosPoints = [Point3(-0.21707670043415206, 0.04341534008683112, -0.390738060781473), VBase3(0, 90, 90)]
-    tapeScaleUpPoint = Point3(.9, .9, .9)
+    tapePosPoints = [
+        Point3(-0.0, 0.09, -0.38),
+        VBase3(-1.152, 86.581, -76.784),
+    ]
+    tapeScaleUpPoint = Point3(0.9, 0.9, 0.24)
     propTracks: tuple[Sequence, ...] = ()
     allTubeTracks: tuple = ()
     for t in targets:
@@ -7190,8 +7278,98 @@ def doLiquidate(attack: dict) -> MetaInterval:
 
     return Parallel(suitTrack, toonTracks, *cloudPropTracks, soundTrack, *puddleTracks)
 
+def doAcidRain(attack: dict) -> MetaInterval:
+    suit = attack['suit']
+    battle = attack['battle']
+    targets: list[dict] = attack['target']
+    damageDelay: float = 3.0
+    dodgeDelay: float = 1.6
+    suitTrack: Sequence = getSuitTrack(attack, delay=0.9, playRate=1.3)
+    initialCloudHeight = suit.height + 3.0
+    cloudPosPoints = [Point3(0.0, 3.0, initialCloudHeight), VBase3(180.0, 0.0, 0.0)]
+    cloudPropTracks: tuple[Parallel, ...] = ()
+
+    damageAnims: list[SplicedAnim] = [SplicedAnim(Anim='melt', Delay=0.0, PlayRate=1.1),
+     SplicedAnim(Anim='jump', Delay=0.7, StartTime=0.4, PlayRate=1.15)]
+    toonTracks: Parallel = getToonTracks(attack, damageDelay=damageDelay - 1.0, splicedDamageAnims=damageAnims, dodgeDelay=dodgeDelay, dodgeAnimNames=['sidestep'], showDamageExtraTime=1.01, dodgeAnimPlayRate=1.05)
+
+    soundTrack: Sequence = getSoundTrack('SA_acid.ogg', delay=1.5, node=suit, playRate=1.1)
+    puddleTracks: tuple[Sequence, ...] = ()
+    for t in targets:
+        toon = t['toon']
+        dmg = t['hp']
+        rainEffect = BattleParticles.createParticleEffect(file='acidrain')
+        rainEffect2 = BattleParticles.createParticleEffect(file='acidrain')
+        rainEffect3 = BattleParticles.createParticleEffect(file='acidrain')
+        cloud = globalPropPool.getProp('stormcloud')
+        targetPoint = __toonFacePoint(toon)
+        targetPoint.setZ(targetPoint[2] + 3.0)
+        cloudPropTrack = Parallel(
+            Func(cloud.pose, 'stormcloud', 0),
+            getPropAppearTrack(cloud, suit, cloudPosPoints, 1e-06, Point3(3.0, 3.0, 3.0), scaleUpTime=0.7, blendType='easeOut'),
+            Func(battle.movie.needRestoreRenderProp, cloud),
+            Func(cloud.wrtReparentTo, render),
+            Sequence(
+                Wait(1.5),
+                LerpPosInterval(cloud, 0.7, pos=targetPoint, blendType='easeInOut'),
+            ),
+            Sequence(
+                Wait(2.0),
+                Parallel(
+                    Sequence(
+                        ParticleInterval(rainEffect, cloud, worldRelative=0, duration=2.4, cleanup=True, softStopT=-0.5)
+                    ),
+                    Sequence(
+                        Wait(0.1),
+                        ParticleInterval(rainEffect2, cloud, worldRelative=0, duration=2.3, cleanup=True, softStopT=-0.5),
+                    ),
+                    Sequence(
+                        Wait(0.1),
+                        ParticleInterval(rainEffect3, cloud, worldRelative=0, duration=2.3, cleanup=True, softStopT=-0.5),
+                    ),
+                    Sequence(
+                        ActorInterval(cloud, 'stormcloud', startTime=3.0, duration=0.1),
+                        ActorInterval(cloud, 'stormcloud', startTime=1.0, duration=2.2),
+                    )
+                )
+            ),
+            Sequence(
+                Wait(4.2),
+                Parallel(
+                    LerpScaleInterval(cloud, 0.45, MovieUtil.PNT3_NEARZERO, blendType='easeIn'),
+                    Sequence(
+                        LerpPosInterval(cloud, 0.45 / 2.0, pos=targetPoint + Vec3(0.0, 0.0, -0.5), blendType='easeOut'),
+                        LerpPosInterval(cloud, 0.45 / 2.0, pos=targetPoint + Vec3(0.0, 0.0, 1.0), blendType='easeIn'),
+                    )
+                ),
+                Func(MovieUtil.removeProp, cloud),
+                Func(battle.movie.clearRenderProp, cloud),
+            )
+        )
+        cloudPropTracks += (cloudPropTrack,)
+
+        if dmg > 0:
+            puddle = globalPropPool.getProp('quicksand')
+            puddle.setColor(Vec4(0.0, 1.0, 0.0, 1))
+            puddle.setHpr(Point3(120.0, 0.0, 0.0))
+            puddle.setScale(0.01)
+            puddleTrack = Sequence(
+                Func(battle.movie.needRestoreRenderProp, puddle),
+                Wait(damageDelay - 0.7),
+                Func(puddle.reparentTo, battle),
+                Func(puddle.setPos, toon.getPos(battle)),
+                LerpScaleInterval(puddle, 1.4, Point3(1.7, 1.7, 1.7), startScale=MovieUtil.PNT3_NEARZERO),
+                Wait(1.3),
+                LerpFunctionInterval(puddle.setAlphaScale, fromData=1, toData=0, duration=0.35, blendType='easeIn'),
+                Func(MovieUtil.removeProp, puddle),
+                Func(battle.movie.clearRenderProp, puddle),
+            )
+            puddleTracks += (puddleTrack,)
+
+    return Parallel(suitTrack, toonTracks, *cloudPropTracks, soundTrack, *puddleTracks)
+
 		
-def doAcidRain(attack):
+def doAcidRainOLD(attack):
     suit = attack['suit']
     battle = attack['battle']
     target = attack['target']
@@ -7683,6 +7861,9 @@ def doSmokeAndMirrors(attack):
     cigarPosPoints = [Point3(-0.05, -0.2, -0.25), VBase3(180.0, 0.0, 0.0)]
     cigarScale = Point3(7.0, 7.0, 7.0)
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 1.5, 2.5, scaleUpPoint=cigarScale)
+    particleNode = battle.attachNewNode('cigar-particle-node')
+    particleNode.setPos(battle.getActorPosHpr(suit)[0])
+    particleNode.headsUp(toon)
     baseFlameTrack: Sequence = getPartTrack(baseFlameEffect, 2.25, 3.25, (baseFlameEffect, suit, 0), softStop=-2.0)
     baseFlameSmallTrack: Sequence = getPartTrack(baseFlameSmall, 2.25, 3.25, (baseFlameSmall, suit, 0), softStop=-2.0)
     partTrack: Sequence = getPartTrack(cigarSmoke, 2.0, 3.5, (cigarSmoke, suit, 0), softStop=-2.0)
@@ -7694,6 +7875,22 @@ def doSmokeAndMirrors(attack):
         particleEffect.setZ(suit.height - 1)
         particleEffect.setScale(.01)
         particles.append(particleEffect)
+
+    match suit.dna.name:
+        case 'bw' | 'bw2' | 'txl' | 'tbc' | 'fires' | 'cnd' | 'cnd2' | 'rb' | 'hho' | 'chw' | 'itn' | 'anc':
+            particleNode.setZ(suit.getHeight() - 2.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 20.0)
+
+        case 'clubpres' | 'safesupervis' | 'videog' | 'bcaster' | 'director' | 'fmaker' | 'cinema' | 'choreo':
+            particleNode.setZ(suit.getHeight() - 2.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 25.0)
+
+        case 'blh' | 'autocad' | 'asm':
+            particleNode.setZ(suit.getHeight() - 1.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 10.0)
 
     if hitSuit:
         hitPoint = lambda toon = toon: __toonFacePoint(toon)
@@ -7772,9 +7969,28 @@ def doHeadHonchoCigarSmoke(attack):
     cigarPosPoints = [Point3(-0.05, -0.2, -0.25), VBase3(180.0, 0.0, 0.0)]
     cigarScale = Point3(7.0, 7.0, 7.0)
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 1.5, 2.5, scaleUpPoint=cigarScale)
+    particleNode = battle.attachNewNode('cigar-particle-node')
+    particleNode.setPos(battle.getActorPosHpr(suit)[0])
+    particleNode.headsUp(toon)
     baseFlameTrack: Sequence = getPartTrack(baseFlameEffect, 2.25, 3.25, (baseFlameEffect, suit, 0), softStop=-2.0)
     baseFlameSmallTrack: Sequence = getPartTrack(baseFlameSmall, 2.25, 3.25, (baseFlameSmall, suit, 0), softStop=-2.0)
-    partTrack: Sequence = getPartTrack(cigarSmoke, 2.0, 3.5, (cigarSmoke, suit, 0), softStop=-2.0)
+    partTrack: Sequence = getPartTrack(cigarSmoke, 1.0, 4.5, (cigarSmoke, suit, 0), softStop=-2.0)
+
+    match suit.dna.name:
+        case 'bw' | 'bw2' | 'txl' | 'tbc' | 'fires' | 'cnd' | 'cnd2' | 'rb' | 'hho' | 'chw' | 'itn' | 'anc':
+            particleNode.setZ(suit.getHeight() - 2.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 20.0)
+
+        case 'clubpres' | 'safesupervis' | 'videog' | 'bcaster' | 'director':
+            particleNode.setZ(suit.getHeight() - 2.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 25.0)
+
+        case 'blh' | 'autocad' | 'asm':
+            particleNode.setZ(suit.getHeight() - 1.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 10.0)
 
     def changeColor(parts) -> Parallel:
         track = Parallel()
@@ -7833,9 +8049,28 @@ def doFirestarterCigarSmoke(attack):
     cigarPosPoints = [Point3(0, -0.08670520231213885, 0), VBase3(180.0, 0.0, 0.0)]
     cigarScale = Point3(4.0, 4.0, 4.0)
     propTrack = getPropTrack(cigar, suit.getRightHand(), cigarPosPoints, 0.5, 3.5, scaleUpPoint=cigarScale)
+    particleNode = battle.attachNewNode('cigar-particle-node')
+    particleNode.setPos(battle.getActorPosHpr(suit)[0])
+    particleNode.headsUp(toon)
     baseFlameTrack: Sequence = getPartTrack(baseFlameEffect, 2.25, 3.25, (baseFlameEffect, suit, 0), softStop=-2.0)
     baseFlameSmallTrack: Sequence = getPartTrack(baseFlameSmall, 2.25, 3.25, (baseFlameSmall, suit, 0), softStop=-2.0)
-    partTrack: Sequence = getPartTrack(cigarSmoke, 2.0, 3.5, (cigarSmoke, suit, 0), softStop=-2.0)
+    partTrack: Sequence = getPartTrack(cigarSmoke, 1.0, 4.5, (cigarSmoke, suit, 0), softStop=-2.0)
+
+    match suit.dna.name:
+        case 'bw' | 'bw2' | 'txl' | 'tbc' | 'fires' | 'cnd' | 'cnd2' | 'rb' | 'hho' | 'chw' | 'itn' | 'anc':
+            particleNode.setZ(suit.getHeight() - 2.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 20.0)
+
+        case 'clubpres' | 'safesupervis' | 'videog' | 'bcaster' | 'director':
+            particleNode.setZ(suit.getHeight() - 2.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 25.0)
+
+        case 'blh' | 'autocad' | 'asm':
+            particleNode.setZ(suit.getHeight() - 1.0)
+            particleNode.setY(6.0)
+            particleNode.setP(particleNode.getP() - 10.0)
 
     def changeColor(parts) -> Parallel:
         track: Parallel = Parallel()

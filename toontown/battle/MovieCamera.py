@@ -156,23 +156,182 @@ def cameraActorShotInsurance(parent, name = 'cameraActorShot'):
         name=name)
     return track
 
-def cameraActorShot(parent, anim, remainTime = 0.0, name = 'cameraActorShot'):
-    previousParent = camera.getParent()
-    path = 'phase_3.5/models/misc/camera_actor'
-    cameraActor = Actor.Actor(path, {anim: path + '-' + anim})
-    node = cameraActor.find('**/CameraBone')
-    track = Sequence(
-        Func(cameraActor.reparentTo, parent),
-        Func(camera.reparentTo, node),
-        Func(camera.setPosHpr, 0, -1, 2, 0, 0, 0),
-        ActorInterval(cameraActor, anim),
-        Func(cameraActor.pose, anim, cameraActor.getNumFrames(anim) - 1),
-        Wait(remainTime - cameraActor.getDuration(anim)),
-        Func(camera.reparentTo, previousParent),
-        Func(camera.setPosHpr, 0.0, -15.0, 10.0, 0, -20, 0),
-        Func(cameraActor.cleanup),
+from direct.interval.IntervalGlobal import *
+from panda3d.core import Point3
+import random
+
+def scapegoatEnragedCameraShot(suit, battle,
+                              name='scapegoatEnragedCameraShot'):
+
+    def makeShake(duration=0.25, intensity=0.5):
+        track = Sequence()
+        steps = 10
+        stepTime = duration / float(steps)
+
+        for i in range(steps):
+            strength = intensity * (1.0 - float(i) / steps)
+
+            pos = Point3(
+                random.uniform(-strength, strength),
+                11.0 + random.uniform(-strength, strength),
+                6.5 + random.uniform(-strength, strength)
+            )
+
+            track.append(
+                LerpPosInterval(camera, stepTime, pos)
+            )
+
+        track.append(
+            Func(camera.setPos, 0, 11, 6.5)
+        )
+
+        return track
+
+    shakeTrack = Sequence(
+        Wait(0.675),
+        makeShake(),
+        Wait(0.1),
+        makeShake()
+    )
+
+    fovTrack = Sequence(
+        Wait(1.49),
+        LerpFunc(
+            base.camLens.setFov,
+            fromData=70.0,
+            toData=80.0,
+            duration=1.0,
+            blendType='easeInOut'
+        )
+    )
+
+    return Sequence(
+        Func(camera.reparentTo, suit),
+        Func(camera.setPosHpr,
+             0, 11, 6.5,
+             -180, -10, 0),
+        Func(base.camLens.setFov, 70),
+
+        Parallel(
+            shakeTrack,
+            fovTrack,
+            Wait(3.8)
+        ),
+
+        Func(camera.wrtReparentTo, battle),
+        Func(base.camLens.setFov, 80),
+
         name=name
     )
+
+from direct.interval.IntervalGlobal import *
+from direct.actor import Actor
+from panda3d.core import NodePath
+import random
+
+def cameraActorShot(parent, anim, remainTime=0.0,
+                    name='cameraActorShot',
+                    shake=False,
+                    shakeDelay=0.68775,
+                    shakeDuration=1.0,
+                    shakeIntensity=0.07):
+
+    previousParent = camera.getParent()
+
+    path = 'phase_3.5/models/misc/camera_actor'
+    cameraActor = Actor.Actor(path, {anim: path + '-' + anim})
+
+    node = cameraActor.find('**/CameraBone')
+
+    animDuration = cameraActor.getDuration(anim)
+    totalDuration = max(remainTime, animDuration)
+
+    # Shake a separate parent so the animation and shake
+    # do not fight over the same transform.
+    shakePivot = NodePath('cameraShakePivot')
+    cameraActor.reparentTo(shakePivot)
+
+    def setupCamera():
+        shakePivot.reparentTo(parent)
+        shakePivot.setPos(0, 0, 0)
+        cameraActor.setPos(0, 0, 0)
+
+        camera.reparentTo(node)
+        camera.setPosHpr(0, -1, 2, 0, 0, 0)
+
+    def restoreCamera():
+        camera.reparentTo(previousParent)
+        camera.setPosHpr(0, -15, 10, 0, -20, 0)
+
+        cameraActor.cleanup()
+        shakePivot.removeNode()
+
+    def makeShakeTrack():
+        track = Sequence()
+
+        steps = max(1, int(shakeDuration / 0.025))
+        stepDuration = shakeDuration / float(steps)
+
+        for i in range(steps):
+            progress = float(i) / steps
+            intensity = shakeIntensity * (1.0 - progress)
+
+            x = random.uniform(-intensity, intensity)
+            y = random.uniform(-intensity, intensity)
+            z = random.uniform(-intensity, intensity)
+
+            track.append(
+                LerpPosInterval(
+                    shakePivot,
+                    stepDuration,
+                    pos=(x, y, z)
+                )
+            )
+
+        track.append(
+            LerpPosInterval(
+                shakePivot,
+                0.05,
+                pos=(0, 0, 0)
+            )
+        )
+
+        return track
+
+    animationTrack = Sequence(
+        ActorInterval(cameraActor, anim),
+        Func(
+            cameraActor.pose,
+            anim,
+            cameraActor.getNumFrames(anim) - 1
+        )
+    )
+
+    if shake:
+        shakeTrack = Sequence(
+            Wait(shakeDelay),
+            makeShakeTrack()
+        )
+
+        cameraMovement = Parallel(
+            animationTrack,
+            shakeTrack
+        )
+    else:
+        cameraMovement = animationTrack
+
+    track = Sequence(
+        Func(setupCamera),
+
+        cameraMovement,
+
+        Wait(max(0.0, totalDuration - cameraMovement.getDuration())),
+
+        Func(restoreCamera),
+
+        name=name
+    )
+
     return track
 
 
@@ -391,7 +550,7 @@ def chooseThrowCloseShot(throws, suitThrowsDict, openDuration, openName, attackD
     if numSuits == 1:
         av = base.cr.doId2do[list(suitThrowsDict.keys())[0]]
         shotChoices = [avatarCloseUpThrowShot,
-                       allGroupLowShot2, 
+                       allGroupLowShot, 
          avatarCloseUpThreeQuarterLeftShot,
          suitGroupThreeQuarterLeftBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
@@ -478,7 +637,7 @@ def chooseZapCloseShot(zaps, openDuration, openName, attackDuration):
 def chooseDropShot(drops, suitDropsDict, attackDuration, battle, enterDuration=0.0, exitDuration=0.0):
     enterShot = chooseNPCEnterShot(drops, enterDuration)
     exitShot = chooseNPCExitShot(drops, exitDuration)
-    if any(drop['level'] > 0 for drop in drops):
+    if any(drop['level'] > 3 for drop in drops):
         fullShot = allGroupHighShot(None, attackDuration)
         track = Sequence(enterShot, fullShot, exitShot)
     else:
@@ -498,7 +657,7 @@ def chooseDropOpenShot(drops, suitDropsDict, attackDuration, battle):
         av = drops[0]['toon']
         shotChoices = [avatarCloseUpThrowShot,
          avatarCloseUpThreeQuarterRightShot,
-         allGroupLowShot2, 
+         allGroupLowShot, 
          avatarBehindShot,
          suitGroupThreeQuarterLeftBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
@@ -517,7 +676,7 @@ def chooseDropCloseShot(drops, suitDropsDict, openDuration, openName, attackDura
     if numSuits == 1:
         av = base.cr.doId2do[list(suitDropsDict.keys())[0]]
         shotChoices = [avatarCloseUpThrowShot,
-                       allGroupLowShot2, 
+                       allGroupLowShot, 
          avatarCloseUpThreeQuarterLeftShot,
          suitGroupThreeQuarterLeftBehindShot]
         track = random.choice(shotChoices)(*[av, duration, battle])
@@ -596,6 +755,165 @@ def getAttackTargetActor(target):
         return target[0]['suit']
 
     return None
+
+from direct.interval.IntervalGlobal import *
+from panda3d.core import NodePath
+
+def makeLitigatorBellowCameraTrack(litigator, battle):
+    cameraPivot = litigator.attachNewNode('bellowCameraPivot')
+
+    originalParent = camera.getParent()
+    originalPos = camera.getPos(originalParent)
+    originalHpr = camera.getHpr(originalParent)
+
+    def setupCamera():
+        cameraPivot.setPos(0, 0, 2)
+        camera.wrtReparentTo(cameraPivot)
+        base.camLens.setFov(65)
+
+    def restoreCamera():
+        camera.wrtReparentTo(battle)
+        base.camLens.setFov(80)
+        cameraPivot.removeNode()
+
+    cameraTrack = Sequence(
+        Func(setupCamera),
+
+        Wait(0.68775),
+
+        # Example camera shake, not the exact jiggleNode implementation
+        Sequence(
+            LerpPosInterval(cameraPivot, 0.1, (0.07, 0, 2)),
+            LerpPosInterval(cameraPivot, 0.1, (-0.07, 0, 2)),
+            LerpPosInterval(cameraPivot, 0.1, (0, 0, 2))
+        ),
+
+        Wait(8.0 - 0.68775 - 0.3),
+
+        Func(restoreCamera)
+    )
+
+    return cameraTrack
+
+from direct.interval.IntervalGlobal import *
+
+def sparkplugCameraShotPowerhouse(node3, node4, name='sparkplugCameraShot'):
+
+    cameraTrack = Sequence(
+        # 0.000 - Initial camera
+        Func(camera.wrtReparentTo, node4),
+        Func(camera.setPosHpr,
+             0, 7.25633, 5.26509,
+             180, 8.16994, 0),
+
+        LerpPosHprInterval(
+            camera,
+            0.68083,
+            startPos=(-0.90777, 5.08354, 7.26217),
+            pos=(0.36311, 4.53887, 7.26217),
+            startHpr=(165.29416, 0, 0),
+            hpr=(180, 0, 0),
+            blendType='easeInOut'
+        ),
+
+        LerpPosHprInterval(
+            camera,
+            0.22694,
+            pos=(2.90487, 4.53887, 7.26217),
+            hpr=(119.54243, 0, 0),
+            blendType='easeInOut'
+        ),
+
+        # 2.437 - Pull back
+        Wait(2.4375 - 1.6665 - 0.22694),
+
+        Func(camera.wrtReparentTo, node3),
+
+        LerpPosHprInterval(
+            camera,
+            0.63544,
+            pos=(-11.77195, -10.13797, 8.53307),
+            hpr=(-52.0262, -11.43784, 0),
+            blendType='easeInOut'
+        ),
+
+        # 3.812 - Widen the FOV
+        Wait(3.81225 - 2.4375 - 0.63544),
+
+        LerpFunc(
+            base.camLens.setFov,
+            fromData=60.0,
+            toData=80,
+            duration=0.13616,
+            blendType='easeInOut'
+        ),
+
+        name=name
+    )
+
+    return cameraTrack
+
+def sparkplugCameraShot(node3, node4, name='sparkplugCameraShot'):
+
+    cameraTrack = Sequence(
+        # 0.000 - Initial camera
+        Func(camera.wrtReparentTo, node4),
+        Func(camera.setPosHpr,
+             0, 11.25633, 5.26509,
+             180, 8.16994, 0),
+
+        # 0.634 - Look at finger
+        Wait(0.6338653),
+
+        LerpPosHprInterval(
+            camera,
+            0.68083,
+            startPos=(-0.90777, 5.08354, 7.26217),
+            pos=(0.36311, 4.53887, 7.26217),
+            startHpr=(165.29416, 0, 0),
+            hpr=(180, 0, 0),
+            blendType='easeInOut'
+        ),
+
+        # 1.666 - Look to the right
+        Wait(1.6665 - 0.6338653 - 0.68083),
+
+        LerpPosHprInterval(
+            camera,
+            0.22694,
+            pos=(2.90487, 4.53887, 7.26217),
+            hpr=(119.54243, 0, 0),
+            blendType='easeInOut'
+        ),
+
+        # 2.437 - Pull back
+        Wait(2.4375 - 1.6665 - 0.22694),
+
+        Func(camera.wrtReparentTo, node3),
+
+        LerpPosHprInterval(
+            camera,
+            0.63544,
+            pos=(-11.77195, -10.13797, 8.53307),
+            hpr=(-52.0262, -11.43784, 0),
+            blendType='easeInOut'
+        ),
+
+        # 3.812 - Widen the FOV
+        Wait(3.81225 - 2.4375 - 0.63544),
+
+        LerpFunc(
+            base.camLens.setFov,
+            fromData=60.0,
+            toData=67.2622,
+            duration=0.13616,
+            blendType='easeInOut'
+        ),
+
+        name=name
+    )
+
+    return cameraTrack
 
 def chooseSuitShot(attack, attackDuration, cheat=0):
     duration = attackDuration
@@ -978,31 +1296,70 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         case 'LitigatorSnapStenographer':
             camTrack.append(defaultCamera(openShotDuration=2.0))
         case 'LitigatorBayouBash':
-            camTrack.append(Sequence(motionShot(.5, 9.0, suit.height - 1, 175, 0, 0.0, 0, suit), moveCameraOnly(-1.0, 9.0, suit.height - 1, 1, suit, h=190, p=0, startH=175, startP=0), Wait(attackDuration - 1)))
+            camTrack.append(Parallel(heldRelativeHeadsUpShot(suit, 1, 12, 8, suit, attackDuration, "bayouBashShot"), Wait(attackDuration)))
         case 'LitigatorBayouBellow':
-            camTrack.append(Sequence(cameraActorShot(suit, 'litigator-bellow', attackDuration)))
+            cameraTrack = cameraActorShot(
+                suit,
+                'litigator-bellow',
+                remainTime=attackDuration,
+                shake=True,
+                shakeDelay=0.68775,
+                shakeDuration=0.75,
+                shakeIntensity=0.5
+            )
+            camTrack.append(Parallel(cameraTrack, Sequence(Wait(attackDuration))))
             # stenographer cheats
         case 'StenographerSanctionBindings':
             if attackDuration > 2:
-                camTrack.append(defaultCamera(openShotDuration=0.5))
+                camTrack.append(defaultCamera(openShotDuration=1.0))
             else:
                 camTrack2 = defaultCamera(openShotDuration=0)
                 return camTrack2
         case 'StenographerSanctionSuppression':
             if attackDuration > 2:
-                camTrack.append(defaultCamera(openShotDuration=0.5))
+                camTrack.append(defaultCamera(openShotDuration=1.0))
             else:
                 camTrack2 = defaultCamera(openShotDuration=0)
                 return camTrack2
         case 'StenographerSanction':
-            camTrack.append(defaultCamera(openShotDuration=0.5))
+            camTrack.append(defaultCamera(openShotDuration=1.0))
         case 'StenographerSanctionLitigator':
-            camTrack.append(defaultCamera(openShotDuration=0.5))
+            camTrack.append(defaultCamera(openShotDuration=1.0))
             # case manager cheats
         case 'CaseManagerInsurancePlanScapegoat' | 'CaseManagerInsurancePlanScapegoat2' | 'CaseManagerInsurancePlan' | 'CaseManagerInsurancePlan2':
-            camTrack.append(heldRelativeShot(suit, 0.0, 8.8096, 7.77317, -180.0, 0.0, 0.0, 2.7))
-            camTrack.append(moveShot(0.0, -15.0, 10.0, 0.0, -20.0, 0.0, 1.5))
-            camTrack.append(heldShot(0.0, -15.0, 10.0, 0.0, -20.0, 0.0, attackDuration - 4.2))
+            camTrack.append(Parallel(Wait(attackDuration), Sequence(
+                # Shot 1: instant setup at 0.0
+                Func(camera.reparentTo, suit),
+                Func(camera.setPosHpr,
+                    0, 5.95944, 9.19824,
+                    180, -15.15766, 0),
+
+                # Shot 2 begins at 0.79525
+                Wait(0.79525),
+
+                LerpPosHprInterval(
+                    camera,
+                    0.7,
+                    startPos=(0, 5.95944, 9.19824),
+                    pos=(0, 8.8096, 7.77317),
+                    startHpr=(180, -15.15766, 0),
+                    hpr=(180, 0, 0),
+                    blendType='easeInOut'
+                ),
+
+                # Shot 3 begins at 3.216
+                Wait(3.216 - 0.79525 - 0.7),
+
+                Func(camera.wrtReparentTo, battle),
+
+                LerpPosHprInterval(
+                    camera,
+                    0.5,
+                    pos=(0, -10, 10.10513),
+                    hpr=(0, -10.49376, 0),
+                    blendType='easeInOut'
+                )
+            )))
         case 'CaseManagerInsurance':
             camTrack.append(heldShot(0.0, -10.0, 10.0, 0.0, -20.0, 0.0, attackDuration))
         case 'CaseManagerInsurance2':
@@ -1011,9 +1368,39 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         case 'CaseManagerLegalBindings':
             camTrack.append(defaultCamera(openShotDuration=2.0))
         case 'CaseManagerLegalBindings2':
-            camTrack.append(heldRelativeShot(suit, 0.0, 8.8096, 7.77317, -180.0, 0.0, 0.0, 2.7))
-            camTrack.append(moveShot(0.0, -15.0, 10.0, 0.0, -20.0, 0.0, 1.5))
-            camTrack.append(heldShot(0.0, -15.0, 10.0, 0.0, -20.0, 0.0, attackDuration - 4.2))
+            camTrack.append(Parallel(Wait(attackDuration), Sequence(
+                # Shot 1: instant setup at 0.0
+                Func(camera.reparentTo, suit),
+                Func(camera.setPosHpr,
+                    0, 5.95944, 9.19824,
+                    180, -15.15766, 0),
+
+                # Shot 2 begins at 0.79525
+                Wait(0.79525),
+
+                LerpPosHprInterval(
+                    camera,
+                    0.7,
+                    startPos=(0, 5.95944, 9.19824),
+                    pos=(0, 8.8096, 7.77317),
+                    startHpr=(180, -15.15766, 0),
+                    hpr=(180, 0, 0),
+                    blendType='easeInOut'
+                ),
+
+                # Shot 3 begins at 3.216
+                Wait(3.216 - 0.79525 - 0.7),
+
+                Func(camera.wrtReparentTo, battle),
+
+                LerpPosHprInterval(
+                    camera,
+                    0.5,
+                    pos=(0, -10, 10.10513),
+                    hpr=(0, -10.49376, 0),
+                    blendType='easeInOut'
+                )
+            )))
             # scapegoat cheats
         case 'ScapegoatRageBuilding':
             camTrack2 = Sequence(Wait(attackDuration))
@@ -1021,7 +1408,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         case 'ScapegoatShieldsUp':
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
         case 'ScapegoatEnraged':
-            camTrack.append(heldRelativeShot(suit, 0.0, 10.0, 8.0, -180.0, -20.0, 0.0, attackDuration))
+            cameraTrack = scapegoatEnragedCameraShot(
+                suit,
+                battle
+            )
+            camTrack.append(Parallel(cameraTrack, Wait(attackDuration)))
         case 'ScapegoatGavel':
             camTrack.append(defaultCamera(openShotDuration=2.0))
         case 'ScapegoatBarnyardBash':
@@ -1066,7 +1457,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                 camTrack2 = defaultCamera(openShotDuration=1.75)
                 return camTrack2
         case 'PowerhouseSnipeSoaked':
-            camTrack.append(defaultCamera(openShotDuration=1.75))
+            cameraTrackContingency = sparkplugCameraShotPowerhouse(
+                battle,
+                suit
+            )
+            camTrack2 = Parallel(Wait(attackDuration), cameraTrackContingency)
+            return camTrack2
         case 'PowerhouseToleranceBuilding':
             camTrack2 = Sequence(Wait(attackDuration))
             return camTrack2
@@ -1150,9 +1546,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack.append(heldRelativeShot(suit, 0.0, 8.8096, 7.77317, -180.0, 0.0, 0.0, 2.7))
             camTrack.append(moveShot(0.0, -10.0, 10.0, 0.0, -20.0, 0.0, 1.5))
             camTrack.append(heldShot(0.0, -10.0, 10.0, 0.0, -20.0, 0.0, attackDuration - 4.2))
-        case 'AmbassadorRefinement' | 'AmbassadorRefinementManager':
-            camTrack.append(heldShot(0.0, -15.0, 10.0, 0.0, -20.0, 0.0, suit.getDuration('snap') + 0.5))
-            camTrack.append(cameraActorShot(suit, 'summon-cog', (attackDuration - (suit.getDuration('snap') + 0.5))))
+        case 'AmbassadorRefinementManager':
+            camTrack.append(Parallel(heldRelativeHeadsUpShot(suit, 1, 12, 8, suit, attackDuration, "bayouBashShot"), Wait(attackDuration)))
+        case 'AmbassadorRefinement':
+            camTrack.append(heldShot(0.0, -10.0, 10.0, 0.0, -20.0, 0.0, attackDuration))
+            # camTrack.append(heldShot(0.0, -15.0, 10.0, 0.0, -20.0, 0.0, suit.getDuration('snap') + 0.5))
+            # camTrack.append(cameraActorShot(suit, 'summon-cog', (attackDuration - (suit.getDuration('snap') + 0.5))))
         case 'AmbassadorGhostMentality':
             camTrack.append(heldShot(0.0, -15.0, 10.0, 0, -20, 0, attackDuration))
         case 'AmbassadorPhase2':
@@ -1594,7 +1993,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         case 'RecordkeeperRedlinedClauseMissedPayment':
             camTrack.append(randomActorShot(suit, battle, attackDuration, 'suit'))
         case 'RecordkeeperAuditCycle':
-            camTrack.append(heldRelativeShot(suit, 4.0, 9.0, suit.height - 1.0, 150.0, 0.0, 0.0, attackDuration))
+            camTrack.append(Parallel(heldRelativeHeadsUpShot(suit, 1, 12, 8, suit, attackDuration, "bayouBashShot"), Wait(attackDuration)))
         case 'RecordkeeperPhantomEntryDamage':
             camTrack.append(heldRelativeShot(suit, 0.0, 10.0, 15.0, -180.0, -30.0, 0.0, attackDuration))
         case 'RecordkeeperPhantomEntrySpawn':
@@ -2480,7 +2879,11 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                 'BanLevel78': 'Level 7 and 8 gags are off-limits!'
             }
         
-            camTrack2 = Sequence(randomActorShot(suit, battle, 3.0, 'suit'), defaultCamera(openShotDuration=0.0, attackDuration=attackDuration - 3.0))
+            cameraTrackContingency = sparkplugCameraShot(
+                battle,
+                suit
+            )
+            camTrack2 = Parallel(Wait(attackDuration), cameraTrackContingency)
             camTrack3 = defaultCamera(openShotDuration=0.5)
             camTrack4 = defaultCamera(openShotDuration=1.5)
             pbpText = attack['playByPlayText']
@@ -2529,8 +2932,12 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
                 'BanSoundDrop': 'Sound and Drop gags are off-limits!'
             }
         
-            camTrack2 = defaultCamera(openShotDuration=2.5)
             camTrack3 = defaultCamera(openShotDuration=0.5)
+            cameraTrackContingency = sparkplugCameraShot(
+                battle,
+                suit
+            )
+            camTrack2 = Parallel(Wait(attackDuration), cameraTrackContingency)
             pbpText = attack['playByPlayText']
             pbpTrack = pbpText.getShowInterval(('Contingency Clause!', banDesc[name]), attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
             pbpTrack2 = pbpText.getShowInterval(('Wire Cut!', banDesc[name]), attackDuration, colorOverride=lambda: (0.45, 0.45, 1.0, 1.0), posOverride=lambda: (0.0, 0.775))
@@ -2724,17 +3131,6 @@ def heldRelativeShot(other, x, y, z, h, p, r, duration, name = 'heldRelativeShot
     track.append(Wait(duration))
     return track
 
-
-def heldRelativeHeadsUpShot(other, x: float, y: float, z: float, headsUpObject, duration: float, name: str = 'heldRelativeHeadsUpShot') -> Sequence:
-    track: Sequence = Sequence(name=name)
-    # Let the camera display the toons
-    track.append(Func(camera.setPos, other, x, y, z))
-    # Heads up the camera towards the given object
-    track.append(Func(camera.headsUp, headsUpObject))
-    # Hold that pose
-    track.append(Wait(duration))
-    return track
-
 def motionShot(x, y, z, h, p, r, duration, other = None, name = 'motionShot'):
     if other:
         posTrack = LerpPosInterval(camera, duration, pos=Point3(x, y, z), other=other, blendType='easeInOut')
@@ -2873,20 +3269,8 @@ def moveCameraOnly(x, y, z, duration, other=None,
 #     )
 
 
-def hprShot(hpr, duration: float, other = None, name: str = 'hprShot'):
-    return LerpHprInterval(camera, duration, hpr=hpr, other=other, name=name) # Simplified from the Clash variant, because other for LerpHprInterval is None by default, which is also the default for hprShot(), thereby making a check to omit the default argument if it matches the default argument unnecessary.
-
-
 def allGroupShot(avatar, duration, battle=None):
     return heldShot(10, 0, 10, 89, -30, 0, duration, "allGroupShot")
-
-
-def allGroupOverheadShot(avatar, duration: float, battle = None) -> Sequence:
-    return heldShot(0.0, -15.0, 9.0, 0.0, -20.0, 0.0, duration, 'allGroupOverheadShot')
-
-
-def allGroupLowerOverheadShot(avatar, duration: float, battle = None) -> Sequence:
-    return heldShot(0.0, -16.5, 7.0, 0.0, -5.0, 0.0, duration, "allGroupLowerOverheadShot")
 
 
 def allGroupLowShot2(avatar, duration, battle=None):
@@ -2902,7 +3286,7 @@ def allGroupLowShot(avatar, duration, battle=None):
             s.getGeomNode().getScale()[0]
         )
         # Enforce a minimum width.
-        return max(width, 4)
+        return max(width, 1)
 
     if battle.activeSuits:
         # Get the width of each suit in the actor list.
@@ -3136,6 +3520,18 @@ def focusCameraBetweenPoints(point1, point2):
 
 def randomCamera(suit, toon, battle, attackDuration, openShotDuration):
     return randomAttackCam(suit, toon, battle, attackDuration, openShotDuration, 'suit')
+
+
+@staticmethod
+def heldRelativeHeadsUpShot(other, x, y, z, headsUpObject, duration, name="heldRelativeHeadsUpShot"):
+    track = Sequence(name=name)
+    # Let the camera display the toons
+    track.append(Func(camera.setPos, other, x, y, z))
+    # Heads up the camera towards the given object
+    track.append(Func(camera.headsUp, headsUpObject))
+    # Hold that pose
+    track.append(Wait(duration))
+    return track
 
 
 def randomAttackCam(suit, target, battle, attackDuration, openShotDuration, attackerString='suit', defenderString='toon'):
@@ -3471,6 +3867,17 @@ def chooseFireCloseShot(throws, suitThrowsDict, openDuration, openName, attackDu
     track = shotChoice(*[av, duration, battle])
     print('chooseFireOpenShot %s' % shotChoice)
     return track
+
+def allGroupOverheadShot(avatar, duration: float, battle = None) -> Sequence:
+    return heldShot(0.0, -15.0, 9.0, 0.0, -20.0, 0.0, duration, 'allGroupOverheadShot')
+
+
+def allGroupLowerOverheadShot(avatar, duration: float, battle = None) -> Sequence:
+    return heldShot(0.0, -16.5, 7.0, 0.0, -5.0, 0.0, duration, "allGroupLowerOverheadShot")
+
+
+def hprShot(hpr, duration: float, other = None, name: str = 'hprShot'):
+    return LerpHprInterval(camera, duration, hpr=hpr, other=other, name=name) # Simplified from the Clash variant, because other for LerpHprInterval is None by default, which is also the default for hprShot(), thereby making a check to omit the default argument if it matches the default argument unnecessary.
 
 
 def avatarCloseUpFireShot(avatar, duration, battle=None):

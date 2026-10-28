@@ -216,7 +216,7 @@ class PacesetterCalculatorAI:
                                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.battle.activeSuits[i].currHP > 0 and self.battle.activeSuits[i].currHP <= 10200 and self.TurnsElapsed % 4 == 0:
+                if self.battle.activeSuits[i].currHP > 0 and self.battle.activeSuits[i].currHP <= 10200 and self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 4 == 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'PacesetterContentSync',
                                                             'animName': 'magic3',

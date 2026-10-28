@@ -93,7 +93,7 @@ class BaseSuitAttackCalculatorAI:
     def calculateSuitAttacks(self):
         for i in range(len(self.battle.activeSuits)): # Cheats before Cog Attacks
             suitId = self.battle.activeSuits[i].doId
-            x = self.TurnsElapsed
+            x = self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i])
             attack = self.__getGenericSuitAttack(suitId)
             if self.battle.activeSuits[i].dna.name == 'videog':
                 if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.suitHasCondition(suitId, 'bannedGagUsed') and self.battle.activeSuits[i].currHP > 0:

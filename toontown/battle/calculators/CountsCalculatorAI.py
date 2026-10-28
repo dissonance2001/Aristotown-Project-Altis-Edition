@@ -39,7 +39,6 @@ class CountsCalculatorAI:
         )
 
     def calculateSuitAttacksCounts(self):
-        x = self.TurnsElapsed
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'erfit':
@@ -56,14 +55,14 @@ class CountsCalculatorAI:
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'erfit':
-                if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and ((self.countErfitHP >= 650) or (self.TurnsElapsed + 2) % 4 == 0):
+                if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and ((self.countErfitHP >= 650) or (self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 2) % 4 == 0):
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'erfit':
-                if (((self.TurnsElapsed + 2) % 4 == 0) or (self.calculator.countErfitHP >= 650)) and self.__suitCanAttack(suitId):
+                if (((self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 2) % 4 == 0) or (self.calculator.countErfitHP >= 650)) and self.__suitCanAttack(suitId):
                     livingOtherCogs = []
 
                     for otherSuit in self.battle.activeSuits:
@@ -148,7 +147,7 @@ class CountsCalculatorAI:
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'erfit':
-                if (((self.TurnsElapsed + 2) % 4 == 0) or (self.calculator.countErfitHP >= 650)) and self.__suitCanAttack(suitId):
+                if (((self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 2) % 4 == 0) or (self.calculator.countErfitHP >= 650)) and self.__suitCanAttack(suitId):
                     livingOtherCogs = []
 
                     for otherSuit in self.battle.activeSuits:
@@ -231,11 +230,11 @@ class CountsCalculatorAI:
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'erclaim':
-                if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and (((self.TurnsElapsed + 3) % 4 == 0) or (self.calculator.countErclaimHP >= 650)) and self.battle.activeSuits[i].currHP > 0:
+                if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and (((self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 3) % 4 == 0) or (self.calculator.countErclaimHP >= 650)) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if (((self.TurnsElapsed + 3) % 4 == 0) or (self.calculator.countErclaimHP >= 650)) and self.__suitCanAttack(suitId):
+                if (((self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 3) % 4 == 0) or (self.calculator.countErclaimHP >= 650)) and self.__suitCanAttack(suitId):
                     sacrificeCandidates = []
 
                     for otherSuit in self.battle.activeSuits:
@@ -292,11 +291,11 @@ class CountsCalculatorAI:
                         'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and (((self.TurnsElapsed + 3) % 4 == 0) and (self.calculator.countErclaimHP >= 650)) and self.battle.activeSuits[i].currHP > 0:
+                if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and (((self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 3) % 4 == 0) and (self.calculator.countErclaimHP >= 650)) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if (((self.TurnsElapsed + 3) % 4 == 0) and (self.calculator.countErclaimHP >= 650)) and self.__suitCanAttack(suitId):
+                if (((self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 3) % 4 == 0) and (self.calculator.countErclaimHP >= 650)) and self.__suitCanAttack(suitId):
                     sacrificeCandidates = []
 
                     for otherSuit in self.battle.activeSuits:
@@ -369,11 +368,11 @@ class CountsCalculatorAI:
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'erfit':
-                if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and len(self.battle.activeSuits) < 5 and self.TurnsElapsed % 2 == 0:
+                if not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and len(self.battle.activeSuits) < 5 and self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 2 == 0:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if len(self.battle.activeSuits) < 5 and self.battle.activeSuits[i].currHP > 0 and self.TurnsElapsed % 2 == 0:
+                if len(self.battle.activeSuits) < 5 and self.battle.activeSuits[i].currHP > 0 and self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 2 == 0:
                     attack = self.__getCheatAttack(suitId, {
                         'suitName': self.battle.activeSuits[i].dna.name,
                         'name': 'ErfitPersonalTrainer',

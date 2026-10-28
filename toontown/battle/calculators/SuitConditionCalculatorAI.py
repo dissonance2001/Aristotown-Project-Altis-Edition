@@ -41,7 +41,7 @@ class SuitConditionCalculatorAI:
     def calculateSuitConditions(self):
         for i in range(len(self.battle.activeSuits)): # Cheat Calculators
             suitId = self.battle.activeSuits[i].doId
-            x = self.calculator.TurnsElapsed
+            x = self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i])
             # if x % 99 == 0 and not self.suitHasCondition(suitId, 'alreadyCogSpawn2'):
             #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
             #                             'name': 'CogSpawn',
@@ -81,65 +81,65 @@ class SuitConditionCalculatorAI:
                     self.setSuitCondition(suitId, 'throwbookcalculator', 1, 10, 'setBoth')
                 if (x + 1) % 3 == 0:
                     self.setSuitCondition(suitId, 'snappedcalculator', 1, 10, 'setBoth')
-                if x % 4 == 0:
-                    self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if x % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0 and not x == 0:
-                    self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                    self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].currHP <= 4100:
-                    if (x + 1) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
-                        self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 1) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
-                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].currHP <= 3600:
-                    if (x + 2) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
-                        self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 2) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
-                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].currHP <= 3100:
-                    if (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
-                        self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 3) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
-                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].currHP <= 2600:
-                    if (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
-                        self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 3) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
-                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].currHP <= 2100:
-                    if (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
-                        self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 3) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
-                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].currHP <= 1600:
-                    if (x + 2) % 3 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
-                        self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 2) % 3 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
-                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].currHP <= 1100:
-                    if (x + 2) % 3 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
-                        self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 2) % 3 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
-                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].currHP <= 600:
-                    if (x + 1) % 2 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
-                        self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 1) % 2 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
-                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
-                if self.battle.activeSuits[i].currHP <= 100:
-                    if (x + 1) % 2 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
-                        self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
-                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
-                    elif (x + 1) % 2 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
-                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if x % 4 == 0:
+                #     self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if x % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and len(self.battle.activeSuits) >= 6 and not self.deadSuits > 0 and not x == 0:
+                #     self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #     self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                # if self.battle.activeSuits[i].currHP <= 4100:
+                #     if (x + 1) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
+                #         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                #     elif (x + 1) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                #         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if self.battle.activeSuits[i].currHP <= 3600:
+                #     if (x + 2) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
+                #         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                #     elif (x + 2) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                #         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if self.battle.activeSuits[i].currHP <= 3100:
+                #     if (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
+                #         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                #     elif (x + 3) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                #         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if self.battle.activeSuits[i].currHP <= 2600:
+                #     if (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
+                #         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                #     elif (x + 3) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                #         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if self.battle.activeSuits[i].currHP <= 2100:
+                #     if (x + 3) % 4 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
+                #         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                #     elif (x + 3) % 4 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                #         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if self.battle.activeSuits[i].currHP <= 1600:
+                #     if (x + 2) % 3 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
+                #         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                #     elif (x + 2) % 3 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                #         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if self.battle.activeSuits[i].currHP <= 1100:
+                #     if (x + 2) % 3 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
+                #         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                #     elif (x + 2) % 3 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                #         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if self.battle.activeSuits[i].currHP <= 600:
+                #     if (x + 1) % 2 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
+                #         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                #     elif (x + 1) % 2 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                #         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                # if self.battle.activeSuits[i].currHP <= 100:
+                #     if (x + 1) % 2 == 0 and self.suitHasCondition(suitId, 'bashcalculator') and not self.deadSuits > 0 and len(self.battle.activeSuits) >= 6:
+                #         self.setSuitCondition(suitId, 'bashcalculator', 0, 0, 'setBoth')
+                #         self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                #     elif (x + 1) % 2 == 0 and not self.suitHasCondition(suitId, 'bashcalculator'):
+                #         self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'sgoat':
                 if (x + 3) % 4 == 0:
                     self.setSuitCondition(suitId, 'gavelcalculator', 1, 10, 'setBoth')
@@ -184,10 +184,12 @@ class SuitConditionCalculatorAI:
                 if self.getSuitConditionTurns(suitId, 'immune') == 1 and self.suitHasCondition(suitId, 'immune'):
                     self.setSuitCondition(suitId, 'wiretappedcalculator', 1, 10, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'ambass': #ambassador
+                for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'alreadyCogSpawn', 1, 1, 'setBoth')
                 if (x + 3) % 5 == 0:
                     self.setSuitCondition(suitId, 'refinementcalculator', 1, 10, 'setBoth')
-                if (x + 3) % 4 == 0:
-                    self.setSuitCondition(suitId, 'advancementcalculator', 1, 10, 'setBoth')
+                # if (x + 3) % 4 == 0:
+                #     self.setSuitCondition(suitId, 'advancementcalculator', 1, 10, 'setBoth')
                 if (x + 2) % 3 == 0:
                     self.setSuitCondition(suitId, 'pinkslipcalculator', 1, 10, 'setBoth')
                 # currentBossHealth = -1

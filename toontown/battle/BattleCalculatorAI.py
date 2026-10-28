@@ -183,6 +183,8 @@ class BattleCalculatorAI:
         self.toonHPAdjusts = {}
         self.toonSkillPtsGained = {}
         self.syphonedHP = 0
+        self.litigatorDamage = 0
+        self.litigatorSnaps = 0
         self.countErclaimHP = 0
         self.countErfitHP = 0
         self.absorbDamage = 0
@@ -240,6 +242,7 @@ class BattleCalculatorAI:
         self.sacrificedCogs = 0
         self.governaughtCogs = 0
         self.TurnsElapsed = 0
+        self.suitTurnStart = {}
         self.TurnsSinceSummonWithOnlyOneCog = 0
         self.TurnsSinceSummon = 0
         self.numShadowsSummoned = 0
@@ -269,6 +272,17 @@ class BattleCalculatorAI:
 
         self.suitStatusConditions = {}
         self.suitStatusConditionsNew = {}
+
+    def getSuitTurnsElapsed(self, suit):
+        if suit is None:
+            return 0
+
+        suitId = suit.doId
+
+        if suitId not in self.suitTurnStart:
+            self.suitTurnStart[suitId] = self.TurnsElapsed
+
+        return self.TurnsElapsed - self.suitTurnStart[suitId]
 
     def printSuitConditions(self):
         self.notify.debug('printSuitConditions() *********************************************')
@@ -1161,6 +1175,8 @@ class BattleCalculatorAI:
                     damage *= 0.7
                 if suit.dna.name == 'erfit':
                     self.countErfitHP += damage
+                if suit.dna.name == 'lgator':
+                    self.litigatorDamage += damage
                 if suit.dna.name == 'erclaim':
                     self.countErclaimHP += damage
              #   for s in self.battle.activeSuits:
@@ -1776,6 +1792,9 @@ class BattleCalculatorAI:
 
         if suit.dna.name == 'erfit':
             self.countErfitHP += attackDamage
+
+        if suit.dna.name == 'lgator':
+            self.litigatorDamage += attackDamage
 
         if suit.dna.name == 'erclaim':
             self.countErclaimHP += attackDamage
@@ -4544,6 +4563,8 @@ class BattleCalculatorAI:
                             attack[TOON_HPBONUS_COL] = math.ceil(totalDmgs * (DamageBonusesDrop[numDmgs - 1] * 0.01))
                             if theSuit.dna.name == 'erfit':
                                 self.countErfitHP += math.ceil(totalDmgs * (DamageBonusesDrop[numDmgs - 1] * 0.01))
+                            if theSuit.dna.name == 'lgator':
+                                self.litigatorDamage += math.ceil(totalDmgs * (DamageBonusesDrop[numDmgs - 1] * 0.01))
                             if theSuit.dna.name == 'erclaim':
                                 self.countErclaimHP += math.ceil(totalDmgs * (DamageBonusesDrop[numDmgs - 1] * 0.01))
                         elif atkTrack == ZAP:
@@ -4554,6 +4575,8 @@ class BattleCalculatorAI:
                             attack[TOON_HPBONUS_COL] = math.ceil(totalDmgs * (DamageBonuses[numDmgs - 1] * 0.01))
                             if theSuit.dna.name == 'erfit':
                                 self.countErfitHP += math.ceil(totalDmgs * (DamageBonuses[numDmgs - 1] * 0.01))
+                            if theSuit.dna.name == 'lgator':
+                                self.litigatorDamage += math.ceil(totalDmgs * (DamageBonuses[numDmgs - 1] * 0.01))
                             if theSuit.dna.name == 'erclaim':
                                 self.countErclaimHP += math.ceil(totalDmgs * (DamageBonuses[numDmgs - 1] * 0.01))
                         if self.notify.getDebug():
@@ -7989,6 +8012,7 @@ class BattleCalculatorAI:
         self.governaughtCogs *= 0
         self.countErclaimHP *= 0
         self.countErfitHP *= 0
+        self.litigatorDamage *= 0
         self.interestMultiplier += 2
         self.absorbDamage = 0
         self.absorbDamageRecordkeeper = 0
@@ -8382,6 +8406,9 @@ class BattleCalculatorAI:
 
     def getLuredSuits(self):
         self.TurnsElapsed += 1
+        # for suit in self.battle.activeSuits:
+        #     if suit.doId not in self.suitTurnStart:
+        #         self.suitTurnStart[suit.doId] = self.TurnsElapsed - 1
         self.deadSuits = 0
         self.absorbDamage = 0
         self.absorbDamageRecordkeeper = 0

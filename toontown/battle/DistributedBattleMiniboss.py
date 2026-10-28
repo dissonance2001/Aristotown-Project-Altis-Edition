@@ -328,6 +328,9 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
         elif suit.dna.name == 'dking':
             fakeSuit = chairmanBoss.dividend
             chairmanBoss.hideDividend()
+        elif suit.isWaiter:
+            fakeSuit = directorBoss.waiterPlaceholder
+            directorBoss.doorSequence()
 
         if fakeSuit is None:
             return False
@@ -459,7 +462,7 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 'stenog', 'lgator', 'sgoat', 'caseman',
                 'safesupervis', 'hustle', 'radiog', 'ubuster',
                 'cdirector', 'rkeeper', 'liquid', 'dking'
-            ):
+            ) or suit.isWaiter:
                 suit.setState('Battle')
 
                 suitTrack = self.createManagerMoveIval(suit, delay)
@@ -1246,6 +1249,9 @@ class DistributedBattleMiniboss(DistributedBattleFinal.DistributedBattleFinal):
                 camera.reparentTo(self)
                 camera.setPosHpr(0, 30, 35, 180, -30, 0)
             if suit.dna.name in ['stenog', 'lgator', 'sgoat', 'caseman']:
+                camera.reparentTo(self)
+                camera.setPosHpr(0, 20, 15, 180, 0, 0)
+            if suit.isWaiter:
                 camera.reparentTo(self)
                 camera.setPosHpr(0, 20, 15, 180, 0, 0)
 

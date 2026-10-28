@@ -39,13 +39,14 @@ class WitnessStandInCalculatorAI:
         )
 
     def calculateSuitAttacksWitnessStandIn(self):
-        x = self.TurnsElapsed
+        for i in range(len(self.battle.activeSuits)):
+            x = self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i])
 
             # Primary Cheats
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'wsi': #witness stand-in
-                if (self.suitHasCondition(suitId, 'soakedcalculator') and not (x % 3 == 0)) or (x + 2) % 3 == 0 and len(self.battle.activeSuits) >= 6  and not self.calculator.deadSuits >= 4 and self.__suitCanAttack(suitId):
+                if (self.suitHasCondition(suitId, 'soakedcalculator') and not (self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 3 == 0)) or (self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 2) % 3 == 0 and len(self.battle.activeSuits) >= 6  and not self.calculator.deadSuits >= 4 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'WSICeaseAndDesist', # Cease And Desist
                      'animName': 'cease',
@@ -56,7 +57,7 @@ class WitnessStandInCalculatorAI:
                                         'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if x % 3 == 0 and len(self.battle.activeSuits) < 6 and self.__suitCanAttack(suitId):
+                if self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 3 == 0 and len(self.battle.activeSuits) < 6 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'WSIJuryNotice', # Jury Notice
                      'animName': 'summon',
@@ -68,7 +69,7 @@ class WitnessStandInCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'redd':  # redd heir wing
-                if (x + 1) % 3 == 0 and self.__suitCanAttack(suitId):
+                if (self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 1) % 3 == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'ReddPeckingOrder', # Pecking Order
                      'animName': 'throw-object',

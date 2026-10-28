@@ -8801,6 +8801,117 @@ def soundWave(self):
     p0.emitter.setLocation(Point3(0.0000, 0.0000, 0.0000))
     self.addParticles(p0)
 
+@particle
+def soundWaveQuick(self):
+    self.reset()
+    self.setPos(0.000, 0.000, 0.000)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(7.000, 7.000, 7.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("PointEmitter")
+    p0.setPoolSize(128)
+    p0.setBirthRate(0.1800)
+    p0.setLitterSize(1)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(2.0000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(1.0000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(0.0010)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(3.2000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAOUT)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setTextureFromNode("phase_5/models/props/uberSoundEffects", "**/Circle")
+    # p0.renderer.addTextureFromFile('maps/Circle.tif')
+    p0.renderer.setColor(Vec4(1.00, 1.00, 1.00, 0.40))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.0000)
+    p0.renderer.setFinalXScale(2.1000)
+    p0.renderer.setInitialYScale(0.0000)
+    p0.renderer.setFinalYScale(2.1000)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(1)
+    p0.renderer.setColorBlendMode(ColorBlendAttrib.MAdd, ColorBlendAttrib.OIncomingAlpha, ColorBlendAttrib.OOne)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETEXPLICIT)
+    p0.emitter.setAmplitude(0.0500)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
+    # Point parameters
+    p0.emitter.setLocation(Point3(0.0000, 0.0000, 0.0000))
+    self.addParticles(p0)
+
+
+@particle
+def soundWaveQuickTaunt(self):
+    self.reset()
+    self.setPos(0.000, 0.000, 0.000)
+    self.setHpr(0.000, 0.000, 0.000)
+    self.setScale(7.000, 7.000, 7.000)
+    p0 = Particles.Particles('particles-1')
+    # Particles parameters
+    p0.setFactory("PointParticleFactory")
+    p0.setRenderer("SpriteParticleRenderer")
+    p0.setEmitter("PointEmitter")
+    p0.setPoolSize(128)
+    p0.setBirthRate(0.5000)
+    p0.setLitterSize(1)
+    p0.setLitterSpread(0)
+    p0.setSystemLifespan(2.6000)
+    p0.setLocalVelocityFlag(1)
+    p0.setSystemGrowsOlderFlag(0)
+    # Factory parameters
+    p0.factory.setLifespanBase(0.4000)
+    p0.factory.setLifespanSpread(0.0000)
+    p0.factory.setMassBase(0.0010)
+    p0.factory.setMassSpread(0.0000)
+    p0.factory.setTerminalVelocityBase(5.0000)
+    p0.factory.setTerminalVelocitySpread(0.0000)
+    # Point factory parameters
+    # Renderer parameters
+    p0.renderer.setAlphaMode(BaseParticleRenderer.PRALPHAOUT)
+    p0.renderer.setUserAlpha(1.00)
+    # Sprite parameters
+    p0.renderer.setTextureFromNode("phase_5/models/props/uberSoundEffects", "**/Circle")
+    # p0.renderer.addTextureFromFile('maps/Circle.tif')
+    p0.renderer.setColor(Vec4(1.00, 0.20, 0.20, 0.40))
+    p0.renderer.setXScaleFlag(1)
+    p0.renderer.setYScaleFlag(1)
+    p0.renderer.setAnimAngleFlag(0)
+    p0.renderer.setInitialXScale(0.0000)
+    p0.renderer.setFinalXScale(3.0000)
+    p0.renderer.setInitialYScale(0.0000)
+    p0.renderer.setFinalYScale(3.0000)
+    p0.renderer.setNonanimatedTheta(0.0000)
+    p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
+    p0.renderer.setAlphaDisable(1)
+    p0.renderer.setColorBlendMode(ColorBlendAttrib.MAdd, ColorBlendAttrib.OIncomingAlpha, ColorBlendAttrib.OOne)
+    # Emitter parameters
+    p0.emitter.setEmissionType(BaseParticleEmitter.ETEXPLICIT)
+    p0.emitter.setAmplitude(0.0500)
+    p0.emitter.setAmplitudeSpread(0.0000)
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setExplicitLaunchVector(Vec3(0.0000, 0.0000, 0.0000))
+    p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
+    # Point parameters
+    p0.emitter.setLocation(Point3(0.0000, 0.0000, 0.0000))
+    self.addParticles(p0)
+
 
 @particle
 def tnt(self):
@@ -9255,7 +9366,7 @@ def jargonSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitude(5.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 4.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -9378,7 +9489,7 @@ def legaleseSpray(self):
     p0.renderer.setAlphaDisable(0)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitude(8.0000)
     p0.emitter.setAmplitudeSpread(0.0000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 7.0000, -1.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -9818,7 +9929,7 @@ def rollodexStream(self):
 def shiftSpray(self):
     self.reset()
     self.setPos(0.000, 5.000, 2.300)
-    self.setHpr(0.000, -10.000, 0.000)
+    self.setHpr(0.000, -55.000, 0.000)
     self.setScale(9.000, 9.000, 9.000)
     p0 = Particles.Particles('particles-1')
     # Particles parameters
@@ -9851,7 +9962,7 @@ def shiftSpray(self):
     p0.renderer.setLifeScale(SparkleParticleRenderer.SPNOSCALE)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(10.0000)
+    p0.emitter.setAmplitude(3.5000)
     p0.emitter.setAmplitudeSpread(0.5000)
     p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 0.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
@@ -12681,17 +12792,17 @@ def zapCogDeathSmoke(self):
 @particle
 def cigarSmokeAtk(self):
     self.reset()
-    self.setPos(0.000, 2.000, 5.000)
-    self.setHpr(0.000, -100.000, 0.000)
+    self.setPos(0.000, 4.000, 0.000)
+    self.setHpr(0.000, -90.000, 0.000)
     self.setScale(1.000, 1.000, 1.000)
     p0 = Particles.Particles('particles-1')
     # Particles parameters
     p0.setFactory("PointParticleFactory")
     p0.setRenderer("SpriteParticleRenderer")
     p0.setEmitter("DiscEmitter")
-    p0.setPoolSize(40)
-    p0.setBirthRate(0.1000)
-    p0.setLitterSize(1)
+    p0.setBirthRate(0.02500)
+    p0.setLitterSize(2)
+    p0.setPoolSize(100)
     p0.setLitterSpread(0)
     p0.setSystemLifespan(0.0000)
     p0.setLocalVelocityFlag(1)
@@ -12715,10 +12826,10 @@ def cigarSmokeAtk(self):
     p0.renderer.setXScaleFlag(1)
     p0.renderer.setYScaleFlag(1)
     p0.renderer.setAnimAngleFlag(0)
-    p0.renderer.setInitialXScale(0.5000)
-    p0.renderer.setFinalXScale(4.0000)
-    p0.renderer.setInitialYScale(0.5000)
-    p0.renderer.setFinalYScale(4.0000)
+    p0.renderer.setInitialXScale(0.25000)
+    p0.renderer.setFinalXScale(2.0000)
+    p0.renderer.setInitialYScale(0.25000)
+    p0.renderer.setFinalYScale(2.0000)
     p0.renderer.setNonanimatedTheta(0.0000)
     p0.renderer.setAlphaBlendMethod(BaseParticleRenderer.PPBLENDLINEAR)
     p0.renderer.setAlphaDisable(0)
@@ -12726,9 +12837,9 @@ def cigarSmokeAtk(self):
                                                          Vec4(0.28235295414924622, 0.28235295414924622, 0.28235295414924622, 1.0), 1)
     # Emitter parameters
     p0.emitter.setEmissionType(BaseParticleEmitter.ETRADIATE)
-    p0.emitter.setAmplitude(0.4000)
+    p0.emitter.setAmplitude(0.3000)
     p0.emitter.setAmplitudeSpread(0.0000)
-    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 10.0000))
+    p0.emitter.setOffsetForce(Vec3(0.0000, 0.0000, 7.0000))
     p0.emitter.setExplicitLaunchVector(Vec3(1.0000, 0.0000, 0.0000))
     p0.emitter.setRadiateOrigin(Point3(0.0000, 0.0000, 0.0000))
     # Disc parameters

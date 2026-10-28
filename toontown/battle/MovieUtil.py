@@ -1929,6 +1929,8 @@ def createSuitDeathTrack(suit, battle):
     if suit.isSkeleton:
         suitTrack.append(
         ActorInterval(suit, 'skeleton-lose', duration=SUIT_LOSE_DURATION))
+        if suit.dna.name == 'ambass':
+            suitTrack.append(Func(suit.makeUnSwole))
     else:
         suitTrack.append(
         ActorInterval(suit, 'lose', duration=SUIT_LOSE_DURATION))

@@ -217,11 +217,11 @@ class FaceTheFamilyCalculatorAI:
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'foreman' and self.battle.activeSuits[i].getActualLevel() == 28:
-                if self.TurnsElapsed % 5 == 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.deadSuits > 0:
+                if self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 5 == 0 and not self.suitHasCondition(suitId, 'sounded') and self.suitHasCondition(suitId, 'unlureSuit') and self.deadSuits > 0:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 5 == 0 and self.__suitCanAttack(suitId):
+                if self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 5 == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'ForemanPolish', # Extortion
                      'animName': 'summon-cog',
@@ -411,7 +411,7 @@ class FaceTheFamilyCalculatorAI:
                         attack = self.__getLureRemoval(suitId)
                         if attack[SUIT_ATK_COL]:
                             self.battle.suitAttacks.append(attack)
-                    if self.TurnsElapsed % 2 == 0:
+                    if self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 2 == 0:
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                                     'name': 'AttorneyInkDrain',
                                                                     'animName': 'effort',
@@ -555,7 +555,7 @@ class FaceTheFamilyCalculatorAI:
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'supervis' and self.battle.activeSuits[i].getActualLevel() == 28:
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                if self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 1 == 0 and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'MintAudit',
                                                             'animName': 'calculator',
@@ -981,7 +981,7 @@ class FaceTheFamilyCalculatorAI:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.battle.activeSuits[i].currHP > 0:
+                if self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'DisableLevel%s' % random.choice(['45', '46', '47', '48', '56', '57', '58', '67', '68', '78']), # Gag Disability
                      'animName': 'objection',
@@ -999,7 +999,7 @@ class FaceTheFamilyCalculatorAI:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.battle.activeSuits[i].currHP > 0:
+                if self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'Disable%s' % random.choice(['ToonupTrap', 'ToonupLure', 'ToonupThrow', 'ToonupSquirt', 'ToonupZap', 'ToonupSound', 'ToonupDrop', 'TrapLure', 'TrapThrow', 'TrapSquirt', 'TrapZap', 'TrapSound', 'TrapDrop', 'LureThrow', 'LureSquirt', 'LureZap', 'LureSound', 'LureDrop', 'ThrowSquirt', 'ThrowZap', 'ThrowSound', 'ThrowDrop', 'SquirtZap', 'SquirtSound', 'SquirtDrop', 'ZapSound', 'ZapDrop', 'SoundDrop']),
                      'animName': 'objection',

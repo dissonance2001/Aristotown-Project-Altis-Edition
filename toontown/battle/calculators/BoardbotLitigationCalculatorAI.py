@@ -456,7 +456,7 @@ class BoardbotLitigationCalculatorAI:
             if self.battle.activeSuits[i].dna.name == 'liquid':
                 for suit in self.battle.activeSuits:
                     if not suit.getManager() and (suit.currHP < suit.maxHP) and suit.currHP > 0 and not suit.getGovernaught():
-                        if (self.TurnsElapsed + 1) % 2 == 0:
+                        if (self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 1) % 2 == 0:
                             self.calculator.sacrificedCogs += 1
                 if self.sacrificedCogs > 0 and self.suitHasCondition(suitId, 'unlureSuit') and not self.suitHasCondition(suitId, 'sounded') and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getLureRemoval(suitId)
@@ -720,18 +720,18 @@ class BoardbotLitigationCalculatorAI:
                                                                 'group': SuitBattleGlobals.ATK_TGT_DOUBLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'phantomEntrycalculator') and self.battle.activeSuits[
-                    i].currHP > 0 and (len(self.battle.activeSuits) < 7 or self.deadSuits > 0):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'RecordkeeperPhantomEntrySpawn',  # Audit
-                                                            'animName': 'effort',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-                                        'targetType': 'none'})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
+                # if self.suitHasCondition(suitId, 'phantomEntrycalculator') and self.battle.activeSuits[
+                #     i].currHP > 0 and (len(self.battle.activeSuits) < 7 or self.deadSuits > 0):
+                #     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                #                                             'name': 'RecordkeeperPhantomEntrySpawn',  # Audit
+                #                                             'animName': 'effort',
+                #                                             'hp': 0,
+                #                                             'acc': 100,
+                #                                             'freq': 0,
+                #                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                #                         'targetType': 'none'})
+                #     if attack[SUIT_ATK_COL]:
+                #         self.battle.suitAttacks.append(attack)
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
@@ -891,7 +891,7 @@ class BoardbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'rkeeper':
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                if self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'RecordkeeperAuditCycle',
                                                             'animName': 'calculating-costs',

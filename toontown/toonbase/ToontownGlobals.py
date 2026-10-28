@@ -2172,6 +2172,12 @@ BossbotRTPreTwoPosHpr = (0,
  180,
  0,
  0)
+BossbotRTPreTwoPosHprWaiter = (0,
+ - 40,
+ 0,
+ 180,
+ 0,
+ 0)
 BossbotRTEpiloguePosHpr = (0,
  90,
  0,

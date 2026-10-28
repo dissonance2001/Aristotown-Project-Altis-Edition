@@ -676,7 +676,14 @@ class SuitSpawnCalculatorAI:
                                     break
 
                             if boss:
-                                maxSuits = 6
+                                if self.calculator.litigatorSnaps == 0:
+                                    maxSuits = 4
+                                elif self.calculator.litigatorSnaps == 1:
+                                    maxSuits = 5
+                                elif self.calculator.litigatorSnaps == 2:
+                                    maxSuits = 6
+                                elif self.calculator.litigatorSnaps == 3:
+                                    maxSuits = 7
                                 maxSpawnPerTurn = 2
 
                                 # Count only living Cogs.

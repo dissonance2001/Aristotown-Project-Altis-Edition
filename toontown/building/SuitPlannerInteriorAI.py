@@ -251,7 +251,8 @@ class SuitPlannerInteriorAI:
         revivesThreeChance=0,
         forceExecutive=0,
         suitName=None,
-        forceLevel=False):
+        forceLevel=False,
+        forceWaiter=0):
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
         flags = self.__setupSuitInfo(
             newSuit,
@@ -274,7 +275,7 @@ class SuitPlannerInteriorAI:
         elif flags & IFSkelecog:
             newSuit.setSkelecog(1)
         newSuit.generateWithRequired(suitZone)
-        if flags & IFWaiter:
+        if forceWaiter or (flags & IFWaiter):
             newSuit.b_setWaiter(1)
         if flags & IFV2:
             newSuit.b_setSkeleRevives(1)
@@ -1204,6 +1205,20 @@ class SuitPlannerInteriorAI:
                 bldgTrack='l',
                 suitLevel=suitLevel,
                 revives=0
+            )
+            reserveSuits.append((suit, 100))
+        if specialCode == 'ambWaiter':
+            # litigation
+            suitLevel = random.randint(10, 25)
+            suitType = SuitDNA.getRandomSuitTierSpawn(suitLevel, 'c')
+
+            suit = self.__genSuitObject(
+                self.zoneId,
+                suitType=suitType,
+                bldgTrack=random.choice(('c', 'm', 's', 'g', 'l', 't', 'p')),
+                suitLevel=suitLevel,
+                revives=0,
+                forceWaiter=1
             )
             reserveSuits.append((suit, 100))
         if specialCode == 'amb':

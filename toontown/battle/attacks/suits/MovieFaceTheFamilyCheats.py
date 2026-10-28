@@ -274,8 +274,11 @@ def doRedTape(attack):
     tape.setColor(0.129, 0, 0.329, 1)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     tubes = []
-    tapePosPoints = [Point3(-0.25, 0, -0.25), VBase3(0, 0, 0)]
-    tapeScaleUpPoint = Point3(1, 1, 0.74)
+    tapePosPoints = [
+        Point3(-0.0, 0.09, -0.38),
+        VBase3(-1.152, 86.581, -76.784),
+    ]
+    tapeScaleUpPoint = Point3(0.9, 0.9, 0.24)
     propTracks = Parallel()
     toonTracks = Parallel()
     allTubeTracks = Parallel()

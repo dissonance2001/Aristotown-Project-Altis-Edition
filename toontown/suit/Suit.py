@@ -1503,7 +1503,7 @@ class Suit(Avatar.Avatar):
         if self.getSkeleRevives() > 0:
             level += TTLocalizer.SkeleRevivePostFix % (self.getSkeleRevives() + 1)
         nameInfo = TTLocalizer.SuitBaseNameWithLevel % {'name': name,
-                                                        'dept': dept,
+                                                        'dept': "Waitstaff",
                                                         'level': level}
         self.setDisplayName(nameInfo)
 

@@ -43,7 +43,7 @@ class HighRollerCalculatorAI:
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
-            x = self.TurnsElapsed
+            x = self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i])
             # Initial Cheats
             if self.battle.activeSuits[i].dna.name == 'hrollers':
                 if self.battle.activeSuits[i].getActualLevel() == 29 and self.__suitCanAttack(suitId):
@@ -98,7 +98,7 @@ class HighRollerCalculatorAI:
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                if self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'HighRollerBust',
                                             'animName': 'bust',
@@ -119,7 +119,7 @@ class HighRollerCalculatorAI:
                 #                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                 #     if attack[SUIT_ATK_COL]:
                         # self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 3 == 0 and not self.TurnsElapsed == 0 and self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'phase3'):
+                if self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'phase3'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'HighRollerCommercialBreak',  # Commercial Break after Puzzle
                                             'animName': 'snap',
@@ -149,7 +149,7 @@ class HighRollerCalculatorAI:
                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'phase3'):
+                if self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 3 == 0 and self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'phase3'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'HighRollerWheelSpin',  # Wheel Spin
                                             'animName': 'wheelspin',
@@ -159,7 +159,7 @@ class HighRollerCalculatorAI:
                                             'group': SuitBattleGlobals.ATK_TGT_SINGLE})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 3 == 0 and self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'phase3'):
+                if self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 3 == 0 and self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'phase3'):
                     attack = self.__getCheatAttack(suitId, random.choice([{'suitName': self.battle.activeSuits[i].dna.name,
                                                            'name': 'HighRollerPuzzle',
                                                            'animName': 'taunt',
@@ -214,7 +214,7 @@ class HighRollerCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if len(self.battle.activeSuits) < 7 and self.__suitCanAttack(suitId) and not self.suitHasCondition(
-                        suitId, 'spawncalculator') and not self.TurnsElapsed % 3 == 0 and not self.suitHasCondition(suitId, 'phase3'):
+                        suitId, 'spawncalculator') and not self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 3 == 0 and not self.suitHasCondition(suitId, 'phase3'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'HighRollerGameTimeSpawn',  # Spawn Cogs
                                             'animName': 'snap',
@@ -303,7 +303,7 @@ class HighRollerCalculatorAI:
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'hroller' and self.suitHasCondition(suitId, 'phase3'):
                 self.highRollerAttacks = [1, 2, 3, 4]
-                if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(
+                if self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(
                         suitId):
                     condition = random.choice(self.highRollerAttacks)
                     if condition == 1:
@@ -392,7 +392,7 @@ class HighRollerCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'hroller' and self.suitHasCondition(suitId, 'phase3'):
-                if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(
+                if self.suitHasCondition(suitId, 'phase3') and self.__suitCanAttack(
                         suitId):
                     condition = random.choice(self.highRollerAttacks)
                     if condition == 1:

@@ -106,7 +106,7 @@ class VideographerCalculatorAI:
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
-            x = self.TurnsElapsed
+            x = self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i])
             # Initial Cheats
             if self.battle.activeSuits[i].dna.name == 'bcaster':  # broadcaster
                 if self.__suitCanAttack(suitId):
@@ -427,7 +427,7 @@ class VideographerCalculatorAI:
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'videog':
-                if self.__suitCanAttack(suitId) and (self.TurnsElapsed + 1) % 2 == 0 and self.suitHasCondition(suitId, 'phase3'):
+                if self.__suitCanAttack(suitId) and (self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 1) % 2 == 0 and self.suitHasCondition(suitId, 'phase3'):
                     hitCogs = random.choice((True, False))
 
                     if hitCogs:
@@ -459,7 +459,7 @@ class VideographerCalculatorAI:
 
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'phase2') and self.__suitCanAttack(suitId) and (self.TurnsElapsed + 1) % 2 == 0:
+                if self.suitHasCondition(suitId, 'phase2') and self.__suitCanAttack(suitId) and (self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) + 1) % 2 == 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                             'name': 'VideographerElectricShock4',  # Rising Stars
                                                             'animName': 'snap',
@@ -475,7 +475,7 @@ class VideographerCalculatorAI:
 
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'phase3') and self.TurnsElapsed % 2 == 0:
+                if self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'phase3') and self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 2 == 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                         'name': 'VideographerRisingStarsSacrifice',
                                                         # Rising Stars Sacrifice
@@ -569,7 +569,7 @@ class VideographerCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if not self.suitHasCondition(suitId, 'phase3') and not self.suitHasCondition(suitId, 'phase2') and not self.suitHasCondition(suitId, 'immune') and not self.suitHasCondition(suitId, 'silhouettespawn') and not self.suitHasCondition(suitId, 'directorscuts') and not len(
-                                self.battle.activeSuits) > 7 and self.__suitCanAttack(suitId) and self.TurnsElapsed % 2 == 0:
+                                self.battle.activeSuits) > 7 and self.__suitCanAttack(suitId) and self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 2 == 0:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                                         'name': 'VideographerRisingStars',  # Rising Stars Hollywoods
                                                         'animName': 'song-and-dance',

@@ -654,7 +654,7 @@ class SellbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
             if self.battle.activeSuits[i].dna.name == 'hustle':
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId):
+                if self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'TrafficCongestionPricing', # Breach Of Contract Confused
                      'animName': 'throw-object',

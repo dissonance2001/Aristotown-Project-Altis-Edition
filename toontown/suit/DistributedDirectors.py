@@ -110,11 +110,42 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.powerhouse.doId = 0
         self.powerhouse.loop('sit-exec')
 
+        self.waiterPlaceholder = DistributedSuitBase.DistributedSuitBase(cr)
+        suitDNA = SuitDNA.SuitDNA()
+        suitDNA.newSuit('f')
+        self.waiterPlaceholder.setDNA(suitDNA)
+        self.waiterPlaceholder.setPickable(0)
+        self.waiterPlaceholder.setDisplayName('')
+        self.waiterPlaceholder.doId = 0
+        self.waiterPlaceholder.loop('sit-exec')
+        self.waiterPlaceholder.setPosHpr(*ToontownGlobals.BossbotRTPreTwoPosHprWaiter)
+
+    def doorSequence(self):
+        if hasattr(self, 'waiterDoorTrack'):
+            if self.waiterDoorTrack and self.waiterDoorTrack.isPlaying():
+                return
+
+        self.waiterDoorTrack = Sequence(
+            LerpHprInterval(
+                self.banquetDoor, 0.5,
+                Point3(120, 0, 0),
+                blendType='easeInOut'
+            ),
+            Wait(4.0),
+            LerpHprInterval(
+                self.banquetDoor, 0.5,
+                Point3(0, 0, 0),
+                blendType='easeInOut'
+            )
+        )
+
+        self.waiterDoorTrack.start()
+
 
     def hideAmbassador(self):
         self.ambassador.hide()
         self.setChatAbsolute(random.choice(("Perhaps you can reach an understanding.",
-                                             "Our relationsnhip with these Toons needs improving.",
+                                             "Our relationship with these Toons needs improving.",
                                             "It seems negotiations have broken down, remind them who they're dealing with!")), CFSpeech | CFTimeout)
 
     def hideVaultmaster(self):
@@ -479,7 +510,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
             return tempNodeAmbassador.getPos(render)
 
         track2 = Sequence(Wait(2.0))
-        track = Sequence(self.loseCogSuits(self.toonsA + self.toonsB, base.localAvatar, loseSuitCamAngle), Wait(2.0), Func(camera.setH, 0), Func(camera.reparentTo, render), Parallel(LerpHprInterval(self.banquetDoor, 0.5, Point3(90, 0, 0)), LerpPosInterval(camera, 4, getCamBossPos)),
+        track = Sequence(self.loseCogSuits(self.toonsA + self.toonsB, base.localAvatar, loseSuitCamAngle), Wait(2.0), Func(camera.setH, 0), Func(camera.reparentTo, render), Parallel(LerpHprInterval(self.banquetDoor, 0.5, Point3(120, 0, 0), blendType='easeInOut'), LerpPosInterval(camera, 4, getCamBossPos)),
                          Parallel(Func(self.setChatAbsolute, "So... you've made it this far. I will admit, that's more persistence than most.", CFSpeech), Sequence(ActorInterval(self, 'Ff_speech'), ActorInterval(self, 'Ff_speech'))), Parallel(Func(self.setChatAbsolute, "But you seem to be under a dangerous misconception.", CFSpeech), ActorInterval(self, 'Ff_lookRt', duration=3)),
             ActorInterval(self, 'Ff_lookRt', duration=3, startTime=3, endTime=0),
             ActorInterval(self, 'Ff_neutral', duration=2),
@@ -533,7 +564,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
                                            Func(self.vaultmaster.setChatAbsolute, "We will be final!", CFSpeech), ActorInterval(self.vaultmaster, 'mob-mentality'),
                                            Func(self.powerhouse.setChatAbsolute, "We will be thorough!", CFSpeech), ActorInterval(self.powerhouse, 'mob-mentality')),
                                   Sequence(Func(self.loop, 'Ff_neutral')),
-                         Parallel(Sequence(Wait(2.5), LerpHprInterval(self.banquetDoor, 0.5, Point3(0, 0, 0))), LerpPosHprInterval(camera, 3, getCamRTPos, Point3(10, -8, 0))), Parallel(Func(self.setChatAbsolute, "", CFSpeech),
+                         Parallel(Sequence(Wait(2.5), LerpHprInterval(self.banquetDoor, 0.5, Point3(0, 0, 0), blendType='easeInOut')), LerpPosHprInterval(camera, 3, getCamRTPos, Point3(10, -8, 0))), Parallel(Func(self.setChatAbsolute, "", CFSpeech),
                           Func(self.powerhouse.setChatAbsolute, "", CFSpeech), Func(self.powerhouse.loop, 'sit-exec'), Func(self.powerhouse.setZ, 2.5), Func(self.powerhouse.setY, 352.25),
                            Func(self.ambassador.setChatAbsolute, "", CFSpeech), Func(self.ambassador.loop, 'sit-exec'), Func(self.ambassador.setZ, 2.5), Func(self.ambassador.setY, 352.25),
                           Func(self.wiretapper.setChatAbsolute, "", CFSpeech), Func(self.wiretapper.loop, 'sit-exec'), Func(self.wiretapper.setZ, 2.5), Func(self.wiretapper.setY, 352.25),
@@ -541,9 +572,9 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
                          Func(self.clearChat), Func(rToon.setChatAbsolute, "Alright, Toons... that's the Executive Board. They're the worst the Bossbots have to offer.", CFSpeech),
                          Wait(3.0), Func(rToon.setChatAbsolute, "But they're still cogs.", CFSpeech), Wait(3.0), Func(rToon.setChatAbsolute, "Stay sharp, work together, and don't let them intimidate you!", CFSpeech), Wait(3.0),
                          Func(rToon.setChatAbsolute, "We've come too far to turn back now!", CFSpeech), Wait(3.0), Func(rToon.setChatAbsolute, "Good luck Toons, we're all counting on you!", CFSpeech),
-                         LerpHprInterval(self.banquetDoor, 2, Point3(120, 0, 0)),
+                         LerpHprInterval(self.banquetDoor, 2, Point3(120, 0, 0), blendType='easeInOut'),
                          Sequence(Func(rToon.suit.loop, 'walk'), self.createWalkInInterval(), rToon.hprInterval(1, VBase3(90, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')),
-                         LerpHprInterval(self.banquetDoor, 2, Point3(0, 0, 0)), Func(rToon.setChatAbsolute, "", CFSpeech), Func(self.setChatAbsolute, "", CFSpeech | CFTimeout), Func(self.__hideResistanceToon))
+                         LerpHprInterval(self.banquetDoor, 2, Point3(0, 0, 0), blendType='easeInOut'), Func(rToon.setChatAbsolute, "", CFSpeech), Func(self.setChatAbsolute, "", CFSpeech | CFTimeout), Func(self.__hideResistanceToon))
         return track
 
     def enterFrolic(self):
@@ -600,7 +631,7 @@ class DistributedDirectors(DistributedBossCog.DistributedBossCog, FSM.FSM):
         def getCamRTPos(rNode = rNode):
             return rNode.getPos(render)
 
-        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPos, rToon, 0, 22, 6), Func(camera.setHpr, 0, 0, 0), Func(rToon.setChatAbsolute, TTL.BossbotRTWearWaiter, CFSpeech | CFTimeout), Wait(3.0), self.wearCogSuits(self.toonsA + self.toonsB, render, None, waiter=True), Func(rToon.clearChat), Func(self.setPosHpr, bossPos, Point3(0, 0, 0)), Parallel(LerpPosInterval(camera, 2, getCamBossPos)), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo1, CFSpeech | CFTimeout), Wait(3.0), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo2, CFSpeech | CFTimeout), Wait(3.0), Parallel(LerpHprInterval(self.banquetDoor, 2, Point3(0, 0, 0)), LerpPosHprInterval(camera, 2, getCamRTPos, Point3(10, -8, 0))), Func(self.setPos, bossEndPos), Func(self.clearChat), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood1, CFSpeech | CFTimeout), Wait(3.0), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood2, CFSpeech | CFTimeout), Wait(1.0), LerpHprInterval(self.banquetDoor, 2, Point3(120, 0, 0)), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(90, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), self.createWalkInInterval(), Func(rToon.clearChat), Func(self.__hideResistanceToon))
+        track = Sequence(Func(camera.reparentTo, render), Func(camera.setPos, rToon, 0, 22, 6), Func(camera.setHpr, 0, 0, 0), Func(rToon.setChatAbsolute, TTL.BossbotRTWearWaiter, CFSpeech | CFTimeout), Wait(3.0), self.wearCogSuits(self.toonsA + self.toonsB, render, None, waiter=True), Func(rToon.clearChat), Func(self.setPosHpr, bossPos, Point3(0, 0, 0)), Parallel(LerpPosInterval(camera, 2, getCamBossPos)), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo1, CFSpeech | CFTimeout), Wait(3.0), Func(self.setChatAbsolute, TTL.BossbotBossPreTwo2, CFSpeech | CFTimeout), Wait(3.0), Parallel(LerpHprInterval(self.banquetDoor, 2, Point3(0, 0, 0), blendType='easeInOut'), LerpPosHprInterval(camera, 2, getCamRTPos, Point3(10, -8, 0))), Func(self.setPos, bossEndPos), Func(self.clearChat), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood1, CFSpeech | CFTimeout), Wait(3.0), Func(rToon.setChatAbsolute, TTL.BossbotRTServeFood2, CFSpeech | CFTimeout), Wait(1.0), LerpHprInterval(self.banquetDoor, 2, Point3(120, 0, 0), blendType='easeInOut'), Sequence(Func(rToon.suit.loop, 'walk'), rToon.hprInterval(1, VBase3(90, 0, 0)), rToon.posInterval(2.5, rToonEndPos), Func(rToon.suit.loop, 'neutral')), self.createWalkInInterval(), Func(rToon.clearChat), Func(self.__hideResistanceToon))
         return track
 
     def __clickedNameTag(self, avatar):

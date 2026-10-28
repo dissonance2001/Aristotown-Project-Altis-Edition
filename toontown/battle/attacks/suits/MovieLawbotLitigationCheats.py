@@ -888,13 +888,30 @@ def doBayouBellow(attack):
     theSuit = attack['suit']
     battle = attack['battle']
     suitTracks = Parallel()
-    sprayEffect = BattleParticles.createParticleEffect(file='soundWave')
+    spraySeq = Sequence()
+    sprayEffect = BattleParticles.createParticleEffect(file="soundWaveQuick")
     sprayEffect.setDepthWrite(0)
     sprayEffect.setDepthTest(0)
     sprayEffect.setTwoSided(1)
-    sprayTrack = Sequence()
-    sprayTrack.append(Func(setPosFromOther, sprayEffect, theSuit, Point3(0, 1.6, theSuit.height - 2)))
-    sprayTrack.append(__getPartTrack(sprayEffect, 0.0, 6.0, [sprayEffect, theSuit, 0], softStop=-3.5))
+
+    spraySeq.append(
+        Func(
+            sprayEffect.setPos,
+            theSuit,
+            Point3(0, 1.5, theSuit.getHeight() - 1),
+        )
+    )
+    sprayParticles = getPartTrack(
+        sprayEffect,
+        0.6,
+        5.0,
+        [sprayEffect, theSuit, 0],
+        softStop=-3.5,
+    )
+    spraySeq.append(sprayParticles)
+
+    finishPartSeq = Sequence(Wait(3.5), Func(spraySeq.finish))
+    suitTrackParticles = Parallel(spraySeq, finishPartSeq)
     for suit in battle.activeSuits:
         suitTrack = Sequence()
         suitTrack.append(Wait(4.0))
@@ -916,7 +933,7 @@ def doBayouBellow(attack):
         suitTracks.append(Wait(4.0))
         suitTracks.append(suitTrack)
     soundTrack = getSoundTrack('SA_bellow.ogg', delay=0.1)
-    return Parallel(suitTracks, sprayTrack, soundTrack)
+    return Parallel(suitTracks, suitTrackParticles, soundTrack)
 
 def __soakRemoval(suit, remove=0):
     if remove:
@@ -957,9 +974,8 @@ def __soakRemoval(suit, remove=0):
 def doBayouBash(attack):
     suit = attack['suit']
     battle = attack['battle']
-    suitTrack = Sequence(getSuitAnimTrack(attack))
+    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0))
     suitTrack2 = Sequence(Func(suit.createSuitSnapInterval), Func(suit.setNeutralAnimationDrop))
-    suitTrack2.append(Wait(5.0))
     soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
     return Parallel(suitTrack, suitTrack2, soundTrack)
 
@@ -969,24 +985,24 @@ def doCourtSanction(attack):
     target = attack['target']
     dmg = target[0]['hp']
     toon = target[0]['toon']
-    sanctioned = __makeSanctionedNodePath()
+    sanctioned = makeSanctionedNodePath()
     missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
     propTrack = Sequence(
-        Wait(0.5),
+        Wait(0.55),
         Func(battle.movie.needRestoreRenderProp, sanctioned),
         Func(sanctioned.reparentTo, render),
         Func(sanctioned.setScale, 0.6),
-        Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
+         Func(sanctioned.setPosHpr, suit, -3, 4, 6, 0, 0, 90),
         Func(sanctioned.setP, 0),
         Func(sanctioned.setR, 0),
-        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .25),
+        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .4),
         Func(sanctioned.removeNode)
     )
-    toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
-    notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'sanctioned', modifier=50, turns=3, mode='keepHighest')))
     suitTrack = getSuitTrack(attack)
-    soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
+    toonTrack = getToonTrackCheat(attack, suitTrack.getDuration() - 1.6, ['conked'], 0, ['duck'])
+    notifyTrack = Sequence(Wait(suitTrack.getDuration() - 1.6),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'sanctioned', modifier=50, turns=3, mode='keepHighest')))
+    soundTrack = getSoundTrack('SA_sanction.ogg', delay =.25, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
 
 
@@ -996,24 +1012,24 @@ def doCourtSanctionLitigator(attack):
     target = attack['target']
     dmg = target[0]['hp']
     toon = target[0]['toon']
-    sanctioned = __makeSanctionedNodePath()
+    sanctioned = makeSanctionedNodePath()
     missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
     propTrack = Sequence(
-        Wait(0.5),
+        Wait(0.55),
         Func(battle.movie.needRestoreRenderProp, sanctioned),
         Func(sanctioned.reparentTo, render),
         Func(sanctioned.setScale, 0.6),
-        Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
+         Func(sanctioned.setPosHpr, suit, -3, 4, 6, 0, 0, 90),
         Func(sanctioned.setP, 0),
         Func(sanctioned.setR, 0),
-        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .25),
+        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .4),
         Func(sanctioned.removeNode)
     )
-    toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
-    notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'sanctioned', modifier=75, turns=3, mode='keepHighest')))
     suitTrack = getSuitTrack(attack)
-    soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
+    toonTrack = getToonTrackCheat(attack, suitTrack.getDuration() - 1.6, ['conked'], 0, ['duck'])
+    notifyTrack = Sequence(Wait(suitTrack.getDuration() - 1.6),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'sanctioned', modifier=50, turns=3, mode='keepHighest')))
+    soundTrack = getSoundTrack('SA_sanction.ogg', delay =.25, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
 
 def doCourtSanction2(attack):
@@ -1022,24 +1038,24 @@ def doCourtSanction2(attack):
     target = attack['target']
     dmg = target[0]['hp']
     toon = target[0]['toon']
-    sanctioned = __makeSanctionedNodePath()
+    sanctioned = makeSanctionedNodePath()
     missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
     propTrack = Sequence(
-        Wait(0.5),
+        Wait(0.55),
         Func(battle.movie.needRestoreRenderProp, sanctioned),
         Func(sanctioned.reparentTo, render),
         Func(sanctioned.setScale, 0.6),
-        Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
+         Func(sanctioned.setPosHpr, suit, -3, 4, 6, 0, 0, 90),
         Func(sanctioned.setP, 0),
         Func(sanctioned.setR, 0),
-        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .25),
+        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .4),
         Func(sanctioned.removeNode)
     )
-    toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
-    notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'sanctioned', modifier=25, turns=3, mode='keepHighest')))
     suitTrack = getSuitTrack(attack)
-    soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
+    toonTrack = getToonTrackCheat(attack, suitTrack.getDuration() - 1.6, ['conked'], 0, ['duck'])
+    notifyTrack = Sequence(Wait(suitTrack.getDuration() - 1.6),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'sanctioned', modifier=50, turns=3, mode='keepHighest')))
+    soundTrack = getSoundTrack('SA_sanction.ogg', delay =.25, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
 
 
@@ -1059,7 +1075,7 @@ def doCourtSanctionBindings(attack):
         soundTrack = getSoundTrack('SA_sanction.ogg', delay=.5, node=suit)
         notifyTrack = Sequence(Wait(.8),  Func(toon.showHpTextNew, -int(dmg), text="SANCTIONED!", colorCode=1))
         if dmg > 0:
-            sanctioned = __makeSanctionedNodePath()
+            sanctioned = makeSanctionedNodePath()
             missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
             propTrack = Sequence(
                 Wait(0.5),
@@ -1242,8 +1258,11 @@ def doLegalBindings2(attack):
     tape.setColorScale(0.25, 0.25, 1.0, 1.0)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     tubes = []
-    tapePosPoints = [Point3(-0.21707670043415206, 0.04341534008683112, -0.390738060781473), VBase3(0, 90, 90)]
-    tapeScaleUpPoint = Point3(.9, .9, .9)
+    tapePosPoints = [
+        Point3(-0.0, 0.09, -0.38),
+        VBase3(-1.152, 86.581, -76.784),
+    ]
+    tapeScaleUpPoint = Point3(0.9, 0.9, 0.24)
     propTracks = Parallel()
     toonTracks = Parallel()
     allTubeTracks = Parallel()
@@ -1302,8 +1321,11 @@ def doLegalBindings(attack):
     tape.setColor(0.129, 0, 0.329, 1)
     suitTrack = Sequence(getSuitTrack(attack, playRate=1.5))
     tubes = []
-    tapePosPoints = [Point3(-0.21707670043415206, 0.04341534008683112, -0.390738060781473), VBase3(0, 90, 90)]
-    tapeScaleUpPoint = Point3(.9, .9, .9)
+    tapePosPoints = [
+        Point3(-0.0, 0.09, -0.38),
+        VBase3(-1.152, 86.581, -76.784),
+    ]
+    tapeScaleUpPoint = Point3(0.9, 0.9, 0.24)
     propTracks = Parallel()
     toonTracks = Parallel()
     allTubeTracks = Parallel()
@@ -1978,7 +2000,6 @@ def doEnraged(attack):
     makeEnraged = Func(suit.makeAngry, 2)
     suitTrack = getSuitAnimTrack(attack)
     makeDamageUp = Parallel(Func(suit.clearSuitStatusEffect, 'rageBuilding'), Func(suit.clearSuitStatusEffect, 'absorbing'), Func(suit.setSuitStatusEffect, 'enraged', modifier=1, turns=3), Func(suit.makeFireEffect), Func(suit.removeRageBuilding))
-    suitTrack.append(Wait(2.0))
     headInterval = Sequence(MovieUtil.createSuitEnragedInterval(suit, 0))
     return Parallel(suitTrack, soundTrack, makeDamageUp, suitColorTrack, headInterval, makeEnraged)
 
@@ -1991,7 +2012,6 @@ def doShieldsUp(attack):
                                                      blendType='easeInOut'))
     soundTrack = Sequence(Wait(suit.getDuration('neutral-enraged-return')), getSoundTrack('SA_defense.ogg'))
     suitTrack = Sequence(ActorInterval(suit, 'neutral-enraged-return'), getSuitAnimTrack(attack), Func(suit.setNeutralAnimationDrop))
-    suitTrack.append(Wait(2.0))
     makeShielding = Parallel(Func(suit.setSuitStatusEffect, 'rageBuilding', modifier=0), Func(suit.clearSuitStatusEffect, 'enraged'), Func(suit.removeRageBuilding))
     return Parallel(suitTrack, soundTrack, suitColorTrack, makeShielding)
 
@@ -2008,19 +2028,19 @@ def doBarnyardBash(attack):
     soundTrack3 = getSoundTrack('LB_toonup.ogg', delay=1.5, node=suit)
     return Parallel(suitTrack, soundTrack2, soundTrack3, selfDamageTrack, makeShielding)
 
-def __makeSanctionedNodePath():
-    tn = TextNode('CANCELLED')
-    tn.setFont(getSuitFont())
+def makeSanctionedNodePath():
+    tn = TextNode("SANCTIONED")
+    tn.setFont(ToontownGlobals.getSuitFont())
     tn.setText('SANCTIONED\nSANCTIONED\nSANCTIONED')
     tn.setAlign(TextNode.ACenter)
-    tntop = hidden.attachNewNode('CancelledTop')
+    tntop = hidden.attachNewNode("SanctionedTop")
     tnpath = tntop.attachNewNode(tn)
     tnpath.setPosHpr(0, 0, 0, 0, 0, 0)
-    tnpath.setScale(1)
+    tnpath.setScale(1.2)
     tnpath.setColor(0.7, 0, 0, 1)
-    tnpathback = tnpath.instanceUnderNode(tntop, 'backside')
+    tnpathback = tnpath.instanceUnderNode(tntop, "backside")
     tnpathback.setPosHpr(0, 0, 0, 180, 0, 0)
-    tnpath.setScale(1)
+    tnpath.setScale(1.2)
     return tntop
 
 def doGavel(attack):

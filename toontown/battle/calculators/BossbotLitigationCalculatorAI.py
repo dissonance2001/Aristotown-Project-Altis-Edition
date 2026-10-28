@@ -64,7 +64,7 @@ class BossbotLitigationCalculatorAI:
                     attack = self.__getLureRemoval(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'bookkeeperHit'):
+                if self.__suitCanAttack(suitId) and self.suitHasCondition(suitId, 'bookkeeperHit'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'BookkeeperBookkeepingRetaliation', # Bookkeeping Retaliation
                      'animName': 'nothing',
@@ -77,7 +77,7 @@ class BossbotLitigationCalculatorAI:
                                                                         )})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'bookkeeperHit') and self.suitHasCondition(suitId, 'bookkeeping'):
+                if self.__suitCanAttack(suitId) and not self.suitHasCondition(suitId, 'bookkeeperHit') and self.suitHasCondition(suitId, 'bookkeeping'):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'BookkeeperPaperCutMarked', # Bookkeeping Retaliation
                      'animName': 'effort',
@@ -277,23 +277,46 @@ class BossbotLitigationCalculatorAI:
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'ambass':  # ambassador
-                if self.suitHasCondition(suitId, 'refinementcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                liveCogs = 0
+                for suit in self.battle.activeSuits:
+                    if suit.isWaiter and suit.currHP > 0:
+                        liveCogs += 1
+                if not self.suitHasCondition(suitId, 'healfinished') and liveCogs > 1:
+                    attack = self.__getCheatAttack(suitId, {
+                        'suitName': self.battle.activeSuits[i].dna.name,
+                        'name': 'AmbassadorRefinement',
+                        'animName': 'nothing',
+                        'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': SuitBattleGlobals.ATK_TGT_GROUP,
+                        'targetType': 'suit',
+                        'allowSelfTarget': True,
+                        'targetSelf': False,
+                        'excludeManagers': False,
+                        'damageTarget': 'target',
+                        'healTarget': 'target'
+                    })
+
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if liveCogs <= 2 and self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 2 == 0:
+                    self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                if liveCogs >= 3:
+                    self.setSuitCondition(suitId, 'advancementcalculator', 1, 10, 'setBoth')
+                if self.suitHasCondition(suitId, 'bashcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'refinementcalculator') and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'AmbassadorRefinement', # Refinement
+                     'name': 'AmbassadorRefinementManager', # Refinement
                      'animName': 'snap',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP,
-                            'targetType': 'suit',
-
-                            'allowSelfTarget': True,
-                            'targetSelf': False,
-                        'excludeManagers': False})
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+                                        'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                 if self.suitHasCondition(suitId, 'advancementcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
@@ -869,7 +892,7 @@ class BossbotLitigationCalculatorAI:
                         'targetSelf': True,})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0  and not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
+                if not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'BanLevel%s' % random.randint(4, 8),
                      'animName': 'sanction',
@@ -879,7 +902,7 @@ class BossbotLitigationCalculatorAI:
                      'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP < 2388:
+                if not self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP < 2388:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'Ban%s' % random.choice(
                                                 ['Toonup', 'Trap', 'Lure', 'Throw', 'Squirt', 'Zap', 'Sound', 'Drop']),
@@ -890,7 +913,7 @@ class BossbotLitigationCalculatorAI:
                      'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
+                if self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'BanLevel%s' % random.choice(['45', '46', '47', '48', '56', '57', '58', '67', '68', '78']),
                      'animName': 'sanction',
@@ -900,7 +923,7 @@ class BossbotLitigationCalculatorAI:
                      'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP < 2388:
+                if self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP < 2388:
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'Ban%s' % random.choice(['ToonupTrap', 'ToonupLure', 'ToonupThrow', 'ToonupSquirt', 'ToonupZap', 'ToonupSound', 'ToonupDrop', 'TrapLure', 'TrapThrow', 'TrapSquirt', 'TrapZap', 'TrapSound', 'TrapDrop', 'LureThrow', 'LureSquirt', 'LureZap', 'LureSound', 'LureDrop', 'ThrowSquirt', 'ThrowZap', 'ThrowSound', 'ThrowDrop', 'SquirtZap', 'SquirtSound', 'SquirtDrop', 'ZapSound', 'ZapDrop', 'SoundDrop']),
                      'animName': 'sanction',

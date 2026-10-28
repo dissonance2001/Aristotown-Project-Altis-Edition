@@ -1838,18 +1838,18 @@ def doMinutesTakenContingency(attack):
     return Parallel(suitTrack, soundTrack, suitSpeechTrack, calcPropTrack)
 
 def __makeSanctionedNodePath():
-    tn = TextNode('CANCELLED')
-    tn.setFont(getSuitFont())
+    tn = TextNode("REDLINED")
+    tn.setFont(ToontownGlobals.getSuitFont())
     tn.setText('REDLINED\nREDLINED\nREDLINED')
     tn.setAlign(TextNode.ACenter)
-    tntop = hidden.attachNewNode('CancelledTop')
+    tntop = hidden.attachNewNode("SanctionedTop")
     tnpath = tntop.attachNewNode(tn)
     tnpath.setPosHpr(0, 0, 0, 0, 0, 0)
-    tnpath.setScale(1)
+    tnpath.setScale(1.2)
     tnpath.setColor(0.7, 0, 0, 1)
-    tnpathback = tnpath.instanceUnderNode(tntop, 'backside')
+    tnpathback = tnpath.instanceUnderNode(tntop, "backside")
     tnpathback.setPosHpr(0, 0, 0, 180, 0, 0)
-    tnpath.setScale(1)
+    tnpath.setScale(1.2)
     return tntop
 
 def doRedlinedClauseGroup(attack):
@@ -1915,21 +1915,21 @@ def doRedlinedClause(attack):
     sanctioned = __makeSanctionedNodePath()
     missPoint = lambda sanctioned=sanctioned, toon=toon: __toonMissPoint(sanctioned, toon)
     propTrack = Sequence(
-        Wait(0.5),
+        Wait(0.55),
         Func(battle.movie.needRestoreRenderProp, sanctioned),
         Func(sanctioned.reparentTo, render),
         Func(sanctioned.setScale, 0.6),
-        Func(sanctioned.setPosHpr, suit.getLeftHand(), 0, 0.11, -0.16, 0, 100, 90),
+         Func(sanctioned.setPosHpr, suit, -3, 4, 6, 0, 0, 90),
         Func(sanctioned.setP, 0),
         Func(sanctioned.setR, 0),
-        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [missPoint], .25),
+        getPropThrowTrack(attack, sanctioned, [__toonFacePoint(toon)], [__toonFacePoint(toon)], .4),
         Func(sanctioned.removeNode)
     )
-    toonTrack = getToonTrackCheat(attack, 0.8, ['conked'], 0, ['duck'])
-    notifyTrack = Sequence(Wait(0.8),  Func(toon.showHpTextNew, -int(dmg), text="REDLINED!", colorCode=1))
-    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'cooldown', turns=2, mode='refreshTurns')))
     suitTrack = getSuitTrack(attack)
-    soundTrack = getSoundTrack('SA_sanction.ogg', delay =.5, node=suit)
+    toonTrack = getToonTrackCheat(attack, suitTrack.getDuration() - 1.6, ['conked'], 0, ['duck'])
+    notifyTrack = Sequence(Wait(suitTrack.getDuration() - 1.6),  Func(toon.showHpTextNew, -int(dmg), text="REDLINED!", colorCode=1))
+    notifyTrack.append(Parallel(Func(toon.setToonStatusEffect, 'cooldown', turns=2, mode='refreshTurns')))
+    soundTrack = getSoundTrack('SA_sanction.ogg', delay =.25, node=suit)
     return Parallel(suitTrack, toonTrack, propTrack, soundTrack, notifyTrack)
 
 def doAuditCycle(attack):

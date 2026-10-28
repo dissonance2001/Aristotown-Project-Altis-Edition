@@ -456,6 +456,17 @@ def __soakRemoval(suit, remove=0):
         suitInterval.append(Func(suit.makeDryFirestarter))
     return suitInterval
 
+def doAmbassadorSpawn(attack):
+    suit = attack['suit']
+    battle = attack['battle']
+    suitTrack = Sequence(getSuitAnimTrack(attack), Wait(2.0))
+    vaporTracks = Parallel()
+    for targetSuit in battle.activeSuits:
+        if not targetSuit.getManager() and not targetSuit.isWaiter:
+            vaporTracks.append(shortCircuitTrack(targetSuit, battle))
+    soundTrack = getSoundTrack('SA_bash.ogg', node=suit)
+    return Parallel(suitTrack, vaporTracks, soundTrack)
+
 def doOilRainHeal(attack):
     suit = attack['suit']
     battle = attack['battle']
@@ -954,7 +965,7 @@ def doVoicemailReal(attack):
     battle = attack['battle']
     phone = globalPropPool.getProp('phone')
     receiver = globalPropPool.getProp('receiver')
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25), Wait(2.0))
+    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
     suitName = suit.getStyleName()
     suitType = getSuitBodyType(attack['suitName'])
     if suitType == 'a':

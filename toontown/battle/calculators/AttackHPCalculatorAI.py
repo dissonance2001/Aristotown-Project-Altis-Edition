@@ -491,9 +491,19 @@ class AttackHPCalculatorAI(object):
                     for s in self.battle.activeSuits:
                         if s in do.activeSuits:
                             if s.dna.name == 'lgator':
-                                maxSuits = 6
+                                if self.calculator.litigatorSnaps == 0:
+                                    maxSuits = 4
+                                elif self.calculator.litigatorSnaps == 1:
+                                    maxSuits = 5
+                                elif self.calculator.litigatorSnaps == 2:
+                                    maxSuits = 6
+                                elif self.calculator.litigatorSnaps == 3:
+                                    maxSuits = 7
 
-                                aliveCount = len(self.battle.activeSuits) - self.deadSuits
+                                aliveCount = sum(
+                                    1 for suit in self.battle.activeSuits
+                                    if suit.currHP > 0
+                                )
                                 spawnAmount = maxSuits - aliveCount
 
                                 if spawnAmount > 0:
@@ -502,6 +512,49 @@ class AttackHPCalculatorAI(object):
                                             boss.appendSuitsToBattle(boss.battleNumber, 'litDesperation')
                                         else:
                                             boss.appendSuitsToBattle(boss.battleNumber, 'lit')
+
+                                break
+        elif atkType['name'] == 'AmbassadorRefinementManager':
+            self.setSuitCondition(theSuit.doId, 'bashcalculator', 0, 0, 'setBoth')
+            for managerTarget in self.battle.activeSuits:
+                if managerTarget is None:
+                    continue
+
+                if managerTarget.getManager() > 0:
+                    continue
+
+                if managerTarget.isWaiter:
+                    continue
+
+                managerTarget.setHP(0)
+                self.__removeLured(managerTarget.doId)
+            from toontown.suit.DistributedDirectorsAI import DistributedDirectorsAI
+
+            boss = None
+            for do in list(simbase.air.doId2do.values()):
+                if isinstance(do, DistributedDirectorsAI):
+                    for s in self.battle.activeSuits:
+                        if s in do.activeSuits:
+                            boss = do
+                            break
+                    for s in self.battle.activeSuits:
+                        if s in do.activeSuits:
+                            if s.dna.name == 'ambass':
+                                maxSuits = 7
+                                maxSpawnPerTurn = 3
+
+                                aliveCount = len(self.battle.activeSuits) - self.deadSuits
+                                availableSlots = maxSuits - aliveCount
+
+                                # Never summon more than three at once.
+                                spawnAmount = min(
+                                    maxSpawnPerTurn,
+                                    availableSlots
+                                )
+
+                                if spawnAmount > 0:
+                                    for i in range(spawnAmount):
+                                        boss.appendSuitsToBattle(boss.battleNumber, 'ambWaiter')
 
                                 break
         elif atkType['name'] == 'BookkeeperBookkeeping':
@@ -524,7 +577,7 @@ class AttackHPCalculatorAI(object):
             self.setSuitCondition(theSuit.doId, 'shielding', 1, 1, 'setBoth')
         elif atkType['name'] == 'PowerhouseSoakImmune':
             self.setSuitCondition(theSuit.doId, 'soakImmune', 1, -1, 'setBoth')
-            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
             self.setSuitCondition(theSuit.doId, 'alreadySoakImmune', 1, 10, 'setBoth')
             for s in self.battle.suits:
                 if s.dna.name == 'wtapper':
@@ -534,7 +587,7 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(suit.doId, 'ban2levels', 1, 2, 'setBoth')
         elif atkType['name'] == 'PowerhouseDropImmune':
             self.setSuitCondition(theSuit.doId, 'dropImmune', 1, -1, 'setBoth')
-            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
             self.setSuitCondition(theSuit.doId, 'alreadyDropImmune', 1, 10, 'setBoth')
             for s in self.battle.suits:
                 if s.dna.name == 'wtapper':
@@ -544,7 +597,7 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(suit.doId, 'ban2levels', 1, 2, 'setBoth')
         elif atkType['name'] == 'PowerhouseZapImmune':
             self.setSuitCondition(theSuit.doId, 'zapImmune', 1, -1, 'setBoth')
-            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
             self.setSuitCondition(theSuit.doId, 'alreadyZapImmune', 1, 10, 'setBoth')
             for s in self.battle.suits:
                 if s.dna.name == 'wtapper':
@@ -554,7 +607,7 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(suit.doId, 'ban2levels', 1, 2, 'setBoth')
         elif atkType['name'] == 'PowerhouseLureImmune':
             self.setSuitCondition(theSuit.doId, 'lureImmune', 1, -1, 'setBoth')
-            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
             self.setSuitCondition(theSuit.doId, 'alreadyLureImmune', 1, 10, 'setBoth')
             for s in self.battle.suits:
                 if s.dna.name == 'wtapper':
@@ -564,7 +617,7 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(suit.doId, 'ban2levels', 1, 2, 'setBoth')
         elif atkType['name'] == 'PowerhouseSyphon':
             self.setSuitCondition(theSuit.doId, 'syphon', 1, -1, 'setBoth')
-            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
             self.setSuitCondition(theSuit.doId, 'alreadySyphon', 1, 10, 'setBoth')
             for s in self.battle.suits:
                 if s.dna.name == 'wtapper':
@@ -583,7 +636,7 @@ class AttackHPCalculatorAI(object):
                     self.setSuitCondition(suit.doId, 'suemovie', 0, 0, 'setBoth')
         elif atkType['name'] == 'PowerhouseSnipeVulnerable':
             self.setSuitCondition(theSuit.doId, 'markImmune', 1, -1, 'setBoth')
-            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
             self.setSuitCondition(theSuit.doId, 'alreadyDropImmune', 1, 10, 'setBoth')
             for s in self.battle.suits:
                 if s.dna.name == 'wtapper':
@@ -593,7 +646,7 @@ class AttackHPCalculatorAI(object):
                         self.setSuitCondition(suit.doId, 'ban2levels', 1, 2, 'setBoth')
         elif atkType['name'] == 'PowerhouseSnipeMulligan':
             self.setSuitCondition(theSuit.doId, 'soundImmune', 1, -1, 'setBoth')
-            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+            self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
             self.setSuitCondition(theSuit.doId, 'alreadyDropImmune', 1, 10, 'setBoth')
             for s in self.battle.suits:
                 if s.dna.name == 'wtapper':
@@ -1668,19 +1721,19 @@ class AttackHPCalculatorAI(object):
                             self.setSuitCondition(suit.doId, 'ban2tracks', 1, 2, 'setBoth')
 
                 continue
-            elif atkType['name'] == 'AmbassadorRefinement':
-                self.setSuitCondition(attackerId, 'immune', 0, 0, 'setBoth')
-                self.setSuitCondition(attackerId, 'refinementcalculator', 0, 0, 'setBoth')
-                self.setSuitCondition(targetId, 'oilRain', 1, 3, 'setBoth')
-                self.setSuitCondition(targetId, 'alreadyOilRain', 1, 1, 'setBoth')
-                self.setSuitCondition(targetId, 'directorDamageReduction', .9, 3, 'setBoth')
-                if self.suitHasCondition(targetId, 'sued'):
-                    self.setSuitCondition(targetId, 'sued', 1, 1, 'setBoth')
-                    self.setSuitCondition(targetId, 'suemovie', 0, 0, 'setBoth')
-                self.setSuitCondition(targetId, 'soaked', 0, 0, 'setBoth')
-                self.setSuitCondition(targetId, 'drenched', 0, 0, 'setBoth')
-                self.setSuitCondition(targetId, 'suemovie', 0, 0, 'setBoth')
-                continue
+            # elif atkType['name'] == 'AmbassadorRefinement':
+            #     self.setSuitCondition(attackerId, 'immune', 0, 0, 'setBoth')
+            #     self.setSuitCondition(attackerId, 'refinementcalculator', 0, 0, 'setBoth')
+            #     self.setSuitCondition(targetId, 'oilRain', 1, 3, 'setBoth')
+            #     self.setSuitCondition(targetId, 'alreadyOilRain', 1, 1, 'setBoth')
+            #     self.setSuitCondition(targetId, 'directorDamageReduction', .9, 3, 'setBoth')
+            #     if self.suitHasCondition(targetId, 'sued'):
+            #         self.setSuitCondition(targetId, 'sued', 1, 1, 'setBoth')
+            #         self.setSuitCondition(targetId, 'suemovie', 0, 0, 'setBoth')
+            #     self.setSuitCondition(targetId, 'soaked', 0, 0, 'setBoth')
+            #     self.setSuitCondition(targetId, 'drenched', 0, 0, 'setBoth')
+            #     self.setSuitCondition(targetId, 'suemovie', 0, 0, 'setBoth')
+            #     continue
             elif atkType['name'] == 'ZapMovie':
                 result = self.getSuitConditionModifier(theSuit.doId, 'zapped')
                 self.setSuitCondition(theSuit.doId, 'zapped', 0, 0, 'setBoth')
@@ -2275,6 +2328,19 @@ class AttackHPCalculatorAI(object):
                     healAmount = 85
                 elif self.suitHasCondition(targetId, 'insured'):
                     healAmount = 50
+
+                attack[SUIT_HP_COL][targetIndex] = 0
+                attack[SUIT_HEAL_COL][targetIndex] = healAmount
+
+                continue
+            elif attackName == 'AmbassadorRefinement':
+                for suit in self.battle.activeSuits:
+                    self.setSuitCondition(suit.doId, 'healfinished', 1, 1, 'setBoth')
+
+                if targetSuit.getManager() > 0:
+                    healAmount = 50
+                else:
+                    healAmount = 0
 
                 attack[SUIT_HP_COL][targetIndex] = 0
                 attack[SUIT_HEAL_COL][targetIndex] = healAmount
@@ -2981,7 +3047,7 @@ class AttackHPCalculatorAI(object):
                 attack[SUIT_HP_COL][targetIndex] = result
                 theSuit.setHP(math.ceil(theSuit.currHP + result))
                 self.setSuitCondition(theSuit.doId, 'shielding', 1, -1, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'rageBuilding', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'rageBuilding', 0, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'enraged', 0, 0, 'none')
                 #self.setSuitCondition(theSuit.doId, 'gavelcalculator', 1, 10, 'setBoth')
                 for s in self.battle.suits:
@@ -3212,7 +3278,7 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'soakImmune', 1, -1, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'alreadySoakImmune', 1, 10, 'setBoth')
                 for s in self.battle.suits:
                     if s.dna.name == 'wtapper':
@@ -3224,7 +3290,7 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'dropImmune', 1, -1, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'alreadyDropImmune', 1, 10, 'setBoth')
                 for s in self.battle.suits:
                     if s.dna.name == 'wtapper':
@@ -3236,7 +3302,7 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'zapImmune', 1, -1, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'alreadyZapImmune', 1, 10, 'setBoth')
                 for s in self.battle.suits:
                     if s.dna.name == 'wtapper':
@@ -3248,7 +3314,7 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'lureImmune', 1, -1, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'alreadyLureImmune', 1, 10, 'setBoth')
                 for s in self.battle.suits:
                     if s.dna.name == 'wtapper':
@@ -3260,7 +3326,7 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'syphon', 1, -1, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'alreadySyphon', 1, 10, 'setBoth')
                 for s in self.battle.suits:
                     if s.dna.name == 'wtapper':
@@ -3283,7 +3349,7 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'markImmune', 1, -1, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'alreadyDropImmune', 1, 10, 'setBoth')
                 for s in self.battle.suits:
                     if s.dna.name == 'wtapper':
@@ -3295,7 +3361,7 @@ class AttackHPCalculatorAI(object):
                 result = 0
                 attack[SUIT_HP_COL][targetIndex] = result
                 self.setSuitCondition(theSuit.doId, 'soundImmune', 1, -1, 'setBoth')
-                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 1, -1, 'setBoth')
+                self.setSuitCondition(theSuit.doId, 'powerhouseRotation', 0, -1, 'setBoth')
                 self.setSuitCondition(theSuit.doId, 'alreadyDropImmune', 1, 10, 'setBoth')
                 for s in self.battle.suits:
                     if s.dna.name == 'wtapper':

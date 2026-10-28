@@ -39,7 +39,6 @@ class CashbotLitigationCalculatorAI:
         )
 
     def calculateSuitAttacksCashbotLitigation(self):
-            x = self.TurnsElapsed
             for i in range(len(self.battle.activeSuits)):
                 suitId = self.battle.activeSuits[i].doId
                 if self.battle.activeSuits[i].dna.name == 'racket':
@@ -205,7 +204,7 @@ class CashbotLitigationCalculatorAI:
             for i in range(len(self.battle.activeSuits)):
                 suitId = self.battle.activeSuits[i].doId
                 if self.battle.activeSuits[i].dna.name == 'racket':
-                    if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId,
+                    if not self.suitHasCondition(suitId,
                                                                                 'hustlingcalculator') and self.__suitCanAttack(
                             suitId):
                         attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,

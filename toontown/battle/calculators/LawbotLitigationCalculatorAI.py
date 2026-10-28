@@ -185,110 +185,6 @@ class LawbotLitigationCalculatorAI:
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
-            if self.battle.activeSuits[i].dna.name == 'caseman':
-                if self.suitHasCondition(suitId, 'insurancecalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'insurancecalculator') and self.__suitCanAttack(suitId):
-                    currentBossHealth = -1
-                    for s in self.battle.suits:
-                        if s.dna.name == 'sgoat':
-                            currentBossHealth = s.currHP
-                    if currentBossHealth >= 1:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'CaseManagerInsurancePlanScapegoat',  # Insurance Plan
-                                                                'animName': 'throw-insurance',
-                                                                    'hp': 0,
-                        'acc': 100,
-                        'freq': 0,
-                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_PENTA, SuitBattleGlobals.ATK_TGT_QUAD)),
-                            'targetType': 'suit',
-                            'allowSelfTarget': True,
-                            'targetSelf': False,
-                            'excludeManagers': False,
-                            'damageTarget': 'target',
-                            'healTarget': 'target'})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    else:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'CaseManagerInsurancePlan',  # Insurance Plan
-                                                                'animName': 'throw-insurance',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                        'freq': 0,
-                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_PENTA, SuitBattleGlobals.ATK_TGT_QUAD)),
-                            'targetType': 'suit',
-                            'allowSelfTarget': True,
-                            'targetSelf': False,
-                            'excludeManagers': False,
-                            'damageTarget': 'target',
-                            'healTarget': 'target'})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'insurancecalculator3') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'insurancecalculator3') and self.__suitCanAttack(suitId):
-                    currentBossHealth = -1
-                    for s in self.battle.suits:
-                        if s.dna.name == 'sgoat':
-                            currentBossHealth = s.currHP
-                    if currentBossHealth >= 1:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'CaseManagerInsurancePlanScapegoat',  # Insurance Plan
-                                                                'animName': 'throw-insurance',
-                                                                    'hp': 0,
-                        'acc': 100,
-                        'freq': 0,
-                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_QUAD)),
-                            'targetType': 'suit',
-                            'allowSelfTarget': True,
-                            'targetSelf': False,
-                            'excludeManagers': False,
-                            'damageTarget': 'target',
-                            'healTarget': 'target'})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                    else:
-                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                                'name': 'CaseManagerInsurancePlan',  # Insurance Plan
-                                                                'animName': 'throw-insurance',
-                                                                'hp': 0,
-                                                                'acc': 100,
-                        'freq': 0,
-                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_QUAD)),
-                            'targetType': 'suit',
-                            'allowSelfTarget': True,
-                            'targetSelf': False,
-                            'excludeManagers': False,
-                            'damageTarget': 'target',
-                            'healTarget': 'target'})
-                        if attack[SUIT_ATK_COL]:
-                            self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'insurancecalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getAbilityQueued(suitId)
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'insurancecalculator2') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                                                            'name': 'CaseManagerLegalBindings2',  # Insurance Plan
-                                                            'animName': 'throw-insurance',
-                                                            'hp': 0,
-                                                            'acc': 100,
-                                                            'freq': 0,
-                                                            'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_QUAD)),
-                            'targetType': 'suit',
-                            'allowSelfTarget': True,
-                            'targetSelf': False,
-                            'excludeManagers': False,
-                            'damageTarget': 'target',
-                            'healTarget': 'target'})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                        self.setSuitCondition(suitId, 'insurancecalculator3', 0, 0, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'stenog':
                 if self.suitHasCondition(suitId, 'whirlwindcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
@@ -399,6 +295,89 @@ class LawbotLitigationCalculatorAI:
                                                             'group': SuitBattleGlobals.ATK_TGT_GROUP})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'caseman':
+                if self.suitHasCondition(suitId, 'insurancecalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getAbilityQueued(suitId)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'insurancecalculator') and self.__suitCanAttack(suitId):
+                    currentBossHealth = -1
+                    for s in self.battle.suits:
+                        if s.dna.name == 'sgoat':
+                            currentBossHealth = s.currHP
+                    if currentBossHealth >= 1:
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'CaseManagerInsurancePlanScapegoat',  # Insurance Plan
+                                                                'animName': 'throw-insurance',
+                                                                    'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_PENTA, SuitBattleGlobals.ATK_TGT_QUAD)),
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                    else:
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'CaseManagerInsurancePlan',  # Insurance Plan
+                                                                'animName': 'throw-insurance',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                        'freq': 0,
+                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_PENTA, SuitBattleGlobals.ATK_TGT_QUAD)),
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'insurancecalculator3') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getAbilityQueued(suitId)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'insurancecalculator3') and self.__suitCanAttack(suitId):
+                    currentBossHealth = -1
+                    for s in self.battle.suits:
+                        if s.dna.name == 'sgoat':
+                            currentBossHealth = s.currHP
+                    if currentBossHealth >= 1:
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'CaseManagerInsurancePlanScapegoat',  # Insurance Plan
+                                                                'animName': 'throw-insurance',
+                                                                    'hp': 0,
+                        'acc': 100,
+                        'freq': 0,
+                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_QUAD)),
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
+                    else:
+                        attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                                'name': 'CaseManagerInsurancePlan',  # Insurance Plan
+                                                                'animName': 'throw-insurance',
+                                                                'hp': 0,
+                                                                'acc': 100,
+                        'freq': 0,
+                        'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_QUAD)),
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
+                        if attack[SUIT_ATK_COL]:
+                            self.battle.suitAttacks.append(attack)
 
             # Secondary Cheats
         for i in range(len(self.battle.activeSuits)):
@@ -523,6 +502,62 @@ class LawbotLitigationCalculatorAI:
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
                         self.setSuitCondition(suitId, 'bindingscalculator2', 0, 0, 'setBoth')
+            if self.battle.activeSuits[i].dna.name == 'stenog':
+                if self.suitHasCondition(suitId, 'calculatingcalculator') and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'CalculatingFees', # Calculating Costs
+                     'animName': 'calculating-costs',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
+
+                        'targetType': 'suit',
+                        'applyDamage': False,
+                        'targetSelf': True,})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BanLevel%s' % random.choice(['45', '46', '47', '48', '56', '57', '58', '67', '68', '78']),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'BanLevel%s' % random.randint(4, 8),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'caseman':
+                if self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'Ban%s' % random.choice(['ToonupTrap', 'ToonupLure', 'ToonupThrow', 'ToonupSquirt', 'ToonupZap', 'ToonupSound', 'ToonupDrop', 'TrapLure', 'TrapThrow', 'TrapSquirt', 'TrapZap', 'TrapSound', 'TrapDrop', 'LureThrow', 'LureSquirt', 'LureZap', 'LureSound', 'LureDrop', 'ThrowSquirt', 'ThrowZap', 'ThrowSound', 'ThrowDrop', 'SquirtZap', 'SquirtSound', 'SquirtDrop', 'ZapSound', 'ZapDrop', 'SoundDrop']),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if not self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                     'name': 'Ban%s' % random.choice(['Toonup', 'Trap', 'Lure', 'Throw', 'Squirt', 'Zap', 'Sound', 'Drop']),
+                     'animName': 'cease',
+                     'hp': 0,
+                     'acc': 100,
+                     'freq': 0,
+                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
 
             # Gag Banning & End Of Round Cheats
         for i in range(len(self.battle.activeSuits)):
@@ -580,7 +615,49 @@ class LawbotLitigationCalculatorAI:
                             'applyDamage': False,
                             'targetSelf': True,})
                     self.battle.suitAttacks.append(attack)
+            if self.battle.activeSuits[i].dna.name == 'caseman':
+                if self.suitHasCondition(suitId, 'insurancecalculator2') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
+                    attack = self.__getAbilityQueued(suitId)
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                if self.suitHasCondition(suitId, 'insurancecalculator2') and self.__suitCanAttack(suitId):
+                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
+                                                            'name': 'CaseManagerLegalBindings2',  # Insurance Plan
+                                                            'animName': 'throw-insurance',
+                                                            'hp': 0,
+                                                            'acc': 100,
+                                                            'freq': 0,
+                                                            'group': random.choice((SuitBattleGlobals.ATK_TGT_TRIPLE, SuitBattleGlobals.ATK_TGT_DOUBLE, SuitBattleGlobals.ATK_TGT_QUAD)),
+                            'targetType': 'suit',
+                            'allowSelfTarget': True,
+                            'targetSelf': False,
+                            'excludeManagers': False,
+                            'damageTarget': 'target',
+                            'healTarget': 'target'})
+                    if attack[SUIT_ATK_COL]:
+                        self.battle.suitAttacks.append(attack)
+                        self.setSuitCondition(suitId, 'insurancecalculator3', 0, 0, 'setBoth')
             if self.battle.activeSuits[i].dna.name == 'lgator':
+                liveCogs = 0
+                for suit in self.battle.activeSuits:
+                    if suit.currHP > 0:
+                        liveCogs += 1
+                if self.calculator.getSuitTurnsElapsed(self.battle.activeSuits[i]) % 4 == 0:
+                    if liveCogs == 6 and self.calculator.litigatorSnaps == 2:
+                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                    elif liveCogs >= 7 and self.calculator.litigatorSnaps > 2:
+                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                    else:
+                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
+                if self.calculator.litigatorDamage >= 500:
+                    if liveCogs == 6 and self.calculator.litigatorSnaps == 2:
+                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                    elif liveCogs >= 7 and self.calculator.litigatorSnaps > 2:
+                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                    elif self.suitHasCondition(suitId, 'bashcalculator'):
+                        self.setSuitCondition(suitId, 'bellowcalculator', 1, 10, 'setBoth')
+                    else:
+                        self.setSuitCondition(suitId, 'bashcalculator', 1, 10, 'setBoth')
                 if self.suitHasCondition(suitId, 'bashcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
@@ -588,7 +665,7 @@ class LawbotLitigationCalculatorAI:
                 if self.suitHasCondition(suitId, 'bashcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
                      'name': 'LitigatorBayouBash', # Bayou Bash
-                     'animName': 'none',
+                     'animName': 'snap2',
                      'hp': 0,
                      'acc': 100,
                      'freq': 0,
@@ -596,73 +673,16 @@ class LawbotLitigationCalculatorAI:
                                         'targetType': 'none'})
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'stenog':
-                if self.suitHasCondition(suitId, 'calculatingcalculator') and self.battle.activeSuits[i].currHP > 0:
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'CalculatingFees', # Calculating Costs
-                     'animName': 'calculating-costs',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_SINGLE,
-
-                        'targetType': 'suit',
-                        'applyDamage': False,
-                        'targetSelf': True,})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'BanLevel%s' % random.choice(['45', '46', '47', '48', '56', '57', '58', '67', '68', '78']),
-                     'animName': 'cease',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'ban2levels') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'BanLevel%s' % random.randint(4, 8),
-                     'animName': 'cease',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-            if self.battle.activeSuits[i].dna.name == 'caseman':
-                if self.TurnsElapsed % 1 == 0 and self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'Ban%s' % random.choice(['ToonupTrap', 'ToonupLure', 'ToonupThrow', 'ToonupSquirt', 'ToonupZap', 'ToonupSound', 'ToonupDrop', 'TrapLure', 'TrapThrow', 'TrapSquirt', 'TrapZap', 'TrapSound', 'TrapDrop', 'LureThrow', 'LureSquirt', 'LureZap', 'LureSound', 'LureDrop', 'ThrowSquirt', 'ThrowZap', 'ThrowSound', 'ThrowDrop', 'SquirtZap', 'SquirtSound', 'SquirtDrop', 'ZapSound', 'ZapDrop', 'SoundDrop']),
-                     'animName': 'cease',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
-                if self.TurnsElapsed % 1 == 0 and not self.suitHasCondition(suitId, 'ban2tracks') and self.__suitCanAttack(suitId):
-                    attack = self.__getCheatAttack(suitId, {'suitName': self.battle.activeSuits[i].dna.name,
-                     'name': 'Ban%s' % random.choice(['Toonup', 'Trap', 'Lure', 'Throw', 'Squirt', 'Zap', 'Sound', 'Drop']),
-                     'animName': 'cease',
-                     'hp': 0,
-                     'acc': 100,
-                     'freq': 0,
-                     'group': SuitBattleGlobals.ATK_TGT_GROUP})
-                    if attack[SUIT_ATK_COL]:
-                        self.battle.suitAttacks.append(attack)
+                        self.calculator.litigatorSnaps += 1
 
         for i in range(len(self.battle.activeSuits)):
             suitId = self.battle.activeSuits[i].doId
             if self.battle.activeSuits[i].dna.name == 'lgator':
-                if self.suitHasCondition(suitId, 'bellowcalculator') and self.calculator.deadSuits > 0 and self.battle.activeSuits[i].currHP > 0:
-                    self.setSuitCondition(suitId, 'bellowcalculator', 0, 0, 'setBoth')
                 if self.suitHasCondition(suitId, 'bellowcalculator') and not self.__suitCanAttack(suitId) and self.battle.activeSuits[i].currHP > 0:
                     attack = self.__getAbilityQueued(suitId)
                     if attack[SUIT_ATK_COL]:
                         self.battle.suitAttacks.append(attack)
-                if self.suitHasCondition(suitId, 'bellowcalculator') and self.__suitCanAttack(suitId) and not self.deadSuits > 0:
+                if self.suitHasCondition(suitId, 'bellowcalculator') and self.__suitCanAttack(suitId):
                     attack = self.__getCheatAttack(suitId,{'suitName': self.battle.activeSuits[i].dna.name,
                                             'name': 'LitigatorBayouBellow',  # Bayou Bellow
                                             'animName': 'bellow',
