@@ -321,7 +321,9 @@ class PacesetterCalculatorAI:
             if attack[SUIT_ATK_COL]:
                 self.battle.suitAttacks.append(attack)
 
-                # Corporate Restructuring invalidates all existing trap positions.
+                # Preserve valid traps on their Cogs. Reconcile only stale
+                # registry entries before changing the suit order.
+                self.calculator.clearStaleSuitTraps()
 
                 self.battle.queueSuitOrder(
                     [otherSuit.doId for otherSuit in newActiveSuits]

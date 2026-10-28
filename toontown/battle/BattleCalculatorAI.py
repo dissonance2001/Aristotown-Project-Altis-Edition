@@ -626,6 +626,32 @@ class BattleCalculatorAI:
             if mainTarget is not None:
                 atkTargets = [mainTarget]
 
+        rushJobConditionTracks = (
+            ('trapRushJob', LURE),
+            ('lureRushJob', LURE),
+            ('throwRushJob', THROW),
+            ('squirtRushJob', SQUIRT),
+            ('zapRushJob', SQUIRT),
+            ('soundRushJob', SOUND),
+            ('dropRushJob', DROP),
+        )
+        for currTarget in atkTargets:
+            targetId = currTarget.doId
+            for condition, requiredTrack in rushJobConditionTracks:
+                if self.suitHasCondition(targetId, condition) and atkTrack == requiredTrack:
+                    attack[TOON_ACCBONUS_COL] = 0
+                    return (1, 100)
+
+            for effect in self.getAllRelevantConditions(targetId, StatusEffects.RushJob, toon=False):
+                requiredTrack = effect.trackToUse
+                if requiredTrack == TRAP:
+                    requiredTrack = LURE
+                elif requiredTrack == ZAP:
+                    requiredTrack = SQUIRT
+                if atkTrack == requiredTrack:
+                    attack[TOON_ACCBONUS_COL] = 0
+                    return (1, 100)
+
         hasAccuracyBuff = False
         toon = simbase.air.doId2do.get(attack[TOON_ID_COL])
         if toon:
@@ -680,18 +706,6 @@ class BattleCalculatorAI:
                     thisSuitDef -= 10
                 if self.suitHasCondition(currTarget.doId, 'drenched'):
                     thisSuitDef -= 20
-                rushJobConditions = [
-                    'trapRushJob',
-                    'lureRushJob',
-                    'throwRushJob',
-                    'squirtRushJob',
-                    'zapRushJob',
-                    'soundRushJob',
-                    'dropRushJob',
-                ]
-                if any(self.suitHasCondition(currTarget.doId, cond)
-                    for cond in rushJobConditions):
-                    thisSuitDef *= 0
                 if debug:
                     self.notify.debug('Examining suit def for toon attack: ' + str(thisSuitDef))
                 tgtDef = min(thisSuitDef, tgtDef)
@@ -1385,6 +1399,14 @@ class BattleCalculatorAI:
     def clearAllSuitTraps(self):
         for suit in self.battle.activeSuits:
             self.__removeSuitTrap(suit.doId)
+
+    def clearStaleSuitTraps(self):
+        for suitId, trapInfo in list(self.traps.items()):
+            suit = self.battle.findSuit(suitId)
+            if (suit is None or
+                    trapInfo[0] == self.TRAP_CONFLICT or
+                    getattr(suit, 'battleTrap', NO_TRAP) == NO_TRAP):
+                self.__removeSuitTrap(suitId)
 
     def __clearTrapCreator(self, creatorId, suitId = None):
         if suitId == None:

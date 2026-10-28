@@ -320,13 +320,27 @@ def doMovingGoalposts(attack):
 
     return Parallel(suitTrack, sprayTracks, toonTracks, toonAnimTracks, toonSpinTracks, spinTracks1, spinTracks2, spinTracks3, soundTracks)
 
-def clearCorporateRestructuringTraps(battle):
+def clearStaleCorporateRestructuringTraps(battle):
     for suit in battle.activeSuits:
+        if getattr(suit, 'battleTrap', NO_TRAP) != NO_TRAP:
+            continue
+
+        trapProp = getattr(suit, 'battleTrapProp', None)
+        if trapProp is not None:
+            try:
+                if not trapProp.isEmpty():
+                    MovieUtil.removeProp(trapProp)
+            except:
+                pass
+
+        suit.battleTrapProp = None
         suit.battleTrap = NO_TRAP
         suit.battleTrapIsFresh = 0
 
         if suit.hasSuitStatusEffect('trapped'):
             suit.clearSuitStatusEffect('trapped')
+        if suit.hasSuitStatusEffect('trapDamage'):
+            suit.clearSuitStatusEffect('trapDamage')
 
 def doCorporateRestructuring(attack):
     suit = attack['suit']
@@ -396,5 +410,6 @@ def doCorporateRestructuring(attack):
     return Sequence(
         Parallel(suitTrack, soundTrack, Sequence(Wait(1.5), suitTracks)),
         Func(battle.setClientSuitOrder, newActiveSuits),
+        Func(clearStaleCorporateRestructuringTraps, battle),
         Func(suit.setNeutralAnimationDrop))
 
