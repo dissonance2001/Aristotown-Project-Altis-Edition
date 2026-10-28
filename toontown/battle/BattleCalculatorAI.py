@@ -626,6 +626,36 @@ class BattleCalculatorAI:
             if mainTarget is not None:
                 atkTargets = [mainTarget]
 
+        rushJobAccuracyTracks = {
+            'trapRushJob': LURE,
+            'lureRushJob': LURE,
+            'throwRushJob': THROW,
+            'squirtRushJob': SQUIRT,
+            'zapRushJob': SQUIRT,
+            'soundRushJob': SOUND,
+            'dropRushJob': DROP,
+        }
+        for currTarget in atkTargets:
+            targetId = currTarget.doId
+            if any(
+                atkTrack == requiredTrack and self.suitHasCondition(targetId, condition)
+                for condition, requiredTrack in rushJobAccuracyTracks.items()
+            ):
+                attack[TOON_ACCBONUS_COL] = 0
+                return (1, 100)
+
+            for effect in self.getAllRelevantConditions(
+                targetId, StatusEffects.RushJob, toon=False
+            ):
+                requiredTrack = effect.trackToUse
+                if requiredTrack == TRAP:
+                    requiredTrack = LURE
+                elif requiredTrack == ZAP:
+                    requiredTrack = SQUIRT
+                if atkTrack == requiredTrack:
+                    attack[TOON_ACCBONUS_COL] = 0
+                    return (1, 100)
+
         hasAccuracyBuff = False
         toon = simbase.air.doId2do.get(attack[TOON_ID_COL])
         if toon:
@@ -680,18 +710,6 @@ class BattleCalculatorAI:
                     thisSuitDef -= 10
                 if self.suitHasCondition(currTarget.doId, 'drenched'):
                     thisSuitDef -= 20
-                rushJobConditions = [
-                    'trapRushJob',
-                    'lureRushJob',
-                    'throwRushJob',
-                    'squirtRushJob',
-                    'zapRushJob',
-                    'soundRushJob',
-                    'dropRushJob',
-                ]
-                if any(self.suitHasCondition(currTarget.doId, cond)
-                    for cond in rushJobConditions):
-                    thisSuitDef *= 0
                 if debug:
                     self.notify.debug('Examining suit def for toon attack: ' + str(thisSuitDef))
                 tgtDef = min(thisSuitDef, tgtDef)
