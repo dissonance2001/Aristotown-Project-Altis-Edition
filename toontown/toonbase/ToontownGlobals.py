@@ -6,6 +6,13 @@ from toontown.toonbase.ContentPackCompatibility import ContentPackCompatibility
 MapHotkeyOn = 'alt'
 MapHotkeyOff = 'alt-up'
 MapHotkey = 'alt'
+SprintHotkeyOn = 'sprint'
+SprintHotkeyOff = 'sprint-up'
+SprintCutOff = 22.0
+SPRINT_INDEX = 6
+ToonSprintSpeedFactor = 1.5
+ToonSprintForwardSpeed = ToonForwardSpeed * ToonSprintSpeedFactor
+ToonSprintReverseSpeed = ToonReverseSpeed * ToonSprintSpeedFactor
 AccountDatabaseChannelId = 4008
 ToonDatabaseChannelId = 4021
 DoodleDatabaseChannelId = 4023

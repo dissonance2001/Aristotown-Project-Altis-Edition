@@ -4604,7 +4604,9 @@ class Toon(Avatar.Avatar, ToonHead):
 
         action = None
         if self.standWalkRunReverse != None:
-            if animationSpeed >= ToontownGlobals.RunCutOff:
+            if animationSpeed >= ToontownGlobals.SprintCutOff:
+                action = ToontownGlobals.SPRINT_INDEX
+            elif animationSpeed >= ToontownGlobals.RunCutOff:
                 action = OTPGlobals.RUN_INDEX
             elif animationSpeed > ToontownGlobals.WalkCutOff:
                 action = OTPGlobals.WALK_INDEX
@@ -4703,7 +4705,10 @@ class Toon(Avatar.Avatar, ToonHead):
         self.standWalkRunReverse = (('neutral', 1.0),
          ('walk', 1.0),
          ('run', 1.0),
-         ('walk', -1.0))
+         ('walk', -1.0),
+         ('run', 1.0),
+         ('run', 1.0),
+         ('run', 1.25))
         self.setSpeed(self.forwardSpeed, self.rotateSpeed)
         self.setActiveShadow(1)
 
@@ -5403,7 +5408,10 @@ class Toon(Avatar.Avatar, ToonHead):
         self.standWalkRunReverse = (('neutral', 1.0),
          ('walk', 1.0),
          ('run', 1.0),
-         ('walk', -1.0))
+         ('walk', -1.0),
+         ('run', 1.0),
+         ('run', 1.0),
+         ('run', 1.25))
         self.setSpeed(self.forwardSpeed, self.rotateSpeed)
         if self.isLocal() and emoteIndex != Emote.globalEmote.EmoteSleepIndex:
             if self.sleepFlag:
@@ -8536,7 +8544,10 @@ class Toon(Avatar.Avatar, ToonHead):
         self.standWalkRunReverse = (('neutral', 1.0),
          ('run', 1.0),
          ('run', 1.0),
-         ('run', -1.0))
+         ('run', -1.0),
+         ('run', 1.0),
+         ('run', 1.0),
+         ('run', 1.25))
         self.setSpeed(self.forwardSpeed, self.rotateSpeed)
         self.setActiveShadow(1)
 

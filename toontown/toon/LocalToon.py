@@ -83,6 +83,8 @@ if (__debug__):
 
 class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     neverDisable = 1
+    SprintStartMessage = 'LocalToon-SprintStart'
+    SprintStopMessage = 'LocalToon-SprintStop'
     piePowerSpeed = base.config.GetDouble('pie-power-speed', 0.2)
     piePowerExponent = base.config.GetDouble('pie-power-exponent', 0.75)
 
@@ -123,6 +125,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
         self.soundRun = self.movementSounds['run_regular']
         self.soundWalk = self.movementSounds['walk_regular']
+        self.soundSprint = self.soundRun
         self.soundWhisper = base.loader.loadSfx('phase_3.5/audio/sfx/GUI_whisper_3.ogg')
         self.soundPhoneRing = base.loader.loadSfx('phase_3.5/audio/sfx/telephone_ring.ogg')
         self.soundSystemMessage = base.loader.loadSfx('phase_3/audio/sfx/clock03.ogg')
@@ -170,6 +173,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.sprinting = False
         self.sprintToggled = False
         self.canSprint = True
+        self.lerpFov = 0
+        self.accept(ToontownGlobals.SprintHotkeyOn, self.requestSprint)
+        self.accept(ToontownGlobals.SprintHotkeyOff, self.stopSprint)
         self.__boundMovementHotkeys = []
         self.wantBattles = base.config.GetBool('want-battles', 1)
         wantNameTagAvIds = base.config.GetBool('want-nametag-avids', 0)
@@ -344,6 +350,14 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.updateSound(self.soundRun, sfx)
         self.soundRun = sfx
 
+    def updateSprintSound(self, sfx):
+        self.updateSound(self.soundSprint, sfx)
+        self.soundSprint = sfx
+
+    def sprintSound(self):
+        self.soundWalk.stop()
+        base.playSfx(self.soundRun, looping=1)
+
     def handleOnFloor(self, collEntry):
         intoNode = collEntry.getIntoNode()
         if intoNode.hasTag('surface'):
@@ -355,10 +369,12 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         try:
             self.updateWalkSound(self.movementSounds['walk_' + surfaceType])
             self.updateRunSound(self.movementSounds['run_' + surfaceType])
+            self.updateSprintSound(self.movementSounds['run_' + surfaceType])
         except:
             surfaceType = 'regular'
             self.updateWalkSound(self.movementSounds['walk_' + surfaceType])
             self.updateRunSound(self.movementSounds['run_' + surfaceType])
+            self.updateSprintSound(self.movementSounds['run_' + surfaceType])
 		
     def handleOffFloor(self, collEntry):
         pass
@@ -1071,8 +1087,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 self.accept(eventUp, self.__endTossPie)
                 self.__boundMovementHotkeys.extend((eventDown, eventUp))
 
-        self.accept(sprintKey, self.requestSprint)
-        self.accept(sprintKey + '-up', self.stopSprint)
+        self.accept(sprintKey, messenger.send, extraArgs=[ToontownGlobals.SprintHotkeyOn])
+        self.accept(sprintKey + '-up', messenger.send, extraArgs=[ToontownGlobals.SprintHotkeyOff])
         self.__boundMovementHotkeys.extend((sprintKey, sprintKey + '-up'))
         self.accept('reloadActionKeys', self.reloadMovementHotkeys)
         self.__boundMovementHotkeys.append('reloadActionKeys')
@@ -1167,74 +1183,142 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.accept("disable-hotkeys", self.disableHotkeys)
 
     def requestSprint(self):
-        # In toggle mode, one press turns sprint on and the next press turns
-        # it off. In hold mode the key-up handler below stops sprinting.
-        if not self.canSprint or self.getHp() < 1:
+        if not hasattr(self, 'motion'):
             return
         if settings.get('toggle-sprint', False):
-            self.sprintToggled = not self.sprintToggled
             if self.sprintToggled:
-                self.startSprint()
-            else:
+                self.sprintToggled = False
                 self.stopSprint(fromFunc=True)
+            elif self.startSprint():
+                self.sprintToggled = True
         else:
-            self.startSprint()
+            motionState = str(getattr(self.motion, 'state', '')).lower()
+            if motionState != 'neutral':
+                self.startSprint()
 
     def startSprint(self):
-        if not self.canSprint or self.getHp() < 1:
-            return
+        if self.sprinting:
+            return True
+        if self.getHp() < 1:
+            return False
+        if not self.canSprint:
+            self.showHpString(TTLocalizer.SprintCooldown, color=(1, 0, 0, 1))
+            return False
         try:
             place = base.cr.playGame.getPlace()
-            if place is None:
-                return
-            # Cog disguise replaces ToonForwardSpeed with SuitWalkSpeed.
-            # Sprint must use the original Toon sprint speed instead of
-            # multiplying the disguise walk speed (4.8), which only gives
-            # 7.2 and therefore stays in the walk animation.
-            if self.isDisguised and hasattr(self, 'oldForward'):
-                sprintForward = self.oldForward * 1.5
-                sprintReverse = self.oldReverse * 1.5
-            else:
-                sprintForward = ToontownGlobals.ToonForwardSpeed * 1.5
-                sprintReverse = ToontownGlobals.ToonReverseSpeed * 1.5
+        except Exception:
+            return False
+        if place is None:
+            return False
 
+        if self.isDisguised and hasattr(self, 'oldForward') and hasattr(self, 'oldReverse'):
+            sprintForward = self.oldForward * ToontownGlobals.ToonSprintSpeedFactor
+            sprintReverse = self.oldReverse * ToontownGlobals.ToonSprintSpeedFactor
+        else:
+            sprintForward = ToontownGlobals.ToonSprintForwardSpeed
+            sprintReverse = ToontownGlobals.ToonSprintReverseSpeed
+
+        try:
             self.controlManager.setSpeeds(
                 sprintForward,
                 ToontownGlobals.ToonJumpForce,
                 sprintReverse,
                 ToontownGlobals.ToonRotateSpeed)
-            self.sprinting = True
-        except:
+        except Exception:
+            return False
+
+        self.sprinting = True
+        messenger.send(self.SprintStartMessage)
+        try:
+            state = place.getCurrentOrNextState() if hasattr(place, 'getCurrentOrNextState') else place.getState()
+            if str(state).lower() == 'walk':
+                self.stopSprintFovSeq()
+                startFov = self.lerpFov or settings['fieldofview']
+                self.sprintFovSeq = LerpFunc(
+                    self.updateSprintFov,
+                    fromData=startFov,
+                    toData=settings['fieldofview'] * 1.25,
+                    duration=0.25,
+                    blendType='easeIn')
+                self.sprintFovSeq.start()
+        except Exception:
             pass
+        return True
 
     def stopSprint(self, fromFunc=False):
         if not fromFunc and settings.get('toggle-sprint', False):
             return
         if not self.sprinting:
             return
-        try:
-            # While disguised, ToonForwardSpeed/ToonReverseSpeed are changed
-            # globally to the slow Cog disguise walk speed (4.8). Restore the
-            # original Toon movement speed when sprint is turned off.
-            if self.isDisguised and hasattr(self, 'oldForward') and hasattr(self, 'oldReverse'):
-                normalForward = self.oldForward
-                normalReverse = self.oldReverse
-                normalRotate = getattr(self, 'oldRotate', ToontownGlobals.ToonRotateSpeed)
-            else:
-                normalForward = ToontownGlobals.ToonForwardSpeed
-                normalReverse = ToontownGlobals.ToonReverseSpeed
-                normalRotate = ToontownGlobals.ToonRotateSpeed
+        if fromFunc:
+            self.sprintToggled = False
 
-            self.controlManager.setSpeeds(
-                normalForward,
-                ToontownGlobals.ToonJumpForce,
-                normalReverse,
-                normalRotate)
-        except:
+        messenger.send(self.SprintStopMessage)
+        self.setWalkSpeedNormal()
+
+        try:
+            place = base.cr.playGame.getPlace()
+            if place is not None:
+                state = place.getCurrentOrNextState() if hasattr(place, 'getCurrentOrNextState') else place.getState()
+                if str(state).lower() == 'walk':
+                    self.stopSprintFovSeq()
+                    startFov = self.lerpFov or settings['fieldofview']
+                    self.sprintFovSeq = LerpFunc(
+                        self.updateSprintFov,
+                        fromData=startFov,
+                        toData=settings['fieldofview'],
+                        duration=0.25,
+                        blendType='easeIn')
+                    self.sprintFovSeq.start()
+        except Exception:
             pass
+
         self.sprinting = False
         if not settings.get('toggle-sprint', False):
             self.sprintToggled = False
+
+    def updateSprintFov(self, fov):
+        base.camLens.setMinFov(fov / (4.0 / 3.0))
+        self.lerpFov = fov
+
+    def stopSprintFovSeq(self):
+        if hasattr(self, 'sprintFovSeq'):
+            self.sprintFovSeq.pause()
+            del self.sprintFovSeq
+
+    def setWalkSpeedNormal(self):
+        if self.isDisguised and hasattr(self, 'oldForward') and hasattr(self, 'oldReverse'):
+            forward = self.oldForward
+            reverse = self.oldReverse
+            rotate = getattr(self, 'oldRotate', ToontownGlobals.ToonRotateSpeed)
+        else:
+            forward = ToontownGlobals.ToonForwardSpeed
+            reverse = ToontownGlobals.ToonReverseSpeed
+            rotate = ToontownGlobals.ToonRotateSpeed
+
+        if settings.get('toggle-sprint', False) and self.sprintToggled and self.canSprint:
+            forward *= ToontownGlobals.ToonSprintSpeedFactor
+            reverse *= ToontownGlobals.ToonSprintSpeedFactor
+
+        self.controlManager.setSpeeds(
+            forward,
+            ToontownGlobals.ToonJumpForce,
+            reverse,
+            rotate)
+
+    def setCanSprint(self, canSprint):
+        if canSprint:
+            self.enableSprint()
+        else:
+            self.disableSprint()
+
+    def disableSprint(self):
+        self.canSprint = False
+        self.sprintToggled = False
+        self.stopSprint(fromFunc=True)
+
+    def enableSprint(self):
+        self.canSprint = True
 
     def __beginTossPieMouse(self, mouseParam):
         self.__beginTossPie(globalClock.getFrameTime())
