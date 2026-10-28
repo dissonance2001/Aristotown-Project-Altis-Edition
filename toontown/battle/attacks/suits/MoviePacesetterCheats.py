@@ -321,25 +321,12 @@ def doMovingGoalposts(attack):
     return Parallel(suitTrack, sprayTracks, toonTracks, toonAnimTracks, toonSpinTracks, spinTracks1, spinTracks2, spinTracks3, soundTracks)
 
 def clearCorporateRestructuringTraps(battle):
-    for suit in list(battle.activeSuits):
-        trapProp = getattr(suit, 'battleTrapProp', None)
-        if trapProp is not None:
-            try:
-                battle.removeTrap(suit, removeTrainTrack=True)
-            except:
-                try:
-                    if not trapProp.isEmpty():
-                        MovieUtil.removeProp(trapProp)
-                except:
-                    pass
-
-        suit.battleTrapProp = None
+    for suit in battle.activeSuits:
         suit.battleTrap = NO_TRAP
         suit.battleTrapIsFresh = 0
 
-        for statusEffect in ('trapped', 'trapDamage'):
-            if suit.hasSuitStatusEffect(statusEffect):
-                suit.clearSuitStatusEffect(statusEffect)
+        if suit.hasSuitStatusEffect('trapped'):
+            suit.clearSuitStatusEffect('trapped')
 
 def doCorporateRestructuring(attack):
     suit = attack['suit']
@@ -354,10 +341,7 @@ def doCorporateRestructuring(attack):
     if sorted(oldIndexes) != list(range(len(oldActiveSuits))):
         return Sequence(getSuitAnimTrack(attack))
     newActiveSuits = [oldActiveSuits[index] for index in oldIndexes]
-    suitTrack = Sequence(
-        Func(clearCorporateRestructuringTraps, battle),
-        Func(suit.stop),
-        getSuitAnimTrack(attack))
+    suitTrack = Sequence(Func(suit.stop), getSuitAnimTrack(attack))
     suitTracks = Parallel()
     for otherSuit in oldActiveSuits:
         pendingDeath = False
