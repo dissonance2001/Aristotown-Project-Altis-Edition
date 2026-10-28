@@ -9,4 +9,8 @@ class NotifWindowGenericText(NotifWindowBase):
         NotifWindowBase.__init__(self, parent, data, **kw)
         self.initialiseoptions(NotifWindowGenericText)
         self.title_text.setText(data.getTitle())
+        if data.getNotificationType() == 'catalog':
+            self.title_text.setZ(self.title_text.getZ() + 0.05)
         self.text.setTextWithVerticalAlignment(data.getSubtitle())
+        if data.getNotificationType() == 'catalog':
+            self.text.setZ(self.text.getZ() + 0.02)

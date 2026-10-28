@@ -1867,7 +1867,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
         from toontown.notifications.notificationData.CatalogNotification import CatalogNotification
         self.hideClarabelleGui()
-        notificationText = '\n\n'.join(message)
+        notificationText = '\n'.join(message)
         self.notificationManager.addNotification(
             CatalogNotification(notificationText))
 
