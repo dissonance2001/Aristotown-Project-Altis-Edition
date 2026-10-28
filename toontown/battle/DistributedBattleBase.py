@@ -1420,7 +1420,13 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.notify.debug('network:joinDone(%d)' % avId)
         self.sendUpdate('joinDone', [avId])
 
-    def d_requestAttack(self, toonId, track, level, av, lockIn=False):
+    def d_requestAttack(self, toonId, track, level, av, lockIn=False, applyAutoLockIn=True):
+        if getattr(self.townBattle, 'manualUnlock', False):
+            lockIn = False
+        elif applyAutoLockIn:
+            autoLockIn = settings.get('auto-lock-in', 0)
+            if autoLockIn == 2 or (autoLockIn == 1 and len(self.toons) == 1):
+                lockIn = True
         self.lockIn = bool(lockIn)
         self.notify.debug('network:requestAttack(%d, %d, %d, %s)' % (track, level, av, self.lockIn))
         self.sendUpdate('requestAttack', [track, level, av, self.lockIn])
@@ -1690,10 +1696,13 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.notify.debug('got a Pass')
             self.d_requestAttack(base.localAvatar.doId, PASS, -1, -1, lockIn)
         elif mode == 'UnAttack':
-            self.d_requestAttack(base.localAvatar.doId, UN_ATTACK, -1, -1)
+            self.d_requestAttack(base.localAvatar.doId, UN_ATTACK, -1, -1, applyAutoLockIn=False)
             noAttack = 1
         elif mode == 'LockIn':
             lockIn = bool(response['lockIn'])
+            if self.townBattle is not None:
+                self.townBattle.lockIn = lockIn
+                self.townBattle.manualUnlock = not lockIn
             self.d_requestLockIn(base.localAvatar.doId, lockIn)
         elif mode == 'GagChange':
             track = response.get('track')
@@ -1701,7 +1710,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             if not isinstance(track, int) or not isinstance(level, int):
                 return
             self.lockIn = False
-            self.d_requestAttack(base.localAvatar.doId, track, level, self.targetId, False)
+            self.d_requestAttack(base.localAvatar.doId, track, level, self.targetId, False, applyAutoLockIn=False)
             noAttack = 1
         elif mode == 'Fire':
             target = response['target']
@@ -1721,6 +1730,31 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
     def __timedOut(self):
         #self.townBattle.adjustStatusEffects(self.activeToons)
+        townBattle = self.townBattle
+        selectedGag = False
+        if self.localToonActive() and townBattle is not None:
+            try:
+                stateName = townBattle.fsm.getCurrentState().getName()
+                track = townBattle.track
+                level = townBattle.level
+                gagProps = ToontownBattleGlobals.AvPropsNew
+                selectedGag = (stateName == 'AttackWait' and
+                               townBattle.lastActionMode == 'Inventory' and
+                               isinstance(track, int) and 0 <= track < len(gagProps) and
+                               isinstance(level, int) and 0 <= level < len(gagProps[track]))
+            except Exception:
+                selectedGag = False
+
+        if selectedGag:
+            if not self.lockIn:
+                self.d_requestLockIn(base.localAvatar.doId, True)
+            self.lockIn = True
+            townBattle.lockIn = True
+            townBattle.manualUnlock = False
+            if getattr(townBattle.waitPanel, 'isLoaded', False):
+                townBattle.waitPanel.setLockIn(True)
+            return
+
         if self.choseAttackAlready == 1:
             return
         self.notify.debug('WaitForInput timed out')

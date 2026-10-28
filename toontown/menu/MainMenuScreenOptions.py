@@ -292,7 +292,7 @@ class MainMenuScreenOptions(MainMenuScreen, FSM):
             if not hasattr(option, 'row'):
                 option.show()
                 continue
-            page = int(option.row) / MainMenuGlobals.maxRowsShownAtOnce
+            page = int(option.row) // MainMenuGlobals.maxRowsShownAtOnce
             if page == self.currentRow:
                 option.setZ(MainMenuGlobals.rowStartingZ - ((option.row % MainMenuGlobals.maxRowsShownAtOnce) * MainMenuGlobals.rowSeparation))
                 option.show()

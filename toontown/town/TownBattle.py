@@ -54,6 +54,7 @@ class TownBattle(StateData.StateData):
         self.level = -1
         self.lastActionMode = 'Inventory'
         self.lockIn = False
+        self.manualUnlock = False
         self.lockInEvent = 'lock-in-request'
         self.gagChangeEvent = 'gag-change-event'
         self.target = 0
@@ -604,6 +605,7 @@ class TownBattle(StateData.StateData):
 
     def enterAttack(self):
         self.lockIn = False
+        self.manualUnlock = False
         if getattr(self.waitPanel, 'isLoaded', False):
             self.waitPanel.setLockIn(False)
         self.attackPanel.enter()
@@ -616,6 +618,7 @@ class TownBattle(StateData.StateData):
     def __handleAttackPanelDone(self, doneStatus):
         self.notify.debug('doneStatus: %s' % doneStatus)
         self.lockIn = bool(doneStatus.get('lockIn', False))
+        self.manualUnlock = bool(doneStatus.get('manualUnlock', False))
         mode = doneStatus['mode']
         if mode == 'Inventory':
             self.lastActionMode = 'Inventory'
@@ -804,7 +807,10 @@ class TownBattle(StateData.StateData):
     def __handleLockIn(self, lockInInfo):
         if lockInInfo.get('mode') != 'LockIn':
             return
-        messenger.send(self.battleEvent, [{'mode': 'LockIn', 'lockIn': bool(lockInInfo.get('lockIn', False))}])
+        lockedIn = bool(lockInInfo.get('lockIn', False))
+        self.lockIn = lockedIn
+        self.manualUnlock = not lockedIn
+        messenger.send(self.battleEvent, [{'mode': 'LockIn', 'lockIn': lockedIn}])
 
     def __handleGagChange(self, gagChangeInfo):
         if gagChangeInfo.get('mode') != 'GagChange':

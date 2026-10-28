@@ -113,9 +113,13 @@ class TownBattleWaitPanel(StateData.StateData):
         self.__sendLockIn(lockedIn)
 
     def __handleGagRightClick(self, guiEvent=None):
-        if self.gui is not None and self.gui.lockedIn:
-            self.gui.setLockIn(False)
-            self.__sendLockIn(False)
+        if self.gui is None:
+            return
+        self.gui.setLockIn(False)
+        if self.townBattle is not None:
+            self.townBattle.lockIn = False
+            self.townBattle.manualUnlock = True
+        self.__sendLockIn(False)
 
     def __handleGagChange(self, track, level):
         if self.gui.lockedIn or bool(getattr(self.townBattle, 'lockIn', False)):

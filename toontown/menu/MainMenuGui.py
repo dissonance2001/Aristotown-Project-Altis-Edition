@@ -26,6 +26,7 @@ OPTION_LABELS = {
     'reduce-gui-movement': 'Reduce GUI Movement',
     'smoothanimations': 'Smooth Animations',
     'health-meter-mode': 'Overhead Laff Display',
+    'auto-lock-in': 'Auto Lock-In',
     'toggle-sprint': 'Toggle Sprint',
     'want-Custom-Controls': 'Custom Keymapping',
     'change-bindings': 'Change Key Bindings',
@@ -57,6 +58,7 @@ OPTION_DESCRIPTIONS = {
     'reduce-gui-movement': 'Reduces animated movement in supported user interface elements.',
     'smoothanimations': 'Enables or disables Altis smooth animation interpolation. Requires a restart, matching the original Altis behavior.',
     'health-meter-mode': 'Changes when Laff meters are displayed above Toon heads.',
+    'auto-lock-in': 'Automatically locks in selected attacks: off, in solo battles, or always. Right-clicking leaves the selection unlocked.',
     'toggle-sprint': 'When enabled, press Sprint once to stay sprinting; when disabled, hold Sprint to sprint.',
     'want-Custom-Controls': 'Enables Altis custom keymapping.',
     'change-bindings': 'Opens the key binding editor.',
@@ -75,6 +77,7 @@ DROPDOWN_OPTIONS = {
     'display-mode': ['Windowed', 'Borderless', 'Fullscreen'],
     'anisotropic-filtering': ['Off', '2x', '4x', '8x', '16x'],
     'health-meter-mode': ['Always Off', 'Always On', 'Default'],
+    'auto-lock-in': ['Off', 'Solo', 'Always'],
 }
 
 

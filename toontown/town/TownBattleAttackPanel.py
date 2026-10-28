@@ -31,7 +31,7 @@ class TownBattleAttackPanel(StateData.StateData):
         if not AttackPanelHidden:
             base.localAvatar.inventory.show()
         self.accept('inventory-selection', self.__handleInventory, extraArgs=[False])
-        self.accept('inventory-selection-alt', self.__handleInventory, extraArgs=[False])
+        self.accept('inventory-selection-alt', self.__handleInventoryAlt)
         self.accept('inventory-run', self.__handleRun)
         self.accept('inventory-surrender', self.__handleSurrender)
         self.accept('inventory-sos', self.__handleSOS)
@@ -80,7 +80,10 @@ class TownBattleAttackPanel(StateData.StateData):
         doneStatus = {'mode': 'Sue'}
         messenger.send(self.doneEvent, [doneStatus])
 
-    def __handleInventory(self, lockIn, track, level, viaKeyboard = False):
+    def __handleInventoryAlt(self, track, level, viaKeyboard = False):
+        self.__handleInventory(False, track, level, viaKeyboard, manualUnlock=True)
+
+    def __handleInventory(self, lockIn, track, level, viaKeyboard = False, manualUnlock = False):
         if not base.cr.isPaid() and gagIsPaidOnly(track, level):
             self._teaserPanel = TeaserPanel(pageName='useGags')
             return
@@ -90,6 +93,8 @@ class TownBattleAttackPanel(StateData.StateData):
             doneStatus['track'] = track
             doneStatus['level'] = level
             doneStatus['lockIn'] = False
+            if manualUnlock:
+                doneStatus['manualUnlock'] = True
             messenger.send(self.doneEvent, [doneStatus])
         else:
             if not viaKeyboard:

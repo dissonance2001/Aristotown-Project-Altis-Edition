@@ -132,6 +132,18 @@ class ClashOptionsPanel(MainMenuScreenOptions.MainMenuScreenOptions):
         self.buttonSeqs[button] = sequence
         sequence.start()
 
+    def enterGameplay(self):
+        self.currentOptions = 'gameplayOptions'
+        self.gameplayOptions = []
+        self.enableButtons()
+        self.tabGameplay['state'] = DGG.DISABLED
+        self.gameplayOptions.append(MainMenuGui.DropdownOption('health-meter-mode', 0, 0))
+        self.gameplayOptions.append(MainMenuGui.ToggleOption('toggle-sprint', 1, 0))
+        self.gameplayOptions.append(MainMenuGui.DropdownOption('auto-lock-in', 0, 1))
+        self.resetButton['state'] = DGG.NORMAL
+        self.resetAllButton['state'] = DGG.NORMAL
+        self._finishTab()
+
     def _finishTab(self):
         MainMenuScreenOptions.MainMenuScreenOptions._finishTab(self)
         optionList = self.getCurrentOptionList()
