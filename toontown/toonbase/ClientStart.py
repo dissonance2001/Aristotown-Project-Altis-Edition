@@ -132,8 +132,6 @@ else:
     http = launcher.http
 
 from toontown.toonbase import ToontownGlobals
-tempLoader = Loader()
-
 from direct.gui import DirectGuiGlobals
 from direct.gui.DirectGui import *
 
@@ -152,20 +150,6 @@ launcher.setPandaErrorCode(0)
 launcher.setPandaWindowOpen()
 ConfigVariableDouble('decompressor-step-time').setValue(0.01)
 ConfigVariableDouble('extractor-step-time').setValue(0.01)
-backgroundNode = tempLoader.loadSync(Filename('phase_3/models/gui/loading-background'))
-backgroundNodePath = aspect2d.attachNewNode(backgroundNode, 0)
-backgroundNodePath.setPos(0.0, 0.0, 0.0)
-backgroundNodePath.setScale(render2d, VBase3(1))
-backgroundNodePath.find('**/fg').hide()
-logo = OnscreenImage(
-    image = 'phase_3/maps/toontown-logo.png',
-    scale = (1 / (4.0 / 3.0), 1, 1 / (4.0 / 3.0)),
-    pos = backgroundNodePath.find('**/fg').getPos())
-logo.setTransparency(TransparencyAttrib.MAlpha)
-logo.setBin('fixed', 20)
-logo.reparentTo(backgroundNodePath)
-backgroundNodePath.find('**/bg').setBin('fixed', 10)
-base.graphicsEngine.renderFrame()
 DirectGuiGlobals.setDefaultRolloverSound(base.loader.loadSfx('phase_3/audio/sfx/GUI_rollover.ogg'))
 DirectGuiGlobals.setDefaultClickSound(base.loader.loadSfx('phase_3/audio/sfx/GUI_create_toon_fwd.ogg'))
 DirectGuiGlobals.setDefaultDialogGeom(loader.loadModel('phase_3/models/gui/dialog_box_gui'))
@@ -194,9 +178,6 @@ serverVersion = base.config.GetString('server-version', 'no_version_set')
 version = OnscreenText(serverVersion, pos = (-1.3, -0.975), scale = 0.06, fg = Vec4(0, 0, 0, 1), align = TextNode.ALeft)
 version.setPos(0.03, 0.03)
 version.reparentTo(base.a2dBottomLeft)
-from toontown.suit import Suit
-Suit.loadModels()
-loader.beginBulkLoad('init', TTLocalizer.LoaderLabel, 138, 0, TTLocalizer.TIP_NONE, 0)
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.showbase.MessengerGlobal import *
 from toontown.distributed import ToontownClientRepository
@@ -205,7 +186,6 @@ cr.music = music
 del music
 base.initNametagGlobals()
 base.cr = cr
-loader.endBulkLoad('init')
 from otp.friends import FriendManager
 from otp.distributed.OtpDoGlobals import *
 cr.generateGlobalObject(OTP_DO_ID_FRIEND_MANAGER, 'FriendManager')
@@ -213,11 +193,6 @@ if not launcher.isDummy():
     base.startShow(cr, launcher.getGameServer())
 else:
     base.startShow(cr)
-backgroundNodePath.reparentTo(hidden)
-backgroundNodePath.removeNode()
-del backgroundNodePath
-del backgroundNode
-del tempLoader
 version.cleanup()
 del version
 base.loader = base.loader

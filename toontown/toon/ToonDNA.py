@@ -4143,10 +4143,8 @@ def registerManualPrideAccessoryTextures():
             )
             registeredCount += 1
 
-    notify.info('Manually registered %d queer/ADHD pride accessory texture file(s).' % registeredCount)
 
 
-registerManualPrideAccessoryTextures()
 
 
 
@@ -4609,13 +4607,8 @@ def registerCustomAccessoriesAsNative():
             not os.path.isfile(registryPath)):
         _saveNativeAccessoryRegistry(registryPath, registry)
 
-    notify.info(
-        'Registered %d unique custom accessory model(s); cleaned %d duplicate file(s) and %d stale registry entry/entries.' %
-        (registeredCount, duplicateFileCount, removedRegistryCount)
-    )
 
 
-registerCustomAccessoriesAsNative()
 
 
 def isValidHat(itemIdx, textureIdx, colorIdx):

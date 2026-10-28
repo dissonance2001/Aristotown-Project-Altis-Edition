@@ -77,7 +77,7 @@ DROPDOWN_OPTIONS = {
     'display-mode': ['Windowed', 'Borderless', 'Fullscreen'],
     'anisotropic-filtering': ['Off', '2x', '4x', '8x', '16x'],
     'health-meter-mode': ['Always Off', 'Always On', 'Default'],
-    'auto-lock-in': ['Off', 'Solo', 'Always'],
+    'auto-lock-in': ['Never', 'Solo', 'Always'],
 }
 
 

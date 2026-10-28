@@ -55,7 +55,7 @@ from .ToontownMsgTypes import *
 from toontown.toontowngui import ToontownLoadingBlocker
 from toontown.ai import DistributedSillyMeterMgr, DistributedHydrantZeroMgr, DistributedMailboxZeroMgr, DistributedTrashcanZeroMgr
 from toontown.hood import StreetSign
-from toontown.dmenu import DMenuScreen, DMenuDisclaimer, DMenuMobileScreen
+from toontown.dmenu import DMenuScreen, DMenuMobileScreen
 from toontown.friends import ToontownFriendSecret
 
 
@@ -161,9 +161,6 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
                                     print(e)
         self.DMENU_SCREEN = None
         
-        self.hasAccepted = False
-        
-        self.accept('AgreeToGame', self.acceptGame)
         
     def congratulations(self, avatarChoice):
         self.acceptedScreen = loader.loadModel('phase_3/models/gui/toon_council')
@@ -241,11 +238,7 @@ class ToontownClientRepository(OTPClientRepository.OTPClientRepository):
         self.PAT_LOGINFSM = self.loginFSM
         self.PAT_DONEEVENT = self.avChoiceDoneEvent
         
-        if not self.hasAccepted:
-            self.disclaimer = DMenuDisclaimer.DMenuDisclaimer
-            self.disclaimer()
-        else:
-            self.acceptGame()
+        self.acceptGame()
         
         self.accept(self.avChoiceDoneEvent, self.__handleAvatarChooserDone, [avList])
         if config.GetBool('want-gib-loader', 1):
