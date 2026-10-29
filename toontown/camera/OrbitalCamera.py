@@ -221,8 +221,6 @@ class OrbitalCamera(FSM, NodePath):
 
         self._initMaxDistance()
         self._startCollisionCheck()
-        self._resetSubjectMotion()
-        self._startSubjectMotionTask()
         self.acceptWheel()
         self.acceptTab()
 
@@ -578,7 +576,14 @@ class OrbitalCamera(FSM, NodePath):
         return task.cont
 
     def isSubjectMoving(self):
-        return self._subjectActuallyMoving
+        return (
+            inputState.isSet('forward') or
+            inputState.isSet('reverse') or
+            inputState.isSet('turnRight') or
+            inputState.isSet('turnLeft') or
+            inputState.isSet('slideLeft') or
+            inputState.isSet('slideRight')
+        )
 
     def _isAimingPie(self):
         return bool(getattr(base.localAvatar, 'isAimingPie', False))

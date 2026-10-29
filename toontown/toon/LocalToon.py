@@ -1233,7 +1233,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             state = place.getCurrentOrNextState() if hasattr(place, 'getCurrentOrNextState') else place.getState()
             if str(state).lower() == 'walk':
                 self.stopSprintFovSeq()
-                startFov = self.lerpFov or settings['fieldofview']
+                startFov = base.camLens.getMinFov() * (4.0 / 3.0)
                 self.sprintFovSeq = LerpFunc(
                     self.updateSprintFov,
                     fromData=startFov,
@@ -1262,7 +1262,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 state = place.getCurrentOrNextState() if hasattr(place, 'getCurrentOrNextState') else place.getState()
                 if str(state).lower() == 'walk':
                     self.stopSprintFovSeq()
-                    startFov = self.lerpFov or settings['fieldofview']
+                    startFov = base.camLens.getMinFov() * (4.0 / 3.0)
                     self.sprintFovSeq = LerpFunc(
                         self.updateSprintFov,
                         fromData=startFov,

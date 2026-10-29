@@ -9,7 +9,7 @@ DefaultSettings = {
 'newGui': False,
 'auto-lock-in': 0,
 'show-disclaimer': True,
-'fieldofview': 52,
+'fieldofview': 65,
 'show-cog-levels': True,
 'health-meter-mode': 2,
 'experienceBarMode': True,
