@@ -2461,7 +2461,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         case 'DirectorActionRetaliation':
             camTrack.append(defaultCamera(openShotDuration=3.55))
         case 'DirectorActionPartner':
-            camTrack.append(Sequence(moveCameraOnly(0, 6, 4, 0, targettoon, h=180, p=0, startH=180, startP=0), Wait(attackDuration)))
+            camTrack.append(Sequence(moveCameraOnly(0, 6, 4, 0, target[0]['toon'], h=180, p=0, startH=180, startP=0), Wait(attackDuration)))
         case 'DirectorCut':
             camTrack.append(defaultCamera(openShotDuration=3.55))
         case 'DirectorAction':
