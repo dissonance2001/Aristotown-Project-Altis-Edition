@@ -17,6 +17,8 @@ from direct.interval.IntervalGlobal import *
 from toontown.toonbase import ToonPythonUtil as PythonUtil
 from toontown.toonbase.ToonPythonUtil import *
 from direct.task import Task
+from direct.showbase.InputStateGlobal import inputState
+from direct.task.TaskManagerGlobal import taskMgr
 from pandac.PandaModules import *
 from otp.avatar import DistributedPlayer
 from otp.avatar import LocalAvatar
@@ -66,6 +68,7 @@ from . import StreamerMode, ChatLog
 from toontown.toon.DistributedNPCToonBase import DistributedNPCToonBase
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from toontown.inventory.enums.ItemEnums import CheesyEffectItemType
 from toontown.toonbase.ToontownGlobals import *
 from toontown.toontowngui import NewsPageButtonManager
 from toontown.friends.FriendHandle import FriendHandle
@@ -125,7 +128,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
         self.soundRun = self.movementSounds['run_regular']
         self.soundWalk = self.movementSounds['walk_regular']
-        self.soundSprint = self.soundRun
         self.soundWhisper = base.loader.loadSfx('phase_3.5/audio/sfx/GUI_whisper_3.ogg')
         self.soundPhoneRing = base.loader.loadSfx('phase_3.5/audio/sfx/telephone_ring.ogg')
         self.soundSystemMessage = base.loader.loadSfx('phase_3/audio/sfx/clock03.ogg')
@@ -350,14 +352,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.updateSound(self.soundRun, sfx)
         self.soundRun = sfx
 
-    def updateSprintSound(self, sfx):
-        self.updateSound(self.soundSprint, sfx)
-        self.soundSprint = sfx
-
-    def sprintSound(self):
-        self.soundWalk.stop()
-        base.playSfx(self.soundRun, looping=1)
-
     def handleOnFloor(self, collEntry):
         intoNode = collEntry.getIntoNode()
         if intoNode.hasTag('surface'):
@@ -369,12 +363,10 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         try:
             self.updateWalkSound(self.movementSounds['walk_' + surfaceType])
             self.updateRunSound(self.movementSounds['run_' + surfaceType])
-            self.updateSprintSound(self.movementSounds['run_' + surfaceType])
         except:
             surfaceType = 'regular'
             self.updateWalkSound(self.movementSounds['walk_' + surfaceType])
             self.updateRunSound(self.movementSounds['run_' + surfaceType])
-            self.updateSprintSound(self.movementSounds['run_' + surfaceType])
 		
     def handleOffFloor(self, collEntry):
         pass
@@ -1182,6 +1174,154 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.ignore("enable-hotkeys")
         self.accept("disable-hotkeys", self.disableHotkeys)
 
+    def isMovementSoundPlaying(self, sound):
+        try:
+            return sound.status() == sound.PLAYING
+        except Exception:
+            return False
+
+    def playMovementSound(self, sound):
+        for name in ('soundWalk', 'soundRun', 'soundSprint'):
+            other = getattr(self, name, None)
+            if other is not None and other is not sound and self.isMovementSoundPlaying(other):
+                other.stop()
+        if sound is not None and not self.isMovementSoundPlaying(sound):
+            base.playSfx(sound, looping=1)
+
+    def walkSound(self):
+        self.playMovementSound(getattr(self, 'soundWalk', None))
+
+    def runSound(self):
+        self.playMovementSound(getattr(self, 'soundRun', None))
+
+    def sprintSound(self):
+        self.playMovementSound(getattr(self, 'soundRun', None))
+
+    def stopSound(self):
+        sounds = []
+        for name in ('soundWalk', 'soundRun', 'soundSprint'):
+            sound = getattr(self, name, None)
+            if sound is not None and all(sound is not existing for existing in sounds):
+                sounds.append(sound)
+        for sound in sounds:
+            sound.stop()
+        self._movementSoundBlockedUntilActionChange = True
+
+    def _playMovementSoundForAction(self, action):
+        if action in (ToontownGlobals.WALK_INDEX, ToontownGlobals.REVERSE_INDEX):
+            self._movementSoundSuppressed = False
+            self._movementSoundBlockedUntilActionChange = False
+            self.walkSound()
+        elif action == ToontownGlobals.RUN_INDEX:
+            self._movementSoundSuppressed = False
+            self._movementSoundBlockedUntilActionChange = False
+            self.runSound()
+        elif action == ToontownGlobals.SPRINT_INDEX:
+            self._movementSoundSuppressed = False
+            self._movementSoundBlockedUntilActionChange = False
+            self.sprintSound()
+        else:
+            self._movementSoundSuppressed = False
+            self.stopSound()
+
+    def trackAnimToSpeed(self, task):
+        if task.time % 10:
+            yield task.cont
+
+        speed, rotSpeed, slideSpeed = self.controlManager.getSpeeds()
+        currentControls = getattr(self.controlManager, 'currentControls', None)
+        airborne = bool(inputState.isSet('jump') or getattr(currentControls, 'isAirborne', 0))
+
+        if speed != 0.0 or rotSpeed != 0.0 or slideSpeed != 0 or inputState.isSet('jump'):
+            if not self.movingFlag:
+                self.movingFlag = 1
+                self.stopLookAround()
+        elif self.movingFlag:
+            self.movingFlag = 0
+            self.startLookAround()
+
+        if self.movingFlag or self.getHp() <= 0:
+            self.wakeUp()
+        elif not self.sleepFlag:
+            now = globalClock.getFrameTime()
+            if now - self.lastMoved > self.sleepTimeout:
+                self.gotoSleep()
+
+        if self.sleepFlag:
+            state = 'Sleep'
+        elif self.getHp() > 0:
+            state = 'Happy'
+        else:
+            state = 'Sad'
+
+        if state != self.lastState:
+            self.lastState = state
+            self.b_setAnimState(state, self.animMultiplier)
+            if state == 'Sad':
+                self.setWalkSpeedSlow()
+            else:
+                self.setWalkSpeedNormal()
+
+        if self.cheesyEffect in (CheesyEffectItemType.FlatProfile, CheesyEffectItemType.FlatPortrait):
+            needH = None
+            if rotSpeed > 0.0:
+                needH = -10
+            elif rotSpeed < 0.0:
+                needH = 10
+            elif speed != 0.0:
+                needH = 0
+
+            if needH is not None and getattr(self, 'lastNeedH', None) != needH:
+                node = self.getGeomNode().getChild(0)
+                lerp = Sequence(LerpHprInterval(node, 0.5, Vec3(needH, 0, 0), blendType='easeInOut'),
+                                name='cheesy-lerp-hpr', autoPause=1)
+                lerp.start()
+                self.lastNeedH = needH
+        else:
+            self.lastNeedH = None
+
+        ourAction = self.getLazyAction(speed, rotSpeed, slideSpeed)
+        animationSpeed = speed
+        if abs(animationSpeed) <= ToontownGlobals.WalkCutOff and abs(slideSpeed) > ToontownGlobals.WalkCutOff:
+            animationSpeed = abs(slideSpeed)
+        if animationSpeed >= ToontownGlobals.SprintCutOff:
+            ourAction = ToontownGlobals.SPRINT_INDEX
+
+        audioSuppressed = getattr(self, '_movementSoundSuppressed', False)
+        if ourAction == self.lastAction and not airborne and not audioSuppressed:
+            yield task.cont
+
+        action = self.setSpeed(speed, rotSpeed, slideSpeed)
+        actionChanged = action != self.lastAction
+        if actionChanged:
+            self.lastAction = action
+            if self.emoteTrack:
+                self.emoteTrack.finish()
+                self.emoteTrack = None
+
+        if airborne:
+            self.stopSound()
+            self._movementSoundSuppressed = True
+        elif actionChanged or getattr(self, '_movementSoundSuppressed', False):
+            self._playMovementSoundForAction(action)
+
+        return Task.cont
+
+    def getSprintMotionState(self):
+        fsms = (getattr(self, 'animFSM', None), getattr(getattr(self, 'motion', None), 'fsm', None))
+        for fsm in fsms:
+            if fsm is None:
+                continue
+            try:
+                state = fsm.getCurrentState()
+                if state is not None:
+                    stateName = state.getName().lower()
+                    if stateName in ('walk', 'run'):
+                        return stateName
+            except Exception:
+                pass
+        return 'neutral'
+
     def requestSprint(self):
         if not hasattr(self, 'motion'):
             return
@@ -1191,10 +1331,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                 self.stopSprint(fromFunc=True)
             elif self.startSprint():
                 self.sprintToggled = True
-        else:
-            motionState = str(getattr(self.motion, 'state', '')).lower()
-            if motionState != 'neutral':
-                self.startSprint()
+        elif self.getSprintMotionState() in ('walk', 'run'):
+            self.startSprint()
 
     def startSprint(self):
         if self.sprinting:
@@ -1274,6 +1412,16 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             pass
 
         self.sprinting = False
+        try:
+            motionState = self.getSprintMotionState()
+            if motionState == 'walk':
+                self.walkSound()
+            elif motionState == 'run':
+                self.runSound()
+            else:
+                self.stopSound()
+        except Exception:
+            pass
         if not settings.get('toggle-sprint', False):
             self.sprintToggled = False
 

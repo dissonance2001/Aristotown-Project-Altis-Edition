@@ -4572,6 +4572,27 @@ class Toon(Avatar.Avatar, ToonHead):
             except:
                 pass
 
+    def getLazyAction(self, forwardSpeed, rotateSpeed, slideSpeed = 0.0):
+        if self.standWalkRunReverse is None:
+            return None
+
+        animationSpeed = forwardSpeed
+        if abs(animationSpeed) <= ToontownGlobals.WalkCutOff and abs(slideSpeed) > ToontownGlobals.WalkCutOff:
+            animationSpeed = abs(slideSpeed)
+
+        if animationSpeed >= ToontownGlobals.SprintCutOff:
+            return ToontownGlobals.SPRINT_INDEX
+        elif animationSpeed >= ToontownGlobals.RunCutOff:
+            return OTPGlobals.RUN_INDEX
+        elif animationSpeed > ToontownGlobals.WalkCutOff:
+            return OTPGlobals.WALK_INDEX
+        elif animationSpeed < -ToontownGlobals.WalkCutOff:
+            return OTPGlobals.REVERSE_INDEX
+        elif rotateSpeed != 0.0:
+            return OTPGlobals.WALK_INDEX
+        else:
+            return OTPGlobals.STAND_INDEX
+
     def setSpeed(self, forwardSpeed, rotateSpeed, slideSpeed = None):
         # The legacy LocalToon animation task calls this with only forward
         # and rotation speed. GravityWalker publishes the current strafe
