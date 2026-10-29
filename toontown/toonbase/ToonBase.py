@@ -42,6 +42,11 @@ from toontown.utils.asyncutil import AsyncRequestManager
 class ToonBase(OTPBase.OTPBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('ToonBase')
 
+    def createBaseAudioManagers(self):
+        super().createBaseAudioManagers()
+        if self.musicManagerIsValid:
+            self.musicManager.setConcurrentSoundLimit(0)
+
     def __init__(self):
         OTPBase.OTPBase.__init__(self)
         self.asyncRequestMgr = AsyncRequestManager

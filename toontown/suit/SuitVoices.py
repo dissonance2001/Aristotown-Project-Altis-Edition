@@ -1,3 +1,5 @@
+import builtins
+
 from toontown.suit import SuitDNA
 from toontown.battle import SuitBattleGlobals
 from toontown.nametag import NametagGlobals
@@ -47,6 +49,8 @@ ChainsawORDialogArray = []
 SkelecogDialogArray = []
 HighRollerDialogArray = []
 StenographerDialogArray = []
+LitigationStenographerDialogArray = []
+LitigationLitigatorDialogArray = []
 FemaleDialogArray = []
 TreekillerDialogArray = []
 HonchoDialogFiles = ['COG_VO_grunt_honcho',
@@ -320,6 +324,8 @@ def unloadDialog(level=0):
         SkelSuitDialogArray,
         HighRollerDialogArray,
         StenographerDialogArray,
+        LitigationStenographerDialogArray,
+        LitigationLitigatorDialogArray,
         FemaleDialogArray,
         TreekillerDialogArray
     )
@@ -344,6 +350,19 @@ def loadDialog(level=0):
         SuitDialogFiles
     )
 
+def _resolveSuitDialogueSfx(path):
+    manager = getattr(builtins, 'ContentPackMgr', None)
+    resolver = getattr(manager, 'resolveSfx', None)
+    if callable(resolver):
+        try:
+            resolved = resolver(path)
+            if resolved:
+                return str(resolved)
+        except Exception:
+            pass
+    return path
+
+
 def loadDialogArray(dialogArray, files,
                     loadPath='phase_3.5/audio/dial/'):
 
@@ -351,9 +370,8 @@ def loadDialogArray(dialogArray, files,
         return dialogArray
 
     for filename in files:
-        sound = base.loader.loadSfx(
-            loadPath + filename + '.ogg'
-        )
+        soundPath = _resolveSuitDialogueSfx(loadPath + filename + '.ogg')
+        sound = base.loader.loadSfx(soundPath)
 
         if sound:
             dialogArray.append(sound)
@@ -419,13 +437,13 @@ def getDialogueArray(suit):
     elif suit.style.name == 'redd' and not suit.isSkeleton:
         return loadDialogArray(ReddDialogArray, ReddDialogFiles)
     elif suit.style.name == 'sgoat' and not suit.isSkeleton:
-        return loadDialogArray(ScapegoatDialogArray, ScapegoatDialogFiles)
+        return loadDialogArray(ScapegoatDialogArray, ScapegoatDialogFiles, 'phase_11/audio/dial/')
     elif suit.style.name == 'caseman' and not suit.isSkeleton:
-        return loadDialogArray(CaseManagerDialogArray, CaseManagerDialogFiles)
+        return loadDialogArray(CaseManagerDialogArray, CaseManagerDialogFiles, 'phase_11/audio/dial/')
     elif suit.style.name == 'stenog' and not suit.isSkeleton:
-        return loadDialogArray(StenographerDialogArray, StenographerDialogFiles)
+        return loadDialogArray(LitigationStenographerDialogArray, StenographerDialogFiles, 'phase_11/audio/dial/')
     elif suit.style.name == 'lgator' and not suit.isSkeleton:
-        return loadDialogArray(LitigatorDialogArray, LitigatorDialogFiles)
+        return loadDialogArray(LitigationLitigatorDialogArray, LitigatorDialogFiles, 'phase_11/audio/dial/')
     elif suit.style.name == 'treasure' and not suit.isSkeleton:
         return loadDialogArray(LitigatorDialogArray, LitigatorDialogFiles)
     elif suit.style.name == 'liquidr' and not suit.isSkeleton:

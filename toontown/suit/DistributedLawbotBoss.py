@@ -203,28 +203,24 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
     def hideLitigator(self):
         self.litigator.hide()
-        self.litigatorMusic.setVolume(1)
         self.setChatAbsolute(random.choice(("I believe this dispute requires litigation.",
                                              "Present the argument they can't refute!",
                                             "They've left me no choice but to litigate!")), CFSpeech | CFTimeout)
 
     def hideStenographer(self):
         self.stenographer.hide()
-        self.stenoMusic.setVolume(1)
         self.setChatAbsolute(random.choice(("Let the record reflect their incompetence.",
                                              "Everything they say can and will be held against them.",
                                             "Make sure we don't miss a word.")), CFSpeech | CFTimeout)
 
     def hideCaseManager(self):
         self.casemanager.hide()
-        self.caseMusic.setVolume(1)
         self.setChatAbsolute(random.choice(("This matter requires closer management.",
                                              "I'm assigning this matter to you!",
                                             "Consider these Toons your newest case!")), CFSpeech | CFTimeout)
 
     def hideScapegoat(self):
         self.scapegoat.hide()
-        self.goatMusic.setVolume(1)
         self.setChatAbsolute(random.choice(("Someone has to take responsibility for this!",
                                              "Let's place the blame where it belongs.",
                                             "Take the fall, that's what you're here for!")), CFSpeech | CFTimeout)
@@ -1073,11 +1069,15 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         self.betweenBattleMusic.stop()
         self.stingMusic.stop()
         #self.paper.hide()
-        self.battleTwoMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_base.ogg')
-        self.stenoMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_stenograph.ogg')
-        self.litigatorMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_litigator.ogg')
-        self.caseMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_casemgr.ogg')
-        self.goatMusic = loader.loadMusic('phase_11/audio/bgm/LB_litigation_scapegoat.ogg')
+        for track in getattr(self, 'musicTracks', ()):
+            if track is not None:
+                track.stop()
+
+        self.battleTwoMusic = loader.loadMusic(ContentPackMgr.resolveMusic('phase_11/audio/bgm/LB_litigation_base.ogg'))
+        self.stenoMusic = loader.loadMusic(ContentPackMgr.resolveMusic('phase_11/audio/bgm/LB_litigation_stenograph.ogg'))
+        self.litigatorMusic = loader.loadMusic(ContentPackMgr.resolveMusic('phase_11/audio/bgm/LB_litigation_litigator.ogg'))
+        self.caseMusic = loader.loadMusic(ContentPackMgr.resolveMusic('phase_11/audio/bgm/LB_litigation_casemgr.ogg'))
+        self.goatMusic = loader.loadMusic(ContentPackMgr.resolveMusic('phase_11/audio/bgm/LB_litigation_scapegoat.ogg'))
         self.musicTracks = [
             self.battleTwoMusic,
             self.stenoMusic,
@@ -1086,12 +1086,14 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             self.goatMusic
         ]
 
-        for track in self.musicTracks:
+        for track in self.musicTracks[1:]:
             track.setLoop(True)
             track.setVolume(0)
-            track.play()
+            track.stop()
 
+        self.battleTwoMusic.setLoop(True)
         self.battleTwoMusic.setVolume(1)
+        self.battleTwoMusic.play()
 
     def exitRollToBattleTwo(self):
         self.notify.debug('----- exitRollToBattleTwo')
@@ -1176,7 +1178,9 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         intervalName = self.uniqueName('Drop')
         self.clearInterval(intervalName)
         self.cleanupBattles()
-        self.battleTwoMusic.stop()
+        for track in getattr(self, 'musicTracks', ()):
+            if track is not None:
+                track.stop()
         localAvatar.inventory.setBattleCreditMultiplier(1)
         if self.juryTimer:
             self.juryTimer.destroy()

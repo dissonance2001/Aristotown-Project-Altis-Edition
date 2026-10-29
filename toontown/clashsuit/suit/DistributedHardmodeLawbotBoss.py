@@ -124,36 +124,17 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
         self.gavelOneRotateNode.setPos(self.gavel_one, 0, 0, -1)
 
     def setLitigationTeamMusic(self, suits):
-        # We are using base.playMusic as opposed to through the music manager for these for sake of speed.
-        # We loaded these through the music manager earlier, however we need these to be as synced up as possible.
+        self.litigationMusicPlaying = []
 
-        suitNames = []
-        for suit in suits:
-            suitNames.append(suit.dna.name)
-            if suit.dna.name in self.litigationMusic:
-                music = self.litigationMusic[suit.dna.name]
-                # Only start the music again if it is not playing currently.
-                if music not in self.litigationMusicPlaying:
-                    self.litigationMusicPlaying.append(music)
-
-        # For each suit that is a litigator but isn't in our battle, stop their music if it is playing.
-        for suitName in list(self.litigationMusic.keys()):
-            if suitName not in suitNames:
-                music = self.litigationMusic[suitName]
-                if music in self.litigationMusicPlaying:
-                    music.setVolume(0)
-                    self.litigationMusicPlaying.remove(music)
+        for music in self.litigationMusic.values():
+            if music is not None:
+                music.setVolume(0)
+                base.musicMgr.stopMusic(music)
 
         if self.litigationBase.status() != self.litigationBase.PLAYING:
             base.playMusic(self.litigationBase, looping=1, volume=1.1, interrupt=0)
-            # all layers are "playing" always but the inactive ones are silent
-            base.playMusic(self.stenographMusic, looping=1, volume=0, interrupt=0, time=self.litigationBase.getTime())
-            base.playMusic(self.scapegoatMusic, looping=1, volume=0, interrupt=0, time=self.litigationBase.getTime())
-            base.playMusic(self.casemgrMusic, looping=1, volume=0, interrupt=0, time=self.litigationBase.getTime())
-            base.playMusic(self.litigatorMusic, looping=1, volume=0, interrupt=0, time=self.litigationBase.getTime())
-
-        for music in self.litigationMusicPlaying:
-            music.setVolume(1.1)
+        else:
+            self.litigationBase.setVolume(1.1)
 
     def handleToonoMusicIn(self, gameMusic):
         if gameMusic is not None:
@@ -343,6 +324,10 @@ class DistributedHardmodeLawbotBoss(DistributedLawbotBoss):
         self.clearChat()
         self.setToonsToNeutral(self.involvedToons)
         base.musicMgr.stopMusic()
+        for music in getattr(self, 'musicTracks', ()):
+            if music is not None:
+                music.stop()
+        self.setLitigationTeamMusic([])
         # mult = BattleGlobals.getBossBattleCreditMultiplier(2)
         # localAvatar.inventory.setBattleCreditMult(mult)
         self.setBattleCreditMult(2)

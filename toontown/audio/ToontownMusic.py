@@ -1,6 +1,7 @@
 from panda3d.core import VirtualFileSystem, Filename
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase import ToontownGlobals
+import builtins
 import json
 import random
 
@@ -51,6 +52,22 @@ class ToontownMusic:
                 tempSeasonDict[key] = value
             self.musicData[season] = tempSeasonDict  # Overwrite it with the changes from content packs
 
+    def _resolveContentPackMusicPath(self, musicPath):
+        if not isinstance(musicPath, str):
+            return musicPath
+
+        manager = getattr(builtins, 'ContentPackMgr', None)
+        resolver = getattr(manager, 'resolveMusic', None) if manager else None
+        if not callable(resolver):
+            return musicPath
+
+        try:
+            resolvedPath = resolver(musicPath)
+        except Exception:
+            return musicPath
+
+        return resolvedPath or musicPath
+
     def loadMusic(self, musicCode):
         """
         Loads music from filepath specified in phase_3/audio/music.json, returns an AudioSound
@@ -65,7 +82,7 @@ class ToontownMusic:
 
         if not isinstance(musicPath, (list, set)):
             # We were given a single song path
-            result = base.loader.loadMusic(musicPath)  # Just return this song back to the caller
+            result = base.loader.loadMusic(self._resolveContentPackMusicPath(musicPath))  # Just return this song back to the caller
             # Dummy out the previous music choices so they can properly randomize at next call
             self.prevMusicChoice = ''
             self.prevMusicList = []
@@ -80,7 +97,7 @@ class ToontownMusic:
             self.prevMusicList = musicPath
             self.prevMusicChoice = choice
 
-            result = base.loader.loadMusic(choice)
+            result = base.loader.loadMusic(self._resolveContentPackMusicPath(choice))
 
         return result
 
