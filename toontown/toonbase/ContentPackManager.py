@@ -13,6 +13,7 @@ textures, fonts, and other assets at the same time.
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from panda3d.core import Multifile, Filename, VirtualFileSystem, getModelPath
 import fnmatch
+import json
 import os
 from toontown.pandautils import yaml
 
@@ -42,14 +43,35 @@ class ContentPackManager:
 
         # Retained for compatibility with Clash-style music.json readers.
         self.overrideMusicData = {}
+        self.luts = {}
+        self.lutsAffectUI = False
+
+    def _decodeYaml(self, value):
+        if isinstance(value, bytes):
+            return value.decode('utf-8-sig')
+        if isinstance(value, dict):
+            return {
+                self._decodeYaml(key): self._decodeYaml(item)
+                for key, item in value.items()
+            }
+        if isinstance(value, list):
+            return [self._decodeYaml(item) for item in value]
+        if isinstance(value, tuple):
+            return tuple(self._decodeYaml(item) for item in value)
+        return value
 
     def _normaliseFilename(self, filename):
+        if isinstance(filename, bytes):
+            filename = filename.decode('utf-8-sig')
         return str(filename).replace('\\', '/').strip().lstrip('/')
 
     def _normaliseVirtualPath(self, path):
+        if isinstance(path, bytes):
+            path = path.decode('utf-8-sig')
         return str(path).replace('\\', '/').lstrip('/')
 
     def _normaliseList(self, value):
+        value = self._decodeYaml(value)
         if value is None:
             return []
         if isinstance(value, str):
@@ -73,8 +95,8 @@ class ContentPackManager:
         return result
 
     def _readSortFile(self):
-        with open(self.sortFile, 'r') as sortFile:
-            config = yaml.load(sortFile) or []
+        with open(self.sortFile, 'r', encoding='utf-8-sig') as sortFile:
+            config = self._decodeYaml(yaml.safe_load(sortFile)) or []
 
         if isinstance(config, dict):
             self.sort = self._normaliseList(
@@ -139,8 +161,8 @@ class ContentPackManager:
         self._readSortFile()
         loadedCount = 0
 
-        print(('Content Pack Manager: reading %s' % self.sortFile))
-        print(('Content Pack Manager: %s listed pack(s)' % len(self.sort)))
+        self.notify.info('Reading content pack order from %s.' % self.sortFile)
+        self.notify.info('%s content pack(s) listed.' % len(self.sort))
 
         for filename in self.sort[:]:
             if not self.isValid(filename):
@@ -172,13 +194,13 @@ class ContentPackManager:
 
         self._writeSortFile()
 
-        print(('Loaded %s content pack(s).' % loadedCount))
-        print(('Content pack model path: %s' % self.modelPath))
-        print('Content pack priority: later YAML entries override earlier entries.')
+        self.notify.info('Loaded %s content pack(s).' % loadedCount)
+        self.notify.debug('Content pack model path: %s' % self.modelPath)
+        self.notify.debug('Later content packs have higher priority.')
         if self.musicOnly:
-            print(('Content pack music-only role: %s' % ', '.join(self.musicOnly)))
+            self.notify.info('Music-only packs: %s' % ', '.join(self.musicOnly))
         if self.sfxOnly:
-            print(('Content pack SFX-only role: %s' % ', '.join(self.sfxOnly)))
+            self.notify.info('SFX-only packs: %s' % ', '.join(self.sfxOnly))
 
         self._printGuiSfxResolution()
 
@@ -196,6 +218,134 @@ class ContentPackManager:
             )
             subfiles[realName.lower()] = realName
         return subfiles
+
+    def _readPackJson(self, entry, paths):
+        for relativePath in paths:
+            key = self._normaliseVirtualPath(relativePath).lower()
+            realName = entry['subfiles'].get(key)
+            if realName is None:
+                continue
+
+            candidate = Filename('%s/%s' % (
+                str(entry['mountPoint']).rstrip('/'),
+                realName
+            ))
+            if not self.vfSys.exists(candidate):
+                continue
+
+            try:
+                rawData = self.vfSys.readFile(candidate, True)
+                data = json.loads(rawData)
+            except Exception as error:
+                self.notify.warning(
+                    'Failed to read %s from content pack %s: %s' % (
+                        relativePath, entry['filename'], error
+                    )
+                )
+                continue
+
+            if isinstance(data, dict):
+                return data
+
+            self.notify.warning(
+                '%s in content pack %s must contain a JSON object.' % (
+                    relativePath, entry['filename']
+                )
+            )
+
+        return None
+
+    def _formatMusicPath(self, value):
+        if not isinstance(value, str) or not value or value == 'None':
+            return value
+        if len(value) > 2 and value[1] == ':':
+            return value
+        if value.startswith('/__contentpacks__/'):
+            return value
+        return '/' + value.lstrip('/')
+
+    def _loadMusicJson(self, entry):
+        if not self._entryAllowsCategory(entry, 'music'):
+            return
+
+        musicData = self._readPackJson(entry, (
+            'audio/music.json',
+            'phase_3/audio/music.json',
+            'music.json'
+        ))
+        if not musicData:
+            return
+
+        for season, mappings in musicData.items():
+            if isinstance(mappings, dict):
+                seasonMappings = self.overrideMusicData.setdefault(season, {})
+                for key, value in mappings.items():
+                    if isinstance(value, (list, tuple, set)):
+                        seasonMappings[key] = [
+                            self._formatMusicPath(path) for path in value
+                        ]
+                    else:
+                        seasonMappings[key] = self._formatMusicPath(value)
+            else:
+                defaultMappings = self.overrideMusicData.setdefault('default', {})
+                if isinstance(mappings, (list, tuple, set)):
+                    defaultMappings[season] = [
+                        self._formatMusicPath(path) for path in mappings
+                    ]
+                else:
+                    defaultMappings[season] = self._formatMusicPath(mappings)
+
+        self.notify.info('Loaded music overrides from content pack %s.' % (
+            entry['filename']
+        ))
+
+    def _resolveLutValue(self, entry, value):
+        if isinstance(value, (list, tuple)):
+            return [self._resolveLutValue(entry, item) for item in value]
+        if not isinstance(value, str) or not value or value == 'None':
+            return value
+
+        requested = self._normaliseVirtualPath(value)
+        realName = entry['subfiles'].get(requested.lower())
+        if realName is None:
+            return value
+
+        candidate = Filename('%s/%s' % (
+            str(entry['mountPoint']).rstrip('/'),
+            realName
+        ))
+        if self.vfSys.exists(candidate):
+            return str(candidate)
+        return value
+
+    def _loadLutsJson(self, entry):
+        lutData = self._readPackJson(entry, (
+            'luts/luts.json',
+            'phase_3/luts/luts.json'
+        ))
+        if not lutData:
+            return
+
+        for key, value in lutData.items():
+            if str(key).lower() in ('luts_affect_ui', 'luts-affect-ui'):
+                if isinstance(value, bool):
+                    self.lutsAffectUI = value
+                else:
+                    try:
+                        self.lutsAffectUI = bool(int(value))
+                    except (TypeError, ValueError):
+                        self.lutsAffectUI = str(value).strip().lower() in (
+                            'true', 'yes', 'on'
+                        )
+                continue
+
+            if value is None or value == 'None':
+                continue
+            self.luts[key] = self._resolveLutValue(entry, value)
+
+        self.notify.info('Loaded LUT overrides from content pack %s.' % (
+            entry['filename']
+        ))
 
     def applyFile(self, filename):
         filename = self._normaliseFilename(filename)
@@ -230,13 +380,29 @@ class ContentPackManager:
         self.mountPoints.append(mountPoint)
         self.packEntries.append(entry)
 
-        print((
-            'Successfully Mounted Content Pack: %s (%s files at %s)' % (
+        isRoleRestricted = (
+            self._entryHasRole(entry, self.musicOnly) or
+            self._entryHasRole(entry, self.sfxOnly)
+        )
+        if not isRoleRestricted and not self.vfSys.mount(
+                multifile,
+                Filename('/'),
+                VirtualFileSystem.MFReadOnly):
+            self.notify.warning(
+                'Content pack %s mounted privately but failed to mount at the VFS root.' %
+                filename
+            )
+
+        self._loadMusicJson(entry)
+        self._loadLutsJson(entry)
+
+        self.notify.info(
+            'Mounted content pack %s (%s files at %s).' % (
                 filename,
                 multifile.getNumSubfiles(),
                 mountPoint
             )
-        ))
+        )
         return True
 
     def _findPackEntry(self, packName):
@@ -363,18 +529,21 @@ class ContentPackManager:
                     providers.append(entry['filename'])
 
             if providers:
-                print((
-                    'CONTENT PACK GUI SFX: %s -> %s' %
+                self.notify.debug(
+                    'Content pack GUI SFX %s resolves from %s.' %
                     (path, providers[0])
-                ))
+                )
             else:
-                print(('CONTENT PACK GUI SFX: %s -> default Altis' % path))
+                self.notify.debug(
+                    'Content pack GUI SFX %s resolves to default Altis assets.' %
+                    path
+                )
 
             if skipped:
-                print((
-                    'CONTENT PACK GUI SFX: skipped music-only provider(s): %s' %
+                self.notify.debug(
+                    'Skipped music-only GUI SFX providers: %s' %
                     ', '.join(skipped)
-                ))
+                )
 
     def resolveMountedFile(self, virtualPath):
         resolved = self.resolveFile(virtualPath)

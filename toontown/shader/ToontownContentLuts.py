@@ -7,9 +7,9 @@ Used for content pack creators for excessive visual customization.
 @author: Main
 """
 
+import builtins
 import json
 from panda3d.core import Filename, VirtualFileSystem
-from toontown.toonbase.ContentPackManager import ContentPackManager
 from toontown.utils.DirectNotifyCategory import DirectNotifyCategory
 
 NULL_LUT = 'None'
@@ -35,10 +35,13 @@ class ToontownContentLuts:
         """
         Loads up all the luts from the content pack manager.
         """
-        self.affect2d = ContentPackManager.lutsAffectUI
-        for key, str in list(ContentPackManager.luts.items()):
-            # The ContentPackMgr will have already filtered out bad luts.
-            self.luts[key] = str
+        manager = getattr(builtins, 'ContentPackMgr', None)
+        if manager is None:
+            return
+
+        self.affect2d = getattr(manager, 'lutsAffectUI', False)
+        for key, value in getattr(manager, 'luts', {}).items():
+            self.luts[key] = value
 
     def keyLoaded(self, key):
         """
