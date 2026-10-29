@@ -1,4 +1,4 @@
-﻿from direct.gui.DirectGui import *
+from direct.gui.DirectGui import *
 from panda3d.core import *
 from panda3d.direct import *
 from toontown.toonbase.ToontownBattleGlobals import *
@@ -18,6 +18,7 @@ from otp.otpbase import OTPGlobals
 from toontown.toontowngui import TTDialog
 from toontown.modifiers.ModifierEnums import ModifierType
 from toontown.modifiers.classes.GagsContentSyncModifier import GagsContentSyncModifier
+from toontown.gui.TTGui import ScalingButton
 
 
 # Corporate Clash inventory reward text colours.
@@ -97,6 +98,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
     BookUnpressableGeomColor = Vec4(1, 1, 1, 1)
     BookUnpressableImage0Color = Vec4(0, 0.6, 1, 1)
     BookUnpressableImage2Color = Vec4(0.1, 0.7, 1, 1)
+    BookUnpressableImage2ColorPrestige = Vec4(0.1, 0.3, 0.6, 1)
     ShadowColor = Vec4(0, 0, 0, 0)
     ShadowBuffedColor = Vec4(1, 1, 1, 1)
     UnpressableShadowBuffedColor = Vec4(1, 1, 1, 0.3)
@@ -643,7 +645,7 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
              1), text='0 / 0', text_scale=0.16, text_fg=(0, 0, 0, 0.8), text_align=TextNode.ACenter, text_pos=(0, -0.05)))
             self.buttons.append([])
             for item in range(0, len(Levels[track])):
-                button = DirectButton(parent=self.trackRows[track], image=(self.upButton,
+                button = ScalingButton(parent=self.trackRows[track], image=(self.upButton,
                                                                            self.downButton,
                                                                            self.rolloverButton,
                                                                            self.flatButton),
@@ -2868,7 +2870,8 @@ class InventoryNewOLD(InventoryBase.InventoryBase, DirectFrame):
         color = self.BookUnpressableImage0Color
         if organicBonus:
             color = self.PressableOrganicColor
-        button.configure(image0_color=color, image2_color=self.BookUnpressableImage2Color)
+        image2Color = self.BookUnpressableImage2ColorPrestige if organicBonus else self.BookUnpressableImage2Color
+        button.configure(image0_color=color, image2_color=image2Color)
 
     def hideTrack(self, trackIndex):
         self.trackNameLabels[trackIndex].show()
