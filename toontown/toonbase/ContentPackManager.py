@@ -483,14 +483,20 @@ class ContentPackManager:
 
         requested = self._normaliseVirtualPath(rawPath)
         requestedBase = os.path.basename(requested).lower()
-        sellbotMusic = (
+        musicBasenameFallbacks = (
             'sb_courtyard.ogg',
             'sb_courtyard_encntr.ogg',
             'sb_factory_ext.ogg',
             'sb_factory_ext_encntr.ogg',
-            'sb_boss_lobby.ogg'
+            'sb_boss_lobby.ogg',
+            'lb_litigation.ogg',
+            'lb_litigation_base.ogg',
+            'lb_litigation_stenograph.ogg',
+            'lb_litigation_litigator.ogg',
+            'lb_litigation_casemgr.ogg',
+            'lb_litigation_scapegoat.ogg'
         )
-        if requestedBase not in sellbotMusic:
+        if requestedBase not in musicBasenameFallbacks:
             return resolved
 
         for entry in reversed(self.packEntries):
