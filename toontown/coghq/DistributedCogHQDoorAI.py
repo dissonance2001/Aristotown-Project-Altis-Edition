@@ -19,7 +19,6 @@ class DistributedCogHQDoorAI(DistributedDoorAI.DistributedDoorAI):
         :type doorIndex: int
         :type hardmode: bool
         """
-        print('DOOR AI INIT', destinationZone, doorIndex, hardmode)
         self.notify.debug("init")
         DistributedDoorAI.DistributedDoorAI.__init__(self, air, blockNumber, doorType, doorIndex, lockValue, swing)
         self.destinationZone = destinationZone
@@ -59,7 +58,7 @@ class DistributedCogHQDoorAI(DistributedDoorAI.DistributedDoorAI):
             self.openDoor(self.exitDoorFSM)
             if self.lockedDoor:
                 av = self.air.doId2do[avatarId]
-                if self.doorType == DoorTypes.EXT_COGHQ:
+                if self.doorType == DoorTypes.EXT_COGHQ and not self.hardmode:
                     av.b_setCogIndex(-1)
                 else:
                     av.b_setCogIndex(dept)

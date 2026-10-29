@@ -336,7 +336,13 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         else:
             offset = Point3(self.doorX, back, ToontownGlobals.FloorOffset)
         otherNP = self.getDoorNodePath()
-        walkLike = ActorInterval(avatar, 'walk', startTime=1, duration=duration, endTime=0.0001)
+        if getattr(avatar, 'isDisguised', False) and getattr(avatar, 'suit', None):
+            walkActor = avatar.suit
+            walkStartTime = walkActor.getDuration('walk') or 1
+        else:
+            walkActor = avatar
+            walkStartTime = 1
+        walkLike = ActorInterval(walkActor, 'walk', startTime=walkStartTime, duration=duration, endTime=0.0001)
         standHere = Sequence(
             LerpPosHprInterval(nodePath=avatar, other=otherNP, duration=duration, pos=offset, hpr=VBase3(0, 0, 0),
                                blendType='easeInOut'), self.getAnimStateInterval(avatar, 'neutral'))
@@ -349,6 +355,8 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         isSuit = isinstance(avatar, Suit.Suit)
         if isSuit:
             return Func(avatar.loop, animName, 0)
+        elif getattr(avatar, 'isDisguised', False) and getattr(avatar, 'suit', None):
+            return Func(avatar.suit.loop, animName)
         else:
             return Func(avatar.setAnimState, animName)
 
@@ -456,7 +464,12 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
     def avatarEnter(self, avatarID):
         avatar = self.cr.doId2do.get(avatarID, None)
         if avatar:
-            avatar.setAnimState('neutral')
+            if isinstance(avatar, Suit.Suit):
+                avatar.loop('neutral', 0)
+            elif getattr(avatar, 'isDisguised', False):
+                avatar.getGeomNode().hide()
+            else:
+                avatar.setAnimState('neutral')
             track = self.avatarEnqueueTrack(avatar, 0.5)
             track.start()
             self.avatarTracks.append(track)
