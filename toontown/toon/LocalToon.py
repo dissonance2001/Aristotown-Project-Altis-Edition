@@ -125,6 +125,9 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         for movement in ('run', 'walk'):
             for footstepCode in ('regular', 'snow'):
                 self.movementSounds['%s_%s' % (movement, footstepCode)] = loader.loadSfx('phase_3.5/audio/sfx/AV_footstep_%sloop_%s.ogg' % (movement, footstepCode))
+        for footstepCode in ('afssm', 'bfssm', 'cfssm', 'afslg', 'bfslg', 'cfslg'):
+            self.movementSounds[footstepCode] = loader.loadSfx('phase_5/audio/sfx/ENC_cog' + footstepCode + '.ogg')
+            self.movementSounds[footstepCode].setVolume(0.5)
 
         self.soundRun = self.movementSounds['run_regular']
         self.soundWalk = self.movementSounds['walk_regular']
@@ -353,6 +356,8 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.soundRun = sfx
 
     def handleOnFloor(self, collEntry):
+        if self.isDisguised:
+            return
         intoNode = collEntry.getIntoNode()
         if intoNode.hasTag('surface'):
             surfaceType = intoNode.getTag('surface')
@@ -2106,6 +2111,22 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
     def allowHardLand(self):
         retval = LocalAvatar.LocalAvatar.allowHardLand(self)
         return retval and not self.isDisguised
+
+    def putOnSuit(self, suitType, setDisplayName=True, rental=False):
+        super().putOnSuit(suitType, setDisplayName=setDisplayName, rental=rental)
+        if not self.isDisguised or not getattr(self, 'suit', None):
+            return
+        style = self.suit.style.body
+        ext = 'fslg' if self.suit.scale > 0.65 else 'fssm'
+        sound = self.movementSounds.get(style + ext)
+        if sound is not None:
+            self.updateRunSound(sound)
+            self.updateWalkSound(sound)
+
+    def takeOffSuit(self):
+        super().takeOffSuit()
+        self.updateRunSound(self.movementSounds['run_regular'])
+        self.updateWalkSound(self.movementSounds['walk_regular'])
 
     def setShovelGuiLevel(self, level = 0):
         pass
