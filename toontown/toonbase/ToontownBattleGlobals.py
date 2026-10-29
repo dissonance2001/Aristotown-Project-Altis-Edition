@@ -499,6 +499,7 @@ ATTACK_PLAY_RATES: dict[str, float] = {
     'Sacked': 1.3,
     'Schmooze': 1.4,
     'Shred': 1.25,
+    'SmokeAndMirrors': 1.15,
     'Spin': 1.1,
     'Tabulate': 1.3,
     'TeeOff': 1.4,

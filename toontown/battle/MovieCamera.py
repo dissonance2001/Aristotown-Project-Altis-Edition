@@ -1089,7 +1089,16 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
         case 'Chomp':
             camTrack.append(defaultCamera(openShotDuration=2.8 / 1.5))
         case 'CigarSmoke' | 'SmokeAndMirrors':
-            camTrack.append(defaultCamera(openShotDuration=2.0))
+            try:
+                if not suit.isSkeleton:
+                    if suit.dna.name in ('hho', 'payman', 'cinema', 'choreo', 'fmaker'): # These Cogs have the Head Honcho head that needs the camera to change earlier than other Cogs.
+                        camTrack.append(defaultCamera(openShotDuration=(50.0 / 24.0) / playRate))
+                    else:
+                        raise Exception
+                else:
+                    raise Exception
+            except Exception:
+                camTrack.append(defaultCamera(openShotDuration=(78.0 / 24.0) / playRate))
         case 'ClipOnTie' | 'DoubleWindsor' | 'HalfWindsor' | 'PowerTie':
             if groupStatus == ATK_TGT_GROUP:
                 camTrack.append(defaultCamera())

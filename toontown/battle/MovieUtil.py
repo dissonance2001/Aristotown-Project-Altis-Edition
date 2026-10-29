@@ -3338,7 +3338,7 @@ def createSuitCaseClosedInterval(suit):
     else:
         return stunInterval
 
-def createSuitHeadHonchoCigarSmokeInterval(suit):
+def createSuitHeadHonchoCigarSmokeInterval(suit, playRate: float = 1.0):
     p1 = Point3(0)
     p2 = Point3(0)
     stars = globalPropPool.getProp('stun')
@@ -3351,15 +3351,15 @@ def createSuitHeadHonchoCigarSmokeInterval(suit):
     if suit.style.name in ('hho', 'payman', 'cinema', 'fmaker', 'choreo'):
         #suitInterval = ActorInterval(suit, 'headhoncho-cigar-smoke')
         for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke'), Func(headPart.loop,
-                        'neutral'))
+            headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke', playRate=playRate),
+                                    Func(headPart.loop, 'neutral'))
             headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
             hasAnimatedHead = True
         return Parallel(headInterval, headLoop)
     else:
         return stunInterval
 
-def createSuitFirestarterCigarSmokeInterval(suit):
+def createSuitFirestarterCigarSmokeInterval(suit, playRate: float = 1.0):
     p1 = Point3(0)
     p2 = Point3(0)
     stars = globalPropPool.getProp('stun')
@@ -3369,19 +3369,11 @@ def createSuitFirestarterCigarSmokeInterval(suit):
     head.calcTightBounds(p1, p2)
     stunInterval = Func(suit.loop, 'neutral')
     hasAnimatedHead = False
-    if suit.style.name == 'fires':
-        suitInterval = ActorInterval(suit, 'cigar-smoke', playRate=1.25)
+    if suit.style.name in ('fires', 'safesupervis'):
+        suitInterval = ActorInterval(suit, 'cigar-smoke', playRate=playRate)
         for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke', playRate=1.25), Func(headPart.loop,
-                        'neutral'))
-            headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
-            hasAnimatedHead = True
-        return Parallel(headInterval)
-    elif suit.style.name == 'safesupervis':
-        suitInterval = ActorInterval(suit, 'cigar-smoke', playRate=1.25)
-        for headPart in suit.animatedHeadParts:
-            headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke', playRate=1.25), Func(headPart.loop,
-                        'neutral'))
+            headInterval = Sequence(ActorInterval(headPart, 'cigar-smoke', playRate=playRate),
+                                    Func(headPart.loop, 'neutral'))
             headLoop = Func(headPart.loop, 'neutral%s' % ('-hurt' if float(suit.currHP) / float(suit.maxHP) <= 0.25 else ''))
             hasAnimatedHead = True
         return Parallel(headInterval)
