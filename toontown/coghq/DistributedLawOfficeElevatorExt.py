@@ -40,7 +40,7 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
         self.intZoneId = entranceId2zoneId[entranceId]
         locator = geom.find('**/elevator_signorigin_%s' % entranceId)
         backgroundGeom = geom.find('**/ElevatorFrameFront_%d' % entranceId)
-        signText = DirectGui.OnscreenText(text=TextEncoder.upper(TTLocalizer.GlobalStreetNames[self.intZoneId][-1]), font=ToontownGlobals.getSuitFont(), scale=2, fg=(0.87, 0.87, 0.87, 1), mayChange=False, parent=render)
+        signText = DirectGui.OnscreenText(text=TextEncoder.upper(TTLocalizer.GlobalStreetNames[self.intZoneId][-1]), font=ToontownGlobals.getSuitFont(), scale=2, fg=(0.87, 0.87, 0.87, 1), mayChange=False, parent=geom)
         signText.setPosHpr(locator, 0, 0, 0, 0, 0, 0)
         signText.setDepthWrite(0)
 
