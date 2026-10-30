@@ -488,6 +488,7 @@ ATTACK_PLAY_RATES: dict[str, float] = {
     'PinkSlip': 1.2,
     'PlayHardball': 1.3,
     'PoundKey': 1.1,
+    'PowerStroke': 1.4,
     'ReArrange': 1.2,
     'ReOrg': 1.2,
     'RedTape': 1.4,

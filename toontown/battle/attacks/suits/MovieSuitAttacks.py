@@ -516,6 +516,8 @@ def doSuitAttack(attack):
             suitTrack = doPlayHardball(attack)
         case 'PoundKey':
             suitTrack = doPoundKey(attack)
+        case 'PowerStroke' | 'TeeOff':
+            suitTrack = doTeeOff(attack)
         case 'PowerTie':
             suitTrack = doPowerTie(attack)
         case 'PowerTrip':
@@ -568,8 +570,6 @@ def doSuitAttack(attack):
             suitTrack = doSynergy(attack)
         case 'Tabulate':
             suitTrack = doTabulate(attack)
-        case 'TeeOff':
-            suitTrack = doTeeOff(attack)
         case 'TickingTimeBomb':
             suitTrack = doTickingTimeBomb(attack)
         case 'Tremor':
@@ -3667,6 +3667,20 @@ def doTeeOff(attack: dict) -> MetaInterval:
         ballPropTrack.append(getPropThrowTrack(attack, ball, [__toonFacePoint(toon)], [missPoint], hitDuration=0.3 / playRate, missDuration=0.5 / playRate, target=t))
         ballPropTrack.append(Func(battle.movie.clearRenderProp, ball))
         ballPropTracks += (ballPropTrack,)
+        if attack['name'] == 'PowerStroke':
+            power = BattleParticles.createParticleEffect(file='headShrinkCloud')
+            power.setPos(0.0, 0.0, 0.0)
+            powerParticles = power.getParticlesNamed('particles-1')
+            powerParticles.renderer.setCenterColor(Vec4(0.1, 0.1, 0.1, 0.4))
+            powerParticles.renderer.setEdgeColor(Vec4(0.4, 0.1, 0.9, 0.7))
+            powerTrack = Sequence(
+                Func(battle.movie.needRestoreParticleEffect, power),
+                Func(power.start, ball),
+                Wait(ballPropTrack.getDuration()),
+                Func(power.cleanup),
+                Func(battle.movie.clearRestoreParticleEffect, power)
+            )
+            ballPropTracks += (powerTrack,)
 
     toonTracks: Parallel = getToonTracks(attack, ToonHitDelay / playRate, ['slip-backward'], ToonDodgeDelay / playRate, ['duck'], showMissedExtraTime=1.7, damageAnimPlayRate=1.1, dodgeAnimPlayRate=1.1)
     soundTrack: Sequence = getSoundTrack('SA_tee_off.ogg', delay=HitDelay / playRate, node=suit)

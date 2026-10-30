@@ -4961,6 +4961,7 @@ SuitAttackNames = {
     'PinkSlip': "Pink Slip!",
     'PlayHardball': "Play Hardball!",
     'PoundKey': "Pound Key!",
+    'PowerStroke': 'Power Stroke!',
     'PowerTie': "Power Tie!",
     'PowerTrip': "Power Trip!",
     'Quake': "Quake!",

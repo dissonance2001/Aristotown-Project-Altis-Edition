@@ -7173,6 +7173,7 @@ SuitAttacks = {
     'PinkSlip': ('throw-paper', ATK_TGT_SINGLE),
     'PlayHardball': ('throw-object', ATK_TGT_SINGLE),
     'PoundKey': ('phone', ATK_TGT_SINGLE),
+    'PowerStroke': ('golf-club-swing', ATK_TGT_SINGLE),
     'PowerTie': ('throw-object', ATK_TGT_SINGLE),
     'PowerTrip': ('magic1', ATK_TGT_GROUP),
     'Quake': ('quick-jump', ATK_TGT_GROUP),

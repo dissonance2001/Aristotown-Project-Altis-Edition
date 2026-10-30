@@ -125,6 +125,7 @@ class AttackEnum(IntEnum):
     PINK_SLIP = auto()
     PLAY_HARDBALL = auto()
     POUND_KEY = auto()
+    POWER_STROKE = auto()
     POWER_TIE = auto()
     POWER_TRIP = auto()
     QUAKE = auto()

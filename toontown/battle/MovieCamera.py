@@ -1207,6 +1207,8 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack.append(defaultCamera(openShotDuration=(70.0 / 24.0) / playRate))
         case 'PoundKey':
             camTrack.append(defaultCamera(openShotDuration=(46.0 / 24.0) / playRate))
+        case 'PowerStroke' | 'TeeOff':
+            camTrack.append(defaultCamera(openShotDuration=2.9))
         case 'PowerTrip':
             camTrack.append(defaultCamera(openShotDuration=0.9))
         case 'Quash':
@@ -1251,8 +1253,6 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             camTrack.append(defaultCamera())
         case 'Synergy':
             camTrack.append(defaultCamera(openShotDuration=1.5))
-        case 'TeeOff':
-            camTrack.append(defaultCamera(openShotDuration=2.9))
         case 'TickingTimeBomb':
             camTrack.append(defaultCamera(openShotDuration=2.0))
         case 'Tremor':
