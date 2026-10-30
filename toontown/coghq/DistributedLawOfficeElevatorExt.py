@@ -16,11 +16,15 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
     def __init__(self, cr):
         DistributedElevatorExt.DistributedElevatorExt.__init__(self, cr)
         self.type = ELEVATOR_OFFICE
+        self.signHead = None
 
     def generate(self):
         DistributedElevatorExt.DistributedElevatorExt.generate(self)
 
     def delete(self):
+        if self.signHead and not self.signHead.isEmpty():
+            self.signHead.removeNode()
+            self.signHead = None
         self.elevatorModel.removeNode()
         del self.elevatorModel
         DistributedElevatorExt.DistributedElevatorExt.delete(self)
@@ -41,12 +45,27 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
          3: ToontownGlobals.LawbotStageIntD,
          4: ToontownGlobals.LawbotStageIntD}
         self.intZoneId = entranceId2zoneId[entranceId]
+        if self.signHead and not self.signHead.isEmpty():
+            self.signHead.removeNode()
+            self.signHead = None
         if entranceId != 4:
             locator = geom.find('**/elevator_signorigin_%s' % entranceId)
             backgroundGeom = geom.find('**/ElevatorFrameFront_%d' % entranceId)
             signText = DirectGui.OnscreenText(text=TextEncoder.upper(TTLocalizer.GlobalStreetNames[self.intZoneId][-1]), font=ToontownGlobals.getSuitFont(), scale=2, fg=(0.87, 0.87, 0.87, 1), mayChange=False, parent=geom)
             signText.setPosHpr(locator, 0, 0, 0, 0, 0, 0)
             signText.setDepthWrite(0)
+        else:
+            locator = geom.find('**/elevator_signorigin_4')
+            if locator.isEmpty():
+                self.notify.error('No sign origin found for entranceId: 4')
+            else:
+                self.signHead = loader.loadModel('phase_5/models/char/suitC_skeleton_skull-zero')
+                self.signHead.reparentTo(locator)
+                self.signHead.setPos(0, -0.45, -0.3)
+                self.signHead.setHpr(180, 0, 0)
+                self.signHead.setScale(4.5)
+                self.signHead.setTexture(loader.loadTexture('phase_5/maps/ttcc_ene_skelecog_l.png'), 1)
+                self.signHead.setTwoSided(True)
 
     def setupElevator(self):
         if getattr(self, 'entranceId', None) == 4:
