@@ -9861,10 +9861,16 @@ SuitAttackTaunts = {
 'DerrickManRefinement': ["Take a breather. Drinks are on me.",
                                 "These Toons have such unrefined tastes, don't they?",
                                 "We should try for something more natural."],
-'DOLAInkDrain': ["Ya look a liddle drained, Toon.",
-                                "Ya don't have an inkline of a chance!",
-                                "Ya plans are goin' down the drain!",
+    'DOLAInkDrain': {
+        'dola': ["Ya plans are goin' down the drain!",
+                 "Ya look a liddle drained, Toon.",
+                 "Ya don't have an inkline of a chance!",
                  "Ya hopes are diluted, Toon."],
+        None: ['Your plans are going down the drain!',
+               'You look a little drained, Toon.',
+               "You don't have an inkling of a chance!",
+               'Your hopes are diluted, Toon.']
+    },
 'DOPRAmbushMarketing': ["It's no-not-not a pyramid sch-scheme, I sw-sw-swear!"],
 
 #high roller phase 1
@@ -10798,16 +10804,14 @@ SuitAttackTaunts = {
                             "You're contributing more than you realize.",
                             "This record will follow you."
                       ],
- 'ContingencySelfRepair': [
-        "A proper contingency plan accounts for operational setbacks!",
-        "Did you really think I came unprepared for this scenario?",
-        "Every risk has a backup procedure in place!",
-        "The Board does not tolerate unstable investments!",
-        "Emergency reserves authorized. Resuming operations.",
-        "Damage projections exceeded acceptable margins. Corrective measures deployed.",
-        "I always allocate additional resources for worst-case outcomes!",
-        "Operational continuity has been restored.",
-    ],
+    'ContingencySelfRepair': ["A proper contingency plan accounts for operational setbacks!",
+                              "Did you really think I came unprepared for this scenario?",
+                              "Every risk has a backup procedure in place!",
+                              "The Board does not tolerate unstable investments!",
+                              "Emergency reserves authorized. Resuming operations.",
+                              "Damage projections exceeded acceptable margins. Corrective measures deployed.",
+                              "I always allocate additional resources for worst-case outcomes!",
+                              "Operational continuity has been restored."],
 'ContingencyFailsafeProtocol': ["This situation is now back under my authority!",
                     "You've reached the limit of tolerance!",
                                  "Do not confuse resistance with leverage!",
@@ -10940,7 +10944,7 @@ SuitAttackTaunts = {
             'Keep your eye on the ball!',
             'Mind if I play through?'],
     # Universal Cheats
-'SynergyFees': ["Litigation is expensive, can you pay the price?",
+    'SynergyFees': ["Litigation is expensive, can you pay the price?",
                     "Time is money, and yours is about to run out.",
                     "Consider this a litigation expense.",
                     "I don't work pro bono, Toon."],
