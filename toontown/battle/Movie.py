@@ -1812,6 +1812,7 @@ class Movie(DirectObject.DirectObject):
                     'PinkSlip',
                     'PlayHardball',
                     'PoundKey',
+                    'PowerStroke',
                     'PowerTie',
                     'PowerTrip',
                     'Quake',
