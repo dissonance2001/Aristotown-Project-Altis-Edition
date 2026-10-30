@@ -27,6 +27,8 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
 
     def setEntranceId(self, entranceId):
         self.entranceId = entranceId
+        if not getattr(self, 'elevatorModel', None):
+            self.setupElevator()
         geom = self.cr.playGame.hood.loader.geom
         locator = geom.find('**/elevator_origin_%s' % entranceId)
         if locator:
@@ -36,16 +38,22 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
         entranceId2zoneId = {0: ToontownGlobals.LawbotStageIntA,
          1: ToontownGlobals.LawbotStageIntB,
          2: ToontownGlobals.LawbotStageIntC,
-         3: ToontownGlobals.LawbotStageIntD}
+         3: ToontownGlobals.LawbotStageIntD,
+         4: ToontownGlobals.LawbotStageIntD}
         self.intZoneId = entranceId2zoneId[entranceId]
-        locator = geom.find('**/elevator_signorigin_%s' % entranceId)
-        backgroundGeom = geom.find('**/ElevatorFrameFront_%d' % entranceId)
-        signText = DirectGui.OnscreenText(text=TextEncoder.upper(TTLocalizer.GlobalStreetNames[self.intZoneId][-1]), font=ToontownGlobals.getSuitFont(), scale=2, fg=(0.87, 0.87, 0.87, 1), mayChange=False, parent=geom)
-        signText.setPosHpr(locator, 0, 0, 0, 0, 0, 0)
-        signText.setDepthWrite(0)
+        if entranceId != 4:
+            locator = geom.find('**/elevator_signorigin_%s' % entranceId)
+            backgroundGeom = geom.find('**/ElevatorFrameFront_%d' % entranceId)
+            signText = DirectGui.OnscreenText(text=TextEncoder.upper(TTLocalizer.GlobalStreetNames[self.intZoneId][-1]), font=ToontownGlobals.getSuitFont(), scale=2, fg=(0.87, 0.87, 0.87, 1), mayChange=False, parent=geom)
+            signText.setPosHpr(locator, 0, 0, 0, 0, 0, 0)
+            signText.setDepthWrite(0)
 
     def setupElevator(self):
-        self.elevatorModel = loader.loadModel('phase_11/models/lawbotHQ/LB_ElevatorScaled')
+        if getattr(self, 'entranceId', None) == 4:
+            self.elevatorModel = loader.loadModel('phase_5/models/cogdominium/tt_m_ara_csa_elevatorB')
+            self.elevatorModel.setScale(1)
+        else:
+            self.elevatorModel = loader.loadModel('phase_11/models/lawbotHQ/LB_ElevatorScaled')
         self.elevatorModel.reparentTo(render)
         self.leftDoor = self.elevatorModel.find('**/left_door')
         self.rightDoor = self.elevatorModel.find('**/right_door')
@@ -57,7 +65,8 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
 
     def setBldgDoId(self, bldgDoId):
         self.bldg = None
-        self.setupElevator()
+        if not getattr(self, 'elevatorModel', None) and hasattr(self, 'entranceId'):
+            self.setupElevator()
         return
 
     def getZoneId(self):

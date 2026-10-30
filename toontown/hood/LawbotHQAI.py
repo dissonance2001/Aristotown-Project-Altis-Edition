@@ -83,6 +83,11 @@ class LawbotHQAI(CogHQAI.CogHQAI):
                 ToontownGlobals.LawbotOfficeExt)
             self.lawOfficeElevators.append(lawOfficeElevator)
 
+        fifthElevator = DistributedLawOfficeElevatorExtAI(
+            self.air, self.air.lawOfficeMgr, ToontownGlobals.LawbotStageIntD, 4)
+        fifthElevator.generateWithRequired(ToontownGlobals.LawbotOfficeExt)
+        self.lawOfficeElevators.append(fifthElevator)
+
     def createOfficeBoardingParty(self):
         lawOfficeIdList = []
         for lawOfficeElevator in self.lawOfficeElevators:

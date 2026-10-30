@@ -16,6 +16,11 @@ class DistributedLawOfficeElevatorExtAI(DistributedElevatorExtAI.DistributedElev
     def getEntranceId(self):
         return self.entranceId
 
+    def checkBoard(self, av):
+        if self.entranceId == 4:
+            return REJECT_NOT_YET_AVAILABLE
+        return DistributedElevatorExtAI.DistributedElevatorExtAI.checkBoard(self, av)
+
     def elevatorClosed(self):
         numPlayers = self.countFullSeats()
         if numPlayers > 0:
