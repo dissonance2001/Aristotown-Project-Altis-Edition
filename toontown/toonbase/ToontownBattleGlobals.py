@@ -461,6 +461,7 @@ ATTACK_PLAY_RATES: dict[str, float] = {
     'Canned': 1.35,
     'Chomp': 1.5,
     'CigarSmoke': 1.15,
+    'CloseTheLoop': 1.3,
     'Crunch': 1.4,
     'DoubleCross': 1.15,
     'DoubleTalk': 1.3,

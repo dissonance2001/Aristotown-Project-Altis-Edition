@@ -79,7 +79,7 @@ from toontown.suit.SuitDNA import *
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
-from typing import Union
+from typing import Any, Union
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSuitAttacks')
 
@@ -5251,57 +5251,117 @@ def doCloseTheLoop(attack: dict) -> MetaInterval:
     suit = attack['suit']
     battle = attack['battle']
     targets: list[dict] = attack['target']
+    playRate: float = attack['playRate']
     BattleParticles.loadParticles()
-    centerColor = Vec4(0.1, 0.1, 0.1, 0.4)
-    edgeColor = Vec4(0.4, 0.1, 0.9, 0.7)
-    powerBar1 = BattleParticles.createParticleEffect(file='powertrip')
-    powerBar2 = BattleParticles.createParticleEffect(file='powertrip2')
-    powerBar1.setPos(0, 6.1, 0.4)
-    powerBar1.setHpr(-60, 0, 0)
-    powerBar2.setPos(0, 6.1, 0.4)
-    powerBar2.setHpr(60, 0, 0)
-    powerBar1Particles = powerBar1.getParticlesNamed('particles-1')
-    powerBar2Particles = powerBar2.getParticlesNamed('particles-1')
-    powerBar1Particles.renderer.setCenterColor(centerColor)
-    powerBar1Particles.renderer.setEdgeColor(edgeColor)
-    powerBar2Particles.renderer.setCenterColor(centerColor)
-    powerBar2Particles.renderer.setEdgeColor(edgeColor)
-    waterfallEffect = BattleParticles.createParticleEffect('Waterfall')
-    waterfallEffect.setScale(11)
-    waterfallParticles = waterfallEffect.getParticlesNamed('particles-1')
-    waterfallParticles.renderer.setCenterColor(centerColor)
-    waterfallParticles.renderer.setEdgeColor(edgeColor)
-    suitName = suit.getStyleName()
 
-    def getPowerTrack(effect, suit = suit, battle = battle):
-        partTrack = Sequence(Func(battle.movie.needRestoreParticleEffect, effect), Func(effect.start, suit), LerpFunctionInterval(effect.setAlphaScale, fromData=0, toData=1, duration=1.0), Wait(1.5), LerpPosInterval(effect, 1.0, Point3(0, 25, 0.4), blendType='easeInOut'), LerpFunctionInterval(effect.setAlphaScale, fromData=1, toData=0, duration=0.4), Func(effect.cleanup), Func(battle.movie.clearRestoreParticleEffect, effect))
+    def generateParticle():
+        '''
+        Use this convenient function to easily grab a particle.
+
+        Returns:
+            out: The produced particle effect.
+        '''
+        particleNames: tuple[str, ...] = ('audit-one', 'audit-two', 'audit-three', 'audit-four', 'audit-five', 'audit-six', 'poundsign')
+        particleColors = (Vec4(0.8, 0.8, 0.8, 1.0),
+         Vec4(0.0, 0.0, 0.0, 1.0),
+         Vec4(0.8, 0.0, 0.0, 1.0))
+        particle = MovieUtil.copyProp(BattleParticles.getParticle(random.choice(particleNames)))
+        particle.setColor(random.choice(particleColors))
+        particle.setBillboardPointEye()
+        return particle
+    
+
+    def makeParticleMovement(particles: tuple[Any, Any], particleNode) -> Sequence:
+        '''
+        Make a given particle effect move as if it were part of a particle effect.
+
+        Parameters:
+            particles (tuple): The particles to move.
+            particleNode: The parent that the particle moves from.
+        
+        Returns:
+            out: The movement for the particle effect.
+        '''
+        destRanges: tuple[tuple[float, float], tuple[float, float]] = ((-60.0, 60.0), (120.0, 240.0)) # The ranges, in degrees, these particle effects can go.
+        radius: float = 8.0
+
+        def getRandomRadians(minRange: float, maxRange: float, /) -> float:
+            '''
+            Have a convenient method for randomizing radians in a range.
+
+            Parameters:
+                minRange (float): The minimum value for the randomizer.
+                maxRange (float): The maximum value for the randomizer.
+            
+            Returns:
+                out (float): The radians in a given range.
+            '''
+            x: float = random.random() * (maxRange - minRange) + minRange
+            return math.radians(x)
+
+        # Index 0
+        destRange0: tuple[float, float] = destRanges[0]
+        angle0: float = getRandomRadians(*destRanges[0])
+        toX0: float = radius * math.cos(angle0)
+        toY0: float = radius * math.sin(angle0) / 4.0
+        toZ0: float = random.random() * 0.2
+
+        # Index 1
+        destRange1: tuple[float, float] = destRanges[0]
+        angle1: float = getRandomRadians(*destRanges[1])
+        toX1: float = radius * math.cos(angle1)
+        toY1: float = radius * math.sin(angle1) / 4.0
+        toZ1: float = random.random() * 0.2
+        return Sequence(
+            Func(particles[0].reparentTo, particleNode),
+            Func(particles[1].reparentTo, particleNode),
+            Parallel(
+                LerpPosInterval(particles[0], 0.2, (toX0, toY0, toZ0)),
+                Sequence(
+                    LerpFunctionInterval(particles[0].setAlphaScale, 0.1, 0.0, 1.0, blendType='easeOut'),
+                    LerpFunctionInterval(particles[0].setAlphaScale, 0.1, 1.0, 0.0, blendType='easeIn')
+                ),
+                LerpPosInterval(particles[1], 0.2, (toX1, toY1, toZ1)),
+                Sequence(
+                    LerpFunctionInterval(particles[1].setAlphaScale, 0.1, 0.0, 1.0, blendType='easeOut'),
+                    LerpFunctionInterval(particles[1].setAlphaScale, 0.1, 1.0, 0.0, blendType='easeIn')
+                )
+            ),
+            Func(MovieUtil.removeProps, particles)
+        )
+
+
+    def getDialedPartTrack(delay: float, particleNode, playRate: float = 1.0) -> Track:
+        '''
+        Create and use a custom-made particle track for use with this attack.
+
+        Parameters:
+            delay (float): The time before the particle effect plays.
+            particleNode: The parent for the particle effects to emit from.
+            playRate (float): How fast the particle node moves.
+
+        Returns:
+            out (Track): The assembled particle track.
+        '''
+        moveDuration: float = 0.9 / playRate
+        partTrack: Track = Track((delay, LerpFunctionInterval(particleNode.setY, moveDuration, 2.0, 15.0)))
+        for i in range(0, int(moveDuration * 10000), 500): # This is going to be awkward, but hopefully this is enough to cover the duration of the particle movement while allowing no strange timings if anyone looks too deep into this.
+            particleDelay: float = delay + (float(i) / 10000.0)
+            particle, particle2 = generateParticle(), generateParticle()
+            partTrack.append((particleDelay, makeParticleMovement((particle, particle2), particleNode)))
+
         return partTrack
 
-    partTrack1 = getPowerTrack(powerBar1)
-    partTrack2 = getPowerTrack(powerBar2)
-    waterfallTrack = getPartTrack(waterfallEffect, 2.5, 2.3, (waterfallEffect, suit, 0), softStop=-1.0)
-    phone = globalPropPool.getProp('phone')
-    receiver = globalPropPool.getProp('receiver')
-    BattleParticles.loadParticles()
+    particleNode = suit.attachNewNode('particle-node') # I would often frown upon this (particle nodes often should be parented to the battle), but the node being parented to the Cog makes it close to Power Trip.
+    particleNode.setPos(0.0, 2.0, 1.0)
+    # TODO: Wall of particles.
+    partTrack: Track = getDialedPartTrack(3.8 / playRate, particleNode, playRate=playRate)
 
-    suitTrack = Sequence(getSuitAnimTrack(attack, playRate=1.25))
-    suitType = getSuitBodyType(attack['suitName'])
-    if suitType == 'a':
-        phonePosPoints = [Point3(-0.26011560693641655, 0.26011560693641655, -0.1), VBase3(180, 180, 0)]
-        receiverPosPoints = [Point3(0, -0.43352601156069426, -0.8670520231213885), VBase3(90, 0, 0)]
-    if suitType == 'b':
-        phonePosPoints = [Point3(0.5202312138728296, 0.26011560693641655, 0), VBase3(180, 180, 0)]
-        receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
-    if suitType == 'c':
-        phonePosPoints = [Point3(0.5202312138728296, 0.26011560693641655, 0), VBase3(180, 180, 0)]
-        receiverPosPoints = [Point3(-0.23, 0, -0.11), VBase3(5.939, 2.763, -177.591)]
-    propTrack = Sequence(Func(__showProp, phone, suit.getLeftHand(), *phonePosPoints), Func(__showProp, receiver, suit.getLeftHand(), *receiverPosPoints), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_ONE, MovieUtil.PNT3_NEARZERO), Wait(0.24), Func(receiver.wrtReparentTo, suit.getRightHand()), LerpPosHprInterval(receiver, 0.0001, Point3(-0.45, 0.48, -0.62), VBase3(-87.47, -18.21, 7.82)), Wait(2.14), Func(receiver.wrtReparentTo, phone), Wait(0.62), LerpScaleInterval(phone, 0.5, MovieUtil.PNT3_NEARZERO), Func(MovieUtil.removeProps, [receiver, phone]))
-    toonTracks = getToonTracks(attack, 2.8, ['slip-forward'], 2.29, ['jump'])
-    if hitAtleastOneToon(targets):
-        soundTrack = Parallel(getSoundTrack('ttr_s_ene_bat_closeTheLoop.ogg', delay=0, node=suit))
-    else:
-        soundTrack = Parallel(getSoundTrack('ttr_s_ene_bat_closeTheLoopMiss.ogg', delay=0, node=suit))
-    return Parallel(suitTrack, toonTracks, propTrack, partTrack1, partTrack2, soundTrack)
+    suitTrack: Sequence = getSuitAnimTrack(attack, playRate=playRate)
+    propTrack: Parallel = getPhoneTrack(suit, playRate=playRate, wantSound=False)
+    toonTracks: Parallel = getToonTracks(attack, 4.2 / playRate, ['slip-forward'], 3.7 / playRate, ['jump'])
+    soundTrack: Sequence = getSoundTrack(f"ttr_s_ene_bat_closeTheLoop{'' if hitAtleastOneToon(targets) else 'Miss'}.ogg", delay=(0.5 if suit.style.body == 'c' else 0.61) / playRate, node=suit, playRate=playRate)
+    return Sequence(Parallel(suitTrack, toonTracks, propTrack, partTrack, soundTrack), Func(particleNode.removeNode))
 
 
 def doMoneyTalks(attack: dict) -> MetaInterval:

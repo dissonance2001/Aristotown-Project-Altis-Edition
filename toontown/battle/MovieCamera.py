@@ -1105,7 +1105,7 @@ def chooseSuitShot(attack, attackDuration, cheat=0):
             else:
                 camTrack.append(randomSplitShot(suit, target[0]['toon'], battle, attackDuration))
         case 'CloseTheLoop':
-            camTrack.append(defaultCamera(openShotDuration=2.5))
+            camTrack.append(defaultCamera(openShotDuration=3.5 / playRate))
         case 'CloudStorage':
             camTrack.append(defaultCamera(openShotDuration=2.5))
         case 'Crunch' | 'MudSling':
