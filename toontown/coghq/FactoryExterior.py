@@ -177,6 +177,9 @@ class FactoryExterior(BattlePlace.BattlePlace):
         elif where == 'stageInterior':
             self.doneStatus = doneStatus
             messenger.send(self.doneEvent)
+        elif where == 'sads':
+            self.doneStatus = doneStatus
+            messenger.send(self.doneEvent)
         elif where == 'boardofficeInterior':
             self.doneStatus = doneStatus
             messenger.send(self.doneEvent)

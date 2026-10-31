@@ -97,12 +97,21 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
     def setLawOfficeInteriorZone(self, zoneId):
         if self.localToonOnBoard:
             hoodId = self.cr.playGame.hood.hoodId
-            doneStatus = {'loader': 'cogHQLoader',
-             'where': 'stageInterior',
-             'how': 'teleportIn',
-             'zoneId': zoneId,
-             'hoodId': hoodId,
-             'stageId': self.intZoneId}
+            if self.entranceId == 4:
+                doneStatus = {'loader': 'cogHQLoader',
+                 'where': 'sads',
+                 'how': 'teleportIn',
+                 'zoneId': zoneId,
+                 'hoodId': hoodId,
+                 'shardId': None,
+                 'avId': -1}
+            else:
+                doneStatus = {'loader': 'cogHQLoader',
+                 'where': 'stageInterior',
+                 'how': 'teleportIn',
+                 'zoneId': zoneId,
+                 'hoodId': hoodId,
+                 'stageId': self.intZoneId}
             self.cr.playGame.getPlace().elevator.signalDone(doneStatus)
 
     def setLawOfficeInteriorZoneForce(self, zoneId):
@@ -110,12 +119,21 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
         if place:
             place.fsm.request('elevator', [self, 1])
             hoodId = self.cr.playGame.hood.hoodId
-            doneStatus = {'loader': 'cogHQLoader',
-             'where': 'stageInterior',
-             'how': 'teleportIn',
-             'zoneId': zoneId,
-             'hoodId': hoodId,
-             'stageId': self.intZoneId}
+            if self.entranceId == 4:
+                doneStatus = {'loader': 'cogHQLoader',
+                 'where': 'sads',
+                 'how': 'teleportIn',
+                 'zoneId': zoneId,
+                 'hoodId': hoodId,
+                 'shardId': None,
+                 'avId': -1}
+            else:
+                doneStatus = {'loader': 'cogHQLoader',
+                 'where': 'stageInterior',
+                 'how': 'teleportIn',
+                 'zoneId': zoneId,
+                 'hoodId': hoodId,
+                 'stageId': self.intZoneId}
             if hasattr(place, 'elevator') and place.elevator:
                 place.elevator.signalDone(doneStatus)
             else:
@@ -124,6 +142,8 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
             self.notify.warning("setLawOfficeInteriorZoneForce: Couldn't find playGame.getPlace(), zoneId: %s" % zoneId)
 
     def getDestName(self):
+        if self.entranceId == 4:
+            return 'Sads'
         if self.intZoneId == ToontownGlobals.LawbotStageIntA:
             return TTLocalizer.ElevatorLawBotCourse0
         elif self.intZoneId == ToontownGlobals.LawbotStageIntB:
@@ -132,3 +152,4 @@ class DistributedLawOfficeElevatorExt(DistributedElevatorExt.DistributedElevator
             return TTLocalizer.ElevatorLawBotCourse2
         elif self.intZoneId == ToontownGlobals.LawbotStageIntD:
             return TTLocalizer.ElevatorLawBotCourse3
+

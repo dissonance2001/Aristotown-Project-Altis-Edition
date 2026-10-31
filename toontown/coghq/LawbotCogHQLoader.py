@@ -3,6 +3,7 @@ from toontown.coghq import LawbotHQBossBattle
 from toontown.coghq import LawbotHQExterior
 from toontown.coghq import LawbotOfficeExterior
 from toontown.coghq import StageInterior
+from toontown.instances import SadsPlace
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import State
 from direct.fsm import StateData
@@ -21,6 +22,7 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
         CogHQLoader.CogHQLoader.__init__(self, hood, parentFSMState, doneEvent)
         self.fsm.addState(State.State('stageInterior', self.enterStageInterior, self.exitStageInterior, ['quietZone', 'cogHQExterior']))
         self.fsm.addState(State.State('factoryExterior', self.enterFactoryExterior, self.exitFactoryExterior, ['quietZone', 'cogHQExterior']))
+        self.fsm.addState(State.State('sads', self.enterSads, self.exitSads, ['quietZone']))
         for stateName in ['start', 'cogHQExterior', 'quietZone']:
             state = self.fsm.getStateNamed(stateName)
             state.addTransition('stageInterior')
@@ -28,6 +30,7 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
         for stateName in ['quietZone']:
             state = self.fsm.getStateNamed(stateName)
             state.addTransition('factoryExterior')
+            state.addTransition('sads')
 
         self.musicFile = 'phase_11/audio/bgm/LB_courtyard.ogg'
         self.lobbyMusicFile = 'phase_11/audio/bgm/LB_boss_lobby.ogg'
@@ -118,3 +121,11 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.notify.debug('LawbotCogHQLoader.exitCogHQBossBattle')
         CogHQLoader.CogHQLoader.exitCogHQBossBattle(self)
         base.cr.forbidCheesyEffects(0)
+
+    def enterSads(self, requestStatus):
+        self.placeClass = SadsPlace.SadsPlace
+        self.enterPlace(requestStatus)
+
+    def exitSads(self):
+        self.exitPlace()
+        self.placeClass = None
